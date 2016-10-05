@@ -1,0 +1,9 @@
+.*.swp
+venv
+.env
+.aenv
+*.pyc
+*~
+#*#
+*secret_config.py*
+*secret*

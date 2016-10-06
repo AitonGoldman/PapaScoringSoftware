@@ -8,15 +8,15 @@ def create_db_handle(db_url,db_name,flask_app):
     db_handle = SQLAlchemy(flask_app)
     return db_handle
 
-def create_TD_tables(db_handle):
+def create_TD_tables(db_handle,drop_tables=False):
     db_handle.reflect()
-    #db_handle.drop_all()
-    print db_handle.create_all()
-    #print db_handle.metadata.tables
+    if drop_tables:
+        db_handle.drop_all()
+    print db_handle.create_all()    
 
 def check_table_exists(db_handle):
-    print db_handle.reflect()
-    if "table" in db_handle.metadata.tables:
+    db_handle.reflect()    
+    if "role" in db_handle.metadata.tables:        
         return True
     else:
         return False

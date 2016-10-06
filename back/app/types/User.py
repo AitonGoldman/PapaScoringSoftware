@@ -66,5 +66,5 @@ def generate_user_class(db_handle):
             #if Admin_permission.can()
             #    user['roles'] = [r.name for r in self.roles]
             return user
-            
+    return User
         

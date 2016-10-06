@@ -1,5 +1,6 @@
 from threading import Lock
 from werkzeug.wsgi import pop_path_info, peek_path_info
+from werkzeug.exceptions import BadRequest
 
 class PathDispatcher(object):
     def __init__(self, default_app, create_app):
@@ -12,17 +13,15 @@ class PathDispatcher(object):
         with self.lock:            
             app = self.instances.get(prefix)
             if app is None:                
-                app = self.create_app(prefix)
+                app = self.create_app(prefix)                
                 if app is not None:
-                    self.instances[prefix] = app
+                    self.instances[prefix] = app                    
             return app
 
     def __call__(self, environ, start_response):        
         app = self.get_application(peek_path_info(environ))
-        if app is not None:
-            print "app is not none"
+        if app is not None:            
             pop_path_info(environ)
-        else:
-            print "app is none"
+        else:            
             app = self.default_app
         return app(environ, start_response)

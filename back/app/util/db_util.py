@@ -2,8 +2,7 @@ from sqlalchemy_utils import create_database, database_exists
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
 
-
-def create_db_handle(db_url,db_name,flask_app):
+def create_db_handle(db_url,flask_app):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_url    
     db_handle = SQLAlchemy(flask_app)
     return db_handle
@@ -20,7 +19,18 @@ def check_table_exists(db_handle):
         return True
     else:
         return False
-        
+
+# FIXME : need to generate db_url by comparing "name" to good list of dbs
+def generate_db_url(db_name):
+    return "postgresql://tom:tomPassword@localhost/%s" % db_name
+
+def app_db_handle(app):
+    return app.tables.db_handle
+
+def app_db_tables(app):
+    return app.tables
+
+
 def check_if_ranking_funcs_exists(db_handle):
     result = db_handle.execute("SELECT prosrc FROM pg_proc WHERE proname = 'papa_scoring_func';")
     if not result.fetchone():

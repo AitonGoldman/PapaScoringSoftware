@@ -3,11 +3,13 @@ from app.blueprints import admin_login_blueprint
 import json
 from werkzeug.exceptions import Unauthorized,Conflict
 from flask_login import login_required, login_user, logout_user, current_user
+from app.util import db_util
 
 @admin_login_blueprint.route('/auth/login',methods=['PUT'])
 def route_login():
+    tables = db_util.app_db_tables(current_app)
     input_data = json.loads(request.data)
-    user = current_app.tables.User.query.filter_by(username=input_data['username']).first()
+    user = tables.User.query.filter_by(username=input_data['username']).first()
     if user and not user.verify_password(input_data['password']):
         user = None
     if user is None:

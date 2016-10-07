@@ -1,0 +1,9 @@
+/node_modules/
+/bower_components/
+/dist/
+/.sass-cache/
+*.swp
+.DS_Store
+npm-debug.log
+*~
+#*#

@@ -1,0 +1,54 @@
+
+<head>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
+  <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+  <link href="thirdparty/css/angular-material.css" rel="stylesheet" />
+  <link href="thirdparty/css/angular-material-tut.css" rel="stylesheet" /> 
+  <link href="css/custom.css" rel="stylesheet" /> 
+  <script type="text/javascript" src="js/app.min.js"></script>
+</head>
+
+</head>
+ <body ng-app="TDApp" layout="column">
+   <md-toolbar layout="row" ng-controller="TitleBarController">
+     <div class="md-toolbar-tools">
+       <md-button class='md-icon-button' ng-click="toggle_sidenav()">
+         <md-icon md-font-set="material-icons"> menu </md-icon>
+       </md-button>
+       <span ui-view='title'>
+       </span>
+       <span flex></span>
+       <span ui-view='backbutton'>
+       </span>     
+     </div>
+   </md-toolbar>
+   <div layout='row' flex>
+     <md-sidenav class="md-sidenav-left" md-component-id='left_sidenav'>       
+      <md-list>
+        <!-- List item #1 -->
+        <md-list-item >
+            <md-button>
+              <md-icon md-svg-src="img/avatar-1.svg" class="avatar"></md-icon>
+              Lia Luogo
+            </md-button>
+        </md-list-item>
+
+        <!-- List item #2 -->
+        <md-list-item >
+            <md-button>
+             <md-icon md-svg-src="img/avatar-4.svg" class="avatar"></md-icon>
+              Lawrence Ray
+            </md-button>
+        </md-list-item>
+
+      </md-list>
+    </md-sidenav>
+
+    <md-content flex id="content">
+      <!-- User details sample -->
+      <div ui-view>
+      </div>
+    </md-content>
+</div>
+  </body>

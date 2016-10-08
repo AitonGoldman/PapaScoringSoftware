@@ -1,6 +1,10 @@
 //_ = require('underscore/underscore-min.js');
 //_ = require('underscore');
+
 angular = require('angular');
+//we can load individual peices for lodash if needed
+//FIXME : should be loading lodash properly - see http://www.jvandemo.com/how-to-properly-integrate-non-angularjs-libraries-in-your-angularjs-application/ or https://github.com/rockabox/ng-lodash
+mylodash = require('lodash');
 require('angular-ui-router');
 require('angular-animate');
 require('angular-aria');
@@ -12,8 +16,9 @@ app = angular.module(
 	'TDApp',
 	[
  	    'ui.router',
-            'ngMaterial'
-            /*REPLACEMECHILD*/
+            'ngMaterial',
+            'TD_services',
+            'app.login',/*REPLACEMECHILD*/
 	]
 );
 
@@ -21,22 +26,23 @@ app = angular.module(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,$mdSidenav) {
-        console.log('hi there again');
-        $scope.toggle_sidenav=function(){
-            console.log('hi there');
-            $mdSidenav('left_sidenav').toggle();
-        };
+             $state,$mdSidenav,User) {
+        if(User.logged_in() == false){            
+            $state.go(".login");
+        }
+        //console.log('lodash');
+        //$scope.lodash = lodash;
         
     }
 );
+
+
 
 app.controller(
     'TitleBarController',    
     function($scope, $location, $http, 
              $state,$mdSidenav) {        
-        $scope.toggle_sidenav=function(){
-            console.log('hi there');
+        $scope.toggle_sidenav=function(){            
             $mdSidenav('left_sidenav').toggle();
         };
         

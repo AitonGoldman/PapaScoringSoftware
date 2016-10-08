@@ -54,6 +54,7 @@
     "moment": "~2.8.4",
     "ng-focus-if": "~1.0.5",
     "ngKeypad": "git+https://github.com/alvarowolfx/ng-keypad.git",
-    "underscore": "^1.8.3"
+      "angular-lodash":"~0.1.1",
+      "lodash":"~4.16.4"
   }
 }

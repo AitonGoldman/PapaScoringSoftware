@@ -1,5 +1,6 @@
 angular.module('TD_services.timeout_resources', ['ngResource']);
-angular.module('TD_services.timeout_resources').factory('TimeoutResources', function($resource,$q) {
+angular.module('TD_services.timeout_resources').factory('TimeoutResources',
+                                                        ['$resource','$q', function($resource,$q) {
     var resource_results = {};
 
     global_timeout = 15000;
@@ -18,7 +19,7 @@ angular.module('TD_services.timeout_resources').factory('TimeoutResources', func
  
     var execute_getdelete_resource = function(res,scope_name,args){
         if(args == undefined){
-	    args={}
+	    args={};
 	}
         res=res['custom_http'];                
         resource_results[scope_name] = res(args);
@@ -75,6 +76,7 @@ angular.module('TD_services.timeout_resources').factory('TimeoutResources', func
 	GetAllResources: function(){//killroy was here
 	    return resource_results;
 	},    
-        Login: generic_resource(loginResource,'logged_in_user','post')
+        Login: generate_custom_http_executor(loginResource,'logged_in_user','post')
     };
-});
+}]);
+

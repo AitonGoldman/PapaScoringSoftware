@@ -30,9 +30,9 @@ app.controller(
         if(User.logged_in() == false){            
             $state.go(".login");
         }
-        //console.log('lodash');
-        //$scope.lodash = lodash;
-        
+        $scope.stop_post_reload = function(){
+            //FIXME : fill me in later
+        };        
     }
 );
 

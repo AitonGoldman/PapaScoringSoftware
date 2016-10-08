@@ -16,25 +16,6 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
                template: 'poop'
              }
  	   }
-       }).state('app.login.process', 
-        { 
- 	 url: '/process',
- 	 views: {
- 	     '@': {
- 	       templateUrl: 'app/login/process/process.html',
- 	       controller: 'app.login.process'
- 	     },
-             'backbutton@':{
-               templateUrl: 'shared_html/backbutton.html'
-             },
-             'title@':{
-               template: ''
-             }
- 	   }, params: {
-             process_step:{}
-          }
-
-
        })//REPLACE_ME
 
 

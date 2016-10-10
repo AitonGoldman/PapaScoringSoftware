@@ -29,14 +29,15 @@ md-list-item > button {
   text-align:left !important;
 }
 
-  md-list .md-button.selected {
+md-list .md-button.selected {
     color: #03a9f4;
-  }
+}
 
-  md-sidenav  md-list {
+/*
+md-sidenav  md-list {
     padding: 0px 0px 8px 0px;
-  }
-
+}
+*/
 
 /* Primary content area */
 

@@ -24,8 +24,8 @@ def generate_user_class(db_handle):
         username = db_handle.Column(db_handle.String(80), unique=True, nullable=False)    
         password_crypt = db_handle.Column(db_handle.String(134))        
         roles = db_handle.relationship(
-            'Role',
-            secondary=Role_User_mapping                   
+           'Role',
+           secondary=Role_User_mapping
         )
 
         def crypt_password(self, password):
@@ -62,9 +62,6 @@ def generate_user_class(db_handle):
             user = to_dict(self)
             del user['password_crypt']
             user['roles'] = [r.name for r in self.roles]        
-            #FIXME : put this back in when we get permissions
-            #if Admin_permission.can()
-            #    user['roles'] = [r.name for r in self.roles]
             return user
     return User
         

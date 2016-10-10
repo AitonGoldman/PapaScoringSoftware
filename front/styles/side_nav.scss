@@ -1,0 +1,11 @@
+md-sidenav md-list{
+ md-list-item.no_padding {
+   padding-left: 5px;
+   padding-right: 0px;
+ }
+ md-list-item._md-button-wrap > div.md-button:first-child {
+   padding-left: 0px;
+   padding-right: 0px;
+ }
+}
+

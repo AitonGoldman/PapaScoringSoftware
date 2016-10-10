@@ -1,5 +1,7 @@
 
 <head>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet">
   <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
@@ -21,34 +23,76 @@
        <span flex></span>
        <span ui-view='backbutton'>
        </span>     
-     </div>
-   </md-toolbar>
+     </div>     
+   </md-toolbar>   
    <div layout='row' flex>
      <md-sidenav class="md-sidenav-left" md-component-id='left_sidenav'>       
-      <md-list>
-        <!-- List item #1 -->
-        <md-list-item >
-            <md-button>
-              <md-icon md-svg-src="img/avatar-1.svg" class="avatar"></md-icon>
-              Lia Luogo
-            </md-button>
-        </md-list-item>
+       <md-toolbar layout="row" class="md-hue-3 md-24" ng-controller="SideBarController">
+         <md-icon aria-label="person"
+                  class="md-48" ng-if="User.logged_in()">
+           person
+         </md-icon>
+         <div class="md-toolbar-tools" ng-if="User.logged_in()">
+           <span>{{User.logged_in_user().username}}</span>           
+         </div>         
+       </md-toolbar>
+       <md-list class='md-dense' ng-controller="SideBarController">
+         <md-list-item ng-click='close_sidebar()' ui-sref='app.login({site:User.get_user_site()})'  ng-if="User.logged_in() == false" class='no_padding md-24'>
+           <span>Login</span>
+           <!--<md-button class="md-secondary">
+             Secondary Button
+             </md-button>-->
+           <md-icon
+              aria-label="chevron_right"
+              class="md-secondary md-48">
+             chevron_right
+           </md-icon>           
+         </md-list-item>
+         <md-list-item ng-click='logout()' ng-if="User.logged_in() == true" class='no_padding md-24'>
+           <span>Logout</span>
+           <!--<md-button class="md-secondary">
+             Secondary Button
+             </md-button>-->
+           <md-icon
+              aria-label="chevron_right"
+              class="md-secondary md-48">
+             chevron_right
+           </md-icon>           
+         </md-list-item>
+         <md-list-item class='no_padding md-24' style='padding-bottom:10px;padding-top:10px'>
+           <span>Users</span>
+           <md-icon
+              aria-label="chevron_right"
+              class="md-secondary md-48">
+             chevron_right
+           </md-icon>           
+         </md-list-item>
+         <md-list-item class='no_padding md-24' style='padding-bottom:10px;padding-top:10px;'>
+           <span>Tournaments</span>
+           <md-icon
+              aria-label="chevron_right"
+              class="md-secondary md-48">
+             chevron_right
+           </md-icon>           
+         </md-list-item>
+         <md-list-item class='no_padding md-24' style='padding-bottom:10px;padding-top:10px;'>
+           <span>Players</span>
+           <md-icon
+              aria-label="chevron_right"
+              class="md-secondary md-48">
+             chevron_right
+           </md-icon>           
+         </md-list-item>
 
-        <!-- List item #2 -->
-        <md-list-item >
-            <md-button>
-             <md-icon md-svg-src="img/avatar-4.svg" class="avatar"></md-icon>
-              Lawrence Ray
-            </md-button>
-        </md-list-item>
-
+         
       </md-list>
     </md-sidenav>
-
-    <md-content flex id="content">
+    <md-content flex id="content" style='padding:0'>
       <!-- User details sample -->
       <div ui-view>
       </div>
     </md-content>
 </div>
   </body>
+
+ 

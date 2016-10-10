@@ -1,1 +1,51 @@
-<a ui-sref='.test'>Hi There</a>
+<div ng-if='User.logged_in()==false' layout="column" layout-align="space-around center" class='md-24'>
+  <div>
+    Wecome To TD!<br> Click on the        <md-button class='md-icon-button' ng-click="toggle_sidenav()">
+         <md-icon md-font-set="material-icons"> menu </md-icon> 
+       </md-button> icon to start!
+
+  </div>
+</div>
+<div ng-if='User.logged_in()' layout="column" layout-align="space-around center" class='md-24'>
+  <div layout="row" layout-align="center center" flex=50>
+    <div>
+      <md-icon 
+         class="md-48">
+        content_paste
+      </md-icon>
+    </div>
+    <div class='md-48' style='width:250px'>
+      <div style='float:left' >
+        <md-button ui-sref='app({site:site})' class="md-raised md-primary">Scorekeeping</md-button>    
+      </div>
+    </div>
+  </div>
+  <div layout="row" layout-align="center center" flex>
+    <div>
+      <md-icon 
+         class="md-48">
+        person_add
+      </md-icon>
+    </div>
+    <div class='md-48' style='width:250px'>
+      <div style='float:left' >
+        <md-button ui-sref='app({site:site})' class="md-raised md-primary">Add User</md-button>    
+      </div>
+    </div>
+  </div>
+  <div layout="row" layout-align="center center" flex>
+    <div>
+      <md-icon 
+         class="md-48">
+        attach_money
+      </md-icon>
+    </div>
+    <div class='md-48' style='width:250px'>
+      <div style='float:left' >
+        <md-button ui-sref='app({site:site})' class="md-raised md-primary">Buy Tickets</md-button>    
+      </div>
+    </div>
+  </div>
+  
+</div>
+

@@ -13,10 +13,32 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
                templateUrl: 'shared_html/backbutton.html'
              },
              'title@':{
-               template: 'poop'
+               template: 'Login'
              }
  	   }
+       }).state('app.login.process', 
+        { 
+ 	 url: '/process',
+ 	 views: {
+ 	     '@': {
+ 	       templateUrl: 'app/login/process/process.html',
+ 	       controller: 'app.login.process'
+ 	     },
+             'backbutton@':{
+               templateUrl: 'shared_html/backbutton.html'
+             },
+             'title@':{
+               template: 'Logged In'
+             }
+ 	   }, params: {
+             process_step:{}
+             ,user_info:{}             
+
+          }
+    
+
        })//REPLACE_ME
+
 
 
 }]);

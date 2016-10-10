@@ -1,0 +1,24 @@
+<div ng-if='resources.logged_in_user != undefined' layout="column" layout-align="space-around center">
+  <div layout="row" layout-align="center center">
+    <div>
+    <md-icon ng-style="{color: 'green'}"
+             aria-label="person"
+             class="md-48">
+      person
+    </md-icon>
+    </div>
+    <div class='md-48'>
+      <!--<span class='numeric_badge'>{{resources.logged_in_user.data.player_id}}</span>--> {{resources.logged_in_user.data.username}}
+    </div>
+  </div>
+  <div class='md-18'>
+    You are now logged in. 
+  </div>
+  <div>
+    <md-button ui-sref='app({site:site})' class="md-raised md-primary">Return Home</md-button>    
+  </div>
+</div>
+
+
+
+

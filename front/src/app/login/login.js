@@ -1,10 +1,13 @@
-angular.module('app.login',[/*REPLACEMECHILD*/]);
+angular.module('app.login',['app.login.process',/*REPLACEMECHILD*/]);
 angular.module('app.login').controller(
-    'app.login',['$scope','$state','TimeoutResources','Utils',
-                 function($scope, $state, TimeoutResources,Utils) {
-                     $scope.site=$state.params.site;
-                     $scope.process_step=$state.params.process_step;
-      }]        
+    'app.login',['$scope','$state','TimeoutResources','Utils','Modals','User',
+                 function($scope, $state, TimeoutResources,Utils,Modals,User) {
+                     $scope.utils = Utils;
+                     $scope.user = {};
+                     $scope.utils.controller_bootstrap($scope,$state);
+                 }]        
 );
+
+
 
 

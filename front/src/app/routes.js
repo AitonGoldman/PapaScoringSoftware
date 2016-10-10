@@ -1,9 +1,24 @@
 angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(    
     $stateProvider,
     $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/app');
+    $urlRouterProvider.otherwise('/');
     
     $stateProvider.state(
+        'event_select', {
+            url: '/',
+            views: {
+                '@': {
+                    templateUrl: 'app/event_select.html'//,
+                    //controller: 'EventSelectController'
+                },
+                'title@':{
+                    template: 'Event Select'
+                },                
+                'backbutton@':{
+                    template: " "
+                }
+            }
+        }).state(
         'app', {
             url: '/:site/app',
             views: {
@@ -12,7 +27,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
                     controller: 'IndexController'
                 },
                 'title@':{
-                    template: ' poop '
+                    template: 'TD Home'
                 },                
                 'backbutton@':{
                     template: " "

@@ -1,1 +1,14 @@
-Welcome to the login page!
+<div layout='column' flex style='margin-top:24px;'>
+<md-input-container>
+  <label>Username</label>
+  <input ng-model="user.username" type="text"  placeholder="Enter Username">
+</md-input-container>
+
+<md-input-container>
+  <label>Password</label>
+  <input type='password' ng-model="user.password" placeholder="Enter Password">
+</md-input-container>
+<md-button class="md-raised md-primary" ui-sref=".process({user_info:user})" ng-disabled="utils.var_empty(user.username) || utils.var_empty(user.password)">Login</md-button>
+</div>
+
+

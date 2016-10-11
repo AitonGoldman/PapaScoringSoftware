@@ -1,6 +1,17 @@
 from sqlalchemy_utils import create_database, database_exists
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
+from app.types import ImportedTables
+
+def create_db_and_tables(app, db_name, use_sqlite=False, drop_tables=False):    
+    db_url = generate_db_url(db_name, use_sqlite)
+    if not database_exists(db_url):        
+        create_database(db_url)
+    #FIXME : need to create dummy app to handle table creation         
+    db_handle = create_db_handle(db_url,app)        
+    app.tables = ImportedTables(db_handle)
+    create_TD_tables(db_handle, drop_tables=drop_tables)
+    db_handle.engine.dispose()
 
 def create_db_handle(db_url,flask_app):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_url    
@@ -21,8 +32,11 @@ def check_table_exists(db_handle):
         return False
 
 # FIXME : need to generate db_url by comparing "name" to good list of dbs
-def generate_db_url(db_name):
-    return "postgresql://tom:tomPassword@localhost/%s" % db_name
+def generate_db_url(db_name, use_sqlite=False):
+    if use_sqlite:
+        return "sqlite:////tmp/%s.db" % db_name
+    else:
+        return "postgresql://tom:tomPassword@localhost/%s" % db_name
 
 def app_db_handle(app):
     return app.tables.db_handle

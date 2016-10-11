@@ -1,24 +1,23 @@
 from flask import jsonify,current_app,request, Flask
-from flask.ext.sqlalchemy import get_debug_queries
 from app.blueprints import meta_admin_blueprint
-from werkzeug.exceptions import BadRequest
-from sqlalchemy_utils import create_database, database_exists
 from app.util import db_util
-from app.types import ImportedTables
 
 import json
 
+#FIXME : needs protection
 @meta_admin_blueprint.route('/meta_admin/db',methods=['POST'])
 def route_meta_admin_create_db():
     dummy_app = Flask('dummy_app')
     input_data = json.loads(request.data)
-    db_url = db_util.generate_db_url(input_data['db_name'])
-    if not database_exists(db_url):        
-        create_database(db_url)
-    #FIXME : need to create dummy app to handle table creation         
-    db_handle = db_util.create_db_handle(db_url,dummy_app)        
-    dummy_app.tables = ImportedTables(db_handle)
-    db_util.create_TD_tables(db_handle)
-    db_handle.engine.dispose()
+    db_util.create_db_and_tables(dummy_app, input_data['db_name'])
     del dummy_app
-    return jsonify({'data':[input_data['db_name']]})    
+    return jsonify({'data':input_data['db_name']})    
+
+@meta_admin_blueprint.route('/meta_admin/test_db',methods=['POST'])
+def route_meta_admin_wipe_test_db():
+    if not current_app.config['DEBUG']:
+        return jsonify({'data':None})
+    dummy_app = Flask('dummy_app')    
+    db_util.create_db_and_tables(dummy_app, 'test', use_sqlite=True, drop_tables=True)
+    del dummy_app
+    return jsonify({'data':'test'})    

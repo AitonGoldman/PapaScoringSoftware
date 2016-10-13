@@ -18,6 +18,11 @@ def create_db_handle(db_url,flask_app):
     db_handle = SQLAlchemy(flask_app)
     return db_handle
 
+def create_db_handle_no_app():
+    db_handle = SQLAlchemy()
+    return db_handle
+
+
 def create_TD_tables(db_handle,drop_tables=False):
     db_handle.reflect()
     if drop_tables:

@@ -19,6 +19,8 @@ class PathDispatcher(object):
             return app
 
     def __call__(self, environ, start_response):        
+        #print environ
+        #print start_response
         app = self.get_application(peek_path_info(environ))
         if app is not None:            
             pop_path_info(environ)

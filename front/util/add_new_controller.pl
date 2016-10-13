@@ -1,24 +1,33 @@
 #!/usr/bin/perl
+use Getopt::Long;
+GetOptions ("name=s" => \$name,
+            "path=s"   => \$path, 
+            "param=s"  => \@module_params,
+            "post_param=s"  => \@module_post_params,
+            "help" => \$help); 
 
-# goal : only add end of module path
-# parse module into array - done
-# get last element - done
-# check dir exists, abort if it does - done
-# mkdir - done
-# output js from template
-# output html from template
-# put contents into routes
-# insert module into parent module dependency
+$help_message =<<"END_HELP_MESSAGE";
+add_new_controller.pl --name <module name> --path <path to src dir> --param <param name> --post_param <post param name>
 
+--name         The name of the module - ex : app.login.process
+--path         Path to src dir - ex : /Users/agoldma/git/github/TD/front/src
+--param        The name of a parameter to define for the ui-router state - the parameter passed to this controller will be a string value
+--post_param   The name of a parameter to define for the ui-router state - the parameter passed to this controller will be an object
+END_HELP_MESSAGE
 
+if($help ne ""){      
+    print $help_message;
+    die();
+}
+$full_module_name = $name;
+$path_to_src_dir = $path;
 
-if (@ARGV < 2){
-    print "Uh oh - don't forget - arg 1 is full module path ('blah.poop.arrr') and arg 2 is path to top level src dir\n";
-    die;
+if ($full_module_name eq "" || $path_to_src_dir eq "" ){
+    print "Uh oh - don't forget full module path ('--name blah.poop.arrr') and path to top level src dir ('--path /Users/agoldma/git/github/TD/front/src')\n\n";
+    print $help_message;
+    die();
 }
 
-$full_module_name = $ARGV[0];
-$path_to_src_dir = $ARGV[1];
 
 @module_path_array = split(/\./,$full_module_name);
 $new_module = $module_path_array[$#module_path_array];
@@ -35,33 +44,73 @@ if(-e $module_file_path){
 
 `mkdir -p $module_file_path`;
 
-my $html_string = <<"END_HTML";
-END_HTML
-
 my $new_routes_string = <<"END_NEW_ROUTES";
-angular.module('TOMApp').config(function(\$stateProvider, \$urlRouterProvider) {
-    \$urlRouterProvider.otherwise('/app');
+angular.module('TDApp').config(['\$stateProvider', '\$urlRouterProvider',function(\$stateProvider, \$urlRouterProvider) {
+    \$urlRouterProvider.otherwise('/');
     
     \$stateProvider//REPLACE_ME
-})
+}]);
 END_NEW_ROUTES
+
+if($new_module eq "process"){
+    if(@module_post_params > 0){
+        for($x=0;$x<@module_post_params;$x++){
+            $module_post_params_string_for_param= <<"END_ROUTES_POST_PARAMS_STRING";
+,$module_post_params[$x]:{}             
+END_ROUTES_POST_PARAMS_STRING
+            $module_post_params_string=$module_post_params_string.$module_post_params_string_for_param;
+        }    
+        
+    } else {
+        $module_post_params_string="";
+    }
+
+    $routes_params_string = <<"END_ROUTES_PARAMS_STRING";
+, params: {
+             process_step:{}
+             $module_post_params_string
+          }
+    
+END_ROUTES_PARAMS_STRING
+} else {
+    $routes_params_string = "";
+}
+
+$url_params_string="";
+$url_params_sref='<!-- ui-sref=".'.$new_module.'({';
+if(@module_params>0){    
+    for($x=0;$x<@module_params;$x++){
+        $url_params_string=$url_params_string."/".$module_params[$x].'/:'.$module_params[$x];
+        $url_params_sref=$url_params_sref."$module_params[$x]: ,";
+    }    
+}
+$url_params_sref=$url_params_sref.'})" -->';
+my $html_string = <<"END_HTML";
+$url_params_sref
+END_HTML
+
+if($new_module ne "process"){
+    $back_button_string= 'shared_html/backbutton.html';    
+} else {
+    $back_button_string='shared_html/notbackbutton.html';
+}
 
 my $routes_string = <<"END_CONTROLLER";
 .state('$full_module_name', 
         { 
- 	 url: '/$new_module',
+ 	 url: '/$new_module$url_params_string',
  	 views: {
  	     '\@': {
  	       templateUrl: '$module_relative_file_path/$new_module.html',
- 	       controller: '$full_module_name',
+ 	       controller: '$full_module_name'
  	     },
              'backbutton\@':{
-               templateUrl: 'shared_html/backbutton.html'
-             },
+               templateUrl: '$back_button_string'
+             },            
              'title\@':{
                template: ''
              }
- 	   }
+ 	   }$routes_params_string
        })//REPLACE_ME
 END_CONTROLLER
 
@@ -87,24 +136,40 @@ open($output1,'>',$routes_path."/routes.js");
 print $output1 $old_routes;
 close output1;
 
-%url_params = get_params_from_routes($routes_path."/routes.js",$full_module_name); 
-$inherited_params = "";
+%url_params = get_params_from_routes($old_routes,$full_module_name); 
 
-foreach $x (keys(%url_params)){
-    $inherited_params = $inherited_params.'$scope.'.$x.'=$state.params.'.$x.";\n";
+$inherited_params = '$scope.site=$state.params.site;'."\n";
+foreach $x (keys(%url_params)){    
+    $inherited_params = $inherited_params."\t".'$scope.'.$x.'=$state.params.'.$x.";\n";
+}
+if($new_module eq "process"){
+    $check_process= << "CHECK_PROCESS_END";
+ \$scope.process_step=\$state.params.process_step;
+        if(mylodash.size(\$scope.process_step)==0){
+          Utils.stop_post_reload();
+        }
+CHECK_PROCESS_END
+} else {
+    $check_process='';
 }
 
 my $module_string = <<"END_MODULE";
 angular.module('$full_module_name',[/*REPLACEMECHILD*/]);
 angular.module('$full_module_name').controller(
-    '$full_module_name',
-    function(\$scope, \$state, StatusModal, TimeoutResources) {
+    '$full_module_name',[
+    '\$scope','\$state','TimeoutResources','Utils','Modals',
+    function(\$scope, \$state, TimeoutResources, Utils,Modals) {
         $inherited_params
-	//\$scope.player_info=\$state.params.newPlayerInfo;
-	//if(\$scope.checkForBlankParams(\$scope.player_info) == true){
-	//    return;
-	//}        
-    }
+        \$scope.utils = Utils;
+        \$scope.utils.controller_bootstrap(\$scope,\$state);                
+        $check_process     
+        //Modals.loading();
+        //$etc_data_promise = TimeoutResources.GetEtcData();
+        //$etc_data_promise.then(function(data){
+        // \$scope.resources = TimeoutResource.GetAllResources();
+        //  Modals.loaded();
+        //})
+    }]
 );
 END_MODULE
 
@@ -112,13 +177,15 @@ open($output1,'>',"$module_file_path/$new_module.js");
 print $output1 $module_string;
 close output1;
 
-
+print "put $full_module_name in $module_file_path\n";
 
 sub get_params_from_routes {
-    %params;
-    open(input1,"$_[0]");
+    %params;    
+    #open(input2,"$_[0]");
     $string_to_match = $_[1];
-    while(<input1>){
+    @old_routes=split(/\n/,$_[0]);
+    for($z=0;$z<@old_routes;$z++){
+        $_=$old_routes[$z];        
         if($_=~ /url\: \'(.+?)\'/){
             $url=$1;
         }
@@ -137,6 +204,7 @@ sub get_params_from_routes {
             }
         }
     }
+    close input2;
     return %params
 }
 

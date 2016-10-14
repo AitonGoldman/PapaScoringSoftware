@@ -5,6 +5,7 @@ from app.util import db_util
 import json
 
 #FIXME : needs protection
+#FIXME : need to pull db creation out into seperate function
 @meta_admin_blueprint.route('/meta_admin/db',methods=['POST'])
 def route_meta_admin_create_db():
     dummy_app = Flask('dummy_app')

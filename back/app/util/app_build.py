@@ -16,13 +16,16 @@ from app import routes
 from app.blueprints import admin_login_blueprint,meta_admin_blueprint,admin_manage_blueprint
 
 def get_generic_app(name):
-    app = Flask(name)    
-    app.config.from_pyfile('app/td_flask.py')    
-    td_config.assign_loaded_config(app,'app/td_public.py','app/td_secret.py')
+    app = Flask(name)
+    flask_config_file=os.getenv('flask_config_file','app/td_flask.py')
+    td_public_config_file=os.getenv('td_public_config_file','app/td_public.py')
+    td_secret_config_file=os.getenv('td_secret_config_file','app/td_secret.py')
+    app.config.from_pyfile(flask_config_file)    
+    td_config.assign_loaded_config(app,td_public_config_file,td_secret_config_file)
     pg_info = build_PgInfo(app)
     use_sqlite = app.td_config['sqlite']
     db_url = db_util.generate_db_url(name,pg_info=pg_info,use_sqlite=use_sqlite)            
-    if not database_exists(db_url):        
+    if not database_exists(db_url) and use_sqlite is False:        
         return None        
     principals = Principal(app)    
     app.my_principals = principals
@@ -40,9 +43,9 @@ def get_admin_app(name):
         return None
     app = get_generic_app(name)            
     if app:
-        db_url = db_util.generate_db_url(name,
-                                     pg_username=app.td_secret_config['pg_username'],
-                                     pg_password=app.td_secret_config['pg_password'])
+        pg_info = build_PgInfo(app)
+        use_sqlite = app.td_config['sqlite']
+        db_url = db_util.generate_db_url(name,pg_info=pg_info,use_sqlite=use_sqlite)            
         db_handle = db_util.create_db_handle(db_url, app)
         app.tables = ImportedTables(db_handle)
         app.register_blueprint(admin_login_blueprint)

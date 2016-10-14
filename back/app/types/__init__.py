@@ -1,4 +1,3 @@
-#from User import generate_user_class
 from Role import generate_role_class
 from User import generate_user_class
 

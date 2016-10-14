@@ -21,3 +21,7 @@ def route_meta_admin_wipe_test_db():
     db_util.create_db_and_tables(dummy_app, 'test', use_sqlite=True, drop_tables=True)
     del dummy_app
     return jsonify({'data':'test'})    
+
+@meta_admin_blueprint.route('/meta_admin/healthcheck',methods=['GET'])
+def route_meta_admin_health_check():    
+    return jsonify({'data':'METAADMIN_HEALTHY'})    

@@ -1,5 +1,6 @@
-from app.util.app_build import get_meta_admin_app, get_admin_app
+from app.util import app_build 
 from app.util.dispatch import PathDispatcher
-
-App = PathDispatcher(get_meta_admin_app(), get_admin_app)
+#FIXME : this should be moved to a different module path from the utils, so that it doesn't get loaded
+#        everytime we include one of the submodules
+App = PathDispatcher(app_build.get_meta_admin_app, app_build.get_admin_app)
 

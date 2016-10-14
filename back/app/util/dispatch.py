@@ -4,7 +4,7 @@ from werkzeug.exceptions import BadRequest
 
 class PathDispatcher(object):
     def __init__(self, default_app, create_app):
-        self.default_app = default_app
+        self.default_app = default_app()
         self.create_app = create_app
         self.lock = Lock()
         self.instances = {}

@@ -23,10 +23,8 @@ def get_generic_app(name):
     app.config.from_pyfile(flask_config_file)    
     td_config.assign_loaded_config(app,td_public_config_file,td_secret_config_file)
     pg_info = build_PgInfo(app)
-    use_sqlite = app.td_config['sqlite']
-    db_url = db_util.generate_db_url(name,pg_info=pg_info,use_sqlite=use_sqlite)            
-    if not database_exists(db_url) and use_sqlite is False:        
-        return None        
+    use_sqlite = app.td_config['sqlite']    
+    db_url = db_util.generate_db_url(name,pg_info=pg_info,use_sqlite=use_sqlite)                 
     principals = Principal(app)    
     app.my_principals = principals
     app.register_error_handler(BadRequest, lambda e: 'bad request!')        
@@ -46,6 +44,8 @@ def get_admin_app(name):
         pg_info = build_PgInfo(app)
         use_sqlite = app.td_config['sqlite']
         db_url = db_util.generate_db_url(name,pg_info=pg_info,use_sqlite=use_sqlite)            
+        if not database_exists(db_url):
+            return None            
         db_handle = db_util.create_db_handle(db_url, app)
         app.tables = ImportedTables(db_handle)
         app.register_blueprint(admin_login_blueprint)
@@ -55,7 +55,7 @@ def get_admin_app(name):
         auth.generate_identity_loaded(app)
     return app
 
-def get_meta_admin_app():    
-    app = get_generic_app('meta_admin')
+def get_meta_admin_app():        
+    app = get_generic_app('meta_admin')    
     app.register_blueprint(meta_admin_blueprint)
     return app

@@ -8,11 +8,12 @@ from flask_login import login_required,current_user
 
 @admin_manage_blueprint.route('/user/<user_id>',methods=['DELETE'])
 @login_required
-@Admin_permission.require(403)
 def route_delete_user(user_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     user = tables.User.query.filter_by(user_id=user_id).first()
+    if user is None:
+        raise BadRequest("Tried to delete a user that does not exist")
     db.session.delete(user)
     db.session.commit()
     return jsonify({'data':'deleted'})
@@ -33,16 +34,19 @@ def route_add_user():
     new_user = tables.User(
         username=input_data['username']        
     )
+    
     new_user.crypt_password(input_data['password'])
-    #if 'roles' not in user_data:
-    #    abort(422)        
     db.session.add(new_user)
-    #for role_id,role_name in user_data['roles'].iteritems():
-    #    role = Role.query.filter_by(role_id=role_id).first()
-    #    if role is not None:            
-    #        new_user.roles.append(role)
-    #    else:
-    #        abort(422)
+    
+    if 'roles' in input_data:        
+        for role in input_data['roles']:                        
+            existing_role = current_app.tables.Role.query.filter_by(role_id=role['role_id']).first()            
+            if existing_role is None:                
+                raise BadRequest('Role with id %s does not exist' % role['role_id'])
+        for role in input_data['roles']:
+            existing_role = current_app.tables.Role.query.filter_by(role_id=role['role_id']).first()            
+            new_user.roles.append(existing_role)
+    
     db.session.commit()                        
     return jsonify({'data':new_user.to_dict_simple()})
     

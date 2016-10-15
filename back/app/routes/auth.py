@@ -8,13 +8,13 @@ from flask_principal import identity_changed, Identity
 
 @admin_login_blueprint.route('/auth/logout',methods=['GET'])
 @login_required
-def logout():
+def route_logout():
     logout_user()
     return jsonify({'data':'all done'})
 
 @admin_login_blueprint.route('/auth/current_user',methods=['GET'])
 @login_required
-def get_current_user():
+def route_get_current_user():
     if hasattr(current_user,'user_id'):
         return jsonify({'data':current_user.to_dict_simple()})
     else:
@@ -23,7 +23,10 @@ def get_current_user():
 @admin_login_blueprint.route('/auth/login',methods=['PUT'])
 def route_login():
     tables = db_util.app_db_tables(current_app)
-    input_data = json.loads(request.data)
+    if request.data:
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Username or password not specified')        
     if 'username' not in input_data or 'password' not in input_data:
         raise BadRequest('Username or password not specified')
         

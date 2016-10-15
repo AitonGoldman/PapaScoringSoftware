@@ -11,11 +11,13 @@ class PathDispatcher(object):
 
     def get_application(self, prefix):
         with self.lock:            
+            if prefix == "meta_admin":
+                return None                
             app = self.instances.get(prefix)
             if app is None:                
                 app = self.create_app(prefix)                
                 if app is not None:
-                    self.instances[prefix] = app                    
+                    self.instances[prefix] = app                                                    
             return app
 
     def __call__(self, environ, start_response):        

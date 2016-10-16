@@ -12,15 +12,21 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         response,results = self.dispatch_request('/%s/util/healthcheck' % self.poop_db_name)                
         self.flask_app = self.app.instances[self.poop_db_name]
 
-        self.admin_user = self.flask_app.tables.User(username='test_admin')
-        self.admin_user.crypt_password('test_admin_password')
-        self.flask_app.tables.db_handle.session.add(self.admin_user)
-        self.flask_app.tables.db_handle.session.commit()
-
         self.new_role = self.flask_app.tables.Role(name='test_role')
         self.flask_app.tables.db_handle.session.add(self.new_role)
         self.flask_app.tables.db_handle.session.commit()
+
+        self.admin_role = self.flask_app.tables.Role(name='admin')
+        self.flask_app.tables.db_handle.session.add(self.admin_role)
+        self.flask_app.tables.db_handle.session.commit()
+
         
+        self.admin_user = self.flask_app.tables.User(username='test_admin')
+        self.admin_user.crypt_password('test_admin_password')
+        self.admin_user.roles.append(self.admin_role)
+        self.flask_app.tables.db_handle.session.add(self.admin_user)
+        self.flask_app.tables.db_handle.session.commit()
+
         
     def test_user_create(self):        
         with self.flask_app.test_client() as c:                    
@@ -82,9 +88,12 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_user_create_with_bad_roles(self):        
         with self.flask_app.test_client() as c:            
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))                        
+                   data=json.dumps({'username':self.admin_user.username,
+                                    'password':'test_admin_password'}))                        
             rv = c.post('/user',
-                       data=json.dumps({'username':'test_user','password':'test_user_password','roles':[{'role_id':'55'}]}))
+                       data=json.dumps({'username':'test_user',
+                                        'password':'test_user_password',
+                                        'roles':[{'role_id':'55'}]}))
             self.assertEquals(rv.status_code,
                               400,
                               'Was expecting status code 400, but it was %s' % (rv.status_code))

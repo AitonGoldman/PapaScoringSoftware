@@ -3,11 +3,12 @@ from flask import jsonify,current_app,request
 import json
 from werkzeug.exceptions import BadRequest,Conflict
 from app.util import db_util
-from app.util.permissions import Admin_permission,Desk_permission,Scorekeeper_permission
+from app.util.permissions import Admin_permission
 from flask_login import login_required,current_user
 
 @admin_manage_blueprint.route('/user/<user_id>',methods=['DELETE'])
 @login_required
+@Admin_permission.require(403)
 def route_delete_user(user_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -20,6 +21,7 @@ def route_delete_user(user_id):
         
 @admin_manage_blueprint.route('/user',methods=['POST'])
 @login_required
+@Admin_permission.require(403)
 def route_add_user():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)

@@ -1,12 +1,13 @@
 from flask import jsonify,current_app,request, Flask
 from app.blueprints import meta_admin_blueprint
 from app.util import db_util
-
+from app.util.permissions import Admin_permission
 import json
 
 #FIXME : needs protection
 #FIXME : need to pull db creation out into seperate function
 @meta_admin_blueprint.route('/meta_admin/db',methods=['POST'])
+@Admin_permission.require(403)
 def route_meta_admin_create_db():
     dummy_app = Flask('dummy_app')
     input_data = json.loads(request.data)
@@ -15,6 +16,7 @@ def route_meta_admin_create_db():
     return jsonify({'data':input_data['db_name']})    
 
 @meta_admin_blueprint.route('/meta_admin/test_db',methods=['POST'])
+@Admin_permission.require(403)
 def route_meta_admin_wipe_test_db():
     if not current_app.config['DEBUG']:
         return jsonify({'data':None})

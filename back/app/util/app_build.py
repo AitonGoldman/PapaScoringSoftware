@@ -1,6 +1,5 @@
 from flask import Flask
 from sqlalchemy_utils import create_database, database_exists
-from app import td_public, td_secret
 from app.util import db_util,td_config, auth
 from app.util.pg_info import build_PgInfo_from_config
 from app.util.dispatch import PathDispatcher

@@ -35,6 +35,7 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
         },
         loading: function(){
             $ionicLoading.show({
+                hideOnStateChange: true,
                 template: '<div class="col"><div><ion-spinner></ion-spinner></div><div><br>Loading...<br>{{loading_message}}</div></div>'
             });
             

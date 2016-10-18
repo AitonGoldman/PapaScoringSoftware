@@ -1,1 +1,14 @@
-<!-- ui-sref=".login({})" -->
+<ion-view view-title="login"  hide-back-button='true' >
+  <ion-content>
+    <div class="list">
+      <label class="item item-input">
+        <input ng-model='user.username' type="text" placeholder="Username">
+      </label>
+      <label class="item item-input">
+        <input ng-model='user.password' type="text" placeholder="Password">
+      </label>
+    </div>
+    <a class="button icon-right ion-chevron-right" ui-sref='.process({user_info:user})'>Login</a>
+  </ion-content>
+</ion-view>
+

@@ -41,13 +41,14 @@ angular.module('TD_services.timeout_resources').factory('TimeoutResources',
 	}
     };                                                            
     global_timeout = 15000;
-    
+
+        //FIXME : THIS BELONGS IN UTILS
     var resolved_promise = function(){
 	var defer = $q.defer();
 	defer.resolve();
 	return defer.promise;
     };
-    
+       //FIXME : THIS BELONGS IN UTILS    
     var rejected_promise = function(){
 	var defer = $q.defer();
 	defer.reject();

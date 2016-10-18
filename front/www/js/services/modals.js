@@ -17,13 +17,13 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
             },500);            
         },
         error:function(error_message,new_dest_site,new_dest_route){
-            $rootScope.error_message = error_message;                        
+            $ionicLoading.hide();
+            $rootScope.error_message = error_message;            
             dest_site = new_dest_site;
             dest_route = new_dest_route;
             if(dest_route == undefined){
                 dest_route="app";
-            }
-            
+            }            
             $ionicModal.fromTemplateUrl('js/services/error_modal.html', {                
                 animation: 'slide-in-up',
                 backdropClickToClose: false,
@@ -37,8 +37,7 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
             $ionicLoading.show({
                 hideOnStateChange: true,
                 template: '<div class="col"><div><ion-spinner></ion-spinner></div><div><br>Loading...<br>{{loading_message}}</div></div>'
-            });
-            
+            });            
         },
         set_status_modal_message: function(message){
             $rootScope.loading_message=message;

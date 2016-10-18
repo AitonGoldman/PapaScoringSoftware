@@ -29,13 +29,16 @@ if ($full_module_name eq "" || $path_to_src_dir eq "" ){
 }
 
 
+
 @module_path_array = split(/\./,$full_module_name);
 $new_module = $module_path_array[$#module_path_array];
 $parent_module = $module_path_array[$#module_path_array-1];
 $parent_module_file_path = $path_to_src_dir.'/'.join('/',@module_path_array[0..$#module_path_array-1]);
 $module_file_path = $path_to_src_dir.'/'.join('/',@module_path_array);
-$module_relative_file_path = join('/',@module_path_array);
+$module_relative_file_path = 'js/'.join('/',@module_path_array);
 $routes_path = $path_to_src_dir.'/'.join('/',@module_path_array[0..1]);
+@path_array = split(/\//,$path_to_src_dir);
+$index_path_location = $path_array[$#path_array-1];
 
 if(-e $module_file_path){
     print "this is already here\n";
@@ -45,9 +48,7 @@ if(-e $module_file_path){
 `mkdir -p $module_file_path`;
 
 my $new_routes_string = <<"END_NEW_ROUTES";
-angular.module('TDApp').config(['\$stateProvider', '\$urlRouterProvider',function(\$stateProvider, \$urlRouterProvider) {
-    \$urlRouterProvider.otherwise('/');
-    
+angular.module('TDApp').config(['\$stateProvider', '\$urlRouterProvider',function(\$stateProvider, \$urlRouterProvider) {    
     \$stateProvider//REPLACE_ME
 }]);
 END_NEW_ROUTES
@@ -69,8 +70,7 @@ END_ROUTES_POST_PARAMS_STRING
 , params: {
              process_step:{}
              $module_post_params_string
-          }
-    
+          }    
 END_ROUTES_PARAMS_STRING
 } else {
     $routes_params_string = "";
@@ -98,28 +98,32 @@ if($new_module ne "process"){
 my $routes_string = <<"END_CONTROLLER";
 .state('$full_module_name', 
         { 
+         cache: false,
  	 url: '/$new_module$url_params_string',
  	 views: {
- 	     '\@': {
+ 	     'menuContent\@app': {
  	       templateUrl: '$module_relative_file_path/$new_module.html',
  	       controller: '$full_module_name'
- 	     },
-             'backbutton\@':{
-               templateUrl: '$back_button_string'
-             },            
-             'title\@':{
-               template: ''
-             }
+ 	     }
  	   }$routes_params_string
        })//REPLACE_ME
 END_CONTROLLER
+
+
+$old_index = replace_string_in_file($index_path_location."/index.html",'<!--REPLACEME-->',"<script src='$module_relative_file_path/$new_module.js'></script>,\n<script src='$module_relative_file_path/routes.js'></script>\n<!--REPLACEME-->");
+
+open($output1,'>',"$index_path_location/index.html");
+print $output1 $old_index;
+close output1;
 
 
 open($output1,'>',"$module_file_path/$new_module.html");
 print $output1 $html_string;
 close output1;
 
-$old_parent = replace_string_in_file($parent_module_file_path."/$parent_module.js",'\/\*REPLACEMECHILD\*\/',"'$full_module_name',\/*REPLACEMECHILD\*\/");
+
+
+$old_parent = replace_string_in_file($parent_module_file_path."/$parent_module.js",'\/\*REPLACEMECHILD\*\/',"'$full_module_name',\n    \/*REPLACEMECHILD\*\/");
 open($output1,'>',$parent_module_file_path."/$parent_module.js");
 print $output1 $old_parent;
 close output1;

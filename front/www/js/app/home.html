@@ -14,17 +14,18 @@
 
   <ion-side-menu side="right">
     <ion-header-bar class="bar-stable">
-      <h1 class="title">Welcome To TD!</h1>
+      <h1 ng-if="User.logged_in() == false" class="title">Welcome To TD!</h1>
+      <h1 ng-if="User.logged_in() == true" class="title">{{User.logged_in_user().username}}</h1>
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <a class='item item-icon-right' menu-close ui-sref='.login'>
+        <a class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false">
           <div>
             Login
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
-        <a class='item item-icon-right' menu-close ui-sref='.logout'>
+        <a class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
           <div>
             Logout
           </div>

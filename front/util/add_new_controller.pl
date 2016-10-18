@@ -84,9 +84,19 @@ if(@module_params>0){
         $url_params_sref=$url_params_sref."$module_params[$x]: ,";
     }    
 }
+if(@module_post_params>0){    
+    for($x=0;$x<@module_post_params;$x++){        
+        $url_params_sref=$url_params_sref."$module_post_params[$x]: ,";
+    }    
+}
 $url_params_sref=$url_params_sref.'})" -->';
 my $html_string = <<"END_HTML";
-$url_params_sref
+<ion-view view-title="">
+  <ion-content>      
+     $url_params_sref    
+  </ion-content>
+</ion-view>
+
 END_HTML
 
 if($new_module ne "process"){
@@ -109,8 +119,13 @@ my $routes_string = <<"END_CONTROLLER";
        })//REPLACE_ME
 END_CONTROLLER
 
+if(@module_path_array == 2){
+    $index_routes_include = "\n<script src='$module_relative_file_path/routes.js'></script>";
+} else {
+    $index_routes_include="";
+}
 
-$old_index = replace_string_in_file($index_path_location."/index.html",'<!--REPLACEME-->',"<script src='$module_relative_file_path/$new_module.js'></script>,\n<script src='$module_relative_file_path/routes.js'></script>\n<!--REPLACEME-->");
+$old_index = replace_string_in_file($index_path_location."/index.html",'<!--REPLACEME-->',"<script src='$module_relative_file_path/$new_module.js'></script>,$index_routes_include\n<!--REPLACEME-->");
 
 open($output1,'>',"$index_path_location/index.html");
 print $output1 $old_index;
@@ -146,12 +161,18 @@ $inherited_params = '$scope.site=$state.params.site;'."\n";
 foreach $x (keys(%url_params)){    
     $inherited_params = $inherited_params."\t".'$scope.'.$x.'=$state.params.'.$x.";\n";
 }
+$passed_in_post_params = "";
+
+for($x=0;$x<@module_post_params;$x++){
+    $passed_in_post_params = $passed_in_post_params."\n        \$scope.".$module_post_params[$x]."=\$state.params.".$module_post_params[$x].";";
+}
 if($new_module eq "process"){
     $check_process= << "CHECK_PROCESS_END";
  \$scope.process_step=\$state.params.process_step;
         if(mylodash.size(\$scope.process_step)==0){
           Utils.stop_post_reload();
         }
+        $passed_in_post_params
 CHECK_PROCESS_END
 } else {
     $check_process='';
@@ -165,7 +186,7 @@ angular.module('$full_module_name').controller(
     function(\$scope, \$state, TimeoutResources, Utils,Modals) {
         $inherited_params
         \$scope.utils = Utils;
-        \$scope.utils.controller_bootstrap(\$scope,\$state);                
+        \$scope.bootstrap_promise = \$scope.utils.controller_bootstrap(\$scope,\$state);                
         $check_process     
         //Modals.loading();
         //$etc_data_promise = TimeoutResources.GetEtcData();

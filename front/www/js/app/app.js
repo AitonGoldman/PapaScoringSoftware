@@ -6,7 +6,7 @@ app = angular.module(
         'ngCookies',            
         'ngSanitize',
         'app.login',
-        'TD_services'
+        'TD_services',
         /*REPLACEMECHILD*/
 	]
 );

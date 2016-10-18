@@ -7,7 +7,8 @@ app = angular.module(
         'ngSanitize',
         'app.login',
         'TD_services',
-        /*REPLACEMECHILD*/
+        'app.login',
+    /*REPLACEMECHILD*/
 	]
 );
 

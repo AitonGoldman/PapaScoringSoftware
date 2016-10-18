@@ -24,17 +24,20 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
         get_user_site: function(){
             return user_site;
         },        
-        check_current_user:function(){            
+        check_current_user:function(){
+            console.log('in check current...');
             Modals.loading();            
             $current_user_promise = TimeoutResources.CurrentUser(undefined,{site:user_site});
-            $current_user_promise.then(function(data){
-                //FIXME : should probably handle this better                
+            return $current_user_promise.then(function(data){                
                 set_logged_in_user_func(data);
                 Modals.loaded();
-            },function(data){                
+            },function(data){
+                //FIXME : If you are not logged in, you will be whisked away to login page
+                //        this can be confusing, and needs to pop up a "hey - you are not
+                //        logged in - click ok to login" message
                 $state.go('app.login',{site:user_site});
                 Modals.loaded();
-            });                        
+            });            
         },
         logged_in: function(){
             return logged_in_status;  

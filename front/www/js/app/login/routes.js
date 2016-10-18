@@ -9,6 +9,22 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.login'
  	     }
  	   }
+       }).state('app.login.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/login/process/process.html',
+ 	       controller: 'app.login.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             ,user_info:{}             
+
+          }    
+
        })//REPLACE_ME
+
 
 }]);

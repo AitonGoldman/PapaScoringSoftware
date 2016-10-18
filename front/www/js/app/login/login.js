@@ -1,4 +1,5 @@
-angular.module('app.login',[/*REPLACEMECHILD*/]);
+angular.module('app.login',['app.login.process',
+    /*REPLACEMECHILD*/]);
 angular.module('app.login').controller(
     'app.login',[
     '$scope','$state','TimeoutResources','Utils','Modals',
@@ -7,7 +8,7 @@ angular.module('app.login').controller(
 
         $scope.utils = Utils;
         $scope.utils.controller_bootstrap($scope,$state);                
-             
+        $scope.user = {};
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){

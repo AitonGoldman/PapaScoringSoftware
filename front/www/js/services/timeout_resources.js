@@ -89,8 +89,9 @@ angular.module('TD_services.timeout_resources').factory('TimeoutResources',
         response_interceptor_to_use = undefined;
         if(default_interceptor == undefined){
             response_interceptor_to_use = response_interceptor;
-        }    
-        return $resource('[APIHOST]/'+url,gen_post_args,
+        }
+        
+        return $resource(api_host+url,gen_post_args,
                          {                             
                              'custom_http':{method:http_method, timeout:global_timeout,interceptor:response_interceptor_to_use}
                          }

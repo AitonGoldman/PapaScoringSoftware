@@ -8,6 +8,7 @@ app = angular.module(
         'app.login',
         'TD_services',
         'app.login',
+    'app.logout',
     /*REPLACEMECHILD*/
 	]
 );

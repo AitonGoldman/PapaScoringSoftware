@@ -29,7 +29,9 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
             Modals.loading();            
             $current_user_promise = TimeoutResources.CurrentUser(undefined,{site:user_site});
             return $current_user_promise.then(function(data){                
-                set_logged_in_user_func(data);
+                if(data.data!=null){
+                    set_logged_in_user_func(data.data);                
+                }
                 Modals.loaded();
             },function(data){
                 //FIXME : If you are not logged in, you will be whisked away to login page

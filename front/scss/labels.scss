@@ -1,0 +1,22 @@
+div.icon-label{
+    div:first-child {
+        font-size: 48px;
+        div:first-child {
+            margin-right:15px;
+            margin-left:auto;
+        }
+        div:last-child {
+            margin-top:auto;
+            margin-bottom:auto;
+            margin-right:auto;
+        }        
+    }
+    div:last-child {
+        div {
+            font-size:22px;
+            margin-top:10px;        
+            margin-left:auto;
+            margin-right:auto;
+        }
+    }
+}

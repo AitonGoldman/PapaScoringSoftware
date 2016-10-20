@@ -1,6 +1,5 @@
 @media screen and (max-width: 610px) {
     .tablet-friendly-list-skinny {
-        margin-top:10px;
         width:100%;
     }
     div.tablet-friendly-list-skinny {
@@ -17,23 +16,19 @@
                 //border-width:10px;
             }
         }
-        
     }
-    
 }
 
 @media screen and (max-width: 970px) and (min-width:611px) {
-.tablet-friendly-list-skinny {
-    margin-top:10px;
-    width:35%;
-}
-
-div.tablet-friendly-list-skinny {
-    a.item {
-        text-align:center;
-    }
-}
-
+    .tablet-friendly-list-skinny {
+        margin-top:10px;
+        width:35%;
+    }    
+    div.tablet-friendly-list-skinny {
+        a.item {
+            text-align:center;
+        }
+    }    
 }
 
 
@@ -80,10 +75,15 @@ ion-side-menu{
         }
     }
 }
+
 ion-side-menu {
     ion-header-bar.bar {            
-        height:80px;
+        //height:80px;
     }
+}
+
+.apple-bar {
+    height:100px;
 }
 
 side-menu-first-list-item {

@@ -1,6 +1,19 @@
-<ion-view view-title="Logged In">
-  <ion-content>      
-
+<ion-view view-title="Logged In"  hide-back-button='true'>
+  <ion-content>
+    <div class='col icon-label'>
+      <div class='row'>
+        <div><i class="icon ion-person"></i></div>
+        <div>{{User.logged_in_user().username}}</div>
+      </div>
+      <div class='row'>
+        <div>Has Logged In</div>
+      </div>
+    </div>
+    <center>
+      <a class='button button-large button-positive' ui-sref='app({site:site})'>
+        Home
+      </a>
+    </center>
   </ion-content>
 </ion-view>
 

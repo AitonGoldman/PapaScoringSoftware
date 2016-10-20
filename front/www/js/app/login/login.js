@@ -9,6 +9,7 @@ angular.module('app.login').controller(
         $scope.utils = Utils;
         $scope.utils.controller_bootstrap($scope,$state);                
         $scope.user = {};
+        //FIXME : should reroute to home if already logged in
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){

@@ -15,9 +15,15 @@ app = angular.module(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,Modals, User) {
-        $scope.site = $state.params.site;
+             $state,Modals, User, Utils) {
+        Utils.controller_bootstrap($scope,$state);
         $scope.User = User;
+        $scope.isIOS = ionic.Platform.isIOS();
+        if($scope.isIOS == true){
+            $scope.menu_bar_title_style={'height':'100'};
+        } else {
+            $scope.menu_bar_title_style={'height':'80'};
+        }
     }
 );
 

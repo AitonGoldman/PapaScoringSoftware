@@ -1,7 +1,7 @@
 angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(    
     $stateProvider,
     $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/event_select');
+    $urlRouterProvider.otherwise('/poop/app');
     
     $stateProvider.state(
         'event_select', {

@@ -13,7 +13,8 @@
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
   <ion-side-menu side="right">
-    <ion-header-bar class="bar-positive">
+    <ion-header-bar class="bar-positive" ng-style="menu_bar_title_style">
+
       <h1 ng-if="User.logged_in() == false" class="title">Welcome To TD!</h1>
       <h1 ng-if="User.logged_in() == true" class="title">{{User.logged_in_user().username}}</h1>
     </ion-header-bar>

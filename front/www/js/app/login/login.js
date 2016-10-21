@@ -7,7 +7,7 @@ angular.module('app.login').controller(
         $scope.site=$state.params.site;
 
         
-        Utils.controller_bootstrap($scope,$state);                
+        $scope.controller_bootstrap($scope,$state);                
         $scope.user = {};
         //FIXME : should reroute to home if already logged in
         //Modals.loading();

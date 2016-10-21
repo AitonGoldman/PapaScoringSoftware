@@ -17,7 +17,19 @@ app.controller(
     'IndexController',    
     function($scope, $location, $http, 
              $state,Modals, User, Utils) {
-        Utils.controller_bootstrap($scope,$state);
+        //FIXME : there has got to be a better place to put this, but I can't put it in
+        //        Utils because it will cause a circular reference
+        $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){
+            scope.site=state.params.site;
+            User.set_user_site(scope.site);            
+            if(do_not_check_current_user == undefined && User.logged_in() == false){
+                return User.check_current_user();
+            } else {
+                return Utils.resolved_promise();
+            }                                 
+        };
+        
+        $scope.controller_bootstrap($scope,$state);
         $scope.User = User;
         $scope.isIOS = ionic.Platform.isIOS();
         if($scope.isIOS == true){

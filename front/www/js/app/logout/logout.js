@@ -6,7 +6,7 @@ angular.module('app.logout').controller(
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
-        $scope.bootstrap_promise = $scope.utils.controller_bootstrap($scope,$state);                
+        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         Modals.loading();            
         $logout_promise = TimeoutResources.Logout(undefined,{site:$scope.site});
         $logout_promise.then(function(data){            

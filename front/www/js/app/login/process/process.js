@@ -5,7 +5,7 @@ angular.module('app.login.process').controller(
         function($scope, $state, TimeoutResources, Utils,Modals,User) {            
             $scope.site=$state.params.site;        
             $scope.utils = Utils;
-            $scope.utils.controller_bootstrap($scope,$state,true);                
+            $scope.controller_bootstrap($scope,$state,true);                
             $scope.process_step=$state.params.process_step;
             $scope.User=User;
             
@@ -26,7 +26,7 @@ angular.module('app.login.process').controller(
             //FIXME : need a better way to handle situation where we want
             //        a different error message than what is given back
             //        by the server.            
-            console.log(data.config.url.split('/')[3]);
+            //console.log(data.config.url.split('/')[3]);
             Modals.error('Login Failed. Check your username and password.', $scope.site, '^');
         });                     
     }]

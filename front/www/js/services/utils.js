@@ -1,12 +1,18 @@
 angular.module('TD_services.utils', []);
-angular.module('TD_services.utils').factory('Utils', ['Modals','User','$q',function(Modals, User, $q) {                
-    var resolved_promise = function(){
+angular.module('TD_services.utils').factory('Utils', ['$q',function($q) {                
+    var resolved_promise = function(value){
 	var defer = $q.defer();
-	defer.resolve();
+	defer.resolve(value);
 	return defer.promise;
     };
-
-    return {
+       
+    var rejected_promise = function(value){
+	var defer = $q.defer();
+	defer.reject(value);
+	return defer.promise;
+    };
+    
+    return {        
         stop_post_reload : function(){
             //FIXME : fill me in later
         },
@@ -18,15 +24,6 @@ angular.module('TD_services.utils').factory('Utils', ['Modals','User','$q',funct
         },
 
         resolved_promise:resolved_promise,
-        
-        controller_bootstrap: function(scope, state, do_not_check_current_user){
-            scope.site=state.params.site;
-            User.set_user_site(scope.site);
-            if(do_not_check_current_user == undefined && User.logged_in() == false){
-                return User.check_current_user();
-            } else {
-                return resolved_promise();
-            }                                 
-        }
+        rejected_promise:rejected_promise                
     };
 }]);

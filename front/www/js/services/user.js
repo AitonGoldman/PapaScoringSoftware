@@ -57,8 +57,8 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
         has_role: function(role) { 
             return logged_in_user && logged_in_user.roles && (
                 logged_in_user.roles.indexOf(role) != -1
-            );
-        },
+            )? true: false;
+        }
     };
 }]);
 

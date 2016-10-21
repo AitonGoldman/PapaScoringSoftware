@@ -13,7 +13,6 @@ def route_logout():
     return jsonify({'data':'all done'})
 
 @admin_login_blueprint.route('/auth/current_user',methods=['GET'])
-@login_required
 def route_get_current_user():
     if hasattr(current_user,'user_id'):
         return jsonify({'data':current_user.to_dict_simple()})

@@ -66,10 +66,12 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_current_user(self):        
         with self.flask_app.test_client() as c:
             rv = c.get('/auth/current_user')
+            null_user = json.loads(rv.data)['data']
             self.assertEquals(rv.status_code,
-                              401,
-                              'Was expecting status code 401, but it was %s' % (rv.status_code))
-            
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            self.assertEquals(null_user,
+                              None)            
             c.put('/auth/login',
                        data=json.dumps({'username':self.new_user.username,'password':'test_user_password'}))
             rv = c.get('/auth/current_user')

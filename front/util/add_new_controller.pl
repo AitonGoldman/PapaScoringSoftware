@@ -125,7 +125,7 @@ if(@module_path_array == 2){
     $index_routes_include="";
 }
 
-$old_index = replace_string_in_file($index_path_location."/index.html",'<!--REPLACEME-->',"<script src='$module_relative_file_path/$new_module.js'></script>,$index_routes_include\n<!--REPLACEME-->");
+$old_index = replace_string_in_file($index_path_location."/index.html",'<!--REPLACEME-->',"<script src='$module_relative_file_path/$new_module.js'></script>$index_routes_include\n<!--REPLACEME-->");
 
 open($output1,'>',"$index_path_location/index.html");
 print $output1 $old_index;
@@ -186,7 +186,7 @@ angular.module('$full_module_name').controller(
     function(\$scope, \$state, TimeoutResources, Utils,Modals) {
         $inherited_params
         \$scope.utils = Utils;
-        \$scope.bootstrap_promise = \$scope.utils.controller_bootstrap(\$scope,\$state);                
+        \$scope.bootstrap_promise = \$scope.controller_bootstrap(\$scope,\$state);                
         $check_process     
         //Modals.loading();
         //$etc_data_promise = TimeoutResources.GetEtcData();

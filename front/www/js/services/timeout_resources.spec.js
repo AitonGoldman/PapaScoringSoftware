@@ -73,25 +73,37 @@ describe('timeout_resources tests', function() {
         test_http_request(999,derp);        
     });
     it('_GenerateResourceDefinition should generate a PUT resource',function(){
-        test_resource_generation('PUT',TimeoutResources._ResponseInterceptor);
+        //test_resource_generation('PUT',TimeoutResources._ResponseInterceptor);
+        test_resource_generation('PUT',{});
         
     });
     it('_GenerateResourceDefinition should generate a POST resource',function(){
-        test_resource_generation('POST',TimeoutResources._ResponseInterceptor);        
+        //test_resource_generation('POST',TimeoutResources._ResponseInterceptor);
+        test_resource_generation('POST',{});        
+        
     });
     it('_GenerateResourceDefinition should generate a GET resource',function(){
-        test_resource_generation('GET',TimeoutResources._ResponseInterceptor);        
+        //test_resource_generation('GET',TimeoutResources._ResponseInterceptor);
+        test_resource_generation('GET',{});        
+        
     });
     it('_GenerateResourceDefinition should generate a DELETE resource',function(){
-        test_resource_generation('DELETE',TimeoutResources._ResponseInterceptor);                
-    });
-    it('_GenerateResourceDefinition should handle a custom responseinterceptor',function(){
-        var custom_response_interceptor = function(arg_one){};        
-        mock_resource.calls.reset();
-        var resource = TimeoutResources._GenerateResourceDefinition(':site/test/route','PUT', custom_response_interceptor);
-        expect(mock_resource.calls.count()).toEqual(0);
-        test_resource_generation('DELETE',{responseError:custom_response_interceptor});
-        expect(mock_resource.calls.count()).toEqual(1);        
+        //test_resource_generation('DELETE',TimeoutResources._ResponseInterceptor);
+        test_resource_generation('DELETE',{});                
+        
+    });    
+    it('_GenerateResourceDefinition should handle default responseinterceptor',function(){        
+        var resource = TimeoutResources._GenerateResourceDefinition(':site/test/route','GET', undefined);        
+        expect(mock_resource).toHaveBeenCalledWith(api_host+':site/test/route',
+                                                   {site:'@site'},
+                                                   {'custom_http':{method:'GET',
+                                                                   timeout: 15000,
+                                                                   interceptor:TimeoutResources._ResponseInterceptor
+                                                                  }
+                                                   }
+                                                  );
+
+        //test_resource_generation('DELETE',{});                         
     });            
     it('_GenerateCustomHttpExecutor should handle a POST/PUT resource',function(){        
         var fake_resource={'custom_http':jasmine.createSpy()};

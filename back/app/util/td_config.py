@@ -17,8 +17,9 @@ def assign_loaded_config(app,
                          secret_config_filename=None,
                          flask_config_filename=None):    
     if flask_config_filename is None:
-        flask_config_filename=os.getenv('flask_config_filename','app/td_flask.py')
-    app.config.from_pyfile(flask_config_filename)
+        flask_config_filename=os.getenv('flask_config_filename',None)
+        if flask_config_filename:
+            app.config.from_pyfile(flask_config_filename)
     secret_config,public_config = get_configs(public_config_filename,secret_config_filename)
     app.td_secret_config = secret_config
     app.td_config = public_config

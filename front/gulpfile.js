@@ -8,12 +8,28 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var karma = require('karma').server;
 var Server = require('karma').Server;
+var protractor = require("gulp-protractor").protractor;
+var argv = require('yargs').argv;
 
 var paths = {
   sass: ['./scss/**/*.scss']
 };
 
 gulp.task('default', ['sass']);
+
+gulp.task('e2e', function(done) {
+    if(argv.test_instance_ip == undefined){
+        done('--test_instance_ip argument needed!');
+        return;
+    }
+    var args = ['--params.test_instance_ip',argv.test_instance_ip];
+    gulp.src(["./tests/*.js"])
+        .pipe(protractor({
+            configFile: "tests/config.js",
+            args: args
+        }))
+        .on('error', function(e) { throw e; });
+});
 
 gulp.task('unit', function (done) {
     server = new Server({

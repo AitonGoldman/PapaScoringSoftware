@@ -1,17 +1,22 @@
 <ion-view view-title="Home"  hide-back-button='true' >
-  <ion-content>
-     
-      <div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
-        <a href="#" class="item item-icon-left">
-          <i class="icon ion-ios-cart"></i>
-          <span>Purchase Tickets</span>
-          </a>
-        
-        <a href="#" class="item item-icon-left">
-          <i class="icon ion-person-add"></i>
-          <span>Add Player</span>
-        </a>        
-      </div>
-      
+  <ion-content>     
+    <div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
+      <a href="#" class="item item-icon-left" ng-if='User.has_role("admin")'>
+        <i class="icon ion-ios-cart"></i>
+        <span>Edit Users</span>
+      </a>
+      <a href="#" class="item item-icon-left" ng-if='User.has_role("desk")'>
+        <i class="icon ion-ios-cart"></i>
+        <span>Purchase Tickets</span>
+      </a>
+      <a href="#" class="item item-icon-left" ng-if='User.has_role("desk")'>
+        <i class="icon ion-person-add"></i>
+        <span>Add Player</span>
+      </a>
+      <a href="#" class="item item-icon-left" ng-if='User.has_role("scorekeeper")'>
+        <i class="icon ion-person-add"></i>
+        <span>Scorekeeping</span>
+      </a>              
+    </div>    
   </ion-content>
 </ion-view>

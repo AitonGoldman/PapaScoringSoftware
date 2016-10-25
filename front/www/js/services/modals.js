@@ -5,8 +5,10 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
     dest_route = undefined;
     
     $rootScope.close_error_dialog = function(){        
-        error_modal.remove();
-        $state.go(dest_route,{site:dest_site});
+        return error_modal.remove().then(function(data){
+            error_modal = undefined;
+            $state.go(dest_route,{site:dest_site});
+        });            
     };
     
     return {
@@ -16,11 +18,12 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
                 $ionicLoading.hide();                                
             },500);            
         },
-        error:function(error_message,new_dest_site,new_dest_route){
-            $ionicLoading.hide();
+        error:function(error_message,new_dest_site,new_dest_route){            
+            $ionicLoading.hide();                                
             if(error_modal != undefined){
-                error_modal.remove();
+                return;
             }
+            error_modal='dummy';
             $rootScope.error_message = error_message;            
             dest_site = new_dest_site;
             dest_route = new_dest_route;

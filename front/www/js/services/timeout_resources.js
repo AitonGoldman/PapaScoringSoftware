@@ -78,10 +78,7 @@ angular.module('TD_services.timeout_resources').factory('TimeoutResources',
         if(custom_interceptor == undefined){
             response_interceptor_to_use = response_interceptor;
         } else {
-            if (custom_interceptor.responseError == undefined){
-                return undefined;
-            }
-            response_interceptor_to_use = custom_interceptor;
+            response_interceptor_to_use = {};
         }
         
         resource_to_return= $resource(api_host+url,gen_post_args,
@@ -108,7 +105,7 @@ angular.module('TD_services.timeout_resources').factory('TimeoutResources',
     };
                                                                  
      loginResource = generate_resource_definition(':site/auth/login',
-                                                  'PUT');    
+                                                  'PUT',true);    
      logoutResource = generate_resource_definition(':site/auth/logout',
                                                   'GET');                                                             
      currentUserResource = generate_resource_definition(':site/auth/current_user',

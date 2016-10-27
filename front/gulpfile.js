@@ -10,12 +10,25 @@ var karma = require('karma').server;
 var Server = require('karma').Server;
 var protractor = require("gulp-protractor").protractor;
 var argv = require('yargs').argv;
+//var replace = require('gulp-replace');
+var replace = require('gulp-string-replace');
 
 var paths = {
   sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['sass']);
+gulp.task('default', ['api_host_replace','sass']);
+
+gulp.task('api_host_replace', function(done){
+    if(argv.backend_ip == undefined){        
+        done('--backend_ip argument needed!');
+        return;
+    }
+    gulp.src(['./www/templates/api_host.js'])
+        .pipe(replace('APIHOST', argv.backend_ip))
+        .pipe(gulp.dest('./www/js/services'));
+    done();
+});
 
 gulp.task('e2e', function(done) {
     if(argv.test_instance_ip == undefined){
@@ -29,6 +42,7 @@ gulp.task('e2e', function(done) {
             args: args
         }))
         .on('error', function(e) { throw e; });
+    done();
 });
 
 gulp.task('unit', function (done) {
@@ -57,7 +71,8 @@ gulp.task('sass', function(done) {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
+    console.log('hi there');
+    gulp.watch(paths.sass, ['sass']);
 });
 
 gulp.task('install', ['git-check'], function() {

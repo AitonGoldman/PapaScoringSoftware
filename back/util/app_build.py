@@ -1,23 +1,23 @@
 from flask import Flask
 from sqlalchemy_utils import create_database, database_exists
-from app.util import db_util,td_config, auth
-from app.util.pg_info import build_PgInfo_from_config
-from app.util.dispatch import PathDispatcher
+from util import db_util, auth, td_config
+from util.db_info import DbInfo
+from util.dispatch import PathDispatcher
 import os
-from app.types import ImportedTables
+from td_types import ImportedTables
 from werkzeug.exceptions import BadRequest
 from flask_principal import Principal
 from flask_cors import CORS
 from flask_login import LoginManager
 
-from app import routes
+import routes
 
-from app.blueprints import admin_login_blueprint,meta_admin_blueprint,admin_manage_blueprint
+from blueprints import admin_login_blueprint,meta_admin_blueprint,admin_manage_blueprint
 
     
 def get_generic_app(name):    
     app = Flask(name)
-    td_config.assign_loaded_config(app)    
+    td_config.assign_loaded_configs_to_app(app)    
     principals = Principal(app)    
     app.my_principals = principals
     app.register_error_handler(BadRequest, lambda e: 'bad request!')        
@@ -30,9 +30,10 @@ def get_generic_app(name):
     return app
 
 def get_admin_app(name):
-    secret_config,public_config = td_config.get_configs()
-    pg_info = build_PgInfo_from_config(secret_config,public_config)    
-    db_url = db_util.generate_db_url(name,pg_info=pg_info,use_sqlite=pg_info.use_sqlite)
+    db_config = td_config.get_db_config()
+    #secret_config,public_config = td_config.get_configs()    
+    db_info = DbInfo(db_config)    
+    db_url = db_util.generate_db_url(name,db_info)    
     if not database_exists(db_url):
         return None                
     app = get_generic_app(name)                            

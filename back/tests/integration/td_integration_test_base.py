@@ -1,38 +1,52 @@
 import unittest
-from app.util import app_build 
-from app.util.dispatch import PathDispatcher
+from util import app_build 
+from util.dispatch import PathDispatcher
 import os
 from tempfile import mkstemp
 from gunicorn.http.wsgi import Response,WSGIErrorsWrapper, FileWrapper
 from gunicorn.http.body import Body
-from app.types import ImportedTables
+#from app.types import ImportedTables
 from mock import MagicMock
-from app.util import db_util
+from util import db_util
 from flask import Flask
 from time import sleep
+from util.db_info import DbInfo
 
 class TdIntegrationTestBase(unittest.TestCase):    
     def setUp(self):
+        #FIXME : need to take new config structure into account
         secret_file_name = mkstemp()[1]
         public_file_name = mkstemp()[1]
+        db_file_name = mkstemp()[1]
+
         flask_file_name = mkstemp()[1]                
         self.poop_db_file_name = mkstemp()[1]
         self.poop_db_name = os.path.basename(self.poop_db_file_name)        
         
         secret_file = open(secret_file_name,'w')
-        secret_file.write('flask_secret_key="poop"')
+        secret_file.write('FLASK_SECRET_KEY="poop"')
         secret_file.close()
 
         public_file = open(public_file_name,'w')
-        public_file.write("sqlite=true")
+        #public_file.write("sqlite=true")
+        #public_file.write("db_type=sqlite")
         public_file.close()
 
+        db_file = open(db_file_name,'w')
+        #public_file.write("sqlite=true")
+        db_file.write("DB_TYPE=sqlite")
+        public_file.close()
+
+        
         flask_file = open(flask_file_name,'w')
         flask_file.write("")
         flask_file.close()
 
         os.environ['td_secret_config_filename']=secret_file_name
         os.environ['td_public_config_filename']=public_file_name
+        #os.environ['db_config_filename']=db_file_name
+        os.environ['DB_CONFIG_FILENAME']=db_file_name
+        os.environ['TD_CONFIG_FILENAME']=secret_file_name
         os.environ['flask_config_filename']=flask_file_name
         
         self.admin_health_check_string = '{\n  "data": {\n    "status": "HEALTHY", \n    "user_count": %s\n  }\n}'
@@ -88,7 +102,7 @@ class TdIntegrationDispatchTestBase(TdIntegrationTestBase):
     def setUp(self):
         super(TdIntegrationDispatchTestBase,self).setUp()
         dummy_app = Flask('dummy_app')                
-        db_util.create_db_and_tables(dummy_app,self.poop_db_name,use_sqlite=True,drop_tables=True)
+        db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'sqlite'}),drop_tables=True)
         del dummy_app
         self.app = PathDispatcher(app_build.get_meta_admin_app, app_build.get_admin_app)                
         

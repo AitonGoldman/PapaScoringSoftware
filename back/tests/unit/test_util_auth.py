@@ -1,7 +1,6 @@
 import unittest
-from app.types import ImportedTables
-from app.util import db_util
-from app.util import auth
+from td_types import ImportedTables
+from util import db_util, auth
 from flask import Flask
 from flask_principal import Identity
 from flask_login import login_user,LoginManager
@@ -15,7 +14,7 @@ class UtilAuthTD(unittest.TestCase):
         self.db_handle = db_util.create_db_handle_no_app()        
         self.tables = ImportedTables(self.db_handle)
         self.app.tables = self.tables
-        self.user_with_roles = self.tables.User()
+        self.user_with_roles = self.tables.User()        
         self.role = self.tables.Role()
         self.role.name = "new_role"
         self.user_with_roles.roles=[self.role]        

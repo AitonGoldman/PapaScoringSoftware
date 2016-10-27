@@ -1,11 +1,11 @@
 import unittest
-from app.util import app_build 
-from app.util.dispatch import PathDispatcher
+from util import app_build 
+from util.dispatch import PathDispatcher
 import os
 from tempfile import mkstemp
 from gunicorn.http.wsgi import Response,WSGIErrorsWrapper, FileWrapper
 from gunicorn.http.body import Body
-from app.types import ImportedTables
+#from types import ImportedTables
 from mock import MagicMock
 import td_integration_test_base
 

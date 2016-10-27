@@ -1,6 +1,6 @@
 import unittest
-from app.types import ImportedTables
-from app.util import db_util
+from td_types import ImportedTables
+from util import db_util
 
 class ModelUserTD(unittest.TestCase):
     def setUp(self):        

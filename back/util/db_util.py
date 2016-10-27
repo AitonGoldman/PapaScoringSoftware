@@ -1,16 +1,16 @@
 from sqlalchemy_utils import create_database, database_exists
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
-from app.types import ImportedTables
+from td_types import ImportedTables
 
-def create_db_and_tables(app, db_name, use_sqlite=False, drop_tables=False):    
-    if use_sqlite:
-        db_url = generate_db_url(db_name, use_sqlite=use_sqlite)
-    else:
-        pg_info = PgInfo(app.td_secret_config['pg_username'],
-                         app.td_secret_config['pg_password'],
-                         None)
-        db_url = db_util.generate_db_url(name, pg_info)            
+def create_db_and_tables(app, db_name, db_info, drop_tables=False):    
+    #if db_info.is_sqlite():
+    db_url = generate_db_url(db_name, db_info)
+    #else:
+        #pg_info = PgInfo(app.td_secret_config['pg_username'],
+        #                 app.td_secret_config['pg_password'],
+        #                 None)
+        #db_url = db_util.generate_db_url(db_name, db_info)            
     if not database_exists(db_url):        
         create_database(db_url)
     db_handle = create_db_handle(db_url,app)        
@@ -43,16 +43,18 @@ def check_table_exists(db_handle):
 
 # FIXME : need to generate db_url by comparing "name" to good list of dbs
 # FIXME : should be using host info in pg_info
-def generate_db_url(db_name, pg_info=None, use_sqlite=False):
+#def generate_db_url(db_name, pg_info=None, use_sqlite=False):
+def generate_db_url(db_name, db_info):
     if db_name is None or db_name == "":
-        raise Exception("No db name specified while generating db url")                
-    if use_sqlite:
-        return "sqlite:////tmp/%s.db" % db_name
-    else:
-        if pg_info is not None :
-            return "postgresql://%s:%s@localhost/%s" % (pg_info.pg_username,pg_info.pg_password,db_name)
-        else:
-            raise Exception("Missing postgress username or password while trying to build db url")
+        raise Exception("No db name specified while generating db url")
+
+    if db_info is None :
+        raise Exception("Missing postgress username or password while trying to build db url")       
+    if db_info.is_sqlite():
+        return "sqlite:////tmp/%s.db" % db_name    
+    if db_info.is_postgres():        
+        return "postgresql://%s:%s@localhost/%s" % (db_info.db_username,db_info.db_password,db_name)
+        
             
 def app_db_handle(app):
     return app.tables.db_handle

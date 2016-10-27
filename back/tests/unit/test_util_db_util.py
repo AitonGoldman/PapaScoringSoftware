@@ -1,16 +1,21 @@
 import unittest
-from app.util import db_util
+from util import db_util
 from mock import MagicMock
 from flask_sqlalchemy import SQLAlchemy
-from app.util.pg_info import PgInfo
+
 
 class UtilDbUtilTD(unittest.TestCase):
     def setUp(self):
         pass
-    def test_generate_db_url(self):        
-        sqlite_url = db_util.generate_db_url('test',use_sqlite=True)
-        pg_info = PgInfo(pg_username='user',pg_password='password')
-        postgres_url = db_util.generate_db_url('test',pg_info=pg_info)
+    def test_generate_db_url(self):
+        db_info = MagicMock()
+        db_info.is_sqlite.return_value=True
+        sqlite_url = db_util.generate_db_url('test',db_info)        
+        db_info.is_sqlite.return_value=False
+        db_info.is_postgres.return_value=True
+        db_info.db_username='user'
+        db_info.db_password='password'        
+        postgres_url = db_util.generate_db_url('test',db_info)
         self.assertEqual(sqlite_url,'sqlite:////tmp/test.db')
         self.assertEqual(postgres_url,'postgresql://%s:%s@localhost/test' % ('user','password'))
     def test_generate_db_url_with_no_db_name(self):

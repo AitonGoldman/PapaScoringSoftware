@@ -1,7 +1,8 @@
 import unittest
 from mock import MagicMock
-from app.util import db_util
-from app.types import ImportedTables,Role,User
+from util import db_util
+#import util.db_util
+from td_types import ImportedTables,Role,User
 from flask_sqlalchemy import SQLAlchemy
 
 

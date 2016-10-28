@@ -1,6 +1,6 @@
 <ion-side-menus enable-menu-with-back-views="true">
   <ion-side-menu-content>
-    <ion-nav-bar class="bar-calm">
+    <ion-nav-bar  align-title='left' class="bar-calm">
       <ion-nav-buttons side="right">
         <!--<a class="button button-icon ion-home" href="#/{{site}}/app">
         </a>-->
@@ -15,10 +15,15 @@
   </ion-side-menu-content>
   <ion-side-menu side="right">
     <ion-header-bar class="bar-positive" ng-style="menu_bar_title_style">
-      <h1 ng-if="User.logged_in() == false" class="title">Welcome To TD!</h1>
+        <div ng-if="User.logged_in() == true">
+            <img align="bottom" src="http://www.soaptheme.net/wordpress/travelo/wp-content/uploads/2014/12/author11.png" class="avatar-frame-small">
+        </div>
+      <h1  ng-if="User.logged_in() == false" class="title">
+          TD 1.0
+        </h1>
       <h1 ng-if="User.logged_in() == true" class="title">{{User.logged_in_user().username}}</h1>
     </ion-header-bar>
-    <ion-content>
+    <ion-content style='margin-top:25px'>
       <ion-list>
         <a id='login_link' class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false">
           <div>

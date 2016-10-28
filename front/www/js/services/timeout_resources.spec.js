@@ -2,13 +2,14 @@ describe('timeout_resources tests', function() {
     var TimeoutResources;    
     var mock_modals;
     var mock_resource;
+    var mock_api_host;
     var unreachable = "Can not perform action requested.  The server is unreachable.";
     var rejected = "The server did not accept the request.";
     var unauthorized = "You are not authroized the do this.";
     var conflict = "The server reports a conflict.";
     var puked = "WHOAH!  Server puked.";    
     var derp = "I have no earthly idea what the hell just happened.";
-    api_host='http://hostname/';    
+    var fake_api_host='http://hostname:8000/';    
 
     var test_http_request = function(status,message){
         var mock_response = {status:status,config:{url:'http://hostname/test/backend/route'}};
@@ -17,9 +18,9 @@ describe('timeout_resources tests', function() {
         expect(rejection.$$state.value.data.message).toEqual(message);        
     };    
 
-    var test_resource_generation = function(method,interceptor){
-        var resource = TimeoutResources._GenerateResourceDefinition(':site/test/route',method, interceptor);        
-        expect(mock_resource).toHaveBeenCalledWith(api_host+':site/test/route',
+    var test_resource_generation = function(method,interceptor){        
+        var resource = TimeoutResources._GenerateResourceDefinition(':site/test/route',method, interceptor);                
+        expect(mock_resource).toHaveBeenCalledWith(fake_api_host+':site/test/route',
                                                    {site:'@site'},
                                                    {'custom_http':{method:method,
                                                                    timeout: 15000,
@@ -29,32 +30,37 @@ describe('timeout_resources tests', function() {
                                                   );
     };
     
+    
     beforeEach(function() {
         module(function($provide) {
             mock_modals = {error:jasmine.createSpy()};
-            $provide.value('Modals', mock_modals);
+            $provide.value('Modals', mock_modals);            
+        });
+        angular.mock.module('TD_services.api_host');
+        angular.mock.module('TD_services.timeout_resources');
+        module(function($provide) {
+            mock_api_host = {};
+            mock_api_host.api_host = jasmine.createSpy();        
+            mock_api_host.api_host.and.returnValue(fake_api_host);            
+            mock_api_host.set_api_host = jasmine.createSpy();
+            $provide.value('api_host', mock_api_host);                    
         });        
-    });    
-
-    // Before each test load our api.users module    
-    beforeEach(angular.mock.module('TD_services.timeout_resources'));
-    beforeEach(angular.mock.module('TD_services.utils'));
-    beforeEach(angular.mock.module('TD_services.user'));
-    beforeEach(function() {
+        angular.mock.module('TD_services.utils');
+        angular.mock.module('TD_services.user');
         module(function($provide) {
             mock_resource = jasmine.createSpy();
-            $provide.value('$resource', mock_resource);                        
-        });        
+            $provide.value('$resource', mock_resource);            
+        });
     });    
     
-    // Before each test set our injected Users factory (_Users_) to our local Users variable
-    beforeEach(inject(function(_TimeoutResources_,_$rootScope_) {        
+    beforeEach(inject(function(_TimeoutResources_,_$rootScope_) {                
         TimeoutResources = _TimeoutResources_;
         $rootScope=_$rootScope_;
     }));
     
 
     it('interceptor should handle timeout/unreachable http request', function() {
+        
         test_http_request(-1,unreachable);
     });
     it('interceptor should handle rejected http request', function() {
@@ -73,7 +79,10 @@ describe('timeout_resources tests', function() {
         test_http_request(999,derp);        
     });
     it('_GenerateResourceDefinition should generate a PUT resource',function(){
-        //test_resource_generation('PUT',TimeoutResources._ResponseInterceptor);
+        //test_resource_generation('PUT',TimeoutResources._ResponseInterceptor);        
+        test_http_request(-1,unreachable);
+    });
+    it('interceptor should handle rejected http request', function() {
         test_resource_generation('PUT',{});
         
     });
@@ -94,16 +103,14 @@ describe('timeout_resources tests', function() {
     });    
     it('_GenerateResourceDefinition should handle default responseinterceptor',function(){        
         var resource = TimeoutResources._GenerateResourceDefinition(':site/test/route','GET', undefined);        
-        expect(mock_resource).toHaveBeenCalledWith(api_host+':site/test/route',
+        expect(mock_resource).toHaveBeenCalledWith(fake_api_host+':site/test/route',
                                                    {site:'@site'},
                                                    {'custom_http':{method:'GET',
                                                                    timeout: 15000,
                                                                    interceptor:TimeoutResources._ResponseInterceptor
                                                                   }
                                                    }
-                                                  );
-
-        //test_resource_generation('DELETE',{});                         
+                                                  );        
     });            
     it('_GenerateCustomHttpExecutor should handle a POST/PUT resource',function(){        
         var fake_resource={'custom_http':jasmine.createSpy()};

@@ -17,7 +17,7 @@ var paths = {
   sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['api_host_replace','sass']);
+gulp.task('default', ['sass']);
 
 gulp.task('api_host_replace', function(done){
     if(argv.backend_ip == undefined){        

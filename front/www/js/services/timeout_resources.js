@@ -119,11 +119,15 @@ angular.module('TD_services.timeout_resources')
                       var url_params = $location.search();
                       if(url_params.host != undefined){
                           api_host.set_api_host('http://'+url_params.host+':8000/');
-                      } else {                                                                                                                                                                                     var ip_start = $location.absUrl().indexOf('//')+2;
+                      } else {
+                          var ip_start = $location.absUrl().indexOf('//')+2;
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
+                          if(ip == undefined || ip == ""){
+                              ip = "192.168.1.178";
+                          }
                           api_host.set_api_host('http://'+ip+':8000/');
-                            }
+                      }
                   };
 
                   set_api_host();                                    

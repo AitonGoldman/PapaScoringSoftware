@@ -1,13 +1,11 @@
 {
   "name": "myApp",
   "app_id": "",
-  "gulpStartupTasks": [
-    "sass",
+  "gulpStartupTasks": [    
     "watch"
   ],
   "watchPatterns": [
-      "www/**/*",
-      "scss/**",
+      "www/**/*",      
       "!www/lib/**/*",
       "!www/**/*.map"
   ]

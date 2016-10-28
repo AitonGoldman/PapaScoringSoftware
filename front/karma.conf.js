@@ -22,7 +22,9 @@ module.exports = function(config) {
           './www/js/services/modals.js',          
           './www/js/services/utils.js',
           './www/js/services/user.js',
-          './www/js/services/timeout_resources.js',
+          './www/js/services/api_host.js',
+          './www/js/services/timeout_resources.js',          
+
           //'./app/app.js', 
           './www/js/services/timeout_resources.spec.js',
           './www/js/services/user.spec.js',

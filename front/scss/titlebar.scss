@@ -1,0 +1,54 @@
+.platform-android, .platform-browser {
+    ion-header-bar.bar-header {
+        height:62px;
+        div.title {
+            height: 62px;
+            font-size: 52px;
+            padding-top:5px;
+        }
+        .button.button-icon::before {
+            font-size:92px;
+        }
+    }
+}
+.platform-browser {
+    div.scroll {
+        padding-top:15px;
+    }    
+}
+
+.platform-android {
+    div.scroll {
+        padding-top:15px;
+    }    
+}
+
+.platform-ios {
+    div.scroll {
+        padding-top:0px;
+    }    
+}
+
+.platform-android {
+    ion-header-bar.bar-header {
+        div.title {
+            padding-top:10px;
+        }
+    }
+}
+
+.platform-ios {
+    ion-header-bar.bar-header {
+        height:52px;
+        div.title {
+            height: 52px;
+            font-size: 42px;
+        }
+        .button.button-icon::before {
+            font-size:62px;
+        }
+    }
+}
+
+
+

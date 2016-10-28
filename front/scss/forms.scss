@@ -1,5 +1,39 @@
-.tablet-friendly-input{
+.platform-browser {
+label.tablet-friendly-input{
   padding-top:20px;
   padding-bottom:20px;
- }
+  input {
+   font-size: 42px;
+  }
+}
+}
+
+.platform-android
+{
+    label.tablet-friendly-input{
+    height:42px;
+    padding-top:80px;
+    padding-bottom:20px;
+     input {
+         font-size: 42px;
+         line-height: 42px;
+         height:42px;
+     }
+}       
+}
+
+.platform-ios
+{
+    label.tablet-friendly-input{
+    height:42px;
+    padding-top:60px;
+    padding-bottom:20px;    
+     input {
+         font-size: 42px;
+         line-height: 82px;
+         height:82px;
+     }
+}       
+}   
+
 

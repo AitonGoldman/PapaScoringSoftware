@@ -17,6 +17,7 @@ from blueprints import admin_login_blueprint,meta_admin_blueprint,admin_manage_b
     
 def get_generic_app(name):    
     app = Flask(name)
+    app.config['UPLOAD_FOLDER']='/var/www/html/pics'
     td_config.assign_loaded_configs_to_app(app)    
     principals = Principal(app)    
     app.my_principals = principals

@@ -16,7 +16,8 @@ app = angular.module(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,Modals, User, Utils) {
+             $state,Modals, User, Utils,Camera) {
+        $scope.Camera=Camera;
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){

@@ -16,7 +16,7 @@
   <ion-side-menu side="right">
     <ion-header-bar class="bar-positive" ng-style="menu_bar_title_style">
         <div ng-if="User.logged_in() == true">
-            <img align="bottom" src="http://www.soaptheme.net/wordpress/travelo/wp-content/uploads/2014/12/author11.png" class="avatar-frame-small">
+            <img align="bottom" src="http://98.111.232.93/pics/{{User.logged_in_user().user_id}}.jpg" class="avatar-frame-small">
         </div>
       <h1  ng-if="User.logged_in() == false" class="title">
           TD 1.0
@@ -37,6 +37,13 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
+        <a id='camera_link' class='item item-icon-right' menu-close ng-click='Camera.take_user_pic_and_upload(1)'>
+          <div>
+            Camera
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        
       </ion-list>
     </ion-content>
   </ion-side-menu>

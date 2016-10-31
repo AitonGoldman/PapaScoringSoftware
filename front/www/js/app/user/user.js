@@ -1,15 +1,14 @@
-angular.module('app.login',['app.login.process',
+angular.module('app.user',['app.user.add_user',
     /*REPLACEMECHILD*/]);
-angular.module('app.login').controller(
-    'app.login',[
+angular.module('app.user').controller(
+    'app.user',[
     '$scope','$state','TimeoutResources','Utils','Modals',
     function($scope, $state, TimeoutResources, Utils,Modals) {
         $scope.site=$state.params.site;
 
-        $scope.utils=Utils;
-        $scope.controller_bootstrap($scope,$state);                
-        $scope.user = {};
-        //FIXME : should reroute to home if already logged in
+        $scope.utils = Utils;
+        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+             
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){

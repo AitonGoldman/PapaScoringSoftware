@@ -1,0 +1,30 @@
+<ion-view view-title="Add User">
+  <ion-content>      
+    <!-- ui-sref=".add_user({})" -->
+    <div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
+      <div class="item item-divider">
+        User Info
+      </div>
+      <label class="item item-input tablet-friendly-text-input">
+        <input ng-model='user_info.username' type="text" placeholder="Username">
+      </label>
+      <label class="item item-input tablet-friendly-text-input">
+        <input ng-model='user_info.password' type="text" placeholder="Password">
+      </label>      
+      <div class="item item-divider">
+        Roles
+      </div>
+      <ion-checkbox class='item item-input' ng-repeat='role in resources.roles.data' ng-model='user_info.roles[role.role_id]'>{{role.name}}</ion-checkbox>
+      <!--<a ui-sref='.process({user_info:user_info})' class="item item-icon-right input-list-button" style='text-align:left'>-->
+      <button ui-sref='.process({user_info:user_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(user_info.username)||utils.var_empty(user_info.password)'>
+        <i class="icon ion-chevron-right"></i>
+        <span >Add User</span>
+      </button>
+      <!--/a -->
+    </div>
+    <center>
+      <!--<a class="button button-large icon-right ion-chevron-right button-positive tablet-friendly-button tablet-friendly-button-with-margin" ui-sref='.process({user_info:user_info})'><span>Add User</span></a>-->
+    </center>
+  </ion-content>
+</ion-view>
+

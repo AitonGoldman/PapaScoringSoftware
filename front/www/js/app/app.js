@@ -9,6 +9,7 @@ app = angular.module(
         'TD_services',
         'app.login',
     'app.logout',
+    'app.user',
     /*REPLACEMECHILD*/
 	]
 );
@@ -33,18 +34,23 @@ app.controller(
         $scope.controller_bootstrap($scope,$state);
         $scope.User = User;
         $scope.isIOS = ionic.Platform.isIOS();
+        //FIXME : don't need this anymore
         if($scope.isIOS == true){
             $scope.menu_bar_title_style={'height':'100'};
         } else {
-            $scope.menu_bar_title_style={'height':'80'};
+            $scope.menu_bar_title_style={'height':'100'};
         }
     }
 );
 
-app.config(function($httpProvider) {
+
+
+app.config(function($httpProvider,$ionicConfigProvider) {
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];   
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    $ionicConfigProvider.backButton.previousTitleText(false);
+    $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
 });
 
 

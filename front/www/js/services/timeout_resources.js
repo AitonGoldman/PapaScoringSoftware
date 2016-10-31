@@ -137,6 +137,8 @@ angular.module('TD_services.timeout_resources')
                                                                 'GET');                                                             
                   var currentUserResource = generate_resource_definition(':site/auth/current_user',
                                                                      'GET');
+                  var getRolesResource = generate_resource_definition(':site/role',
+                                                                     'GET');
                   
                   return {
 	              GetAllResources: function(){
@@ -147,7 +149,8 @@ angular.module('TD_services.timeout_resources')
                       _GenerateCustomHttpExecutor: generate_custom_http_executor,
                       Login: generate_custom_http_executor(loginResource,'logged_in_user','post'),
                       Logout: generate_custom_http_executor(logoutResource,'logout_result','get'),        
-                      CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get')
+                      CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get'),
+                      GetRoles: generate_custom_http_executor(getRolesResource,'roles','get')                      
                   };
               }]);
 

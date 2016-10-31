@@ -1,14 +1,63 @@
+.tablet-friendly-button-with-margin {
+    margin-top:25px;
+}
+
 .tablet-friendly-button {
-    padding-top:15px;
-    padding-bottom:15px;
-    border-radius: 25px;
-    margin-left: 15px;
+    @media screen and (max-width: 610px){
+        @media screen and (max-height: 800px){
+            padding-top:7px;
+            padding-bottom:7px;
+            border-radius: 15px;
+            margin-left: 15px;
+        }
+        @media screen and (min-height: 801px){
+            padding-top:15px;
+            padding-bottom:15px;
+            border-radius: 25px;
+            margin-left: 15px;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        padding-top:15px;
+        padding-bottom:15px;
+        border-radius: 25px;
+        margin-left: 15px;
+    }
+    @media screen and (min-width: 971px) {
+        padding-top:15px;
+        padding-bottom:15px;
+        border-radius: 25px;
+        margin-left: 15px;        
+    }
+
     span {
-        padding-top:5px;
-        padding-bottom:5px;     
-        margin-right:10px;
-        margin-left:5px;
-        font-size:42px;        
+        @media screen and (max-width: 610px){
+            @media screen and (max-height: 800px){
+                font-size:22px;        
+            }
+            @media screen and (min-height: 801px){
+                padding-top:5px;
+                padding-bottom:5px;     
+                margin-right:10px;
+                margin-left:5px;                
+                font-size:42px;        
+            }
+        }
+        @media screen and (max-width: 970px) and (min-width:611px) {
+            padding-top:5px;
+            padding-bottom:5px;     
+            margin-right:10px;
+            margin-left:5px;
+            font-size:42px;        
+        }
+        @media screen and (min-width: 971px) {
+            padding-top:5px;
+            padding-bottom:5px;     
+            margin-right:10px;
+            margin-left:5px;            
+            font-size:42px;        
+        }        
+
     }
 }
 

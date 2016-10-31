@@ -3,22 +3,21 @@ ion-side-menu {
         ion-list {
             a.item {
                 div {
-                    padding-top:30px;
-                    padding-bottom:30px;
-                    font-size:44px;
-                }
-            }
-        }
-    }
-}
-
-
-ion-side-menu{
-    ion-content {
-        div {
-            ion-list{
-                div.list{
-                    //margin-top:35px;
+                    @media screen and (max-width: 610px){
+                        padding-top:30px;
+                        padding-bottom:30px;
+                        font-size:24px;
+                    }
+                    @media screen and (max-width: 970px) and (min-width:611px) {
+                        padding-top:30px;
+                        padding-bottom:30px;
+                        font-size:44px;                        
+                    }
+                    @media screen and (min-width: 971px) {
+                        padding-top:30px;
+                        padding-bottom:30px;
+                        font-size:44px;                                                
+                    }                    
                 }
             }
         }
@@ -27,18 +26,12 @@ ion-side-menu{
 
 .platform-android,.platform-ios,.platform-browser {
     ion-side-menu {
-        ion-header-bar.bar {
-            height:100px;
+        ion-header-bar.bar { 
             .title {
                 font-size:34px;
             }
-            //height:80px;
         }
     }
-}
-
-.apple-bar {
-    height:100px;
 }
 
 side-menu-first-list-item {

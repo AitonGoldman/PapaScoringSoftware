@@ -3,7 +3,12 @@ div.icon-label{
     div:first-child {
         font-weight: bold;
         @media screen and (max-width: 610px) {    
-            font-size: 42px;
+            @media screen and (max-height: 800px){
+                font-size: 28px;
+            }       
+            @media screen and (min-height: 801px){
+                font-size: 42px;
+            }
         }
         @media screen and (max-width: 970px) and (min-width:611px) {
             font-size: 42px;
@@ -24,7 +29,21 @@ div.icon-label{
     div:nth-child(2) {
         div {
             font-weight: normal;
-            font-size:32px;
+            @media screen and (max-width: 610px){
+                @media screen and (max-height: 800px){
+                    font-size:18px;
+                }
+                @media screen and (min-height: 801px){
+                    font-size:32px;
+                }
+            }
+            @media screen and (max-width: 970px) and (min-width:611px) {
+                font-size:32px;
+            }
+            @media screen and (min-width: 971px) {
+                font-size:32px;
+            }
+
             margin-top:10px;        
             margin-left:auto;
             margin-right:auto;

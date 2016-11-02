@@ -16,10 +16,19 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.flask_app.tables.db_handle.session.add(self.new_role)
         self.flask_app.tables.db_handle.session.commit()
 
+        self.new_role_id = self.new_role.role_id
+        
+        self.new_role_2 = self.flask_app.tables.Role(name='test_role_2')
+        self.flask_app.tables.db_handle.session.add(self.new_role_2)
+        self.flask_app.tables.db_handle.session.commit()
+
+        self.new_role_2_id = self.new_role_2.role_id
+        
         self.admin_role = self.flask_app.tables.Role(name='admin')
         self.flask_app.tables.db_handle.session.add(self.admin_role)
         self.flask_app.tables.db_handle.session.commit()
 
+        self.admin_role_id = self.admin_role.role_id
         
         self.admin_user = self.flask_app.tables.User(username='test_admin')
         self.admin_user.crypt_password('test_admin_password')
@@ -73,7 +82,8 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             rv = c.put('/auth/login',
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))                        
             rv = c.post('/user',
-                       data=json.dumps({'username':'test_user','password':'test_user_password','roles':[{'role_id':'1'}]}))
+                       data=json.dumps({'username':'test_user','password':'test_user_password',
+                                        'roles':{'%s' % self.new_role_id:True}}))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
@@ -93,7 +103,7 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user',
                                         'password':'test_user_password',
-                                        'roles':[{'role_id':'55'}]}))
+                                        'roles':{'55':True}}))
             self.assertEquals(rv.status_code,
                               400,
                               'Was expecting status code 400, but it was %s' % (rv.status_code))
@@ -123,4 +133,87 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               'Was expecting status code 400, but it was %s' % (rv.status_code))
             self.assertIsNone(self.flask_app.tables.User.query.filter_by(username='test_user_does_not_exist').first(),
                               "Was expecting to find no user, but found user with user_id %s" % 55)
+            
+
+    def test_user_edit_username_and_roles_and_haspicture(self):        
+        with self.flask_app.test_client() as c:            
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+            rv = c.post('/user',
+                       data=json.dumps({'username':'test_user_changed','password':'test_user_password',
+                                        'roles':{'%s' % self.admin_role_id:True}}))
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()            
+            rv = c.put('/user/%s' % new_user.user_id,
+                       data=json.dumps({'username':'test_user_changed',
+                                        'roles':{'%s' % self.admin_role_id:False,'%s'%(self.new_role_2_id):True},
+                                        'has_picture':True}))
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            self.assertIsNotNone(self.flask_app.tables.User.query.filter_by(username='test_user_changed').first(),
+                              "Was expecting to find no user, but found user with user_id %s" % 2)
+            changed_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()
+            self.assertEquals(len(changed_user.roles),1)
+            self.assertEquals(changed_user.roles[0].name,"test_role_2")
+            self.assertEquals(changed_user.has_picture, True)
+
+    def test_user_edit_bad_roles(self):        
+        with self.flask_app.test_client() as c:            
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+            rv = c.post('/user',
+                       data=json.dumps({'username':'test_user_changed','password':'test_user_password',
+                                        'roles':{'%s' % self.admin_role_id:True}}))
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()            
+            rv = c.put('/user/%s' % new_user.user_id,
+                       data=json.dumps({'username':'test_user_changed',
+                                        'roles':{'999':False,'989':True},
+                                        'has_picture':True}))
+            self.assertEquals(rv.status_code,
+                              400,
+                              'Was expecting status code 400, but it was %s' % (rv.status_code))
+
+    def test_user_edit_no_username(self):        
+        with self.flask_app.test_client() as c:            
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+            rv = c.post('/user',
+                       data=json.dumps({'username':'test_user_changed','password':'test_user_password',
+                                        'roles':{'%s' % self.admin_role_id:True}}))
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()            
+            rv = c.put('/user/%s' % new_user.user_id,
+                       data=json.dumps({'has_picture':True}))
+            self.assertEquals(rv.status_code,
+                              400,
+                              'Was expecting status code 400, but it was %s' % (rv.status_code))
+            
+    def test_user_edit_password(self):        
+        with self.flask_app.test_client() as c:            
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+            rv = c.post('/user',
+                       data=json.dumps({'username':'test_user_password_changed','password':'test_new_password',
+                                        'roles':{'%s' % self.admin_role_id:True}}))
+            new_user = self.flask_app.tables.User.query.filter_by(username='test_user_password_changed').first()            
+            rv = c.put('/user/%s' % new_user.user_id,
+                       data=json.dumps({'username':'test_user_password_changed',
+                                         'password':'poop'}))
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':'test_user_password_changed','password':'poop'}))
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            
             

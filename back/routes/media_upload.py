@@ -12,11 +12,10 @@ def allowed_file(filename):
 
 @admin_manage_blueprint.route('/media_upload/user_pic', methods=['POST'])
 def upload_file():    
-    # check if the post request has the file part        
-    if 'file' not in request.files:                        
+    # check if the post request has the file part            
+    if 'file' not in request.files:                                
         return jsonify({})        
-    file = request.files['file']        
-    print file.filename
+    file = request.files['file']            
     if file.filename == '':            
         return jsonify({})        
     if file:                        

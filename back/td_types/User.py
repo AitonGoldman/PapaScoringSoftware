@@ -22,7 +22,8 @@ def generate_user_class(db_handle):
         """Model object for a user"""
         user_id = db_handle.Column(db_handle.Integer, primary_key=True)
         username = db_handle.Column(db_handle.String(80), unique=True, nullable=False)    
-        password_crypt = db_handle.Column(db_handle.String(134))        
+        password_crypt = db_handle.Column(db_handle.String(134))
+        has_picture = db_handle.Column(db_handle.Boolean(),default=False)
         roles = db_handle.relationship(
            'Role',
            secondary=Role_User_mapping
@@ -61,7 +62,8 @@ def generate_user_class(db_handle):
         def to_dict_simple(self):
             user = to_dict(self)
             del user['password_crypt']
-            user['roles'] = [r.name for r in self.roles]        
+            #user['roles'] = [r.name for r in self.roles]
+            user['roles'] = [r.to_dict_simple() for r in self.roles]        
             return user
     return User
         

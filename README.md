@@ -19,12 +19,16 @@ NOTE : This quickstart is for demo purposes only.  If you want to run you own in
 
 ### Starting up backend
 `cd <top of checked out git repo>/back`
+
 `docker build -t td_backend .`
+
 `docker run -d -t -p 8000:8000 td_backend`
 
 ### Starting up frontend
 `cd <top of checked out git repo>/front`
+
 `docker build -t td_frontend .`
+
 `docker run -t -d -p 8100:8100 -p 35729:35729 td_frontend`
 
 ### Try it out!

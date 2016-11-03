@@ -13,7 +13,9 @@ def generate_tournament_class(db_handle):
         scoring_type = db_handle.Column(db_handle.String(100))
         start_date = db_handle.Column(db_handle.DateTime)
         end_date = db_handle.Column(db_handle.DateTime)
-        
+        divisions = db_handle.relationship('Division',lazy='joined')
+
+
         def to_dict_simple(self):
             return to_dict(self)
     return Tournament

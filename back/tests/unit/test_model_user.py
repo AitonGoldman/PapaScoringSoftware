@@ -39,7 +39,6 @@ class ModelUserTD(unittest.TestCase):
         self.assertTrue('password_crypt' not in simple_dict_with_roles)
         self.assertTrue('roles' in simple_dict_with_roles)
         self.assertEquals(len(simple_dict_with_roles['roles']),1)
-        simple_dict_no_roles = self.user.to_dict_simple()
-        print simple_dict_no_roles
+        simple_dict_no_roles = self.user.to_dict_simple()        
         self.assertTrue('roles' not in simple_dict_no_roles)
  

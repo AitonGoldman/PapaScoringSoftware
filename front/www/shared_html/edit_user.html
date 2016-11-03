@@ -19,7 +19,7 @@
   <div class="item item-divider">
     Roles
   </div>
-  <ion-checkbox id="add_user_role_{{role.name}}_checkbox" class='item item-input' ng-repeat='role in resources.roles.data' ng-model='user_info.roles[role.role_id]'>{{role.name}}</ion-checkbox>
+  <ion-checkbox id="add_user_role_{{role.name}}_checkbox" class='item item-input' ng-repeat='role in resources.roles.data' ng-model='user_info.roles_dict[role.role_id]'>{{role.name}}</ion-checkbox>
   <button id='add_user_add_button' ui-sref='.process({process_step:{process:true}, user_info:user_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(user_info.username)'>
     <i class="icon ion-chevron-right"></i>
     <span >Apply Changes</span>

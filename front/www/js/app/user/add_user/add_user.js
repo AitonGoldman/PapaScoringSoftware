@@ -7,7 +7,7 @@ angular.module('app.user.add_user').controller(
         $scope.site=$state.params.site;
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        $scope.user_info={roles:{}};        
+        $scope.user_info={roles_dict:{}};        
         Modals.loading();
         get_roles_promise = TimeoutResources.GetRoles(undefined,{site:$scope.site});
         // = TimeoutResources.GetEtcData();

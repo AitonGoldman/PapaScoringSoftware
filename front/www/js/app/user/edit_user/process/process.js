@@ -15,6 +15,12 @@ angular.module('app.user.edit_user.process').controller(
         }        
         $scope.user_info=$state.params.user_info;
         Modals.loading();
+        $scope.user_info.roles=[];
+        _.forEach($scope.user_info.roles_dict,function(value,key){            
+            if(value==true){
+                $scope.user_info.roles.push(key);
+            }            
+        });
         update_user_promise = TimeoutResources.UpdateUser(undefined,{site:$scope.site},$scope.user_info);        
         update_user_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

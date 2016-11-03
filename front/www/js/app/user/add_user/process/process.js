@@ -16,6 +16,13 @@ angular.module('app.user.add_user.process').controller(
         
         $scope.user_info=$state.params.user_info;        
         Modals.loading();
+        $scope.user_info.roles=[];
+        _.forEach($scope.user_info.roles_dict,function(value,key){
+            console.log(key+" "+value);
+            if(value==true){
+                $scope.user_info.roles.push(key);
+            }            
+        });
         add_user_promise = TimeoutResources.AddUser(undefined,{site:$scope.site},$scope.user_info);
         // = TimeoutResources.GetEtcData();
         add_user_promise.then(function(data){

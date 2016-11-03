@@ -17,15 +17,19 @@ angular.module('app.user.edit_user').controller(
             // = TimeoutResources.GetEtcData();
             get_user_promise.then(function(data){                            
                 $scope.resources = TimeoutResources.GetAllResources();
-                $scope.user_info = $scope.resources.user.data[$scope.user_id];                        
-                $scope.user_info.existing_roles =  $scope.user_info.roles;
-                $scope.user_info.roles = {};                
-                for(role_idx in $scope.resources.roles.data){                
-                    role = $scope.resources.roles.data[role_idx];                                                
-                    if(_.findIndex($scope.user_info.existing_roles, function(o) { return o.name == role.name; })!= -1){
-                        $scope.user_info.roles[role.role_id]=true;                    
-                    }
-                }            
+                $scope.user_info = $scope.resources.user.data[$scope.user_id];                                        
+                $scope.user_info.roles_dict = {};                
+                // for(role_idx in $scope.resources.roles.data){                
+                //     role = $scope.resources.roles.data[role_idx];                                                
+                //     if(_.findIndex($scope.user_info.existing_roles, function(o) { return o.name == role.name; })!= -1){
+                //         $scope.user_info.roles[role.role_id]=true;                    
+                //     }
+                // }
+                _.forEach($scope.resources.roles.data,function(value){
+                    if(_.findIndex($scope.user_info.roles, function(o) { return o.name == value.name; })!= -1){
+                        $scope.user_info.roles_dict[value.role_id]=true;                    
+                    }                    
+                });
                 Modals.loaded();
             });
             $scope.take_pic_and_upload = function(){

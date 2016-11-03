@@ -22,6 +22,16 @@ class UtilTdConfigTD(unittest.TestCase):
         self.create_flask_config_file(self.good_db_config_path,'DB_TYPE="sqlite"')        
         self.create_flask_config_file(self.bad_td_config_path)
         self.create_flask_config_file(self.bad_db_config_path)
+
+
+        if 'DB_TYPE' in os.environ:
+            del os.environ['DB_TYPE']
+        if 'FLASK_SECRET_KEY' in os.environ:
+            del os.environ['FLASK_SECRET_KEY']
+        if 'TD_CONFIG_FILENAME' in os.environ:
+            del os.environ['TD_CONFIG_FILENAME']
+        if 'DB_CONFIG_FILENAME' in os.environ:
+            del os.environ['DB_CONFIG_FILENAME']
     
     def test_assign_loaded_config(self):                 
         flask_app = Flask("dummy_app")
@@ -55,8 +65,6 @@ class UtilTdConfigTD(unittest.TestCase):
         self.assertTrue(flask_app.td_config['FLASK_SECRET_KEY']=='testing2')
         self.assertTrue(flask_app.td_config['DB_TYPE']=='sqlite')
         self.assertTrue('test_public_param' not in flask_app.td_config)
-        del os.environ['TD_CONFIG_FILENAME']
-        del os.environ['DB_CONFIG_FILENAME']
         
                 
         

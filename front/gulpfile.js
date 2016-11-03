@@ -35,8 +35,15 @@ gulp.task('e2e', function(done) {
         done('--test_instance_ip argument needed!');
         return;
     }
+    var single_spec = argv.single_protractor_spec;
+    if(single_spec == undefined){
+        specs_to_run = "./tests/*.js";
+    } else {
+        specs_to_run = single_spec;
+    }
     var args = ['--params.test_instance_ip',argv.test_instance_ip];
-    gulp.src(["./tests/*.js"])
+    
+    gulp.src([specs_to_run])
         .pipe(protractor({
             configFile: "tests/config.js",
             args: args

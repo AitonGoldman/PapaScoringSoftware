@@ -17,8 +17,8 @@ def route_add_tournament():
     if 'scoring_type' not in tournament_data:
         raise BadRequest('did not specify scoring type')            
     db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)
-    if tables.Tournament.query.filter_by(tournament_name=tournament_data['tournament_name']).first():
+    tables = db_util.app_db_tables(current_app)        
+    if tables.Tournament.query.filter_by(tournament_name=tournament_data['tournament_name']).first():        
         raise Conflict('You are trying to create a duplicate tournament')
     new_tournament = tables.Tournament(
         tournament_name=tournament_data['tournament_name'],        
@@ -31,10 +31,20 @@ def route_add_tournament():
         new_tournament.team_tournament = False    
 
     if 'single_division' in tournament_data and tournament_data['single_division']:
+        if 'finals_num_qualifiers' not in tournament_data or tournament_data['finals_num_qualifiers'] == "":
+            raise BadRequest('finals_num_qualifiers not found in post data')            
         new_tournament.single_division=True
+        new_division = tables.Division(
+            division_name = new_tournament.tournament_name+"_single",
+            finals_num_qualifiers = tournament_data['finals_num_qualifiers']
+        )
+        db.session.add(new_division)
+        new_tournament.divisions.append(new_division)
+        #db.session.add(new_tournament)
+        #db.sesssion.commit()
         # FILL IN DIVISION CREATION CODE HERE
     else:
-        new_tournament.single_division=False        
+        new_tournament.single_division=False    
     db.session.add(new_tournament)
     db.session.commit()
     return jsonify({'data': new_tournament.to_dict_simple()})

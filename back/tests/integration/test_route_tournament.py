@@ -22,36 +22,61 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.flask_app.tables.db_handle.session.commit()
 
 
-    def test_tournament_create_no_teams_not_single(self):        
+    def test_tournament_create_no_teams_single(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
             rv = c.post('/tournament',
-                       data=json.dumps({'tournament_name':'test_tournament',
-                                        'team_tournament':False,
-                                        'single_division':False,
-                                        'scoring_type':'HERB'                                        
+                       data=json.dumps({'tournament_name':'test_tournament',                                        
+                                        'single_division':True,
+                                        'scoring_type':'HERB',
+                                        'finals_num_qualifiers':24
                                         ,}))            
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
             new_tourney = json.loads(rv.data)
             retrieved_tourney = self.flask_app.tables.Tournament.query.filter_by(tournament_id=new_tourney['data']['tournament_id']).first()
+            retrieved_division = retrieved_tourney.divisions[0] if len(retrieved_tourney.divisions)==1 else None
             self.assertIsNotNone(retrieved_tourney,
                                  "Could not find the tournament we just created")
+            self.assertIsNotNone(retrieved_division,
+                                 "Could not find the division we just created")
+            self.assertEquals(retrieved_division.division_name,'test_tournament_single')
             self.assertEquals(new_tourney['data']['tournament_name'],'test_tournament')
             self.assertEquals(new_tourney['data']['team_tournament'],False)
-            self.assertEquals(new_tourney['data']['single_division'],False)
+            self.assertEquals(new_tourney['data']['single_division'],True)
             self.assertEquals(new_tourney['data']['scoring_type'],'HERB')
             
 
+    def test_tournament_create_multiple_divisions(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+            rv = c.post('/tournament',
+                       data=json.dumps({'tournament_name':'test_tournament',                                        
+                                        'single_division':False,
+                                        'scoring_type':'HERB'
+                                        ,}))            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            new_tourney = json.loads(rv.data)
+            retrieved_tourney = self.flask_app.tables.Tournament.query.filter_by(tournament_id=new_tourney['data']['tournament_id']).first()
+            retrieved_division = retrieved_tourney.divisions[0] if len(retrieved_tourney.divisions)==1 else None
+            self.assertIsNotNone(retrieved_tourney,
+                                 "Could not find the tournament we just created")
+            self.assertIsNone(retrieved_division,
+                              "Found a division we were not expecting")
+                        
+            
     def test_tournament_create_invalid(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
             rv = c.post('/tournament',
                        data=json.dumps({'team_tournament':False,
-                                        'single_division':False,
+                                        'single_division':True,
                                         'scoring_type':'POOP'                                        
                                         ,}))            
             self.assertEquals(rv.status_code,
@@ -62,20 +87,22 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+            
             rv = c.post('/tournament',
-                       data=json.dumps({'tournament_name':'test_tournament',
-                                        'team_tournament':False,
-                                        'single_division':False,
-                                        'scoring_type':'HERB'                                        
+                       data=json.dumps({'tournament_name':'test_tournament',                                        
+                                        'single_division':True,
+                                        'scoring_type':'HERB',
+                                        'finals_num_qualifiers':24
                                         ,}))            
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
+            
             rv = c.post('/tournament',
-                       data=json.dumps({'tournament_name':'test_tournament',
-                                        'team_tournament':False,
-                                        'single_division':False,
-                                        'scoring_type':'HERB'                                        
+                       data=json.dumps({'tournament_name':'test_tournament',                                        
+                                        'single_division':True,
+                                        'scoring_type':'HERB',
+                                        'finals_num_qualifiers':24                                        
                                         ,}))            
             self.assertEquals(rv.status_code,
                               409,

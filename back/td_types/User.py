@@ -63,7 +63,8 @@ def generate_user_class(db_handle):
             user = to_dict(self)
             del user['password_crypt']
             #user['roles'] = [r.name for r in self.roles]
-            user['roles'] = [r.to_dict_simple() for r in self.roles]        
+            if self.roles:
+                user['roles'] = [r.to_dict_simple() for r in self.roles]        
             return user
     return User
         

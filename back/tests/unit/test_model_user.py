@@ -30,10 +30,16 @@ class ModelUserTD(unittest.TestCase):
         self.assertFalse(self.user.is_anonymous())           
         
     def test_to_dict_simple(self):         
-        user_dict_with_roles = {'username':'test_user_with_roles','user_id':1, 'has_picture':None, 'roles':[{'name': 'new_role', 'role_id': 1}]}
         self.user.password=self.user.crypt_password('password_two')
         simple_dict_with_roles = self.user_with_roles.to_dict_simple()
-        self.assertDictEqual(user_dict_with_roles,simple_dict_with_roles)
-        user_dict_no_roles = {'username':'test_user','user_id':2, 'roles': [], 'has_picture':None}        
+        for value in self.user.__table__.columns:
+            key =  str(value)[str(value).index('.')+1:]
+            if key != 'password_crypt':
+                self.assertTrue(key in simple_dict_with_roles,"oops - did not find %s" % key)
+        self.assertTrue('password_crypt' not in simple_dict_with_roles)
+        self.assertTrue('roles' in simple_dict_with_roles)
+        self.assertEquals(len(simple_dict_with_roles['roles']),1)
         simple_dict_no_roles = self.user.to_dict_simple()
-        self.assertDictEqual(user_dict_no_roles,simple_dict_no_roles)
+        print simple_dict_no_roles
+        self.assertTrue('roles' not in simple_dict_no_roles)
+ 

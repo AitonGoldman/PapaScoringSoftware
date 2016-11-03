@@ -22,4 +22,7 @@ class ModelImportedTablesTD(unittest.TestCase):
         self.assertTrue(hasattr(self.tables,'db_handle'))
         self.assertTrue(type(self.tables.db_handle) is SQLAlchemy)
         
+        self.assertTrue(hasattr(self.tables,'Tournament'))
+        self.assertTrue(self.tables.Tournament.__name__ == 'Tournament')
+        
         

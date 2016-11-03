@@ -56,7 +56,8 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
         set_logged_in_user:  set_logged_in_user_func,         
         has_role: function(role) { 
             return logged_in_user && logged_in_user.roles && (
-                logged_in_user.roles.indexOf(role) != -1
+                //logged_in_user.roles.indexOf(role) != -1
+                _.find(logged_in_user.roles, function(o) { return o.name == role; })
             )? true: false;
         }
     };

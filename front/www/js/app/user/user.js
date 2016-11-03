@@ -1,4 +1,5 @@
 angular.module('app.user',['app.user.add_user',
+    'app.user.edit_user',
     /*REPLACEMECHILD*/]);
 angular.module('app.user').controller(
     'app.user',[
@@ -8,12 +9,14 @@ angular.module('app.user').controller(
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-             
-        //Modals.loading();
+        
+        Modals.loading();
+        get_users_promise = TimeoutResources.GetUsers(undefined,{site:$scope.site});        
         // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResource.GetAllResources();
-        //  Modals.loaded();
-        //})
+        get_users_promise.then(function(data){
+            $scope.resources = TimeoutResources.GetAllResources();
+            console.log($scope.resources.users);
+            Modals.loaded();
+        });
     }]
 );

@@ -2,6 +2,7 @@ app = angular.module(
 	'TDApp',
     [
         'ionic',
+        'ngCordova',
  	'ui.router',            
         'ngCookies',            
         'ngSanitize',
@@ -17,8 +18,7 @@ app = angular.module(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,Modals, User, Utils,Camera) {
-        $scope.Camera=Camera;
+             $state,Modals, User, Utils,$ionicPlatform) {
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){
@@ -40,10 +40,20 @@ app.controller(
         } else {
             $scope.menu_bar_title_style={'height':'100'};
         }
+        $scope.is_native = false;
+        $ionicPlatform.ready(function() {        
+            dev_info = ionic.Platform.device();
+            if (_.size(dev_info)!=0){
+                $scope.is_native=true;
+                //alert('on a native app');
+            }
+        });        
     }
 );
 
-
+app.run(function($ionicPlatform) {
+  });
+  
 
 app.config(function($httpProvider,$ionicConfigProvider) {
     $httpProvider.defaults.useXDomain = true;

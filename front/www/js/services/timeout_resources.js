@@ -73,8 +73,7 @@ angular.module('TD_services.timeout_resources')
 	              return resource_results[scope_name].$promise;	
                   };
                   
-                  var generate_resource_definition = function(url,http_method,custom_interceptor){                              
-                      console.log('in generate resource def');
+                  var generate_resource_definition = function(url,http_method,custom_interceptor){                                                    
                       url_chunks = url.split("/");
                       gen_post_args = {};
                       for(url_chunk_index in url_chunks){
@@ -138,7 +137,13 @@ angular.module('TD_services.timeout_resources')
                   var currentUserResource = generate_resource_definition(':site/auth/current_user',
                                                                      'GET');
                   var getRolesResource = generate_resource_definition(':site/role',
-                                                                     'GET');
+                                                                      'GET');
+                  var getUserResource = generate_resource_definition(':site/user/:user_id',
+                                                                     'GET');                                    
+                  var addUserResource = generate_resource_definition(':site/user',
+                                                                     'POST');
+                  var updateUserResource = generate_resource_definition(':site/user/:user_id',
+                                                                     'PUT');
                   
                   return {
 	              GetAllResources: function(){
@@ -150,7 +155,11 @@ angular.module('TD_services.timeout_resources')
                       Login: generate_custom_http_executor(loginResource,'logged_in_user','post'),
                       Logout: generate_custom_http_executor(logoutResource,'logout_result','get'),        
                       CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get'),
-                      GetRoles: generate_custom_http_executor(getRolesResource,'roles','get')                      
+                      GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
+                      GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
+                      GetUser: generate_custom_http_executor(getUserResource,'user','get'),
+                      AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
+                      UpdateUser: generate_custom_http_executor(updateUserResource,'updated_user','post')
                   };
               }]);
 

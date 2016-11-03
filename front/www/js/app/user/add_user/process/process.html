@@ -1,6 +1,20 @@
-<ion-view view-title="">
+<ion-view view-title="User Added">
   <ion-content>      
-     <!-- ui-sref=".process({user_info: ,})" -->    
+    <div class='col icon-label'>
+      <div class='row'>
+        <div><i class="icon ion-person-add"></i></div>
+        <div>{{resources.added_user.data.username}}</div>
+      </div>
+      <div class='row'>
+        <div>Has Been Created</div>
+      </div>
+    </div>
+    <center>
+      <a id='AddAnotherUser' class='button button-large button-positive tablet-friendly-button' ui-sref='.^.^({site:site})'>
+        <span>Add Another User</span>
+      </a>
+    </center>
+
   </ion-content>
 </ion-view>
 

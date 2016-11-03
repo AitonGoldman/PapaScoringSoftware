@@ -1,7 +1,7 @@
 <ion-view view-title="Home"  hide-back-button='true' >
   <ion-content>     
     <div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
-      <a ui-sref='.user' class="item item-icon-left poop" ng-if='User.has_role("admin")'>
+      <a id="home_manage_user_button" ui-sref='.user' class="item item-icon-left poop" ng-if='User.has_role("admin")'>
         <i class="icon ion-person-stalker"></i>
         <span>Manage Users</span>
       </a>

@@ -1,0 +1,28 @@
+<div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
+  <div class="item item-divider" id='add_user_user_info_title'>
+    User Info
+  </div>
+  <label class="item item-input tablet-friendly-text-input">
+    <input ng-model='user_info.username' type="text" placeholder="Username">
+  </label>
+  <label class="item item-input tablet-friendly-text-input">
+    <input ng-model='user_info.password' type="text" placeholder="Password">
+  </label>
+  <button ng-if='is_native == true' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-click='take_pic_and_upload()'>
+    <i class="icon ion-camera"></i>
+
+    <span >Take Picture</span>
+    <!--    <img align="bottom" src="" class="avatar-frame-small" style='margin-left:100%'>-->
+    <img ng-if='user_info.has_picture==true' align="bottom" src="http://98.111.232.93/pics/{{user_id}}.jpg?{{random_img}}" class="avatar-frame-small" style='float:right;margin-right:48px'>
+  </button>
+
+  <div class="item item-divider">
+    Roles
+  </div>
+  <ion-checkbox id="add_user_role_{{role.name}}_checkbox" class='item item-input' ng-repeat='role in resources.roles.data' ng-model='user_info.roles[role.role_id]'>{{role.name}}</ion-checkbox>
+  <button id='add_user_add_button' ui-sref='.process({process_step:{process:true}, user_info:user_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(user_info.username)'>
+    <i class="icon ion-chevron-right"></i>
+    <span >Apply Changes</span>
+  </button>
+</div>
+

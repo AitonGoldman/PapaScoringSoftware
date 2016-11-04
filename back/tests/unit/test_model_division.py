@@ -19,6 +19,7 @@ class ModelDivisionTD(unittest.TestCase):
         )
         #self.db_handle.session.add(self.division)
         self.division_dict = {'division_name':'a',
+                              'active':False,
                               'number_of_scores_per_entry':1,
                               'division_id':None,
                               'local_price':None,
@@ -41,12 +42,16 @@ class ModelDivisionTD(unittest.TestCase):
             key =  str(value)[str(value).index('.')+1:]            
             self.assertTrue(key in self.division_dict)
         
+    def test_to_dict_tournament_with_single_divisions(self):                
+        self.division.tournament.single_division = True                
+        simple_dict = self.division.to_dict_simple()
+        self.assertEquals(simple_dict['tournament_name'],'test_tournament')        
+
     def test_to_dict_tournament_with_multiple_divisions(self):                
         self.division.tournament.single_division = False
-        self.division_dict['tournament_name']='test_tournament, a'                        
-        
         simple_dict = self.division.to_dict_simple()
-        self.assertDictEqual(self.division_dict,simple_dict)
+        self.assertEquals(simple_dict['tournament_name'],'test_tournament, a')
+        
         
 
         

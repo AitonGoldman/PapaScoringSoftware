@@ -8,16 +8,14 @@ class ModelTournamentTD(unittest.TestCase):
         self.tables = ImportedTables(self.db_handle)
         self.tournament = self.tables.Tournament(
             tournament_name='test_tournament',
-            team_tournament=False,
-            active=False,
+            team_tournament=False,            
             single_division=False,
             scoring_type="HERB"
         )
         
         self.tournament_with_division = self.tables.Tournament(
             tournament_name='test_tournament',
-            team_tournament=False,
-            active=False,
+            team_tournament=False,            
             single_division=True,
             scoring_type="HERB"
         )

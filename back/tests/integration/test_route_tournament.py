@@ -124,8 +124,7 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                        data=json.dumps({'tournament_name':'test_tournament_rename',
                                         'team_tournament':True,
                                         'single_division':True,
-                                        'scoring_type':'PAPA',
-                                        'active':True
+                                        'scoring_type':'PAPA'                                        
                                         ,}))            
             self.assertEquals(rv.status_code,
                               200,
@@ -133,6 +132,6 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
 
             edited_tourney = json.loads(rv.data)            
             self.assertEquals(edited_tourney['data']['tournament_name'],'test_tournament_rename')
-            self.assertEquals(edited_tourney['data']['active'],True)
+            
 
             

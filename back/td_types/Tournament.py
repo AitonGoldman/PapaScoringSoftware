@@ -8,7 +8,6 @@ def generate_tournament_class(db_handle):
         tournament_id = db_handle.Column(db_handle.Integer, primary_key=True)
         team_tournament = db_handle.Column(db_handle.Boolean)
         tournament_name = db_handle.Column(db_handle.String(1000))
-        active = db_handle.Column(db_handle.Boolean)
         single_division = db_handle.Column(db_handle.Boolean)        
         scoring_type = db_handle.Column(db_handle.String(100))
         start_date = db_handle.Column(db_handle.DateTime)

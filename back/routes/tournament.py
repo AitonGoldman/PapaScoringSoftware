@@ -21,8 +21,7 @@ def route_add_tournament():
     if tables.Tournament.query.filter_by(tournament_name=tournament_data['tournament_name']).first():        
         raise Conflict('You are trying to create a duplicate tournament')
     new_tournament = tables.Tournament(
-        tournament_name=tournament_data['tournament_name'],        
-        active=False,        
+        tournament_name=tournament_data['tournament_name'],                
         scoring_type=tournament_data['scoring_type']
     )
     if 'team_tournament' in tournament_data and tournament_data['team_tournament']:    
@@ -34,7 +33,7 @@ def route_add_tournament():
         if 'finals_num_qualifiers' not in tournament_data or tournament_data['finals_num_qualifiers'] == "":
             raise BadRequest('finals_num_qualifiers not found in post data')            
         new_tournament.single_division=True
-        new_division = tables.Division(
+        new_division = tables.Division(            
             division_name = new_tournament.tournament_name+"_single",
             finals_num_qualifiers = tournament_data['finals_num_qualifiers']
         )

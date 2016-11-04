@@ -11,6 +11,7 @@ app = angular.module(
         'app.login',
     'app.logout',
     'app.user',
+    'app.tournament',
     /*REPLACEMECHILD*/
 	]
 );
@@ -63,5 +64,15 @@ app.config(function($httpProvider,$ionicConfigProvider) {
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
 });
 
+app.filter('range', function() {
+  return function(input, total) {
+    total = parseInt(total);
 
+    for (var i=0; i<total; i++) {
+      input.push(i);
+    }
+
+    return input;
+  };
+});
 

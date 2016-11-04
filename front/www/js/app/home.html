@@ -37,12 +37,20 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
-        <a id='camera_link' class='item item-icon-right' menu-close ng-click='Camera.take_user_pic_and_upload(1)'>
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.tournament' ng-if="User.logged_in() == true && User.has_role('admin')">
+          
           <div>
-            Camera
+            Tourneys
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
+        
+        <!-- <a id='camera_link' class='item item-icon-right' menu-close ng-click='Camera.take_user_pic_and_upload(1)'> -->
+        <!--   <div> -->
+        <!--     Camera -->
+        <!--   </div> -->
+        <!--   <i class="icon ion-chevron-right"></i> -->
+        <!-- </a> -->
         
       </ion-list>
     </ion-content>

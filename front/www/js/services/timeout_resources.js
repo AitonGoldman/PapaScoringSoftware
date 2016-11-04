@@ -144,6 +144,8 @@ angular.module('TD_services.timeout_resources')
                                                                      'POST');
                   var updateUserResource = generate_resource_definition(':site/user/:user_id',
                                                                      'PUT');
+                  var addTournamentResource = generate_resource_definition(':site/tournament',
+                                                                     'POST');
                   
                   return {
 	              GetAllResources: function(){
@@ -159,7 +161,8 @@ angular.module('TD_services.timeout_resources')
                       GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
                       AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
-                      UpdateUser: generate_custom_http_executor(updateUserResource,'updated_user','post')
+                      UpdateUser: generate_custom_http_executor(updateUserResource,'updated_user','post'),
+                      AddTournament: generate_custom_http_executor(addTournamentResource,'added_tournament','post')
                   };
               }]);
 

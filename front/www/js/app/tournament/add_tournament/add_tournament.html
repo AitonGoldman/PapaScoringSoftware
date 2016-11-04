@@ -1,0 +1,29 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
+      <div class="item item-divider" id='add_user_user_info_title'>
+        Tournament Info
+      </div>
+      <label class="item item-input tablet-friendly-text-input">
+        <input ng-model='tournament.tournament_name' type="text" placeholder="Tournament Name">
+      </label>      
+      <ion-checkbox id="add_tournament_single_division_checkbox" class='item item-input' ng-model='tournament.single_division'>Single Division</ion-checkbox>
+      <label class="item item-input tablet-friendly-text-input" ng-if='tournament.single_division == true'>
+        <input ng-model='tournament.finals_num_qualifiers' type="text" placeholder="# of Qualifiers">
+      </label>
+      <ion-checkbox ng-if='tournament.single_division == true' id="add_tournament_use_stripe_checkbox" class='item item-input' ng-model='tournament.use_stripe'>Use Stripe</ion-checkbox>
+      <label ng-if="tournament.use_stripe == true && tournament.single_division == true" class="item item-input tablet-friendly-text-input">
+        <input ng-model='tournament.stripe_sku' type="text" placeholder="Stripe SKU">
+      </label>      
+      <label ng-if="tournament.use_stripe == false && tournament.single_division == true" class="item item-input tablet-friendly-text-input">
+        <input ng-model='tournament.local_price' type="text" placeholder="Ticket Price">
+      </label>      
+      
+      <button id='add_tournament_add_button' ui-sref='.process({process_step:{process:true}, tournament_info:tournament})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
+        <i class="icon ion-chevron-right"></i>
+        <span >Add Tournament</span>
+      </button>
+    </div>
+  </ion-content>
+</ion-view>
+

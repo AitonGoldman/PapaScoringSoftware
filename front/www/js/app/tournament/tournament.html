@@ -1,0 +1,17 @@
+<ion-view view-title="Tournaments">
+  <ion-content>      
+    <div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
+      <a id="manage_tournaments_add_tournament_button" ui-sref='.add_tournament' class="item item-icon-left item-icon-right">
+        <i class="icon ion-plus-circled"></i>
+        <span>Add Tournament...</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>
+      <a id="tournament_edit_tournament_{{tournament.tournament_id}}_link"ng-repeat='tournament in resources.tournaments.data' ui-sref='.edit_tournament({tournament_id:tournament.tournament_id})' class="item item-icon-left item-icon-right">
+        <i class="icon ion-person"></i>
+        <span>{{tournament.tournament_name}}</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>      
+    </div>
+  </ion-content>
+</ion-view>
+

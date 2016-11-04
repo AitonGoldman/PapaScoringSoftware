@@ -13,12 +13,15 @@ from routes.utils import fetch_entity
 def route_add_tournament():
     tournament_data = json.loads(request.data)
     if 'tournament_name' not in tournament_data or tournament_data['tournament_name'] is None or tournament_data['tournament_name'] == "":
+        print "no name"
         raise BadRequest('tournament_name not found in post data')
     if 'scoring_type' not in tournament_data:
+        print "no type"
         raise BadRequest('did not specify scoring type')            
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)        
     if tables.Tournament.query.filter_by(tournament_name=tournament_data['tournament_name']).first():        
+        print "duplicate"
         raise Conflict('You are trying to create a duplicate tournament')
     new_tournament = tables.Tournament(
         tournament_name=tournament_data['tournament_name'],                
@@ -31,12 +34,20 @@ def route_add_tournament():
 
     if 'single_division' in tournament_data and tournament_data['single_division']:
         if 'finals_num_qualifiers' not in tournament_data or tournament_data['finals_num_qualifiers'] == "":
+            print "no qualifiers"
             raise BadRequest('finals_num_qualifiers not found in post data')            
         new_tournament.single_division=True
         new_division = tables.Division(            
             division_name = new_tournament.tournament_name+"_single",
             finals_num_qualifiers = tournament_data['finals_num_qualifiers']
         )
+        if tournament_data['scoring_type'] == "HERB":
+            new_division.number_of_scores_per_entry=1
+        if 'stripe_sku' in tournament_data:
+            new_division.stripe_sku=tournament_data['stripe_sku']
+        if 'local_price' in tournament_data:
+            new_division.local_price=tournament_data['local_price']
+        
         db.session.add(new_division)
         new_tournament.divisions.append(new_division)
         #db.session.add(new_tournament)

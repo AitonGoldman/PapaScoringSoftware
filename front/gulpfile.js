@@ -17,18 +17,12 @@ var paths = {
   sass: ['./scss/**/*.scss']
 };
 
+if(argv.help){
+    console.log('--test_instance_ip <ip> (for e2e target)');
+    console.log('--single_protractor_spec <path_to_spec_file> (for e2e target)');
+    return;
+}
 gulp.task('default', ['sass']);
-
-gulp.task('api_host_replace', function(done){
-    if(argv.backend_ip == undefined){        
-        done('--backend_ip argument needed!');
-        return;
-    }
-    gulp.src(['./www/templates/api_host.js'])
-        .pipe(replace('APIHOST', argv.backend_ip))
-        .pipe(gulp.dest('./www/js/services'));
-    done();
-});
 
 gulp.task('e2e', function(done) {
     if(argv.test_instance_ip == undefined){

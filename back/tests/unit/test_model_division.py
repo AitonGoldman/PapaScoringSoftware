@@ -21,6 +21,8 @@ class ModelDivisionTD(unittest.TestCase):
         self.division_dict = {'division_name':'a',
                               'active':False,
                               'number_of_scores_per_entry':1,
+                              'scoring_type':'HERB',
+                              'team_tournament':False,
                               'division_id':None,
                               'local_price':None,
                               'stripe_sku':None,

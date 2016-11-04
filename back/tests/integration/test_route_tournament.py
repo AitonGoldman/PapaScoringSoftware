@@ -26,12 +26,14 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+            
             rv = c.post('/tournament',
                        data=json.dumps({'tournament_name':'test_tournament',                                        
                                         'single_division':True,
                                         'scoring_type':'HERB',
                                         'finals_num_qualifiers':24
-                                        ,}))            
+                                        ,}))
+            
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
@@ -43,11 +45,10 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertIsNotNone(retrieved_division,
                                  "Could not find the division we just created")
             self.assertEquals(retrieved_division.division_name,'test_tournament_single')
-            self.assertEquals(new_tourney['data']['tournament_name'],'test_tournament')
-            self.assertEquals(new_tourney['data']['team_tournament'],False)
+            self.assertEquals(new_tourney['data']['tournament_name'],'test_tournament')            
             self.assertEquals(new_tourney['data']['single_division'],True)
-            self.assertEquals(new_tourney['data']['scoring_type'],'HERB')
-            
+            self.assertEquals(retrieved_division.scoring_type,"HERB")
+            self.assertEquals(retrieved_division.team_tournament,False)            
 
     def test_tournament_create_multiple_divisions(self):        
         with self.flask_app.test_client() as c:                    

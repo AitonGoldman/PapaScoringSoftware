@@ -8,8 +8,11 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         #metadivision_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
         #    'metadivision.metadivision_id'
         #))
-        active = db_handle.Column(db_handle.Boolean,default=False)                
+        
         division_id = db_handle.Column(db_handle.Integer, primary_key=True)
+        active = db_handle.Column(db_handle.Boolean,default=False)
+        team_tournament = db_handle.Column(db_handle.Boolean)
+        scoring_type = db_handle.Column(db_handle.String(100))
         division_name = db_handle.Column(db_handle.String(100))
         number_of_scores_per_entry = db_handle.Column(db_handle.Integer)
         stripe_sku = db_handle.Column(db_handle.String(100))
@@ -36,7 +39,6 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         def to_dict_simple(self):
             division = to_dict(self)
             division['tournament_name'] = self.get_tournament_name(self.tournament)
-            division['team_tournament'] = self.tournament.team_tournament            
             return division
 
         def get_tournament_name(self, tournament):

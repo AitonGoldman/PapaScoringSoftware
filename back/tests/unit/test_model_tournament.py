@@ -7,17 +7,13 @@ class ModelTournamentTD(unittest.TestCase):
         self.db_handle = db_util.create_db_handle_no_app()        
         self.tables = ImportedTables(self.db_handle)
         self.tournament = self.tables.Tournament(
-            tournament_name='test_tournament',
-            team_tournament=False,            
-            single_division=False,
-            scoring_type="HERB"
+            tournament_name='test_tournament',            
+            single_division=False            
         )
         
         self.tournament_with_division = self.tables.Tournament(
-            tournament_name='test_tournament',
-            team_tournament=False,            
-            single_division=True,
-            scoring_type="HERB"
+            tournament_name='test_tournament',            
+            single_division=True            
         )
         self.division = self.tables.Division(
             division_name='test_division'

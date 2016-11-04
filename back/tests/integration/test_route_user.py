@@ -141,20 +141,21 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user_changed','password':'test_user_password',
-                                        'roles':{'%s' % self.admin_role_id:True}}))
+                                        'roles':[self.admin_role_id]}))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
-            new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()            
+            new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()                        
             rv = c.put('/user/%s' % new_user.user_id,
                        data=json.dumps({'username':'test_user_changed',
-                                        'roles':{'%s' % self.admin_role_id:False,'%s'%(self.new_role_2_id):True},
+                                        #'roles':{'%s' % self.admin_role_id:False,'%s'%(self.new_role_2_id):True},
+                                        'roles':[str(self.new_role_2_id)],
                                         'has_picture':True}))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
             self.assertIsNotNone(self.flask_app.tables.User.query.filter_by(username='test_user_changed').first(),
-                              "Was expecting to find no user, but found user with user_id %s" % 2)
+                              "Was expecting to find user, but found no user with user_name test_user_changed")
             changed_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()
             self.assertEquals(len(changed_user.roles),1)
             self.assertEquals(changed_user.roles[0].name,"test_role_2")

@@ -1,4 +1,5 @@
 angular.module('app.tournament',['app.tournament.add_tournament',
+    'app.tournament.edit_tournament',
     /*REPLACEMECHILD*/]);
 angular.module('app.tournament').controller(
     'app.tournament',[
@@ -8,12 +9,12 @@ angular.module('app.tournament').controller(
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-             
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResource.GetAllResources();
-        //  Modals.loaded();
-        //})
+        Modals.loading();
+        tournaments_promise = TimeoutResources.GetTournaments(undefined,{site:$scope.site});        
+        //= TimeoutResources.GetEtcData();
+        tournaments_promise.then(function(data){
+            $scope.resources = TimeoutResources.GetAllResources();
+            Modals.loaded();
+        });
     }]
 );

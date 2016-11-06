@@ -34,7 +34,34 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
           }    
 
+       }).state('app.tournament.edit_tournament', 
+        { 
+         cache: false,
+ 	 url: '/edit_tournament/division_id/:division_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/edit_tournament/edit_tournament.html',
+ 	       controller: 'app.tournament.edit_tournament'
+ 	     }
+ 	   }
+       }).state('app.tournament.edit_tournament.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/edit_tournament/process/process.html',
+ 	       controller: 'app.tournament.edit_tournament.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             ,division_info:{}             
+
+          }    
+
        })//REPLACE_ME
+
+
 
 
 

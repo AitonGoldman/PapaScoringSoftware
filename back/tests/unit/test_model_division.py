@@ -25,6 +25,7 @@ class ModelDivisionTD(unittest.TestCase):
                               'team_tournament':False,
                               'division_id':None,
                               'local_price':None,
+                              'use_stripe':None,
                               'stripe_sku':None,
                               'finals_player_selection_type':None,
                               'finals_num_qualifiers':None,

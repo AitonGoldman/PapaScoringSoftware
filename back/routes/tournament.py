@@ -7,6 +7,13 @@ from util.permissions import Admin_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
 
+@admin_manage_blueprint.route('/tournament',methods=['GET'])
+def route_get_all_tournaments():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)            
+    tournaments_dict = {tournament.tournament_id: tournament.to_dict_simple() for tournament in tables.Tournament.query.all()}    
+    return jsonify({'data': tournaments_dict})
+
 @admin_manage_blueprint.route('/tournament',methods=['POST'])
 @login_required
 @Admin_permission.require(403)
@@ -35,9 +42,10 @@ def route_add_tournament():
         
         if tournament_data['scoring_type'] == "HERB":
             new_division.number_of_scores_per_entry=1
-        if 'stripe_sku' in tournament_data:
+        if 'use_stripe' in tournament_data and tournament_data['use_stripe']:
+            new_division.use_stripe = True
             new_division.stripe_sku=tournament_data['stripe_sku']
-        if 'local_price' in tournament_data:
+        if 'local_price' in tournament_data and tournament_data['use_stripe'] == False: 
             new_division.local_price=tournament_data['local_price']
         if 'team_tournament' in tournament_data and tournament_data['team_tournament']:    
             new_division.team_tournament = True

@@ -14,6 +14,8 @@ def generate_tournament_class(db_handle):
 
 
         def to_dict_simple(self):
-            return to_dict(self)
+            tournament = to_dict(self)
+            tournament['divisions']=[division.division_id for division in self.divisions]
+            return tournament
     return Tournament
     

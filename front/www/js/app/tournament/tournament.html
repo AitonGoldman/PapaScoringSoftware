@@ -6,11 +6,19 @@
         <span>Add Tournament...</span>
         <i class="icon ion-chevron-right"></i>        
       </a>
-      <a id="tournament_edit_tournament_{{tournament.tournament_id}}_link"ng-repeat='tournament in resources.tournaments.data' ui-sref='.edit_tournament({tournament_id:tournament.tournament_id})' class="item item-icon-left item-icon-right">
-        <i class="icon ion-person"></i>
-        <span>{{tournament.tournament_name}}</span>
-        <i class="icon ion-chevron-right"></i>        
-      </a>      
+      <div ng-repeat="tournament in resources.tournaments.data">
+        <a ng-if='tournament.single_division == true' id="tournament_edit_tournament_{{tournament.tournament_id}}_link" ui-sref='.edit_tournament({division_id:tournament.divisions[0]})' class="item item-icon-left item-icon-right">
+          <i class="icon ion-person"></i>
+          <span>{{tournament.tournament_name}}</span>
+          <i class="icon ion-chevron-right"></i>        
+        </a>
+        <a ng-if='tournament.single_division == false' id="tournament_edit_tournament_{{tournament.tournament_id}}_link" ui-sref='.edit_tournament({tournament_id:tournament.tournament_id})' class="item item-icon-left item-icon-right">
+          <i class="icon ion-person"></i>
+          <span>{{tournament.tournament_name}}</span>
+          <i class="icon ion-chevron-right"></i>        
+        </a>
+        
+      </div>
     </div>
   </ion-content>
 </ion-view>

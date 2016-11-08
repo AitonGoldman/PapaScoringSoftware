@@ -16,6 +16,7 @@ angular.module('app.tournament.edit_tournament').controller(
         division_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.division = $scope.resources.division.data;
+            $scope.tournament = $scope.resources.division.data;
             console.log($scope.division);
             Modals.loaded();
         });

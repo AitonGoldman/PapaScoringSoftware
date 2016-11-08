@@ -1,22 +1,18 @@
 <ion-view view-title="Login">
   <ion-content>
-    <div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
-      <label class="item item-input tablet-friendly-text-input">
+    <div class="skinny-list list">
+      <label style='padidng:0' class='item-input item'>
+        <span class='input-label'>Username : </span>
         <input ng-model='user.username' type="text" placeholder="Username">
       </label>
-      <label class="item item-input  tablet-friendly-text-input">
+      <label style='padidng:0' class='item-input item'>
+        <span class='input-label'>Password : </span>
         <input ng-model='user.password' type="text" placeholder="Password">
       </label>
-    <!--   <a class="button button-large icon-right ion-chevron-right button-positive tablet-friendly-button" ui-sref='.process({user_info:user})'><span>Login</span></a>-->
-    <!-- <a ui-sref='.process({user_info:user})' class="item item-icon-right input-list-button" style='text-align:left'> -->
-    <!--   <i class="icon ion-chevron-right"></i> -->
-    <!--   <span>Login</span> -->
-    <!-- </a> -->
-    <button id="LoginButton" ui-sref='.process({user_info:user})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(user.username)||utils.var_empty(user.password)'>
+      <button id="LoginButton" ui-sref='.process({user_info:user})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(user.username)||utils.var_empty(user.password)'>
       <i class="icon ion-chevron-right"></i>
       <span >Login</span>
     </button>
-
     </div>
   </ion-content>
 </ion-view>

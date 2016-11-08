@@ -39,7 +39,7 @@ app.controller(
         if($scope.isIOS == true){
             $scope.menu_bar_title_style={'height':'100'};
         } else {
-            $scope.menu_bar_title_style={'height':'100'};
+            $scope.menu_bar_title_style={'height':'120'};
         }
         $scope.is_native = false;
         $ionicPlatform.ready(function() {        

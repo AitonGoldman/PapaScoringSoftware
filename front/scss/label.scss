@@ -1,0 +1,61 @@
+.icon-label {
+    margin-top: 15px;
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px) {
+            font-size:$font-size-small;
+        }
+        @media screen and (min-device-height: 751px){
+            font-size:$font-size-med;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        font-size:$font-size-med;
+    }
+    @media screen and (min-width: 971px) {
+        font-size:$font-size-large;
+    }
+
+
+    div.row {
+        margin-left:auto;
+        margin-right:auto;
+    }
+    div.row:nth-child(1) {
+        div:nth-child(1){
+            margin-right:15px;
+            margin-left:auto;
+        }
+        div:nth-child(2){
+            margin-right:auto;
+            margin-top:auto;
+            margin-bottom:auto;
+        }
+    }
+    div.row:nth-child(2) {
+        margin-top:15px;
+        div:nth-child(1){
+            @media screen and (max-width: 610px){
+                @media screen and (max-device-height: 750px){
+                    font-size:$font-size-small - 4;
+                    padding-left:$font-size-small - ($font-size-small/3);
+                }
+                @media screen and (min-device-height: 751px){
+                    font-size:$font-size-med - 8;
+                    padding-left:$font-size-med - ($font-size-med/3);
+                    
+                }
+            }
+            @media screen and (max-width: 970px) and (min-width:611px) {
+                    font-size:$font-size-med - 8;
+                    padding-left:$font-size-med - ($font-size-med/3);
+
+            }
+            @media screen and (min-width: 971px) {
+                    font-size:$font-size-large - 8;
+                    padding-left:$font-size-large - ($font-size-large/3);
+            }            
+            margin-right:auto;
+            margin-left:auto;
+        }
+    }
+}

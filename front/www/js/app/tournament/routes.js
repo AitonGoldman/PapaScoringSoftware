@@ -59,7 +59,72 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
           }    
 
+       }).state('app.tournament.division_list', 
+        { 
+         cache: false,
+ 	 url: '/division_list/tournament_id/:tournament_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/division_list/division_list.html',
+ 	       controller: 'app.tournament.division_list'
+ 	     }
+ 	   }
+       }).state('app.tournament.division_list.add_division', 
+        { 
+         cache: false,
+ 	 url: '/add_division/tournament_id/:tournament_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/division_list/add_division/add_division.html',
+ 	       controller: 'app.tournament.division_list.add_division'
+ 	     }
+ 	   }
+       }).state('app.tournament.division_list.add_division.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/division_list/add_division/process/process.html',
+ 	       controller: 'app.tournament.division_list.add_division.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             ,division_info:{}             
+
+          }    
+
+       }).state('app.tournament.division_list.edit_division', 
+        { 
+         cache: false,
+ 	 url: '/edit_division/division_id/:division_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/division_list/edit_division/edit_division.html',
+ 	       controller: 'app.tournament.division_list.edit_division'
+ 	     }
+ 	   }
+       }).state('app.tournament.division_list.edit_division.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/division_list/edit_division/process/process.html',
+ 	       controller: 'app.tournament.division_list.edit_division.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             ,division_info:{}             
+
+          }    
+
        })//REPLACE_ME
+
+
+
+
+
 
 
 

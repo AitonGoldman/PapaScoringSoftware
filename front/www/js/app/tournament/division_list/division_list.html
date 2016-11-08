@@ -1,0 +1,20 @@
+<ion-view view-title="">
+  <ion-content>      
+     <!-- ui-sref=".division_list({tournament_id: ,})" -->    
+    <div class="skinny-list list">    
+      <a id="manage_tournaments_add_division_button" ui-sref='.add_division({tournament_id:tournament_id})' class="item item-icon-left item-icon-right">
+        <i class="icon ion-plus-circled"></i>
+        <span>Add Division...</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>
+      <div ng-repeat="division in resources.tournament_divisions.data">
+        <a id="tournament_edit_division_{{division.division_id}}_link" ng-click='choose_action(division.division_id,division,".edit_division")' class="item item-icon-left item-icon-right">
+          <i ng-if='division.active == true' class="icon ion-play" style='color:green'></i>
+          <i ng-if='division.active == false' class="icon ion-stop" style='color:red'></i>
+          <span>{{division.division_name}}</span>
+          <i class="icon ion-chevron-right"></i>        
+        </a>        
+      </div>
+  </ion-content>
+</ion-view>
+

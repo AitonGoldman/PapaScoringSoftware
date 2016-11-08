@@ -148,8 +148,12 @@ angular.module('TD_services.timeout_resources')
                                                                      'PUT');                  
                   var addTournamentResource = generate_resource_definition(':site/tournament',
                                                                            'POST');
+                  var addDivisionResource = generate_resource_definition(':site/division',
+                                                                           'POST');                  
                   var getTournamentResource = generate_resource_definition(':site/tournament/:tournament_id',
-                                                                     'GET');                                    
+                                                                           'GET');
+                  var getTournamentDivisionsResource = generate_resource_definition(':site/tournament/:tournament_id/division',
+                                                                     'GET');                                                      
                   var getDivisionResource = generate_resource_definition(':site/division/:division_id',
                                                                      'GET');                                    
 
@@ -171,8 +175,11 @@ angular.module('TD_services.timeout_resources')
                       AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
                       UpdateUser: generate_custom_http_executor(updateUserResource,'updated_user','post'),
                       AddTournament: generate_custom_http_executor(addTournamentResource,'added_tournament','post'),
+                      AddDivision: generate_custom_http_executor(addDivisionResource,'added_division','post'),
                       GetTournaments: generate_custom_http_executor(getTournamentResource,'tournaments','get'),
-                      GetDivision: generate_custom_http_executor(getDivisionResource,'division','get'),                                                     UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post')
+                      GetDivision: generate_custom_http_executor(getDivisionResource,'division','get'),
+                      GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),                                                    
+                      UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post')
             
                   };
               }]);

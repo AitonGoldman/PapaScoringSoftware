@@ -19,7 +19,7 @@ app = angular.module(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,Modals, User, Utils,$ionicPlatform) {
+             $state,Modals, User, Utils,$ionicPlatform, $ionicActionSheet, TimeoutResources) {
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){
@@ -48,7 +48,41 @@ app.controller(
                 $scope.is_native=true;
                 //alert('on a native app');
             }
-        });        
+        });
+        $scope.choose_action = function(division_id,tournament,dest_route){
+            console.log(division_id);
+            var hideSheet = $ionicActionSheet.show({
+                buttons: [
+                    { text: 'Edit Tournament' },
+                    { text: 'Activate/Deactivate Tournament' }
+                ],                    
+                titleText: 'Tournament Actions',
+                cancelText: 'Cancel',
+                cancel: function() {
+                    // add cancel code..
+                },
+                buttonClicked: function(index) {
+                    if(index == 0){
+                        $state.go(dest_route,{division_id:division_id});
+                    }
+                    if(index == 1){
+                        if(tournament.active == true){
+                            new_tournament_status=false;
+                            tournament.active=false;
+                        } else {                                
+                            new_tournament_status=true;
+                            tournament.active=true;
+                        }
+                        Modals.loading();
+                        active_promise = TimeoutResources.UpdateDivision(undefined,{site:$scope.site},{division_id:division_id,active:new_tournament_status});
+                        active_promise.then(function(data){
+                            Modals.loaded();
+                        });
+                    }
+                    return true;
+                }
+            });
+        };          
     }
 );
 

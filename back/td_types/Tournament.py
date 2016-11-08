@@ -15,6 +15,11 @@ def generate_tournament_class(db_handle):
 
         def to_dict_simple(self):
             tournament = to_dict(self)
+            if self.single_division:
+                if self.divisions[0].active:
+                    tournament['active']=True
+                else:
+                    tournament['active']=False                    
             tournament['divisions']=[division.division_id for division in self.divisions]
             return tournament
     return Tournament

@@ -6,7 +6,7 @@ describe('User', function() {
         this.ready_to_test = td_utils.beforeTdTest(true);        
     });
 
-    it('edit user roles', function(done) {
+    it('edit user', function(done) {
         var EC = protractor.ExpectedConditions;
         this.ready_to_test.then(function(data){
             add_new_user_p = td_utils.add_new_user('poopyhead');
@@ -29,6 +29,8 @@ describe('User', function() {
                 element(by.model('user_info.password')).sendKeys('new_poop_pass');
                 element(by.id('add_user_role_desk_checkbox')).click();
                 element(by.id('add_user_role_admin_checkbox')).click();                
+                el = element(by.id("add_user_add_button"));
+                var tag = browser.executeScript("arguments[0].scrollIntoView(true)", el);
                 element.all(by.id('add_user_add_button')).then(function(data){
                     data[0].click();
                 });
@@ -71,5 +73,5 @@ describe('User', function() {
             
             
         });
-    });
+    },60000);
 });

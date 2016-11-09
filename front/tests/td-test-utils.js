@@ -137,6 +137,8 @@ var add_new_user = function(new_user_name){
                 element(by.model('user_info.username')).sendKeys(new_user_name);
                 element(by.model('user_info.password')).sendKeys(new_user_name);
                 element(by.id('add_user_role_admin_checkbox')).click();
+                el = element(by.id("add_user_add_button"));
+                var tag = browser.executeScript("arguments[0].scrollIntoView(true)", el);
                 element.all(by.id('add_user_add_button')).then(function(data){
                     data[0].click();
                 });

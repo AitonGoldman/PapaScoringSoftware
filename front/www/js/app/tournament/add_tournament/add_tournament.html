@@ -1,7 +1,7 @@
 <ion-view view-title="">
   <ion-content>
     <div class="skinny-list">    
-      <div class="item-divider item" id='add_user_user_info_title'>
+      <div class="item-divider item" id="add_tournament_tournament_info_title">
         Tournament Info
       </div>
       <label class="item-input item">
@@ -23,7 +23,7 @@
         <span >Ticket Price: </span>
         <input ng-model='tournament.local_price' type="text" placeholder="Ticket Price">
       </label>
-      <button id='add_tournament_add_button' ui-sref='.process({process_step:{process:true}, tournament_info:tournament})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
+      <button id="add_tournament_add_button" ui-sref='.process({process_step:{process:true}, tournament_info:tournament})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
         <i class="icon ion-chevron-right"></i>
         <span >Add Tournament</span>
       </button>

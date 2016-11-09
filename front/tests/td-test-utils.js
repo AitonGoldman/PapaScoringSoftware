@@ -102,18 +102,18 @@ var checkForError = function(expectError, done){
     if(done==undefined){
         done=function(){};
     }
-    browser.wait(EC.stalenessOf($('#error_present')), 5000).then(function(data){
-        if(expectError == false){
+    return browser.wait(EC.presenceOf($('#error_present')), 5000).then(function(data){
+        if(expectError == true){            
             done();
-        } else {
+        } else {            
             console.log("WAS expecting error -- "+err);
             expect(false).toBe(true);
             done();
         }                    
     },function(err){
-        if(expectError == true){
+        if(expectError == false){            
             done();
-        } else {
+        } else {            
             console.log("was NOT expecting error -- "+err);
             expect(false).toBe(true);
             done();
@@ -150,3 +150,57 @@ var add_new_user = function(new_user_name){
     };
 
 exports.add_new_user = add_new_user;
+
+var add_new_tournament = function(new_tournament_name,single_division){        
+    var button_to_wait_for = undefined;
+    if(single_division){
+        button_to_wait_for = "#AddAnotherTournament";
+    } else {
+        button_to_wait_for = "#AddDivisionsToTournament";
+    }
+    browser.wait(open_menu());    
+    $('#menu_tournament_link').click();
+    var EC = protractor.ExpectedConditions;    
+    manage_tournaments_p =  browser.wait(EC.presenceOf($('#manage_tournaments_add_tournament_button')), 5000);
+    ready_to_add_tournament_p = manage_tournaments_p.then(function(data){
+        $('#manage_tournaments_add_tournament_button').click();
+        return browser.wait(EC.presenceOf($('#add_tournament_tournament_info_title')), 7000);        
+    });
+    add_tournaments_p = ready_to_add_tournament_p.then(function(data){
+        element(by.model('tournament.tournament_name')).sendKeys(new_tournament_name);
+    });
+    
+    
+    if(single_division == false){
+        added_tournaments_p = add_tournaments_p.then(function(data){            
+            return $('#add_tournament_single_division_checkbox').click();
+        });
+    } else {        
+        added_tournaments_p = add_tournaments_p.then(function(data){            
+            element(by.model('tournament.finals_num_qualifiers')).sendKeys("24");
+            element(by.model('tournament.stripe_sku')).sendKeys("12345abcd");
+            $('#add_tournament_tournament_info_title').click();
+            el = element(by.id("add_tournament_add_button"));
+            var tag = browser.executeScript("arguments[0].scrollIntoView(true)", el);                        
+            return browser.wait(EC.elementToBeClickable($('#add_tournament_add_button')), 25000);
+        });
+        
+    }
+
+    done_adding_tournaments_p = added_tournaments_p.then(function(data){
+        $('#add_tournament_add_button').click();
+        return checkForError(false);        
+    });    
+    
+    really_done_adding_p =  done_adding_tournaments_p.then(function(data){        
+        return browser.wait(EC.presenceOf($(button_to_wait_for)), 5000);
+    });
+
+    return really_done_adding_p.then(function(data){
+        $(button_to_wait_for).click();        
+        return browser.wait(EC.presenceOf($('#tournament_edit_tournament_'+new_tournament_name+'_link')), 15000);
+    });
+
+};
+
+exports.add_new_tournament = add_new_tournament;

@@ -56,12 +56,13 @@ def route_add_division():
 @admin_manage_blueprint.route('/division/<division_id>',methods=['PUT'])
 @login_required
 @Admin_permission.require(403)
-def route_edit_division(division_id):
+def route_edit_division(division_id):    
     division_data = json.loads(request.data)
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
+    
     division = fetch_entity(tables.Division,division_id)
-    if 'division_id' not in division_data:
+    if 'division_id' not in division_data:        
         raise BadRequest('No DivisionId specified')
     # FIXME : need to deal with single division vs multiple division name editing (i.e. tournament_name is calculated)
     #if 'division_name' in division_data and division.division_name != division_data['division_name']:
@@ -78,12 +79,19 @@ def route_edit_division(division_id):
         division.finals_num_qualifiers = division_data['finals_num_qualifiers']    
     if 'team_tournament' in division_data:
         division.team_tournament = division_data['team_tournament']
-    if 'use_stripe' in division_data and 'stripe_sku' in division_data:        
-        division.use_stripe=division_data['use_stripe']
-        if division.use_stripe:            
-            division.stripe_sku = division_data['stripe_sku']
-        elif 'local_price' in division_data:            
-            division.local_price = division_data['local_price']    
+    if 'use_stripe' in division_data:
+        if division_data['use_stripe'] is True:            
+            division.use_stripe=True
+            if 'stripe_sku' in division_data:        
+                division.stripe_sku = division_data['stripe_sku']
+            else:
+                raise BadRequest('Specified use_stripe, but no sku specified')
+        else:
+            division.use_stripe=False
+            if 'local_price' in division_data:                            
+                division.local_price = division_data['local_price']
+            else:
+                raise BadRequest('use_stripe is false, but no local price specified')            
     db.session.commit()
     return jsonify({'data':division.to_dict_simple()})
             

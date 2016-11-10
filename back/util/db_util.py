@@ -2,15 +2,20 @@ from sqlalchemy_utils import create_database, database_exists
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
 from td_types import ImportedTables
-
+from machine_list import machines
+def load_machines_from_json(app):    
+    for machine in machines:
+        app.tables.db_handle.session.add(
+            app.tables.Machine(
+                machine_name=machine['machine_name']
+            )
+        )
+        app.tables.db_handle.session.commit()
+        pass
+        
+    
 def create_db_and_tables(app, db_name, db_info, drop_tables=False):    
-    #if db_info.is_sqlite():
     db_url = generate_db_url(db_name, db_info)
-    #else:
-        #pg_info = PgInfo(app.td_secret_config['pg_username'],
-        #                 app.td_secret_config['pg_password'],
-        #                 None)
-        #db_url = db_util.generate_db_url(db_name, db_info)            
     if not database_exists(db_url):        
         create_database(db_url)
     db_handle = create_db_handle(db_url,app)        
@@ -32,6 +37,7 @@ def create_TD_tables(db_handle,drop_tables=False):
     db_handle.reflect()
     if drop_tables:
         db_handle.drop_all()
+        db_handle.session.commit()
     db_handle.create_all()    
 
 def check_table_exists(db_handle):

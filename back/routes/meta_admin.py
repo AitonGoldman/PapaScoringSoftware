@@ -31,6 +31,16 @@ def route_meta_admin_create_db():
     del dummy_app
     return jsonify({'data':input_data['db_name']})    
 
+@meta_admin_blueprint.route('/meta_admin/db_with_machines',methods=['POST'])
+def route_meta_admin_create_db_and_load_machines():    
+    dummy_app = Flask('dummy_app')
+    db_config = td_config.get_db_config()    
+    db_util.create_db_and_tables(dummy_app, 'test', DbInfo(db_config), True)
+    db_util.load_machines_from_json(dummy_app)
+    del dummy_app
+    return jsonify({'data':'test'})    
+
+
 @meta_admin_blueprint.route('/meta_admin/test_db',methods=['POST'])
 def route_meta_admin_wipe_test_db():    
     dummy_app = Flask('dummy_app')    

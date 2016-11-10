@@ -28,4 +28,10 @@ class ModelImportedTablesTD(unittest.TestCase):
         self.assertTrue(hasattr(self.tables,'Division'))
         self.assertTrue(self.tables.Division.__name__ == 'Division')
         
+        self.assertTrue(hasattr(self.tables,'Machine'))
+        self.assertTrue(self.tables.Machine.__name__ == 'Machine')
+
+        self.assertTrue(hasattr(self.tables,'DivisionMachine'))
+        self.assertTrue(self.tables.DivisionMachine.__name__ == 'DivisionMachine')
+        
         

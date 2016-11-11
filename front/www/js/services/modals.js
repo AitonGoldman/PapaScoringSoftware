@@ -7,19 +7,6 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
 
     $rootScope.machines = {1:{machine_id:1,machine_name:'disney tron'},2:{machine_id:2,machine_name:'tron'},3:{machine_id:3,machine_name:'whatever'}};
     $rootScope.matches = [];
-    $rootScope.callbackMethod=function(query,initializing){
-        $rootScope.matches=[];
-        machines = _.values($rootScope.machines);
-        if(query.length > 3){
-            _.forEach(machines,function(value){
-                                
-                if(value.machine_name.match("(.*"+query+".*)")!=null){                    
-                    $rootScope.matches.push(value);
-                } else {
-                }                
-            });
-        }            
-    };
 
     
     $rootScope.close_error_dialog = function(){        

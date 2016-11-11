@@ -159,7 +159,9 @@ angular.module('TD_services.timeout_resources')
                   var addDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                            'POST');                  
                   var getDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
-                                                                           'GET');                  
+                                                                                 'GET');
+                  var getMachinesResource = generate_resource_definition(':site/machine',
+                                                                           'GET');                                    
                   var deleteDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id',
                                                                            'DELETE');                  
                   return {
@@ -184,7 +186,8 @@ angular.module('TD_services.timeout_resources')
                       GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),                                              AddDivisionMachine: generate_custom_http_executor(addDivisionMachineResource,'added_division_machine','post'),
                       DeleteDivisionMachine: generate_custom_http_executor(deleteDivisionMachineResource,'deleted_division_machine','get'),
                       GetDivisionMachines: generate_custom_http_executor(getDivisionMachinesResource,'division_machines','get'),
-                      UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post')
+                      UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post'),
+                      GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get')
             
                   };
               }]);

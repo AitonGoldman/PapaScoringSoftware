@@ -1,0 +1,21 @@
+<ion-view view-title="">
+  <ion-content>      
+    <center style='padding:100px'>
+      <div class='item-input-inset'>
+        <label class="item-input-wrapper">
+          <i style='font-size:48px' class="icon ion-ios-search placeholder-icon"></i>
+          <input style='height:58px;font-size:48px' type="search" placeholder="Search" ng-change='update_machine_list()' ng-model='division_machine.division_machine_name'>
+        </label>
+        <button class="button button-clear">
+          Cancel
+        </button>
+      </div>
+      <div class='list skinny-list'>
+        <a ng-click='add_division_machine(match)' ng-repeat='match in matches' class='item'>
+          {{match.machine_name}}
+        </a>
+      </div>
+    </center>
+  </ion-content>
+</ion-view>
+

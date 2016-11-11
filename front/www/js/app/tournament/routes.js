@@ -119,7 +119,29 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
           }    
 
+       }).state('app.tournament.edit_tournament.division_machine_list', 
+        { 
+         cache: false,
+ 	 url: '/division_machine_list',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/edit_tournament/division_machine_list/division_machine_list.html',
+ 	       controller: 'app.tournament.edit_tournament.division_machine_list'
+ 	     }
+ 	   }
+       }).state('app.tournament.edit_tournament.division_machine_list.add_division_machine', 
+        { 
+         cache: false,
+ 	 url: '/add_division_machine',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/edit_tournament/division_machine_list/add_division_machine/add_division_machine.html',
+ 	       controller: 'app.tournament.edit_tournament.division_machine_list.add_division_machine'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
+
 
 
 

@@ -1,4 +1,5 @@
 angular.module('app.tournament.edit_tournament',['app.tournament.edit_tournament.process',
+    'app.tournament.edit_tournament.division_machine_list',
     /*REPLACEMECHILD*/]);
 angular.module('app.tournament.edit_tournament').controller(
     'app.tournament.edit_tournament',[
@@ -16,8 +17,7 @@ angular.module('app.tournament.edit_tournament').controller(
         division_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.division = $scope.resources.division.data;
-            $scope.tournament = $scope.resources.division.data;
-            console.log($scope.division);
+            $scope.tournament = $scope.resources.division.data;            
             Modals.loaded();
         });
     }]

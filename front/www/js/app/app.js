@@ -50,7 +50,7 @@ app.controller(
             }
         });
         $scope.choose_action = function(division_id,tournament,dest_route){
-            console.log(division_id);
+            
             var hideSheet = $ionicActionSheet.show({
                 buttons: [
                     { text: 'Edit Tournament' },

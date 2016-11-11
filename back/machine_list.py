@@ -1,5 +1,5 @@
 machines = [
-{ "_id": "3120", "key": "3120",  "machine_name": "Glamor Girls" },
+{ "_id": "3120", "key": "3120",  "machine_name": "Glamor Girls", "abbreviation":"GLAM"},
 { "_id": "4604", "key": "4604",  "machine_name": "Gran Casino" },
 { "_id": "990", "key": "990",  "machine_name": "Gay Cruise" },
 { "_id": "3270", "key": "3270",  "machine_name": "Special Force Girls" },

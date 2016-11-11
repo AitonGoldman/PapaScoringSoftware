@@ -13,6 +13,10 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.flask_app.tables.db_handle.session.add(self.admin_role)
         self.flask_app.tables.db_handle.session.commit()
 
+        self.desk_role = self.flask_app.tables.Role(name='desk')
+        self.flask_app.tables.db_handle.session.add(self.desk_role)
+        self.flask_app.tables.db_handle.session.commit()
+        
         self.admin_role_id = self.admin_role.role_id
         
         self.admin_user = self.flask_app.tables.User(username='test_admin')
@@ -21,6 +25,12 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.flask_app.tables.db_handle.session.add(self.admin_user)
         self.flask_app.tables.db_handle.session.commit()
 
+        self.desk_user = self.flask_app.tables.User(username='test_desk')
+        self.desk_user.crypt_password('test_desk')
+        self.desk_user.roles.append(self.desk_role)
+        self.flask_app.tables.db_handle.session.add(self.desk_user)
+        self.flask_app.tables.db_handle.session.commit()
+        
 
     def test_tournament_create_no_teams_single(self):        
         with self.flask_app.test_client() as c:                    
@@ -170,6 +180,81 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(num_tournaments,1)
             self.assertIsNotNone(tournaments['data']['1']['divisions'])
             self.assertEquals(len(tournaments['data']['1']['divisions']),1)            
+
+    def test_tournament_create_invalid(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+            rv = c.post('/tournament',
+                       data=json.dumps({'team_tournament':False,
+                                        'single_division':True,
+                                        'scoring_type':'POOP'                                        
+                                        ,}))            
+            self.assertEquals(rv.status_code,
+                              400,
+                              'Was expecting status code 400, but it was %s' % (rv.status_code))
+            
+
+            
+    def test_tournament_add_no_auth(self):        
+        with self.flask_app.test_client() as c:                                
+            rv = c.post('/tournament',
+                       data=json.dumps({'tournament_name':'test_tournament',                                        
+                                        'single_division':True,
+                                        'scoring_type':'HERB',
+                                        'finals_num_qualifiers':24
+                                        ,}))
+            self.assertEquals(rv.status_code,
+                              401,
+                              'Was expecting status code 401, but it was %s' % (rv.status_code))
+
+    def test_tournament_edit_no_auth(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+            rv = c.post('/tournament',
+                       data=json.dumps({'tournament_name':'test_tournament',                                                                                'scoring_type':'HERB'                                        
+                                        ,}))            
+        new_tourney = json.loads(rv.data)
+        with self.flask_app.test_client() as c:                            
+            rv = c.put('/tournament/%s' % new_tourney['data']['tournament_id'],
+                       data=json.dumps({'tournament_name':'test_tournament_rename'}))            
+            self.assertEquals(rv.status_code,
+                              401,
+                              'Was expecting status code 401, but it was %s' % (rv.status_code))
+            
+            
+    def test_tournament_add_wrong_auth(self):        
+        with self.flask_app.test_client() as c:                                
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':'test_desk','password':'test_desk'}))         
+            rv = c.post('/tournament',
+                       data=json.dumps({'tournament_name':'test_tournament',                                        
+                                        'single_division':True,
+                                        'scoring_type':'HERB',
+                                        'finals_num_qualifiers':24
+                                        ,}))
+            self.assertEquals(rv.status_code,
+                              403,
+                              'Was expecting status code 403, but it was %s' % (rv.status_code))
+
+    def test_tournament_edit_wrong_auth(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+            rv = c.post('/tournament',
+                       data=json.dumps({'tournament_name':'test_tournament',                                                                                'scoring_type':'HERB'                                        
+                                        ,}))            
+        new_tourney = json.loads(rv.data)
+        with self.flask_app.test_client() as c:
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':'test_desk','password':'test_desk'}))
+            rv = c.put('/tournament/%s' % new_tourney['data']['tournament_id'],
+                       data=json.dumps({'tournament_name':'test_tournament_rename'}))            
+            self.assertEquals(rv.status_code,
+                              403,
+                              'Was expecting status code 403, but it was %s' % (rv.status_code))
+            
             
 
             

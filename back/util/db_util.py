@@ -5,11 +5,13 @@ from td_types import ImportedTables
 from machine_list import machines
 def load_machines_from_json(app):    
     for machine in machines:
-        app.tables.db_handle.session.add(
-            app.tables.Machine(
-                machine_name=machine['machine_name']
-            )
+        new_machine = app.tables.Machine(
+            machine_name=machine['machine_name']
         )
+        if 'abbreviation' in machine:
+            new_machine.abbreviation = machine['abbreviation']
+
+        app.tables.db_handle.session.add(new_machine)
         app.tables.db_handle.session.commit()
         pass
         

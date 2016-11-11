@@ -35,6 +35,17 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.admin_user.roles.append(self.admin_role)
         self.flask_app.tables.db_handle.session.add(self.admin_user)
         self.flask_app.tables.db_handle.session.commit()
+        
+
+    def test_user_get(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.get('/user')            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            user = json.loads(rv.data)['data']                        
+
+            self.assertIsNotNone(user)
 
         
     def test_user_create(self):        
@@ -216,5 +227,74 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
+            
+            
+    def test_user_create_no_auth(self):        
+        with self.flask_app.test_client() as c:               
+            rv = c.post('/user',
+                       data=json.dumps({'username':'test_user','password':'test_user_password'}))            
+            self.assertEquals(rv.status_code,
+                              401,
+                              'Was expecting status code 401, but it was %s' % (rv.status_code))
+            
+    def test_user_edit_no_auth(self):     
+        with self.flask_app.test_client() as c:            
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+            rv = c.post('/user',
+                       data=json.dumps({'username':'test_user_changed','password':'test_user_password',
+                                        'roles':[self.admin_role_id]}))
+        new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()
+        with self.flask_app.test_client() as c:                   
+            rv = c.put('/user/%s' % new_user.user_id,
+                       data=json.dumps({'username':'test_user_changed',
+                                        #'roles':{'%s' % self.admin_role_id:False,'%s'%(self.new_role_2_id):True},
+                                        'roles':[str(self.new_role_2_id)],
+                                        'has_picture':True}))
+            self.assertEquals(rv.status_code,
+                              401,
+                              'Was expecting status code 401, but it was %s' % (rv.status_code))
+
+    def test_user_create_wrong_auth(self):        
+        self.desk_user = self.flask_app.tables.User(username='test_desk')
+        self.desk_user.crypt_password('test_desk')
+        self.desk_user.roles.append(self.new_role_2)
+        self.flask_app.tables.db_handle.session.add(self.desk_user)
+        self.flask_app.tables.db_handle.session.commit()
+
+        with self.flask_app.test_client() as c:               
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':'test_desk','password':'test_desk'}))
+            rv = c.post('/user',
+                       data=json.dumps({'username':'test_user','password':'test_user_password'}))            
+            self.assertEquals(rv.status_code,
+                              403,
+                              'Was expecting status code 403, but it was %s' % (rv.status_code))
+            
+    def test_user_edit_wrong_auth(self):     
+        self.desk_user = self.flask_app.tables.User(username='test_desk')
+        self.desk_user.crypt_password('test_desk')
+        self.desk_user.roles.append(self.new_role_2)
+        self.flask_app.tables.db_handle.session.add(self.desk_user)
+        self.flask_app.tables.db_handle.session.commit()
+
+        with self.flask_app.test_client() as c:            
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+            rv = c.post('/user',
+                       data=json.dumps({'username':'test_user_changed','password':'test_user_password',
+                                        'roles':[self.admin_role_id]}))
+        new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()
+        with self.flask_app.test_client() as c:                   
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':'test_desk','password':'test_desk'}))
+            rv = c.put('/user/%s' % new_user.user_id,
+                       data=json.dumps({'username':'test_user_changed',
+                                        #'roles':{'%s' % self.admin_role_id:False,'%s'%(self.new_role_2_id):True},
+                                        'roles':[str(self.new_role_2_id)],
+                                        'has_picture':True}))
+            self.assertEquals(rv.status_code,
+                              403,
+                              'Was expecting status code 403, but it was %s' % (rv.status_code))
             
             

@@ -28,8 +28,6 @@ def route_delete_user(user_id):
     return jsonify({'data':'deleted'})
 
 @admin_manage_blueprint.route('/user',methods=['GET'])
-@login_required
-@Admin_permission.require(403)
 def route_get_all_users():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -38,8 +36,6 @@ def route_get_all_users():
     return jsonify({'data':users_dict})
 
 @admin_manage_blueprint.route('/user/<user_id>',methods=['GET'])
-@login_required
-@Admin_permission.require(403)
 def route_get_user(user_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)

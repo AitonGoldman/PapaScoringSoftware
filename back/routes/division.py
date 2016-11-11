@@ -13,6 +13,54 @@ def route_get_division(division_id):
     tables = db_util.app_db_tables(current_app)            
     return jsonify({'data': tables.Division.query.filter_by(division_id=division_id).first().to_dict_simple()})
 
+@admin_manage_blueprint.route('/division/<division_id>/division_machine',methods=['GET'])
+def route_get_division_machines(division_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    division_machines = tables.DivisionMachine.query.filter_by(division_id=division_id).all()
+    return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>',methods=['GET'])
+def route_get_division_machine(division_id,division_machine_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
+    return jsonify({'data': division_machine.to_dict_simple()})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine',methods=['POST'])
+@login_required
+@Admin_permission.require(403)
+def route_add_division_machine(division_id):        
+    machine_data = json.loads(request.data)
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                
+    division = fetch_entity(tables.Division,division_id)    
+    # FIXME : need to load machines as part of init
+    if 'machine_id' in machine_data:                
+        machine = fetch_entity(tables.Machine,int(machine_data['machine_id']))
+        
+    else:        
+        BadRequest('no machine_id specified')
+    new_division_machine = tables.DivisionMachine(
+        machine_id=machine.machine_id,
+        division_id=division.division_id,
+        removed=False
+    )    
+    tables.db_handle.session.add(new_division_machine)
+    tables.db_handle.session.commit()
+    return jsonify({'data':new_division_machine.to_dict_simple()})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>',methods=['DELETE'])
+@login_required
+@Admin_permission.require(403)
+def route_delete_division_machine(division_id,division_machine_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)        
+    division_machine.removed=True
+    tables.db_handle.session.commit()
+    return jsonify({'data':division_machine.to_dict_simple()})
+
 
 @admin_manage_blueprint.route('/division',methods=['POST'])
 @login_required

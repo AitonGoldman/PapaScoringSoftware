@@ -3,8 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
 from td_types import ImportedTables
 from machine_list import machines
-def load_machines_from_json(app):    
-    for machine in machines:
+from machine_list_test import test_machines
+def load_machines_from_json(app,test=False):    
+    machines_to_load = machines
+    if test:
+        machines_to_load = test_machines
+    for machine in machines_to_load:
         new_machine = app.tables.Machine(
             machine_name=machine['machine_name']
         )

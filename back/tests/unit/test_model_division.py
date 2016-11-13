@@ -24,6 +24,7 @@ class ModelDivisionTD(unittest.TestCase):
                               'scoring_type':'HERB',
                               'team_tournament':False,
                               'division_id':None,
+                              'meta_division_id':None,
                               'local_price':None,
                               'use_stripe':None,
                               'stripe_sku':None,

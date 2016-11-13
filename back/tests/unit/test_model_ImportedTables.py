@@ -33,5 +33,8 @@ class ModelImportedTablesTD(unittest.TestCase):
 
         self.assertTrue(hasattr(self.tables,'DivisionMachine'))
         self.assertTrue(self.tables.DivisionMachine.__name__ == 'DivisionMachine')
+
+        self.assertTrue(hasattr(self.tables,'MetaDivision'))
+        self.assertTrue(self.tables.MetaDivision.__name__ == 'MetaDivision')
         
         

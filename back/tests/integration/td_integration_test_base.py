@@ -16,10 +16,14 @@ import time
 class TdIntegrationTestBase(unittest.TestCase):    
     def setUp(self):
         #FIXME : need to take new config structure into account
-        secret_file_name = mkstemp()[1]
-        public_file_name = mkstemp()[1]                
+        self.secret_file_info = mkstemp()
+        self.public_file_info = mkstemp()
+        secret_file_name = self.secret_file_info[1]
+        public_file_name = self.public_file_info[1]                
         self.db_temp_info = mkstemp()
         os.close(self.db_temp_info[0])
+        os.close(self.secret_file_info[0])
+        os.close(self.public_file_info[0])
         db_file_name=self.db_temp_info[1]
         
         flask_file_name = mkstemp()[1]                

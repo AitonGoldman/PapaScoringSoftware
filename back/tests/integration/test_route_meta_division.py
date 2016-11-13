@@ -82,7 +82,7 @@ class RouteMetaDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase
             meta_division = self.flask_app.tables.MetaDivision.query.filter_by(meta_division_id=meta_division['meta_division_id']).first()
             self.assertEquals(meta_division.meta_division_name,'test_meta_division')            
             self.assertEquals(len(meta_division.divisions),2)
-
+            
     def test_edit_meta_division(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
@@ -111,3 +111,38 @@ class RouteMetaDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase
             self.assertEquals(len(meta_division['divisions']),2)
             self.assertTrue('3' in meta_division['divisions'])
 
+    def test_add_meta_division_badauth(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.post('/meta_division',
+                        data=json.dumps({'divisions':['1','2'],'meta_division_name':'test_meta_division'}))        
+            self.assertEquals(rv.status_code,
+                              401,
+                              'Was expecting status code 401, but it was %s' % (rv.status_code))
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_desk','password':'test_desk'}))
+            rv = c.post('/meta_division',
+                        data=json.dumps({'divisions':['1','2'],'meta_division_name':'test_meta_division'}))        
+            self.assertEquals(rv.status_code,
+                              403,
+                              'Was expecting status code 403, but it was %s' % (rv.status_code))
+            
+    def test_edit_meta_division_badauth(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+            rv = c.post('/meta_division',
+                        data=json.dumps({'divisions':['1','2'],'meta_division_name':'test_meta_division'}))        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/meta_division/1',
+                        data=json.dumps({'divisions':['1'],'meta_division_name':'test_meta_division_new'}))        
+            self.assertEquals(rv.status_code,
+                              401,
+                              'Was expecting status code 401, but it was %s' % (rv.status_code))
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_desk','password':'test_desk'}))
+            rv = c.put('/meta_division/1',
+                        data=json.dumps({'divisions':['1'],'meta_division_name':'test_meta_division_new'}))        
+            self.assertEquals(rv.status_code,
+                              403,
+                              'Was expecting status code 403, but it was %s' % (rv.status_code))
+            

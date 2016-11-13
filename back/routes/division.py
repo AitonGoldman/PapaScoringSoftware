@@ -3,7 +3,7 @@ from flask import jsonify,current_app,request
 import json
 from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
-from util.permissions import Admin_permission
+from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
 
@@ -58,6 +58,35 @@ def route_delete_division_machine(division_id,division_machine_id):
     tables = db_util.app_db_tables(current_app)                            
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)        
     division_machine.removed=True
+    tables.db_handle.session.commit()
+    return jsonify({'data':division_machine.to_dict_simple()})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/player/<player_id>',
+                              methods=['PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_add_division_machine_player(division_id,division_machine_id,player_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)        
+    player = fetch_entity(tables.Player,player_id)
+    if division_machine.player_id:
+        raise Conflict('Player is already playing on this machine')
+    division_machine.player_id=player.player_id
+    tables.db_handle.session.commit()
+    return jsonify({'data':division_machine.to_dict_simple()})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<int:division_machine_id>/player',
+                              methods=['DELETE'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_remove_division_machine_player(division_id,division_machine_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)            
+    if division_machine.player_id is None:
+        raise BadRequest('No player playing on this machine')
+    division_machine.player_id=None
     tables.db_handle.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})
 

@@ -45,7 +45,7 @@ def route_meta_admin_create_db_and_load_machines():
     generate_test_user('test_admin',dummy_app, db_handle,['admin','scorekeeper','desk','void'])            
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
     generate_test_user('test_desk',dummy_app, db_handle,['desk','void'])            
-    db_util.load_machines_from_json(dummy_app)
+    db_util.load_machines_from_json(dummy_app,True)
     db_handle.engine.dispose()
     del dummy_app
     return jsonify({'data':'test'})    
@@ -67,6 +67,7 @@ def route_meta_admin_wipe_test_db():
     generate_test_user('test_admin',dummy_app, db_handle,['admin','scorekeeper','desk','void'])            
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
     generate_test_user('test_desk',dummy_app, db_handle,['desk','void'])            
+    db_util.load_machines_from_json(dummy_app,True)
     db_handle.engine.dispose()
     del dummy_app
     return jsonify({'data':'test'})    

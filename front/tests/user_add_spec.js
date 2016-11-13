@@ -2,33 +2,25 @@ var rp = require('request-promise');
 var td_utils = require('./td-test-utils');
 describe('User', function() {
     beforeEach(function() {
-        this.ready_to_test = td_utils.beforeTdTest(true);        
+        td_utils.beforeTdTestEx(true);        
     });
-    it('add user', function(done) {
+    it('add user', function() {
+        new_user_name='poopyhead';
         var EC = protractor.ExpectedConditions;
-        this.ready_to_test.then(function(data){
-             td_utils.add_new_user('poopyhead').then(function(data){
-                 td_utils.checkForError(false,done);
-             });
-         });
-     });
-    it('new user login', function(done) {        
+        td_utils.add_new_user_ex(new_user_name,false);        
+        td_utils.checkForError(false);
+        element(by.id('AddAnotherUser')).click();
+        //browser.wait(EC.presenceOf($('#user_edit_user_'+new_user_name+'_link')), 5000);
+        expect(element(by.id('user_edit_user_'+new_user_name+'_link')).isPresent()).toBe(true);
+    });
+    
+    it('new user login', function() {        
         var EC = protractor.ExpectedConditions;
-        this.ready_to_test.then(function(data){
-            add_new_user_p = td_utils.add_new_user('poopyhead');
-            ready_to_logout_p = add_new_user_p.then(function(data){
-                return td_utils.open_menu();
-            });
-            logged_out_p = ready_to_logout_p.then(function(data){
-                element(by.id('logout_link')).click();
-                return browser.wait(EC.presenceOf($('#LoginAgainButton')), 5000);
-            });
-            logged_out_p.then(function(data){                
-                return td_utils.login_through_webpage('poopyhead','poopyhead');
-            });
-            browser.sleep(3000).then(function(data){
-                td_utils.checkForError(false,done);
-            });            
-        });
+        new_user_name='poopyhead2';
+        td_utils.add_new_user(new_user_name,true);
+        td_utils.open_menu_ex();
+        element(by.id('logout_link')).click();
+        td_utils.login_through_webpage_ex(new_user_name,new_user_name);
+        td_utils.checkForError(false);
     });        
 });

@@ -6,7 +6,6 @@ exports.config = {
     },
     specs: ['login_spec.js'],
     jasmineNodeOpts : {
-      showColors: true,
-      defaultTimeoutInterval : 60000
+      showColors: true
    }
 }

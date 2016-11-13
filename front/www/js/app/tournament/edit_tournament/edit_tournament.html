@@ -13,11 +13,11 @@
         <span># of Qualifiers : </span>
         <input ng-model='division.finals_num_qualifiers' type="text" placeholder="# of Qualifiers">
       </label>
-       <button id='edit_tournament_add_machines_button' ui-sref='.division_machine_list' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left'>
+       <button id="edit_tournament_add_machines_button" ui-sref='.division_machine_list' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left'>
         <i class="icon ion-chevron-right"></i>
         <span >Manage Machines</span>
       </button>      
-      <ion-checkbox  id="add_tournament_team_tournament_checkbox" class='item'  ng-model='tournament.team_tournament'>Team Tournament</ion-checkbox>      
+      <ion-checkbox  id="add_tournament_team_tournament_checkbox" class='item'  ng-model='division.team_tournament'>Team Tournament</ion-checkbox>      
       <ion-checkbox id="add_tournament_use_stripe_checkbox"  class='item' ng-model='division.use_stripe'>Enabled</ion-checkbox>
       <label ng-if="division.use_stripe == true" class="item-input  item">
         <span >Stripe SKU : </span>

@@ -11,7 +11,7 @@
         <span>Add Machine...</span>
         <i class="icon ion-chevron-right"></i>        
       </a>
-      <a ng-click='remove_machine(division_machine)' ng-if="division_machine.removed == false" class='item item-icon-right' ng-repeat="division_machine in resources.division_machines.data">
+      <a id='manage_division_machines_edit_{{division_machine.division_machine_name}}' ng-click='remove_machine(division_machine)' ng-if="division_machine.removed == false" class='item item-icon-right' ng-repeat="division_machine in resources.division_machines.data">
         <i style='color:red;font-size:48px;margin-right:10px;' class="icon ion-close-circled"></i>
         <span>{{division_machine.division_machine_name}}</span>
       </a>

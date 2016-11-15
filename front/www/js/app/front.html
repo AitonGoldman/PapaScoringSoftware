@@ -9,14 +9,19 @@
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
       </a>
-      <a href="#" class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
+      <a ui-sref='.player' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
         <i class="icon ion-person-add"></i>
         <span>Add Player</span>
       </a>
       <a href="#" class="item item-icon-left  item-padding" ng-if='User.has_role("scorekeeper")'>
         <i class="icon ion-clipboard"></i>
         <span>Scorekeeping</span>
-      </a>              
+      </a>
+      <div class='item row' style='padding:0;font-size:24px'>
+        <div style='padding-top:32px;'>Main Division : </div>
+        <ion-radio ng-model="choice" ng-value="'A'">A Division</ion-radio>
+        <ion-radio ng-model="choice" ng-value="'B'">B Division</ion-radio>
+      </div>
     </div>    
   </ion-content>
 </ion-view>

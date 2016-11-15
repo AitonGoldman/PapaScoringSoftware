@@ -6,6 +6,7 @@ from util import db_util
 from util.permissions import Admin_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
+import os
 
 def check_roles_exist(roles):
     for role_id in roles:
@@ -76,6 +77,8 @@ def route_update_user(user_id):
         #     if role_added is False:
         #         role_to_remove = current_app.tables.Role.query.filter_by(role_id=role_id).first()            
         # user.roles.remove(role_to_remove)
+    if 'pic_file' in input_data:
+        os.system('mv %s/%s /var/www/html/pics/%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],user.user_id))
     db.session.commit()                        
     return jsonify({'data':user.to_dict_simple()})
 

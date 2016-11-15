@@ -16,7 +16,7 @@
     <i class="icon ion-camera"></i>
     <span >Take Picture</span>
     <!--    <img align="bottom" src="" class="avatar-frame-small" style='margin-left:100%'>-->
-    <img ng-if='user_info.has_picture==true' align="bottom" src="http://98.111.232.93/pics/{{user_id}}.jpg?{{random_img}}" class="avatar-frame-small" style='float:right;margin-right:48px'>
+    <img id="user_edit_user_pic" ng-if='user_info.has_picture==true' align="bottom" class="avatar-frame-small" style='float:right;margin-right:48px'>
   </button>
 
   <div class="item-divider item">

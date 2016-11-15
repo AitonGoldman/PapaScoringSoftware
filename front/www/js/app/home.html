@@ -17,7 +17,7 @@
     <!--<ion-header-bar class="bar-positive" ng-style="menu_bar_title_style">-->
         <ion-header-bar class="bar-positive">
         <div ng-if="User.logged_in() == true">
-            <img align="bottom" src="http://98.111.232.93/pics/{{User.logged_in_user().user_id}}.jpg" class="avatar-frame-small">
+            <img id="side_menu_user_icon" align="bottom" src="http://98.111.232.93/pics/{{User.logged_in_user().user_id}}.jpg?{{randomNumber}}" class="avatar-frame-small">
         </div>
       <h1  ng-if="User.logged_in() == false" class="title">
           TD 1.0
@@ -26,6 +26,13 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
+        <a id='home_link' class='item item-icon-right' menu-close ui-sref='app' ng-if="User.logged_in() == true">
+          <div>
+            Home
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+
         <a id='login_link' class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false">
           <div>
             Login

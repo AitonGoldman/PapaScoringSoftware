@@ -151,6 +151,9 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> ef47748103e0c8f263ce59f9e9f1e088bd1740bf
 }]);

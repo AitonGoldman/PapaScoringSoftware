@@ -52,8 +52,7 @@ app.controller(
             }
         });
         //FIXME : rename this more logically
-        $scope.choose_action = function(division_id,tournament,dest_route){
-            
+        $scope.choose_action = function(division_id,tournament,dest_route){            
             var hideSheet = $ionicActionSheet.show({
                 buttons: [
                     { text: 'Edit Tournament' },

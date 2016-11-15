@@ -90,7 +90,6 @@ def route_remove_division_machine_player(division_id,division_machine_id):
     tables.db_handle.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})
 
-
 @admin_manage_blueprint.route('/division',methods=['POST'])
 @login_required
 @Admin_permission.require(403)

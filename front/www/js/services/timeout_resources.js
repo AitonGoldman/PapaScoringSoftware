@@ -183,12 +183,12 @@ angular.module('TD_services.timeout_resources')
                       AddDivision: generate_custom_http_executor(addDivisionResource,'added_division','post'),
                       GetTournaments: generate_custom_http_executor(getTournamentResource,'tournaments','get'),
                       GetDivision: generate_custom_http_executor(getDivisionResource,'division','get'),
-                      GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),                                              AddDivisionMachine: generate_custom_http_executor(addDivisionMachineResource,'added_division_machine','post'),
+                      GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),
+                      AddDivisionMachine: generate_custom_http_executor(addDivisionMachineResource,'added_division_machine','post'),
                       DeleteDivisionMachine: generate_custom_http_executor(deleteDivisionMachineResource,'deleted_division_machine','get'),
                       GetDivisionMachines: generate_custom_http_executor(getDivisionMachinesResource,'division_machines','get'),
                       UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post'),
-                      GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get')
-            
+                      GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get')            
                   };
               }]);
 

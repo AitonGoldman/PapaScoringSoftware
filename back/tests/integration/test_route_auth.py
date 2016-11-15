@@ -45,7 +45,7 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertFalse(hasattr(returned_user,'password_crypt'),
                              "Found a password field in returned user, but should not have")
 
-            self.assertTrue(self.new_role.name in returned_user['roles'],
+            self.assertTrue(self.new_role.name in [role['name'] for role in returned_user['roles']],
                             "Role %s was not found in returned user" % self.new_role.name)
 
     def test_logout_user(self):        

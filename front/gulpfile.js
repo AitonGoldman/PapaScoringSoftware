@@ -17,26 +17,27 @@ var paths = {
   sass: ['./scss/**/*.scss']
 };
 
+if(argv.help){
+    console.log('--test_instance_ip <ip> (for e2e target)');
+    console.log('--single_protractor_spec <path_to_spec_file> (for e2e target)');
+    return;
+}
 gulp.task('default', ['sass']);
-
-gulp.task('api_host_replace', function(done){
-    if(argv.backend_ip == undefined){        
-        done('--backend_ip argument needed!');
-        return;
-    }
-    gulp.src(['./www/templates/api_host.js'])
-        .pipe(replace('APIHOST', argv.backend_ip))
-        .pipe(gulp.dest('./www/js/services'));
-    done();
-});
 
 gulp.task('e2e', function(done) {
     if(argv.test_instance_ip == undefined){
         done('--test_instance_ip argument needed!');
         return;
     }
+    var single_spec = argv.single_protractor_spec;
+    if(single_spec == undefined){
+        specs_to_run = "./tests/*.js";
+    } else {
+        specs_to_run = single_spec;
+    }
     var args = ['--params.test_instance_ip',argv.test_instance_ip];
-    gulp.src(["./tests/*.js"])
+    
+    gulp.src([specs_to_run])
         .pipe(protractor({
             configFile: "tests/config.js",
             args: args

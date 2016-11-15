@@ -1,0 +1,33 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list skinny-list-inputs">    
+      <div class="item-divider item" id='add_user_user_info_title'>
+        Tournament Info
+      </div>
+      <label class="item item-input">
+        <span >Name : </span>
+        <!--<input ng-disabled='true' ng-model='division.tournament_name' type="text" placeholder="Tournament Name"/>-->
+        <span style='padding-left:15px'>{{division.tournament_name}}</span>
+      </label>
+      <label class="item-input item">
+        <span># of Qualifiers : </span>
+        <input ng-model='division.finals_num_qualifiers' type="text" placeholder="# of Qualifiers">
+      </label>
+      <ion-checkbox  id="add_tournament_team_tournament_checkbox" class='item'  ng-model='division.team_tournament'>Team Tournament</ion-checkbox>
+      <ion-checkbox id="add_tournament_use_stripe_checkbox"  class='item' ng-model='division.use_stripe'>Enabled</ion-checkbox>
+      <label ng-if="division.use_stripe == true" class="item-input  item">
+        <span >Stripe SKU : </span>
+        <input ng-model='division.stripe_sku' type="text" placeholder="Stripe SKU">
+      </label>
+      <label ng-if="division.use_stripe == false" class="item-input  item">
+        <span >Ticket Price : </span>
+        <input ng-model='division.local_price' type="text" placeholder="Ticket Price">
+      </label>
+      <button id='add_tournament_add_button' ui-sref='.process({process_step:{process:true}, division_info:division})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
+        <i class="icon ion-chevron-right"></i>
+        <span >Add Tournament</span>
+      </button>
+    </div>
+  </ion-content>
+</ion-view>
+

@@ -5,6 +5,15 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission
 from flask_login import login_required,current_user
+from routes.utils import fetch_entity
+import os
+
+def check_roles_exist(roles):
+    for role_id in roles:
+        existing_role = current_app.tables.Role.query.filter_by(role_id=role_id).first()
+        if existing_role is None:            
+            raise BadRequest('Role with id %s does not exist' % role_id)
+
 
 @admin_manage_blueprint.route('/user/<user_id>',methods=['DELETE'])
 @login_required
@@ -18,7 +27,62 @@ def route_delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     return jsonify({'data':'deleted'})
-        
+
+@admin_manage_blueprint.route('/user',methods=['GET'])
+def route_get_all_users():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    users = tables.User.query.all()    
+    users_dict = {user.user_id: user.to_dict_simple() for user in users}
+    return jsonify({'data':users_dict})
+
+@admin_manage_blueprint.route('/user/<user_id>',methods=['GET'])
+def route_get_user(user_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    user = fetch_entity(tables.User,user_id)     
+    user_dict = {user.user_id: user.to_dict_simple()}
+    return jsonify({'data':user_dict})
+
+
+@admin_manage_blueprint.route('/user/<user_id>',methods=['PUT'])
+@login_required
+@Admin_permission.require(403)
+def route_update_user(user_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    user = fetch_entity(tables.User,user_id)     
+    input_data = json.loads(request.data)
+    if 'username' not in input_data:
+        raise BadRequest("You did not specify a username")
+    if input_data['username'] != user.username:
+        user.username=input_data['username']
+    if 'has_picture' in input_data:
+        user.has_picture=True
+    if 'password' in input_data:        
+        user.crypt_password(input_data['password'])    
+    if 'roles' in input_data:        
+        check_roles_exist(input_data['roles'])
+        roles = current_app.tables.Role.query.all()
+        user_roles = user.roles
+        for role in roles:            
+            if role in user_roles and str(role.role_id) not in input_data['roles']:
+                user.roles.remove(role)                
+            if role not in user_roles and str(role.role_id) in input_data['roles']:                                
+                user.roles.append(role)                
+        # for role_id, role_added  in input_data['roles'].iteritems():        
+        #     if role_added:
+        #         existing_role = current_app.tables.Role.query.filter_by(role_id=role_id).first()            
+        #         user.roles.append(existing_role)
+        #     if role_added is False:
+        #         role_to_remove = current_app.tables.Role.query.filter_by(role_id=role_id).first()            
+        # user.roles.remove(role_to_remove)
+    if 'pic_file' in input_data:
+        os.system('mv %s/%s /var/www/html/pics/%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],user.user_id))
+    db.session.commit()                        
+    return jsonify({'data':user.to_dict_simple()})
+
+
 @admin_manage_blueprint.route('/user',methods=['POST'])
 @login_required
 @Admin_permission.require(403)
@@ -39,14 +103,11 @@ def route_add_user():
     
     new_user.crypt_password(input_data['password'])
     db.session.add(new_user)
-    
-    if 'roles' in input_data:        
-        for role in input_data['roles']:                        
-            existing_role = current_app.tables.Role.query.filter_by(role_id=role['role_id']).first()            
-            if existing_role is None:                
-                raise BadRequest('Role with id %s does not exist' % role['role_id'])
-        for role in input_data['roles']:
-            existing_role = current_app.tables.Role.query.filter_by(role_id=role['role_id']).first()            
+
+    if 'roles' in input_data:
+        check_roles_exist(input_data['roles'])
+        for role_id in input_data['roles']:            
+            existing_role = current_app.tables.Role.query.filter_by(role_id=role_id).first()            
             new_user.roles.append(existing_role)
     
     db.session.commit()                        

@@ -1,14 +1,20 @@
-<ion-view view-title="login"  hide-back-button='true' >
+<ion-view view-title="Login">
   <ion-content>
-    <div class="list">
-      <label class="item item-input tablet-friendly-input">
+    <div class="skinny-list list">
+      <label style='padidng:0' class='item-input item'>
+        <span class='input-label'>Username : </span>
         <input ng-model='user.username' type="text" placeholder="Username">
       </label>
-      <label class="item item-input  tablet-friendly-input">
+      <label style='padidng:0' class='item-input item'>
+        <span class='input-label'>Password : </span>
         <input ng-model='user.password' type="text" placeholder="Password">
       </label>
+      <button id="LoginButton" ui-sref='.process({user_info:user})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(user.username)||utils.var_empty(user.password)'>
+      <i class="icon ion-chevron-right"></i>
+      <span >Login</span>
+    </button>
     </div>
-   <a class="button button-large icon-right ion-chevron-right button-positive tablet-friendly-button" ui-sref='.process({user_info:user})'><span>Login</span></a>
   </ion-content>
 </ion-view>
+
 

@@ -1,0 +1,44 @@
+.platform-android,.platform-ios,.platform-browser {
+    @media not screen and (max-width: 610px) and (max-height: 750px) and (min-height: 561px){
+
+        .checkbox{
+//          padding: ($checkbox-med-height / 4) ($checkbox-med-width / 4);
+//          padding-top: ($checkbox-med-height * .4);
+          padding-top: ($checkbox-med-height/4);
+          padding-left: 0;
+//          padding-left:($checkbox-med-height * .15)
+        }
+        .checkbox input,
+        .checkbox-icon {
+            width: $checkbox-med-width;
+            height: $checkbox-med-height;
+            //width: $checkbox-med-width*.8;
+            //height: $checkbox-med-height*.8;
+            
+        }
+        .checkbox input:after,
+        .checkbox-icon:after {
+            //width: ($checkbox-med-width*.8 / 2);
+            //height: ($checkbox-med-width*.8 / 4) - 1;
+            width: ($checkbox-med-width / 2);
+            height: ($checkbox-med-width / 4) - 1;
+            
+            //border: $checkbox-med-check-width solid $checkbox-check-color;
+        }
+        .checkbox-square .checkbox-icon:after {
+            width: ($checkbox-med-width / 2) - 1;
+        }
+        .item-checkbox .checkbox {
+            margin-top: (($checkbox-med-height + ($checkbox-med-height / 2)) / 2) * -1;            
+        }
+        .item-checkbox {
+            //PADDING FOR CHECKBOX
+            padding-top:$checkbox-med-height*.4;
+            padding-bottom:$checkbox-med-height*.4;
+            padding-left: ($item-padding * 2) + $checkbox-med-width;
+        }
+        .item-checkbox.item-checkbox-right {
+            padding-right: ($item-padding * 2) + $checkbox-med-width;
+        }
+    }    
+}

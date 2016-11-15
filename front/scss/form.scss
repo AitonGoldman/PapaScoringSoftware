@@ -1,0 +1,152 @@
+.platform-android,.platform-ios {
+    .item-input {
+        input::-webkit-input-placeholder{
+            @media screen and (max-width: 610px){
+                @media screen and (max-device-height: 750px){
+                    padding-top: $font-size-small/4;
+                }
+                @media screen and (min-device-height: 751px){
+                    padding-top: $font-size-med/4;
+                }
+            }
+            @media screen and (max-width: 970px) and (min-width:611px) {
+                padding-top: $font-size-med/4;
+            }
+            @media screen and (min-width: 971px) {
+                    padding-top: $font-size-large/4;
+            }           
+        }
+        input::-moz-placeholder{
+            //            padding-top:15px;
+        }
+        input:-moz-placeholder {
+            //            padding-top:15px;
+        }
+    }
+}
+
+.skinny-list a.item, .skinny-list .item-divider, .skinny-list .input-list-button  {
+    @media screen and (max-width: 610px) {
+        @media screen and (max-device-height: 750px){
+            padding-top: $font-size-small - $font-size-small/2.5;
+            padding-bottom: $font-size-small - $font-size-small/2.5;            
+            
+        }
+        @media screen and (min-device-height: 751px){
+            padding-top: $font-size-med;
+            padding-bottom: $font-size-med;            
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        padding-top: $font-size-med;
+        padding-bottom:$font-size-med;
+    }            
+    @media screen and (min-width: 971px){
+        padding-top:$font-size-large;
+        padding-bottom: $font-size-large;
+    }        
+}
+.button-no-margin {
+    margin:0;
+}
+.input-list-button {
+    i.icon::before {
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){
+                font-size:$font-size-small*1.5;
+            }
+            @media screen and (min-device-height: 751px){
+                font-size:$font-size-med*1.5;
+                //height:100px;
+            }
+        }
+        @media screen and (max-width: 970px) and (min-width:611px) {
+            font-size:$font-size-med*1.5;
+        }
+        @media screen and (min-width: 971px) {
+            font-size:$font-size-large*1.5;
+        }
+    }
+}
+
+label.item-input {
+    margin-top:0;
+    margin-bottom:0;
+
+    //PADDING
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            padding-top:$font-size-small*.4;
+            padding-bottom:$font-size-small*.4;
+        }
+        @media screen and (min-device-height: 751px){
+            padding-top:$font-size-med*.4;
+            padding-bottom:$font-size-med*.4;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+            padding-top:$font-size-med*.4;
+            padding-bottom:$font-size-med*.4;
+    }
+    @media screen and (min-width: 971px) {
+            padding-top:$font-size-large*.4;
+            padding-bottom:$font-size-large*.4;
+    }                        
+
+   
+    .input-label {
+        padding-top:0px;
+        padding-bottom:0px;
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){
+                font-size:$font-size-small;
+            }
+            @media screen and (min-device-height: 751px){
+                font-size:$font-size-med;
+            }
+        }
+        @media screen and (max-width: 970px) and (min-width:611px) {
+            font-size:$font-size-med;
+        }
+        @media screen and (min-width: 971px) {
+            font-size:$font-size-large;
+        }                        
+    }
+    input {
+
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){
+                font-size:$font-size-small;
+                height: $font-size-small * 1.5;
+                line-height: $font-size-small * 0.75;
+                padding:0px;
+                margin-left:$font-size-small;
+                //margin:0px;
+            }
+            @media screen and (min-device-height: 751px){                    
+                font-size:$font-size-med; 
+                height: $font-size-med * 1.5;
+                line-height: $font-size-med * 0.75;                     
+                padding:0px;
+                margin-left:$font-size-med;
+                //margin:0px;
+            }
+        }
+        @media screen and (max-width: 970px) and (min-width:611px) {
+            font-size:$font-size-med;
+            height: $font-size-med * 1.5;
+            line-height: $font-size-med * 0.75;                    
+            padding:0px;
+            margin-left:$font-size-med;
+            
+        }
+        @media screen and (min-width: 971px) {
+            font-size:$font-size-large;
+            height: $font-size-med * 1.5;
+            line-height: $font-size-large * 0.75;
+            padding:0px;
+            margin-left:$font-size-large;
+            //margin:10px;
+        }            
+    }
+}    

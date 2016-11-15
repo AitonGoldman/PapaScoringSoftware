@@ -4,12 +4,15 @@
 
   
   <link href="css/ionic.app.css" rel="stylesheet" />
+  <!--<link rel="stylesheet" href="https://rawgit.com/guylabs/ion-autocomplete/master/src/ion-autocomplete.css">-->
+
   <link rel="manifest" href="manifest.json">
   <script src="lib/ionic/js/ionic.bundle.js"></script>
   <script src="http://code.angularjs.org/1.5.3/angular-cookies.js"></script>
   <script src="http://code.angularjs.org/1.5.3/angular-sanitize.js"></script>
   <script src="http://code.angularjs.org/1.5.3/angular-resource.js"></script>
-    <!-- cordova script (this will be a 404 during development) -->
+  <script src="https://rawgit.com/guylabs/ion-autocomplete/master/src/ion-autocomplete.js"></script>
+  <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
     
     <!-- your app's js -->
@@ -24,18 +27,41 @@
 
 <script src='js/app/logout/logout.js'></script>
 <script src='js/app/logout/routes.js'></script>
+<script src='js/app/user/user.js'></script>
+<script src='js/app/user/routes.js'></script>
+<script src='js/app/user/add_user/add_user.js'></script>
+<script src='js/app/user/add_user/process/process.js'></script>
+<script src='js/app/user/edit_user/edit_user.js'></script>
+<script src='js/app/user/edit_user/process/process.js'></script>
+<script src='js/app/tournament/tournament.js'></script>
+<script src='js/app/tournament/routes.js'></script>
+<script src='js/app/tournament/add_tournament/add_tournament.js'></script>
+<script src='js/app/tournament/add_tournament/process/process.js'></script>
+<script src='js/app/tournament/edit_tournament/edit_tournament.js'></script>
+<script src='js/app/tournament/edit_tournament/process/process.js'></script>
+<script src='js/app/tournament/division_list/division_list.js'></script>
+<script src='js/app/tournament/division_list/add_division/add_division.js'></script>
+<script src='js/app/tournament/division_list/add_division/process/process.js'></script>
+<script src='js/app/tournament/division_list/edit_division/edit_division.js'></script>
+<script src='js/app/tournament/division_list/edit_division/process/process.js'></script>
+<script src='js/app/tournament/edit_tournament/division_machine_list/division_machine_list.js'></script>
+<script src='js/app/tournament/edit_tournament/division_machine_list/add_division_machine/add_division_machine.js'></script>
+<script src='js/app/player/player.js'></script>
+<script src='js/app/player/routes.js'></script>
+<script src='js/app/player/add_player/add_player.js'></script>
 <!--REPLACEME-->
 
     <!--<script src="js/controllers.js"></script>-->
     <script src="js/services/api_host.js"></script>
     <script src="js/services/modals.js"></script>
+    <script src="js/services/camera.js"></script>
     <script src="js/services/timeout_resources.js"></script>
     <script src="js/services/user.js"></script>
     <script src="js/services/utils.js"></script>
     <script src="js/services/services.js"></script>
 
     <script src="js/app/routes.js"></script>    
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-cordova/0.1.27-alpha/ng-cordova.js"></script>    
 </head>
 
 </head>

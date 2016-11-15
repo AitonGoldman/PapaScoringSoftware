@@ -1,0 +1,124 @@
+.platform-ios.platform-cordova {
+    &:not(.fullscreen) {
+        .bar-header:not(.bar-subheader) {
+            @media screen and (max-width: 610px) {
+                @media screen and (max-device-height: 750px){
+                    height: $bar-height-small;
+                }       
+                @media screen and (min-device-height: 751px){
+                    height: $bar-height-med;
+                }
+            }
+            @media screen and (max-width: 970px) and (min-width:611px) {
+                height: $bar-height-med;
+            }
+            @media screen and (min-width: 971px){
+                height: $bar-height-large;
+            }        
+        }
+        div.title {
+            padding-bottom:0;
+            @media screen and (max-width: 610px) {
+                @media screen and (max-device-height: 750px){
+                }       
+                @media screen and (min-device-height: 751px){
+                    padding-top:$bar-height-med*.2 - $font-size-med*.25;
+                }
+            }
+            @media screen and (max-width: 970px) and (min-width:611px) {
+                padding-top:$bar-height-med*.2 - $font-size-med*.25;
+            }
+            @media screen and (min-width: 971px){
+                padding-top:$bar-height-large*.2 - $font-size-large*.25;
+            }        
+            
+
+        }
+    }
+}
+
+.platform-android,.platform-browser,.platform-ios { 
+    ion-header-bar.bar-header {
+        @media screen and (max-width: 610px) {
+            @media screen and (max-device-height: 750px){
+                height: $bar-height-small;
+            }
+            @media screen and (min-device-height: 751px){
+                height: $bar-height-med;
+            }
+        }
+        @media screen and (max-width: 970px) and (min-width:611px) {
+            height: $bar-height-med;
+        }
+        @media screen and (min-width: 971px){
+            height: $bar-height-large;
+        }        
+        .button {
+            &.button-icon {
+                .icon:before,
+                &:before,
+                &.icon-left:before,
+                &.icon-right:before {
+                    @media screen and (max-width: 610px) {            
+                        @media screen and (max-device-height: 750px){
+                            font-size: $button-menu-icon-size-small;
+                        }
+                        @media screen and (min-device-height: 751px){
+
+                            font-size: $button-menu-icon-size-med;
+                        }
+                    }
+                    @media screen and (max-width: 970px) and (min-width:611px) {
+                        font-size: $button-menu-icon-size-med;
+                    }
+                    @media screen and (min-width: 971px){
+                        font-size: $button-menu-icon-size-large;
+                    }
+                }
+            }
+        }
+        
+        div.title {
+            @media screen and (max-width: 610px) {            
+                @media screen and (max-device-height: 750px){
+                    font-size: $bar-title-font-size-small;
+                    //height:100%;
+                    height: $bar-title-font-size-small*3;
+                    margin-top:$bar-height-med/4;      
+                    //                    margin-top:auto;
+                    //margin-bottom:auto;
+                    //dline-height:$bar-title-font-size-small+($bar-title-font-size-small/1.5);
+                }
+                @media screen and (min-device-height: 751px){
+                    font-size: $bar-title-font-size-med;
+                    //height:100%
+                    height: $bar-title-font-size-med*3;
+                    //margin-top:auto;
+                    margin-top:$bar-height-med/4;      
+                    //margin-bottom:auto;
+                    //line-height:$bar-title-font-size-med+($bar-title-font-size-med/1.5);                    
+                }
+            }
+            @media screen and (max-width: 970px) and (min-width:611px) {
+                font-size: $bar-title-font-size-med;
+                height: $bar-title-font-size-small*3;
+                margin-top:$bar-height-med/4;      
+
+                /* height:100%; */
+                /* margin-top:auto; */
+                /* margin-bottom:auto; */
+                /* line-height:$bar-title-font-size-med+($bar-title-font-size-med/1.5); */
+            }
+            @media screen and (min-width: 971px){
+                font-size: $bar-title-font-size-large;
+                height: $bar-title-font-size-small*3;
+                margin-top:$bar-height-large/4;      
+
+                /* height:100%; */
+                /* margin-top:auto; */
+                /* margin-bottom:auto; */
+                /* line-height:$bar-title-font-size-large+($bar-title-font-size-large/1.5); */
+            }            
+        }
+    }
+}

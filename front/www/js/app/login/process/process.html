@@ -1,6 +1,6 @@
 <ion-view view-title="Logged In"  hide-back-button='true'>
   <ion-content>
-    <div class='col icon-label'>
+    <div class='col icon-label first-element'>
       <div class='row'>
         <div><i class="icon ion-person"></i></div>
         <div>{{User.logged_in_user().username}}</div>
@@ -10,7 +10,7 @@
       </div>
     </div>
     <center>
-      <a class='button button-large button-positive tablet-friendly-button' ui-sref='app({site:site})'>
+      <a id='HomeButton' class='button button-large button-positive tablet-friendly-button' ui-sref='app({site:site})'>
         <span>Home</span>
       </a>
     </center>

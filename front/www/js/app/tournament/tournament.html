@@ -1,0 +1,27 @@
+<ion-view view-title="Tournaments">
+  <ion-content>      
+    <div class="skinny-list list">    
+      <a id="manage_tournaments_add_tournament_button" ui-sref='.add_tournament' class="item item-icon-left item-icon-right">
+        <i class="icon ion-plus-circled"></i>
+        <span>Add Tournament...</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>
+      <div ng-repeat="tournament in resources.tournaments.data">
+        <!--<a ng-if='tournament.single_division == true' id="tournament_edit_tournament_{{tournament.tournament_id}}_link" ui-sref='.edit_tournament({division_id:tournament.divisions[0]})' class="item item-icon-left item-icon-right">-->
+        <a ng-if='tournament.single_division == true' id="tournament_edit_tournament_{{tournament.tournament_name}}_link" ng-click="choose_action(tournament.divisions[0],tournament,'.edit_tournament')" class="item item-icon-left item-icon-right">
+          <i ng-if='tournament.active == true' class="icon ion-play" style='color:green'></i>
+          <i ng-if='tournament.active == false' class="icon ion-stop" style='color:red'></i>
+
+          <span>{{tournament.tournament_name}}</span>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <a ng-if='tournament.single_division == false' id="tournament_edit_tournament_{{tournament.tournament_name}}_link" ui-sref='.division_list({tournament_id:tournament.tournament_id})' class="item item-icon-left item-icon-right">
+          <i class="icon ion-person"></i>
+          <span>{{tournament.tournament_name}}</span>
+          <i class="icon ion-chevron-right"></i>        
+        </a>        
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+

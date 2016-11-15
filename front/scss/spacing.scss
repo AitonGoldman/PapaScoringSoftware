@@ -1,0 +1,19 @@
+.platform-android,.platform-browser,.platform-ios {
+    .first-element{
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){
+                //  margin-top:$font-size-small * .1;
+            }
+            @media screen and (min-device-height: 751px){
+                margin-top:$font-size-med - 1;
+                //margin-top:$font-size-med+12;
+            }
+        }
+        @media screen and (max-width: 970px) and (min-width:611px) {
+            margin-top:$font-size-med - 1;
+        }
+        @media screen and (min-width: 971px) {
+            margin-top:$font-size-large - 1;
+        }
+    }
+}

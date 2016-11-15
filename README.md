@@ -4,6 +4,7 @@ TD is Pinball Scoring Software. Features include :
 * Native apps (Android and iOS) for administration and for players
 * Players can buy tickets directly through the website
 * Integrated with the IFPA website and Challonge
+* Can be run on your laptop or in a cloud environment
 
 # Quickstart
 These instructions will allow you to get an instance of TD running on your machine so you can try it out.
@@ -19,12 +20,16 @@ NOTE : This quickstart is for demo purposes only.  If you want to run you own in
 
 ### Starting up backend
 `cd <top of checked out git repo>/back`
+
 `docker build -t td_backend .`
+
 `docker run -d -t -p 8000:8000 td_backend`
 
 ### Starting up frontend
 `cd <top of checked out git repo>/front`
+
 `docker build -t td_frontend .`
+
 `docker run -t -d -p 8100:8100 -p 35729:35729 td_frontend`
 
 ### Try it out!

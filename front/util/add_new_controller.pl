@@ -169,8 +169,10 @@ for($x=0;$x<@module_post_params;$x++){
 if($new_module eq "process"){
     $check_process= << "CHECK_PROCESS_END";
  \$scope.process_step=\$state.params.process_step;
-        if(mylodash.size(\$scope.process_step)==0){
-          Utils.stop_post_reload();
+        if(_.size(\$scope.process_step)==0){
+            //Utils.stop_post_reload();
+            Modals.error('Tried to reload a page that submits data.',\$scope.site,'app');
+            return;
         }
         $passed_in_post_params
 CHECK_PROCESS_END
@@ -191,7 +193,7 @@ angular.module('$full_module_name').controller(
         //Modals.loading();
         //$etc_data_promise = TimeoutResources.GetEtcData();
         //$etc_data_promise.then(function(data){
-        // \$scope.resources = TimeoutResource.GetAllResources();
+        // \$scope.resources = TimeoutResources.GetAllResources();
         //  Modals.loaded();
         //})
     }]

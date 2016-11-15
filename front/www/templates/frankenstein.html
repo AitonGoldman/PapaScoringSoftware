@@ -1,0 +1,65 @@
+<!-- Non form input -->
+@media screen and (max-width: 610px){
+    @media screen and (max-height: 800px){
+    }
+    @media screen and (min-height: 801px){
+    }
+}
+@media screen and (max-width: 970px) and (min-width:611px) {
+}
+@media screen and (min-width: 971px) {
+}
+
+<!--with form input -->
+@media screen and (max-width: 610px){
+    @media screen and (max-device-height: 750px){
+    }
+    @media screen and (min-device-height: 751px){
+    }
+}
+@media screen and (max-width: 970px) and (min-width:611px) {
+}
+@media screen and (min-width: 971px) {
+}
+
+
+<!-- LIST WITH INPUTS -->
+<div class="list">
+  <div class="item item-divider">
+    DIVIDER
+  </div>
+  <label class="item item-input tablet-friendly-text-input">
+    <input ng-model='' type="text" placeholder="">
+  </label>
+  <!-- CHECKBOX -->
+  <ion-checkbox class='item item-input' ng-model=''>{{}}</ion-checkbox>
+  <!-- form button (a href) in list -->
+  <a ui-sref='' class="item item-icon-right input-list-button">
+  <i class="icon ion-chevron-right"></i>
+  <span>TEXT</span>
+  </a>
+  <!-- form button (actual button) in list -->
+  <button ui-sref='' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty()'>
+    <i class="icon ion-chevron-right"></i>
+    <span >TEXT</span>
+  </button>
+
+</div>
+<!-- LIST -->
+<div class="tablet-friendly-list-skinny" style='margin-left:auto;margin-right:auto'>
+  <!-- ITEM HAS ONLY LEFT ICON -->
+  <a ui-sref='' class="item item-icon-left" ng-if=''>
+    <i class="icon ion-person-stalker"></i>
+    <span>TEXT</span>
+  </a>
+
+</div>
+
+<!--BIG BUTTON WITH ICON-->
+<a class="button button-large icon-right ion-chevron-right button-positive tablet-friendly-button" ui-sref=''><span>TEXT</span></a>
+<!-- BIG BUTTON NO ICON -->
+<a class='button button-large button-positive tablet-friendly-button' ui-sref='app({site:site})'>
+  <span>Home</span>
+</a>
+
+

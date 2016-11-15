@@ -4,6 +4,7 @@ TD is Pinball Scoring Software. Features include :
 * Native apps (Android and iOS) for administration and for players
 * Players can buy tickets directly through the website
 * Integrated with the IFPA website and Challonge
+* Can be run on your laptop or in a cloud environment
 
 # Quickstart
 These instructions will allow you to get an instance of TD running on your machine so you can try it out.

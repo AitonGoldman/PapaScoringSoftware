@@ -1,8 +1,13 @@
 angular.module('TD_services.modals',[]);
 angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$ionicLoading','$ionicModal','$rootScope',function($state,$timeout,$ionicLoading,$ionicModal,$rootScope) {        
     error_modal = undefined;
+    choose_machine_modal = undefined;
     dest_site = undefined;
     dest_route = undefined;
+
+    $rootScope.machines = {1:{machine_id:1,machine_name:'disney tron'},2:{machine_id:2,machine_name:'tron'},3:{machine_id:3,machine_name:'whatever'}};
+    $rootScope.matches = [];
+
     
     $rootScope.close_error_dialog = function(){        
         return error_modal.remove().then(function(data){
@@ -39,6 +44,27 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
                 error_modal.show();
             });
         },
+        choose_machine:function(){                        
+            $ionicLoading.hide();                                
+            if(choose_machine_modal != undefined){
+                return;
+            }
+            choose_machine_modal='dummy';
+            //$rootScope.error_message = error_message;            
+            //dest_site = new_dest_site;
+            //dest_route = new_dest_route;
+            //if(dest_route == undefined){
+            //    dest_route="app";
+            //}            
+            $ionicModal.fromTemplateUrl('js/services/select_machine.html', {                
+                animation: 'slide-in-up',
+                backdropClickToClose: false,
+                scope : $rootScope
+            }).then(function(modal) {
+                choose_machine_modal = modal;
+                choose_machine_modal.show();
+            });
+        },        
         loading: function(){
             $ionicLoading.show({
                 hideOnStateChange: true,

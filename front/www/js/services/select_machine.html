@@ -1,0 +1,21 @@
+ <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Select Machines</h1>
+    </ion-header-bar>
+    <center style='padding:100px'>
+      <div class='item-input-inset'>
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios-search placeholder-icon"></i>
+          <input type="search" placeholder="Search" ng-change='callbackMethod(query)' ng-model='query'>
+        </label>
+        <button class="button button-clear">
+          Cancel
+        </button>
+      </div>
+      <div class='list'>
+      </div>
+      <div ng-repeat='match in matches'>
+        {{match}}
+      </div>
+    </center>
+ </ion-modal-view>

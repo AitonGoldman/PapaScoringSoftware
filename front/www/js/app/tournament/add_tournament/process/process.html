@@ -1,0 +1,25 @@
+<ion-view view-title="">
+  <ion-content>      
+      <div class='col icon-label first-element'>
+        <div class='row'>
+          <div><i class="icon ion-plus-circled"></i></div>
+          <div>{{resources.added_tournament.data.tournament_name}}</div>
+        </div>
+        <div class='row'>
+          <div>Has Been Created</div>
+        </div>
+      </div>
+      <center ng-if='tournament_info.single_division == true'>
+        <a id="AddAnotherTournament" class='button button-large button-positive tablet-friendly-button' ui-sref='.^.^({site:site})'>
+          <span>Add Another Tournament</span>
+        </a>
+      </center>
+      <center ng-if='tournament_info.single_division == false'>
+        <a id='AddDivisionsToTournament' class='button button-large button-positive tablet-friendly-button' ui-sref='.^.^({site:site})'>
+          <span>Add Divisions To Tournament</span>
+        </a>
+      </center>        
+    </div>
+  </ion-content>
+</ion-view>
+

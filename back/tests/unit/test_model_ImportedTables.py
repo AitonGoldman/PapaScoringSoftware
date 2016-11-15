@@ -2,7 +2,7 @@ import unittest
 from mock import MagicMock
 from util import db_util
 #import util.db_util
-from td_types import ImportedTables,Role,User
+from td_types import ImportedTables
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -21,5 +21,20 @@ class ModelImportedTablesTD(unittest.TestCase):
 
         self.assertTrue(hasattr(self.tables,'db_handle'))
         self.assertTrue(type(self.tables.db_handle) is SQLAlchemy)
+        
+        self.assertTrue(hasattr(self.tables,'Tournament'))
+        self.assertTrue(self.tables.Tournament.__name__ == 'Tournament')
+
+        self.assertTrue(hasattr(self.tables,'Division'))
+        self.assertTrue(self.tables.Division.__name__ == 'Division')
+        
+        self.assertTrue(hasattr(self.tables,'Machine'))
+        self.assertTrue(self.tables.Machine.__name__ == 'Machine')
+
+        self.assertTrue(hasattr(self.tables,'DivisionMachine'))
+        self.assertTrue(self.tables.DivisionMachine.__name__ == 'DivisionMachine')
+
+        self.assertTrue(hasattr(self.tables,'MetaDivision'))
+        self.assertTrue(self.tables.MetaDivision.__name__ == 'MetaDivision')
         
         

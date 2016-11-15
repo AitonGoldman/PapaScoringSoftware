@@ -12,7 +12,9 @@ class ModelRoleTD(unittest.TestCase):
         self.role.name = "new_role"
         self.role.role_id = 1
                 
-    def test_to_dict_simple(self):                 
-        role_dict = {'name':'new_role','role_id':1}        
+    def test_to_dict_simple(self):        
         simple_dict = self.role.to_dict_simple()
-        self.assertDictEqual(role_dict,simple_dict)
+        for value in self.role.__table__.columns:
+            key =  str(value)[str(value).index('.')+1:]            
+            self.assertTrue(key in simple_dict,"oops - did not find %s" % key)
+        

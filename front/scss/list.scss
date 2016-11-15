@@ -1,0 +1,61 @@
+.platform-android,.platform-browser {
+    .skinny-list {
+        //div.list{
+            @media screen and (max-width: 610px){
+               @media screen and (max-device-height: 750px){
+                   margin-top:$font-size-small * .1;
+               }
+               @media screen and (min-device-height: 751px){
+                   margin-top:$font-size-med - 1;
+               }
+           }
+           @media screen and (max-width: 970px) and (min-width:611px) {
+               margin-top:$font-size-med - 1;
+           }
+           @media screen and (min-width: 971px) {
+               margin-top:$font-size-large - 1;
+           }
+     }
+}
+.platform-android,.platform-browser,.platform-ios {
+    .skinny-list {
+        //div.list{
+           @media screen and (max-width: 970px) and (min-width:611px) {
+               //margin-top:$font-size-med - 1;
+               margin-left:15%;
+               margin-right:15%;
+           }
+           @media screen and (min-width: 971px) {
+               //margin-top:$font-size-large - 1;
+               margin-left:15%;
+               margin-right:15%;
+           }
+           .item {
+               @media screen and (max-width: 610px) {
+                   @media screen and (max-device-height: 750px){
+                       font-size: $font-size-small;                    
+                       //padding-top: $font-size-small - $font-size-small/2.5;
+                       //padding-bottom: $font-size-small - $font-size-small/2.5;            
+
+                   }
+                   @media screen and (min-device-height: 751px){
+                       //padding-top: $font-size-med;
+                       //padding-bottom: $font-size-med;            
+                       font-size: $font-size-med;
+                   }
+               }
+               @media screen and (max-width: 970px) and (min-width:611px) {
+                   font-size: $font-size-med;
+                   //padding-top: $font-size-med;
+                   //padding-bottom:$font-size-med;
+               }            
+               @media screen and (min-width: 971px){
+
+                   font-size: $font-size-large;
+                   //padding-top:$font-size-large;
+                   //padding-bottom: $font-size-large;
+               }
+           }                   
+       //}
+   }
+}

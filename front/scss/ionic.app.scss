@@ -18,16 +18,60 @@ $dark:                            #444 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
+$item-font-size: 20px !default;
+//$font-size-large: $item-font-size + 44;
+$font-size-large: $item-font-size + 20;
+$font-size-med: $item-font-size + 20;
+$font-size-small: $item-font-size;
+
+$bar-title-font-size:             24px !default;
+$bar-title-font-size-small:             $font-size-small;
+$bar-title-font-size-med:             $font-size-med;
+$bar-title-font-size-large:            $font-size-large;
+
+$bar-height-small:                  42 + $bar-title-font-size-small;
+$bar-height-large:                  42 + $bar-title-font-size-large;
+$bar-height-med:                    42 + $bar-title-font-size-med;
+
+$button-menu-icon-size:          102px !default;
+$button-menu-icon-size-small: $button-menu-icon-size/1.5;
+$button-menu-icon-size-med:   $button-menu-icon-size;
+$button-menu-icon-size-large: $button-menu-icon-size;
+
+$checkbox-med-width:                  48px !default;
+$checkbox-med-height:                 48px !default;
+$checkbox-med-check-width:            1px !default;
+
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-@import "fonts.scss";
-@import "icons.scss";
-@import "colors.scss";
-@import "lists.scss";
-@import "forms.scss";
-@import "buttons.scss";
-@import "labels.scss";
-@import "titlebar.scss";
-@import "sidemenu.scss";
+@import "bar.scss";
+@import "side_menu.scss";
+@import "list.scss";
+@import "form.scss";
+@import "checkbox.scss";
+@import "label.scss";
+@import "spacing.scss";
+@import "button.scss";
+
+
+.avatar-frame{border: 2px solid #c7b89e;}
+.avatar-frame,.avatar-frame img{
+    width: 50px;
+    height: 50px;
+    -webkit-border-radius: 30px; /* Saf3+, Chrome */
+    border-radius: 30px; /* Opera 10.5, IE 9 */
+    /*-moz-border-radius: 30px;  Disabled for FF1+ */
+}
+
+.avatar-frame-small,.avatar-frame img{
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 30px; /* Saf3+, Chrome */
+    border-radius: 30px; /* Opera 10.5, IE 9 */
+    /*-moz-border-radius: 30px;  Disabled for FF1+ */
+    margin-top: auto;
+    margin-bottom:auto;
+    margin-right:20px;
+}
 
 

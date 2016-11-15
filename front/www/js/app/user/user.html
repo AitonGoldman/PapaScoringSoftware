@@ -1,0 +1,18 @@
+<ion-view view-title="Users">
+  <ion-content>      
+    <!-- ui-sref=".user({})" -->
+    <div class="skinny-list list">    
+      <a id="manage_users_add_user_button" ui-sref='.add_user' class="item item-icon-left item-icon-right">
+        <i class="icon ion-person-add"></i>
+        <span>Add User...</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>
+      <a id="user_edit_user_{{user.username}}_link"ng-repeat='user in resources.users.data' ui-sref='.edit_user({user_id:user.user_id})' class="item item-icon-left item-icon-right">
+        <i class="icon ion-person"></i>
+        <span>{{user.username}}</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>          
+    </div>
+  </ion-content>
+</ion-view>
+

@@ -73,8 +73,7 @@ angular.module('TD_services.timeout_resources')
 	              return resource_results[scope_name].$promise;	
                   };
                   
-                  var generate_resource_definition = function(url,http_method,custom_interceptor){                              
-                      console.log('in generate resource def');
+                  var generate_resource_definition = function(url,http_method,custom_interceptor){                                                    
                       url_chunks = url.split("/");
                       gen_post_args = {};
                       for(url_chunk_index in url_chunks){
@@ -137,7 +136,34 @@ angular.module('TD_services.timeout_resources')
                                                                 'GET');                                                             
                   var currentUserResource = generate_resource_definition(':site/auth/current_user',
                                                                      'GET');
-                  
+                  var getRolesResource = generate_resource_definition(':site/role',
+                                                                      'GET');
+                  var getUserResource = generate_resource_definition(':site/user/:user_id',
+                                                                     'GET');                                    
+                  var addUserResource = generate_resource_definition(':site/user',
+                                                                     'POST');
+                  var updateUserResource = generate_resource_definition(':site/user/:user_id',
+                                                                        'PUT');
+                  var updateDivisionResource = generate_resource_definition(':site/division/:division_id',
+                                                                     'PUT');                  
+                  var addTournamentResource = generate_resource_definition(':site/tournament',
+                                                                           'POST');
+                  var addDivisionResource = generate_resource_definition(':site/division',
+                                                                           'POST');                  
+                  var getTournamentResource = generate_resource_definition(':site/tournament/:tournament_id',
+                                                                           'GET');
+                  var getTournamentDivisionsResource = generate_resource_definition(':site/tournament/:tournament_id/division',
+                                                                                    'GET');
+                  var getDivisionResource = generate_resource_definition(':site/division/:division_id',
+                                                                     'GET');                                    
+                  var addDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine',
+                                                                           'POST');                  
+                  var getDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
+                                                                                 'GET');
+                  var getMachinesResource = generate_resource_definition(':site/machine',
+                                                                           'GET');                                    
+                  var deleteDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id',
+                                                                           'DELETE');                  
                   return {
 	              GetAllResources: function(){
 	                  return resource_results;
@@ -147,7 +173,22 @@ angular.module('TD_services.timeout_resources')
                       _GenerateCustomHttpExecutor: generate_custom_http_executor,
                       Login: generate_custom_http_executor(loginResource,'logged_in_user','post'),
                       Logout: generate_custom_http_executor(logoutResource,'logout_result','get'),        
-                      CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get')
+                      CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get'),
+                      GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
+                      GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
+                      GetUser: generate_custom_http_executor(getUserResource,'user','get'),
+                      AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
+                      UpdateUser: generate_custom_http_executor(updateUserResource,'updated_user','post'),
+                      AddTournament: generate_custom_http_executor(addTournamentResource,'added_tournament','post'),
+                      AddDivision: generate_custom_http_executor(addDivisionResource,'added_division','post'),
+                      GetTournaments: generate_custom_http_executor(getTournamentResource,'tournaments','get'),
+                      GetDivision: generate_custom_http_executor(getDivisionResource,'division','get'),
+                      GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),
+                      AddDivisionMachine: generate_custom_http_executor(addDivisionMachineResource,'added_division_machine','post'),
+                      DeleteDivisionMachine: generate_custom_http_executor(deleteDivisionMachineResource,'deleted_division_machine','get'),
+                      GetDivisionMachines: generate_custom_http_executor(getDivisionMachinesResource,'division_machines','get'),
+                      UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post'),
+                      GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get')            
                   };
               }]);
 

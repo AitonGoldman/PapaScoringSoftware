@@ -44,6 +44,7 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         def to_dict_simple(self):
             division = to_dict(self)
             division['tournament_name'] = self.get_tournament_name(self.tournament)
+            division['single_division'] = self.tournament.single_division
             return division
 
         def get_tournament_name(self, tournament):

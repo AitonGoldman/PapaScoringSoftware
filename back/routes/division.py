@@ -7,6 +7,12 @@ from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
 
+@admin_manage_blueprint.route('/division',methods=['GET'])
+def route_get_divisions():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)            
+    return jsonify({'data': {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}})
+
 @admin_manage_blueprint.route('/division/<division_id>',methods=['GET'])
 def route_get_division(division_id):
     db = db_util.app_db_handle(current_app)

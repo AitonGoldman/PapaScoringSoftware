@@ -38,7 +38,7 @@ def route_meta_admin_create_db_and_load_machines():
     db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)
     db_url = db_util.generate_db_url('test', db_info)
     db_handle = dummy_app.tables.db_handle
-    for role in ['admin','desk','scorekeeper','void']:
+    for role in ['admin','desk','scorekeeper','void','player']:
         db_handle.session.add(dummy_app.tables.Role(name=role))
         db_handle.session.commit()
     

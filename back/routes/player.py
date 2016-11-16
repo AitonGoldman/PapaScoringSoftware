@@ -43,6 +43,7 @@ def route_edit_player(player_id):
         player.linked_division_id = input_data['linked_division_id']
     db.session.commit()                        
     return jsonify({'data':player.to_dict_simple()})        
+
 @admin_manage_blueprint.route('/player',methods=['POST'])
 @login_required
 @Desk_permission.require(403)
@@ -64,6 +65,8 @@ def route_add_player():
         asshole_count=0,
         active=True        
     )
+    db.session.add(new_player)
+    db.session.commit()                        
     new_player.roles.append(player_role)
     if 'ifpa_ranking' in input_data and input_data['ifpa_ranking'] != 0:
         new_player.ifpa_ranking = input_data['ifpa_ranking']
@@ -71,8 +74,6 @@ def route_add_player():
         new_player.email_address = input_data['email_address']
     if 'linked_division_id' in input_data and tables.Division.query.filter_by(division_id=input_data['linked_division_id']).first():
         new_player.linked_division_id = input_data['linked_division_id']
-    
-    db.session.add(new_player)
-    db.session.commit()                        
+    db.session.commit()                            
     return jsonify({'data':new_player.to_dict_simple()})
     

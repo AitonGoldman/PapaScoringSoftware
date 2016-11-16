@@ -17,11 +17,30 @@
         <i class="icon ion-clipboard"></i>
         <span>Scorekeeping</span>
       </a>
-      <div class='item row' style='padding:0;font-size:24px'>
+       <!-- <label class="item"> -->
+       <!--   <div class="input-label"> -->
+       <!--     Lightsaber -->
+       <!--   </div> -->
+       <!--   <select style='font-size:48px'> -->
+       <!--     <option >Blue</option> -->
+       <!--     <option selected>Green</option> -->
+       <!--     <option>Red</option> -->
+       <!--   </select> -->
+       <!-- </label> -->
+      <!--<div class='item row' style='padding:0;font-size:24px'>
         <div style='padding-top:32px;'>Main Division : </div>
         <ion-radio ng-model="choice" ng-value="'A'">A Division</ion-radio>
         <ion-radio ng-model="choice" ng-value="'B'">B Division</ion-radio>
+      </div>-->
+
+      <div class="item range">
+        <i class="icon ion-volume-low"></i>
+        <input ng-model='slider.value' type="range" name="volume"  min="0" max="{{slider.max}}" value="0">
+        {{slider.value}}
+        <!--<i class="icon ion-volume-high"></i>-->
       </div>
+
+
     </div>    
   </ion-content>
 </ion-view>

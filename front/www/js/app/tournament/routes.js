@@ -140,20 +140,4 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	     }
  	   }
        })//REPLACE_ME
-
-
-
-
-
-
-
-
-
-
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> ef47748103e0c8f263ce59f9e9f1e088bd1740bf
 }]);

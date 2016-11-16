@@ -1,18 +1,37 @@
-angular.module('app.player.add_player',[/*REPLACEMECHILD*/]);
+angular.module('app.player.add_player',['app.player.add_player.process',
+    /*REPLACEMECHILD*/]);
 angular.module('app.player.add_player').controller(
     'app.player.add_player',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
-        $scope.site=$state.params.site;
+        '$scope','$state','TimeoutResources','Utils','Modals','ActionSheets',
+        function($scope, $state, TimeoutResources, Utils,Modals,ActionSheets) {
+            $scope.site=$state.params.site;
+            $scope.player_info={ifpa_result:{}};
+            $scope.utils = Utils;
+            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+            divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+            Modals.loading();
+            // = TimeoutResources.GetEtcData();
+            divisions_promise.then(function(data){
+                $scope.resources = TimeoutResources.GetAllResources();
+                $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});                
+                Modals.loaded();
+            });
+            $scope.get_ifpa_ranking = function(){
+                player_name = $scope.player_info.first_name;
+                if(Utils.var_empty($scope.player_info.last_name) == false){
+                    player_name=player_name+$scope.player_info.last_name;
+                }
+                Modals.loading();
+                ifpa_promise = TimeoutResources.GetIfpaRanking(undefined,{site:$scope.site,player_name:player_name});
+                ifpa_promise.then(function(data){
+                    $scope.resources = TimeoutResources.GetAllResources();
+                    Modals.loaded();                    
+                    $scope.result={};
+                    ActionSheets.choose_ifpa_lookup_action($scope.resources.ifpa_rankings.data.search,$scope.player_info.ifpa_result);                
+                });            
+            };
 
-        $scope.utils = Utils;
-        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-             
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
-    }]
+            
+        }
+    ]
 );

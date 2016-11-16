@@ -36,6 +36,7 @@ class ModelPlayerTD(unittest.TestCase):
             active=True,
             pin=1234,
             asshole_count=1)
+        self.player_with_roles.linked_division_id=1
         self.player_with_roles.linked_division=self.division_one
         self.player_with_roles.division_machine=self.division_machine
         self.role = self.tables.Role()

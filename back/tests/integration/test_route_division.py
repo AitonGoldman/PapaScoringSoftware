@@ -143,6 +143,57 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(division.use_stripe,False)
             self.assertEquals(division.local_price,5)
             self.assertEquals(division.finals_num_qualifiers,14)
+
+    def test_get_divisions(self):        
+        new_tournament = self.flask_app.tables.Tournament(
+            tournament_name='test_tournament_1',
+            single_division=True
+        )
+        new_tournament_two = self.flask_app.tables.Tournament(
+            tournament_name='test_tournament_2',
+            single_division=True
+        )
+        
+        self.flask_app.tables.db_handle.session.add(new_tournament)
+        self.flask_app.tables.db_handle.session.add(new_tournament_two)
+        self.flask_app.tables.db_handle.session.commit()
+        new_division = self.flask_app.tables.Division(
+            division_name='test_division_1',
+            active=False,
+            team_tournament=False,
+            scoring_type="HERB",
+            use_stripe=True,
+            stripe_sku="1234",
+            finals_num_qualifiers=24
+        )
+        new_division_two = self.flask_app.tables.Division(
+            division_name='test_division_2',
+            active=False,
+            team_tournament=False,
+            scoring_type="HERB",
+            use_stripe=True,
+            stripe_sku="1234",
+            finals_num_qualifiers=24
+        )
+        
+        self.flask_app.tables.db_handle.session.add(new_division)
+        self.flask_app.tables.db_handle.session.add(new_division_two)
+        self.flask_app.tables.db_handle.session.commit()
+        
+        new_tournament.divisions.append(new_division)
+        self.flask_app.tables.db_handle.session.commit()
+
+        new_tournament_two.divisions.append(new_division_two)
+        self.flask_app.tables.db_handle.session.commit()
+        
+        with self.flask_app.test_client() as c:                                
+            rv = c.get('/division')
+            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            division = json.loads(rv.data)['data']
+            self.assertEquals(len(division.keys()),2)
             
             
     def test_get_division(self):        

@@ -3,12 +3,13 @@ angular.module('TD_services.action_sheets')
     .factory('ActionSheets',
              ['$state','$timeout',
               '$ionicLoading','$ionicModal',
-              '$rootScope', '$ionicActionSheet',
+              '$rootScope', '$ionicActionSheet','Modals','TimeoutResources',
               function($state,$timeout,
                        $ionicLoading,$ionicModal,
-                       $rootScope,$ionicActionSheet) {        
+                       $rootScope,$ionicActionSheet,Modals,
+                       TimeoutResources) {        
                   
-                  var choose_action = function(division_id,tournament,dest_route){            
+                  var choose_action = function(site,division_id,tournament,dest_route){            
                       var hideSheet = $ionicActionSheet.show({
                           buttons: [
                               { text: 'Edit Tournament' },
@@ -32,7 +33,7 @@ angular.module('TD_services.action_sheets')
                                       tournament.active=true;
                                   }
                                   Modals.loading();
-                                  active_promise = TimeoutResources.UpdateDivision(undefined,{site:$scope.site},{division_id:division_id,active:new_tournament_status});
+                                  active_promise = TimeoutResources.UpdateDivision(undefined,{site:site},{division_id:division_id,active:new_tournament_status});
                                   active_promise.then(function(data){
                                       Modals.loaded();
                                   });

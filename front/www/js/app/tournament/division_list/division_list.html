@@ -8,7 +8,7 @@
         <i class="icon ion-chevron-right"></i>        
       </a>
       <div ng-repeat="division in resources.tournament_divisions.data">
-        <a id="tournament_edit_division_{{division.division_name}}_link" ng-click='choose_action(division.division_id,division,".edit_division")' class="item item-icon-left item-icon-right">
+        <a id="tournament_edit_division_{{division.division_name}}_link" ng-click='ActionSheets.choose_action(site,division.division_id,division,".edit_division")' class="item item-icon-left item-icon-right">
           <i ng-if='division.active == true' class="icon ion-play" style='color:green'></i>
           <i ng-if='division.active == false' class="icon ion-stop" style='color:red'></i>
           <span>{{division.division_name}}</span>

@@ -123,8 +123,8 @@ angular.module('TD_services.timeout_resources')
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
                           if(ip == undefined || ip == ""){
-                              //ip = "192.168.1.178";
-                              ip = "9.75.197.73";
+                              ip = "192.168.1.178";
+                              //ip = "9.75.197.73";
                           }
                           api_host.set_api_host('http://'+ip+':8000/');
                       }

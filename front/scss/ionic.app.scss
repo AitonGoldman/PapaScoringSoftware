@@ -52,6 +52,7 @@ $checkbox-med-check-width:            1px !default;
 @import "label.scss";
 @import "spacing.scss";
 @import "button.scss";
+@import "radio_buttons.scss";
 
 
 .avatar-frame{border: 2px solid #c7b89e;}
@@ -73,5 +74,4 @@ $checkbox-med-check-width:            1px !default;
     margin-bottom:auto;
     margin-right:20px;
 }
-
 

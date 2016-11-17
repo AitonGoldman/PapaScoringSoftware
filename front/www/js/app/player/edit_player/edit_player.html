@@ -20,7 +20,7 @@
         <div style='padding-top:32px;margin-right:25%;font-size:34px'>Playing In</div>
         <ion-radio  ng-change='on_div_change()' style='width:12%' ng-model="player_info.linked_division_id" ng-repeat='division in main_divisions' ng-value="division.division_id"> {{division.division_name}} </ion-radio>
       </div>
-      <button id='add_user_add_button' ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(player_info.first_name) == true || utils.var_empty(player_info.last_name) == true'>
+      <button id='edit_player_edit_button' ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(player_info.first_name) == true || utils.var_empty(player_info.last_name) == true'>
         <i class="icon ion-chevron-right"></i>
         <span >Apply Changes</span>
       </button>

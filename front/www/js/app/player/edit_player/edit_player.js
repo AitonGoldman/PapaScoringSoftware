@@ -7,7 +7,7 @@ angular.module('app.player.edit_player').controller(
             $scope.site=$state.params.site;
 	    $scope.player_id=$state.params.player_id;
             $scope.ActionSheets = ActionSheets;
-            $scope.utils = Utils;
+            $scope.utils = Utils;            
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             Modals.loading();
             divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});

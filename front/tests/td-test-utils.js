@@ -78,7 +78,7 @@ exports.login_through_webpage_ex = login_through_webpage_ex;
 
 
 var beforeTdTest = function(login,username,password){
-    
+    //FIXME : need to handle type_of_db_init MUCH better
     reset_menu_count();
     if(username==undefined){
         username='test_admin';
@@ -90,7 +90,7 @@ var beforeTdTest = function(login,username,password){
     var instance_ip = browser.params.test_instance_ip;         
     this.get_promise = browser.manage().deleteAllCookies();
     options = {
-        uri: "http://"+instance_ip+":8000/meta_admin/test_db",
+        uri: "http://"+instance_ip+":8000/meta_admin/test_db"+type_of_db_init,
         method: 'POST',
         json: true // Automatically parses the JSON string in the response
     };
@@ -121,7 +121,7 @@ var beforeTdTest = function(login,username,password){
 
 exports.beforeTdTest = beforeTdTest;
 
-var beforeTdTestEx = function(login,username,password){
+var beforeTdTestEx = function(login,username,password,type_of_db_init){
     var EC = protractor.ExpectedConditions;
     if(username==undefined){
         username='test_admin';
@@ -132,8 +132,11 @@ var beforeTdTestEx = function(login,username,password){
     }
     var instance_ip = browser.params.test_instance_ip;         
     this.get_promise = browser.manage().deleteAllCookies();
+    if(type_of_db_init == undefined){
+        type_of_db_init = "";
+    }
     options = {
-        uri: "http://"+instance_ip+":8000/meta_admin/test_db",
+        uri: "http://"+instance_ip+":8000/meta_admin/test_db"+type_of_db_init,
         method: 'POST',
         json: true // Automatically parses the JSON string in the response
     };
@@ -251,3 +254,23 @@ var add_new_tournament = function(new_tournament_name,single_division,check_for_
 };
 
 exports.add_new_tournament = add_new_tournament;
+
+var add_new_player = function(new_player_first_name,new_player_last_name,submit_player){
+    element(by.id('home_manage_players_button')).click();        
+    element(by.id('manage_players_add_player_button')).click();
+    expect(element(by.id('add_player_add_button')).isEnabled()).toBe(false);
+    element(by.model('player_info.first_name')).sendKeys(new_player_first_name);
+    expect(element(by.id('add_player_add_button')).isEnabled()).toBe(false);
+    element(by.model('player_info.last_name')).sendKeys(new_player_last_name);
+    expect(element(by.id('add_player_add_button')).isEnabled()).toBe(false);
+    element(by.id('add_player_get_ifpa_ranking')).click();
+    element(by.buttonText('Cancel')).click();
+    expect(element(by.id('add_player_add_button')).isEnabled()).toBe(false);
+    element(by.id('add_player_linked_division_B')).click();
+    expect(element(by.id('add_player_add_button')).isEnabled()).toBe(true);
+    if(submit_player == true){
+        element(by.id('add_player_add_button')).click();
+    }
+}
+
+exports.add_new_player = add_new_player;

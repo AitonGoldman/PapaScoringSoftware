@@ -9,7 +9,7 @@
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
       </a>
-      <a ui-sref='.player' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
+      <a id='home_manage_players_button' ui-sref='.player' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
         <i class="icon ion-person-add"></i>
         <span>Add Player</span>
       </a>
@@ -33,12 +33,11 @@
         <ion-radio ng-model="choice" ng-value="'B'">B Division</ion-radio>
       </div>-->
 
-      <div class="item range">
+      <!--<div class="item range">
         <i class="icon ion-volume-low"></i>
         <input ng-model='slider.value' type="range" name="volume"  min="0" max="{{slider.max}}" value="0">
-        {{slider.value}}
-        <!--<i class="icon ion-volume-high"></i>-->
-      </div>
+        {{slider.value}}   
+      </div>-->
 
 
     </div>    

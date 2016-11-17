@@ -18,8 +18,7 @@
           Playing In
           <i style='margin-left:10px' class="icon ion-chevron-right"></i>
         </div>
-
-        <ion-radio  class='item' style='width:12%' ng-model="player_info.linked_division_id" ng-repeat='division in main_divisions' ng-value="division.division_id"> {{division.division_name}} </ion-radio>
+        <ion-radio  id="add_player_linked_division_{{division.division_name}}" class='item' style='width:12%' ng-model="player_info.linked_division_id" ng-repeat='division in main_divisions' ng-value="division.division_id"> {{division.division_name}} </ion-radio>
 
       </label>
 
@@ -30,11 +29,12 @@
         <img ng-if='player_info.has_picture==true' align="bottom" class="avatar-frame-small" style='float:right;margin-right:48px'>
       </button>
 
-      <button class="item item-icon-right button button-full button-calm input-list-button button-no-margin" style='text-align:left' ng-click='get_ifpa_ranking()'>
+      <button id='add_player_get_ifpa_ranking' class="item item-icon-right button button-full button-calm input-list-button button-no-margin" style='text-align:left' ng-click='get_ifpa_ranking()'>
         <i class="icon ion-search"></i>
-        <span >Lookup Ifpa Ranking <span ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>
+        <span >Lookup Ifpa Ranking <span id="add_player_ifpa_ranking" ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>
       </button>
-      <button id='add_user_add_button' ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(player_info.first_name) == true || utils.var_empty(player_info.last_name) == true || utils.var_empty(player_info.linked_division_id) == true || player_info.ifpa_result.looked_up != true'>
+      <button id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(player_info.first_name) == true || utils.var_empty(player_info.last_name) == true || utils.var_empty(player_info.linked_division_id) == true || player_info.ifpa_result.looked_up != true'>
+        
         <i class="icon ion-chevron-right"></i>
         <span >Apply Changes</span>
       </button>

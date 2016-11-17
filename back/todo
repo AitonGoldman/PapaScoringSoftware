@@ -1,0 +1,53 @@
+current activity
+# ui - add/edit player 30
+# modify pic taking for player add
+
+tasks - functional - short term
+# player add - handle spaces in first name/last name
+# player add - need to require pics on native
+# ui tests - add/edit player 30
+# tests - player routes : auth, conflict
+# refactor add/remove machines to be shared_html/js
+# refactoring tournament shared html and js
+# refactoring integration/unit tests
+
+# need to make sure we are always using the tables.db_handle when we have it around
+# need to figure out how to handle shared code on backend and create a "create_user" function
+
+scratchpad
+# cached info
+## divisions - if cached : 
+### add end date
+### check if end date has been reached
+## players - ?
+## division machines - allow for manual refresh of cache
+## logout needs to wipe cache
+
+bugs
+# bug : deal with editing division name
+
+remember to go back to...
+# check out td_integeration_test setup - specifically regarding setting app config params(i.e. secret key, etc)
+# remember to modify division_machine tests when adding team, finals
+# remember to modify player when adding team
+
+tasks - functional - long term
+# add "confirm on backend" to protractor tests
+# make sure integration tests are not sqllite specific
+# add "initialize db" script which calls routes 
+
+scheduling
+11/14 - 11/20 : player-creation (tue)
+                team creation/editing (wed)
+                ticket purchase - backend (wed)
+
+11/21 - 11/27  : ticket purchase - frontend (sun/mon),
+                 scorekeeping - backend (tue),
+                 scorekeeping - frontend (wed),
+                 results - backend (thur)
+                 results - backend (fri)
+11/28-12/3 : queueing - backend (mon)
+             queueing - frontend (tue)
+             player-app - backend (wed)
+             player-app - frontend (thur)
+?? - ?? : audit logs

@@ -78,7 +78,7 @@ def route_update_user(user_id):
         #         role_to_remove = current_app.tables.Role.query.filter_by(role_id=role_id).first()            
         # user.roles.remove(role_to_remove)
     if 'pic_file' in input_data:
-        os.system('mv %s/%s /var/www/html/pics/%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],user.user_id))
+        os.system('mv %s/%s /var/www/html/pics/user_%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],user.user_id))
     db.session.commit()                        
     return jsonify({'data':user.to_dict_simple()})
 

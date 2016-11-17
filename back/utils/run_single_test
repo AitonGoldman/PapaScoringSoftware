@@ -1,0 +1,1 @@
+python -m unittest <package.class_name.method>

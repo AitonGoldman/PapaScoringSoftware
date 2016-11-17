@@ -32,15 +32,5 @@ angular.module('app.user.edit_user').controller(
                 });
                 Modals.loaded();
             });
-            $scope.take_pic_and_upload = function(){
-                upload_pic_promise = Camera.take_user_pic_and_upload("user");
-                upload_pic_promise.then(function(data){
-                    if(data.result == Camera.TRANSFER_SUCCESS){                                                
-                        $scope.user_info.pic_file = data.file_name;
-                        $scope.user_info.has_picture=true;
-                        $scope.random_img=_.random(0,99999);
-                    }                    
-                });
-            };
         }]
 );

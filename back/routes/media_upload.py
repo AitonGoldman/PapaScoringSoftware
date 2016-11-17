@@ -10,8 +10,8 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@admin_manage_blueprint.route('/media_upload/user_pic', methods=['POST'])
-def upload_file():    
+@admin_manage_blueprint.route('/media_upload/<pic_type>_pic', methods=['POST'])
+def upload_file(pic_type):    
     # check if the post request has the file part            
     if 'file' not in request.files:                                
         return jsonify({})        
@@ -23,3 +23,4 @@ def upload_file():
         save_path=os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
         file.save(save_path)
     return jsonify({})
+

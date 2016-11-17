@@ -6,7 +6,7 @@ from util import db_util
 from util.permissions import Admin_permission, Desk_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
-
+import os
 
 @admin_manage_blueprint.route('/player',methods=['GET'])
 def route_get_players():
@@ -74,6 +74,8 @@ def route_add_player():
         new_player.email_address = input_data['email_address']
     if 'linked_division_id' in input_data and tables.Division.query.filter_by(division_id=input_data['linked_division_id']).first():
         new_player.linked_division_id = input_data['linked_division_id']
+    if 'pic_file' in input_data:
+        os.system('mv %s/%s /var/www/html/pics/player_%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],new_player.player_id))        
     db.session.commit()                            
     return jsonify({'data':new_player.to_dict_simple()})
     

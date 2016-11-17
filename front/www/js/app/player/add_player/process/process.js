@@ -14,9 +14,13 @@ angular.module('app.player.add_player.process').controller(
             return;
         }
         
-        $scope.player_info=$state.params.player_info;        
-        $scope.player_info.ifpa_ranking=$scope.player_info.ifpa_result.result.wppr_rank;
-        $scope.player_info.ifpa_result=undefined;
+        $scope.player_info=$state.params.player_info;
+        if($scope.player_info.ifpa_result.result != undefined){
+            $scope.player_info.ifpa_ranking=$scope.player_info.ifpa_result.result.wppr_rank;
+            $scope.player_info.ifpa_result=undefined;
+        } else {
+            $scope.player_info.ifpa_ranking=-1;
+        }
         Modals.loading();
         player_add_promise = TimeoutResources.AddPlayer(undefined,{site:$scope.site},$scope.player_info);
         // = TimeoutResources.GetEtcData();

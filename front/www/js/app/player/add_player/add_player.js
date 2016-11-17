@@ -5,7 +5,7 @@ angular.module('app.player.add_player').controller(
         '$scope','$state','TimeoutResources','Utils','Modals','ActionSheets',
         function($scope, $state, TimeoutResources, Utils,Modals,ActionSheets) {
             $scope.site=$state.params.site;
-            $scope.player_info={ifpa_result:{}};
+            $scope.player_info={ifpa_result:{},linked_division_id:undefined};
             $scope.utils = Utils;
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});

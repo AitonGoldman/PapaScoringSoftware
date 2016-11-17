@@ -20,7 +20,7 @@ app = angular.module(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope) {
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera) {
         $scope.slider={value:0, max:10};
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference
@@ -51,6 +51,18 @@ app.controller(
                 //alert('on a native app');
             }
         });
+        $scope.take_pic_and_upload = function(type,info_object){            
+            upload_pic_promise = Camera.take_user_pic_and_upload(type);
+            upload_pic_promise.then(function(data){
+                if(data.result == Camera.TRANSFER_SUCCESS){                    
+                    //$scope.user_info.pic_file = data.file_name;
+                    //$scope.user_info.has_picture=true;
+                    info_object.pic_file = data.file_name;
+                    info_object.has_picture=true;
+                    $scope.random_img=_.random(0,99999);
+                }                    
+            });
+        };        
         //FIXME : rename this more logically
     }
 );

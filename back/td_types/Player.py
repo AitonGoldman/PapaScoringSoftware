@@ -62,7 +62,8 @@ def generate_player_class(db_handle):
             if self.roles:
                 player_dict['roles']={role.role_id:role.to_dict_simple() for role in self.roles}
             if self.linked_division_id:
-                player_dict['linked_division']=self.linked_division.to_dict_simple()
+                #player_dict['linked_division']=self.linked_division.to_dict_simple()
+                player_dict['linked_division_name']=self.linked_division.get_tournament_name(self.linked_division.tournament)
             if self.division_machine:                
                 player_dict['division_machine']={'division_machine_id':self.division_machine.division_machine_id,'division_machine_name':self.division_machine.machine.machine_name}                
             return player_dict

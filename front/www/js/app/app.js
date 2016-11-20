@@ -6,13 +6,15 @@ app = angular.module(
  	'ui.router',            
         'ngCookies',            
         'ngSanitize',
+        'ngAnimate',
         'app.login',
         'TD_services',
-        'app.login',
+        'app.login',        
     'app.logout',
     'app.user',
     'app.tournament',
     'app.player',
+    'app.token',
     /*REPLACEMECHILD*/
 	]
 );

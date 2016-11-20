@@ -1,0 +1,26 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list">
+      <label class="item-input item">
+        <i class="icon ion-search placeholder-icon"></i>
+        <form ng-submit='test_submit()'>
+          <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange()' type="tel" placeholder="Player #" ng-model="player.player_id">
+        </form>
+      </label>
+      <div class='item'>
+        <div style='margin-left:68px'>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>
+      </div>        
+    </div>
+    
+    <div style='z-index:99;position:absolute;top:0px;left:75%;perspective:400px;transform-style: preserve-3d;'>
+      <img src="http://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" style='height:154px;width:154px;border-radius:96px;position:absolute;z-index=102;' class='avatar-frame sample-show-hide sample-show-hide-front' ng-show='selected_players.length == 0 && poop == true'>
+      <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back' style='height:154px;width:154px;border-radius:96px;position:absolute;z-index=101;' src="http://10.0.0.40/pics/player_{{player_img_id}}.jpg">
+      <!--<img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front' style='height:154px;width:154px;border-radius:96px;position:absolute;z-index=100' src="http://10.0.0.40/pics/player_2.jpg">-->
+      <img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front' style='background-color:white;height:154px;width:154px;border-radius:96px;position:absolute;z-index=100'>
+
+    </div>
+
+    
+  </ion-content>
+</ion-view>
+

@@ -22,6 +22,7 @@ angular.module('app.player.add_player').controller(
                     player_name=player_name+$scope.player_info.last_name;
                 }
                 Modals.loading();
+                player_name = player_name.replace(/ /g, ""); 
                 ifpa_promise = TimeoutResources.GetIfpaRanking(undefined,{site:$scope.site,player_name:player_name});
                 ifpa_promise.then(function(data){
                     $scope.resources = TimeoutResources.GetAllResources();
@@ -30,7 +31,6 @@ angular.module('app.player.add_player').controller(
                     ActionSheets.choose_ifpa_lookup_action($scope.resources.ifpa_rankings.data.search,$scope.player_info.ifpa_result);                
                 });            
             };
-
             
         }
     ]

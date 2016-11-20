@@ -75,3 +75,20 @@ $checkbox-med-check-width:            1px !default;
     margin-right:20px;
 }
 
+.sample-show-hide {   
+  transition: all linear .5s;
+  backface-visibility: hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.sample-show-hide-back.ng-hide {
+  transition: all linear .5s;
+  transform: rotateY( 180deg );
+}
+
+.sample-show-hide-front.ng-hide {
+  transition: all linear .5s;
+  transform: rotateY( -180deg );
+}
+
+

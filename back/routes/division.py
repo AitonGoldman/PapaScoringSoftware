@@ -76,8 +76,8 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     tables = db_util.app_db_tables(current_app)                            
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)        
     player = fetch_entity(tables.Player,player_id)
-    if division_machine.player_id:
-        raise Conflict('Player is already playing on this machine')
+    if division_machine.player_id or division_machine.team_id:
+        raise Conflict('Machine is already being played')
     division_machine.player_id=player.player_id
     tables.db_handle.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})
@@ -177,3 +177,32 @@ def route_edit_division(division_id):
     db.session.commit()
     return jsonify({'data':division.to_dict_simple()})
             
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/team/<team_id>',
+                              methods=['PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_add_division_machine_team(division_id,division_machine_id,team_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)        
+    team = fetch_entity(tables.Team,team_id)
+    if division_machine.team_id or division_machine.player_id:
+        raise Conflict('The machine is already being played')
+    division_machine.team_id=team.team_id
+    tables.db_handle.session.commit()
+    return jsonify({'data':division_machine.to_dict_simple()})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<int:division_machine_id>/team',
+                              methods=['DELETE'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_remove_division_machine_team(division_id,division_machine_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)            
+    if division_machine.team_id is None:
+        raise BadRequest('No team playing on this machine')
+    division_machine.team_id=None
+    tables.db_handle.session.commit()
+    return jsonify({'data':division_machine.to_dict_simple()})
+

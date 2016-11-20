@@ -23,9 +23,9 @@ def generate_division_machine_class(db_handle):
         #finals_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
         #    'finals.finals_id'
         #))    
-        #team_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
-        #    'team.team_id'
-        #))    
+        team_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
+            'team.team_id'
+        ))    
         #player_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
         #    'player.player_id'
         #))    
@@ -37,10 +37,10 @@ def generate_division_machine_class(db_handle):
             'Machine',
             foreign_keys=[machine_id]
         )
-        #team = db_handle.relationship(
-        #    'Team',
-        #    foreign_keys=[team_id]
-        #)    
+        team = db_handle.relationship(
+            'Team',
+            foreign_keys=[team_id]
+        )    
         player = db_handle.relationship('Player')    
                 
         def to_dict_simple(self):
@@ -49,6 +49,9 @@ def generate_division_machine_class(db_handle):
             division_machine['abbreviation'] = self.machine.abbreviation        
             if self.player_id:
                 division_machine['player']={'player_id':self.player_id,'player_name': "%s %s" % (self.player.first_name,self.player.last_name)}
+            if self.team_id:
+                division_machine['team']={'team_id':self.team_id,'team_name': "%s" % (self.team.team_name)}
+                
             return division_machine
         
         #def to_dict_with_player(self):

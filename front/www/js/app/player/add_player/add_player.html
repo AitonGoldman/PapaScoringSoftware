@@ -33,7 +33,7 @@
         <i class="icon ion-search"></i>
         <span >Lookup Ifpa Ranking <span id="add_player_ifpa_ranking" ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>
       </button>
-      <button id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(player_info.first_name) == true || utils.var_empty(player_info.last_name) == true || utils.var_empty(player_info.linked_division_id) == true || player_info.ifpa_result.looked_up != true'>
+      <button id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='form_not_ready_for_submit()'>
         
         <i class="icon ion-chevron-right"></i>
         <span >Apply Changes</span>

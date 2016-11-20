@@ -31,7 +31,16 @@ angular.module('app.player.add_player').controller(
                     ActionSheets.choose_ifpa_lookup_action($scope.resources.ifpa_rankings.data.search,$scope.player_info.ifpa_result);                
                 });            
             };
-            
+            $scope.form_not_ready_for_submit = function(){
+                if ($scope.is_native == true && $scope.player_info.has_picture != true){
+                    return true;
+                }
+                if (Utils.var_empty($scope.player_info.first_name) == true || Utils.var_empty($scope.player_info.last_name) == true || Utils.var_empty($scope.player_info.linked_division_id) == true || $scope.player_info.ifpa_result.looked_up != true){                    
+                    return true;
+                } else {
+                    return false;
+                }
+            };
         }
     ]
 );

@@ -9,9 +9,9 @@ def generate_player_role_mapping(db_handle):
     return Role_Player_mapping
 
 
-def generate_player_class(db_handle):    
+def generate_player_class(db_handle,Team_Player_mapping):    
     Role_Player_mapping = generate_player_role_mapping(db_handle)
-
+    #Team_Player_mapping = generate_player_team_mapping(db_handle)
     class Player(db_handle.Model):
         player_id = db_handle.Column(db_handle.Integer,primary_key=True)
         asshole_count = db_handle.Column(db_handle.Integer)
@@ -30,7 +30,11 @@ def generate_player_class(db_handle):
            'Role',
            secondary=Role_Player_mapping
         )
-
+        teams = db_handle.relationship(
+            'Team',
+            secondary=Team_Player_mapping,
+            lazy='joined'
+        )
         division_machine = db_handle.relationship('DivisionMachine', uselist=False)
         linked_division = db_handle.relationship('Division', uselist=False)
 

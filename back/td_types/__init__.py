@@ -6,7 +6,7 @@ from Machine import generate_machine_class
 from DivisionMachine import generate_division_machine_class
 from MetaDivision import generate_meta_division_class
 from Player import generate_player_class
-
+from Team import generate_team_class
 class ImportedTables():
     def __init__(self,db_handle):
         self.Role = generate_role_class(db_handle)        
@@ -17,6 +17,7 @@ class ImportedTables():
         self.DivisionMachine = generate_division_machine_class(db_handle)
         self.MetaDivision = generate_meta_division_class(db_handle)
         self.Player = generate_player_class(db_handle)
+        self.Team = generate_team_class(db_handle)
         self.db_handle = db_handle
         
  

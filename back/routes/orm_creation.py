@@ -1,6 +1,19 @@
 from util import db_util
 from routes.utils import check_roles_exist,fetch_entity
 
+def create_team(app,team_data):
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+    team = app.tables.Team(
+        team_name=team_data['team_name']
+    )    
+    db.session.add(team)
+    db.session.commit()
+    for player_id in team_data['players']:
+        team.players.append(fetch_entity(tables.Player,player_id))            
+    db.session.commit()
+    return team
+
 def create_player(app,player_data):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)

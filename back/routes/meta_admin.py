@@ -4,7 +4,7 @@ from util import db_util, td_config
 from util.db_info import DbInfo
 from util.permissions import Admin_permission
 from time import sleep
-from orm_creation import create_roles
+from orm_creation import create_roles, create_team
 import json
 
 def generate_test_user(username,dummy_app,db_handle,roles=[]):
@@ -75,7 +75,8 @@ def route_meta_admin_create_db_and_tournaments_and_player_and_team():
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
     generate_test_user('test_desk',dummy_app, db_handle,['desk','void'])            
     test_player = generate_test_player('aiton','goldman',dummy_app,db_handle)
-    generate_test_team([test_player],dummy_app,db_handle)
+    #generate_test_team([test_player],dummy_app,db_handle)
+    create_team(dummy_app,{'team_name':'test_team','players':['1']})
     db_util.load_machines_from_json(dummy_app,True)
     db_util.init_papa_tournaments_divisions(dummy_app.tables)
     db_handle.engine.dispose()

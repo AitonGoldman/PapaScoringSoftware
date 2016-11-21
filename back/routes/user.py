@@ -5,14 +5,15 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity
+from routes.utils import fetch_entity, check_roles_exist
+from orm_creation import create_user
 import os
 
-def check_roles_exist(roles):
-    for role_id in roles:
-        existing_role = current_app.tables.Role.query.filter_by(role_id=role_id).first()
-        if existing_role is None:            
-            raise BadRequest('Role with id %s does not exist' % role_id)
+# def check_roles_exist(roles):
+#     for role_id in roles:
+#         existing_role = current_app.tables.Role.query.filter_by(role_id=role_id).first()
+#         if existing_role is None:            
+#             raise BadRequest('Role with id %s does not exist' % role_id)
 
 
 @admin_manage_blueprint.route('/user/<user_id>',methods=['DELETE'])
@@ -62,7 +63,7 @@ def route_update_user(user_id):
     if 'password' in input_data:        
         user.crypt_password(input_data['password'])    
     if 'roles' in input_data:        
-        check_roles_exist(input_data['roles'])
+        check_roles_exist(tables, input_data['roles'])
         roles = current_app.tables.Role.query.all()
         user_roles = user.roles
         for role in roles:            
@@ -70,13 +71,6 @@ def route_update_user(user_id):
                 user.roles.remove(role)                
             if role not in user_roles and str(role.role_id) in input_data['roles']:                                
                 user.roles.append(role)                
-        # for role_id, role_added  in input_data['roles'].iteritems():        
-        #     if role_added:
-        #         existing_role = current_app.tables.Role.query.filter_by(role_id=role_id).first()            
-        #         user.roles.append(existing_role)
-        #     if role_added is False:
-        #         role_to_remove = current_app.tables.Role.query.filter_by(role_id=role_id).first()            
-        # user.roles.remove(role_to_remove)
     if 'pic_file' in input_data:
         os.system('mv %s/%s /var/www/html/pics/user_%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],user.user_id))
     db.session.commit()                        
@@ -97,19 +91,11 @@ def route_add_user():
     user = tables.User.query.filter_by(username=input_data['username']).first()
     if user is not None:
         raise Conflict('Duplicate username')
-    new_user = tables.User(
-        username=input_data['username']        
-    )
-    
-    new_user.crypt_password(input_data['password'])
-    db.session.add(new_user)
-
     if 'roles' in input_data:
-        check_roles_exist(input_data['roles'])
-        for role_id in input_data['roles']:            
-            existing_role = current_app.tables.Role.query.filter_by(role_id=role_id).first()            
-            new_user.roles.append(existing_role)
+        roles = input_data['roles']
+    else:
+        roles = []
+    new_user = create_user(current_app,input_data['username'],input_data['password'],roles)
     
-    db.session.commit()                        
     return jsonify({'data':new_user.to_dict_simple()})
     

@@ -1,6 +1,32 @@
 from util import db_util
 from routes.utils import check_roles_exist,fetch_entity
 
+def create_player(app,player_data):
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+
+    player_role = tables.Role.query.filter_by(name='player').first()
+
+    new_player = tables.Player(
+        first_name=player_data['first_name'],
+        last_name=player_data['last_name'],
+        asshole_count=0,
+        active=True        
+    )
+    db.session.add(new_player)
+    db.session.commit()                        
+    new_player.roles.append(player_role)
+    if 'ifpa_ranking' in player_data and player_data['ifpa_ranking'] != 0:
+        new_player.ifpa_ranking = player_data['ifpa_ranking']
+    if 'email_address' in player_data:
+        new_player.email_address = player_data['email_address']
+    if 'linked_division_id' in player_data and tables.Division.query.filter_by(division_id=player_data['linked_division_id']).first():
+        new_player.linked_division_id = player_data['linked_division_id']
+    if 'pic_file' in player_data:
+        os.system('mv %s/%s /var/www/html/pics/player_%s.jpg' % (app.config['UPLOAD_FOLDER'],player_data['pic_file'],new_player.player_id))        
+    db.session.commit()
+    return new_player
+
 def create_meta_division(app,meta_division_data):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)

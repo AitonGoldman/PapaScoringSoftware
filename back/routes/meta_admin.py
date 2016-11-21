@@ -4,6 +4,7 @@ from util import db_util, td_config
 from util.db_info import DbInfo
 from util.permissions import Admin_permission
 from time import sleep
+from orm_creation import create_roles
 import json
 
 def generate_test_user(username,dummy_app,db_handle,roles=[]):
@@ -19,6 +20,7 @@ def generate_test_user(username,dummy_app,db_handle,roles=[]):
         role = dummy_app.tables.Role.query.filter_by(name=role).first()        
         user.roles.append(role)
         db_handle.session.commit()
+
 
 def generate_test_player(first_name,last_name,dummy_app,db_handle):
     
@@ -65,10 +67,10 @@ def route_meta_admin_create_db_and_tournaments_and_player_and_team():
     db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)
     db_url = db_util.generate_db_url('test', db_info)
     db_handle = dummy_app.tables.db_handle
-    for role in ['admin','desk','scorekeeper','void','player']:
-        db_handle.session.add(dummy_app.tables.Role(name=role))
-        db_handle.session.commit()
-    
+    #for role in ['admin','desk','scorekeeper','void','player']:
+    #    db_handle.session.add(dummy_app.tables.Role(name=role))
+    #    db_handle.session.commit()
+    create_roles(dummy_app)
     generate_test_user('test_admin',dummy_app, db_handle,['admin','scorekeeper','desk','void'])            
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
     generate_test_user('test_desk',dummy_app, db_handle,['desk','void'])            
@@ -87,9 +89,11 @@ def route_meta_admin_create_db_and_tournaments():
     db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)
     db_url = db_util.generate_db_url('test', db_info)
     db_handle = dummy_app.tables.db_handle
-    for role in ['admin','desk','scorekeeper','void','player']:
-        db_handle.session.add(dummy_app.tables.Role(name=role))
-        db_handle.session.commit()
+    create_roles(dummy_app)
+
+    # for role in ['admin','desk','scorekeeper','void','player']:
+    #     db_handle.session.add(dummy_app.tables.Role(name=role))
+    #     db_handle.session.commit()
     
     generate_test_user('test_admin',dummy_app, db_handle,['admin','scorekeeper','desk','void'])            
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
@@ -108,9 +112,11 @@ def route_meta_admin_create_db_and_load_machines():
     db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)
     db_url = db_util.generate_db_url('test', db_info)
     db_handle = dummy_app.tables.db_handle
-    for role in ['admin','desk','scorekeeper','void','player']:
-        db_handle.session.add(dummy_app.tables.Role(name=role))
-        db_handle.session.commit()
+    create_roles(dummy_app)
+
+    #for role in ['admin','desk','scorekeeper','void','player']:
+    #    db_handle.session.add(dummy_app.tables.Role(name=role))
+    #    db_handle.session.commit()
     
     generate_test_user('test_admin',dummy_app, db_handle,['admin','scorekeeper','desk','void'])            
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
@@ -130,9 +136,11 @@ def route_meta_admin_wipe_test_db():
     db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)
     db_url = db_util.generate_db_url('test', db_info)
     db_handle = dummy_app.tables.db_handle
-    for role in ['admin','desk','scorekeeper','void']:
-        db_handle.session.add(dummy_app.tables.Role(name=role))
-        db_handle.session.commit()
+
+    create_roles(dummy_app)
+    #for role in ['admin','desk','scorekeeper','void']:
+    #    db_handle.session.add(dummy_app.tables.Role(name=role))
+    #    db_handle.session.commit()
     
     generate_test_user('test_admin',dummy_app, db_handle,['admin','scorekeeper','desk','void'])            
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                

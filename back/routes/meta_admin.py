@@ -20,6 +20,32 @@ def generate_test_user(username,dummy_app,db_handle,roles=[]):
         user.roles.append(role)
         db_handle.session.commit()
 
+def generate_test_player(first_name,last_name,dummy_app,db_handle):
+    
+    player = dummy_app.tables.Player(
+        first_name=first_name,
+        last_name=last_name,
+        ifpa_ranking=15        
+    )    
+    db_handle.session.add(player)
+    db_handle.session.commit()
+    player = dummy_app.tables.Player.query.filter_by(player_id=player.player_id).first()
+    role = dummy_app.tables.Role.query.filter_by(name='player').first()        
+    player.roles.append(role)
+    db_handle.session.commit()
+    return player
+
+def generate_test_team(players,dummy_app,db_handle):
+    
+    team = dummy_app.tables.Team(
+        team_name="test_team"
+    )    
+    db_handle.session.add(team)
+    db_handle.session.commit()
+    for player in players:
+        team.players.append(player)            
+    db_handle.session.commit()
+    
 #FIXME : needs protection
 #FIXME : need to pull db creation out into seperate function
 @meta_admin_blueprint.route('/meta_admin/db',methods=['POST'])
@@ -30,6 +56,29 @@ def route_meta_admin_create_db():
     db_util.create_db_and_tables(dummy_app, input_data['db_name'], DbInfo(db_config))
     del dummy_app
     return jsonify({'data':input_data['db_name']})    
+
+
+@meta_admin_blueprint.route('/meta_admin/test_db_with_tournaments_and_player_and_team',methods=['POST'])
+def route_meta_admin_create_db_and_tournaments_and_player_and_team():    
+    dummy_app = Flask('dummy_app')    
+    db_info = DbInfo({'DB_TYPE':'sqlite'})
+    db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)
+    db_url = db_util.generate_db_url('test', db_info)
+    db_handle = dummy_app.tables.db_handle
+    for role in ['admin','desk','scorekeeper','void','player']:
+        db_handle.session.add(dummy_app.tables.Role(name=role))
+        db_handle.session.commit()
+    
+    generate_test_user('test_admin',dummy_app, db_handle,['admin','scorekeeper','desk','void'])            
+    generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
+    generate_test_user('test_desk',dummy_app, db_handle,['desk','void'])            
+    test_player = generate_test_player('aiton','goldman',dummy_app,db_handle)
+    generate_test_team([test_player],dummy_app,db_handle)
+    db_util.load_machines_from_json(dummy_app,True)
+    db_util.init_papa_tournaments_divisions(dummy_app.tables)
+    db_handle.engine.dispose()
+    del dummy_app
+    return jsonify({'data':'test'})    
 
 @meta_admin_blueprint.route('/meta_admin/test_db_with_tournaments',methods=['POST'])
 def route_meta_admin_create_db_and_tournaments():    
@@ -87,7 +136,7 @@ def route_meta_admin_wipe_test_db():
     
     generate_test_user('test_admin',dummy_app, db_handle,['admin','scorekeeper','desk','void'])            
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
-    generate_test_user('test_desk',dummy_app, db_handle,['desk','void'])            
+    generate_test_user('test_desk',dummy_app, db_handle,['desk','void'])                
     db_util.load_machines_from_json(dummy_app,True)
     db_handle.engine.dispose()
     del dummy_app

@@ -69,7 +69,9 @@ def generate_player_class(db_handle,Team_Player_mapping):
                 #player_dict['linked_division']=self.linked_division.to_dict_simple()
                 player_dict['linked_division_name']=self.linked_division.get_tournament_name(self.linked_division.tournament)
             if self.division_machine:                
-                player_dict['division_machine']={'division_machine_id':self.division_machine.division_machine_id,'division_machine_name':self.division_machine.machine.machine_name}                
+                player_dict['division_machine']={'division_machine_id':self.division_machine.division_machine_id,'division_machine_name':self.division_machine.machine.machine_name}
+            if self.teams:
+                player_dict['teams']=[team.to_dict_simple() for team in self.teams]
             return player_dict
             
     return Player

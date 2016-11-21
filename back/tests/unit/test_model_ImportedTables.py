@@ -42,5 +42,8 @@ class ModelImportedTablesTD(unittest.TestCase):
 
         self.assertTrue(hasattr(self.tables,'Team'))
         self.assertTrue(self.tables.Team.__name__ == 'Team')
-        
+
+        self.assertTrue(hasattr(self.tables,'Token'))
+        self.assertTrue(self.tables.Token.__name__ == 'Token')
+
         

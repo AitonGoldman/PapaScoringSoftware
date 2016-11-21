@@ -6,7 +6,7 @@ from util import db_util
 from util.permissions import Admin_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
-from orm_creation import create_tournament
+from orm_creation import create_tournament,create_division
 
 @admin_manage_blueprint.route('/tournament',methods=['GET'])
 def route_get_all_tournaments():

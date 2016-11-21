@@ -6,6 +6,8 @@ from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
+from orm_creation import create_division
+
 
 @admin_manage_blueprint.route('/division',methods=['GET'])
 def route_get_divisions():
@@ -112,26 +114,7 @@ def route_add_division():
     if tables.Division.query.filter_by(division_name=division_data['division_name'],tournament_id=division_data['tournament_id']).first():
         raise Conflict('You are trying to create a duplicate tournament')
     
-    new_division = tables.Division(            
-        division_name = division_data["division_name"],
-        finals_num_qualifiers = division_data['finals_num_qualifiers'],
-        tournament_id=division_data["tournament_id"]
-    )        
-    if division_data['scoring_type'] == "HERB":
-        new_division.number_of_scores_per_entry=1
-    if 'use_stripe' in division_data and division_data['use_stripe']:
-        new_division.use_stripe = True
-        new_division.stripe_sku=division_data['stripe_sku']
-    if 'local_price' in division_data and division_data['use_stripe'] == False: 
-        new_division.local_price=division_data['local_price']
-    if 'team_tournament' in division_data and division_data['team_tournament']:    
-        new_division.team_tournament = True
-    else:
-        new_division.team_tournament = False    
-    new_division.scoring_type=division_data['scoring_type']            
-    db.session.add(new_division)
-    db.session.commit()
-
+    new_division = create_division(current_app,division_data)
     return jsonify({'data':new_division.to_dict_simple()})
 
 

@@ -1,5 +1,20 @@
 from util import db_util
-from routes.utils import check_roles_exist
+from routes.utils import check_roles_exist,fetch_entity
+
+def create_meta_division(app,meta_division_data):
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+    new_meta_division = tables.MetaDivision(
+    )
+    if 'meta_division_name' in meta_division_data:
+        new_meta_division.meta_division_name=meta_division_data['meta_division_name']
+    if 'divisions' in meta_division_data:
+        for division in meta_division_data['divisions']:
+            division_table = fetch_entity(tables.Division,int(division))
+            new_meta_division.divisions.append(division_table)        
+    tables.db_handle.session.add(new_meta_division)
+    tables.db_handle.session.commit()
+    return new_meta_division
 
 def create_division(app,division_data):
     db = db_util.app_db_handle(app)

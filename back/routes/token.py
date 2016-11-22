@@ -3,7 +3,7 @@ from flask import jsonify,current_app,request
 import json
 from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
-from util.permissions import Admin_permission, Desk_permission
+from util.permissions import Admin_permission, Desk_permission, Token_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
 import os
@@ -46,8 +46,6 @@ def check_add_token_request_is_valid(tokens_data, tables):
         raise BadRequest('No player_id specified')
     if tokens_data.has_key('divisions') is False and tokens_data.has_key('meta_divisions') is False and tokens_data.has_key('teams') is False:
         raise BadRequest('No divisions specified for tokens')
-    if tokens_data.has_key('team_id') is False and tokens_data.has_key('teams') is True:
-        raise BadRequest('No team id specified')                
     player_id = tokens_data['player_id']
     if tokens_data.has_key('team_id'):
         team_id = tokens_data['team_id']
@@ -66,7 +64,7 @@ def check_add_token_request_is_valid(tokens_data, tables):
         if division.team_tournament is False:
             raise BadRequest('Tried to add a token for a team in a non-team tournament')
         num_tokens = tokens_data['teams'][div_id]
-        if num_tokens > 0:
+        if int(num_tokens) > 0:
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)        
     for metadiv_id in tokens_data['metadivisions']:
         meta_division=fetch_entity(tables.MetaDivision,metadiv_id)
@@ -145,7 +143,7 @@ def get_tokens_for_player(player_id):
     return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict}})
 
 @admin_manage_blueprint.route('/token/confirm_paid_for', methods=['PUT'])
-#@login_required
+@login_required
 def confirm_tokens():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -161,7 +159,8 @@ def confirm_tokens():
     return jsonify({'data':token.to_dict_simple()})
 
 @admin_manage_blueprint.route('/token/paid_for/<int:paid_for>', methods=['POST'])
-#@login_required
+@login_required
+@Token_permission.require(403)
 def add_token(paid_for):
     if hasattr(current_user,'player_id') and paid_for != 0:
         raise BadRequest('Stop being a dick, you assface')
@@ -186,7 +185,7 @@ def add_token(paid_for):
             total_tokens = total_tokens + tokens
     for div_id in tokens_data['teams']:
         num_tokens = tokens_data['teams'][div_id]
-        if num_tokens > 0:
+        if int(num_tokens) > 0:
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)
             tokens = create_division_tokens(num_tokens,div_id=div_id,team_id=team_id,paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens

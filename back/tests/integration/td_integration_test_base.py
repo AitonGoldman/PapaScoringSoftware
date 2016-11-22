@@ -31,7 +31,8 @@ class TdIntegrationTestBase(unittest.TestCase):
         self.poop_db_name = os.path.basename(self.poop_db_file_name)        
         
         secret_file = open(secret_file_name,'w')
-        secret_file.write('FLASK_SECRET_KEY="poop"')
+        secret_file.write('FLASK_SECRET_KEY=poop\n')
+        secret_file.write('MAX_TICKETS_ALLOWED_PER_DIVISION=5')
         secret_file.close()
 
         public_file = open(public_file_name,'w')

@@ -1,5 +1,5 @@
 from flask_restless.helpers import to_dict
-
+import datetime
 
 def generate_token_class(db_handle):
     class Token(db_handle.Model):
@@ -16,6 +16,11 @@ def generate_token_class(db_handle):
         metadivision_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'meta_division.meta_division_id'
         ))
+        deskworker_id = db_handle.Column('deskworker_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
+        scorekeeper_id = db_handle.Column('scorekeeper_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
+        purchase_date = db_handle.Column(db_handle.DateTime,default=datetime.datetime.now)
+        game_started_date = db_handle.Column(db_handle.DateTime)
+        used_date = db_handle.Column(db_handle.DateTime)
         paid_for = db_handle.Column(db_handle.Boolean,default=False)
         used = db_handle.Column(db_handle.Boolean,default=False)
         comped = db_handle.Column(db_handle.Boolean,default=False)

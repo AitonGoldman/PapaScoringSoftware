@@ -9,6 +9,7 @@ from routes.utils import fetch_entity
 import os
 from flask_restless.helpers import to_dict
 
+
 def get_existing_token_count(player_id=None,team_id=None,div_id=None,metadiv_id=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -90,9 +91,11 @@ def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None
         new_token.paid_for = True if paid_for == 1 else False
         new_token.used=False
         new_token.comped=comped
-        db.session.add(new_token)                
-        db.session.commit()
+        if hasattr(current_user,'user_id'):
+            new_token.deskworker_id=current_user.user_id
         
+        db.session.add(new_token)                
+        db.session.commit()            
         tokens.append(to_dict(new_token))
     return tokens
 

@@ -99,7 +99,7 @@ def create_tournament(app,tournament_data):
     return new_tournament
     
 def create_roles(app,custom_roles=[]):
-    roles = ['admin','desk','scorekeeper','void','player']                    
+    roles = ['admin','desk','scorekeeper','void','player','token']                    
     db_handle = app.tables.db_handle
     if len(custom_roles)>0:
         roles = custom_roles
@@ -119,7 +119,7 @@ def create_user(app,username,password,roles=[]):
 
     if len(roles)>0:
         check_roles_exist(app.tables, roles)
-        for role_id in roles:            
+        for role_id in roles:
             existing_role = tables.Role.query.filter_by(role_id=role_id).first()            
             new_user.roles.append(existing_role)
     

@@ -94,7 +94,7 @@ def route_add_user():
     if 'roles' in input_data:
         roles = input_data['roles']
     else:
-        roles = []
+        roles = []    
     new_user = create_user(current_app,input_data['username'],input_data['password'],roles)
     
     return jsonify({'data':new_user.to_dict_simple()})

@@ -150,3 +150,25 @@ label.item-input {
         }            
     }
 }    
+
+.platform-android,.platform-browser,.platform-ios { 
+    .player-select {
+        div {
+            div {
+                @media screen and (max-width: 610px){
+                    @media screen and (max-device-height: 750px){
+                    }
+                    @media screen and (min-device-height: 751px){
+                        margin-left:63px;
+                    }
+                }
+                @media screen and (max-width: 970px) and (min-width:611px) {
+                        margin-left:63px;
+                }
+                @media screen and (min-width: 971px) {
+                        margin-left:63px;
+                }
+            }
+        }
+    }
+}

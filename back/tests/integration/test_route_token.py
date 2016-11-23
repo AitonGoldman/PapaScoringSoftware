@@ -293,3 +293,36 @@ class RouteTokenTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               409,
                               'Was expecting status code 409, but it was %s : %s' % (rv.status_code,rv.data))
             
+    def test_get_tokens_for_player(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_desk','password':'test_desk'}))
+            rv = c.get('/token/player_id/1')            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            tokens = json.loads(rv.data)['data']                        
+            self.assertEquals(tokens['tokens']['divisions']['1'],0)
+            self.assertEquals(tokens['tokens']['metadivisions']['1'],0)
+            self.assertEquals(tokens['tokens']['teams']['5'],0)
+            self.assertEquals(tokens['available_tokens']['divisions']['1'],5)
+            self.assertEquals(tokens['available_tokens']['metadivisions']['1'],5)
+            self.assertEquals(tokens['available_tokens']['teams']['5'],5)
+            
+            rv = c.post('/token/paid_for/1',
+                       data=json.dumps({"player_id":1,
+                                        "team_id":1,
+                                        "divisions":{1:1},
+                                        "teams":{5:1},
+                                        "metadivisions":{1:1}}))
+            rv = c.get('/token/player_id/1')            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            tokens = json.loads(rv.data)['data']                        
+            self.assertEquals(tokens['tokens']['divisions']['1'],1)
+            self.assertEquals(tokens['tokens']['metadivisions']['1'],1)
+            self.assertEquals(tokens['tokens']['teams']['5'],1)
+            self.assertEquals(tokens['available_tokens']['divisions']['1'],4)
+            self.assertEquals(tokens['available_tokens']['metadivisions']['1'],4)
+            self.assertEquals(tokens['available_tokens']['teams']['5'],4)

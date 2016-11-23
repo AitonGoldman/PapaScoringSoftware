@@ -122,10 +122,11 @@ def get_team_tokens_for_player(player_id):
 def get_tokens_for_player(player_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    player = fetch_entity(tables.Player,player_id)         
+    player = fetch_entity(tables.Player,player_id)
+    team_ids = tables.Team.query.filter(tables.Team.players.any(player_id=player.player_id)).all()
     tokens = tables.Token.query.filter_by(player_id=player.player_id, paid_for=True).all()
-    token_dict = {'divisions':{},'metadivisions':{}}
-    remaining_tokens_dict={'divisions':{},'metadivisions':{}}
+    token_dict = {'divisions':{},'metadivisions':{},'teams':{}}
+    remaining_tokens_dict={'divisions':{},'metadivisions':{},'teams':{}}
     #FIXME : need only active divisions
     divisions = tables.Division.query.all()    
     metadivisions = tables.MetaDivision.query.all()
@@ -139,6 +140,11 @@ def get_tokens_for_player(player_id):
             metadiv_count = get_existing_token_count(player_id=player_id,metadiv_id=division.meta_division_id)
             token_dict['metadivisions'][division.meta_division_id]= metadiv_count
             remaining_tokens_dict['metadivisions'][division.meta_division_id] = max_tickets_allowed - metadiv_count
+        if division.team_tournament is not None:
+            for team in team_ids:
+                team_count = get_existing_token_count(team_id=team.team_id,div_id=division.division_id)
+                token_dict['teams'][division.division_id]= team_count
+                remaining_tokens_dict['teams'][division.division_id] = max_tickets_allowed - team_count
             
     return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict}})
 

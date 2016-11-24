@@ -120,6 +120,7 @@ def get_team_tokens_for_player(player_id):
 
 @admin_manage_blueprint.route('/token/player_id/<player_id>',methods=['GET'])
 def get_tokens_for_player(player_id):
+    #FIXME : needs more protection?
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     player = fetch_entity(tables.Player,player_id)
@@ -133,20 +134,21 @@ def get_tokens_for_player(player_id):
     max_tickets_allowed = int(current_app.td_config['MAX_TICKETS_ALLOWED_PER_DIVISION'])
     for division in divisions:
         if division.team_tournament is False and division.meta_division_id is None:
-            div_count = get_existing_token_count(player_id=player_id, div_id=division.division_id)
-            token_dict['divisions'][division.division_id]=div_count
-            remaining_tokens_dict['divisions'][division.division_id] = max_tickets_allowed - div_count
+            if division.tournament.single_division or division.tournament.single_division is False and division.division_id == player.linked_division_id:
+                div_count = get_existing_token_count(player_id=player_id, div_id=division.division_id)                
+                token_dict['divisions'][division.division_id]=div_count
+                remaining_tokens_dict['divisions'][division.division_id] = max_tickets_allowed - div_count
         if division.meta_division_id is not None:
             metadiv_count = get_existing_token_count(player_id=player_id,metadiv_id=division.meta_division_id)
             token_dict['metadivisions'][division.meta_division_id]= metadiv_count
             remaining_tokens_dict['metadivisions'][division.meta_division_id] = max_tickets_allowed - metadiv_count
-        if division.team_tournament is not None:
+        if division.team_tournament is True:
             for team in team_ids:
                 team_count = get_existing_token_count(team_id=team.team_id,div_id=division.division_id)
                 token_dict['teams'][division.division_id]= team_count
                 remaining_tokens_dict['teams'][division.division_id] = max_tickets_allowed - team_count
             
-    return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict}})
+    return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict,'player':player.to_dict_simple()}})
 
 @admin_manage_blueprint.route('/token/confirm_paid_for', methods=['PUT'])
 @login_required
@@ -201,6 +203,13 @@ def add_token(paid_for):
             tokens = create_division_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id, paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens
     db.session.commit()
-    
+    total_divisions_tokens_summary = {}
+    total_metadivisions_tokens_summary = {}
+    for div_id in tokens_data['divisions']:
+        total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token['division_id'])==str(div_id)])
+    for div_id in tokens_data['teams']:
+        total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token['division_id'])==str(div_id)])
+    for metadiv_id in tokens_data['metadivisions']:
+        total_metadivisions_tokens_summary[metadiv_id] = len([token for token in total_tokens if str(token['metadivision_id'])==str(metadiv_id)])
          
-    return jsonify({'data':total_tokens})
+    return jsonify({'data':{'divisions':total_divisions_tokens_summary,'metadivisions':total_metadivisions_tokens_summary}})

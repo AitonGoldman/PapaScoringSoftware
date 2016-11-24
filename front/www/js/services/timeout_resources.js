@@ -123,8 +123,10 @@ angular.module('TD_services.timeout_resources')
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
                           if(ip == undefined || ip == ""){
-                              ip = "192.168.1.178";
+                              //ip = "192.168.1.178";
                               //ip = "9.75.197.73";
+                              //ip="10.0.0.40";
+                              ip="98.111.232.93";
                           }
                           api_host.set_api_host('http://'+ip+':8000/');
                       }
@@ -166,11 +168,16 @@ angular.module('TD_services.timeout_resources')
                   var getDivisionsResource = generate_resource_definition(':site/division',
                                                                      'GET');                                                      
                   var addDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine',
-                                                                           'POST');                  
+                                                                                'POST');
+                  var addTokensResource = generate_resource_definition(':site/token/paid_for/1',
+                                                                           'POST');                                    
                   var getDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                                  'GET');
                   var getMachinesResource = generate_resource_definition(':site/machine',
                                                                          'GET');
+                  var getPlayerTokensResource = generate_resource_definition(':site/token/player_id/:player_id',
+                                                                         'GET');
+                  
                   var getIfpaRankingResource = generate_resource_definition(':site/ifpa/:player_name',
                                                                            'GET');                                    
                   
@@ -192,6 +199,7 @@ angular.module('TD_services.timeout_resources')
                       GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
                       GetPlayer: generate_custom_http_executor(getPlayersResource,'player','get'),                                            
                       AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
+                      AddTokens: generate_custom_http_executor(addTokensResource,'added_tokens','post'),
                       AddPlayer: generate_custom_http_executor(addPlayerResource,'added_player','post'),
                       UpdateUser: generate_custom_http_executor(updateUserResource,'updated_user','post'),
                       UpdatePlayer: generate_custom_http_executor(updatePlayerResource,'updated_player','post'),
@@ -206,7 +214,8 @@ angular.module('TD_services.timeout_resources')
                       GetDivisionMachines: generate_custom_http_executor(getDivisionMachinesResource,'division_machines','get'),
                       UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post'),
                       GetIfpaRanking: generate_custom_http_executor(getIfpaRankingResource,'ifpa_rankings','get'),                      
-                      GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get')            
+                      GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get'),
+                      GetPlayerTokens: generate_custom_http_executor(getPlayerTokensResource,'player_tokens','get')            
                   };
               }]);
 

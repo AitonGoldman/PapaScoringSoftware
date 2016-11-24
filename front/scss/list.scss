@@ -18,6 +18,26 @@
      }
 }
 .platform-android,.platform-browser,.platform-ios {
+    .skinny-list-results {
+        div {
+            @media screen and (max-width: 610px){
+                @media screen and (max-device-height: 750px){
+                }
+                @media screen and (min-device-height: 751px){
+                    padding-top:15px;
+                    padding-bottom:15px;
+                }
+            }
+            @media screen and (max-width: 970px) and (min-width:611px) {
+                    padding-top:15px;
+                    padding-bottom:15px;
+            }
+            @media screen and (min-width: 971px) {
+                    padding-top:15px;
+                    padding-bottom:15px;
+            }
+        }
+    }
     .skinny-list {
         //div.list{
            @media screen and (max-width: 970px) and (min-width:611px) {

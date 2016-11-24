@@ -75,6 +75,32 @@ $checkbox-med-check-width:            1px !default;
     margin-right:20px;
 }
 
+.avatar-user-pic-relative {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            height:104px;
+            width:104px;
+            border-radius:52px;
+        }
+        @media screen and (min-device-height: 751px){
+            height:154px;
+            width:154px;
+            border-radius:96px;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        height:154px;
+        width:154px;
+        border-radius:96px;
+    }
+    @media screen and (min-width: 971px) {
+        height:154px;
+        width:154px;
+        border-radius:96px;
+    }   
+}
+
+
 .avatar-user-pic {
     position:absolute;
     @media screen and (max-width: 610px){

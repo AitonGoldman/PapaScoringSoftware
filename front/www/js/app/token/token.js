@@ -1,11 +1,15 @@
-angular.module('app.token',[/*REPLACEMECHILD*/]);
+angular.module('app.token',['app.token.token_select',
+    /*REPLACEMECHILD*/]);
 angular.module('app.token').controller(
     'app.token',[
         '$scope','$state','TimeoutResources','Utils','Modals','$filter','$animate',
         function($scope, $state, TimeoutResources, Utils,Modals,$filter,$animate) {
             $animate.enabled(false);
             $scope.test_submit = function(){
-                alert("hi there");
+                if($scope.selected_players.length != 0){
+                    console.log($scope.selected_players[0]);
+                    $state.go('.token_select',{player_id:$scope.selected_players[0].player_id});
+                }
             };
             $scope.keyDown = function(event){
                 //keyCode 9               

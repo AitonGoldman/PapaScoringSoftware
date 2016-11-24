@@ -1,0 +1,44 @@
+<ion-view view-title="Purchase Tickets">
+  <ion-content>
+    <div class='avatar-label'>
+      <table style='width:100%;font-size:20px'>
+        <tr>
+          <td style='width:33%;vertical-align:middle'><div align='right' style='margin-top:auto;margin-bottom:auto'>{{resources.player_tokens.data.player.first_name}} {{resources.player_tokens.data.player.last_name}}</div></td>
+          <td style='width:33%;'><center><img class='avatar-user-pic-relative' src="http://98.111.232.93/pics/player_{{player_id}}.jpg"></center></td>
+          <td style='width:33%;vertical-align:middle'>
+
+            <div ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.divisions' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}</div>
+            <div ng-repeat='(metadivision_id,token_count) in resources.player_tokens.data.tokens.metadivisions' align='left' >{{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : {{token_count}}</div>
+            <div ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.teams' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="skinny-list list">
+      <ion-checkbox id="token_select_comped_checkbox" class='item' ng-model='sliders.comped'>Comped</ion-checkbox>
+      <div ng-style='check_if_tokens_maxed_out("divisions",division_id)' ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.divisions' class="item range">
+        {{resources.divisions.data[division_id].tournament_name}}
+        <input ng-model='sliders.divisions[division_id]' type="range" name="volume"  min="0" max="{{resources.player_tokens.data.available_tokens.divisions[division_id]}}">
+        {{sliders.divisions[division_id]}}   
+      </div>
+      <div ng-style='check_if_tokens_maxed_out("metadivisions",metadivision_id)' ng-repeat='(metadivision_id,token_count) in resources.player_tokens.data.tokens.metadivisions' class="item range">
+
+        {{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}}
+        <input ng-model='sliders.metadivisions[metadivision_id]' type="range" name="volume"  min="0" max="{{resources.player_tokens.data.available_tokens.metadivisions[metadivision_id]}}">
+        {{sliders.metadivisions[metadivision_id]}}
+        
+      </div>
+      <div ng-style='check_if_tokens_maxed_out("teams",division_id)' ng-repeat='(division_id,token_count) in resources.player_tokens.data.available_tokens.teams' class="item range">
+        {{resources.divisions.data[division_id].tournament_name}}
+        <input ng-model='sliders.teams[division_id]' type="range" name="volume"  min="0" max="{{resources.player_tokens.data.available_tokens.teams[division_id]}}" value="0">
+        {{sliders.teams[division_id]}}   
+      </div>
+      <button id="token_select_add_tokens" ui-sref='.process({process_step:{process:true}, token_info:sliders})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
+        <i class="icon ion-chevron-right"></i>
+        <span >Purchase Tokens</span>
+      </button>
+      
+    </div>    
+  </ion-content>
+</ion-view>
+

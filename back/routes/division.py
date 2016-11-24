@@ -13,7 +13,10 @@ from orm_creation import create_division
 def route_get_divisions():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)            
-    return jsonify({'data': {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}})
+    divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
+    #FIXME : this is a hack, and should be fixed
+    divisions['metadivisions'] = {metadivision.meta_division_id:metadivision.to_dict_simple() for metadivision in tables.MetaDivision.query.all()}
+    return jsonify({'data': divisions})
 
 @admin_manage_blueprint.route('/division/<division_id>',methods=['GET'])
 def route_get_division(division_id):

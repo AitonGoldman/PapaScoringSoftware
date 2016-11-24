@@ -82,7 +82,7 @@ def check_if_ranking_funcs_exists(db_handle):
         DB.engine.execute("CREATE FUNCTION papa_scoring_finals_func(rank real) RETURNS real AS $$  BEGIN IF rank = 1 THEN RETURN 3; ELSIF rank = 2 THEN RETURN 2; ELSIF rank = 3 THEN RETURN 1; ELSIF rank = 4 THEN RETURN 0; END IF; END; $$ LANGUAGE plsgsql;")    
 
 #FIXME : this should be getting app passed in
-def init_papa_tournaments_divisions(tables):
+def init_papa_tournaments_divisions(tables,use_stripe=False,stripe_sku=None):
     db = tables.db_handle
     new_tournament = tables.Tournament(
         tournament_name="Main",
@@ -97,10 +97,13 @@ def init_papa_tournaments_divisions(tables):
             scoring_type="HERB",
             division_name=division_name,
             number_of_scores_per_entry=1,
-            use_stripe=True,
-            stripe_sku="stripe-"+division_name,
             finals_num_qualifiers=24
         )
+        if use_stripe:
+            new_division.use_stripe=True
+            new_division.stripe_sku=stripe_sku
+        else:
+            new_division.local_price=5
         db.session.add(new_division)
         db.session.commit()
         new_tournament.divisions.append(new_division)
@@ -127,6 +130,11 @@ def init_papa_tournaments_divisions(tables):
         stripe_sku="stripe-test team tournament",
         finals_num_qualifiers=24
     )
+    if use_stripe:
+        new_division.use_stripe=True
+        new_division.stripe_sku=stripe_sku
+    else:
+        new_division.local_price=5    
     db.session.add(new_division)
     db.session.commit()
     new_tournament.divisions.append(new_division)
@@ -135,7 +143,7 @@ def init_papa_tournaments_divisions(tables):
         new_tournament = tables.Tournament(
             tournament_name=tournament_name,
             single_division=True        
-        )
+        )        
         db.session.add(new_tournament)
         db.session.commit()
         new_division=tables.Division(
@@ -148,6 +156,11 @@ def init_papa_tournaments_divisions(tables):
             stripe_sku="stripe-"+tournament_name,
             finals_num_qualifiers=24
         )
+        if use_stripe:
+            new_division.use_stripe=True
+            new_division.stripe_sku=stripe_sku
+        else:
+            new_division.local_price=5
         db.session.add(new_division)
         db.session.commit()
         new_tournament.divisions.append(new_division)

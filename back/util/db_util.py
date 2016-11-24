@@ -106,13 +106,13 @@ def init_papa_tournaments_divisions(tables):
         new_tournament.divisions.append(new_division)
         db.session.commit()
     new_metadivision = tables.MetaDivision(
-        meta_division_name="test_metadivision"
+        meta_division_name="Classics"
     )
     db.session.add(new_metadivision)
     db.session.commit()
 
     new_tournament = tables.Tournament(
-        tournament_name='test team tournament',
+        tournament_name='Split Flipper',
         single_division=True        
     )
     db.session.add(new_tournament)
@@ -128,7 +128,9 @@ def init_papa_tournaments_divisions(tables):
         finals_num_qualifiers=24
     )
     db.session.add(new_division)
-    db.session.commit()    
+    db.session.commit()
+    new_tournament.divisions.append(new_division)
+    db.session.commit()
     for tournament_name in ['Classics 1','Classics 2','Classics 3']:
         new_tournament = tables.Tournament(
             tournament_name=tournament_name,

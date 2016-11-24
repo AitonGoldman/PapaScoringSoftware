@@ -75,6 +75,10 @@ def route_meta_admin_create_db_and_tournaments_and_player_and_team():
     generate_test_user('test_scorekeeper',dummy_app, db_handle,['scorekeeper','void'])                
     generate_test_user('test_desk',dummy_app, db_handle,['desk','void'])            
     test_player = generate_test_player('aiton','goldman',dummy_app,db_handle)
+    test_player.linked_division_id=1
+    test_player_two = generate_test_player('doug','polka',dummy_app,db_handle)
+    test_player.linked_division_id=1
+    db_handle.session.commit()
     #generate_test_team([test_player],dummy_app,db_handle)
     create_team(dummy_app,{'team_name':'test_team','players':['1']})
     db_util.load_machines_from_json(dummy_app,True)

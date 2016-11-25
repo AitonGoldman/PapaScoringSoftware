@@ -197,7 +197,8 @@ def create_tournament(app,tournament_data):
         tournament_data['tournament_id']= new_tournament.tournament_id
         create_division(app,tournament_data)    
     else:        
-        new_tournament.single_division=False    
+        new_tournament.single_division=False
+    db.session.commit()
     return new_tournament
     
 def create_roles(app,custom_roles=[]):

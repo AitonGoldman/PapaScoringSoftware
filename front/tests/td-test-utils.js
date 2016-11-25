@@ -225,7 +225,7 @@ var add_new_user_ex = function(new_user_name,go_home){
     
 exports.add_new_user_ex = add_new_user_ex;
 
-var add_new_tournament = function(new_tournament_name,single_division,check_for_error){        
+var add_new_tournament = function(new_tournament_name,single_division,check_for_error,use_stripe){        
     var EC = protractor.ExpectedConditions;
     var button_to_wait_for = undefined;
     if(single_division){
@@ -240,8 +240,13 @@ var add_new_tournament = function(new_tournament_name,single_division,check_for_
     if(single_division == false){
         element(by.id('add_tournament_single_division_checkbox')).click();
     } else {
-        element(by.model('tournament.finals_num_qualifiers')).sendKeys("24");
-        element(by.model('tournament.stripe_sku')).sendKeys("12345abcd");        
+        element(by.model('tournament.finals_num_qualifiers')).sendKeys("24");        
+        if(use_stripe == true){
+            element(by.model('tournament.stripe_sku')).sendKeys("12345abcd");
+        } else {
+            element(by.model('tournament.use_stripe')).click();
+            element(by.model('tournament.local_price')).sendKeys("5");            
+        }        
     }
     el = element(by.id("add_tournament_add_button"));
     browser.executeScript("arguments[0].scrollIntoView(true)", el);

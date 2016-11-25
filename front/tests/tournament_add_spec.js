@@ -8,6 +8,15 @@ describe('User', function() {
         var EC = protractor.ExpectedConditions;
         td_utils.add_new_tournament('poopyhead',true,true);        
     });
+    it('add single division tournament with stripe', function() {
+        if (browser.params.test_stripe_sku == undefined){        
+            console.log('You did not specify a strip_sku - skipping');
+            return;
+        }
+
+        var EC = protractor.ExpectedConditions;
+        td_utils.add_new_tournament('poopyhead',true,true,true,true);        
+    });    
     it('add multi division tournament', function() {
         var EC = protractor.ExpectedConditions;
         new_tournament_name='poopyhead';

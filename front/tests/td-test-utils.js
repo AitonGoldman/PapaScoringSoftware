@@ -241,8 +241,8 @@ var add_new_tournament = function(new_tournament_name,single_division,check_for_
         element(by.id('add_tournament_single_division_checkbox')).click();
     } else {
         element(by.model('tournament.finals_num_qualifiers')).sendKeys("24");        
-        if(use_stripe == true){
-            element(by.model('tournament.stripe_sku')).sendKeys("12345abcd");
+        if(use_stripe == true){            
+            element(by.model('tournament.stripe_sku')).sendKeys(browser.params.test_stripe_sku);
         } else {
             element(by.model('tournament.use_stripe')).click();
             element(by.model('tournament.local_price')).sendKeys("5");            

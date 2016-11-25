@@ -29,3 +29,4 @@ flask-cache==0.13.1
 iso8601==0.1.11
 configobj==4.7.2
 mock==2.0.0
+enum34==1.1.6

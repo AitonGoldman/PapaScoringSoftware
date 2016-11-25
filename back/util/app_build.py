@@ -32,6 +32,7 @@ def get_generic_app(name):
     return app
 
 def get_admin_app(name):
+    #FIXME : this actually gets ALL config values, not just db values
     db_config = td_config.get_db_config()
     #secret_config,public_config = td_config.get_configs()    
     db_info = DbInfo(db_config)    

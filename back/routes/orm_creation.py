@@ -1,5 +1,102 @@
 from util import db_util
 from routes.utils import check_roles_exist,fetch_entity
+from enum import Enum
+import stripe
+
+class RolesEnum(Enum):
+    admin = 1
+    desk = 2
+    scorekeeper = 3
+    void = 4
+    player = 5
+    token = 6
+
+def set_stripe_api_key(stripe_api_key):
+    stripe.api_key=stripe_api_key
+
+def fetch_stripe_price(app,division):
+    db = db_util.app_db_handle(app)
+    product_list = stripe.Product.list()
+    items = product_list['data']            
+    dict_sku_prices = {}
+    for item in items:        
+        dict_sku_prices[item['skus']['data'][0]['id']]=item['skus']['data'][0]['price']/100    
+    division.local_price = dict_sku_prices[division.stripe_sku]
+    db.session.commit()        
+
+def create_stanard_roles_and_users(app):
+    create_roles(app)
+    test_admin = create_user(app,'test_admin', 'test_admin',
+                             [str(RolesEnum.admin.value),str(RolesEnum.desk.value),
+                              str(RolesEnum.scorekeeper.value),str(RolesEnum.void.value),
+                              str(RolesEnum.token.value)])
+    test_scorekeeper = create_user(app,'test_scorekeeper', 'test_scorekeeper',
+                                   [str(RolesEnum.scorekeeper.value),str(RolesEnum.void.value)])            
+    
+    test_desk = create_user(app,'test_desk', 'test_desk',
+                            [str(RolesEnum.desk.value),str(RolesEnum.void.value),str(RolesEnum.token.value)])            
+    return test_admin,test_scorekeeper,test_desk
+
+
+def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
+    db = app.tables.db_handle
+    tables = app.tables
+    new_tournament = create_tournament(app,{'tournament_name':'Main','single_division':False})
+    new_tournament_data = {
+        #'division_name':division_name,
+        'finals_num_qualifiers':'24',
+        'tournament_id':str(new_tournament.tournament_id),
+        'team_tournament':False,
+        'scoring_type':'HERB',
+        'active':True
+    }
+    if use_stripe:
+        new_tournament_data['use_stripe']=True
+        new_tournament_data['stripe_sku']=stripe_sku
+    else:
+        new_tournament_data['use_stripe']=False
+        new_tournament_data['local_price']=5
+    for division_name in ['A','B','C','D']:
+        new_tournament_data['division_name']=division_name
+        new_division = create_division(app,new_tournament_data)            
+        db.session.commit()
+        new_tournament.divisions.append(new_division)
+        db.session.commit()
+    new_metadivision = create_meta_division(app,{
+        'meta_division_name':'Classics'
+    })
+    new_team_tournament_data={'tournament_name':'Split Flipper',
+                                                         'single_division':True,
+                                                         'active':True,
+                                                         'team_tournament':True,
+                                                         'scoring_type':'HERB',
+                                                         'number_of_scores_per_entry':'1',
+                                                         'finals_num_qualifiers':'24'}
+    if use_stripe:
+        new_team_tournament_data['use_stripe']=True
+        new_team_tournament_data['stripe_sku']=stripe_sku
+    else:
+        new_team_tournament_data['use_stripe']=False
+        new_team_tournament_data['local_price']=5
+    new_tournament = create_tournament(app,new_team_tournament_data)
+    new_classics_tournament_data = {'single_division':True,
+                                    'active':True,
+                                    'team_tournament':False,
+                                    'scoring_type':'HERB',
+                                    'number_of_scores_per_entry':'1',
+                                    'finals_num_qualifiers':'24'
+    }
+    if use_stripe:
+        new_classics_tournament_data['use_stripe']=True
+        new_classics_tournament_data['stripe_sku']=stripe_sku
+    else:
+        new_classics_tournament_data['use_stripe']=False        
+        new_classics_tournament_data['local_price']=5
+    for tournament_name in ['Classics 1','Classics 2','Classics 3']:
+        new_classics_tournament_data['tournament_name']=tournament_name
+        new_tournament = create_tournament(app,new_classics_tournament_data)
+        new_metadivision.divisions.append(new_division)
+        db.session.commit()        
 
 def create_team(app,team_data):
     db = db_util.app_db_handle(app)
@@ -69,6 +166,8 @@ def create_division(app,division_data):
     if 'use_stripe' in division_data and division_data['use_stripe']:
         new_division.use_stripe = True
         new_division.stripe_sku=division_data['stripe_sku']
+    else:
+        new_division.use_stripe = False
     if 'local_price' in division_data and division_data['use_stripe'] == False: 
         new_division.local_price=division_data['local_price']
     if 'team_tournament' in division_data and division_data['team_tournament']:    
@@ -78,6 +177,9 @@ def create_division(app,division_data):
     new_division.scoring_type=division_data['scoring_type']            
     db.session.add(new_division)
     db.session.commit()
+    if new_division.use_stripe:
+        set_stripe_api_key(app.td_config['STRIPE_API_KEY'])
+        fetch_stripe_price(app,new_division)
     return new_division
 
 def create_tournament(app,tournament_data):
@@ -89,17 +191,19 @@ def create_tournament(app,tournament_data):
     )
     db.session.add(new_tournament)
     db.session.commit()
-    if 'single_division' in tournament_data and tournament_data['single_division']:
+    if 'single_division' in tournament_data and tournament_data['single_division']:        
         new_tournament.single_division=True
         tournament_data['division_name']= new_tournament.tournament_name+"_single"
         tournament_data['tournament_id']= new_tournament.tournament_id
         create_division(app,tournament_data)    
-    else:
+    else:        
         new_tournament.single_division=False    
     return new_tournament
     
 def create_roles(app,custom_roles=[]):
-    roles = ['admin','desk','scorekeeper','void','player','token']                    
+    roles = []
+    for role_enum in list(RolesEnum):
+        roles.append(role_enum.name)
     db_handle = app.tables.db_handle
     if len(custom_roles)>0:
         roles = custom_roles

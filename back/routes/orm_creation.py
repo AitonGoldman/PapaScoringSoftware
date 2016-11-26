@@ -95,7 +95,7 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
     for tournament_name in ['Classics 1','Classics 2','Classics 3']:
         new_classics_tournament_data['tournament_name']=tournament_name
         new_tournament = create_tournament(app,new_classics_tournament_data)
-        new_metadivision.divisions.append(new_division)
+        new_metadivision.divisions.append(new_tournament.divisions[0])
         db.session.commit()        
 
 def create_team(app,team_data):

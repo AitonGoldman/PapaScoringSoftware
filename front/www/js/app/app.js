@@ -91,7 +91,8 @@ app.config(function($httpProvider,$ionicConfigProvider) {
 });
 
 app.filter('range', function() {
-  return function(input, total) {
+    
+  return function(input, total) {    
     total = parseInt(total);
 
     for (var i=0; i<total; i++) {

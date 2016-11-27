@@ -84,6 +84,24 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     tables.db_handle.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})
 
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/undo',
+                              methods=['PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_undo_division_machine_player_team(division_id,division_machine_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
+    if division_machine.division.team_tournament is False and division_machine.player_id is None:
+        raise Conflict('Machine is not being played')
+    if division_machine.division.team_tournament and division_machine.team_id is None:
+        raise Conflict('Machine is not being played')    
+    token = tables.Token.query.filter_by(player_id=division_machine.player_id,division_machine_id=division_machine_id,used=False).first()
+    token.division_machine_id=None
+    division_machine.player_id=None
+    db.session.commit()    
+    return jsonify({'data':division_machine.to_dict_simple()})
+
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<int:division_machine_id>/player',
                               methods=['DELETE'])
 @login_required

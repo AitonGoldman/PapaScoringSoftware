@@ -25,6 +25,7 @@ def generate_token_class(db_handle):
         used = db_handle.Column(db_handle.Boolean,default=False)
         comped = db_handle.Column(db_handle.Boolean,default=False)
         division_machine_id = db_handle.Column('division_machine_id', db_handle.Integer, db_handle.ForeignKey('division_machine.division_machine_id'))
+        voided = db_handle.Column(db_handle.Boolean,default=False)
         def to_dict_simple(self):
             return to_dict(self)        
     return Token

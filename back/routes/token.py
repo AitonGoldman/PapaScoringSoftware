@@ -213,3 +213,5 @@ def add_token(paid_for):
         total_metadivisions_tokens_summary[metadiv_id] = len([token for token in total_tokens if str(token['metadivision_id'])==str(metadiv_id)])
          
     return jsonify({'data':{'divisions':total_divisions_tokens_summary,'metadivisions':total_metadivisions_tokens_summary}})
+
+

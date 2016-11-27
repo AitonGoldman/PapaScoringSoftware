@@ -154,6 +154,11 @@ class RouteDivisionMachineTD(td_integration_test_base.TdIntegrationDispatchTestB
                        data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
             rv = c.post('/division/1/division_machine',
                         data=json.dumps({'machine_id':1}))
+            rv = c.post('/token/paid_for/1',
+                        data=json.dumps({"player_id":1,                                     
+                                         "divisions":{1:1},
+                                         "teams":{},
+                                         "metadivisions":{}}))                        
         with self.flask_app.test_client() as c:
             rv = c.put('/auth/login',
                        data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))                    
@@ -166,12 +171,42 @@ class RouteDivisionMachineTD(td_integration_test_base.TdIntegrationDispatchTestB
             division_machine = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=returned_division_machine['division_machine_id']).first()
             self.assertEquals(division_machine.player_id,returned_division_machine['player_id'])
 
+    def test_undo_player_add_to_machine(self):
+        with self.flask_app.test_client() as c:
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
+            rv = c.post('/division/1/division_machine',
+                        data=json.dumps({'machine_id':1}))
+            rv = c.post('/token/paid_for/1',
+                        data=json.dumps({"player_id":1,                                     
+                                         "divisions":{1:1},
+                                         "teams":{},
+                                         "metadivisions":{}}))                        
+            
+        with self.flask_app.test_client() as c:
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))                    
+            rv = c.put('/division/1/division_machine/1/player/1')
+            rv = c.put('/division/1/division_machine/1/undo')            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            returned_division_machine = json.loads(rv.data)['data']
+            self.assertEquals(returned_division_machine['player_id'],None)
+            division_machine = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=returned_division_machine['division_machine_id']).first()
+            self.assertEquals(division_machine.player_id,None)
+            
     def test_remove_player_from_machine(self):
         with self.flask_app.test_client() as c:
             rv = c.put('/auth/login',
                        data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
             rv = c.post('/division/1/division_machine',
                         data=json.dumps({'machine_id':1}))
+            rv = c.post('/token/paid_for/1',
+                        data=json.dumps({"player_id":1,                                     
+                                         "divisions":{1:1},
+                                         "teams":{},
+                                         "metadivisions":{}}))                                    
         with self.flask_app.test_client() as c:
             rv = c.put('/auth/login',
                        data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))        
@@ -207,7 +242,12 @@ class RouteDivisionMachineTD(td_integration_test_base.TdIntegrationDispatchTestB
             rv = c.put('/auth/login',
                        data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
             rv = c.post('/division/1/division_machine',
-                        data=json.dumps({'machine_id':1}))        
+                        data=json.dumps({'machine_id':1}))
+            rv = c.post('/token/paid_for/1',
+                        data=json.dumps({"player_id":1,                                     
+                                         "divisions":{1:1},
+                                         "teams":{},
+                                         "metadivisions":{}}))                                    
         with self.flask_app.test_client() as c:
             rv = c.put('/auth/login',
                        data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))        
@@ -215,7 +255,7 @@ class RouteDivisionMachineTD(td_integration_test_base.TdIntegrationDispatchTestB
             rv = c.put('/division/1/division_machine/1/player/2')            
             self.assertEquals(rv.status_code,
                               409,
-                              'Was expecting status code 409, but it was %s' % (rv.status_code))            
+                              'Was expecting status code 409, but it was %s : %s' % (rv.status_code,rv.data))            
             division_machine = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=1).first()
             self.assertEquals(division_machine.player_id,1)
 
@@ -280,10 +320,18 @@ class RouteDivisionMachineTD(td_integration_test_base.TdIntegrationDispatchTestB
                        data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
             rv = c.post('/division/1/division_machine',
                         data=json.dumps({'machine_id':1}))
+            rv = c.post('/token/paid_for/1',
+                        data=json.dumps({"player_id":1,                                     
+                                         "divisions":{1:1},
+                                         "teams":{},
+                                         "metadivisions":{}}))                                    
         with self.flask_app.test_client() as c:
             rv = c.put('/auth/login',
                        data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))        
             rv = c.put('/division/1/division_machine/1/team/1')            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
             rv = c.delete('/division/1/division_machine/1/team')
             self.assertEquals(rv.status_code,
                               200,

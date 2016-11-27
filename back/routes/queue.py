@@ -10,6 +10,7 @@ import os
 from flask_restless.helpers import to_dict
 from orm_creation import create_queue
 
+
 @admin_manage_blueprint.route('/queue/division/<division_id>',methods=['GET'])
 def get_queues(division_id):
     db = db_util.app_db_handle(current_app)
@@ -35,6 +36,7 @@ def add_player_to_queue():
     if division_machine.player_id is None:
         raise BadRequest('No player is on machine - just jump on it')
     player = fetch_entity(tables.Player,queue_data['player_id'])
+    check_player_team_can_start_game(current_app,division_machine,player)
     remove_player_from_queue(current_app,player)    
     new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])    
     return jsonify({'data':new_queue.to_dict_simple()})
@@ -95,8 +97,11 @@ def add_player_to_machine_from_queue(division_machine_id):
     division_machine.player_id = root_queue.player_id
     if len(root_queue.queue_child)==0:
         division_machine.queue_id = None
+        db.session.commit()        
     else:
         division_machine.queue_id = root_queue.queue_child[0].queue_id
+        root_queue.queue_child[0].parent_id=None        
+        db.session.commit()        
     db.session.delete(root_queue)
     db.session.commit()
     return_dict = {'division_machine':division_machine.to_dict_simple()}

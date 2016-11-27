@@ -373,6 +373,46 @@ class RouteQueueTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(division_machine.queue_id,None)
             self.assertEquals(division_machine.player_id,1)                        
 
+    def test_add_player_to_machine_from_queue_with_three_players(self):                        
+        self.division_machine.player_id=4
+        self.flask_app.tables.db_handle.session.commit()            
+
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_desk','password':'test_desk'}))
+            rv = c.post('/token/paid_for/1',
+                        data=json.dumps({"player_id":1,                                     
+                                         "divisions":{1:1},
+                                         "teams":{},
+                                         "metadivisions":{}}))
+        with self.flask_app.test_client() as c:                            
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':self.score_user_name_password,
+                                        'password':self.score_user_name_password}))
+            rv = c.post('/queue',
+                       data=json.dumps({"player_id":"1",                                        
+                                        "division_machine_id":"1"}))
+            rv = c.post('/queue',
+                       data=json.dumps({"player_id":"2",                                        
+                                        "division_machine_id":"1"}))
+            rv = c.post('/queue',
+                       data=json.dumps({"player_id":"3",                                        
+                                        "division_machine_id":"1"}))                        
+            #FIXME : need to have a generic way of dealing with multiple test contexts wrt orm objects
+            division_machine = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=1).first()
+            division_machine.player_id=None
+            self.flask_app.tables.db_handle.session.commit()            
+            rv = c.put('/queue/division_machine/1')
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            add_player_to_machine_from_queue = json.loads(rv.data)['data']                                    
+            self.assertEquals(add_player_to_machine_from_queue['division_machine']['player_id'],1)
+            self.assertEquals(add_player_to_machine_from_queue['next_queue']['queue_id'],2)
+            division_machine = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=1).first()
+            self.assertEquals(division_machine.queue_id,2)
+            self.assertEquals(division_machine.player_id,1)                                    
+            
     def test_add_player_to_machine_from_queue_with_one_player_already_on_machine(self):                
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',

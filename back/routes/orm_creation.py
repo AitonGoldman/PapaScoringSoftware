@@ -280,3 +280,20 @@ def create_queue(app,division_machine_id,player_id,bumped=None):
     db.session.commit()
     return new_queue
         
+def create_entry(app,player_id,division_machine_id,division_id,score):
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+    entry = tables.Entry(
+        player_id=player_id,
+        division_id=division_id
+    )
+    db.session.add(entry)
+    db.session.commit()
+    score = tables.Score(
+        score=score,
+        entry_id=entry.entry_id,
+        division_machine_id=division_machine_id
+    )
+    db.session.add(score)
+    db.session.commit()    
+    return entry

@@ -60,6 +60,7 @@ def set_token_start_time(app,player,division_machine):
                                                     metadivision_id=division_machine.division.meta_division_id,
                                                     used=False).first()
     token_to_set.game_started_date=datetime.datetime.now()
+    token_to_set.division_machine_id = division_machine.division_machine_id
     db.session.commit()
     pass
 

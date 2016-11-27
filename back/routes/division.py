@@ -5,8 +5,8 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity
-from orm_creation import create_division
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time
+from orm_creation import create_division, create_division_machine
 
 
 @admin_manage_blueprint.route('/division',methods=['GET'])
@@ -52,13 +52,7 @@ def route_add_division_machine(division_id):
         
     else:        
         BadRequest('no machine_id specified')
-    new_division_machine = tables.DivisionMachine(
-        machine_id=machine.machine_id,
-        division_id=division.division_id,
-        removed=False
-    )    
-    tables.db_handle.session.add(new_division_machine)
-    tables.db_handle.session.commit()
+    new_division_machine = create_division_machine(current_app,machine,division)
     return jsonify({'data':new_division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>',methods=['DELETE'])
@@ -83,6 +77,9 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     player = fetch_entity(tables.Player,player_id)
     if division_machine.player_id or division_machine.team_id:
         raise Conflict('Machine is already being played')
+    if check_player_team_can_start_game(current_app,division_machine,player) is False:
+        raise BadRequest('Player can not start game - either no tickets or already on another machine')
+    set_token_start_time(current_app,player,division_machine)    
     division_machine.player_id=player.player_id
     tables.db_handle.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})

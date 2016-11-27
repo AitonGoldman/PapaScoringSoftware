@@ -32,7 +32,9 @@ class TdIntegrationTestBase(unittest.TestCase):
         
         secret_file = open(secret_file_name,'w')
         secret_file.write('FLASK_SECRET_KEY=poop\n')
-        secret_file.write('MAX_TICKETS_ALLOWED_PER_DIVISION=5')
+        secret_file.write('MAX_TICKETS_ALLOWED_PER_DIVISION=5\n')
+        secret_file.write('QUEUE_BUMP_AMOUNT=0')
+
         secret_file.close()
 
         public_file = open(public_file_name,'w')

@@ -10,6 +10,7 @@ class RolesEnum(Enum):
     void = 4
     player = 5
     token = 6
+    queue = 7
 
 def set_stripe_api_key(stripe_api_key):
     stripe.api_key=stripe_api_key
@@ -29,12 +30,14 @@ def create_stanard_roles_and_users(app):
     test_admin = create_user(app,'test_admin', 'test_admin',
                              [str(RolesEnum.admin.value),str(RolesEnum.desk.value),
                               str(RolesEnum.scorekeeper.value),str(RolesEnum.void.value),
-                              str(RolesEnum.token.value)])
+                              str(RolesEnum.token.value), str(RolesEnum.queue.value)])
     test_scorekeeper = create_user(app,'test_scorekeeper', 'test_scorekeeper',
-                                   [str(RolesEnum.scorekeeper.value),str(RolesEnum.void.value)])            
+                                   [str(RolesEnum.scorekeeper.value),str(RolesEnum.void.value),
+                                   str(RolesEnum.queue.value)])            
     
     test_desk = create_user(app,'test_desk', 'test_desk',
-                            [str(RolesEnum.desk.value),str(RolesEnum.void.value),str(RolesEnum.token.value)])            
+                            [str(RolesEnum.desk.value),str(RolesEnum.void.value),str(RolesEnum.token.value),
+                            str(RolesEnum.queue.value)])            
     return test_admin,test_scorekeeper,test_desk
 
 
@@ -212,6 +215,18 @@ def create_roles(app,custom_roles=[]):
         db_handle.session.add(app.tables.Role(name=role))
         db_handle.session.commit()
 
+def create_division_machine(app,machine,division):
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+    new_division_machine = tables.DivisionMachine(
+        machine_id=machine.machine_id,
+        division_id=division.division_id,
+        removed=False
+    )    
+    tables.db_handle.session.add(new_division_machine)
+    tables.db_handle.session.commit()
+    return new_division_machine
+
 def create_user(app,username,password,roles=[]):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
@@ -231,4 +246,37 @@ def create_user(app,username,password,roles=[]):
     db.session.commit()                        
     return new_user
     
+        
+def create_queue(app,division_machine_id,player_id,bumped=None):
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+    division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=division_machine_id).first()
+    new_queue = tables.Queue(
+        division_machine_id=division_machine_id,
+        player_id=player_id
+    )        
+    db.session.add(new_queue)
+    db.session.commit()
+    bump_num = int(app.td_config['QUEUE_BUMP_AMOUNT'])    
+    if bumped and bump_num!=0:
+        queue_count = 1
+        queue=division_machine.queue
+        while(queue is not None) and queue_count < bump_num:
+            queue_count = queue_count + 1
+            queue=queue.queue_child[0]
+        new_queue.parent_id=queue.queue_id
+        if(len(queue.queue_child)>0):
+            queue.queue_child[0].parent_id=new_queue.queue_id
+        db.session.commit()        
+        return new_queue
+    if division_machine.queue_id is None:
+        division_machine.queue_id=new_queue.queue_id
+        db.session.commit()
+        return new_queue
+    queue_node = division_machine.queue        
+    while len(queue_node.queue_child) > 0:        
+        queue_node = queue_node.queue_child[0]
+    new_queue.parent_id = queue_node.queue_id
+    db.session.commit()
+    return new_queue
         

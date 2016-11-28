@@ -160,6 +160,9 @@ a.badge1 {
     transform-style: preserve-3d;
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
+            top:0px;
+            left:75%;
+            perspective:400px;
         }
         @media screen and (min-device-height: 751px){
             top:0px;

@@ -193,7 +193,8 @@ angular.module('TD_services.timeout_resources')
                   var addPlayerToMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id/player/:player_id','PUT');
                   var addPlayerToMachineFromQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id','PUT');                  
                   var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');                                                      
-                  var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');                  
+                  var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
+                  var addToQueueResource = generate_resource_definition(':site/queue','POST');                                    
                   
                   return {
 	              GetAllResources: function(){
@@ -233,7 +234,8 @@ angular.module('TD_services.timeout_resources')
                       BumpQueue: generate_custom_http_executor(bumpQueueResource,'queues','put'),
                       AddPlayerToMachine: generate_custom_http_executor(addPlayerToMachineResource,'machine_added_to','put'),
                       VoidScore: generate_custom_http_executor(voidScoreResource,'voided_score','put'),
-                      AddScore: generate_custom_http_executor(addScoreResource,'added_score','put')
+                      AddScore: generate_custom_http_executor(addScoreResource,'added_score','put'),
+                      AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put')
                   };
               }]);
 

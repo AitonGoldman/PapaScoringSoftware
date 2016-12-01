@@ -1,4 +1,5 @@
-angular.module('app.scorekeeping.machine_select.record_score.confirm.process',[/*REPLACEMECHILD*/]);
+angular.module('app.scorekeeping.machine_select.record_score.confirm.process',['app.scorekeeping.machine_select.record_score.confirm.process.queue_add',
+    /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select.record_score.confirm.process').controller(
     'app.scorekeeping.machine_select.record_score.confirm.process',[
     '$scope','$state','TimeoutResources','Utils','Modals',
@@ -21,7 +22,8 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm.process').c
         }
         
         $scope.confirmed_score=$state.params.confirmed_score;
-        console.log($scope.score);
+        $scope.confirmed_score.score_with_commas = $scope.confirmed_score.score;
+        $scope.confirmed_score.score = $scope.confirmed_score.score.replace(/,/g, '');
         add_score_promise = TimeoutResources.AddScore(undefined,{site:$scope.site,division_machine_id:$scope.division_machine_id,score:$scope.confirmed_score.score});
         Modals.loading();
         // = TimeoutResources.GetEtcData();

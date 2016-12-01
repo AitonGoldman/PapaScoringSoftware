@@ -74,7 +74,7 @@ angular.module('TD_services.action_sheets')
                                   $state.go('.edit_player',{player_id:player_id});
                               }
                               if(index == 1){
-                                  $state.go('.edit_player',{player_id:player_id});
+                                  $state.go('.player_info',{player_id:player_id});
                               }
                               return true;
                           }

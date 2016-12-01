@@ -9,6 +9,7 @@ from routes.utils import fetch_entity
 import os
 from orm_creation import create_player
 
+
 @admin_manage_blueprint.route('/player',methods=['GET'])
 def route_get_players():
     db = db_util.app_db_handle(current_app)
@@ -59,5 +60,6 @@ def route_add_player():
     if player is not None:
         raise Conflict('Duplicate player')
     new_player = create_player(current_app,input_data)
+    
     return jsonify({'data':new_player.to_dict_simple()})
     

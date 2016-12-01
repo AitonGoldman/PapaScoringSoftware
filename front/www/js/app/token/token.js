@@ -12,6 +12,9 @@ angular.module('app.token').controller(
                 }
             };
             $scope.keyDown = function(event){
+                if(event.keyCode == 9 || event.keyCode==13){
+                    $state.go('.token_select',{player_id:$scope.selected_players[0].player_id});
+                }
                 //keyCode 9               
             };
             $scope.site=$state.params.site;

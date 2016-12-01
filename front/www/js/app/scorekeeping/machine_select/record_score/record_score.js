@@ -27,6 +27,8 @@ angular.module('app.scorekeeping.machine_select.record_score').controller(
             $scope.test_submit = function(){                
                 $state.go('.confirm',{score:$scope.score.score});
             };
-            
+            $scope.onScoreChange = function(){
+                $scope.score.score = $scope.score.score.replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+            };
     }]
 );

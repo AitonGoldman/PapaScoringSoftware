@@ -15,8 +15,13 @@ angular.module('app.scorekeeping.machine_select').controller(
         Modals.loading();
         //= TimeoutResources.GetEtcData();
         division_machines_promise.then(function(data){
-        $scope.resources = TimeoutResources.GetAllResources();
-         Modals.loaded();
+            $scope.resources = TimeoutResources.GetAllResources();
+            $scope.flattened_division_machines = _.values($scope.resources.division_machines.data);
+            $scope.flattened_division_machines.sort(function (a, b) {
+                return (a.division_machine_id > b.division_machine_id ? 1 : -1);
+            });
+            console.log($scope.flattened_division_machines);
+            Modals.loaded();
         });
     }]
 );

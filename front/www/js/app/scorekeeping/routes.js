@@ -90,7 +90,33 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.scorekeeping.machine_select.record_score.confirm'
  	     }
  	   }
+       }).state('app.scorekeeping.machine_select.record_score.confirm.process.queue_add', 
+        { 
+         cache: false,
+ 	 url: '/queue_add',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/record_score/confirm/process/queue_add/queue_add.html',
+ 	       controller: 'app.scorekeeping.machine_select.record_score.confirm.process.queue_add'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.machine_select.record_score.confirm.process.queue_add.process', 
+        { 
+         cache: false,
+ 	 url: '/process/division_machine_id/:queued_division_machine_id/:queued_division_machine_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/record_score/confirm/process/queue_add/process/process.html',
+ 	       controller: 'app.scorekeeping.machine_select.record_score.confirm.process.queue_add.process'
+ 	     }
+ 	   }, params: {
+               process_step:{}               
+             
+          }    
+
        })//REPLACE_ME
+
+
 
 
 

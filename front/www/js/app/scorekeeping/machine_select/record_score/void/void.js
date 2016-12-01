@@ -7,6 +7,8 @@ angular.module('app.scorekeeping.machine_select.record_score.void').controller(
 	$scope.division_machine_name=$state.params.division_machine_name;
 	$scope.division_id=$state.params.division_id;
 	$scope.division_machine_id=$state.params.division_machine_id;
+            $scope.player_id = $state.params.player_id;
+            $scope.player_name = $state.params.player_name;
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);

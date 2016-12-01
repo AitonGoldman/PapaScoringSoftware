@@ -23,6 +23,22 @@
         }
     }
 }
+
+.platform-android {
+    ion-side-menu {
+        ion-list {
+            .item:nth-child(1) {
+                @media screen and (max-width: 610px){
+                    @media screen and (max-device-height: 750px){
+                        //margin-top:$font-size-small - 1;
+                        margin-top:$font-size-small*2;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .platform-android, .platform-browser {
     ion-side-menu {
         ion-content {

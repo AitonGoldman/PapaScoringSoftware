@@ -2,7 +2,7 @@
   <ion-content>      
     <div class='icon-label-header row first-element'>
       <div><i class="icon ion-plus-circled"></i></div>
-      <div>{{confirmed_score.score}}</div>
+      <div>{{confirmed_score.score_with_commas}}</div>
     </div>
     <div style='text-align:center;font-size:38px;line-height:38px'>
       {{division_machine_name}}<br>(#{{player_id}}) {{player_name}}.
@@ -12,6 +12,9 @@
     </button>
     <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name})">
       Add new player to machine
+    </button>    
+    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".queue_add">
+      Add {{player_name}} to new queue
     </button>    
     
     <!--<button style='font-size:48px' ng-if="queues.length > 0" class="button button-full button-assertive icon-right ion-chevron-right" ui-sref=".undo({process_step:{process:true}})">

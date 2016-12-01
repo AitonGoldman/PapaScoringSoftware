@@ -14,10 +14,7 @@ def route_logout():
 
 @admin_login_blueprint.route('/auth/current_user',methods=['GET'])
 def route_get_current_user():
-    if hasattr(current_user,'user_id'):
-        return jsonify({'data':current_user.to_dict_simple()})
-    else:
-        return jsonify({'data': None})
+    return jsonify({'data':current_user.to_dict_simple()})
 
 @admin_login_blueprint.route('/auth/login',methods=['PUT'])
 def route_login():
@@ -39,4 +36,21 @@ def route_login():
     user_dict = user.to_dict_simple()
     user_dict['roles'] = [r.name for r in user.roles]        
     return jsonify({'data':user.to_dict_simple()})
-    
+
+@admin_login_blueprint.route('/auth/player_login',methods=['PUT'])
+def route_player_login():
+    tables = db_util.app_db_tables(current_app)
+    if request.data:
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Player pin # not specified')        
+    if 'player_pin' not in input_data:
+        raise BadRequest('Player pin # not specified')
+        
+    player = tables.Player.query.filter_by(pin=input_data['player_pin']).first()
+    if player is None:
+        raise Unauthorized('Bad player pin #')
+    login_user(player)
+    identity_changed.send(current_app._get_current_object(), identity=Identity(player.player_id))
+    return jsonify({'data':player.to_dict_simple()})
+

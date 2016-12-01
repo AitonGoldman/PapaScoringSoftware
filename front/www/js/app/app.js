@@ -91,6 +91,24 @@ app.config(function($httpProvider,$ionicConfigProvider) {
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
 });
 
+app.filter('orderObjectBy', function() {
+  return function(items, field, reverse) {
+    var filtered = [];
+      angular.forEach(items, function(item,index) {
+          if(index == "$promise" || index == "$resolved"){
+              
+          } else {
+              filtered.push(item);
+          }
+    });
+    filtered.sort(function (a, b) {
+      return (a[field] > b[field] ? 1 : -1);
+    });
+    if(reverse) filtered.reverse();
+    return filtered;
+  };
+});
+
 app.filter('range', function() {
     
     return function(input, total, start) {    

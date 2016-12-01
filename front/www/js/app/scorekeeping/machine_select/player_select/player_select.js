@@ -36,6 +36,12 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                     $scope.player_img_id=$scope.selected_players[0].player_id;
                 }                
             };
+            $scope.keyDown = function(event){
+                if(event.keyCode == 9 || event.keyCode==13){
+                    $state.go('.process',{process_step:{process:true},player_info:$scope.selected_players[0],from_queue:0});
+                }                
+            };
+            
             $scope.poop_2 = true;
             $scope.testChange = function(){
                 $scope.poop_2 = false;

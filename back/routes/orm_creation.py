@@ -3,6 +3,7 @@ from routes.utils import check_roles_exist,fetch_entity
 from enum import Enum
 import stripe
 import os
+import random
 
 class RolesEnum(Enum):
     admin = 1
@@ -139,6 +140,10 @@ def create_player(app,player_data):
     if 'pic_file' in player_data:
         os.system('mv %s/%s /var/www/html/pics/player_%s.jpg' % (app.config['UPLOAD_FOLDER'],player_data['pic_file'],new_player.player_id))        
     db.session.commit()
+    if app.td_config['DB_TYPE']=='sqlite':        
+        new_player.pin= random.randrange(1234,9999)
+        db.session.commit()
+        pass
     return new_player
 
 def create_meta_division(app,meta_division_data):

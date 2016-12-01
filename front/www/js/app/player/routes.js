@@ -59,7 +59,18 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
           }    
 
+       }).state('app.player.player_info', 
+        { 
+         cache: false,
+ 	 url: '/player_info/player_id/:player_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/player/player_info/player_info.html',
+ 	       controller: 'app.player.player_info'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
 
 
 

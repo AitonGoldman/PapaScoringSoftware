@@ -1,5 +1,6 @@
 angular.module('app.player',['app.player.add_player',
     'app.player.edit_player',
+    'app.player.player_info',
     /*REPLACEMECHILD*/]);
 angular.module('app.player').controller(
     'app.player',[

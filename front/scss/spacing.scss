@@ -3,6 +3,7 @@
         @media screen and (max-width: 610px){
             @media screen and (max-device-height: 750px){
                 //  margin-top:$font-size-small * .1;
+                margin-top:$font-size-small - 1;
             }
             @media screen and (min-device-height: 751px){
                 margin-top:$font-size-med - 1;

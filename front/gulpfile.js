@@ -20,6 +20,7 @@ var paths = {
 if(argv.help){
     console.log('--test_instance_ip <ip> (for e2e target)');
     console.log('--single_protractor_spec <path_to_spec_file> (for e2e target)');
+    console.log('--test_stripe_sku <stripe_sku> (for tests that need stripe sku)');
     return;
 }
 gulp.task('default', ['sass']);
@@ -36,7 +37,10 @@ gulp.task('e2e', function(done) {
         specs_to_run = single_spec;
     }
     var args = ['--params.test_instance_ip',argv.test_instance_ip];
-    
+    if(argv.test_stripe_sku){
+        args.push('--params.test_stripe_sku');
+        args.push(argv.test_stripe_sku);
+    }    
     gulp.src([specs_to_run])
         .pipe(protractor({
             configFile: "tests/config.js",

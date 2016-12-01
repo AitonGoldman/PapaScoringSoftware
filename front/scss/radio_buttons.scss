@@ -1,0 +1,14 @@
+.platform-android,.platform-ios,.platform-browser {
+    .horiz-radio-container {
+        padding:0;
+        div.radio-label {
+            padding-top: ($font-size-med/4)+2;
+            padding-right:$font-size-med;
+            margin-right:auto;
+            padding-left:($font-size-med/4)+5;
+        }
+    }
+}
+//style='padding-top:32px;margin-right:25%;font-size:34px'
+
+

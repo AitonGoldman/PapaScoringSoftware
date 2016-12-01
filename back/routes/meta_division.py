@@ -6,6 +6,7 @@ from util import db_util
 from util.permissions import Admin_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
+from orm_creation import create_meta_division
 
 @admin_manage_blueprint.route('/meta_division/<meta_division_id>',methods=['GET'])
 def route_get_meta_division(meta_division_id):
@@ -30,16 +31,17 @@ def route_add_meta_division():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)                    
     # FIXME : need to load machines as part of init
-    new_meta_division = tables.MetaDivision(
-    )
-    if 'meta_division_name' in meta_division_data:
-        new_meta_division.meta_division_name=meta_division_data['meta_division_name']
-    if 'divisions' in meta_division_data:
-        for division in meta_division_data['divisions']:
-            division_table = fetch_entity(tables.Division,int(division))
-            new_meta_division.divisions.append(division_table)        
-    tables.db_handle.session.add(new_meta_division)
-    tables.db_handle.session.commit()
+    # new_meta_division = tables.MetaDivision(
+    # )
+    # if 'meta_division_name' in meta_division_data:
+    #     new_meta_division.meta_division_name=meta_division_data['meta_division_name']
+    # if 'divisions' in meta_division_data:
+    #     for division in meta_division_data['divisions']:
+    #         division_table = fetch_entity(tables.Division,int(division))
+    #         new_meta_division.divisions.append(division_table)        
+    # tables.db_handle.session.add(new_meta_division)
+    # tables.db_handle.session.commit()
+    new_meta_division = create_meta_division(current_app,meta_division_data)
     return jsonify({'data':new_meta_division.to_dict_simple()})
 
 @admin_manage_blueprint.route('/meta_division/<meta_division_id>',methods=['PUT'])

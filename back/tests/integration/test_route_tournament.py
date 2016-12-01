@@ -3,46 +3,31 @@ import os
 from mock import MagicMock
 import td_integration_test_base
 import json
+from routes import orm_creation
 
 class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def setUp(self):
         super(RouteTournamentTD,self).setUp()
         response,results = self.dispatch_request('/%s/util/healthcheck' % self.poop_db_name)                
         self.flask_app = self.app.instances[self.poop_db_name]
-        self.admin_role = self.flask_app.tables.Role(name='admin')
-        self.flask_app.tables.db_handle.session.add(self.admin_role)
-        self.flask_app.tables.db_handle.session.commit()
-
-        self.desk_role = self.flask_app.tables.Role(name='desk')
-        self.flask_app.tables.db_handle.session.add(self.desk_role)
-        self.flask_app.tables.db_handle.session.commit()
-        
-        self.admin_role_id = self.admin_role.role_id
-        
-        self.admin_user = self.flask_app.tables.User(username='test_admin')
-        self.admin_user.crypt_password('test_admin_password')
-        self.admin_user.roles.append(self.admin_role)
-        self.flask_app.tables.db_handle.session.add(self.admin_user)
-        self.flask_app.tables.db_handle.session.commit()
-
-        self.desk_user = self.flask_app.tables.User(username='test_desk')
-        self.desk_user.crypt_password('test_desk')
-        self.desk_user.roles.append(self.desk_role)
-        self.flask_app.tables.db_handle.session.add(self.desk_user)
-        self.flask_app.tables.db_handle.session.commit()
-        
-
-    def test_tournament_create_no_teams_single(self):        
+        self.admin_user,self.scorekeeper_user,self.desk_user = orm_creation.create_stanard_roles_and_users(self.flask_app)
+        self.admin_user_password='test_admin'
+        self.desk_user_password='test_desk'        
+    #FIXME : need a "get division that was created with single division tournament create" test
+    def test_tournament_create_no_teams_single_no_stripe(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
             
             rv = c.post('/tournament',
                        data=json.dumps({'tournament_name':'test_tournament',                                        
                                         'single_division':True,
                                         'scoring_type':'HERB',
-                                        'finals_num_qualifiers':24
-                                        ,}))
+                                        'finals_num_qualifiers':24,
+                                        'team_tournament':False,
+                                        'use_stripe':False,
+                                        'local_price':'5',
+                                        'active':False}))
             
             self.assertEquals(rv.status_code,
                               200,
@@ -60,10 +45,45 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(retrieved_division.scoring_type,"HERB")
             self.assertEquals(retrieved_division.team_tournament,False)            
 
+    @unittest.skipIf(os.getenv('TEST_STRIPE_SKU',None) is None or os.getenv('STRIPE_API_KEY',None) is None,
+                     "SKIPPING BECAUSE NO TEST_STRIPE_SKU SET")
+    def test_tournament_create_no_teams_single_with_stripe(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
+            
+            rv = c.post('/tournament',
+                       data=json.dumps({'tournament_name':'test_tournament',                                        
+                                        'single_division':True,
+                                        'scoring_type':'HERB',
+                                        'finals_num_qualifiers':24,
+                                        'team_tournament':False,
+                                        'use_stripe':True,
+                                        'stripe_sku':os.getenv('TEST_STRIPE_SKU',None),
+                                        'active':False}))
+            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s' % (rv.status_code))
+            new_tourney = json.loads(rv.data)
+            retrieved_tourney = self.flask_app.tables.Tournament.query.filter_by(tournament_id=new_tourney['data']['tournament_id']).first()
+            retrieved_division = retrieved_tourney.divisions[0] if len(retrieved_tourney.divisions)==1 else None
+            self.assertIsNotNone(retrieved_tourney,
+                                 "Could not find the tournament we just created")
+            self.assertIsNotNone(retrieved_division,
+                                 "Could not find the division we just created")
+            self.assertEquals(retrieved_division.division_name,'test_tournament_single')
+            self.assertEquals(new_tourney['data']['tournament_name'],'test_tournament')            
+            self.assertEquals(new_tourney['data']['single_division'],True)
+            self.assertEquals(retrieved_division.scoring_type,"HERB")
+            self.assertEquals(retrieved_division.team_tournament,False)
+            self.assertEquals(retrieved_division.local_price,20)            
+            
+            
     def test_tournament_create_multiple_divisions(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
             rv = c.post('/tournament',
                        data=json.dumps({'tournament_name':'test_tournament',                                        
                                         'single_division':False,
@@ -84,7 +104,7 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_tournament_create_invalid(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
             rv = c.post('/tournament',
                        data=json.dumps({'team_tournament':False,
                                         'single_division':True,
@@ -97,7 +117,7 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_tournament_create_duplicate(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
             
             rv = c.post('/tournament',
                        data=json.dumps({'tournament_name':'test_tournament',                                        
@@ -123,7 +143,7 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_tournament_edit(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
             rv = c.post('/tournament',
                        data=json.dumps({'tournament_name':'test_tournament',                                                                                'scoring_type':'HERB'                                        
                                         ,}))            
@@ -160,8 +180,8 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             active=False,
             team_tournament=False,
             scoring_type="HERB",
-            use_stripe=True,
-            stripe_sku="1234",
+            use_stripe=False,
+            local_price='5',
             finals_num_qualifiers=24
         )
         self.flask_app.tables.db_handle.session.add(new_division)
@@ -184,7 +204,7 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_tournament_create_invalid(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
             rv = c.post('/tournament',
                        data=json.dumps({'team_tournament':False,
                                         'single_division':True,
@@ -211,7 +231,7 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_tournament_edit_no_auth(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
             rv = c.post('/tournament',
                        data=json.dumps({'tournament_name':'test_tournament',                                                                                'scoring_type':'HERB'                                        
                                         ,}))            
@@ -227,7 +247,7 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_tournament_add_wrong_auth(self):        
         with self.flask_app.test_client() as c:                                
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':'test_desk','password':'test_desk'}))         
+                   data=json.dumps({'username':self.desk_user.username,'password':self.desk_user_password}))         
             rv = c.post('/tournament',
                        data=json.dumps({'tournament_name':'test_tournament',                                        
                                         'single_division':True,
@@ -241,7 +261,7 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_tournament_edit_wrong_auth(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))            
+                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
             rv = c.post('/tournament',
                        data=json.dumps({'tournament_name':'test_tournament',                                                                                'scoring_type':'HERB'                                        
                                         ,}))            

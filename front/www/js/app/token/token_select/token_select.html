@@ -1,0 +1,54 @@
+<ion-view view-title="Purchase Tickets">
+  <ion-content>
+    <div class='avatar-label'>
+      <table style='width:100%;font-size:20px'>
+        <tr>
+          <td style='width:33%;vertical-align:middle'><div align='right' style='margin-top:auto;margin-bottom:auto'>{{resources.player_tokens.data.player.first_name}} {{resources.player_tokens.data.player.last_name}}</div></td>
+          <td style='width:33%;'><center><img class='avatar-user-pic-relative' src="http://98.111.232.93/pics/player_{{player_id}}.jpg"></center></td>
+          <td style='width:33%;vertical-align:middle'>
+
+            <div ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.divisions' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}</div>
+            <div ng-repeat='(metadivision_id,token_count) in resources.player_tokens.data.tokens.metadivisions' align='left' >{{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : {{token_count}}</div>
+            <div ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.teams' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="skinny-list list" style='margin-left:0;margin-right:0'>
+      <ion-checkbox id="token_select_comped_checkbox" class='item' ng-model='sliders.comped' >Comped</ion-checkbox>
+      <span ng-repeat='type in ["divisions","metadivisions","teams"]'>
+        <div ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens[type]' class="item" style='font-size:24px;padding-top:0px;'>
+          <div ng-if="type != 'metadivisions'" style='background-color:lightblue;padding-top:10px;padding-bottom:10px'>{{resources.divisions.data[division_id].tournament_name}}</div>
+          <div ng-if="type == 'metadivisions'" style='background-color:lightblue;padding-top:10px;padding-bottom:10px'>{{resources.divisions.data.metadivisions[division_id].meta_division_name}}</div>
+
+          <div class='row' style='z-index:-1;padding-top:7px;padding-bottom:7px;position:relative;top:0px;'>
+            <!-- <div style='text-align:center;font-size:34px' class='col' ng-repeat='number in []|range:resources.player_tokens.data.available_tokens[type][division_id]+1'> -->
+            <!--   <a ng-style='{"background-color":buttons[type][division_id][number]}' style='top:10px;' ng-click='set_token_count(type,division_id,number)' class='badge1'>{{number}}</a> -->
+            <!-- </div> -->
+            <div ng-click='change_token_list(-7)'
+                 ng-if='cur_ticket_start_range > 0'
+              class='col-10'
+              >prev </div>
+            
+            <div class='col' ng-repeat='number in []|range:8:0'>
+              <a ng-if='number+(cur_ticket_start_range) >= 0 && number+(cur_ticket_start_range) <= resources.player_tokens.data.available_tokens[type][division_id]' ng-style='{"background-color":buttons[type][division_id][number]}' style='top:10px;' ng-click='set_token_count(type,division_id,number+cur_ticket_start_range)' class='badge1'>{{number+(cur_ticket_start_range)}}</a>
+            </div>
+            <div ng-click='change_token_list(7)'
+                 ng-if='cur_ticket_start_range + 7 < resources.player_tokens.data.available_tokens[type][division_id]'
+                 class='col-10'
+            >next </div>
+            <div class='col-10'>
+                {{sliders[type][division_id]}}
+            </div>
+          </div>
+        </div>
+      </span>      
+      <button id="token_select_add_tokens" ui-sref='.process({process_step:{process:true}, token_info:sliders})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
+        <i class="icon ion-chevron-right"></i>
+        <span >Purchase Tokens (COST : ${{total_cost}})</span>
+      </button>
+      
+    </div>    
+  </ion-content>
+</ion-view>
+

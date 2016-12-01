@@ -13,19 +13,28 @@
         <span>Last Name : </span>
         <input class="myinput" ng-model='player_info.last_name' type="text" placeholder="Last Name" />
       </label>
+      <label class='item row horiz-radio-container'>
+        <div class='radio-label'>
+          Playing In
+          <i style='margin-left:10px' class="icon ion-chevron-right"></i>
+        </div>
+        <ion-radio  id="add_player_linked_division_{{division.division_name}}" class='item' style='width:12%' ng-model="player_info.linked_division_id" ng-repeat='division in main_divisions' ng-value="division.division_id"> {{division.division_name}} </ion-radio>
 
-      <button ng-if='is_native == true' class="item item-icon-right button button-full button-calm input-list-button button-no-margin" style='text-align:left' ng-click='take_pic_and_upload()'>
+      </label>
+
+      <button ng-if='is_native == true' class="item item-icon-right button button-full button-calm input-list-button button-no-margin" style='text-align:left' ng-click='take_pic_and_upload("player",player_info)'>
         <i class="icon ion-camera"></i>
         <span >Take Picture</span>
         <!--    <img align="bottom" src="" class="avatar-frame-small" style='margin-left:100%'>-->
-        <img ng-if='player_info.has_picture==true' align="bottom" src="http://98.111.232.93/pics/{{player_id}}.jpg?{{random_img}}" class="avatar-frame-small" style='float:right;margin-right:48px'>
+        <img ng-if='player_info.has_picture==true' align="bottom" class="avatar-frame-small" style='float:right;margin-right:48px'>
       </button>
 
-      <div class="item-divider item">
-        Roles
-      </div>
-      <ion-checkbox id="add_user_role_{{role.name}}_checkbox" class='item' ng-repeat='role in resources.roles.data' ng-model='user_info.roles_dict[role.role_id]'>{{role.name}}</ion-checkbox>
-      <button id='add_user_add_button' ui-sref='.process({process_step:{process:true}, user_info:user_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(user_info.username)'>
+      <button id='add_player_get_ifpa_ranking' class="item item-icon-right button button-full button-calm input-list-button button-no-margin" style='text-align:left' ng-click='get_ifpa_ranking()'>
+        <i class="icon ion-search"></i>
+        <span >Lookup Ifpa Ranking <span id="add_player_ifpa_ranking" ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>
+      </button>
+      <button id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='form_not_ready_for_submit()'>
+        
         <i class="icon ion-chevron-right"></i>
         <span >Apply Changes</span>
       </button>

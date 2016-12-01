@@ -6,7 +6,6 @@ def generate_meta_division_class(db_handle):
     class MetaDivision(db_handle.Model):
         meta_division_id = db_handle.Column(db_handle.Integer, primary_key=True)
         meta_division_name = db_handle.Column(db_handle.String(1000))
-        meta_division_id = db_handle.Column(db_handle.Integer, primary_key=True)
         divisions = db_handle.relationship("Division")
         
         def to_dict_simple(self):

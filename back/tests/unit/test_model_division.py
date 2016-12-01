@@ -37,7 +37,8 @@ class ModelDivisionTD(unittest.TestCase):
                               'finals_num_players_per_group':None,
                               'finals_num_games_per_match':None,
                               'tournament_id':1,
-                              'tournament_name':'test_tournament'
+                              'tournament_name':'test_tournament',
+                              'single_division':True
         }
     
             
@@ -49,12 +50,14 @@ class ModelDivisionTD(unittest.TestCase):
     def test_to_dict_tournament_with_single_divisions(self):                
         self.division.tournament.single_division = True                
         simple_dict = self.division.to_dict_simple()
-        self.assertEquals(simple_dict['tournament_name'],'test_tournament')        
+        self.assertEquals(simple_dict['tournament_name'],'test_tournament')
+        self.assertEquals(simple_dict['single_division'], True)
 
     def test_to_dict_tournament_with_multiple_divisions(self):                
         self.division.tournament.single_division = False
         simple_dict = self.division.to_dict_simple()
         self.assertEquals(simple_dict['tournament_name'],'test_tournament, a')
+        self.assertEquals(simple_dict['single_division'], False)
         
         
 

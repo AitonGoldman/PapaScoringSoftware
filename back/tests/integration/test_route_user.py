@@ -94,7 +94,7 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))                        
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user','password':'test_user_password',
-                                        'roles':{'%s' % self.new_role_id:True}}))
+                                        'roles':[str(self.new_role_id)]}))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
@@ -114,7 +114,7 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user',
                                         'password':'test_user_password',
-                                        'roles':{'55':True}}))
+                                        'roles':[str(55)]}))
             self.assertEquals(rv.status_code,
                               400,
                               'Was expecting status code 400, but it was %s' % (rv.status_code))
@@ -152,7 +152,7 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user_changed','password':'test_user_password',
-                                        'roles':[self.admin_role_id]}))
+                                        'roles':[str(self.admin_role_id)]}))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
@@ -178,14 +178,14 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user_changed','password':'test_user_password',
-                                        'roles':{'%s' % self.admin_role_id:True}}))
+                                        'roles':[str(self.admin_role_id)]}))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
             new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()            
             rv = c.put('/user/%s' % new_user.user_id,
                        data=json.dumps({'username':'test_user_changed',
-                                        'roles':{'999':False,'989':True},
+                                        'roles':[str(989)],
                                         'has_picture':True}))
             self.assertEquals(rv.status_code,
                               400,
@@ -197,7 +197,7 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user_changed','password':'test_user_password',
-                                        'roles':{'%s' % self.admin_role_id:True}}))
+                                        'roles':[str(self.admin_role_id)]}))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
@@ -214,7 +214,7 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user_password_changed','password':'test_new_password',
-                                        'roles':{'%s' % self.admin_role_id:True}}))
+                                        'roles':[str(self.admin_role_id)]}))
             new_user = self.flask_app.tables.User.query.filter_by(username='test_user_password_changed').first()            
             rv = c.put('/user/%s' % new_user.user_id,
                        data=json.dumps({'username':'test_user_password_changed',
@@ -243,7 +243,7 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user_changed','password':'test_user_password',
-                                        'roles':[self.admin_role_id]}))
+                                        'roles':[str(self.admin_role_id)]}))
         new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()
         with self.flask_app.test_client() as c:                   
             rv = c.put('/user/%s' % new_user.user_id,
@@ -283,7 +283,7 @@ class RouteUserTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                    data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
             rv = c.post('/user',
                        data=json.dumps({'username':'test_user_changed','password':'test_user_password',
-                                        'roles':[self.admin_role_id]}))
+                                        'roles':[str(self.admin_role_id)]}))
         new_user = self.flask_app.tables.User.query.filter_by(username='test_user_changed').first()
         with self.flask_app.test_client() as c:                   
             rv = c.put('/auth/login',

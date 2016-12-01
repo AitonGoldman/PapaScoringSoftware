@@ -3,75 +3,55 @@ import os
 from mock import MagicMock
 import td_integration_test_base
 import json
+from routes import orm_creation
 
 class RouteMetaDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def setUp(self):
         super(RouteMetaDivisionTD,self).setUp()
         response,results = self.dispatch_request('/%s/util/healthcheck' % self.poop_db_name)                
         self.flask_app = self.app.instances[self.poop_db_name]
-        self.admin_role = self.flask_app.tables.Role(name='admin')
-        self.flask_app.tables.db_handle.session.add(self.admin_role)
-        self.flask_app.tables.db_handle.session.commit()
+        self.admin_user,self.scorekeeper_user,self.desk_user = orm_creation.create_stanard_roles_and_users(self.flask_app)
+        self.admin_user_password='test_admin'
+        self.desk_user_password='test_desk'        
 
-        self.admin_role_id = self.admin_role.role_id
-        
-        self.admin_user = self.flask_app.tables.User(username='test_admin')
-        self.admin_user.crypt_password('test_admin_password')
-        self.admin_user.roles.append(self.admin_role)
-        self.flask_app.tables.db_handle.session.add(self.admin_user)
-        self.flask_app.tables.db_handle.session.commit()
+        self.new_tournament_one = orm_creation.create_tournament(self.flask_app,{
+            'tournament_name':'test_tournament_1',
+            'single_division':True,
+            'finals_num_qualifiers':'24',
+            'scoring_type':"HERB",
+            'team_tournament':False,
+            'local_price':'5',
+            'use_stripe':False
+        })
 
-        self.desk_role = self.flask_app.tables.Role(name='desk')
-        self.flask_app.tables.db_handle.session.add(self.desk_role)
-        self.flask_app.tables.db_handle.session.commit()        
-        self.desk_user = self.flask_app.tables.User(username='test_desk')
-        self.desk_user.crypt_password('test_desk')
-        self.desk_user.roles.append(self.desk_role)
-        self.flask_app.tables.db_handle.session.add(self.desk_user)
-        self.flask_app.tables.db_handle.session.commit()
+        self.new_tournament_two = orm_creation.create_tournament(self.flask_app,{
+            'tournament_name':'test_tournament_2',
+            'single_division':True,
+            'finals_num_qualifiers':'24',
+            'scoring_type':"HERB",
+            'team_tournament':False,
+            'local_price':'5',
+            'use_stripe':False
+        })
 
-        self.tournament_one = self.flask_app.tables.Tournament(            
-            tournament_name='test_tournament_one',
-            single_division=True
-        )
-        self.tournament_two = self.flask_app.tables.Tournament(            
-            tournament_name='test_tournament_two',
-            single_division=True
-        )
-        self.tournament_three = self.flask_app.tables.Tournament(            
-            tournament_name='test_tournament_three',
-            single_division=True
-        )                
-        self.division_one = self.flask_app.tables.Division(
-            division_name='one',            
-            tournament_id=1,
-            division_id=1,
-            tournament=self.tournament_one
-        )
-        self.division_two = self.flask_app.tables.Division(
-            division_name='two',            
-            tournament_id=2,
-            division_id=2,
-            tournament=self.tournament_two
-        )
-        self.division_three = self.flask_app.tables.Division(
-            division_name='three',            
-            tournament_id=3,
-            division_id=3,
-            tournament=self.tournament_three
-        )                
-        self.flask_app.tables.db_handle.session.add(self.tournament_one)
-        self.flask_app.tables.db_handle.session.add(self.tournament_two)
-        self.flask_app.tables.db_handle.session.add(self.tournament_three)
-        self.flask_app.tables.db_handle.session.add(self.division_one)
-        self.flask_app.tables.db_handle.session.add(self.division_two)
-        self.flask_app.tables.db_handle.session.add(self.division_three)
-        self.flask_app.tables.db_handle.session.commit()
+        self.new_tournament_three = orm_creation.create_tournament(self.flask_app,{
+            'tournament_name':'test_tournament_3',
+            'single_division':True,
+            'finals_num_qualifiers':'24',
+            'scoring_type':"HERB",
+            'team_tournament':False,
+            'local_price':'5',
+            'use_stripe':False
+        })
+
+        self.division_one = self.new_tournament_one.divisions[0]
+        self.division_two = self.new_tournament_two.divisions[0]
+        self.division_three = self.new_tournament_three.divisions[0]
 
     def test_add_meta_division(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
             rv = c.post('/meta_division',
                         data=json.dumps({'divisions':['1','2'],'meta_division_name':'test_meta_division'}))        
             self.assertEquals(rv.status_code,
@@ -80,13 +60,14 @@ class RouteMetaDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase
             meta_division = json.loads(rv.data)['data']
             self.assertTrue('meta_division_id' in meta_division)
             meta_division = self.flask_app.tables.MetaDivision.query.filter_by(meta_division_id=meta_division['meta_division_id']).first()
-            self.assertEquals(meta_division.meta_division_name,'test_meta_division')            
+            self.assertIsNotNone(meta_division)
+            self.assertEquals(meta_division.meta_division_name,'test_meta_division')
             self.assertEquals(len(meta_division.divisions),2)
             
     def test_edit_meta_division(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
             rv = c.post('/meta_division',
                         data=json.dumps({'divisions':['1','2'],'meta_division_name':'test_meta_division'}))        
             rv = c.put('/meta_division/1',
@@ -129,7 +110,7 @@ class RouteMetaDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase
     def test_edit_meta_division_badauth(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':'test_admin_password'}))
+                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
             rv = c.post('/meta_division',
                         data=json.dumps({'divisions':['1','2'],'meta_division_name':'test_meta_division'}))        
         with self.flask_app.test_client() as c:                    

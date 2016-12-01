@@ -3,8 +3,9 @@ angular.module('app.tournament.division_list',['app.tournament.division_list.add
     /*REPLACEMECHILD*/]);
 angular.module('app.tournament.division_list').controller(
     'app.tournament.division_list',[
-        '$scope','$state','TimeoutResources','Utils','Modals','$ionicActionSheet',
-        function($scope, $state, TimeoutResources, Utils,Modals,$ionicActionSheet) {
+        '$scope','$state','TimeoutResources','Utils','Modals','ActionSheets',
+        function($scope, $state, TimeoutResources, Utils,Modals,ActionSheets) {
+            $scope.ActionSheets=ActionSheets;
         $scope.site=$state.params.site;
 	$scope.tournament_id=$state.params.tournament_id;
 

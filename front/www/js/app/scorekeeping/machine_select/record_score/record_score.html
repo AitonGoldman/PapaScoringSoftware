@@ -1,0 +1,28 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list" >
+      <!-- REMOVE ME -->
+      <div class='item' style='z-index:199;background-color: rgba(0, 0, 0, 0.0);padding-left:48px;'>
+          {{division_machine_name}}
+      </div>
+      <div class='player-select'>
+        <label class="item-input item" style='z-index:199;background-color: rgba(0, 0, 0, 0.0)'>          
+          <i ng-if='score.score == undefined' class="icon ion-search placeholder-icon"></i>
+          <form ng-submit='test_submit()'>
+            <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange()' type="tel" placeholder="Score" ng-model="score.score">
+          </form>
+        </label>
+      </div>
+    </div>
+    <div style='font-size:38px;margin-left:15%;margin-right:15%;text-align:center'>
+      (#{{player_id}}){{player_name}}
+    </div>
+    <div style='z-index:4' class='machine-info-avatar'>
+      <img class='avatar-frame avatar-user-pic' src="http://98.111.232.93/pics/machine_{{division_machine_id}}.jpg">
+    </div>
+    <button style='font-size:48px' class="button button-full button-assertive icon-right ion-chevron-right" ng-click="choose_void_action()">
+      Void Ticket
+    </button>
+  </ion-content>
+</ion-view>
+

@@ -52,6 +52,7 @@ $checkbox-med-check-width:            1px !default;
 @import "label.scss";
 @import "spacing.scss";
 @import "button.scss";
+@import "radio_buttons.scss";
 
 
 .avatar-frame{border: 2px solid #c7b89e;}
@@ -74,4 +75,183 @@ $checkbox-med-check-width:            1px !default;
     margin-right:20px;
 }
 
+.avatar-user-pic-relative {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            height:104px;
+            width:104px;
+            border-radius:52px;
+        }
+        @media screen and (min-device-height: 751px){
+            height:154px;
+            width:154px;
+            border-radius:96px;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        height:154px;
+        width:154px;
+        border-radius:96px;
+    }
+    @media screen and (min-width: 971px) {
+        height:154px;
+        width:154px;
+        border-radius:96px;
+    }   
+}
 
+a.badge1 {
+    padding-right:15px;
+    padding-left:15px;
+    //    width:70px;
+    //    height:50px;
+    text-align:center;
+    background:green;
+    color:white;
+    border-radius:25px;
+    box-shadow: 4px 6px 8px rgba(0, 0, 0, .5);
+}
+
+.avatar-user-pic {
+    position:absolute;
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            height:104px;
+            width:104px;
+            border-radius:52px;
+        }
+        @media screen and (min-device-height: 751px){
+            height:154px;
+            width:154px;
+            border-radius:96px;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        height:154px;
+        width:154px;
+        border-radius:96px;
+    }
+    @media screen and (min-width: 971px) {
+        height:154px;
+        width:154px;
+        border-radius:96px;
+    }   
+}
+
+.platform-browser {
+.sample-show-hide {   
+  transition: all linear 0.5s;
+  backface-visibility: hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+.sample-show-hide-back.ng-hide {
+  transition: all linear 0.5s;
+  transform: rotateY( 180deg );
+}
+
+.sample-show-hide-front.ng-hide {
+  transition: all linear 0.5s;
+  transform: rotateY( -180deg );
+}
+}
+
+.platform-ios {
+    .sample-show-hide {
+  transition-duration: .1s;
+  //transition: all linear 0.5s;
+  //backface-visibility: hidden;
+  //-webkit-backface-visibility:hidden;
+}
+
+.sample-show-hide-back.ng-hide {
+  transition-duration: .1s;
+    //transition: all linear 0.5s;
+    //transform: rotateY( 180deg );
+}
+
+.sample-show-hide-front.ng-hide {
+  transition-duration: .1s;
+    //transition: all linear 0.5s;
+  //transform: rotateY( -180deg );
+}
+}
+
+.platform-android {
+    .sample-show-hide {
+  //transition-duration: .5s;
+  transition: all linear 0.5s;
+  //backface-visibility: hidden;
+  //-webkit-backface-visibility:hidden;
+}
+
+.sample-show-hide-back.ng-hide {
+  //transition-duration: .5s;
+    transition: all linear 0.5s;
+    //transform: rotateY( 180deg );
+}
+
+.sample-show-hide-front.ng-hide {
+  //transition-duration: .5s;
+  transition: all linear 0.5s;
+  //transform: rotateY( -180deg );
+}
+}
+
+.player-info-avatar {
+    z-index:99;
+    position:absolute;
+    transform-style: preserve-3d;
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            top:0px;
+            left:75%;
+            perspective:400px;
+        }
+        @media screen and (min-device-height: 751px){
+            top:0px;
+            left:75%;
+            perspective:400px;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        top:0px;
+        left:80%;
+        perspective:400px;
+    }
+    @media screen and (min-width: 971px) {
+        top:0px;
+        left:80%;
+        perspective:400px;
+    }
+}
+
+.machine-info-avatar {
+    z-index:99;
+    position:absolute;
+    transform-style: preserve-3d;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity:.5;
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            top:0px;
+            left:60%;
+            perspective:400px;
+        }
+        @media screen and (min-device-height: 751px){
+            top:0px;
+            left:60%;
+            perspective:400px;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        top:0px;
+        left:65%;
+        perspective:400px;
+    }
+    @media screen and (min-width: 971px) {
+        top:0px;
+        left:70%;
+        perspective:400px;
+    }
+}

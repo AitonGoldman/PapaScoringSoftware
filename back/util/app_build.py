@@ -9,6 +9,11 @@ from werkzeug.exceptions import BadRequest
 from flask_principal import Principal
 from flask_cors import CORS
 from flask_login import LoginManager
+from flask import jsonify
+from json import loads, dumps
+from werkzeug.exceptions import default_exceptions, HTTPException
+from traceback import format_exception_only
+from flask_principal import Permission
 
 import routes
 
@@ -31,7 +36,28 @@ def get_generic_app(name):
     )
     return app
 
+def make_json_error(ex):
+    """Turn an exception into a chunk of JSON"""
+    response = jsonify({})
+    response_dict = loads(response.get_data())
+    if hasattr(ex, 'state_go'):
+        response_dict['state_go'] = ex.state_go
+    if isinstance(ex, HTTPException):
+        response.status_code = ex.code
+        if isinstance(ex.description, Permission):
+            response_dict['message'] = "Permission denied"
+        else:
+            response_dict['message'] = str(ex.description)
+    else:
+        response.status_code = 500
+        response_dict['message'] = str(ex)
+    if response.status_code == 500:
+        response_dict['stack'] = str(format_exception_only(type(ex), ex))
+    response.set_data(dumps(response_dict))
+    return response
+
 def get_admin_app(name):
+    #FIXME : this actually gets ALL config values, not just db values
     db_config = td_config.get_db_config()
     #secret_config,public_config = td_config.get_configs()    
     db_info = DbInfo(db_config)    
@@ -46,6 +72,8 @@ def get_admin_app(name):
     LoginManager().init_app(app)
     auth.generate_user_loader(app)
     auth.generate_identity_loaded(app)
+    for code in default_exceptions.iterkeys():
+        app.error_handler_spec[None][code] = make_json_error    
     return app
 
 def get_meta_admin_app():        

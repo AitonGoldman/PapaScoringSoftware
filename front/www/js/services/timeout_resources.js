@@ -16,22 +16,25 @@ angular.module('TD_services.timeout_resources')
                   var resource_results = {};
                   var response_interceptor = {
 	              'responseError': function(rejection) {            
-                          //FIXME : need error dialog to display            
-	                  rejection.data={};
-	                  if(rejection.status == -1){                
+                          //FIXME : need error dialog to display
+                          poop = rejection;
+                          console.log(rejection);                          
+	                  //rejection.data={};
+	                  if(rejection.status == -1){
+                              rejection.data = {};
 		              rejection.data.message="Can not perform action requested.  The server is unreachable.";
 		              rejection.data.debug="HTTP Timeout while getting<br>"+rejection.config.url;
 	                  }
                           if(rejection.status == 400){                
-		              rejection.data.message="The server did not accept the request.";
-		              rejection.data.debug="";
+		              //rejection.data.message="The server did not accept the request.";
+		              //rejection.data.debug="";
                           }
                           if(rejection.status == 401){                
-		              rejection.data.message="You are not authroized the do this.";
-		              rejection.data.debug="";
+		              rejection.data.message="You are not authroized to do this.";
+		              //rejection.data.debug="";
                           }
                           if(rejection.status == 409){                
-		              rejection.data.message="The server reports a conflict.";
+		              //rejection.data.message="The server reports a conflict.";
 		              rejection.data.debug="";
                           }
                           if(rejection.status == 500){                
@@ -124,6 +127,9 @@ angular.module('TD_services.timeout_resources')
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
                           if(ip == undefined || ip == ""){
                               ip = "192.168.1.178";
+                              //ip = "9.75.197.73";
+                              //ip="9.75.197.135";
+                              //ip="98.111.232.93";
                           }
                           api_host.set_api_host('http://'+ip+':8000/');
                       }
@@ -142,8 +148,14 @@ angular.module('TD_services.timeout_resources')
                                                                      'GET');                                    
                   var addUserResource = generate_resource_definition(':site/user',
                                                                      'POST');
+                  var addPlayerResource = generate_resource_definition(':site/player',
+                                                                       'POST');
+                  var getPlayersResource = generate_resource_definition(':site/player/:player_id',
+                                                                     'GET');                                    
                   var updateUserResource = generate_resource_definition(':site/user/:user_id',
                                                                         'PUT');
+                  var updatePlayerResource = generate_resource_definition(':site/player/:player_id',
+                                                                        'PUT');                 
                   var updateDivisionResource = generate_resource_definition(':site/division/:division_id',
                                                                      'PUT');                  
                   var addTournamentResource = generate_resource_definition(':site/tournament',
@@ -155,15 +167,34 @@ angular.module('TD_services.timeout_resources')
                   var getTournamentDivisionsResource = generate_resource_definition(':site/tournament/:tournament_id/division',
                                                                                     'GET');
                   var getDivisionResource = generate_resource_definition(':site/division/:division_id',
-                                                                     'GET');                                    
+                                                                         'GET');
+                  var getDivisionsResource = generate_resource_definition(':site/division',
+                                                                     'GET');                                                      
                   var addDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine',
-                                                                           'POST');                  
+                                                                                'POST');
+                  var addTokensResource = generate_resource_definition(':site/token/paid_for/1',
+                                                                           'POST');                                    
                   var getDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                                  'GET');
                   var getMachinesResource = generate_resource_definition(':site/machine',
+                                                                         'GET');
+                  var getPlayerTokensResource = generate_resource_definition(':site/token/player_id/:player_id',
+                                                                         'GET');
+                  
+                  var getIfpaRankingResource = generate_resource_definition(':site/ifpa/:player_name',
                                                                            'GET');                                    
+                  
                   var deleteDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id',
-                                                                           'DELETE');                  
+                                                                                   'DELETE');
+                  var getQueuesResource = generate_resource_definition(':site/queue/division/:division_id',
+                                                                           'GET');                                    
+                  var bumpQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id/bump',
+                                                                       'PUT');
+                  var addPlayerToMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id/player/:player_id','PUT');
+                  var addPlayerToMachineFromQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id','PUT');                  
+                  var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');                                                      
+                  var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');                  
+                  
                   return {
 	              GetAllResources: function(){
 	                  return resource_results;
@@ -177,18 +208,32 @@ angular.module('TD_services.timeout_resources')
                       GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
                       GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
+                      GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
+                      GetPlayer: generate_custom_http_executor(getPlayersResource,'player','get'),                                            
                       AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
+                      AddTokens: generate_custom_http_executor(addTokensResource,'added_tokens','post'),
+                      AddPlayer: generate_custom_http_executor(addPlayerResource,'added_player','post'),
                       UpdateUser: generate_custom_http_executor(updateUserResource,'updated_user','post'),
+                      UpdatePlayer: generate_custom_http_executor(updatePlayerResource,'updated_player','post'),
                       AddTournament: generate_custom_http_executor(addTournamentResource,'added_tournament','post'),
                       AddDivision: generate_custom_http_executor(addDivisionResource,'added_division','post'),
                       GetTournaments: generate_custom_http_executor(getTournamentResource,'tournaments','get'),
                       GetDivision: generate_custom_http_executor(getDivisionResource,'division','get'),
+                      GetDivisions: generate_custom_http_executor(getDivisionsResource,'divisions','get'),                      
                       GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),
                       AddDivisionMachine: generate_custom_http_executor(addDivisionMachineResource,'added_division_machine','post'),
+                      AddPlayerToMachineFromQueue: generate_custom_http_executor(addPlayerToMachineFromQueueResource,'machine_added_to','post'),
                       DeleteDivisionMachine: generate_custom_http_executor(deleteDivisionMachineResource,'deleted_division_machine','get'),
                       GetDivisionMachines: generate_custom_http_executor(getDivisionMachinesResource,'division_machines','get'),
                       UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post'),
-                      GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get')            
+                      GetIfpaRanking: generate_custom_http_executor(getIfpaRankingResource,'ifpa_rankings','get'),                      
+                      GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get'),
+                      GetPlayerTokens: generate_custom_http_executor(getPlayerTokensResource,'player_tokens','get'),
+                      GetQueues: generate_custom_http_executor(getQueuesResource,'queues','get'),
+                      BumpQueue: generate_custom_http_executor(bumpQueueResource,'queues','put'),
+                      AddPlayerToMachine: generate_custom_http_executor(addPlayerToMachineResource,'machine_added_to','put'),
+                      VoidScore: generate_custom_http_executor(voidScoreResource,'voided_score','put'),
+                      AddScore: generate_custom_http_executor(addScoreResource,'added_score','put')
                   };
               }]);
 

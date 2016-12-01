@@ -36,5 +36,14 @@ class ModelImportedTablesTD(unittest.TestCase):
 
         self.assertTrue(hasattr(self.tables,'MetaDivision'))
         self.assertTrue(self.tables.MetaDivision.__name__ == 'MetaDivision')
-        
+
+        self.assertTrue(hasattr(self.tables,'Player'))
+        self.assertTrue(self.tables.Player.__name__ == 'Player')
+
+        self.assertTrue(hasattr(self.tables,'Team'))
+        self.assertTrue(self.tables.Team.__name__ == 'Team')
+
+        self.assertTrue(hasattr(self.tables,'Token'))
+        self.assertTrue(self.tables.Token.__name__ == 'Token')
+
         

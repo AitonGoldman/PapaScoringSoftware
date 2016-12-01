@@ -9,9 +9,9 @@ def generate_player_role_mapping(db_handle):
     return Role_Player_mapping
 
 
-def generate_player_class(db_handle):    
+def generate_player_class(db_handle,Team_Player_mapping):    
     Role_Player_mapping = generate_player_role_mapping(db_handle)
-
+    #Team_Player_mapping = generate_player_team_mapping(db_handle)
     class Player(db_handle.Model):
         player_id = db_handle.Column(db_handle.Integer,primary_key=True)
         asshole_count = db_handle.Column(db_handle.Integer)
@@ -30,7 +30,11 @@ def generate_player_class(db_handle):
            'Role',
            secondary=Role_Player_mapping
         )
-
+        teams = db_handle.relationship(
+            'Team',
+            secondary=Team_Player_mapping,
+            lazy='joined'
+        )
         division_machine = db_handle.relationship('DivisionMachine', uselist=False)
         linked_division = db_handle.relationship('Division', uselist=False)
 
@@ -62,9 +66,12 @@ def generate_player_class(db_handle):
             if self.roles:
                 player_dict['roles']={role.role_id:role.to_dict_simple() for role in self.roles}
             if self.linked_division_id:
-                player_dict['linked_division']=self.linked_division.to_dict_simple()
+                #player_dict['linked_division']=self.linked_division.to_dict_simple()
+                player_dict['linked_division_name']=self.linked_division.get_tournament_name(self.linked_division.tournament)
             if self.division_machine:                
-                player_dict['division_machine']={'division_machine_id':self.division_machine.division_machine_id,'division_machine_name':self.division_machine.machine.machine_name}                
+                player_dict['division_machine']={'division_machine_id':self.division_machine.division_machine_id,'division_machine_name':self.division_machine.machine.machine_name}
+            if self.teams:
+                player_dict['teams']=[team.to_dict_simple() for team in self.teams]
             return player_dict
             
     return Player

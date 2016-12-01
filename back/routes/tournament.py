@@ -6,6 +6,7 @@ from util import db_util
 from util.permissions import Admin_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
+from orm_creation import create_tournament,create_division
 
 @admin_manage_blueprint.route('/tournament',methods=['GET'])
 def route_get_all_tournaments():
@@ -27,41 +28,7 @@ def route_add_tournament():
     tables = db_util.app_db_tables(current_app)            
     if tables.Tournament.query.filter_by(tournament_name=tournament_data['tournament_name']).first():                
         raise Conflict('You are trying to create a duplicate tournament')
-    new_tournament = tables.Tournament(
-        tournament_name=tournament_data['tournament_name']                        
-    )    
-    if 'single_division' in tournament_data and tournament_data['single_division']:        
-        if 'finals_num_qualifiers' not in tournament_data or tournament_data['finals_num_qualifiers'] == "":
-            print "no qualifiers"
-            raise BadRequest('finals_num_qualifiers not found in post data')            
-        new_tournament.single_division=True
-        new_division = tables.Division(            
-            division_name = new_tournament.tournament_name+"_single",
-            finals_num_qualifiers = tournament_data['finals_num_qualifiers']
-        )
-        
-        if tournament_data['scoring_type'] == "HERB":
-            new_division.number_of_scores_per_entry=1
-        if 'use_stripe' in tournament_data and tournament_data['use_stripe']:
-            new_division.use_stripe = True
-            new_division.stripe_sku=tournament_data['stripe_sku']
-        if 'local_price' in tournament_data and tournament_data['use_stripe'] == False: 
-            new_division.local_price=tournament_data['local_price']
-        if 'team_tournament' in tournament_data and tournament_data['team_tournament']:    
-            new_division.team_tournament = True
-        else:
-            new_division.team_tournament = False    
-        new_division.scoring_type=tournament_data['scoring_type']
-            
-        db.session.add(new_division)
-        new_tournament.divisions.append(new_division)
-        #db.session.add(new_tournament)
-        #db.sesssion.commit()
-        # FILL IN DIVISION CREATION CODE HERE
-    else:
-        new_tournament.single_division=False    
-    db.session.add(new_tournament)
-    db.session.commit()
+    new_tournament = create_tournament(current_app,tournament_data)
     return jsonify({'data': new_tournament.to_dict_simple()})
 
 @admin_manage_blueprint.route('/tournament/<tournament_id>/division',methods=['GET'])

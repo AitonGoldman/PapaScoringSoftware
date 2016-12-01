@@ -30,13 +30,30 @@
             }
             @media screen and (min-width: 971px){
                 padding-top:$bar-height-large*.2 - $font-size-large*.25;
-            }        
-            
-
+            }                    
         }
     }
 }
 
+.platform-ios {
+    div.title {
+        @media screen and (max-width: 610px) {            
+            @media screen and (max-device-height: 750px){                
+                //background-color:blue;
+                font-size: $bar-title-font-size-small;
+                //height:100%;
+                //height: $bar-title-font-size-small*3;
+                //padding-top:$bar-height-small*.2 - $font-size-small*.25;                
+                margin-top:$bar-height-small*.2 - $font-size-small*.25;
+                //$bar-height-med/4;      
+                //                    margin-top:auto;
+                //margin-bottom:auto;
+                //dline-height:$bar-title-font-size-small+($bar-title-font-size-small/1.5);
+                //padding-bottom:10px;
+            }
+        }
+    }
+}
 .platform-android,.platform-browser,.platform-ios { 
     ion-header-bar.bar-header {
         @media screen and (max-width: 610px) {
@@ -81,10 +98,10 @@
         div.title {
             @media screen and (max-width: 610px) {            
                 @media screen and (max-device-height: 750px){
-                    font-size: $bar-title-font-size-small;
+                    //font-size: $bar-title-font-size-small;
                     //height:100%;
-                    height: $bar-title-font-size-small*3;
-                    margin-top:$bar-height-med/4;      
+                    //height: $bar-title-font-size-small*3;
+                    //margin-top:$bar-height-med/4;      
                     //                    margin-top:auto;
                     //margin-bottom:auto;
                     //dline-height:$bar-title-font-size-small+($bar-title-font-size-small/1.5);

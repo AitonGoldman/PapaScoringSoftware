@@ -36,6 +36,7 @@ class ModelPlayerTD(unittest.TestCase):
             active=True,
             pin=1234,
             asshole_count=1)
+        self.player_with_roles.linked_division_id=1
         self.player_with_roles.linked_division=self.division_one
         self.player_with_roles.division_machine=self.division_machine
         self.role = self.tables.Role()
@@ -57,5 +58,5 @@ class ModelPlayerTD(unittest.TestCase):
             self.assertTrue(key in simple_dict_with_roles,"oops - did not find %s" % key)        
         self.assertTrue('roles' in simple_dict_with_roles)
         self.assertEquals(len(simple_dict_with_roles['roles']),1)
-        self.assertEquals(simple_dict_with_roles['linked_division']['division_id'],1)
+        self.assertEquals(simple_dict_with_roles['linked_division_name'],'test_tournament_one')
         self.assertEquals(simple_dict_with_roles['division_machine']['division_machine_id'],1)

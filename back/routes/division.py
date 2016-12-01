@@ -5,7 +5,18 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time
+from orm_creation import create_division, create_division_machine
+
+
+@admin_manage_blueprint.route('/division',methods=['GET'])
+def route_get_divisions():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)            
+    divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
+    #FIXME : this is a hack, and should be fixed
+    divisions['metadivisions'] = {metadivision.meta_division_id:metadivision.to_dict_simple() for metadivision in tables.MetaDivision.query.all()}
+    return jsonify({'data': divisions})
 
 @admin_manage_blueprint.route('/division/<division_id>',methods=['GET'])
 def route_get_division(division_id):
@@ -41,13 +52,7 @@ def route_add_division_machine(division_id):
         
     else:        
         BadRequest('no machine_id specified')
-    new_division_machine = tables.DivisionMachine(
-        machine_id=machine.machine_id,
-        division_id=division.division_id,
-        removed=False
-    )    
-    tables.db_handle.session.add(new_division_machine)
-    tables.db_handle.session.commit()
+    new_division_machine = create_division_machine(current_app,machine,division)
     return jsonify({'data':new_division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>',methods=['DELETE'])
@@ -70,10 +75,31 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     tables = db_util.app_db_tables(current_app)                            
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)        
     player = fetch_entity(tables.Player,player_id)
-    if division_machine.player_id:
-        raise Conflict('Player is already playing on this machine')
+    if division_machine.player_id or division_machine.team_id:
+        raise Conflict('Machine is already being played')
+    if check_player_team_can_start_game(current_app,division_machine,player) is False:
+        raise BadRequest('Player can not start game - either no tickets or already on another machine')
+    set_token_start_time(current_app,player,division_machine)    
     division_machine.player_id=player.player_id
     tables.db_handle.session.commit()
+    return jsonify({'data':division_machine.to_dict_simple()})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/undo',
+                              methods=['PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_undo_division_machine_player_team(division_id,division_machine_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
+    if division_machine.division.team_tournament is False and division_machine.player_id is None:
+        raise Conflict('Machine is not being played')
+    if division_machine.division.team_tournament and division_machine.team_id is None:
+        raise Conflict('Machine is not being played')    
+    token = tables.Token.query.filter_by(player_id=division_machine.player_id,division_machine_id=division_machine_id,used=False).first()
+    token.division_machine_id=None
+    division_machine.player_id=None
+    db.session.commit()    
     return jsonify({'data':division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<int:division_machine_id>/player',
@@ -106,26 +132,7 @@ def route_add_division():
     if tables.Division.query.filter_by(division_name=division_data['division_name'],tournament_id=division_data['tournament_id']).first():
         raise Conflict('You are trying to create a duplicate tournament')
     
-    new_division = tables.Division(            
-        division_name = division_data["division_name"],
-        finals_num_qualifiers = division_data['finals_num_qualifiers'],
-        tournament_id=division_data["tournament_id"]
-    )        
-    if division_data['scoring_type'] == "HERB":
-        new_division.number_of_scores_per_entry=1
-    if 'use_stripe' in division_data and division_data['use_stripe']:
-        new_division.use_stripe = True
-        new_division.stripe_sku=division_data['stripe_sku']
-    if 'local_price' in division_data and division_data['use_stripe'] == False: 
-        new_division.local_price=division_data['local_price']
-    if 'team_tournament' in division_data and division_data['team_tournament']:    
-        new_division.team_tournament = True
-    else:
-        new_division.team_tournament = False    
-    new_division.scoring_type=division_data['scoring_type']            
-    db.session.add(new_division)
-    db.session.commit()
-
+    new_division = create_division(current_app,division_data)
     return jsonify({'data':new_division.to_dict_simple()})
 
 
@@ -171,3 +178,32 @@ def route_edit_division(division_id):
     db.session.commit()
     return jsonify({'data':division.to_dict_simple()})
             
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/team/<team_id>',
+                              methods=['PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_add_division_machine_team(division_id,division_machine_id,team_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)        
+    team = fetch_entity(tables.Team,team_id)
+    if division_machine.team_id or division_machine.player_id:
+        raise Conflict('The machine is already being played')
+    division_machine.team_id=team.team_id
+    tables.db_handle.session.commit()
+    return jsonify({'data':division_machine.to_dict_simple()})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<int:division_machine_id>/team',
+                              methods=['DELETE'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_remove_division_machine_team(division_id,division_machine_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                            
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)            
+    if division_machine.team_id is None:
+        raise BadRequest('No team playing on this machine')
+    division_machine.team_id=None
+    tables.db_handle.session.commit()
+    return jsonify({'data':division_machine.to_dict_simple()})
+

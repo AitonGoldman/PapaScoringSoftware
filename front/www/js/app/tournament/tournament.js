@@ -4,10 +4,11 @@ angular.module('app.tournament',['app.tournament.add_tournament',
     /*REPLACEMECHILD*/]);
 angular.module('app.tournament').controller(
     'app.tournament',[
-        '$scope','$state','TimeoutResources','Utils','Modals','$ionicActionSheet', '$timeout',
-        function($scope, $state, TimeoutResources, Utils,Modals,$ionicActionSheet, $timeout) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$timeout','ActionSheets',
+        function($scope, $state, TimeoutResources, Utils,Modals, $timeout, ActionSheets) {
             $scope.site=$state.params.site;
             
+            $scope.choose_action = ActionSheets.choose_action;
             
             $scope.utils = Utils;
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                

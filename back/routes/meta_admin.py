@@ -22,6 +22,7 @@ def route_meta_admin_create_db():
     del dummy_app
     return jsonify({'data':input_data['db_name']})    
 
+
 @meta_admin_blueprint.route('/meta_admin/test_db_with_tournaments_and_player_and_team/<use_stripe>',methods=['POST'])
 def route_meta_admin_create_db_and_tournaments_and_player_and_team(use_stripe):    
     dummy_app = Flask('dummy_app')
@@ -38,7 +39,9 @@ def route_meta_admin_create_db_and_tournaments_and_player_and_team(use_stripe):
         orm_creation.init_papa_tournaments_divisions(dummy_app)
     create_stanard_roles_and_users(dummy_app)
     test_player = orm_creation.create_player(dummy_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123','linked_division_id':'1'})
-    test_player_two = orm_creation.create_player(dummy_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123','linked_division_id':'1'})
+    test_player_two = orm_creation.create_player(dummy_app,{'first_name':'aiton','last_name':'goldman2','ifpa_ranking':'123','linked_division_id':'1'})
+    test_player_three = orm_creation.create_player(dummy_app,{'first_name':'aiton','last_name':'goldman3','ifpa_ranking':'123','linked_division_id':'1'})
+    test_player_four = orm_creation.create_player(dummy_app,{'first_name':'aiton','last_name':'goldman4','ifpa_ranking':'123','linked_division_id':'1'})
 
     db_handle.session.commit()    
     orm_creation.create_team(dummy_app,{'team_name':'test_team','players':[str(test_player.player_id)]})

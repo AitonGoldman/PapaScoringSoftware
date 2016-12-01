@@ -4,6 +4,7 @@ import datetime
 def generate_queue_class(db_handle):
     class Queue(db_handle.Model):
         queue_id = db_handle.Column(db_handle.Integer, primary_key=True)
+        bumped = db_handle.Column(db_handle.Boolean, default=False)
         division_machine_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'division_machine.division_machine_id'
         ))

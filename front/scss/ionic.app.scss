@@ -138,20 +138,64 @@ a.badge1 {
     }   
 }
 
+.platform-browser {
 .sample-show-hide {   
-  transition: all linear .5s;
+  transition: all linear 0.5s;
   backface-visibility: hidden;
   -webkit-backface-visibility:hidden;
 }
 
 .sample-show-hide-back.ng-hide {
-  transition: all linear .5s;
+  transition: all linear 0.5s;
   transform: rotateY( 180deg );
 }
 
 .sample-show-hide-front.ng-hide {
-  transition: all linear .5s;
+  transition: all linear 0.5s;
   transform: rotateY( -180deg );
+}
+}
+
+.platform-ios {
+    .sample-show-hide {
+  transition-duration: .1s;
+  //transition: all linear 0.5s;
+  //backface-visibility: hidden;
+  //-webkit-backface-visibility:hidden;
+}
+
+.sample-show-hide-back.ng-hide {
+  transition-duration: .1s;
+    //transition: all linear 0.5s;
+    //transform: rotateY( 180deg );
+}
+
+.sample-show-hide-front.ng-hide {
+  transition-duration: .1s;
+    //transition: all linear 0.5s;
+  //transform: rotateY( -180deg );
+}
+}
+
+.platform-android {
+    .sample-show-hide {
+  //transition-duration: .5s;
+  transition: all linear 0.5s;
+  //backface-visibility: hidden;
+  //-webkit-backface-visibility:hidden;
+}
+
+.sample-show-hide-back.ng-hide {
+  //transition-duration: .5s;
+    transition: all linear 0.5s;
+    //transform: rotateY( 180deg );
+}
+
+.sample-show-hide-front.ng-hide {
+  //transition-duration: .5s;
+  transition: all linear 0.5s;
+  //transform: rotateY( -180deg );
+}
 }
 
 .player-info-avatar {
@@ -178,6 +222,36 @@ a.badge1 {
     @media screen and (min-width: 971px) {
         top:0px;
         left:80%;
+        perspective:400px;
+    }
+}
+
+.machine-info-avatar {
+    z-index:99;
+    position:absolute;
+    transform-style: preserve-3d;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity:.5;
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            top:0px;
+            left:60%;
+            perspective:400px;
+        }
+        @media screen and (min-device-height: 751px){
+            top:0px;
+            left:60%;
+            perspective:400px;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        top:0px;
+        left:65%;
+        perspective:400px;
+    }
+    @media screen and (min-width: 971px) {
+        top:0px;
+        left:70%;
         perspective:400px;
     }
 }

@@ -5,6 +5,8 @@ angular.module('app.token.token_select').controller(
     '$scope','$state','TimeoutResources','Utils','Modals',
     function($scope, $state, TimeoutResources, Utils,Modals) {        
         $scope.site=$state.params.site;
+        $scope.cur_ticket_start_range=0;
+        $scope.cur_range=0;
 	$scope.player_id=$state.params.player_id;
         $scope.sliders={'divisions':{},'metadivisions':{},'teams':{},
                         'divisions_costs':{},'metadivisions_costs':{},'teams_costs':{},
@@ -75,7 +77,7 @@ angular.module('app.token.token_select').controller(
             for(x in $scope.buttons[type][division_id]){
                 $scope.buttons[type][division_id][x]='green';
             }
-            $scope.buttons[type][division_id][number]='red';
+            $scope.buttons[type][division_id][number]='red';           
             $scope.sliders[type][division_id]=number;
             var division_price = $scope.resources.divisions.data[division_id].local_price;
             $scope.sliders[type+"_costs"][division_id]=division_price*number;
@@ -85,6 +87,8 @@ angular.module('app.token.token_select').controller(
         $scope.disable_form_submit = function(){
             return false;
         };
-        
+        $scope.change_token_list = function(amount){            
+            $scope.cur_ticket_start_range=$scope.cur_ticket_start_range+amount;
+        };
     }]
 );

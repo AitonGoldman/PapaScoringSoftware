@@ -48,7 +48,10 @@ def bump_player_down_queue(division_machine_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
-    queue = division_machine.queue    
+    queue = division_machine.queue        
+    allow_bump=True    
+    if queue.bumped:
+        allow_bump=False
     player_id = queue.player_id
     player = fetch_entity(tables.Player,player_id)
     if remove_player_from_queue(current_app,player) is False:
@@ -57,10 +60,13 @@ def bump_player_down_queue(division_machine_id):
     queue = division_machine.queue    
     if queue is None:
         #do not allow bumps if there is no queue to bump down
-        return jsonify({'data':False})            
-    create_queue(current_app,division_machine.division_machine_id,player_id,bumped=True)
-    #return jsonify({'data':moved_up_queue.to_dict_simple()})
-    return jsonify({'data':True})
+        return_queue = get_queue_from_division_machine(division_machine,True)            
+        return jsonify({'data':{division_machine_id:{'queues':return_queue}}})        
+    if allow_bump:
+        create_queue(current_app,division_machine.division_machine_id,player_id,bumped=True)
+    #return jsonify({'data':moved_up_queue.to_dict_simple()})    
+    return_queue = get_queue_from_division_machine(division_machine,True)    
+    return jsonify({'data':{division_machine_id:{'queues':return_queue}}})
 
 
 @admin_manage_blueprint.route('/queue/player/<player_id>',methods=['DELETE'])
@@ -105,6 +111,6 @@ def add_player_to_machine_from_queue(division_machine_id):
     db.session.delete(root_queue)
     db.session.commit()
     return_dict = {'division_machine':division_machine.to_dict_simple()}
-    if division_machine.queue_id:
-        return_dict['next_queue']=division_machine.queue.to_dict_simple()
-    return jsonify({'data': return_dict})
+    #if division_machine.queue_id:
+    #    return_dict['next_queue']=division_machine.queue.to_dict_simple()
+    return jsonify({'data': division_machine.to_dict_simple()})

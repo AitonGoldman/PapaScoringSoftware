@@ -15,6 +15,7 @@ app = angular.module(
     'app.tournament',
     'app.player',
     'app.token',
+    'app.scorekeeping',
     /*REPLACEMECHILD*/
 	]
 );
@@ -92,13 +93,15 @@ app.config(function($httpProvider,$ionicConfigProvider) {
 
 app.filter('range', function() {
     
-  return function(input, total) {    
-    total = parseInt(total);
-
-    for (var i=0; i<total; i++) {
-      input.push(i);
-    }
-
+    return function(input, total, start) {    
+        if(start == undefined){
+            start = 0;
+        }
+        total = parseInt(total);
+        
+        for (var i=start; i<total; i++) {
+            input.push(i);
+        }
     return input;
   };
 });

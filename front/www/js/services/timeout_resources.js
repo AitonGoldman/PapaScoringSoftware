@@ -16,22 +16,25 @@ angular.module('TD_services.timeout_resources')
                   var resource_results = {};
                   var response_interceptor = {
 	              'responseError': function(rejection) {            
-                          //FIXME : need error dialog to display            
-	                  rejection.data={};
-	                  if(rejection.status == -1){                
+                          //FIXME : need error dialog to display
+                          poop = rejection;
+                          console.log(rejection);                          
+	                  //rejection.data={};
+	                  if(rejection.status == -1){
+                              rejection.data = {};
 		              rejection.data.message="Can not perform action requested.  The server is unreachable.";
 		              rejection.data.debug="HTTP Timeout while getting<br>"+rejection.config.url;
 	                  }
                           if(rejection.status == 400){                
-		              rejection.data.message="The server did not accept the request.";
-		              rejection.data.debug="";
+		              //rejection.data.message="The server did not accept the request.";
+		              //rejection.data.debug="";
                           }
                           if(rejection.status == 401){                
-		              rejection.data.message="You are not authroized the do this.";
-		              rejection.data.debug="";
+		              rejection.data.message="You are not authroized to do this.";
+		              //rejection.data.debug="";
                           }
                           if(rejection.status == 409){                
-		              rejection.data.message="The server reports a conflict.";
+		              //rejection.data.message="The server reports a conflict.";
 		              rejection.data.debug="";
                           }
                           if(rejection.status == 500){                
@@ -123,10 +126,10 @@ angular.module('TD_services.timeout_resources')
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
                           if(ip == undefined || ip == ""){
-                              //ip = "192.168.1.178";
+                              ip = "192.168.1.178";
                               //ip = "9.75.197.73";
-                              //ip="10.0.0.40";
-                              ip="98.111.232.93";
+                              //ip="9.75.197.135";
+                              //ip="98.111.232.93";
                           }
                           api_host.set_api_host('http://'+ip+':8000/');
                       }
@@ -182,7 +185,16 @@ angular.module('TD_services.timeout_resources')
                                                                            'GET');                                    
                   
                   var deleteDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id',
-                                                                           'DELETE');                  
+                                                                                   'DELETE');
+                  var getQueuesResource = generate_resource_definition(':site/queue/division/:division_id',
+                                                                           'GET');                                    
+                  var bumpQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id/bump',
+                                                                       'PUT');
+                  var addPlayerToMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id/player/:player_id','PUT');
+                  var addPlayerToMachineFromQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id','PUT');                  
+                  var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');                                                      
+                  var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');                  
+                  
                   return {
 	              GetAllResources: function(){
 	                  return resource_results;
@@ -210,12 +222,18 @@ angular.module('TD_services.timeout_resources')
                       GetDivisions: generate_custom_http_executor(getDivisionsResource,'divisions','get'),                      
                       GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),
                       AddDivisionMachine: generate_custom_http_executor(addDivisionMachineResource,'added_division_machine','post'),
+                      AddPlayerToMachineFromQueue: generate_custom_http_executor(addPlayerToMachineFromQueueResource,'machine_added_to','post'),
                       DeleteDivisionMachine: generate_custom_http_executor(deleteDivisionMachineResource,'deleted_division_machine','get'),
                       GetDivisionMachines: generate_custom_http_executor(getDivisionMachinesResource,'division_machines','get'),
                       UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post'),
                       GetIfpaRanking: generate_custom_http_executor(getIfpaRankingResource,'ifpa_rankings','get'),                      
                       GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get'),
-                      GetPlayerTokens: generate_custom_http_executor(getPlayerTokensResource,'player_tokens','get')            
+                      GetPlayerTokens: generate_custom_http_executor(getPlayerTokensResource,'player_tokens','get'),
+                      GetQueues: generate_custom_http_executor(getQueuesResource,'queues','get'),
+                      BumpQueue: generate_custom_http_executor(bumpQueueResource,'queues','put'),
+                      AddPlayerToMachine: generate_custom_http_executor(addPlayerToMachineResource,'machine_added_to','put'),
+                      VoidScore: generate_custom_http_executor(voidScoreResource,'voided_score','put'),
+                      AddScore: generate_custom_http_executor(addScoreResource,'added_score','put')
                   };
               }]);
 

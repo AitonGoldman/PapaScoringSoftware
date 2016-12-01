@@ -22,8 +22,23 @@
           <div ng-if="type == 'metadivisions'" style='background-color:lightblue;padding-top:10px;padding-bottom:10px'>{{resources.divisions.data.metadivisions[division_id].meta_division_name}}</div>
 
           <div class='row' style='z-index:-1;padding-top:7px;padding-bottom:7px;position:relative;top:0px;'>
-            <div style='text-align:center;font-size:34px' class='col' ng-repeat='number in []|range:resources.player_tokens.data.available_tokens[type][division_id]+1'>
-              <a ng-style='{"background-color":buttons[type][division_id][number]}' style='top:10px;' ng-click='set_token_count(type,division_id,number)' class='badge1'>{{number}}</a>
+            <!-- <div style='text-align:center;font-size:34px' class='col' ng-repeat='number in []|range:resources.player_tokens.data.available_tokens[type][division_id]+1'> -->
+            <!--   <a ng-style='{"background-color":buttons[type][division_id][number]}' style='top:10px;' ng-click='set_token_count(type,division_id,number)' class='badge1'>{{number}}</a> -->
+            <!-- </div> -->
+            <div ng-click='change_token_list(-7)'
+                 ng-if='cur_ticket_start_range > 0'
+              class='col-10'
+              >prev </div>
+            
+            <div class='col' ng-repeat='number in []|range:8:0'>
+              <a ng-if='number+(cur_ticket_start_range) >= 0 && number+(cur_ticket_start_range) <= resources.player_tokens.data.available_tokens[type][division_id]' ng-style='{"background-color":buttons[type][division_id][number]}' style='top:10px;' ng-click='set_token_count(type,division_id,number+cur_ticket_start_range)' class='badge1'>{{number+(cur_ticket_start_range)}}</a>
+            </div>
+            <div ng-click='change_token_list(7)'
+                 ng-if='cur_ticket_start_range + 7 < resources.player_tokens.data.available_tokens[type][division_id]'
+                 class='col-10'
+            >next </div>
+            <div class='col-10'>
+                {{sliders[type][division_id]}}
             </div>
           </div>
         </div>

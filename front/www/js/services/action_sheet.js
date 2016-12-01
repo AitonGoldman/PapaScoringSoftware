@@ -80,6 +80,29 @@ angular.module('TD_services.action_sheets')
                           }
                       });
                   };
+                  var choose_void_action = function(division_machine_id,prefixroute){            
+                      var hideSheet = $ionicActionSheet.show({
+                          buttons: [
+                              { text: 'VOID' },                              
+                          ],                    
+                          titleText: 'DO YOU WANT TO VOID THIS TICKET',
+                          cancelText: 'Cancel',
+                          cancel: function() {
+                              // add cancel code..
+                          },
+                          buttonClicked: function(index) {
+                              if(index == 0){
+                                  if(prefixroute!=undefined){
+                                      void_route = prefixroute+".void";
+                                  } else {
+                                      void_route = '.void';
+                                  }
+                                  $state.go(void_route,{process_step:{process:true}});                                  
+                              }
+                              return true;
+                          }
+                      });
+                  };                  
                   var choose_ifpa_lookup_action = function(ifpa_search_results,result){            
                       result.looked_up = true;
                       buttons = [];
@@ -118,6 +141,7 @@ angular.module('TD_services.action_sheets')
                       choose_action:choose_action,
                       choose_player_action:choose_player_action,
                       choose_ifpa_lookup_action:choose_ifpa_lookup_action,
-                      choose_change_div:choose_change_div
+                      choose_change_div:choose_change_div,
+                      choose_void_action:choose_void_action
                   };
               }]);

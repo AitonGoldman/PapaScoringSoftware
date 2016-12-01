@@ -1,0 +1,16 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list">    
+      <a ng-if="division_machine.removed != true && division_machine.player_id!=undefined" id="scorekeeping_machine_select_{{division_machine.division_machine_id}}_link" ng-repeat='division_machine in resources.division_machines.data' ui-sref='.record_score({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name,player_name:division_machine.player.player_name,player_id:division_machine.player.player_id})' class="item item-icon-right">
+        <span>{{division_machine.division_machine_name}}</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>
+      <a ng-if="division_machine.removed != true && division_machine.player_id==undefined" id="scorekeeping_machine_select_{{division_machine.division_machine_id}}_link" ng-repeat='division_machine in resources.division_machines.data' ui-sref='.player_select({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name,player_name:division_machine.player.player_name,player_id:division_machine.player.player_id})' class="item item-icon-right">
+        <span>{{division_machine.division_machine_name}}</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>          
+      
+    </div>
+  </ion-content>
+</ion-view>
+

@@ -2,6 +2,7 @@ from util import db_util
 from routes.utils import check_roles_exist,fetch_entity
 from enum import Enum
 import stripe
+import os
 
 class RolesEnum(Enum):
     admin = 1
@@ -267,6 +268,7 @@ def create_queue(app,division_machine_id,player_id,bumped=None):
         new_queue.parent_id=queue.queue_id
         if(len(queue.queue_child)>0):
             queue.queue_child[0].parent_id=new_queue.queue_id
+        new_queue.bumped=True
         db.session.commit()        
         return new_queue
     if division_machine.queue_id is None:

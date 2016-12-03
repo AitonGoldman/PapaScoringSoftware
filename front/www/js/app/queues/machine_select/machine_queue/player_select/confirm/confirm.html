@@ -1,0 +1,29 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list">
+      <div class="item-divider item" id='add_user_user_info_title'>
+        Confirm Queue Add
+      </div>
+      <div class='item row padding-vertical' >
+        <div class='col' style='text-align:right'>
+          Machine : 
+        </div>
+        <div class='col'>        
+          {{division_machine_name}}
+        </div>
+      </div>
+      <div class='item row  padding-vertical'>
+        <div class='col' style='text-align:right'>
+           Player : 
+        </div>
+        <div class='col'>
+        (#{{player_id}}) {{player_name}}
+        </div>
+      </div>
+    </div>
+    <button style='font-size:38px;line-height:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".process({process_step:{process:true}})">
+      Add To Queue
+    </button>    
+  </ion-content>
+</ion-view>
+

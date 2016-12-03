@@ -121,6 +121,7 @@ def create_player(app,player_data):
     tables = db_util.app_db_tables(app)
 
     player_role = tables.Role.query.filter_by(name='player').first()
+    queue_role = tables.Role.query.filter_by(name='queue').first()    
 
     new_player = tables.Player(
         first_name=player_data['first_name'],
@@ -131,6 +132,7 @@ def create_player(app,player_data):
     db.session.add(new_player)
     db.session.commit()                        
     new_player.roles.append(player_role)
+    new_player.roles.append(queue_role)
     if 'ifpa_ranking' in player_data and player_data['ifpa_ranking'] != 0:
         new_player.ifpa_ranking = player_data['ifpa_ranking']
     if 'email_address' in player_data:

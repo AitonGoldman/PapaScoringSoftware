@@ -20,6 +20,8 @@ def get_queues(division_id):
     for division_machine in division_machines:
         queues[division_machine.division_machine_id]={
             'division_machine_name':"%s"%division_machine.machine.machine_name,
+            'division_machine_id':division_machine.division_machine_id,
+            'division_id':division_machine.division_id,
             'queues':get_queue_from_division_machine(division_machine,json_output=True)
         }
     return jsonify({'data':queues})
@@ -80,7 +82,7 @@ def route_remove_player_from_queue(player_id):
     if queue is None:
         raise BadRequest('Player is not in any queues')
     remove_result = remove_player_from_queue(current_app,player)
-    return jsonify({'data':remove_result})
+    return jsonify({'data':to_dict(remove_result)})
 
 
 @admin_manage_blueprint.route('/queue/division_machine/<division_machine_id>',methods=['PUT'])
@@ -97,7 +99,7 @@ def add_player_to_machine_from_queue(division_machine_id):
     root_queue = division_machine.queue
     player = fetch_entity(tables.Player,root_queue.player_id)
     if check_player_team_can_start_game(current_app,division_machine,player=player) is False:
-        raise BadRequest('Player can not start game - either no tickets or already on another machine')
+        raise BadRequest('Player can not start game - either no tickets or already on another machine')    
     set_token_start_time(current_app,player,division_machine)
     # need to check player is allowed to play the game (i.e. tokens available, not playing in other division, etc)
     division_machine.player_id = root_queue.player_id
@@ -109,7 +111,7 @@ def add_player_to_machine_from_queue(division_machine_id):
         root_queue.queue_child[0].parent_id=None        
         db.session.commit()        
     db.session.delete(root_queue)
-    db.session.commit()
+    db.session.commit()    
     return_dict = {'division_machine':division_machine.to_dict_simple()}
     #if division_machine.queue_id:
     #    return_dict['next_queue']=division_machine.queue.to_dict_simple()

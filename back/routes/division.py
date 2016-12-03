@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue
 from orm_creation import create_division, create_division_machine
 
 
@@ -82,6 +82,7 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     set_token_start_time(current_app,player,division_machine)    
     division_machine.player_id=player.player_id
     tables.db_handle.session.commit()
+    remove_player_from_queue(current_app,player)    
     return jsonify({'data':division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/undo',

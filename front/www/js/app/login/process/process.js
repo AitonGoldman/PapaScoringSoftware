@@ -21,7 +21,7 @@ angular.module('app.login.process').controller(
             
             $login_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
-                User.set_logged_in_user($scope.resources.logged_in_user.data);
+                User.set_logged_in_user($scope.resources.logged_in_user.data,"user");
                 Modals.loaded();
             },function(data){
                 //FIXME : need a better way to handle situation where we want

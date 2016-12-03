@@ -119,25 +119,34 @@ angular.module('TD_services.timeout_resources')
                   
                   var set_api_host = function(){                                                             
                       var url_params = $location.search();
+                      // if (type_of_page == "player"){
+                      //     server_port = "8001";
+                      // } else {
+                      //     server_port = "8000";
+                      // }
                       if(url_params.host != undefined){
-                          api_host.set_api_host('http://'+url_params.host+':8000/');
+                          api_host.set_api_host('http://'+url_params.host+':'+server_port+'/');
                       } else {
                           var ip_start = $location.absUrl().indexOf('//')+2;
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
                           if(ip == undefined || ip == ""){
-                              ip = "192.168.1.178";
+                              //ip = "192.168.1.178";
                               //ip = "9.75.197.73";
                               //ip="9.75.197.135";
                               //ip="98.111.232.93";
+                              ip=server_ip_address;                              
                           }
-                          api_host.set_api_host('http://'+ip+':8000/');
+                          api_host.set_api_host('http://'+ip+':'+server_port+'/');
                       }
                   };
 
                   set_api_host();                                    
                   var loginResource = generate_resource_definition(':site/auth/login',
+                                                                   'PUT',{});
+                  var loginPlayerResource = generate_resource_definition(':site/auth/player_login',
                                                                'PUT',{});    
+                  
                   var logoutResource = generate_resource_definition(':site/auth/logout',
                                                                 'GET');                                                             
                   var currentUserResource = generate_resource_definition(':site/auth/current_user',
@@ -195,6 +204,7 @@ angular.module('TD_services.timeout_resources')
                   var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');                                                      
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
                   var addToQueueResource = generate_resource_definition(':site/queue','POST');                                    
+                  var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');                                    
                   
                   return {
 	              GetAllResources: function(){
@@ -204,6 +214,7 @@ angular.module('TD_services.timeout_resources')
                       _GenerateResourceDefinition: generate_resource_definition,        
                       _GenerateCustomHttpExecutor: generate_custom_http_executor,
                       Login: generate_custom_http_executor(loginResource,'logged_in_user','post'),
+                      LoginPlayer: generate_custom_http_executor(loginPlayerResource,'logged_in_player','post'),                      
                       Logout: generate_custom_http_executor(logoutResource,'logout_result','get'),        
                       CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get'),
                       GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
@@ -235,6 +246,8 @@ angular.module('TD_services.timeout_resources')
                       AddPlayerToMachine: generate_custom_http_executor(addPlayerToMachineResource,'machine_added_to','put'),
                       VoidScore: generate_custom_http_executor(voidScoreResource,'voided_score','put'),
                       AddScore: generate_custom_http_executor(addScoreResource,'added_score','put'),
+                      RemovePlayerFromQueue: generate_custom_http_executor(removePlayerFromQueueResource,'modified_queue','delete'),
+                      
                       AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put')
                   };
               }]);

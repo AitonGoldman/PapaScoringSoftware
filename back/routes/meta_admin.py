@@ -10,6 +10,7 @@ from orm_creation import RolesEnum
 import orm_creation
 from orm_creation import create_stanard_roles_and_users
 import os
+import random
 
 #FIXME : needs protection
 #FIXME : need to pull db creation out into seperate function
@@ -22,6 +23,41 @@ def route_meta_admin_create_db():
     del dummy_app
     return jsonify({'data':input_data['db_name']})    
 
+@meta_admin_blueprint.route('/meta_admin/test_scores',methods=['POST'])
+def route_meta_admin_create_test_scores():    
+    dummy_app = Flask('dummy_app')
+    td_config.assign_loaded_configs_to_app(dummy_app)
+    dummy_app.td_config['TEST_STRIPE_SKU']=os.getenv('TEST_STRIPE_SKU',None)
+    db_config = td_config.get_db_config()    
+    db_info = DbInfo(db_config)    
+    db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)    
+    db_handle = dummy_app.tables.db_handle        
+    orm_creation.init_papa_tournaments_divisions(dummy_app)
+    create_stanard_roles_and_users(dummy_app)
+    db_handle.session.commit()        
+    db_util.load_machines_from_json(dummy_app,True)
+    machines = dummy_app.tables.Machine.query.all()[0:50]
+    division_machine_count = 1
+    for division in dummy_app.tables.Division.query.all():        
+        for x in range(division_machine_count,division_machine_count+7):
+            orm_creation.create_division_machine(dummy_app,machines[x],division)
+        division_machine_count=division_machine_count+1
+    for x in range(150):
+        orm_creation.create_player(dummy_app,{'first_name':'aiton','last_name':'goldman%s'% x,'ifpa_ranking':'123','linked_division_id':'1'})
+
+    for division in dummy_app.tables.Division.query.all():                
+        for division_machine in dummy_app.tables.DivisionMachine.query.filter_by(division_id=division.division_id).all():
+            for player_id in range(1,150):
+                for ticket_num in range(5):
+                    orm_creation.create_entry(dummy_app,
+                                              player_id,
+                                              division_machine.division_machine_id,
+                                              division.division_id,
+                                              random.randrange(1,9999))
+        
+    db_handle.engine.dispose()
+    del dummy_app
+    return jsonify({'data':'test'})    
 
 @meta_admin_blueprint.route('/meta_admin/test_db_with_tournaments_and_player_and_team/<use_stripe>',methods=['POST'])
 def route_meta_admin_create_db_and_tournaments_and_player_and_team(use_stripe):    

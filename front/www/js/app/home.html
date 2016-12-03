@@ -24,8 +24,8 @@
         </h1>
       <h1 ng-if="User.logged_in() == true" class="title">{{User.logged_in_user().username}}</h1>
     </ion-header-bar>
-    <ion-content>
-      <ion-list>
+        <ion-content>          
+          <ion-list>
         <a id='home_link' class='item item-icon-right' menu-close ui-sref='app' ng-if="User.logged_in() == true">
           <div>
             Home
@@ -33,12 +33,19 @@
           <i class="icon ion-chevron-right"></i>
         </a>
 
-        <a id='login_link' class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false">
+        <a id='login_link' class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false && type_of_page == 'user'">
           <div>
             Login
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
+        <a id='login_link_player' class='item item-icon-right' menu-close ui-sref='.login_player' ng-if="User.logged_in() == false && type_of_page == 'player'">
+          <div>
+            Login
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        
         <a id='logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
           <div>
             Logout
@@ -60,7 +67,7 @@
         <!--   <i class="icon ion-chevron-right"></i> -->
         <!-- </a> -->
         
-      </ion-list>
+          </ion-list>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>

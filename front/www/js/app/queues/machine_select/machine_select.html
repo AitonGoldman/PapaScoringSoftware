@@ -1,0 +1,11 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list">
+      <a  class="item item-icon-right" ng-repeat='division_machine in resources.queues.data' ui-sref='.machine_queue({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})'>
+        {{division_machine.division_machine_name}}
+        <span style='float:right'>{{division_machine.queues.length}}</span>
+      </a>
+    </div>
+  </ion-content>
+</ion-view>
+

@@ -25,7 +25,8 @@ def create_db_and_tables(app, db_name, db_info, drop_tables=False):
     db_url = generate_db_url(db_name, db_info)
     if not database_exists(db_url):        
         create_database(db_url)
-    db_handle = create_db_handle(db_url,app)        
+    db_handle = create_db_handle(db_url,app)
+    check_if_ranking_funcs_exists(db_handle)
     app.tables = ImportedTables(db_handle)
     create_TD_tables(db_handle, drop_tables=drop_tables)
     db_handle.engine.dispose()
@@ -77,10 +78,10 @@ def app_db_tables(app):
 
 
 def check_if_ranking_funcs_exists(db_handle):
-    result = db_handle.execute("SELECT prosrc FROM pg_proc WHERE proname = 'papa_scoring_func';")
+    result = db_handle.engine.execute("SELECT prosrc FROM pg_proc WHERE proname = 'papa_scoring_func';")
     if not result.fetchone():
-        DB.engine.execute("CREATE FUNCTION papa_scoring_func(rank real) RETURNS real AS $$ BEGIN IF rank = 1 THEN RETURN 100; ELSIF rank = 2 THEN RETURN 90; ELSIF rank = 3 THEN RETURN 85; ELSIF rank < 88 THEN  RETURN 100-rank-12; ELSIF rank >= 88 THEN RETURN 0; END IF; END; $$ LANGUAGE plpgsql;")
-        DB.engine.execute("CREATE FUNCTION papa_scoring_finals_func(rank real) RETURNS real AS $$  BEGIN IF rank = 1 THEN RETURN 3; ELSIF rank = 2 THEN RETURN 2; ELSIF rank = 3 THEN RETURN 1; ELSIF rank = 4 THEN RETURN 0; END IF; END; $$ LANGUAGE plsgsql;")    
+        db_handle.engine.execute("CREATE FUNCTION papa_scoring_func(rank real) RETURNS real AS $$ BEGIN IF rank = 1 THEN RETURN 100; ELSIF rank = 2 THEN RETURN 90; ELSIF rank = 3 THEN RETURN 85; ELSIF rank < 88 THEN  RETURN 100-rank-12; ELSIF rank >= 88 THEN RETURN 0; END IF; END; $$ LANGUAGE plpgsql;")
+        
 
     
         

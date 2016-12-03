@@ -10,9 +10,14 @@
       </div>
     </div>
     <center>
-      <a id="LoginAgainButton" class='button button-large button-positive tablet-friendly-button' ui-sref='app.login({site:site})'>
+      
+      <a ng-if='type_of_page=="user"' id="LoginAgainButton" class='button button-large button-positive tablet-friendly-button' ui-sref='app.login({site:site})'>
         <span>Login Again</span>
       </a>
+      <a ng-if='type_of_page=="player"' id="LoginAgainButton" class='button button-large button-positive tablet-friendly-button' ui-sref='app.login_player({site:site})'>
+        <span>Login Again</span>
+      </a>
+      
     </center>
   </ion-content>
 </ion-view>

@@ -80,6 +80,25 @@ angular.module('TD_services.action_sheets')
                           }
                       });
                   };
+                  var choose_queue_action = function(player_name, player_id, queue_remove_function){            
+                      var hideSheet = $ionicActionSheet.show({
+                          buttons: [
+                              { text: 'Remove '+player_name },                              
+                          ],                    
+                          titleText: 'Remove Player From Queue?',
+                          cancelText: 'Cancel',
+                          cancel: function() {
+                              // add cancel code..
+                          },
+                          buttonClicked: function(index) {
+                              if(index == 0){
+                                  queue_remove_function(player_id);
+                              }
+                              return true;
+                          }
+                      });
+                  };                  
+                  
                   var choose_void_action = function(division_machine_id,prefixroute){            
                       var hideSheet = $ionicActionSheet.show({
                           buttons: [
@@ -142,6 +161,7 @@ angular.module('TD_services.action_sheets')
                       choose_player_action:choose_player_action,
                       choose_ifpa_lookup_action:choose_ifpa_lookup_action,
                       choose_change_div:choose_change_div,
-                      choose_void_action:choose_void_action
+                      choose_void_action:choose_void_action,
+                      choose_queue_action:choose_queue_action
                   };
               }]);

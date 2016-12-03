@@ -88,7 +88,7 @@ def remove_player_from_queue(app,player=None,division_machine=None):
             db.session.commit()                            
     db.session.delete(queue)    
     db.session.commit()    
-    return True
+    return queue
     
 def get_queue_from_division_machine(division_machine,json_output=False):
     if division_machine.queue is None:

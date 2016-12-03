@@ -6,9 +6,9 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
     var logged_in_status = false;
     var type_of_user = undefined;
     var user_site = undefined;
-    var set_logged_in_user_func = function(new_user) {
+    var set_logged_in_user_func = function(new_user,new_user_type) {        
         logged_in_user = new_user;
-        type_of_user = "user";
+        type_of_user = new_user_type;
         logged_in_status=true;
     };
 
@@ -25,12 +25,17 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
             return user_site;
         },        
         check_current_user:function(){
-            console.log('in check current...');
+            
             Modals.loading();            
             $current_user_promise = TimeoutResources.CurrentUser(undefined,{site:user_site});
-            return $current_user_promise.then(function(data){                
+            return $current_user_promise.then(function(data){                                
                 if(data.data!=null){
-                    set_logged_in_user_func(data.data);                
+                    if(data.data.player_id!=undefined){
+                        set_logged_in_user_func(data.data,'player');
+                    } else {
+                        set_logged_in_user_func(data.data,'user');
+                    }
+                    
                 }
                 Modals.loaded();
             },function(data){
@@ -45,13 +50,13 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
             return logged_in_status;  
         },
         logged_in_user: function() {            
-            if(type_of_user == "user"){
+//            if(type_of_user == "user"){
                 return logged_in_user;
-            }
-            if(type_of_user == "player"){
-                return logged_in_player;
-            }
-            return undefined;
+  //          }
+    //        if(type_of_user == "player"){
+    //            return logged_in_player;
+   //         }
+            //return undefined;
         },        
         set_logged_in_user:  set_logged_in_user_func,         
         has_role: function(role) { 

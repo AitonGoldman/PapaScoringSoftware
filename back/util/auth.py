@@ -5,7 +5,7 @@ from flask import current_app
 def generate_user_loader(app):    
     @app.login_manager.user_loader    
     def load_user(userid):
-        if current_app.td_config['PLAYER_LOGIN']:
+        if current_app.td_config['PLAYER_LOGIN'] == "1":
             return app.tables.Player.query.get(int(userid))
         else:
             return app.tables.User.query.get(int(userid))

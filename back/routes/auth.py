@@ -7,13 +7,15 @@ from util import db_util
 from flask_principal import identity_changed, Identity
 
 @admin_login_blueprint.route('/auth/logout',methods=['GET'])
-@login_required
 def route_logout():
-    logout_user()
+    if current_user.is_anonymous() is False:
+        logout_user()
     return jsonify({'data':'all done'})
 
 @admin_login_blueprint.route('/auth/current_user',methods=['GET'])
 def route_get_current_user():
+    if current_user.is_anonymous():
+        return jsonify({'data':None})
     return jsonify({'data':current_user.to_dict_simple()})
 
 @admin_login_blueprint.route('/auth/login',methods=['PUT'])

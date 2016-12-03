@@ -1,0 +1,32 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class='first-element'>
+      &nbsp;
+    </div>
+    <div style='text-align:center'>
+      <b>
+        {{division_machine_name}}
+      </b>
+    </div>
+    <table style='margin-left:auto;margin-right:auto;'>
+      <tr>
+        <th><b>Rank</b></th>
+        <th style='padding-left:50px'><b>Player</b></th>
+        <th style='padding-left:50px'><b>Points</b></th>
+        <th style='padding-left:50px'><b>Score</b></th>
+        
+      </tr>
+      <tr ng-repeat='result in resources.division_machine_results.data'>
+        <td style='padding-top:10px;' >{{result.rank}}</td>
+        <td style='padding-left:50px;padding-top:10px;'>
+          <a ui-sref='.^.^.^.players.player({player_id:result.player_id,player_name:result.player_name})'>
+            {{result.player_name}}
+          </a>
+        </td>
+        <td style='padding-left:50px;padding-top:10px;'>{{result.points}}</td>
+        <td style='padding-left:50px;padding-top:10px;'>{{result.score}}</td>
+      </tr>
+    </table>
+  </ion-content>
+</ion-view>
+

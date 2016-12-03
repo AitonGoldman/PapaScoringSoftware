@@ -37,12 +37,12 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
     player_entry_dict = {}
     sorted_player_list = {}
     ranked_player_list = {}
-    top_6_machines = {}
+    top_6_machines = {}    
     division_machine_results = []    
     for player in players:        
         player_results_dict[player.player_id]={}
     
-    for division in divisions:
+    for division in divisions:        
         if division_id != 0:
             division_machines = tables.DivisionMachine.query.filter_by(division_id=division.division_id).all()
         else:
@@ -52,10 +52,12 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
             return_dict[division.division_id][division_machine.division_machine_id]=[]
         sorted_player_list[division.division_id]=[]
         ranked_player_list[division.division_id]=[]
-        player_entry_dict[division.division_id]=[]
+        #player_entry_dict[division.division_id]=[]
+        division_name = division.get_tournament_name(division.tournament)        
+        player_entry_dict[division.division_id]={'tournament_name':division_name,'entries':[],'sum':0,'rank':0}
         top_6_machines[division.division_id]={}
         for player in players:        
-            player_results_dict[player.player_id][division.division_id]={'points':[],'sum':0}
+            player_results_dict[player.player_id][division.division_id]={'points':[],'sum':0,'player_name':player.first_name+" "+player.last_name}
             top_6_machines[division.division_id][player.player_id]=[]            
 
     for result in results:        
@@ -89,17 +91,18 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                                              'points': get_papa_points_from_rank(division_machine_result['filter_rank'])})                
             ## machine view            
         if division_machine_id_external is None:
-            if len(player_results_dict[player_id][entry_div_id]['points'])<6:
+            if len(player_results_dict[player_id][entry_div_id]['points'])<3:
                 filter_score = get_papa_points_from_rank(result['filter_rank'])
                 player_results_dict[result['player_player_id']][result['entry_division_id']]['points'].append(filter_score)        
                 player_results_dict[result['player_player_id']][result['entry_division_id']]['sum'] = sum(player_results_dict[result['player_player_id']][result['entry_division_id']]['points'])
                 if(result['filter_rank'] < 150):
                     top_6_machines[entry_div_id][player_id].append({'machine_name':result['machine_machine_name'],
+                                                                    'machine_abbreviation':result['machine_abbreviation'],
                                                                     'division_machine_id':result['score_division_machine_id'],
                                                                     'rank':result['filter_rank'],
                                                                     'points':filter_score})
             if player_id_external and int(player_id_external) == player_id:
-                player_entry_dict[entry_div_id].append(
+                player_entry_dict[entry_div_id]['entries'].append(
                     {
                         'machine_name':result['machine_machine_name'],
                         'division_machine_id':result['score_division_machine_id'],                        
@@ -108,17 +111,22 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                         'points': get_papa_points_from_rank(result['filter_rank'])
                     }
                 )
+                player_entry_dict[entry_div_id]['sum']=player_results_dict[result['player_player_id']][result['entry_division_id']]['sum']                
     if division_machine_id_external:
         return jsonify({'data': division_machine_results})
     for player_id,div in player_results_dict.iteritems():
         for div_id, player in div.iteritems():
-            sorted_player_list[div_id].append({'player_id':player_id,'sum':player['sum']})
+            sorted_player_list[div_id].append({'player_id':player_id,'sum':player['sum'],'player_name':player['player_name']})
     for division in divisions:
         sorted_player_list[division.division_id] = sorted(sorted_player_list[division.division_id], key= lambda e: e['sum'],reverse=True)
         ranked_player_list[division.division_id] = list(Ranking(sorted_player_list[division.division_id],key=lambda pp: pp['sum']))
     if player_id_external:
+        for (ranked_division_id,ranked_results) in ranked_player_list.iteritems():
+            for ranked_result in ranked_results:                                
+                if ranked_result[1]['player_id']==int(player_id_external):                    
+                    player_entry_dict[ranked_division_id]['rank']=ranked_result[0]
         return jsonify({'data':player_entry_dict})        
-    return jsonify({'data':{'top_machines':top_6_machines},'ranked_player_list':ranked_player_list})
+    return jsonify({'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}})
 
 
 @admin_manage_blueprint.route('/results/player/<player_id>',methods=['GET'])
@@ -136,6 +144,7 @@ def route_get_division_machine_results(division_machine_id):
 def get_first_query(division_id=None, division_machine_id=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
+    
     if division_id:
         where_string = "entry.division_id=%s" % division_id
     else:
@@ -162,6 +171,7 @@ def get_first_query(division_id=None, division_machine_id=None):
         tables.Player.player_id,        
         tables.Machine.machine_id,
         tables.Machine.machine_name,
+        tables.Machine.abbreviation,
         #tables.Tournament,
         func.rank().over(order_by=desc(tables.Score.score),
                          partition_by=tables.Score.division_machine_id).label('scorerank'),

@@ -1,0 +1,76 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class='first-element'>
+    </div>
+    <center>
+    <div style='padding:10px;'>
+      <b>{{player_name}}</b>
+    </div>
+    <div ng-repeat='(division_id,player_division_results) in resources.player_results.data' style='padding-bottom:10px;'>
+      <div style='background-color:tan'>
+        <a ui-sref='.^.^.divisions.division({division_id:division_id,division_name:player_division_results.tournament_name})'>
+          {{player_division_results.tournament_name}}
+        </a>
+        <br>
+        Rank : {{player_division_results.rank}}        
+      </div>
+      <div style='background-color:brown'>
+        <b>Best 3 Scores</b><br>
+        <table style='margin-left:auto;margin-right:auto;'>
+          <tr>
+            <th><b>Rank</b></th>
+            <th style='padding-left:20px'><b>Machine</b></th>
+            <th style='padding-left:20px'><b>Points</b></th>
+            <th style='padding-left:20px'><b>Score</b></th>            
+          </tr>
+          <tr ng-repeat='machine_score in player_division_results.entries|limitTo:3'>
+            <td style='padding-top:10px;' >{{machine_score.rank}}</td>
+            <td style='padding-left:20px;padding-top:10px;'>
+              <a ui-sref='.^.^.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name})'>
+              {{machine_score.machine_name}}
+              </a>
+            </td>
+            <td style='padding-left:20px;padding-top:10px;'>{{machine_score.points}}</td>
+            <td style='padding-left:20px;padding-top:10px;'>{{machine_score.score}}</td>            
+          </tr>
+          <tr>
+            <td style='padding-top:10px;'>
+            </td>
+            <td style='padding-left:20px;padding-top:10px;'>
+              Total 
+            </td>
+            <td style='padding-left:20px;padding-top:10px;'>
+              {{player_division_results.sum}}
+            </td>
+            <td style='padding-left:20px;padding-top:10px;'>
+            </td>
+          </tr>
+        </table>
+        <div ng-if='player_division_results.entries.length > 3'>
+          <hr>
+          <b>All Scores</b><br>
+        <table style='margin-left:auto;margin-right:auto;'>
+          <tr>
+            <th><b>Rank</b></th>
+            <th style='padding-left:20px'><b>Machine</b></th>
+            <th style='padding-left:20px'><b>Points</b></th>
+            <th style='padding-left:20px'><b>Score</b></th>            
+          </tr>
+          <tr ng-repeat='machine_score in player_division_results.entries' ng-if='$index > 2'>
+            <td style='padding-top:10px;' >{{machine_score.rank}}</td>
+            <td style='padding-left:20px;padding-top:10px;'>
+                          <a ui-sref='.^.^.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name})'>
+                            {{machine_score.machine_name}}
+                          </a>
+            </td>
+            <td style='padding-left:20px;padding-top:10px;'>{{machine_score.points}}</td>
+            <td style='padding-left:20px;padding-top:10px;'>{{machine_score.score}}</td>            
+          </tr>
+        </table>
+        </div>
+      </div>
+    </div>
+    <!-- ui-sref=".player({player_id: ,})" -->    
+  </ion-content>
+</ion-view>
+

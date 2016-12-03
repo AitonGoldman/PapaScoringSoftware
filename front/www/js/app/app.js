@@ -18,6 +18,7 @@ app = angular.module(
         'app.scorekeeping',
         'app.login_player',    
     'app.queues',
+    'app.results',
     /*REPLACEMECHILD*/
 	]
 );

@@ -1,0 +1,40 @@
+<ion-view view-title="">
+  <ion-content>
+    <div class='first-element'>
+      &nbsp;
+    </div>
+    <div style='text-align:center'>
+      <b>
+        {{division_name}}
+      </b>
+    </div>
+    <br>
+    <table style='margin-left:auto;margin-right:auto;'>
+      <tr>
+        <th><b>Rank</b></th>
+        <th style='padding-left:50px'><b>Player</b></th>
+        <th style='padding-left:50px'><b>Points</b></th>
+        <th class='mobile-hide' style='padding-left:50px'><b>Top 3</b></th>
+        
+      </tr>
+      <tr ng-repeat='result in resources.division_results.data.ranked_player_list[division_id]'>
+        <td style='padding-top:10px;' >{{result[0]}}</td>
+        <td style='padding-left:50px;padding-top:10px;'>
+          <a ui-sref='.^.^.players.player({player_id:result[1].player_id,player_name:result[1].player_name})'>
+            {{result[1].player_name}}
+          </a>
+        </td>
+        <td style='padding-left:50px;padding-top:10px;'>{{result[1].sum}}</td>
+        <td style='padding-left:50px;padding-top:10px;' class='mobile-hide'>
+          <span ng-repeat='top_player_machine in resources.division_results.data.top_machines[division_id][result[1].player_id]|limitTo:3'>
+            <span>
+              <a ui-sref='.^.^.division_machines.machines.machine({division_machine_id:top_player_machine.division_machine_id,division_machine_name:top_player_machine.machine_name})'>{{top_player_machine.machine_abbreviation}}({{top_player_machine.rank}})</a>
+            </span>
+            <span ng-if='$last == false'> | </span>             
+          </span>
+        </td>
+      </tr>
+    </table>
+  </ion-content>
+</ion-view>
+

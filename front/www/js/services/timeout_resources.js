@@ -204,7 +204,10 @@ angular.module('TD_services.timeout_resources')
                   var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');                                                      
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
                   var addToQueueResource = generate_resource_definition(':site/queue','POST');                                    
-                  var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');                                    
+                  var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');
+                  var getDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET');
+                  var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET');
+                  var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET');                       
                   
                   return {
 	              GetAllResources: function(){
@@ -231,6 +234,8 @@ angular.module('TD_services.timeout_resources')
                       AddDivision: generate_custom_http_executor(addDivisionResource,'added_division','post'),
                       GetTournaments: generate_custom_http_executor(getTournamentResource,'tournaments','get'),
                       GetDivision: generate_custom_http_executor(getDivisionResource,'division','get'),
+                      GetDivisionResults: generate_custom_http_executor(getDivisionResultsResource,'division_results','get'),
+                      GetDivisionMachineResults: generate_custom_http_executor(getDivisionMachineResultsResource,'division_machine_results','get'),
                       GetDivisions: generate_custom_http_executor(getDivisionsResource,'divisions','get'),                      
                       GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),
                       AddDivisionMachine: generate_custom_http_executor(addDivisionMachineResource,'added_division_machine','post'),
@@ -247,7 +252,7 @@ angular.module('TD_services.timeout_resources')
                       VoidScore: generate_custom_http_executor(voidScoreResource,'voided_score','put'),
                       AddScore: generate_custom_http_executor(addScoreResource,'added_score','put'),
                       RemovePlayerFromQueue: generate_custom_http_executor(removePlayerFromQueueResource,'modified_queue','delete'),
-                      
+                      GetPlayerResults: generate_custom_http_executor(getPlayerResultsResource,'player_results','get'),                      
                       AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put')
                   };
               }]);

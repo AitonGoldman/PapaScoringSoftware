@@ -19,6 +19,7 @@ app = angular.module(
         'app.login_player',    
     'app.queues',
     'app.results',
+    'app.queue_view',
     /*REPLACEMECHILD*/
 	]
 );
@@ -115,13 +116,16 @@ app.filter('orderObjectBy', function() {
 
 app.filter('range', function() {
     
-    return function(input, total, start) {    
+    return function(input, total, start, increment) {    
+        if(increment == undefined){
+            increment=1;
+        }
         if(start == undefined){
             start = 0;
         }
         total = parseInt(total);
         
-        for (var i=start; i<total; i++) {
+        for (var i=start; i<total; i=i+increment) {
             input.push(i);
         }
     return input;

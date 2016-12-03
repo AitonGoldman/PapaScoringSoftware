@@ -1,0 +1,78 @@
+<ion-view view-title="">
+  <ion-content>
+    <div class='first-element'>
+    </div>
+
+    <div class="card">
+      <div class="item item-divider">
+        New Score
+      </div>
+      <div class="item item-text-wrap">
+        <table>
+          <tr>
+            <td style='vertical-align:middle'>
+              Score : 
+            </td>
+            <td>
+              <input style='font-size:18px' type="text" ng-model='new_entry.score'>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Machine : 
+            </td>
+            <td>
+              <a ng-if='new_entry.division_machine_id==undefined' ui-sref='.select_division_machine({player_id:player_id})'>Select Machine</a>
+              <span ng-if='new_entry.division_machine_id!=undefined'>{{new_entry.division_machine_name}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td style='padding-top:10px'>
+              <button ng-click='add_entry(new_entry)'>Add Ticket</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    
+    <div class="card" ng-repeat='player_entry in resources.player_entries.data'>
+      <div class="item item-divider">
+        {{player_entry.score.division_machine_name}} (#{{player_entry.entry_id}})
+      </div>
+      <div class="item item-text-wrap">
+        <table>
+          <tr>
+            <td style='vertical-align:middle'>
+              Score : 
+            </td>
+            <td>
+              <input style='font-size:18px' type="text" ng-model='player_entry.score.score'>
+            </td>
+            <td style='vertical-align:middle'>
+              <button ng-click='change_score(player_entry.score)'>Save Score</button>
+            </td>
+            <td style='vertical-align:middle'>
+              <i ng-if='player_entry.score.changed==true' style='margin-left:10px' class="icon ion-checkmark"></i>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Machine : 
+            </td>
+            <td>
+              <a ui-sref='.select_division_machine({player_id:player_id})'>{{player_entry.score.division_machine_name}}</a>
+            </td>
+          </tr>
+          <tr>
+            <td style='padding-top:10px'>
+              <button ng-click='void_entry(player_entry,1)' ng-if='player_entry.voided==false'>Void Ticket</button>
+              <span ng-if='player_entry.voided == true '>VOIDED</span>
+              <button ng-click='void_entry(player_entry,0)' ng-if='player_entry.voided==true'>UnVoid Ticket</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+

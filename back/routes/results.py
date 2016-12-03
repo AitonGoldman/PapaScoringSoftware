@@ -144,16 +144,14 @@ def route_get_division_machine_results(division_machine_id):
 def get_first_query(division_id=None, division_machine_id=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    
+    where_string = "entry.voided=false "
     if division_id:
-        where_string = "entry.division_id=%s" % division_id
-    else:
-        where_string = "entry.division_id > 0"
+        where_string = where_string + " and entry.division_id=%s" % division_id
+    #else:
+    #    where_string = "entry.division_id > 0"
 
-    if division_id and division_machine_id:
+    if division_machine_id:
         where_string = where_string + " and score.division_machine_id = "+division_machine_id
-    if division_id is None and division_machine_id:
-        where_string = "score.division_machine_id = "+division_machine_id
     papa_scoring_func = func.papa_scoring_func(func.rank().over(order_by=desc(tables.Score.score),
                                                                    partition_by=(tables.Entry.division_id,
                                                                                  tables.Score.division_machine_id))).label('scorepoints')            

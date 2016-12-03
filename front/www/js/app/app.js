@@ -20,6 +20,7 @@ app = angular.module(
     'app.queues',
     'app.results',
     'app.queue_view',
+    'app.oops',
     /*REPLACEMECHILD*/
 	]
 );

@@ -24,6 +24,8 @@ def generate_score_class(db_handle):
         )
         
         def to_dict_simple(self):
-            return to_dict(self)
+            score_dict = to_dict(self)
+            score_dict['division_machine_name']=self.division_machine.machine.machine_name
+            return score_dict
                     
     return Score

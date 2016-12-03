@@ -31,6 +31,14 @@ def route_get_division_machines(division_id):
     division_machines = tables.DivisionMachine.query.filter_by(division_id=division_id).all()
     return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
 
+@admin_manage_blueprint.route('/division_machine',methods=['GET'])
+def route_get_all_division_machines():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    division_machines = tables.DivisionMachine.query.all()
+    return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
+
+
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>',methods=['GET'])
 def route_get_division_machine(division_id,division_machine_id):
     db = db_util.app_db_handle(current_app)

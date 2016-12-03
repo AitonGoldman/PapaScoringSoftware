@@ -5,7 +5,8 @@ def generate_entry_class(db_handle):
         """Model object for an entry"""
         # pylint: disable=no-init
         # pylint can't find SQLAlchemy's __init__() method for some reason
-        entry_id = db_handle.Column(db_handle.Integer, primary_key=True)                
+        voided = db_handle.Column(db_handle.Boolean, default=False)
+        entry_id = db_handle.Column(db_handle.Integer, primary_key=True)
         player_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'player.player_id'
         ))

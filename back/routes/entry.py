@@ -23,7 +23,8 @@ def route_add_score(division_machine_id, score):
     entry = create_entry(current_app,division_machine.player_id,
                          division_machine.division_machine_id,
                          division_machine.division_id,
-                         score=score)
+                         score=score,
+                         voided=False)
     division_machine.player_id=None
     token.used=True
     token.used_date = datetime.datetime.now()    
@@ -44,3 +45,14 @@ def route_void_score(division_machine_id):
     token.voided=True
     db.session.commit()
     return jsonify({'data':None})
+
+
+@admin_manage_blueprint.route('/entry/player/<player_id>',methods=['GET'])
+@login_required
+@Admin_permission.require(403)
+def route_get_player_entries(player_id):        
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                    
+    player_entries = tables.Entry.query.filter_by(player_id=player_id).all()    
+    return jsonify({'data':{player_entry.entry_id:player_entry.to_dict_simple() for player_entry in player_entries}})
+

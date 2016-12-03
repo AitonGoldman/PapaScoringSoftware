@@ -25,7 +25,10 @@
         <i class="icon ion-clipboard"></i>
         <span>Results</span>
       </a>
-      
+      <a id="home_manage_user_button" ui-sref='.oops' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'>
+        <i class="icon ion-person-stalker"></i>
+        <span>Oops</span>
+      </a>      
        <!-- <label class="item"> -->
        <!--   <div class="input-label"> -->
        <!--     Lightsaber -->

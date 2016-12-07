@@ -1,7 +1,8 @@
 angular.module('TD_services.camera',[]);
 angular.module('TD_services.camera').factory('Camera', ['$state','$timeout','$rootScope','Modals', '$cordovaCamera', '$cordovaFileTransfer', function($state,$timeout,$rootScope, Modals, $cordovaCamera, $cordovaFileTransfer) {            
     var dest_pic_name="1.jpg";
-    var upload_host="http://98.111.232.93:8000";
+    //var upload_host="http://98.111.232.93:8000";
+    var upload_host="http://"+server_ip_address+":8000";    
     var upload_url_path="/test/media_upload/user_pic";
     var TRANSFER_FAILED='transfer failed';
     var TRANSFER_SUCCESS='transfer success';
@@ -26,7 +27,7 @@ angular.module('TD_services.camera').factory('Camera', ['$state','$timeout','$ro
                 var randomNumber = Math.floor((Math.random() * 1000) + 1); 
                 var dest_pic_name=localFileName+"-"+randomNumber+".jpg";
                 //var dest_pic_name=user_id+".jpg";
-                var upload_host="http://98.111.232.93:8000";
+                //var upload_host="http://98.111.232.93:8000";
                 //var upload_host="http://192.168.1.178:8000";
                 var upload_url_path="/test/media_upload/"+type_of_pic+"_pic";            
                 var cordova_options = {};

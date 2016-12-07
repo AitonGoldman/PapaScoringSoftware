@@ -46,6 +46,16 @@ def route_edit_player(player_id):
     db.session.commit()                        
     return jsonify({'data':player.to_dict_simple()})        
 
+@admin_manage_blueprint.route('/player/<player_id>/pin',methods=['GET'])
+@login_required
+@Desk_permission.require(403)
+def route_get_player_pin(player_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    player = fetch_entity(tables.Player,player_id)     
+    db.session.commit()                        
+    return jsonify({'data':player.pin})        
+
 @admin_manage_blueprint.route('/player',methods=['POST'])
 @login_required
 @Desk_permission.require(403)

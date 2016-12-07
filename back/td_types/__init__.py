@@ -12,6 +12,8 @@ from Token import generate_token_class
 from Queue import generate_queue_class
 from Score import generate_score_class
 from Entry import generate_entry_class
+from AuditLog import generate_audit_log_class
+
 class ImportedTables():
     def __init__(self,db_handle):
         self.Role = generate_role_class(db_handle)        
@@ -27,7 +29,8 @@ class ImportedTables():
         self.Token = generate_token_class(db_handle)
         self.Queue = generate_queue_class(db_handle)
         self.Score = generate_score_class(db_handle)
-        self.Entry = generate_entry_class(db_handle)        
+        self.Entry = generate_entry_class(db_handle)
+        self.AuditLog = generate_audit_log_class(db_handle)
         self.db_handle = db_handle
         
  

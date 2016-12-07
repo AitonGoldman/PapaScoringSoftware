@@ -1,6 +1,8 @@
 from werkzeug.exceptions import BadRequest
 from util import db_util
 import datetime
+from flask import current_app
+from flask_login import current_user
 
 def fetch_entity(model_class,model_id):
     found_entity = model_class.query.get(model_id)    
@@ -28,6 +30,7 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
                                                   division_id=division_machine.division.division_id,
                                                   used=False).all()
         if tables.DivisionMachine.query.filter_by(player_id=player.player_id).first():
+            print "uh oh 1"
             return False
     if team:
         if division_machine.division.meta_division_id:
@@ -42,6 +45,7 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
             return False
     
     if len(tokens) == 0:
+        print "uh oh 2"        
         return False
     
     # check that player is not on a queue for a different machine (note : this is a special case - we just yank them off the queue)
@@ -61,7 +65,18 @@ def set_token_start_time(app,player,division_machine):
                                                     used=False).first()
     token_to_set.game_started_date=datetime.datetime.now()
     token_to_set.division_machine_id = division_machine.division_machine_id
+    db.session.commit()    
+    audit_log = tables.AuditLog()
+    audit_log.player_id=player.player_id
+    audit_log.token_id=token_to_set.token_id
+    audit_log.division_machine_id=division_machine.division_machine_id
+    audit_log.scorekeeper_id=current_user.user_id
+    audit_log.game_started_date=datetime.datetime.now()
+    tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
+    audit_log.remaining_tokens = tokens_left_string            
+    db.session.add(audit_log)
     db.session.commit()
+
     pass
 
 def remove_player_from_queue(app,player=None,division_machine=None):
@@ -105,3 +120,29 @@ def get_queue_from_division_machine(division_machine,json_output=False):
         else:
             queue = None
     return queue_list
+
+def calc_audit_log_remaining_tokens(player_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
+    metadivisions = {meta_division.meta_division_id:meta_division.to_dict_simple() for meta_division in tables.MetaDivision.query.all()}
+    division_tokens_left={}
+    metadivision_tokens_left={}
+    tokens_left = tables.Token.query.filter_by(player_id=player_id,used=False).all()
+    for token in tokens_left:
+        if token.metadivision_id:
+            if token.metadivision_id not in metadivision_tokens_left:
+                metadivision_tokens_left[token.metadivision_id]=1
+            else:
+                metadivision_tokens_left[token.metadivision_id]=metadivision_tokens_left[token.metadivision_id]+1
+        else:
+            if token.division_id not in division_tokens_left:
+                division_tokens_left[token.division_id]=1
+            else:
+                division_tokens_left[token.division_id]=division_tokens_left[token.division_id]+1
+    tokens_left_string = ""
+    for division_id,division_token_count in division_tokens_left.iteritems():
+        tokens_left_string=tokens_left_string+" %s : %s | " % (divisions[division_id]['tournament_name'],division_token_count)
+    for metadivision_id,metadivision_token_count in metadivision_tokens_left.iteritems():
+        tokens_left_string=tokens_left_string+" %s : %s | " % (metadivisions[metadivision_id]['meta_division_name'],metadivision_token_count)
+    return tokens_left_string

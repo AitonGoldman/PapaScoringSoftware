@@ -77,6 +77,7 @@ angular.module('app.token.token_select').controller(
             for(x in $scope.buttons[type][division_id]){
                 $scope.buttons[type][division_id][x]='green';
             }
+            console.log(number);
             $scope.buttons[type][division_id][number]='red';           
             $scope.sliders[type][division_id]=number;
             var division_price = $scope.resources.divisions.data[division_id].local_price;

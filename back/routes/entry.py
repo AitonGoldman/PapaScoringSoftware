@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,calc_audit_log_remaining_tokens
 from orm_creation import create_entry
 import datetime
 
@@ -23,11 +23,23 @@ def route_add_score(division_machine_id, score):
     entry = create_entry(current_app,division_machine.player_id,
                          division_machine.division_machine_id,
                          division_machine.division_id,
-                         score=score,
-                         voided=False)
+                         score=score)
     division_machine.player_id=None
     token.used=True
-    token.used_date = datetime.datetime.now()    
+    token.used_date = datetime.datetime.now()
+    db.session.commit()
+    
+        
+    audit_log = tables.AuditLog()
+    audit_log.player_id = token.player_id
+    audit_log.token_id=token.token_id
+    audit_log.scorekeeper_id=current_user.user_id
+    audit_log.used_date=datetime.datetime.now()
+    audit_log.used=True
+    tokens_left_string = calc_audit_log_remaining_tokens(token.player_id)        
+    audit_log.remaining_tokens = tokens_left_string
+    audit_log.division_machine_id=division_machine.division_machine_id
+    db.session.add(audit_log)    
     db.session.commit()
     return jsonify({'data':entry.to_dict_simple()})
 
@@ -44,6 +56,19 @@ def route_void_score(division_machine_id):
     token.used_date = datetime.datetime.now()
     token.voided=True
     db.session.commit()
+
+    audit_log = tables.AuditLog()
+    audit_log.player_id = token.player_id
+    audit_log.token_id=token.token_id
+    audit_log.scorekeeper_id=current_user.user_id
+    audit_log.voided_date=datetime.datetime.now()
+    audit_log.voided=True
+    audit_log.division_machine_id=division_machine.division_machine_id    
+    tokens_left_string = calc_audit_log_remaining_tokens(token.player_id)        
+    audit_log.remaining_tokens = tokens_left_string
+    db.session.add(audit_log)    
+    db.session.commit()
+    
     return jsonify({'data':None})
 
 

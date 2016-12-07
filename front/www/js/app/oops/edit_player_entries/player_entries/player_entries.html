@@ -22,7 +22,7 @@
               Machine : 
             </td>
             <td>
-              <a ng-if='new_entry.division_machine_id==undefined' ui-sref='.select_division_machine({player_id:player_id})'>Select Machine</a>
+              <a ng-if='new_entry.division_machine_id==undefined || new_entry.division_machine_id == ""' ui-sref='.select_division_machine({player_id:player_id})'>Select Machine</a>
               <span ng-if='new_entry.division_machine_id!=undefined'>{{new_entry.division_machine_name}}</span>
             </td>
           </tr>

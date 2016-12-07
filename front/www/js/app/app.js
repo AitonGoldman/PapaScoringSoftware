@@ -34,8 +34,8 @@ app.controller(
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){
-            scope.site=state.params.site;            
-            User.set_user_site(scope.site);            
+            $scope.site=state.params.site;            
+            User.set_user_site($scope.site);            
             if(do_not_check_current_user == undefined && User.logged_in() == false){
                 return User.check_current_user();
             } else {
@@ -60,6 +60,7 @@ app.controller(
                 //alert('on a native app');
             }
         });
+        $scope.server_ip_address=server_ip_address;
         $scope.take_pic_and_upload = function(type,info_object){            
             upload_pic_promise = Camera.take_user_pic_and_upload(type);
             upload_pic_promise.then(function(data){
@@ -94,6 +95,7 @@ app.config(function($httpProvider,$ionicConfigProvider) {
     $httpProvider.defaults.withCredentials = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     $ionicConfigProvider.backButton.previousTitleText(false);
+    $ionicConfigProvider.backButton.text(" ");
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
 });
 

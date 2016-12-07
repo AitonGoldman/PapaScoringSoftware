@@ -28,16 +28,21 @@
             <div ng-click='change_token_list(-7)'
                  ng-if='cur_ticket_start_range > 0'
               class='col-10'
-              >prev </div>
+              ><i class='icon ion-arrow-left-c'></i></div>
             
             <div class='col' ng-repeat='number in []|range:8:0'>
-              <a ng-if='number+(cur_ticket_start_range) >= 0 && number+(cur_ticket_start_range) <= resources.player_tokens.data.available_tokens[type][division_id]' ng-style='{"background-color":buttons[type][division_id][number]}' style='top:10px;' ng-click='set_token_count(type,division_id,number+cur_ticket_start_range)' class='badge1'>{{number+(cur_ticket_start_range)}}</a>
+              <a ng-if='number+(cur_ticket_start_range) >= 0 && number+(cur_ticket_start_range) <= resources.player_tokens.data.available_tokens[type][division_id]'
+                 ng-style='{"background-color":buttons[type][division_id][number+cur_ticket_start_range]}'
+                 style='top:10px;'
+                 ng-click='set_token_count(type,division_id,number+cur_ticket_start_range)'
+                 class='badge1'>{{number+(cur_ticket_start_range)}}</a>
             </div>
             <div ng-click='change_token_list(7)'
                  ng-if='cur_ticket_start_range + 7 < resources.player_tokens.data.available_tokens[type][division_id]'
-                 class='col-10'
-            >next </div>
-            <div class='col-10'>
+                                                     class='col-10'
+                                                     style='margin-top:auto;margin-bottom:auto'                                                     
+            ><i style='padding-left:10px' class='icon ion-arrow-right-c'></i></div>
+            <div style='margin-top:auto;margin-bottom:auto' class='col-10'>
                 {{sliders[type][division_id]}}
             </div>
           </div>

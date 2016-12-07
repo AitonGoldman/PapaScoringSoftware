@@ -211,7 +211,11 @@ angular.module('TD_services.timeout_resources')
                   var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET');
                   var voidEntryResource = generate_resource_definition(':site/admin/entry_id/:entry_id/void/:void','DELETE');
                   var addEntryResource = generate_resource_definition(':site/admin/division_machine_id/:division_machine_id/score/:score/player_id/:player_id','POST');                                    
-                  var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET');                    var getPlayerEntriesResource = generate_resource_definition(':site/entry/player/:player_id','GET');                      var setScoreResource = generate_resource_definition(':site/admin/score_id/:score_id/score/:score','PUT');                       
+                  var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET');
+                  var getPlayerEntriesResource = generate_resource_definition(':site/entry/player/:player_id','GET');
+                  var setScoreResource = generate_resource_definition(':site/admin/score_id/:score_id/score/:score','PUT');
+                  var getAuditLogMissingTokensResource = generate_resource_definition(':site/admin/audit_log/where_all_my_tokens_at/player_id/:player_id','GET');
+                  var getPlayerPinResource = generate_resource_definition(':site/player/:player_id/pin','GET');                  
                   
                   return {
 	              GetAllResources: function(){
@@ -261,7 +265,9 @@ angular.module('TD_services.timeout_resources')
                       AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put'),
                       SetScore: generate_custom_http_executor(setScoreResource,'score_set','put'),
                       VoidEntry: generate_custom_http_executor(voidEntryResource,'score_set','delete'),
-                      AddEntry: generate_custom_http_executor(addEntryResource,'entry_added','get')                      
+                      AddEntry: generate_custom_http_executor(addEntryResource,'entry_added','get'),
+                      GetAuditLogMissingTokens: generate_custom_http_executor(getAuditLogMissingTokensResource,'audit_log_missing_tokens','get'),
+                      GetPlayerPin: generate_custom_http_executor(getPlayerPinResource,'player_pin','get')                      
 
                       
                   };

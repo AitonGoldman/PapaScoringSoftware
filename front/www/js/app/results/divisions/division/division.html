@@ -17,7 +17,7 @@
         <th class='mobile-hide' style='padding-left:50px'><b>Top 3</b></th>
         
       </tr>
-      <tr ng-repeat='result in resources.division_results.data.ranked_player_list[division_id]'>
+      <tr ng-repeat='result in resources.division_results.data.ranked_player_list[division_id]' ng-if='result[0]!=0'>
         <td style='padding-top:10px;' >{{result[0]}}</td>
         <td style='padding-left:50px;padding-top:10px;'>
           <a ui-sref='.^.^.players.player({player_id:result[1].player_id,player_name:result[1].player_name})'>

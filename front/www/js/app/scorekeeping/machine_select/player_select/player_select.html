@@ -1,5 +1,5 @@
 <!--resources.queues.data[division_machine_id].queues[0].player.player_name-->
-<ion-view view-title="">
+<ion-view view-title="Select Player">
   <ion-content>
     <div class="skinny-list list" >
       <!-- REMOVE ME -->
@@ -23,20 +23,13 @@
     
     <div ng-if='queues.length == 0' style='z-index:200' class='player-info-avatar'>
       <img src="http://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players.length == 0 && poop == true'>
-      <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://98.111.232.93/pics/player_{{player_img_id}}.jpg">
+      <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">
       <img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'>
     </div>
     <div style='z-index:4' class='machine-info-avatar'>
-      <img class='avatar-frame avatar-user-pic' src="http://98.111.232.93/pics/machine_{{division_machine_id}}.jpg">
+      <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg">
     </div>
     <div ng-if='queues.length > 0' style='z-index:200' class='player-info-avatar'>
-<!--      <img ng-show='poop_2 == true'
-           class='avatar-frame sample-show-hide  sample-show-hide-front avatar-user-pic' src="http://98.111.232.93/pics/player_{{queues[0].player.player_id}}.jpg"> -->
-<img ng-show='poop_2 == true'
-           class='avatar-frame sample-show-hide  sample-show-hide-front avatar-user-pic' src="http://98.111.232.93/pics/player_{{queue_player.player_id}}.jpg">      
-      <!--<img ng-repeat='queue in queues'
-           ng-show='poop_2 == true'
-           class='avatar-frame sample-show-hide  sample-show-hide-front avatar-user-pic' src="http://98.111.232.93/pics/player_{{queues[0].player.player_id}}.jpg">     --> 
     </div>
 <button style='font-size:48px' ng-if="queues.length > 0" class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".process({process_step:{process:true}, player_info:queues[0].player,from_queue:1})">
   Start Player On Machine

@@ -58,8 +58,7 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
         top_6_machines[division.division_id]={}
         for player in players:        
             player_results_dict[player.player_id][division.division_id]={'points':[],'sum':0,'player_name':player.first_name+" "+player.last_name}
-            top_6_machines[division.division_id][player.player_id]=[]            
-
+            top_6_machines[division.division_id][player.player_id]=[]                
     for result in results:        
         new_dict={
             'division_id':result['entry_division_id'],
@@ -73,7 +72,8 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
             #'filter_points':result['filter_score'],
             'filter_rank':result['filter_rank']
             
-        }                
+        }
+        print new_dict
         entry_div_id = result['entry_division_id']
         score_div_machine_id = result['score_division_machine_id']        
         return_dict[entry_div_id][score_div_machine_id].append(new_dict)

@@ -269,3 +269,12 @@ a.badge1 {
     @media screen and (min-width: 971px) {
     }
 }
+.platform-android,.platform-browser{
+    .bar {
+        button.back-button {
+            .icon::before{
+                font-size: 72px;
+            }
+        }
+    }
+}

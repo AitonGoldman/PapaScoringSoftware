@@ -39,7 +39,29 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.oops.edit_player_entries.player_entries.select_division_machine'
  	     }
  	   }
+       }).state('app.oops.missing_tokens', 
+        { 
+         cache: false,
+ 	 url: '/missing_tokens',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/oops/missing_tokens/missing_tokens.html',
+ 	       controller: 'app.oops.missing_tokens'
+ 	     }
+ 	   }
+       }).state('app.oops.missing_tokens.report', 
+        { 
+         cache: false,
+ 	 url: '/report/player_id/:player_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/oops/missing_tokens/report/report.html',
+ 	       controller: 'app.oops.missing_tokens.report'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
+
 
 
 

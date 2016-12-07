@@ -5,10 +5,10 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission, Desk_permission, Token_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity
+from routes.utils import fetch_entity,calc_audit_log_remaining_tokens
 import os
 from flask_restless.helpers import to_dict
-
+import datetime
 
 def get_existing_token_count(player_id=None,team_id=None,div_id=None,metadiv_id=None):
     db = db_util.app_db_handle(current_app)
@@ -93,7 +93,17 @@ def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None
             new_token.deskworker_id=current_user.user_id
         
         db.session.add(new_token)                
-        db.session.commit()            
+        db.session.commit()
+        audit_log = tables.AuditLog()
+        audit_log.purchase_date = datetime.datetime.now()
+        audit_log.player_id = player_id
+        audit_log.token_id=new_token.token_id
+        audit_log.deskworker_id=current_user.user_id
+        
+        tokens_left_string = calc_audit_log_remaining_tokens(player_id)
+        audit_log.remaining_tokens = tokens_left_string        
+        db.session.add(audit_log)
+        db.session.commit()
         tokens.append(to_dict(new_token))
     return tokens
 

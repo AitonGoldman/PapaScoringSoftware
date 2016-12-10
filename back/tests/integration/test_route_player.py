@@ -19,8 +19,7 @@ class RoutePlayerTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         super(RoutePlayerTD,self).setUp()
         response,results = self.dispatch_request('/%s/util/healthcheck' % self.poop_db_name)                
         self.flask_app = self.app.instances[self.poop_db_name]
-        
-        orm_creation.create_roles(self.flask_app)
+        orm_creation.create_stanard_roles_and_users(self.flask_app)
         self.new_tournament = orm_creation.create_tournament(self.flask_app,{
             'tournament_name':'test_tournament',
             'single_division':False
@@ -32,8 +31,6 @@ class RoutePlayerTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             'scoring_type':'HERB',
             'use_stripe':False
         })
-        orm_creation.create_user(self.flask_app,'test_desk','test_desk',[orm_creation.RolesEnum.desk.value])        
-        orm_creation.create_user(self.flask_app,'test_score','test_score',[orm_creation.RolesEnum.scorekeeper.value])        
 
         new_tournament_data = {            
             'tournament_name':'test_tournament',
@@ -99,7 +96,7 @@ class RoutePlayerTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             
     def test_add_with_wrong_permissions(self):
         with self.flask_app.test_client() as c:
-            self.checkWrongPermissions(c,'post','/player','test_score')            
+            self.checkWrongPermissions(c,'post','/player','test_scorekeeper')            
 
     def test_add_with_player_permissions(self):
         self.new_player = orm_creation.create_player(self.flask_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123'})        
@@ -125,7 +122,7 @@ class RoutePlayerTD(td_integration_test_base.TdIntegrationDispatchTestBase):
 
     def test_edit_with_wrong_permissions(self):
         with self.flask_app.test_client() as c:
-            self.checkWrongPermissions(c,'put','/player/1','test_score')            
+            self.checkWrongPermissions(c,'put','/player/1','test_scorekeeper')            
 
     def test_edit_with_player_permissions(self):
         self.new_player = orm_creation.create_player(self.flask_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123'})        

@@ -13,15 +13,14 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         super(RouteAuthTD,self).setUp()
         response,results = self.dispatch_request('/%s/util/healthcheck' % self.poop_db_name)                
         self.flask_app = self.app.instances[self.poop_db_name]
-        orm_creation.create_roles(self.flask_app) 
-        self.new_user = orm_creation.create_user(self.flask_app,'test_user','test_user_password',[RolesEnum.test.value])
+        orm_creation.create_stanard_roles_and_users(self.flask_app)
         self.new_player = orm_creation.create_player(self.flask_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123'})        
         
     def test_login(self):        
         with self.flask_app.test_client() as c:            
             
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':'test_user','password':'test_user_password'}))
+                       data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s' % (rv.status_code))
@@ -30,15 +29,15 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               True,
                               "Was expecting current_user to have a username attr, but it did not")
             self.assertEquals(current_user.username,
-                              'test_user',
-                              "expected user to be %s, but got %s" % (self.new_user.username, current_user.username))
+                              'test_scorekeeper',
+                              "expected user to be test_scorekeeper, but got %s" % (current_user.username))
             returned_user = json.loads(rv.data)['data']
             self.assertFalse('player' in returned_user,                              
                             "expected player in logged in user, but none found")
 
-            self.assertEquals('test_user',
+            self.assertEquals('test_scorekeeper',
                               returned_user['username'],
-                              "username returned was incorrect - expected %s but found %s" % (self.new_user.username,
+                              "username returned was incorrect - expected %s but found %s" % ('test_scorekeeper',
                                                                                                returned_user['username']))
             self.assertFalse('password_crypt' in returned_user,
                              "Found a password field in returned user, but should not have")
@@ -46,8 +45,8 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertFalse('pin' in returned_user,
                              "Found a password field in returned user, but should not have")
 
-            self.assertTrue(RolesEnum.test.name in [role['name'] for role in returned_user['roles']],
-                            "Role %s was not found in returned user" % RolesEnum.test.name)
+            self.assertTrue(RolesEnum.scorekeeper.name in [role['name'] for role in returned_user['roles']],
+                            "Role scorekeeper was not found in returned user")
 
     def test_login_player_through_user_login(self):        
         with self.flask_app.test_client() as c:            
@@ -63,11 +62,11 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               "Was expecting current_user to have a username attr, but it did not")
             self.assertEquals(current_user.username,
                               'player%s'%self.new_player.pin,
-                              "expected user to be %s, but got %s" % (self.new_user.username, current_user.username))
+                              "expected user to be %s, but got %s" % ('player%s'%self.new_player.pin, current_user.username))
             returned_user = json.loads(rv.data)['data']
             self.assertEquals('player%s'%self.new_player.pin,
                               returned_user['username'],
-                              "username returned was incorrect - expected %s but found %s" % (self.new_user.username,
+                              "username returned was incorrect - expected %s but found %s" % ('player%s'%self.new_player.pin,
                                                                                                returned_user['username']))
 
             self.assertTrue('player' in returned_user,                              
@@ -100,11 +99,11 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               "Was expecting current_user to have a username attr, but it did not")
             self.assertEquals(current_user.username,
                               'player%s'%self.new_player.pin,
-                              "expected user to be %s, but got %s" % (self.new_user.username, current_user.username))
+                              "expected user to be %s, but got %s" % ('player%s'%self.new_player.pin, current_user.username))
             returned_user = json.loads(rv.data)['data']
             self.assertEquals('player%s'%self.new_player.pin,
                               returned_user['username'],
-                              "username returned was incorrect - expected %s but found %s" % (self.new_user.username,
+                              "username returned was incorrect - expected %s but found %s" % ('player%s'%self.new_player.pin,
                                                                                                returned_user['username']))
 
             self.assertTrue('player' in returned_user,                              
@@ -145,15 +144,14 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(null_user,
                               None)            
             c.put('/auth/login',
-                       data=json.dumps({'username':'test_user','password':'test_user_password'}))
+                       data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))
             rv = c.get('/auth/current_user')
             returned_user = json.loads(rv.data)['data']
-            self.assertEquals('test_user',
+            self.assertEquals('test_scorekeeper',
                               returned_user['username'],
-                              "username returned was incorrect - expected %s but found %s" % ('test_user',
+                              "username returned was incorrect - expected %s but found %s" % ('test_scorekeeper',
                                                                                                returned_user['username']))
-            
-            
+                        
     def test_login_bad_username_password(self):        
         with self.flask_app.test_client() as c:            
             

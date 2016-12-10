@@ -10,8 +10,11 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         response,results = self.dispatch_request('/%s/util/healthcheck' % self.poop_db_name)                
         self.flask_app = self.app.instances[self.poop_db_name]
         self.admin_user,self.scorekeeper_user,self.desk_user = orm_creation.create_stanard_roles_and_users(self.flask_app)
+        self.admin_user_name='test_admin'        
         self.admin_user_password='test_admin'
+        self.desk_user_name='test_desk'
         self.desk_user_password='test_desk'
+        self.new_player = orm_creation.create_player(self.flask_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123'})        
         
     def test_add_division(self):        
         new_tournament = orm_creation.create_tournament(self.flask_app,{
@@ -22,7 +25,7 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         #self.flask_app.tables.db_handle.session.commit()
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
+                       data=json.dumps({'username':self.admin_user_name,'password':self.admin_user_password}))
             rv = c.post('/division',
                         data=json.dumps({'division_name':'test_division_1',
                                          'scoring_type':'HERB',
@@ -55,7 +58,7 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         })
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
+                       data=json.dumps({'username':self.admin_user_name,'password':self.admin_user_password}))
             rv = c.post('/division',
                         data=json.dumps({'division_name':'test_division_1',
                                          'scoring_type':'HERB',
@@ -87,7 +90,7 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         })
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
+                       data=json.dumps({'username':self.admin_user_name,'password':self.admin_user_password}))
             rv = c.post('/division',
                         data=json.dumps({'division_name':'test_division_1',
                                          'scoring_type':'HERB',
@@ -129,7 +132,7 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         })
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
+                       data=json.dumps({'username':self.admin_user_name,'password':self.admin_user_password}))
             rv = c.post('/division',
                         data=json.dumps({'division_name':'test_division_1',
                                          'scoring_type':'HERB',
@@ -170,7 +173,7 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         })         
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
+                       data=json.dumps({'username':self.admin_user_name,'password':self.admin_user_password}))
             rv = c.post('/division',
                         data=json.dumps({'division_name':'test_division_1',
                                          'scoring_type':'HERB',
@@ -200,121 +203,24 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(division['use_stripe'],False)
             self.assertEquals(division['local_price'],5)
             self.assertEquals(division['finals_num_qualifiers'],24)
-                        
-    def test_edit_division_no_auth(self):        
-        new_tournament = orm_creation.create_tournament(self.flask_app,{
-            'tournament_name':'test_tournament_1',
-            'single_division':False
-        })         
-        with self.flask_app.test_client() as c:                    
-            rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
-            rv = c.post('/division',
-                        data=json.dumps({'division_name':'test_division_1',
-                                         'scoring_type':'HERB',
-                                         'finals_num_qualifiers':24,
-                                         'active':False,
-                                         'team_tournament':False,
-                                         'use_stripe':False,
-                                         'local_price':5,
-                                         'tournament_id':new_tournament.tournament_id
-                        }))
-            division = json.loads(rv.data)['data']
-        with self.flask_app.test_client() as c:                    
-            rv = c.put('/division/%s'%division['division_id'],
-                        data=json.dumps({'scoring_type':'PAPA',
-                                         'division_id':division['division_id'],
-                                         'finals_num_qualifiers':14,
-                                         'active':True,
-                                         'team_tournament':True,
-                                         'use_stripe':False,
-                                         'local_price':5,
-                                         'tournament_id':new_tournament.tournament_id
-                        }))                    
-            self.assertEquals(rv.status_code,
-                              401,
-                              'Was expecting status code 401, but it was %s' % (rv.status_code))
-            
-            
+                                    
     def test_add_division_no_auth(self):        
-        new_tournament = orm_creation.create_tournament(self.flask_app,{
-            'tournament_name':'test_tournament_1',
-            'single_division':False
-        })         
-        with self.flask_app.test_client() as c:                    
-            rv = c.post('/division',
-                        data=json.dumps({'division_name':'test_division_1',
-                                         'scoring_type':'HERB',
-                                         'finals_num_qualifiers':24,
-                                         'active':False,
-                                         'team_tournament':False,
-                                         'use_stripe':False,
-                                         'local_price':5,
-                                         'tournament_id':new_tournament.tournament_id
-                        }))
-            self.assertEquals(rv.status_code,
-                              401,
-                              'Was expecting status code 401, but it was %s' % (rv.status_code))
-
-
-    def test_edit_division_wrong_auth(self):        
-        new_tournament = orm_creation.create_tournament(self.flask_app,{
-            'tournament_name':'test_tournament_1',
-            'single_division':False
-        })         
-        with self.flask_app.test_client() as c:                    
-            rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))
-            rv = c.post('/division',
-                        data=json.dumps({'division_name':'test_division_1',
-                                         'scoring_type':'HERB',
-                                         'finals_num_qualifiers':24,
-                                         'active':False,
-                                         'team_tournament':False,
-                                         'use_stripe':False,
-                                         'local_price':5,
-                                         'tournament_id':new_tournament.tournament_id
-                        }))
-            division = json.loads(rv.data)['data']   
-        with self.flask_app.test_client() as c:            
-            rv = c.put('/auth/login',
-                       #FIXME : the second test_client session looses the refrences to user objects
-                       data=json.dumps({'username':'test_desk','password':self.desk_user_password}))
-            rv = c.put('/division/%s'%division['division_id'],
-                        data=json.dumps({'scoring_type':'PAPA',
-                                         'division_id':division['division_id'],
-                                         'finals_num_qualifiers':14,
-                                         'active':True,
-                                         'team_tournament':True,
-                                         'use_stripe':False,
-                                         'local_price':5,
-                                         'tournament_id':new_tournament.tournament_id
-                        }))                    
-            self.assertEquals(rv.status_code,
-                              403,
-                              'Was expecting status code 403, but it was %s' % (rv.status_code))
-            
-            
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'post','/division')            
     def test_add_division_wrong_auth(self):        
-        new_tournament = orm_creation.create_tournament(self.flask_app,{
-            'tournament_name':'test_tournament_1',
-            'single_division':False
-        })         
-        with self.flask_app.test_client() as c:                    
-            rv = c.put('/auth/login',
-                       data=json.dumps({'username':self.desk_user.username,'password':self.desk_user_password}))
-            rv = c.post('/division',
-                        data=json.dumps({'division_name':'test_division_1',
-                                         'scoring_type':'HERB',
-                                         'finals_num_qualifiers':24,
-                                         'active':False,
-                                         'team_tournament':False,
-                                         'use_stripe':False,
-                                         'local_price':5,
-                                         'tournament_id':new_tournament.tournament_id
-                        }))
-            self.assertEquals(rv.status_code,
-                              403,
-                              'Was expecting status code 403, but it was %s' % (rv.status_code))
-            
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'post','/division', 'test_scorekeeper')
+    def test_add_division_with_player_auth(self):        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'post','/division', pin=self.new_player.pin)                        
+    def test_edit_division_no_auth(self):        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/division/1')            
+    def test_edit_division_wrong_auth(self):        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/division/1', 'test_scorekeeper')            
+    def test_edit_division_with_player_auth(self):        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/division/1', pin=self.new_player.pin)            
+
             

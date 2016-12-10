@@ -7,8 +7,8 @@ from util.permissions import Admin_permission, Desk_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity
 import os
-from orm_creation import create_player
-
+from orm_creation import create_player,create_user,RolesEnum
+import random
 
 @admin_manage_blueprint.route('/player',methods=['GET'])
 def route_get_players():
@@ -70,6 +70,12 @@ def route_add_player():
     if player is not None:
         raise Conflict('Duplicate player')
     new_player = create_player(current_app,input_data)
-    
+    # new_user = create_user(current_app,"%s%s%s" % (new_player.first_name,
+    #                                                new_player.last_name,
+    #                                                new_player.pin),
+    #                        "%s"%(new_player.pin*random.randrange(1,99999)),                        
+    #                        [RolesEnum.player.value])
+    #new_player.user_id=new_user.user_id
+    db.session.commit()
     return jsonify({'data':new_player.to_dict_simple()})
     

@@ -22,7 +22,7 @@ def generate_player_class(db_handle,Team_Player_mapping):
         email_address = db_handle.Column(db_handle.String(120))
         active = db_handle.Column(db_handle.Boolean, default=True)
         pin = db_handle.Column(db_handle.Integer, db_handle.Sequence(name='player_pin_seq',start=1234,increment=13))
-
+        user_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('user.user_id'))
         linked_division_id = db_handle.Column(db_handle.Integer,
                                             db_handle.ForeignKey(
                                                 'division.division_id'))
@@ -35,6 +35,7 @@ def generate_player_class(db_handle,Team_Player_mapping):
             secondary=Team_Player_mapping,
             lazy='joined'
         )
+        user = db_handle.relationship('User')
         division_machine = db_handle.relationship('DivisionMachine', uselist=False)
         linked_division = db_handle.relationship('Division', uselist=False)
 

@@ -26,9 +26,8 @@ def route_login():
     else:
         raise BadRequest('Username or password not specified')        
     if 'username' not in input_data or 'password' not in input_data:
-        raise BadRequest('Username or password not specified')
-        
-    user = tables.User.query.filter_by(username=input_data['username']).first()
+        raise BadRequest('Username or password not specified')    
+    user = tables.User.query.filter_by(username=input_data['username']).first()    
     if user and not user.verify_password(input_data['password']):
         user = None
     if user is None:
@@ -52,7 +51,7 @@ def route_player_login():
     player = tables.Player.query.filter_by(pin=input_data['player_pin']).first()
     if player is None:
         raise Unauthorized('Bad player pin #')
-    login_user(player)
+    login_user(player.user)
     identity_changed.send(current_app._get_current_object(), identity=Identity(player.player_id))
-    return jsonify({'data':player.to_dict_simple()})
+    return jsonify({'data':player.user.to_dict_simple()})
 

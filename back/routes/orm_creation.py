@@ -13,7 +13,8 @@ class RolesEnum(Enum):
     player = 5
     token = 6
     queue = 7
-
+    test = 8
+    
 def set_stripe_api_key(stripe_api_key):
     stripe.api_key=stripe_api_key
 
@@ -129,10 +130,26 @@ def create_player(app,player_data):
         asshole_count=0,
         active=True        
     )
+    if app.td_config['DB_TYPE']=='sqlite':        
+        new_player.pin= random.randrange(1234,9999)
+        db.session.commit()
+        pass
+    
     db.session.add(new_player)
-    db.session.commit()                        
-    new_player.roles.append(player_role)
-    new_player.roles.append(queue_role)
+    db.session.commit()
+    new_user = tables.User(
+        username="player%s" % (new_player.pin),
+        pin=new_player.pin,
+        is_player=True
+    )
+    db.session.add(new_user)
+    db.session.commit()
+    new_player.user_id=new_user.user_id
+    db.session.commit()
+    new_user.roles.append(player_role)
+    db.session.commit()    
+    new_user.roles.append(queue_role)
+    db.session.commit()    
     if 'ifpa_ranking' in player_data and player_data['ifpa_ranking'] != 0:
         new_player.ifpa_ranking = player_data['ifpa_ranking']
     if 'email_address' in player_data:
@@ -142,10 +159,7 @@ def create_player(app,player_data):
     if 'pic_file' in player_data:
         os.system('mv %s/%s /var/www/html/pics/player_%s.jpg' % (app.config['UPLOAD_FOLDER'],player_data['pic_file'],new_player.player_id))        
     db.session.commit()
-    if app.td_config['DB_TYPE']=='sqlite':        
-        new_player.pin= random.randrange(1234,9999)
-        db.session.commit()
-        pass
+    
     return new_player
 
 def create_meta_division(app,meta_division_data):
@@ -214,14 +228,18 @@ def create_tournament(app,tournament_data):
     
 def create_roles(app,custom_roles=[]):
     roles = []
+    new_roles = []
     for role_enum in list(RolesEnum):
         roles.append(role_enum.name)
     db_handle = app.tables.db_handle
     if len(custom_roles)>0:
         roles = custom_roles
     for role in roles:
-        db_handle.session.add(app.tables.Role(name=role))
+        new_role = app.tables.Role(name=role)
+        db_handle.session.add(new_role)
         db_handle.session.commit()
+        new_roles.append(new_role)
+    return new_roles
 
 def create_division_machine(app,machine,division):
     db = db_util.app_db_handle(app)
@@ -239,13 +257,14 @@ def create_user(app,username,password,roles=[]):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
     new_user = tables.User(
-        username=username
+        username=username,
+        is_player=False
     )
     
     new_user.crypt_password(password)
     db.session.add(new_user)
 
-    if len(roles)>0:
+    if len(roles)>0:        
         check_roles_exist(app.tables, roles)
         for role_id in roles:
             existing_role = tables.Role.query.filter_by(role_id=role_id).first()            

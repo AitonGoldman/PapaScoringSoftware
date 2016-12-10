@@ -21,19 +21,31 @@ class UtilAuthTD(unittest.TestCase):
         self.id = Identity('dummy')        
         
     def test_on_identity_loaded_callback(self):         
-        with self.app.test_request_context():                                        
-            login_user(self.user_with_roles)
-            self.assertIsNone(getattr(self.id,'user',None))            
-            on_identity_loaded_callback = auth.generate_identity_loaded(self.app)            
-            self.assertEqual(len(self.id.provides),0)            
-            on_identity_loaded_callback(None,self.id)
-            self.assertEqual(len(self.id.provides),2)
-            self.assertIsNotNone(self.id.user)
+        with self.app.test_client() as c:
+            with self.app.test_request_context('/') as req_c:            
+                login_user(self.user_with_roles)
+                self.assertIsNone(getattr(self.id,'user',None))            
+                on_identity_loaded_callback = auth.generate_identity_loaded(self.app)            
+                self.assertEqual(len(self.id.provides),0)            
+                on_identity_loaded_callback(None,self.id)
+                self.assertEqual(len(self.id.provides),2)                
 
     def test_generate_user_loader(self):                 
         self.app.tables=MagicMock()
         self.app.tables.User.query.get.return_value=self.user_with_roles
+        self.app.td_config = {'PLAYER_LOGIN':0}
+        
         with self.app.test_client() as c:            
-            user_loader = auth.generate_user_loader(self.app)
-            returned_user = user_loader(1)
-            self.assertEquals(returned_user,self.user_with_roles)
+            with self.app.test_request_context('/') as req_c:
+                user_loader = auth.generate_user_loader(self.app)
+                returned_user = user_loader(1)
+                self.assertEquals(returned_user,self.user_with_roles)
+        self.app.td_config = {'PLAYER_LOGIN':1}
+        
+        with self.app.test_client() as c:            
+            with self.app.test_request_context('/') as req_c:
+                user_loader = auth.generate_user_loader(self.app)
+                returned_user = user_loader(1)
+                self.assertEquals(returned_user,self.user_with_roles)
+
+                

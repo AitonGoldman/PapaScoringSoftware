@@ -1,17 +1,13 @@
 import unittest
 from td_types import ImportedTables
 from util import db_util
+from td_unit_test_base import TdUnitTestBase
 
-class ModelRoleTD(unittest.TestCase):
+class ModelRoleTD(TdUnitTestBase):
     def setUp(self):        
         self.db_handle = db_util.create_db_handle_no_app()        
         self.tables = ImportedTables(self.db_handle)
-        self.user_with_roles = self.tables.User(
-            username='test_user_with_roles')
-        self.role = self.tables.Role()
-        self.role.name = "new_role"
-        self.role.role_id = 1
-                
+        self.role = self.create_role('new_role')
     def test_to_dict_simple(self):        
         simple_dict = self.role.to_dict_simple()
         for value in self.role.__table__.columns:

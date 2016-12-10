@@ -1,61 +1,29 @@
 import unittest
 from td_types import ImportedTables
 from util import db_util
+from td_unit_test_base import TdUnitTestBase
 
-class ModelQueueTD(unittest.TestCase):
+class ModelQueueTD(TdUnitTestBase):
     def setUp(self):        
         self.db_handle = db_util.create_db_handle_no_app()        
         self.tables = ImportedTables(self.db_handle)
-        self.machine = self.tables.Machine(
-            machine_name='test_machine',
-            abbreviation='AAA'
-        )
-        self.division_machine = self.tables.DivisionMachine(
-            removed=False,
-            machine_id=self.machine.machine_id,            
-            division_machine_id=1
-        )
-        self.division_machine.machine = self.machine
-        self.player_1 = self.tables.Player(
-            first_name='al',
-            last_name='thomka',
-            player_id=1)
-        self.player_2 = self.tables.Player(
-            first_name='al',
-            last_name='thomka2',
-            player_id=2)
-        self.player_3 = self.tables.Player(
-            first_name='al',
-            last_name='thomka3',
-            player_id=3)
-        self.player_4 = self.tables.Player(
-            first_name='al',
-            last_name='thomka4',
-            player_id=4)
-        self.queue_root = self.tables.Queue(
-            queue_id=1,
-            player_id=1,
-            division_machine_id=1,
-            division_machine=self.division_machine,
-            player=self.player_1
-        )
-        self.queue_second = self.tables.Queue(
-            queue_id=2,
-            player_id=2,
-            division_machine_id=1,
-            division_machine=self.division_machine,
-            player=self.player_2
-        )
-        self.queue_root.queue_child = [self.queue_second]
-        self.division_machine.queue = self.queue_root
-
+        self.create_single_division_tournament()
+        self.create_division_machine()
+        self.player = self.create_player(1)
+        self.player_two = self.create_player(2)        
+        self.create_team()        
+        self.create_queue()
+        self.queue.player_id=1
+        self.queue.player=self.player
+        self.child_queue.player_id=1
+        self.child_queue.player=self.player
     def test_to_dict_simple(self):                 
-        simple_dict = self.queue_second.to_dict_simple()
-        for value in self.queue_root.__table__.columns:
+        simple_dict = self.child_queue.to_dict_simple()
+        for value in self.child_queue.__table__.columns:
             key =  str(value)[str(value).index('.')+1:]            
             self.assertTrue(key in simple_dict,"oops - did not find %s" % key)        
         self.assertEquals(simple_dict['division_machine']['division_machine_id'],1)
-        self.assertEquals(simple_dict['player']['player_id'],2)        
+        self.assertEquals(simple_dict['player']['player_id'],1)        
         self.assertEquals(simple_dict['queue_position'],2)        
  
         

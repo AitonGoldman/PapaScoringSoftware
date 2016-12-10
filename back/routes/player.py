@@ -70,12 +70,6 @@ def route_add_player():
     if player is not None:
         raise Conflict('Duplicate player')
     new_player = create_player(current_app,input_data)
-    # new_user = create_user(current_app,"%s%s%s" % (new_player.first_name,
-    #                                                new_player.last_name,
-    #                                                new_player.pin),
-    #                        "%s"%(new_player.pin*random.randrange(1,99999)),                        
-    #                        [RolesEnum.player.value])
-    #new_player.user_id=new_user.user_id
     db.session.commit()
     return jsonify({'data':new_player.to_dict_simple()})
     

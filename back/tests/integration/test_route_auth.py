@@ -175,6 +175,28 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(rv.status_code,
                               400,
                               'Was expecting status code 400, but it was %s' % (rv.status_code))
+
+    def test_login_player_bad_pin(self):        
+        with self.flask_app.test_client() as c:            
+            
+            rv = c.put('/auth/player_login',
+                       data=json.dumps({'player_pin':'poop'}))
+            self.assertEquals(rv.status_code,
+                              401,
+                              'Was expecting status code 401, but it was %s' % (rv.status_code))
+            
+            
+    def test_login_player_no_pin(self):        
+        with self.flask_app.test_client() as c:                        
+            rv = c.put('/auth/player_login')
+            self.assertEquals(rv.status_code,
+                              400,
+                              'Was expecting status code 400, but it was %s' % (rv.status_code))
+            rv = c.put('/auth/player_login',
+                       data=json.dumps({}))
+            self.assertEquals(rv.status_code,
+                              400,
+                              'Was expecting status code 400, but it was %s' % (rv.status_code))
             
 
             

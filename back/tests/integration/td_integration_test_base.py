@@ -12,8 +12,24 @@ from flask import Flask
 from time import sleep
 from util.db_info import DbInfo
 import time
+import json
 
 class TdIntegrationTestBase(unittest.TestCase):    
+    def checkWrongPermissions(self,c,http_method,url,user_name=None,pin=None):        
+        expected_status_code=401
+        if pin:
+            rv = c.put('/auth/player_login',
+                       data=json.dumps({'player_pin':pin}))
+            expected_status_code = 403
+        if user_name:
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':user_name,'password':user_name}))
+            expected_status_code = 403
+        rv = getattr(c,http_method)(url)
+        self.assertEquals(rv.status_code,
+                          expected_status_code,
+                          'Was expecting status code %s, but it was %s : %s' % (expected_status_code,rv.status_code,rv.data))
+        
     def setUp(self):
         #FIXME : need to take new config structure into account
         self.secret_file_info = mkstemp()

@@ -97,6 +97,18 @@ class RoutePlayerTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             
             self.assertEquals(returned_player['teams'][0]['team_name'],'test_team')
             
+    def test_add_with_wrong_permissions(self):
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'post','/player','test_score')            
+
+    def test_add_with_player_permissions(self):
+        self.new_player = orm_creation.create_player(self.flask_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123'})        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'post','/player',pin=self.new_player.pin)            
+
+    def test_add_with_no_permissions(self):        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'post','/player')            
             
     def test_add_player(self):
         with self.flask_app.test_client() as c:
@@ -111,6 +123,19 @@ class RoutePlayerTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             player = self.flask_app.tables.Player.query.filter_by(player_id=returned_player['player_id']).first()
             self.assertEquals(player.player_id,returned_player['player_id'])
 
+    def test_edit_with_wrong_permissions(self):
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/player/1','test_score')            
+
+    def test_edit_with_player_permissions(self):
+        self.new_player = orm_creation.create_player(self.flask_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123'})        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/player/1',pin=self.new_player.pin)            
+
+    def test_edit_with_no_permissions(self):        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/player/1')            
+            
     def test_edit_player(self):
         with self.flask_app.test_client() as c:
             rv = c.put('/auth/login',

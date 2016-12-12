@@ -70,8 +70,10 @@ def route_update_user(user_id):
         user_roles = user.roles
         for role in roles:            
             if role in user_roles and str(role.role_id) not in input_data['roles']:
+                #print "removing %s"%role.name
                 user.roles.remove(role)                
             if role not in user_roles and str(role.role_id) in input_data['roles']:                                
+                #print "removing %s"%role.name
                 user.roles.append(role)                
     if 'pic_file' in input_data:
         os.system('mv %s/%s /var/www/html/pics/user_%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],user.user_id))

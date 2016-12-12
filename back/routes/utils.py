@@ -29,8 +29,7 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
             tokens = tables.Token.query.filter_by(player_id=player.player_id,
                                                   division_id=division_machine.division.division_id,
                                                   used=False).all()
-        if tables.DivisionMachine.query.filter_by(player_id=player.player_id).first():
-            print "uh oh 1"
+        if tables.DivisionMachine.query.filter_by(player_id=player.player_id).first():            
             return False
     if team:
         if division_machine.division.meta_division_id:
@@ -41,11 +40,11 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
             tokens = tables.Token.query.filter_by(team_id=team.team_id,
                                                   division_id=division_machine.division.division_id,
                                                   used=False).all()
-        if tables.DivisionMachine.query.filter_by(team_id=team.team_id).first():
+        if tables.DivisionMachine.query.filter_by(team_id=team.team_id).first():            
             return False
     
     if len(tokens) == 0:
-        print "uh oh 2"        
+        print "no tokens fool for %s"%division_machine.division.division_id
         return False
     
     # check that player is not on a queue for a different machine (note : this is a special case - we just yank them off the queue)

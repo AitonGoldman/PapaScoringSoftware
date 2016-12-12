@@ -195,7 +195,8 @@ def add_token(paid_for):
     player = fetch_entity(tables.Player,tokens_data['player_id'])
     if tokens_data.has_key('team_id'):
         team_id = tokens_data['team_id']
-        team = fetch_entity(tables.Player,team_id)        
+        team = fetch_entity(tables.Player,team_id)
+    # FIXME : we rely on team_id being passed in - should check for it here
     for div_id in tokens_data['divisions']:
         num_tokens = tokens_data['divisions'][div_id]
         if num_tokens > 0:

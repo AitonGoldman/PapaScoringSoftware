@@ -198,6 +198,9 @@ def route_add_division_machine_team(division_id,division_machine_id,team_id):
     team = fetch_entity(tables.Team,team_id)
     if division_machine.team_id or division_machine.player_id:
         raise Conflict('The machine is already being played')
+    if check_player_team_can_start_game(current_app,division_machine,team=team) is False:
+        raise BadRequest('Player can not start game - either no tickets or already on another machine')
+
     division_machine.team_id=team.team_id
     tables.db_handle.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})

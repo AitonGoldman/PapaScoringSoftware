@@ -12,7 +12,9 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.flask_app = self.app.instances[self.poop_db_name]
         self.admin_user,self.scorekeeper_user,self.desk_user = orm_creation.create_stanard_roles_and_users(self.flask_app)
         self.admin_user_password='test_admin'
-        self.desk_user_password='test_desk'        
+        self.desk_user_password='test_desk'
+        self.new_player = orm_creation.create_player(self.flask_app,{'first_name':'aiton','last_name':'goldman','ifpa_ranking':'123'})        
+        self.player_pin = self.new_player.pin
     #FIXME : need a "get division that was created with single division tournament create" test
     def test_tournament_create_no_teams_single_no_stripe(self):        
         with self.flask_app.test_client() as c:                    
@@ -215,66 +217,23 @@ class RouteTournamentTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               'Was expecting status code 400, but it was %s' % (rv.status_code))
             
 
-            
-    def test_tournament_add_no_auth(self):        
-        with self.flask_app.test_client() as c:                                
-            rv = c.post('/tournament',
-                       data=json.dumps({'tournament_name':'test_tournament',                                        
-                                        'single_division':True,
-                                        'scoring_type':'HERB',
-                                        'finals_num_qualifiers':24
-                                        ,}))
-            self.assertEquals(rv.status_code,
-                              401,
-                              'Was expecting status code 401, but it was %s' % (rv.status_code))
-
-    def test_tournament_edit_no_auth(self):        
-        with self.flask_app.test_client() as c:                    
-            rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
-            rv = c.post('/tournament',
-                       data=json.dumps({'tournament_name':'test_tournament',                                                                                'scoring_type':'HERB'                                        
-                                        ,}))            
-        new_tourney = json.loads(rv.data)
-        with self.flask_app.test_client() as c:                            
-            rv = c.put('/tournament/%s' % new_tourney['data']['tournament_id'],
-                       data=json.dumps({'tournament_name':'test_tournament_rename'}))            
-            self.assertEquals(rv.status_code,
-                              401,
-                              'Was expecting status code 401, but it was %s' % (rv.status_code))
-            
-            
-    def test_tournament_add_wrong_auth(self):        
-        with self.flask_app.test_client() as c:                                
-            rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.desk_user.username,'password':self.desk_user_password}))         
-            rv = c.post('/tournament',
-                       data=json.dumps({'tournament_name':'test_tournament',                                        
-                                        'single_division':True,
-                                        'scoring_type':'HERB',
-                                        'finals_num_qualifiers':24
-                                        ,}))
-            self.assertEquals(rv.status_code,
-                              403,
-                              'Was expecting status code 403, but it was %s' % (rv.status_code))
-
-    def test_tournament_edit_wrong_auth(self):        
-        with self.flask_app.test_client() as c:                    
-            rv = c.put('/auth/login',
-                   data=json.dumps({'username':self.admin_user.username,'password':self.admin_user_password}))            
-            rv = c.post('/tournament',
-                       data=json.dumps({'tournament_name':'test_tournament',                                                                                'scoring_type':'HERB'                                        
-                                        ,}))            
-        new_tourney = json.loads(rv.data)
+    
+    def test_tournament_add_bad_auth(self):        
         with self.flask_app.test_client() as c:
-            rv = c.put('/auth/login',
-                   data=json.dumps({'username':'test_desk','password':'test_desk'}))
-            rv = c.put('/tournament/%s' % new_tourney['data']['tournament_id'],
-                       data=json.dumps({'tournament_name':'test_tournament_rename'}))            
-            self.assertEquals(rv.status_code,
-                              403,
-                              'Was expecting status code 403, but it was %s' % (rv.status_code))
-            
-            
+            self.checkWrongPermissions(c,'post','/tournament')            
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'post','/tournament','test_scorekeeper')            
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'post','/tournament',pin=self.player_pin)            
 
+
+    def test_tournament_edit_bad_auth(self):        
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/tournament/1')            
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/tournament/1','test_scorekeeper')            
+        with self.flask_app.test_client() as c:
+            self.checkWrongPermissions(c,'put','/tournament/1',pin=self.player_pin)            
+
+            
             

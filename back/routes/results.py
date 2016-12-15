@@ -72,8 +72,7 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
             #'filter_points':result['filter_score'],
             'filter_rank':result['filter_rank']
             
-        }
-        print new_dict
+        }        
         entry_div_id = result['entry_division_id']
         score_div_machine_id = result['score_division_machine_id']        
         return_dict[entry_div_id][score_div_machine_id].append(new_dict)

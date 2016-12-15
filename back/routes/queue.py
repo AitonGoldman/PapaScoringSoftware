@@ -51,8 +51,8 @@ def bump_player_down_queue(division_machine_id):
     tables = db_util.app_db_tables(current_app)    
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
     queue = division_machine.queue        
-    allow_bump=True    
-    if queue.bumped:
+    allow_bump=True        
+    if queue and queue.bumped:
         allow_bump=False
     player_id = queue.player_id
     player = fetch_entity(tables.Player,player_id)
@@ -64,7 +64,7 @@ def bump_player_down_queue(division_machine_id):
         #do not allow bumps if there is no queue to bump down
         return_queue = get_queue_from_division_machine(division_machine,True)            
         return jsonify({'data':{division_machine_id:{'queues':return_queue}}})        
-    if allow_bump:
+    if allow_bump:        
         create_queue(current_app,division_machine.division_machine_id,player_id,bumped=True)
     #return jsonify({'data':moved_up_queue.to_dict_simple()})    
     return_queue = get_queue_from_division_machine(division_machine,True)    

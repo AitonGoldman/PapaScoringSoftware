@@ -7,6 +7,9 @@ def generate_audit_log_class(db_handle):
         player_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'player.player_id'
         ))
+        team_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
+            'team.team_id'
+        ))        
         entry_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'entry.entry_id'
         ))
@@ -27,6 +30,7 @@ def generate_audit_log_class(db_handle):
         remaining_tokens = db_handle.Column(db_handle.String(255))
         description = db_handle.Column(db_handle.String(255))
         action=db_handle.Column(db_handle.String(255))
+        num_tokens_purchased_in_batch=db_handle.Column(db_handle.Integer)
         division_machine = db_handle.relationship(
             'DivisionMachine',
             foreign_keys=[division_machine_id]
@@ -34,7 +38,12 @@ def generate_audit_log_class(db_handle):
         token = db_handle.relationship(
             'Token',
             foreign_keys=[token_id]
+        )
+        entry = db_handle.relationship(
+            'Entry',
+            foreign_keys=[entry_id]
         )        
+        
         
         def to_dict_simple(self):
             return to_dict(self)        

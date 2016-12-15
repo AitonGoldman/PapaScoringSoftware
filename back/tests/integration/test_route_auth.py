@@ -178,7 +178,7 @@ class RouteAuthTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         with self.flask_app.test_client() as c:            
             
             rv = c.put('/auth/player_login',
-                       data=json.dumps({'player_pin':'poop'}))
+                       data=json.dumps({'player_pin':'1'}))
             self.assertEquals(rv.status_code,
                               401,
                               'Was expecting status code 401, but it was %s' % (rv.status_code))

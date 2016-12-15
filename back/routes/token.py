@@ -1,7 +1,7 @@
 from blueprints import admin_login_blueprint,admin_manage_blueprint
 from flask import jsonify,current_app,request
 import json
-from werkzeug.exceptions import BadRequest,Conflict
+from werkzeug.exceptions import BadRequest,Conflict,Forbidden
 from util import db_util
 from util.permissions import Admin_permission, Desk_permission, Token_permission
 from flask_login import login_required,current_user
@@ -71,7 +71,7 @@ def check_add_token_request_is_valid(tokens_data, tables):
         num_tokens = tokens_data['metadivisions'][metadiv_id]        
         check_add_token_for_max_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id)                     
     
-def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None,team_id=None, paid_for=1, comped=False):
+def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None,team_id=None, paid_for=1, comped=False, player_id_for_team_audit_log=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     tokens = []
@@ -95,12 +95,25 @@ def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None
         db.session.add(new_token)                
         db.session.commit()
         audit_log = tables.AuditLog()
-        audit_log.purchase_date = datetime.datetime.now()
-        audit_log.player_id = player_id
+        if paid_for == 1:
+            audit_log.purchase_date = datetime.datetime.now()
+        if player_id:
+            audit_log.player_id = player_id
+        if team_id:
+            audit_log.team_id = team_id
+            
         audit_log.token_id=new_token.token_id
         audit_log.deskworker_id=current_user.user_id
-        
-        tokens_left_string = calc_audit_log_remaining_tokens(player_id)
+        audit_log.num_tokens_purchased_in_batch=num_tokens
+        #FIXME : needs serious refactoring -
+        #        we need to jump through these hoops because we want both team and player tokens to be looked up when creating the
+        #        remaining tokens part of the audit log 
+        if player_id is None:
+            if player_id_for_team_audit_log is not None:
+                player_id_for_calc_remaining_tokens = player_id_for_team_audit_log
+        else:
+            player_id_for_calc_remaining_tokens = player_id
+        tokens_left_string = calc_audit_log_remaining_tokens(player_id_for_calc_remaining_tokens,team_id)
         audit_log.remaining_tokens = tokens_left_string        
         db.session.add(audit_log)
         db.session.commit()
@@ -180,8 +193,8 @@ def confirm_tokens():
 @login_required
 @Token_permission.require(403)
 def add_token(paid_for):
-    if hasattr(current_user,'player_id') and paid_for != 0:
-        raise BadRequest('Stop being a dick, you assface')
+    if current_user.is_player and paid_for != 0:
+        raise Forbidden('Stop being a dick, you assface')        
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
     total_tokens=[]
@@ -202,17 +215,18 @@ def add_token(paid_for):
         if num_tokens > 0:
             tokens = create_division_tokens(num_tokens,div_id=div_id,player_id=player_id, paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens
-    for div_id in tokens_data['teams']:
-        num_tokens = tokens_data['teams'][div_id]
-        if int(num_tokens) > 0:
-            check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)
-            tokens = create_division_tokens(num_tokens,div_id=div_id,team_id=team_id,paid_for=paid_for,comped=comped)
-            total_tokens = total_tokens + tokens
     for metadiv_id in tokens_data['metadivisions']:
         num_tokens = tokens_data['metadivisions'][metadiv_id]
         if num_tokens > 0:
             tokens = create_division_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id, paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens
+    for div_id in tokens_data['teams']:
+        num_tokens = tokens_data['teams'][div_id]
+        if int(num_tokens) > 0:
+            check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)
+            tokens = create_division_tokens(num_tokens,div_id=div_id,team_id=team_id,paid_for=paid_for,comped=comped,player_id_for_team_audit_log=player_id)
+            total_tokens = total_tokens + tokens
+            
     db.session.commit()
     total_divisions_tokens_summary = {}
     total_metadivisions_tokens_summary = {}
@@ -223,6 +237,8 @@ def add_token(paid_for):
     for metadiv_id in tokens_data['metadivisions']:
         total_metadivisions_tokens_summary[metadiv_id] = len([token for token in total_tokens if str(token['metadivision_id'])==str(metadiv_id)])
          
-    return jsonify({'data':{'divisions':total_divisions_tokens_summary,'metadivisions':total_metadivisions_tokens_summary}})
+    return jsonify({'data':{'divisions':total_divisions_tokens_summary,
+                            'metadivisions':total_metadivisions_tokens_summary,                            
+                            'tokens':total_tokens}})
 
 

@@ -1,8 +1,24 @@
 from werkzeug.exceptions import BadRequest
 from util import db_util
 import datetime
-from flask import current_app
+from flask import current_app,jsonify
 from flask_login import current_user
+import stripe
+from flask_restless.helpers import to_dict
+
+def get_valid_sku(sku,STRIPE_API_KEY):
+    if 'STRIPE_API_KEY' is None:
+        raise BadRequest('Stripe API key is not set')
+    stripe.api_key = STRIPE_API_KEY
+    product_list = stripe.Product.list()
+    items = product_list['data']
+    dict_sku_prices = {}
+    for item in items:        
+        dict_sku_prices[item['skus']['data'][0]['id']]=item['skus']['data'][0]['price']/100                
+    if sku in dict_sku_prices:        
+        return {'sku':to_dict(item['skus']['data'][0])}
+    else:        
+        return {'sku':None}
 
 def fetch_entity(model_class,model_id):
     found_entity = model_class.query.get(model_id)    
@@ -43,35 +59,50 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
         if tables.DivisionMachine.query.filter_by(team_id=team.team_id).first():            
             return False
     
-    if len(tokens) == 0:
-        print "no tokens fool for %s"%division_machine.division.division_id
+    if len(tokens) == 0:        
         return False
     
     # check that player is not on a queue for a different machine (note : this is a special case - we just yank them off the queue)
     return True
     
 
-def set_token_start_time(app,player,division_machine):
+def set_token_start_time(app,player,division_machine,team_id=None):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)        
     if division_machine.division.meta_division_id is None:
-        token_to_set = tables.Token.query.filter_by(player_id=player.player_id,
-                                                    division_id=division_machine.division.division_id,
-                                                    used=False).first()
+        if player:
+            token_to_set = tables.Token.query.filter_by(player_id=player.player_id,
+                                                        division_id=division_machine.division.division_id,
+                                                        used=False).first()
+        if team_id:
+            token_to_set = tables.Token.query.filter_by(team_id=team_id,
+                                                        division_id=division_machine.division.division_id,
+                                                        used=False).first()
+            
+            
     else:
-        token_to_set = tables.Token.query.filter_by(player_id=player.player_id,
-                                                    metadivision_id=division_machine.division.meta_division_id,
-                                                    used=False).first()
+        if player:
+            token_to_set = tables.Token.query.filter_by(player_id=player.player_id,
+                                                        metadivision_id=division_machine.division.meta_division_id,
+                                                        used=False).first()
+            
     token_to_set.game_started_date=datetime.datetime.now()
     token_to_set.division_machine_id = division_machine.division_machine_id
     db.session.commit()    
     audit_log = tables.AuditLog()
-    audit_log.player_id=player.player_id
+    if player:
+        audit_log.player_id=player.player_id
+    if team_id:
+        audit_log.team_id=team_id
     audit_log.token_id=token_to_set.token_id
     audit_log.division_machine_id=division_machine.division_machine_id
     audit_log.scorekeeper_id=current_user.user_id
     audit_log.game_started_date=datetime.datetime.now()
-    tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
+    if player:
+        tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
+    else:
+        tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+        
     audit_log.remaining_tokens = tokens_left_string            
     db.session.add(audit_log)
     db.session.commit()
@@ -120,14 +151,24 @@ def get_queue_from_division_machine(division_machine,json_output=False):
             queue = None
     return queue_list
 
-def calc_audit_log_remaining_tokens(player_id):
+
+def calc_audit_log_remaining_tokens(player_id,team_id=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
     metadivisions = {meta_division.meta_division_id:meta_division.to_dict_simple() for meta_division in tables.MetaDivision.query.all()}
     division_tokens_left={}
     metadivision_tokens_left={}
-    tokens_left = tables.Token.query.filter_by(player_id=player_id,used=False).all()
+    player_teams = []
+    tokens_left = []    
+    if player_id:
+        tokens_left = tables.Token.query.filter_by(player_id=player_id,used=False,paid_for=True).all()
+        player_teams = tables.Player.query.filter_by(player_id=player_id).first().teams
+    if len(player_teams) > 0:
+        team_id = player_teams[0].team_id
+    if team_id:
+        tokens_left = tokens_left + tables.Token.query.filter_by(team_id=team_id,used=False,paid_for=True).all()
+    
     for token in tokens_left:
         if token.metadivision_id:
             if token.metadivision_id not in metadivision_tokens_left:

@@ -13,6 +13,8 @@ from time import sleep
 from util.db_info import DbInfo
 import time
 import json
+import random
+from sqlalchemy_utils import drop_database
 
 class TdIntegrationTestBase(unittest.TestCase):    
     def checkWrongPermissions(self,c,http_method,url,user_name=None,pin=None):        
@@ -43,13 +45,13 @@ class TdIntegrationTestBase(unittest.TestCase):
         db_file_name=self.db_temp_info[1]
         
         flask_file_name = mkstemp()[1]                
-        self.poop_db_file_name = mkstemp()[1]
-        self.poop_db_name = os.path.basename(self.poop_db_file_name)        
-        
+        #self.poop_db_file_name = mkstemp()[1]
+        #self.poop_db_name = os.path.basename(self.poop_db_file_name)        
+        self.poop_db_name = "test%s"%random.randrange(9999999)
         secret_file = open(secret_file_name,'w')
         secret_file.write('FLASK_SECRET_KEY=poop\n')
         secret_file.write('MAX_TICKETS_ALLOWED_PER_DIVISION=5\n')
-        secret_file.write('QUEUE_BUMP_AMOUNT=0')
+        secret_file.write('QUEUE_BUMP_AMOUNT=5')
 
         secret_file.close()
 
@@ -60,7 +62,10 @@ class TdIntegrationTestBase(unittest.TestCase):
 
         db_file = open(db_file_name,'w')
         #public_file.write("sqlite=true")
-        db_file.write("DB_TYPE=sqlite")
+        #db_file.write("DB_TYPE=sqlite\n")        
+        db_file.write("DB_TYPE=postgres\n")
+        db_file.write("DB_PASSWORD=tompassword\n")
+        db_file.write("DB_USERNAME=tom\n")        
         public_file.close()
 
         
@@ -128,8 +133,15 @@ class TdIntegrationDispatchTestBase(TdIntegrationTestBase):
     def setUp(self):
         super(TdIntegrationDispatchTestBase,self).setUp()
         dummy_app = Flask('dummy_app')                
-        db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'sqlite'}),drop_tables=True)
+        #db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'sqlite'}),drop_tables=True)
+        self.assertFalse((os.getenv('DB_USERNAME',None) is None or os.getenv('DB_PASSWORD',None) is None),
+                         "You forgot to set DB_USERNAME and DB_PASSWORD")
+        
+        db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'postgres','DB_USERNAME':os.getenv('DB_USERNAME'),'DB_PASSWORD':os.getenv('DB_PASSWORD')}),drop_tables=True)
         del dummy_app
         self.app = PathDispatcher(app_build.get_meta_admin_app, app_build.get_admin_app)                
-        
+    def tearDown(self):
+        db_url = db_util.generate_db_url(self.poop_db_name, DbInfo({'DB_TYPE':'postgres','DB_USERNAME':'tom','DB_PASSWORD':'tompassword'}))        
+        drop_database(db_url)
+
 

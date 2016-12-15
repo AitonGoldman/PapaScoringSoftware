@@ -1,5 +1,5 @@
 from util import db_util
-from routes.utils import check_roles_exist,fetch_entity
+from routes.utils import check_roles_exist,fetch_entity,get_valid_sku
 from enum import Enum
 import stripe
 import os
@@ -56,18 +56,22 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
         'scoring_type':'HERB',
         'active':True
     }
+    counter=0
     if use_stripe:
         new_tournament_data['use_stripe']=True
-        new_tournament_data['stripe_sku']=stripe_sku
+        new_tournament_data['stripe_sku']=stripe_sku[counter]
     else:
         new_tournament_data['use_stripe']=False
         new_tournament_data['local_price']=5
-    for division_name in ['A','B','C','D']:
+    for division_name in ['A','B','C','D']:        
         new_tournament_data['division_name']=division_name
-        new_division = create_division(app,new_tournament_data)            
+        new_division = create_division(app,new_tournament_data)
+        if use_stripe:
+            new_tournament_data['stripe_sku']=stripe_sku[counter]        
         db.session.commit()
         new_tournament.divisions.append(new_division)
         db.session.commit()
+        counter=counter+1        
     new_metadivision = create_meta_division(app,{
         'meta_division_name':'Classics'
     })
@@ -80,11 +84,12 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
                                                          'finals_num_qualifiers':'24'}
     if use_stripe:
         new_team_tournament_data['use_stripe']=True
-        new_team_tournament_data['stripe_sku']=stripe_sku
+        new_team_tournament_data['stripe_sku']=stripe_sku[counter]
     else:
         new_team_tournament_data['use_stripe']=False
         new_team_tournament_data['local_price']=5
     new_tournament = create_tournament(app,new_team_tournament_data)
+    counter = counter + 1    
     new_classics_tournament_data = {'single_division':True,
                                     'active':True,
                                     'team_tournament':False,
@@ -94,15 +99,19 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
     }
     if use_stripe:
         new_classics_tournament_data['use_stripe']=True
-        new_classics_tournament_data['stripe_sku']=stripe_sku
+        new_classics_tournament_data['stripe_sku']=stripe_sku[counter]
     else:
         new_classics_tournament_data['use_stripe']=False        
         new_classics_tournament_data['local_price']=5
-    for tournament_name in ['Classics 1','Classics 2','Classics 3']:
+    
+    for tournament_name in ['Classics 1','Classics 2','Classics 3']:        
         new_classics_tournament_data['tournament_name']=tournament_name
+        if use_stripe:            
+            new_classics_tournament_data['stripe_sku']=stripe_sku[counter]        
         new_tournament = create_tournament(app,new_classics_tournament_data)
         new_metadivision.divisions.append(new_tournament.divisions[0])
         db.session.commit()        
+        counter=counter+1
 
 def create_team(app,team_data):
     db = db_util.app_db_handle(app)
@@ -123,6 +132,7 @@ def create_player(app,player_data):
 
     player_role = tables.Role.query.filter_by(name='player').first()
     queue_role = tables.Role.query.filter_by(name='queue').first()    
+    token_role = tables.Role.query.filter_by(name='token').first()    
 
     new_player = tables.Player(
         first_name=player_data['first_name'],
@@ -131,7 +141,7 @@ def create_player(app,player_data):
         active=True        
     )
     if app.td_config['DB_TYPE']=='sqlite':        
-        new_player.pin= random.randrange(1234,9999)
+        new_player.pin= random.randrange(1234,9999999)
         db.session.commit()
         pass
     
@@ -140,15 +150,12 @@ def create_player(app,player_data):
     new_user = tables.User(
         username="player%s" % (new_player.pin),
         pin=new_player.pin,
-        is_player=True
+        is_player=True,
+        roles=[player_role,queue_role,token_role]
     )
     db.session.add(new_user)
     db.session.commit()
-    new_player.user_id=new_user.user_id
-    db.session.commit()
-    new_user.roles.append(player_role)
-    db.session.commit()    
-    new_user.roles.append(queue_role)
+    new_player.user_id=new_user.user_id    
     db.session.commit()    
     if 'ifpa_ranking' in player_data and player_data['ifpa_ranking'] != 0:
         new_player.ifpa_ranking = player_data['ifpa_ranking']
@@ -190,6 +197,8 @@ def create_division(app,division_data):
         new_division.number_of_scores_per_entry=1
     if 'use_stripe' in division_data and division_data['use_stripe']:
         new_division.use_stripe = True
+        if get_valid_sku(division_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
+            raise BadRequest('invalid SKU specified')
         new_division.stripe_sku=division_data['stripe_sku']
     else:
         new_division.use_stripe = False
@@ -284,16 +293,16 @@ def create_queue(app,division_machine_id,player_id,bumped=None):
     )        
     db.session.add(new_queue)
     db.session.commit()
-    bump_num = int(app.td_config['QUEUE_BUMP_AMOUNT'])    
+    bump_num = int(app.td_config['QUEUE_BUMP_AMOUNT'])        
     if bumped and bump_num!=0:
         queue_count = 1
         queue=division_machine.queue
-        while(queue is not None) and queue_count < bump_num:
-            queue_count = queue_count + 1
+        while(len(queue.queue_child)>0) and queue_count < bump_num:
+            queue_count = queue_count + 1            
             queue=queue.queue_child[0]
         new_queue.parent_id=queue.queue_id
         if(len(queue.queue_child)>0):
-            queue.queue_child[0].parent_id=new_queue.queue_id
+            queue.queue_child[0].parent_id=new_queue.queue_id        
         new_queue.bumped=True
         db.session.commit()        
         return new_queue
@@ -308,13 +317,17 @@ def create_queue(app,division_machine_id,player_id,bumped=None):
     db.session.commit()
     return new_queue
         
-def create_entry(app,player_id,division_machine_id,division_id,score):
+#def create_entry(app,player_id,division_machine_id,division_id,score):
+def create_entry(app,division_machine_id,division_id,score,player_id=None,team_id=None):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
-    entry = tables.Entry(
-        player_id=player_id,
+    entry = tables.Entry(        
         division_id=division_id
     )
+    if player_id:
+        entry.player_id=player_id
+    if team_id:
+        entry.team_id=team_id
     db.session.add(entry)
     db.session.commit()
     score = tables.Score(

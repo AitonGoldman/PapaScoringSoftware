@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue,get_valid_sku
 from orm_creation import create_division, create_division_machine
 
 
@@ -174,7 +174,9 @@ def route_edit_division(division_id):
     if 'use_stripe' in division_data:
         if division_data['use_stripe'] is True:            
             division.use_stripe=True
-            if 'stripe_sku' in division_data:        
+            if 'stripe_sku' in division_data:
+                if get_valid_sku(division_data['stripe_sku'],current_app.td_config['STRIPE_API_KEY'])['sku'] is None:
+                    raise BadRequest('Invalid sku specified')
                 division.stripe_sku = division_data['stripe_sku']
             else:
                 raise BadRequest('Specified use_stripe, but no sku specified')
@@ -200,7 +202,7 @@ def route_add_division_machine_team(division_id,division_machine_id,team_id):
         raise Conflict('The machine is already being played')
     if check_player_team_can_start_game(current_app,division_machine,team=team) is False:
         raise BadRequest('Player can not start game - either no tickets or already on another machine')
-
+    set_token_start_time(current_app,None,division_machine,team_id=team_id)    
     division_machine.team_id=team.team_id
     tables.db_handle.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})

@@ -283,10 +283,9 @@ class RouteQueueTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(len(modified_queue),3)
             self.assertEquals(modified_queue[0].player_id,2)
             self.assertEquals(modified_queue[1].player_id,3)
-            self.assertEquals(modified_queue[2].player_id,1)
+            self.assertEquals(modified_queue[2].player_id,1)                        
 
-
-    def test_bump_player_from_three_player_queue_and_one_bump(self):                
+    def test_bump_player_from_three_player_queue_and_bump_amount_set_to_one(self):                
         self.flask_app.td_config['QUEUE_BUMP_AMOUNT']=1
         with self.flask_app.test_client() as c:                                            
             rv = c.put('/auth/login',
@@ -366,8 +365,8 @@ class RouteQueueTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
-            add_player_to_machine_from_queue = json.loads(rv.data)['data']                                    
-            self.assertEquals(add_player_to_machine_from_queue['division_machine']['player_id'],1)
+            add_player_to_machine_from_queue = json.loads(rv.data)['data']                                                
+            self.assertEquals(add_player_to_machine_from_queue['player_id'],1)
             self.assertFalse('next_queue' in add_player_to_machine_from_queue)
             division_machine = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=1).first()
             self.assertEquals(division_machine.queue_id,None)
@@ -407,8 +406,8 @@ class RouteQueueTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               200,
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
             add_player_to_machine_from_queue = json.loads(rv.data)['data']                                    
-            self.assertEquals(add_player_to_machine_from_queue['division_machine']['player_id'],1)
-            self.assertEquals(add_player_to_machine_from_queue['next_queue']['queue_id'],2)
+            self.assertEquals(add_player_to_machine_from_queue['player_id'],1)
+            self.assertEquals(add_player_to_machine_from_queue['queue_id'],2)
             division_machine = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=1).first()
             self.assertEquals(division_machine.queue_id,2)
             self.assertEquals(division_machine.player_id,1)                                    
@@ -490,3 +489,42 @@ class RouteQueueTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(division_machine.queue_id,None)
             division_machine_two = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=2).first()
             self.assertEquals(division_machine_two.queue_id,second_queue['queue_id'])
+
+    def test_bump_player_from_three_player_queue_until_player_one_bumped_off_queue(self):                
+        with self.flask_app.test_client() as c:                                
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':self.score_user_name_password,
+                                        'password':self.score_user_name_password}))
+            self.division_machine.player_id=4
+            self.flask_app.tables.db_handle.session.commit()            
+            rv = c.post('/queue',
+                       data=json.dumps({"player_id":"1",                                        
+                                        "division_machine_id":"1"}))
+            rv = c.post('/queue',
+                       data=json.dumps({"player_id":"2",                                        
+                                        "division_machine_id":"1"}))
+            rv = c.post('/queue',
+                       data=json.dumps({"player_id":"3",                                        
+                                        "division_machine_id":"1"}))
+            rv = c.put('/queue/division_machine/1/bump')
+            rv = c.put('/queue/division_machine/1/bump')
+            rv = c.put('/queue/division_machine/1/bump')
+            rv = c.put('/queue/division_machine/1/bump')
+            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            modified_queue = []
+            queue = self.flask_app.tables.DivisionMachine.query.filter_by(division_machine_id=1).first().queue 
+            while queue is not None:                
+                modified_queue.append(queue)
+                if len(queue.queue_child) > 0:
+                    queue = queue.queue_child[0]
+                else:
+                    queue = None            
+            self.assertIsNotNone(modified_queue)
+            self.assertEquals(len(modified_queue),2)
+            self.assertEquals(modified_queue[0].player_id,2)
+            self.assertEquals(modified_queue[1].player_id,3)
+            
+            

@@ -89,6 +89,8 @@ def route_void_score(division_machine_id):
     audit_log.token_id=token.token_id
     audit_log.scorekeeper_id=current_user.user_id
     audit_log.voided_date=datetime.datetime.now()
+    audit_log.used_date=datetime.datetime.now()
+    audit_log.used=True
     audit_log.voided=True
     audit_log.division_machine_id=division_machine.division_machine_id    
     tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        

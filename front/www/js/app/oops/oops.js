@@ -1,5 +1,6 @@
 angular.module('app.oops',['app.oops.edit_player_entries',
     'app.oops.missing_tokens',
+    'app.oops.missing_scores',
     /*REPLACEMECHILD*/]);
 angular.module('app.oops').controller(
     'app.oops',[

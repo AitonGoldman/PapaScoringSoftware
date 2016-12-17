@@ -1,0 +1,24 @@
+<ion-view view-title="">
+  <ion-content>      
+    <center>
+      <div class='first-element'>
+      </div>
+      <div>
+        Time Delta <br>
+        
+      <select ng-change='get_division_events()' ng-model='audit_log.time_delta'>
+        <option value="15">15</option>
+        <option value="25">25</option>
+        <option value="35">35</option>
+        <option value="45">45</option>
+      </select>
+      </div>      
+
+      <div ng-repeat="audit_log_entry in resources.audit_log_missing_scores.data">
+        {{audit_log_entry}}
+      </div>
+    </center>
+    <!-- ui-sref=".report_division_events({audit_log_id: ,})" -->    
+  </ion-content>
+</ion-view>
+

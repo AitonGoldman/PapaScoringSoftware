@@ -50,8 +50,7 @@ class RouteResultsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         with self.flask_app.test_client() as c:
             rv = c.get('/results/division/%s'%self.division.division_id)
             results_returned = json.loads(rv.data)['data']
-            for player in results_returned['ranked_player_list'][str(self.division.division_id)]:
-                print "%s at rank %s with points %s" %(player[1]['player_id'],player[0],player[1]['sum'])
+            for player in results_returned['ranked_player_list'][str(self.division.division_id)]:                
                 if player[1]['player_id']==22 or player[1]['player_id']==21:
                     self.assertEquals(player[1]['sum'],300)
                     self.assertEquals(player[0],0)                    

@@ -1,0 +1,13 @@
+<ion-view view-title="">
+  <ion-content>      
+    <center>
+      <div class='first-element'>
+      </div>
+      <div ui-sref=".report_division_events({audit_log_id:audit_log_entry.audit_log_id})" ng-repeat="audit_log_entry in resources.audit_log_missing_tokens.data|filter:{contents:'!Purchased'}">
+        -- {{audit_log_entry.audit_log_id}} --
+        {{audit_log_entry.contents}}
+      </div>
+    </center>
+  </ion-content>
+</ion-view>
+

@@ -16,10 +16,10 @@ angular.module('app.login_player.process').controller(
         
         $scope.player=$state.params.player;
         Modals.loading();            
-        $login_promise = TimeoutResources.LoginPlayer(undefined,{site:$scope.site},
+        login_promise = TimeoutResources.LoginPlayer(undefined,{site:$scope.site},
                                                 {player_pin:$scope.player.pin});
         
-        $login_promise.then(function(data){
+        login_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             User.set_logged_in_user($scope.resources.logged_in_player.data,"player");            
             Modals.loaded();

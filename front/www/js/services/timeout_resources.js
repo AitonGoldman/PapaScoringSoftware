@@ -215,6 +215,8 @@ angular.module('TD_services.timeout_resources')
                   var getPlayerEntriesResource = generate_resource_definition(':site/entry/player/:player_id','GET');
                   var setScoreResource = generate_resource_definition(':site/admin/score_id/:score_id/score/:score','PUT');
                   var getAuditLogMissingTokensResource = generate_resource_definition(':site/admin/audit_log/where_all_my_tokens_at/player_id/:player_id','GET');
+                  var getAuditLogMissingScoresResource = generate_resource_definition(':site/admin/audit_log/where_all_my_scores_at/player_id/:player_id/audit_log_id/:audit_log_id/time_delta/:time_delta','GET');
+                  
                   var getPlayerPinResource = generate_resource_definition(':site/player/:player_id/pin','GET');                  
                   
                   return {
@@ -267,6 +269,8 @@ angular.module('TD_services.timeout_resources')
                       VoidEntry: generate_custom_http_executor(voidEntryResource,'score_set','delete'),
                       AddEntry: generate_custom_http_executor(addEntryResource,'entry_added','get'),
                       GetAuditLogMissingTokens: generate_custom_http_executor(getAuditLogMissingTokensResource,'audit_log_missing_tokens','get'),
+                      GetAuditLogMissingScores: generate_custom_http_executor(getAuditLogMissingScoresResource,'audit_log_missing_scores','get'),
+                      
                       GetPlayerPin: generate_custom_http_executor(getPlayerPinResource,'player_pin','get')                      
 
                       

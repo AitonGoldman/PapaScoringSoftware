@@ -50,14 +50,14 @@ angular.module('app.oops.edit_player_entries.player_entries').controller(
             add_entry_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
                 Modals.loaded();
-                new_entry.score=undefined;
-                new_entry.division_machine_id=undefined;
-                new_entry.division_machine_name=undefined;                
                 console.log($scope.resources);
                 $scope.resources.player_entries.data[0]={
                     score:{division_machine_name:$scope.new_division_machine_name,score:new_entry.score},
                     entry_id:$scope.resources.entry_added.data                    
                 };
+                new_entry.score=undefined;
+                new_entry.division_machine_id=undefined;
+                new_entry.division_machine_name=undefined;                                
             });            
         };                
     }]

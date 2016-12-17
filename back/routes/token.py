@@ -94,28 +94,6 @@ def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None
         
         db.session.add(new_token)                
         db.session.commit()
-        audit_log = tables.AuditLog()
-        if paid_for == 1:
-            audit_log.purchase_date = datetime.datetime.now()
-        if player_id:
-            audit_log.player_id = player_id
-        if team_id:
-            audit_log.team_id = team_id
-            
-        audit_log.token_id=new_token.token_id
-        audit_log.deskworker_id=current_user.user_id
-        audit_log.num_tokens_purchased_in_batch=num_tokens
-        #FIXME : needs serious refactoring -
-        #        we need to jump through these hoops because we want both team and player tokens to be looked up when creating the
-        #        remaining tokens part of the audit log 
-        if player_id is None:
-            if player_id_for_team_audit_log is not None:
-                player_id_for_calc_remaining_tokens = player_id_for_team_audit_log
-        else:
-            player_id_for_calc_remaining_tokens = player_id
-        tokens_left_string = calc_audit_log_remaining_tokens(player_id_for_calc_remaining_tokens,team_id)
-        audit_log.remaining_tokens = tokens_left_string        
-        db.session.add(audit_log)
         db.session.commit()
         tokens.append(to_dict(new_token))
     return tokens
@@ -198,6 +176,7 @@ def add_token(paid_for):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
     total_tokens=[]
+    #tokens = []
     tokens_data = json.loads(request.data)
     check_add_token_request_is_valid(tokens_data, tables)    
     player_id = tokens_data['player_id']
@@ -209,6 +188,8 @@ def add_token(paid_for):
     if tokens_data.has_key('team_id'):
         team_id = tokens_data['team_id']
         team = fetch_entity(tables.Player,team_id)
+    else:
+        team_id=None
     # FIXME : we rely on team_id being passed in - should check for it here
     for div_id in tokens_data['divisions']:
         num_tokens = tokens_data['divisions'][div_id]
@@ -225,9 +206,29 @@ def add_token(paid_for):
         if int(num_tokens) > 0:
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)
             tokens = create_division_tokens(num_tokens,div_id=div_id,team_id=team_id,paid_for=paid_for,comped=comped,player_id_for_team_audit_log=player_id)
-            total_tokens = total_tokens + tokens
-            
+            total_tokens = total_tokens + tokens            
     db.session.commit()
+    for token in total_tokens:
+        audit_log = tables.AuditLog()
+        if paid_for == 1:
+            audit_log.purchase_date = datetime.datetime.now()
+        if player_id:
+            audit_log.player_id = player_id
+        if team_id:
+            audit_log.team_id = team_id
+            
+        audit_log.token_id=token['token_id']
+        audit_log.deskworker_id=current_user.user_id
+        if token['team_id'] is not None:            
+            audit_log.num_tokens_purchased_in_batch=int(tokens_data['teams'][str(token['division_id'])])
+        elif token['division_id'] is not None:
+            audit_log.num_tokens_purchased_in_batch=int(tokens_data['divisions'][str(token['division_id'])])
+        elif token['metadivision_id'] is not None:
+            audit_log.num_tokens_purchased_in_batch=int(tokens_data['metadivisions'][str(token['metadivision_id'])])                        
+        tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
+        audit_log.remaining_tokens = tokens_left_string        
+        db.session.add(audit_log)
+        db.session.commit()
     total_divisions_tokens_summary = {}
     total_metadivisions_tokens_summary = {}
     for div_id in tokens_data['divisions']:

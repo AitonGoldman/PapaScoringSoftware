@@ -59,7 +59,40 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.oops.missing_tokens.report'
  	     }
  	   }
+       }).state('app.oops.missing_scores', 
+        { 
+         cache: false,
+ 	 url: '/missing_scores',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/oops/missing_scores/missing_scores.html',
+ 	       controller: 'app.oops.missing_scores'
+ 	     }
+ 	   }
+       }).state('app.oops.missing_scores.report_player_events', 
+        { 
+         cache: false,
+ 	 url: '/report_player_events/player_id/:player_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/oops/missing_scores/report_player_events/report_player_events.html',
+ 	       controller: 'app.oops.missing_scores.report_player_events'
+ 	     }
+ 	   }
+       }).state('app.oops.missing_scores.report_player_events.report_division_events', 
+        { 
+         cache: false,
+ 	 url: '/report_division_events/audit_log_id/:audit_log_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/oops/missing_scores/report_player_events/report_division_events/report_division_events.html',
+ 	       controller: 'app.oops.missing_scores.report_player_events.report_division_events'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
+
+
 
 
 

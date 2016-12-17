@@ -41,6 +41,6 @@ def route_admin_add_score(division_machine_id,score,player_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     division_id=fetch_entity(tables.DivisionMachine,division_machine_id).division_id
-    entry = create_entry(current_app,player_id,division_machine_id,division_id,score)
+    entry = create_entry(current_app,division_machine_id,division_id,score,player_id)
     db.session.commit()
     return jsonify({'data':entry.entry_id})

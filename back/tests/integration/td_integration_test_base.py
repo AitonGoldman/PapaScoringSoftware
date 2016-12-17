@@ -44,8 +44,10 @@ class TdIntegrationTestBase(unittest.TestCase):
         os.close(self.public_file_info[0])
         db_file_name=self.db_temp_info[1]
         
-        flask_file_name = mkstemp()[1]                
-        #self.poop_db_file_name = mkstemp()[1]
+        #flask_file_name = mkstemp()[1]                
+        self.poop_db_file_name = mkstemp()
+        os.close(self.poop_db_file_name[0])
+        self.poop_db_file_name = self.poop_db_file_name[1]
         #self.poop_db_name = os.path.basename(self.poop_db_file_name)        
         self.poop_db_name = "test%s"%random.randrange(9999999)
         secret_file = open(secret_file_name,'w')
@@ -55,10 +57,10 @@ class TdIntegrationTestBase(unittest.TestCase):
 
         secret_file.close()
 
-        public_file = open(public_file_name,'w')
+        #public_file = open(public_file_name,'w')
         #public_file.write("sqlite=true")
         #public_file.write("db_type=sqlite")
-        public_file.close()
+        #public_file.close()
 
         db_file = open(db_file_name,'w')
         #public_file.write("sqlite=true")
@@ -66,19 +68,19 @@ class TdIntegrationTestBase(unittest.TestCase):
         db_file.write("DB_TYPE=postgres\n")
         db_file.write("DB_PASSWORD=tompassword\n")
         db_file.write("DB_USERNAME=tom\n")        
-        public_file.close()
+        db_file.close()
 
         
-        flask_file = open(flask_file_name,'w')
-        flask_file.write("")
-        flask_file.close()
+        #flask_file = open(flask_file_name,'w')
+        #flask_file.write("")
+        #flask_file.close()
 
         os.environ['td_secret_config_filename']=secret_file_name
         os.environ['td_public_config_filename']=public_file_name
         #os.environ['db_config_filename']=db_file_name
         os.environ['DB_CONFIG_FILENAME']=db_file_name
         os.environ['TD_CONFIG_FILENAME']=secret_file_name
-        os.environ['flask_config_filename']=flask_file_name
+        #os.environ['flask_config_filename']=flask_file_name
         
         self.admin_health_check_string = '{\n  "data": {\n    "status": "HEALTHY", \n    "user_count": %s\n  }\n}'
         self.metaadmin_health_check_string = '{\n  "data": "METAADMIN_HEALTHY"\n}'
@@ -136,7 +138,8 @@ class TdIntegrationDispatchTestBase(TdIntegrationTestBase):
         #db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'sqlite'}),drop_tables=True)
         self.assertFalse((os.getenv('DB_USERNAME',None) is None or os.getenv('DB_PASSWORD',None) is None),
                          "You forgot to set DB_USERNAME and DB_PASSWORD")
-        
+        if os.getenv('USE_REAL_TEST_DB',None):
+            self.poop_db_name='test'
         db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'postgres','DB_USERNAME':os.getenv('DB_USERNAME'),'DB_PASSWORD':os.getenv('DB_PASSWORD')}),drop_tables=True)
         del dummy_app
         self.app = PathDispatcher(app_build.get_meta_admin_app, app_build.get_admin_app)                

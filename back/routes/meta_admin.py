@@ -50,10 +50,11 @@ def route_meta_admin_create_test_scores():
             for player_id in range(1,150):
                 for ticket_num in range(5):
                     orm_creation.create_entry(dummy_app,
-                                              player_id,
                                               division_machine.division_machine_id,
                                               division.division_id,
-                                              random.randrange(1,9999))
+                                              random.randrange(1,9999),
+                                              player_id
+                    )
         
     db_handle.engine.dispose()
     del dummy_app

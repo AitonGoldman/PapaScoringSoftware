@@ -21,6 +21,7 @@ angular.module('app.login_player.process').controller(
         
         login_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
+            console.log($scope.resources);
             User.set_logged_in_user($scope.resources.logged_in_player.data,"player");            
             Modals.loaded();
         },function(data){

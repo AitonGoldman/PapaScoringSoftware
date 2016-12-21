@@ -1,5 +1,6 @@
 angular.module('app.scorekeeping.machine_select',['app.scorekeeping.machine_select.player_select',
     'app.scorekeeping.machine_select.record_score',
+    'app.scorekeeping.machine_select.team_select',
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select').controller(
     'app.scorekeeping.machine_select',[
@@ -19,8 +20,7 @@ angular.module('app.scorekeeping.machine_select').controller(
             $scope.flattened_division_machines = _.values($scope.resources.division_machines.data);
             $scope.flattened_division_machines.sort(function (a, b) {
                 return (a.division_machine_id > b.division_machine_id ? 1 : -1);
-            });
-            console.log($scope.flattened_division_machines);
+            });            
             Modals.loaded();
         });
     }]

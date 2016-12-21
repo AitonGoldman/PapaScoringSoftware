@@ -51,6 +51,7 @@ def generate_division_machine_class(db_handle):
         def to_dict_simple(self):
             division_machine = to_dict(self)
             division_machine['division_machine_name'] = self.machine.machine_name
+            division_machine['team_tournament']= self.division.team_tournament
             division_machine['abbreviation'] = self.machine.abbreviation        
             if self.player_id:
                 division_machine['player']={'player_id':self.player_id,'player_name': "%s %s" % (self.player.first_name,self.player.last_name)}

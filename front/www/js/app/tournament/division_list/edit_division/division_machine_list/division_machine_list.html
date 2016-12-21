@@ -1,0 +1,21 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list">
+      <button id='add_division_machine_return_button' ui-sref='.^.^' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left'>
+        <i class="icon ion-chevron-right"></i>
+        <span >Done Managing Machines</span>
+      </button>
+
+      <a id="manage_division_machines_add_machine_button" ui-sref='.add_division_machine' class="item item-icon-left item-icon-right">
+        <i class="icon ion-plus-circled"></i>
+        <span>Add Machine...</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>
+      <a id='manage_division_machines_edit_{{division_machine.division_machine_name}}' ng-click='remove_machine(division_machine)' ng-if="division_machine.removed == false" class='item item-icon-right' ng-repeat="division_machine in resources.division_machines.data">
+        <i style='color:red;font-size:48px;margin-right:10px;' class="icon ion-close-circled"></i>
+        <span>{{division_machine.division_machine_name}}</span>
+      </a>
+    </div>
+  </ion-content>
+</ion-view>
+

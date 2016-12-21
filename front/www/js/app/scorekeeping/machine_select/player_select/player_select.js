@@ -37,7 +37,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 }                
             };
             $scope.keyDown = function(event){
-                if(event.keyCode == 9 || event.keyCode==13){
+                if(event.keyCode == 9 || event.keyCode==13){                    
                     $state.go('.process',{process_step:{process:true},player_info:$scope.selected_players[0],from_queue:0});
                 }                
             };
@@ -65,7 +65,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             };
             $scope.test_submit = function(){
                 if($scope.selected_players.length != 0){                    
-                    $state.go('.process',{process_step:{process:true},player_info:$scope.selected_players[0],from_queue:0});
+                    //$state.go('.process',{process_step:{process:true},player_info:$scope.selected_players[0],from_queue:0});
                 }
             };
 

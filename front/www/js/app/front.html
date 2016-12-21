@@ -9,18 +9,30 @@
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
       </a>
+      <a ui-sref=".player_token" class="item item-icon-left  item-padding" ng-if='User.has_role("player")'>
+        <i class="icon ion-ios-cart"></i>
+        <span>Purchase Tickets</span>
+      </a>      
       <a id='home_manage_players_button' ui-sref='.player' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
         <i class="icon ion-person-add"></i>
         <span>Add Player</span>
       </a>
+      <a id='home_manage_players_button' ui-sref='.teams' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
+        <i class="icon ion-person-add"></i>
+        <span>Add Team</span>
+      </a>      
       <a ui-sref='.scorekeeping' class="item item-icon-left  item-padding" ng-if='User.has_role("scorekeeper")'>
         <i class="icon ion-clipboard"></i>
         <span>Scorekeeping</span>
       </a>
-      <a ui-sref='.queues({manage:false})' class="item item-icon-left  item-padding">
+      <a ng-if='User.has_role("desk") == false' ui-sref='.queues({manage:false})' class="item item-icon-left  item-padding">
         <i class="icon ion-clipboard"></i>
         <span>Queues</span>
       </a>
+      <a ng-if='User.has_role("desk") == true' ui-sref='.queues({manage:true})' class="item item-icon-left  item-padding">
+        <i class="icon ion-clipboard"></i>
+        <span>Queues</span>
+      </a>      
       <a ui-sref='.results' class="item item-icon-left  item-padding">
         <i class="icon ion-clipboard"></i>
         <span>Results</span>

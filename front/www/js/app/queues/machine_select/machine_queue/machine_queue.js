@@ -13,10 +13,10 @@ angular.module('app.queues.machine_select.machine_queue').controller(
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                            
             $scope.bootstrap_promise.then(function(data){
-                if(User.logged_in()==true){
-                    $scope.logged_in_player_id = User.logged_in_user().player_id;
+                if(User.logged_in()==true && User.has_role('player')){                    
+                    $scope.logged_in_player_id = User.logged_in_user().player.player_id;
+                    $scope.logged_in_player_name = User.logged_in_user().player.first_name+" "+User.logged_in_user().player.last_name;
                 }
-                
             });
             
         //Modals.loading();

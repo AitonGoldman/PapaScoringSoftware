@@ -1,4 +1,5 @@
 angular.module('app.tournament.division_list.edit_division',['app.tournament.division_list.edit_division.process',
+    'app.tournament.division_list.edit_division.division_machine_list',
     /*REPLACEMECHILD*/]);
 angular.module('app.tournament.division_list.edit_division').controller(
     'app.tournament.division_list.edit_division',[

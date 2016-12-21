@@ -4,7 +4,7 @@ angular.module('app.logout').controller(
         '$scope','$state','TimeoutResources','Utils','Modals','User',
         function($scope, $state, TimeoutResources, Utils,Modals,User) {
         $scope.site=$state.params.site;
-            $scope.type_of_page = type_of_page;
+            //$scope.type_of_page = type_of_page;
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         Modals.loading();            

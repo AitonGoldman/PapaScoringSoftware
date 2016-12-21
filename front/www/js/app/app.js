@@ -21,6 +21,8 @@ app = angular.module(
     'app.results',
     'app.queue_view',
     'app.oops',
+    'app.player_token',
+    'app.teams',
     /*REPLACEMECHILD*/
 	]
 );
@@ -29,7 +31,11 @@ app.controller(
     'IndexController',    
     function($scope, $location, $http, 
              $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera) {
-        $scope.type_of_page = type_of_page;
+        //$scope.type_of_page = type_of_page;
+        $scope.type_of_page = 'player';
+        if ($location.absUrl().includes('player.html#')!=true){
+            $scope.type_of_page = 'user';
+        };
         $scope.slider={value:0, max:10};
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference
@@ -37,6 +43,7 @@ app.controller(
             $scope.site=state.params.site;            
             User.set_user_site($scope.site);            
             if(do_not_check_current_user == undefined && User.logged_in() == false){
+                console.log('pooping');
                 return User.check_current_user();
             } else {
                 return Utils.resolved_promise();

@@ -6,7 +6,8 @@ angular.module('app.scorekeeping.machine_select.record_score').controller(
         '$scope','$state','TimeoutResources','Utils','Modals','ActionSheets',
         function($scope, $state, TimeoutResources, Utils,Modals,ActionSheets) {
         $scope.site=$state.params.site;
-	$scope.division_id=$state.params.division_id;
+	    $scope.division_id=$state.params.division_id;
+	$scope.team_tournament=$state.params.team_tournament;            
         $scope.division_machine_id=$state.params.division_machine_id;
         $scope.division_machine_name=$state.params.division_machine_name;
             $scope.player_id = $state.params.player_id;
@@ -16,8 +17,7 @@ angular.module('app.scorekeeping.machine_select.record_score').controller(
         $scope.score={score:undefined};
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        $scope.resources = TimeoutResources.GetAllResources();
-        console.log($scope.resources);
+        $scope.resources = TimeoutResources.GetAllResources();        
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){

@@ -87,6 +87,9 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
         raise Conflict('Machine is already being played')
     if check_player_team_can_start_game(current_app,division_machine,player) is False:
         raise BadRequest('Player can not start game - either no tickets or already on another machine')
+    if len(player.teams) > 0:
+        if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():            
+            raise BadRequest('Player can not start game - his team is playing on another machine')        
     set_token_start_time(current_app,player,division_machine)    
     division_machine.player_id=player.player_id
     tables.db_handle.session.commit()
@@ -201,7 +204,10 @@ def route_add_division_machine_team(division_id,division_machine_id,team_id):
     if division_machine.team_id or division_machine.player_id:
         raise Conflict('The machine is already being played')
     if check_player_team_can_start_game(current_app,division_machine,team=team) is False:
-        raise BadRequest('Player can not start game - either no tickets or already on another machine')
+        raise BadRequest('Player can not start game - either no tickets or already on another machine')    
+    if tables.DivisionMachine.query.filter_by(player_id=team.players[0].player_id).first() or tables.DivisionMachine.query.filter_by(player_id=team.players[1].player_id).first():            
+        raise BadRequest('Team can not start game - one player is playing on another machine')        
+    
     set_token_start_time(current_app,None,division_machine,team_id=team_id)    
     division_machine.team_id=team.team_id
     tables.db_handle.session.commit()

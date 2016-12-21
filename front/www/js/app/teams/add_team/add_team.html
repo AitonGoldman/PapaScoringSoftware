@@ -1,0 +1,48 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list" >
+      <!-- REMOVE ME -->
+      <div class='player-select'>
+        <label class="item-input item">
+          <i class="icon ion-search placeholder-icon"></i>
+          <form ng-submit='test_submit()'>
+            <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange(0)' type="tel" placeholder="Player #" ng-model="team_players[0].player_id">
+          </form>
+        </label>
+        <div class='item'>
+          <div>&nbsp;{{selected_players[0][0].first_name}} {{selected_players[0][0].last_name}}</div>
+        </div>
+      </div>
+      <div class='player-select'>
+        <label class="item-input item">
+          <i class="icon ion-search placeholder-icon"></i>
+          <form ng-submit='test_submit()'>
+            <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange(1)' type="tel" placeholder="Player #" ng-model="team_players[1].player_id">
+          </form>
+        </label>
+        <div class='item'>
+          <div>&nbsp;{{selected_players[1][0].first_name}} {{selected_players[1][0].last_name}}</div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class='player-info-avatar'>
+      <img src="http://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players[0].length == 0 && poop == true'>
+      <img ng-show='selected_players[0].length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{team_players[0].player_img_id}}.jpg">
+      <img ng-show='selected_players[0].length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'>
+    </div>
+    <div class='player-info-avatar' style='top:150px'>
+      <img src="http://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players[0].length == 0 && poop == true'>
+      <img ng-show='selected_players[1].length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{team_players[1].player_img_id}}.jpg">
+      <img ng-show='selected_players[1].length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'>
+    </div>    
+    <!-- <div class='player-info-avatar'> -->
+    <!--   <img src="http://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players2.length == 0 && poop == true'> -->
+    <!--   <img ng-show='selected_players2.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{player2_img_id}}.jpg"> -->
+    <!--   <img ng-show='selected_players2.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'> -->
+    <!-- </div> -->
+    
+  </ion-content>
+</ion-view>
+

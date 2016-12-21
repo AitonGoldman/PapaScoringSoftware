@@ -16,7 +16,7 @@ angular.module('app.queues.machine_select.machine_queue.player_select').controll
         $scope.test_submit = function(){
             if($scope.selected_players.length != 0){
                 console.log($scope.selected_players[0]);
-                $state.go('.confirm',{player_id:$scope.selected_players[0].player_id,player_name:$scope.selected_players[0].first_name+" "+$scope.selected_players[0].last_name});
+                //$state.go('.confirm',{player_id:$scope.selected_players[0].player_id,player_name:$scope.selected_players[0].first_name+" "+$scope.selected_players[0].last_name});
             }
         };
         $scope.keyDown = function(event){

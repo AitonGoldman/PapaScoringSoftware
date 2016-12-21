@@ -1,0 +1,18 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class='icon-label-header row first-element'>
+      <div><i class="icon ion-plus-circled"></i></div>
+      <div>{{resources.machine_added_to.data.team.team_name}}</div>
+    </div>
+    <div style='text-align:center;font-size:38px'>
+      is now playing {{resources.machine_added_to.data.division_machine_name}}.
+    </div>
+    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^">
+      Return to Machine List
+    </button>    
+    <!--<button style='font-size:48px' ng-if="queues.length > 0" class="button button-full button-assertive icon-right ion-chevron-right" ui-sref=".undo({process_step:{process:true}})">
+      Remove Player from {{resources.machine_added_to.data.division_machine_name}}-->
+    </button>
+  </ion-content>
+</ion-view>
+

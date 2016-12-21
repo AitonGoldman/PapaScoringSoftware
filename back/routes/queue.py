@@ -36,9 +36,12 @@ def add_player_to_queue():
     queue_data = json.loads(request.data)
     division_machine = fetch_entity(tables.DivisionMachine, queue_data['division_machine_id'])
     if division_machine.player_id is None:
-        raise BadRequest('No player is on machine - just jump on it')
+        raise BadRequest('No player is on machine - just jump on it')    
     player = fetch_entity(tables.Player,queue_data['player_id'])
-    check_player_team_can_start_game(current_app,division_machine,player)
+    check_player_team_can_start_game(current_app,division_machine,player)    
+    if len(player.teams) > 0:
+        if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():
+            raise BadRequest("Can't queue - player's team is on another machine")                
     remove_player_from_queue(current_app,player)    
     new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])    
     return jsonify({'data':new_queue.to_dict_simple()})

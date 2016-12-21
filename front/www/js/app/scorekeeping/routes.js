@@ -46,7 +46,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.scorekeeping.machine_select.record_score', 
         { 
          cache: false,
- 	 url: '/record_score/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name/player_name/:player_name/player_id/:player_id',
+ 	 url: '/record_score/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name/player_name/:player_name/player_id/:player_id/team/:team_tournament',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/scorekeeping/machine_select/record_score/record_score.html',
@@ -114,7 +114,34 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
              
           }    
 
+       }).state('app.scorekeeping.machine_select.team_select', 
+        { 
+         cache: false,
+ 	 url: '/team_select/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/team_select/team_select.html',
+ 	       controller: 'app.scorekeeping.machine_select.team_select'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.machine_select.team_select.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/team_select/process/process.html',
+ 	       controller: 'app.scorekeeping.machine_select.team_select.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             ,team_info:{}             
+
+          }    
+
        })//REPLACE_ME
+
+
 
 
 

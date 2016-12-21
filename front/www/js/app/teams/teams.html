@@ -1,0 +1,22 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div class="skinny-list list">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search" ng-model="searchText">
+      </label>
+      <a id="manage_players_add_player_button" ui-sref='.add_team' class="item item-icon-left item-icon-right">
+        <i class="icon ion-plus-circled"></i>
+        <span>Add Team...</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>
+      <div ng-repeat="team in flat_teams|filter:searchText">
+        <a id="manage_players_edit_player_{{team.team_id}}_link" class="item item-icon-left item-icon-right">
+          <span>{{team.team_name}}</span>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+

@@ -139,7 +139,8 @@ def route_meta_admin_create_db_and_tournaments():
 @meta_admin_blueprint.route('/meta_admin/test_db_with_machines',methods=['POST'])
 def route_meta_admin_create_db_and_load_machines():    
     dummy_app = Flask('dummy_app')    
-    db_info = DbInfo({'DB_TYPE':'sqlite'})
+    db_config = td_config.get_db_config()    
+    db_info = DbInfo(db_config)    
     db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)    
     db_handle = dummy_app.tables.db_handle
     create_stanard_roles_and_users(dummy_app)

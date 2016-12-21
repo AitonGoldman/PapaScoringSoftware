@@ -21,13 +21,14 @@ angular.module('app.token').controller(
             
             $scope.player = {};
             $scope.utils = Utils;
-            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-            players_promise = TimeoutResources.GetPlayers(undefined,{site:$scope.site});
+            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                            
             Modals.loading();
+            players_promise = TimeoutResources.GetPlayers(undefined,{site:$scope.site});            
             // = TimeoutResources.GetEtcData();
             players_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
-                $scope.flattened_players = _.values($scope.resources.players.data);                                              $animate.enabled(true);                              
+                $scope.flattened_players = _.values($scope.resources.players.data);
+                $animate.enabled(true);                              
                 Modals.loaded();
             });
             $scope.selected_players=[];

@@ -13,7 +13,7 @@ angular.module('app.oops.edit_player_entries').controller(
         $scope.test_submit = function(){
                 if($scope.selected_players.length != 0){
                     console.log($scope.selected_players[0]);
-                    $state.go('.player_entries',{player_id:$scope.selected_players[0].player_id});
+                    //$state.go('.player_entries',{player_id:$scope.selected_players[0].player_id});
                 }
             };
             $scope.keyDown = function(event){

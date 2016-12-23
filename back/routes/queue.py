@@ -11,6 +11,17 @@ from flask_restless.helpers import to_dict
 from orm_creation import create_queue
 
 
+@admin_manage_blueprint.route('/queue/player_id/<player_id>',methods=['GET'])
+def get_queue_for_player(player_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    player = fetch_entity(tables.Player, player_id)
+    queue = tables.Queue.query.filter_by(player_id=player_id).first()
+    if queue:
+        return jsonify({'data':queue.to_dict_simple()})
+    else:
+        return jsonify({'data':None})
+
 @admin_manage_blueprint.route('/queue/division/<division_id>',methods=['GET'])
 def get_queues(division_id):
     db = db_util.app_db_handle(current_app)

@@ -8,7 +8,8 @@ angular.module('app.player.player_info').controller(
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        player_pin_promise = TimeoutResources.GetPlayerPin(undefined,{site:$scope.site,player_id:$scope.player_id});
+        player_queue_promise = TimeoutResources.GetPlayerQueue(undefined,{site:$scope.site,player_id:$scope.player_id});
+        player_pin_promise = TimeoutResources.GetPlayerPin(player_queue_promise,{site:$scope.site,player_id:$scope.player_id});
         division_promise = TimeoutResources.GetDivisions(player_pin_promise,{site:$scope.site});
         player_promise = TimeoutResources.GetPlayer(division_promise,{site:$scope.site,player_id:$scope.player_id});
         player_tokens_promise = TimeoutResources.GetPlayerTokens(player_promise,{site:$scope.site,player_id:$scope.player_id});

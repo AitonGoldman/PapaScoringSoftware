@@ -206,7 +206,9 @@ angular.module('TD_services.timeout_resources')
                   var deleteDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id',
                                                                                    'DELETE');
                   var getQueuesResource = generate_resource_definition(':site/queue/division/:division_id',
-                                                                           'GET');                                    
+                                                                       'GET');
+                  var getPlayerQueueResource = generate_resource_definition(':site/queue/player_id/:player_id',
+                                                                           'GET');                                                      
                   var bumpQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id/bump',
                                                                        'PUT');
                   var addPlayerToMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id/player/:player_id','PUT');
@@ -272,13 +274,15 @@ angular.module('TD_services.timeout_resources')
                       GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get'),
                       GetPlayerTokens: generate_custom_http_executor(getPlayerTokensResource,'player_tokens','get'),
                       GetQueues: generate_custom_http_executor(getQueuesResource,'queues','get'),
+                      GetPlayerQueue: generate_custom_http_executor(getPlayerQueueResource,'player_queue','get'),                      
                       BumpQueue: generate_custom_http_executor(bumpQueueResource,'queues','put'),
                       AddPlayerToMachine: generate_custom_http_executor(addPlayerToMachineResource,'machine_added_to','put'),
                       AddTeamToMachine: generate_custom_http_executor(addTeamToMachineResource,'machine_added_to','put'),                      
                       VoidScore: generate_custom_http_executor(voidScoreResource,'voided_score','put'),
                       AddScore: generate_custom_http_executor(addScoreResource,'added_score','put'),
                       RemovePlayerFromQueue: generate_custom_http_executor(removePlayerFromQueueResource,'modified_queue','delete'),
-                      GetPlayerResults: generate_custom_http_executor(getPlayerResultsResource,'player_results','get'),                        GetPlayerEntries: generate_custom_http_executor(getPlayerEntriesResource,'player_entries','get'),                      
+                      GetPlayerResults: generate_custom_http_executor(getPlayerResultsResource,'player_results','get'),
+                      GetPlayerEntries: generate_custom_http_executor(getPlayerEntriesResource,'player_entries','get'),                      
                       AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put'),
                       SetScore: generate_custom_http_executor(setScoreResource,'score_set','put'),
                       VoidEntry: generate_custom_http_executor(voidEntryResource,'score_set','delete'),

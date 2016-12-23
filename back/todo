@@ -1,10 +1,36 @@
 current activity
-
-
+# unit tests
+## everything in util
+# model tests
+## td_types/TeamPlayerMapping.py
+# route tests
+## add tests for RoleEnum
+## changing login so player login funcs are completely seperate (identiy, etc)
+./token.py - check ( still need a get team tokens route? )
+./results.py (teams) - tue - check (still need team results)
+./admin.py (teams?) - later
+./media_upload.py - later
+./orm_creation.py - later
+./utils.py - later
+# add more oops - something went wrong when player buying tickets
+# add player ticket purchase page/add pulldowns to desk purchase page
+# add "go back to token select" on confirm page
+# add more player info to player info page (currently playing? current queued?)
+# deal with back buttons
+#  handle teams on UI side
+# metadivision creation
+## add metadivision sku/price
+# tourney/division edit needs to allow specifying if queuing allowed
 
 tasks - functional - short term
+# investigate why "addentry" POST didn't parse url params correctly
+# if player has no entries, don't display on results
+# change all urls that are hardcoded (i.e. images, submit_links,etc) to...?
 # need a way to deal with "oops - I put the wrong person on the machine and now it's time to record their score"
+
 # need a way to deal with "oops - I added someone on a machine, but it turns out it's the wrong person - how do I undo on a queue division?"
+# add a refresh button where appropriate (queues, results, ?)
+
 # don't allow "undo player add" on divisions with queues/deal with this
 # fix add player to machine css
 # add tests for queue bumping 
@@ -13,7 +39,6 @@ tasks - functional - short term
 # tests - player protractor and routes : auth, conflict
 # add protractor tests that just take screen shots
 # confirm that adding players/teams also removes existing players/teams from player
-# refactor token_select to try horiz radio buttons
 # add css for token_select
 # fix back button
 # move pic and animation css out from ionic-app.scss
@@ -36,68 +61,18 @@ remember to go back to...
 ## remember to look through tests where we get env vars directly right now
 # remember to modify division_machine tests when adding finals
 
-
 tasks - functional - long term
 # add "confirm on backend" to protractor tests
 # make sure integration tests are not sqllite specific
 # add "initialize db" script which calls routes 
 
-scratchpad - queue :
-
-caching
-# cached info
-## divisions - if cached : 
-### add end date
-### check if end date has been reached
-## players - ?
-## division machines - allow for manual refresh of cache
-## logout needs to wipe cache
-
-scratchpad - audit log
-# audit_log
-## need a "audit log" for each object - i.e. each object has a list of "audit_log" objects
-## example : a token has a "created" and "used" object in it's "audit_logs" field
-
-# use cases
-## My score disappeared(aka My score got assigned to someone else)
-## I should have more tokens
-## My ticket got voided prematurely
-## There is a score I didn't record
-
-# My score disappeared
-## possible reasons : assigned to wrong person, never properly submitted, voided
-## how to find number 1 : work back in history of games played for player, try and identify timeframe of missing game, get a list of scores recorded in that division at that time
-## how to find number 2 : same as 1, can find scorekeepers, ask to verify?
-## how to find number 3 : same as number 1 - a complete history which includes voids
-
-# I should have more tokens
-## possible reasons : they are wrong, desk made a mistake, void prematurely
-## how to find number 1 : have a history - show their complete purchase history(backwards - with summaries at each purchase point), and side by side with thier usage history (also backwards)
-## how to find number 2 : compare with stripe/square history; if they paid cash, they are SOL
-## how to find number 3 : same as number 1, with voids
-
-# My ticket got voided without me saying so
-## get scorekeepr name from voiding, try and confirm
-
-# common elements
-## player_id, team_id, action(game_started,score_recorded, void), time stamp, scorekeeper(user_id), data(score_entered)
-## associated with token
-
-## player_id, team_id, action(purchased), time stamp, desk_worker(user_id)
-## associated with token
-
-
 scheduling
 
 11/28-12/3 : 
-player_info (wed)
-score_keeper - score record/void/jagoff/undo player select (wed)
-player-app (buy tickets, queue manage) - backend (wed)
-player-app - frontend (thur)
-queue_display ( fri )
-results - backend (sat)
-results - frontend (sat)
-admin functionality (edit entries, etc) (sat)
+score_keeper - jagoff and undo player select (??)
+player-app (buy tickets) - backend (thur)
+results - backend (fri)
+results - frontend (fri)
 back button - (sat)
 ?? - ?? : audit logs
 ?? - ?? : team creation/editing

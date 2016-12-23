@@ -18,7 +18,7 @@
         <span >Manage Machines</span>
       </button>            
       <ion-checkbox  id="add_tournament_team_tournament_checkbox" class='item'  ng-model='division.team_tournament'>Team Tournament</ion-checkbox>
-      <ion-checkbox id="add_tournament_use_stripe_checkbox"  class='item' ng-model='division.use_stripe'>Enabled</ion-checkbox>
+      <ion-checkbox id="add_tournament_use_stripe_checkbox"  class='item' ng-model='division.use_stripe'>Use Stripe</ion-checkbox>
       <label ng-if="division.use_stripe == true" class="item-input  item">
         <span >Stripe SKU : </span>
         <input ng-model='division.stripe_sku' type="text" placeholder="Stripe SKU">
@@ -29,7 +29,7 @@
       </label>
       <button id='add_tournament_add_button' ui-sref='.process({process_step:{process:true}, division_info:division})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
         <i class="icon ion-chevron-right"></i>
-        <span >Add Tournament</span>
+        <span >Apply Changes</span>
       </button>
     </div>
   </ion-content>

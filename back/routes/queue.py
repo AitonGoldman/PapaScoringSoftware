@@ -38,7 +38,10 @@ def add_player_to_queue():
     if division_machine.player_id is None:
         raise BadRequest('No player is on machine - just jump on it')    
     player = fetch_entity(tables.Player,queue_data['player_id'])
-    check_player_team_can_start_game(current_app,division_machine,player)    
+    check_player_team_can_start_game(current_app,division_machine,player)
+    if player.division_machine:
+        raise BadRequest("Can't queue - player  is already playing a machine")                
+        
     if len(player.teams) > 0:
         if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():
             raise BadRequest("Can't queue - player's team is on another machine")                

@@ -34,6 +34,34 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
           }    
 
+       }).state('app.token.token_select.confirm', 
+        { 
+         cache: false,
+ 	 url: '/confirm',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/token/token_select/confirm/confirm.html',
+ 	       controller: 'app.token.token_select.confirm'
+ 	     }
+ 	 }, params: {             
+             token_info:{}             
+          } 
+            
+       }).state('app.token.token_select.confirm.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/token/token_select/confirm/process/process.html',
+ 	       controller: 'app.token.token_select.confirm.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             ,token_info:{}             
+
+          }    
+
        })//REPLACE_ME
 
 

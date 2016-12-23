@@ -47,10 +47,15 @@ def check_add_token_request_is_valid(tokens_data, tables):
     if tokens_data.has_key('divisions') is False and tokens_data.has_key('meta_divisions') is False and tokens_data.has_key('teams') is False:
         raise BadRequest('No divisions specified for tokens')
     player_id = tokens_data['player_id']
+    player = fetch_entity(tables.Player,tokens_data['player_id'])
     if tokens_data.has_key('team_id'):
         team_id = tokens_data['team_id']
         team = fetch_entity(tables.Player,team_id)
-    fetch_entity(tables.Player,tokens_data['player_id'])
+    elif len(player.teams) > 0:
+        team_id=player.teams[0].team_id
+    else:
+        team_id=None
+            
     for div_id in tokens_data['divisions']:
         division=fetch_entity(tables.Division,div_id)
         if division.team_tournament is True:
@@ -188,6 +193,9 @@ def add_token(paid_for):
     if tokens_data.has_key('team_id'):
         team_id = tokens_data['team_id']
         team = fetch_entity(tables.Player,team_id)
+    #else:
+    elif len(player.teams) > 0:
+        team_id=player.teams[0].team_id
     else:
         team_id=None
     # FIXME : we rely on team_id being passed in - should check for it here

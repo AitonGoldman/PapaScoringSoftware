@@ -18,7 +18,7 @@ angular.module('app.oops.missing_scores').controller(
             };
             $scope.keyDown = function(event){
                 if(event.keyCode == 9 || event.keyCode==13){
-                    $state.go('.report',{player_id:$scope.selected_players[0].player_id});
+                    $state.go('.report_player_events',{player_id:$scope.selected_players[0].player_id});
                 }
                 //keyCode 9               
             };

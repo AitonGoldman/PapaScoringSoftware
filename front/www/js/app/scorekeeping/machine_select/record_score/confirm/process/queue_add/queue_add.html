@@ -2,7 +2,7 @@
   <ion-content>      
     <div class="skinny-list list">
 
-      <a ng-if='division_machine.player_id != undefined' class="item item-icon-right" ng-repeat='division_machine in resources.division_machines.data' ui-sref='.process({process_step:{process:true},queued_division_machine_id:division_machine.division_machine_id,queued_division_machine_name:division_machine.division_machine_name})'>
+      <a ng-if='division_machine.player_id != undefined || (division_machine.player_id == undefined && division_machine.queue_id != undefined)' class="item item-icon-right" ng-repeat='division_machine in resources.division_machines.data' ui-sref='.process({process_step:{process:true},queued_division_machine_id:division_machine.division_machine_id,queued_division_machine_name:division_machine.division_machine_name})'>
         {{division_machine.division_machine_name}}
       </a>
     </div>

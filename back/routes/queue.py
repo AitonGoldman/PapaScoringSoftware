@@ -46,7 +46,7 @@ def add_player_to_queue():
     tables = db_util.app_db_tables(current_app)
     queue_data = json.loads(request.data)
     division_machine = fetch_entity(tables.DivisionMachine, queue_data['division_machine_id'])
-    if division_machine.player_id is None:
+    if division_machine.player_id is None and division_machine.queue is None:
         raise BadRequest('No player is on machine - just jump on it')    
     player = fetch_entity(tables.Player,queue_data['player_id'])
     check_player_team_can_start_game(current_app,division_machine,player)

@@ -55,7 +55,11 @@ def add_player_to_queue():
         
     if len(player.teams) > 0:
         if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():
-            raise BadRequest("Can't queue - player's team is on another machine")                
+            raise BadRequest("Can't queue - player's team is on another machine")
+    
+    if check_player_team_can_start_game(current_app,division_machine,player) is False:
+        raise BadRequest("Can't queue - player has no tokens")
+        
     remove_player_from_queue(current_app,player)    
     new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])    
     return jsonify({'data':new_queue.to_dict_simple()})

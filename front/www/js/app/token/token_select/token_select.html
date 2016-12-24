@@ -15,7 +15,7 @@
       </table>
     </div>
     <div class="skinny-list list" style='margin-left:0;margin-right:0'>
-      <ion-checkbox id="token_select_comped_checkbox" class='item' ng-model='sliders.comped' >Comped</ion-checkbox>
+      <ion-checkbox id="token_select_comped_checkbox" class='item' ng-model='token_info.comped' >Comped</ion-checkbox>
       <div ng-if='division.team_tournament == false && division.meta_division_id == null' class='item' ng-repeat='(division_id,division) in resources.divisions.data' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}
         <select style='font-size:48px' ng-change='calc_total_cost()' name="repeatSelect" id="repeatSelect" ng-model="token_info.divisions[division_id]">
           <option ng-repeat="option in []|range:resources.player_tokens.data.available_tokens.divisions[division_id]+1:0" value="{{option}}">{{option}}</option>

@@ -16,6 +16,8 @@ angular.module('app.token.token_select.process').controller(
         }
         
         $scope.token_info=$state.params.token_info;
+        console.log('poop');
+        console.log($scope.token_info);
         divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
         token_add_promise = TimeoutResources.AddTokens(divisions_promise,{site:$scope.site},$scope.token_info);                
         Modals.loading();

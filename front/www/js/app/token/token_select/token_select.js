@@ -11,7 +11,8 @@ angular.module('app.token.token_select').controller(
                 teams:{},
                 divisions_names:{},
                 metadivisions_names:{},
-                total_cost:0
+                total_cost:0,
+                comped:false
             };
             
             $scope.utils = Utils;

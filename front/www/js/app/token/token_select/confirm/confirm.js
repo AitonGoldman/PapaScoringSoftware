@@ -21,6 +21,7 @@ angular.module('app.token.token_select.confirm').controller(
                 $scope.added_tokens['divisions']=$scope.token_info.divisions;
                 $scope.added_tokens['metadivisions']=$scope.token_info.metadivisions;
                 $scope.added_tokens['teams']=$scope.token_info.teams;
+                $scope.added_tokens['comped']=$scope.token_info.comped;
                 //$scope.added_tokens['player_id']=User.logged_in_user().player.player_id;
                 $scope.added_tokens['player_id']=$scope.player_id;
                 $state.go('.process',{process_step:{process:true},

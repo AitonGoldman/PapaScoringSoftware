@@ -131,6 +131,19 @@ class TdIntegrationTestBase(unittest.TestCase):
     def create_short_env(self, url):
         return {'SERVER_NAME': '0.0.0.0', 'REQUEST_METHOD': 'GET', 'PATH_INFO': url, 'SERVER_PROTOCOL': 'HTTP/1.1', 'QUERY_STRING': '', 'RAW_URI': url,'wsgi.url_scheme': 'http','SERVER_PORT': '8000'}                
 
+class TdIntegrationSetupTestBase(TdIntegrationTestBase):
+    def setUp(self):
+        super(TdIntegrationSetupTestBase,self).setUp()
+        dummy_app = Flask('dummy_app')                
+        #db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'sqlite'}),drop_tables=True)
+        self.assertFalse((os.getenv('DB_USERNAME',None) is None or os.getenv('DB_PASSWORD',None) is None),
+                         "You forgot to set DB_USERNAME and DB_PASSWORD")
+        if os.getenv('USE_REAL_TEST_DB',None):
+            self.poop_db_name='test'        
+        db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'postgres','DB_USERNAME':os.getenv('DB_USERNAME'),'DB_PASSWORD':os.getenv('DB_PASSWORD')}),drop_tables=True)
+        del dummy_app
+        self.app = PathDispatcher(app_build.get_meta_admin_app, app_build.get_admin_app)                
+    
 class TdIntegrationDispatchTestBase(TdIntegrationTestBase):
     def setUp(self):
         super(TdIntegrationDispatchTestBase,self).setUp()

@@ -43,8 +43,34 @@ def create_stanard_roles_and_users(app):
                             str(RolesEnum.queue.value)])            
     return test_admin,test_scorekeeper,test_desk
 
-
-def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
+def init_papa_tournaments_division_machines(app):
+    db = app.tables.db_handle
+    tables = app.tables
+    machine_counter = 1
+    for division_id in [1,2,3,4]:        
+        division = tables.Division.query.filter_by(division_id=division_id).first()
+        for machine_id in range(12):
+            machine_id_to_lookup = machine_id+machine_counter            
+            machine = tables.Machine.query.filter_by(machine_id=machine_id_to_lookup).first()
+            create_division_machine(app,machine,division)
+        machine_counter=machine_counter+12
+        
+    division = tables.Division.query.filter_by(division_id=5).first()
+    for machine_id in range(12):
+        machine_id_to_lookup = machine_id+machine_counter            
+        machine = tables.Machine.query.filter_by(machine_id=machine_id_to_lookup).first()
+        create_division_machine(app,machine,division)
+    machine_counter=machine_counter+12
+    for division_id in [6,7,8]:        
+        division = tables.Division.query.filter_by(division_id=division_id).first()
+        for machine_id in range(12):
+            machine_id_to_lookup = machine_id+machine_counter            
+            machine = tables.Machine.query.filter_by(machine_id=machine_id_to_lookup).first()
+            create_division_machine(app,machine,division)
+        machine_counter=machine_counter+12
+        
+        
+def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None):
     db = app.tables.db_handle
     tables = app.tables
     new_tournament = create_tournament(app,{'tournament_name':'Main','single_division':False})
@@ -55,23 +81,20 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
         'team_tournament':False,
         'scoring_type':'HERB',
         'active':True
-    }
-    counter=0
+    }    
     if use_stripe:
-        new_tournament_data['use_stripe']=True
-        new_tournament_data['stripe_sku']=stripe_sku[counter]
+        new_tournament_data['use_stripe']=True        
     else:
         new_tournament_data['use_stripe']=False
         new_tournament_data['local_price']=5
     for division_name in ['A','B','C','D']:        
+        if use_stripe:
+            new_tournament_data['stripe_sku']=stripe_skus[division_name]
         new_tournament_data['division_name']=division_name
         new_division = create_division(app,new_tournament_data)
-        if use_stripe:
-            new_tournament_data['stripe_sku']=stripe_sku[counter]        
         db.session.commit()
         new_tournament.divisions.append(new_division)
-        db.session.commit()
-        counter=counter+1        
+        db.session.commit()        
     new_metadivision = create_meta_division(app,{
         'meta_division_name':'Classics'
     })
@@ -84,12 +107,11 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
                                                          'finals_num_qualifiers':'24'}
     if use_stripe:
         new_team_tournament_data['use_stripe']=True
-        new_team_tournament_data['stripe_sku']=stripe_sku[counter]
+        new_team_tournament_data['stripe_sku']=stripe_skus['Split Flipper']
     else:
         new_team_tournament_data['use_stripe']=False
         new_team_tournament_data['local_price']=5
     new_tournament = create_tournament(app,new_team_tournament_data)
-    counter = counter + 1    
     new_classics_tournament_data = {'single_division':True,
                                     'active':True,
                                     'team_tournament':False,
@@ -98,20 +120,18 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_sku=None):
                                     'finals_num_qualifiers':'24'
     }
     if use_stripe:
-        new_classics_tournament_data['use_stripe']=True
-        new_classics_tournament_data['stripe_sku']=stripe_sku[counter]
+        new_classics_tournament_data['use_stripe']=True        
     else:
         new_classics_tournament_data['use_stripe']=False        
         new_classics_tournament_data['local_price']=5
     
     for tournament_name in ['Classics 1','Classics 2','Classics 3']:        
+        if use_stripe:
+            new_classics_tournament_data['stripe_sku']=stripe_skus[tournament_name]
         new_classics_tournament_data['tournament_name']=tournament_name
-        if use_stripe:            
-            new_classics_tournament_data['stripe_sku']=stripe_sku[counter]        
         new_tournament = create_tournament(app,new_classics_tournament_data)
         new_metadivision.divisions.append(new_tournament.divisions[0])
         db.session.commit()        
-        counter=counter+1
 
 def create_team(app,team_data):
     db = db_util.app_db_handle(app)

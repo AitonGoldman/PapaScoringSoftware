@@ -1,0 +1,15 @@
+<ion-view view-title="Jagoffs">
+  <ion-content>      
+    <table class='first-element table'>
+      <tr>
+        <th>Count </th>
+        <th>Player </th>
+      </tr>
+      <tr ng-repeat='jagoff in resources.jagoffs.data'>                
+        <td>{{jagoff.asshole_count}}</td>
+        <td>( #{{jagoff.player_id}} ){{jagoff.first_name}} {{jagoff.last_name}}</td>
+      </tr>
+    </table>
+  </ion-content>
+</ion-view>
+

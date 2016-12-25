@@ -217,6 +217,7 @@ angular.module('TD_services.timeout_resources')
                   var addPlayerToMachineFromQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id','PUT');                  
                   var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');
                   var declareJagoffResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/jagoff','PUT');
+                  var getJagoffsResource = generate_resource_definition(':site/jagoff','GET');                  
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
                   var addToQueueResource = generate_resource_definition(':site/queue','POST');                                    
                   var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');
@@ -248,7 +249,8 @@ angular.module('TD_services.timeout_resources')
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
                       GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
                       GetTeams: generate_custom_http_executor(getTeamsResource,'teams','get'),                      
-                      GetPlayer: generate_custom_http_executor(getPlayersResource,'player','get'),                                            
+                      GetPlayer: generate_custom_http_executor(getPlayersResource,'player','get'),                      
+                      GetJagoffs: generate_custom_http_executor(getJagoffsResource,'jagoffs','get'),                                            
                       AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
                       AddTokens: generate_custom_http_executor(addTokensResource,'added_tokens','post'),
                       AddPlayerTokens: generate_custom_http_executor(addPlayerTokensResource,'added_player_tokens','post'),                      

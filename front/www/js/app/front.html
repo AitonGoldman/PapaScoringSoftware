@@ -45,8 +45,13 @@
         <i class="icon ion-person-stalker"></i>
         <span>Queue View</span>
       </a>
-      <div class="list">
-
+      <a id="home_manage_user_button" ui-sref='.jagoffs' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'>
+        <i class="icon ion-person-stalker"></i>
+        <span>Jagoffs</span>
+      </a>
+      
+      <!--<div class="list">
+        
         <label class="item item-input item-select">
           <div class="input-label">
             Lightsaber
@@ -92,7 +97,7 @@
           </select>
         </label>
 
-      </div>
+      </div>-->
        <!-- <label class="item"> -->
        <!--   <div class="input-label"> -->
        <!--     Lightsaber -->

@@ -10,14 +10,6 @@ from orm_creation import create_entry
 import datetime
 from sqlalchemy import and_,or_
 
-# a score is missing
-# show list of scores/voidings in reverse order
-# select 2 events (score or void) to act as boundry
-## do a query to get all auditlogs between the two events for division/metadivision of selected audit_log event
-## return the results of that query
-# select one event as anchor
-## select events that are X amount of time ahead of that event, where X is passed into the function
-
 @admin_manage_blueprint.route('/admin/audit_log/where_all_my_scores_at/player_id/<player_id>/audit_log_id/<audit_log_id>/time_delta/<minutes>',methods=['GET'])
 #@login_required
 #@Admin_permission.require(403)

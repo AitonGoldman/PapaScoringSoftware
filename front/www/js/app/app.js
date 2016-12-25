@@ -23,6 +23,7 @@ app = angular.module(
     'app.oops',
     'app.player_token',
     'app.teams',
+    'app.queue_player_after_play',
     /*REPLACEMECHILD*/
 	]
 );

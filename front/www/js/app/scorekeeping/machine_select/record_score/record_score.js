@@ -1,5 +1,6 @@
 angular.module('app.scorekeeping.machine_select.record_score',['app.scorekeeping.machine_select.record_score.void',
     'app.scorekeeping.machine_select.record_score.confirm',
+    'app.scorekeeping.machine_select.record_score.confirm_jagoff',
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select.record_score').controller(
     'app.scorekeeping.machine_select.record_score',[

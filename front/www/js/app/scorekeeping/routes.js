@@ -139,7 +139,33 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
           }    
 
+       }).state('app.scorekeeping.machine_select.record_score.confirm_jagoff', 
+        { 
+         cache: false,
+ 	 url: '/confirm_jagoff',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/record_score/confirm_jagoff/confirm_jagoff.html',
+ 	       controller: 'app.scorekeeping.machine_select.record_score.confirm_jagoff'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.machine_select.record_score.confirm_jagoff.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/record_score/confirm_jagoff/process/process.html',
+ 	       controller: 'app.scorekeeping.machine_select.record_score.confirm_jagoff.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
        })//REPLACE_ME
+
+
 
 
 

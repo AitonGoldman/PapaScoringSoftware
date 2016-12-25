@@ -215,7 +215,8 @@ angular.module('TD_services.timeout_resources')
                   var addTeamToMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id/team/:team_id','PUT');
 
                   var addPlayerToMachineFromQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id','PUT');                  
-                  var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');                                                      
+                  var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');
+                  var declareJagoffResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/jagoff','PUT');
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
                   var addToQueueResource = generate_resource_definition(':site/queue','POST');                                    
                   var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');
@@ -279,6 +280,7 @@ angular.module('TD_services.timeout_resources')
                       AddPlayerToMachine: generate_custom_http_executor(addPlayerToMachineResource,'machine_added_to','put'),
                       AddTeamToMachine: generate_custom_http_executor(addTeamToMachineResource,'machine_added_to','put'),                      
                       VoidScore: generate_custom_http_executor(voidScoreResource,'voided_score','put'),
+                      DeclareJagoff: generate_custom_http_executor(declareJagoffResource,'jagoff','put'),
                       AddScore: generate_custom_http_executor(addScoreResource,'added_score','put'),
                       RemovePlayerFromQueue: generate_custom_http_executor(removePlayerFromQueueResource,'modified_queue','delete'),
                       GetPlayerResults: generate_custom_http_executor(getPlayerResultsResource,'player_results','get'),

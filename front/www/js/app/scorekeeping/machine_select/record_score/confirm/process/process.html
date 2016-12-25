@@ -11,7 +11,7 @@
       Return to Machine List
     </button>
     <span ng-if="team_tournament=='false'">
-    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name})">
+    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
       Add new player to machine
     </button>    
     <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
@@ -19,7 +19,7 @@
     </button>    
     </span>
     <span ng-if="team_tournament=='true'">
-    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.^.team_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name})">
+    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.^.team_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
       Add new team to machine
     </button>    
     </span>    

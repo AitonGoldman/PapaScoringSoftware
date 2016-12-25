@@ -8,6 +8,7 @@ def generate_team_class(db_handle,Team_Player_mapping):
     #FIXME : tie a team to a specific tournament/division
         team_id = db_handle.Column(db_handle.Integer, primary_key=True)
         team_name = db_handle.Column(db_handle.String(1000))
+        asshole_count = db_handle.Column(db_handle.Integer)
         players = db_handle.relationship(
             'Player',
             secondary=Team_Player_mapping        

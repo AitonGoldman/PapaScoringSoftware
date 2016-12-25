@@ -103,6 +103,60 @@ def route_void_score(division_machine_id):
     
     return jsonify({'data':token.to_dict_simple()})
 
+@admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/jagoff',methods=['PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_jagoff(division_machine_id):        
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
+    if division_machine.player_id:
+        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,player_id=division_machine.player_id).first()
+    if division_machine.team_id:
+        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,team_id=division_machine.team_id).first()        
+    if token is None:
+        raise BadRequest('Tried to decalre a jagoff inapropriately')
+    player_id = division_machine.player_id
+    if player_id:
+        player = fetch_entity(tables.Player,player_id)
+        if player.asshole_count:
+            player.asshole_count = player.asshole_count+1
+        else:
+            player.asshole_count = 1            
+    team_id = division_machine.team_id
+    if team_id:
+        team = fetch_entity(tables.Team,team_id)
+        if team.asshole_count:
+            team.asshole_count = team.asshole_count+1
+        else:
+            team.asshole_count = 1            
+
+    division_machine.player_id=None
+    division_machine.team_id=None
+
+    token.used=True
+    token.used_date = datetime.datetime.now()
+    token.voided=True
+    db.session.commit()
+
+    audit_log = tables.AuditLog()
+    audit_log.player_id = player_id
+    audit_log.team_id = team_id
+    audit_log.token_id=token.token_id
+    audit_log.scorekeeper_id=current_user.user_id
+    audit_log.voided_date=datetime.datetime.now()
+    audit_log.used_date=datetime.datetime.now()
+    audit_log.used=True
+    audit_log.voided=True
+    audit_log.division_machine_id=division_machine.division_machine_id    
+    tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
+    audit_log.remaining_tokens = tokens_left_string
+    audit_log.description = "declared jagoff"
+    db.session.add(audit_log)    
+    db.session.commit()
+    
+    return jsonify({'data':token.to_dict_simple()})
+
 
 @admin_manage_blueprint.route('/entry/player/<player_id>',methods=['GET'])
 @login_required

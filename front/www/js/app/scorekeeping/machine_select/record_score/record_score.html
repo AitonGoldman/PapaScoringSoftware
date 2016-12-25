@@ -16,7 +16,7 @@
       
     </div>
     <div style='font-size:38px;margin-left:15%;margin-right:15%;text-align:center'>
-      (#{{player_id}}){{player_name}}
+      <span ng-if='team_tournament=="false"'>(#{{player_id}})</span>{{player_name}}
     </div>
     <div style='z-index:4' class='machine-info-avatar'>
       <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg">
@@ -29,7 +29,7 @@
       Void Ticket
     </button>
     <button style='font-size:48px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".confirm_jagoff">
-      ({{player_id}}){{player_name}} is not here.
+      <span ng-if='team_tournament=="false"'> ({{player_id}}) </span> {{player_name}} is not here.
     </button>
   </ion-content>
 </ion-view>

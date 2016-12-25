@@ -5,21 +5,28 @@
       <div>{{confirmed_score.score_with_commas}}</div>
     </div>
     <div style='text-align:center;font-size:38px;line-height:38px'>
-      {{division_machine_name}}<br>(#{{player_id}}) {{player_name}}.
+      {{division_machine_name}}<br><span ng-if='team_tournament=="false"'>(#{{player_id}})</span> {{player_name}}.
     </div>
     <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.^">
       Return to Machine List
     </button>
+    <span ng-if="team_tournament=='false'">
     <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name})">
       Add new player to machine
     </button>    
     <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
       Add {{player_name}} to new queue
     </button>    
+    </span>
+    <span ng-if="team_tournament=='true'">
+    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.^.team_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name})">
+      Add new team to machine
+    </button>    
+    </span>    
     
     <!--<button style='font-size:48px' ng-if="queues.length > 0" class="button button-full button-assertive icon-right ion-chevron-right" ui-sref=".undo({process_step:{process:true}})">
-      Remove Player from {{resources.machine_added_to.data.division_machine_name}}-->
-    </button>
+      Remove Player from {{resources.machine_added_to.data.division_machine_name}}
+      </button>-->
 
   </ion-content>
 </ion-view>

@@ -10,6 +10,7 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm.process').c
 	$scope.division_machine_id=$state.params.division_machine_id;
         $scope.player_id = $state.params.player_id;
         $scope.player_name = $state.params.player_name;
+	$scope.team_tournament=$state.params.team_tournament;            
 
         
         $scope.utils = Utils;

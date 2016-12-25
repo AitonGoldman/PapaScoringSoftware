@@ -22,7 +22,7 @@
       </div>
       <div class='item row  padding-vertical'>
         <div class='col' style='text-align:right'>
-          Player : 
+          <span ng-if='team_tournament=="false"'>Player</span><span ng-if='team_tournament=="true"'>Team</span> : 
         </div>
         <div class='col'>        
           {{player_name}}

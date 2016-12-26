@@ -26,7 +26,7 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         finals_challonge_name_ppo_b = db_handle.Column(db_handle.String(100))        
         finals_num_players_per_group = db_handle.Column(db_handle.Integer)
         finals_num_games_per_match = db_handle.Column(db_handle.Integer)
-
+        queuing = db_handle.Column(db_handle.Boolean,default=False)
         meta_division_id = db_handle.Column(db_handle.Integer,
                                          db_handle.ForeignKey(
                                              'meta_division.meta_division_id'))

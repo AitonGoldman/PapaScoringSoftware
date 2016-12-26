@@ -44,9 +44,17 @@ app.controller(
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){
             $scope.site=state.params.site;            
             User.set_user_site($scope.site);            
-            if(do_not_check_current_user == undefined && User.logged_in() == false){
-                console.log('pooping');
-                return User.check_current_user();
+            if(do_not_check_current_user == undefined && User.logged_in() == false){                
+                
+                check_user_promise = User.check_current_user();
+                get_divisions_promise = check_user_promise.then(function(data){
+                    Modals.loading();
+                    return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+                });
+                
+                return get_divisions_promise.then(function(data){
+                    Modals.loaded();
+                });
             } else {
                 return Utils.resolved_promise();
             }                                 

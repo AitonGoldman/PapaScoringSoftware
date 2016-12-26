@@ -174,6 +174,8 @@ def route_edit_division(division_id):
         division.finals_num_qualifiers = division_data['finals_num_qualifiers']    
     if 'team_tournament' in division_data:
         division.team_tournament = division_data['team_tournament']
+    if 'queuing' in division_data:
+        division.queuing=division_data['queuing']
     if 'use_stripe' in division_data:
         if division_data['use_stripe'] is True:            
             division.use_stripe=True

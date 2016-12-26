@@ -30,6 +30,7 @@ angular.module('app.queues.machine_select.machine_queue').controller(
             remove_promise = TimeoutResources.RemovePlayerFromQueue(undefined,{site:$scope.site,player_id:player_id});
             remove_promise.then(function(data){
                 $scope.resources=TimeoutResources.GetAllResources();
+                console.log($scope.resources.modified_queue.data);
                 $scope.division_machine = $scope.resources.modified_queue.data[$scope.division_machine_id];                    
                 Modals.loaded();
             });

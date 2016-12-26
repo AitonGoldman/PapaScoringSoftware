@@ -100,11 +100,13 @@ def route_remove_player_from_queue(player_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
     player = fetch_entity(tables.Player,player_id)
-    queue = tables.Queue.query.filter_by(player_id=player_id).first()
+    queue = tables.Queue.query.filter_by(player_id=player_id).first()    
     if queue is None:
-        raise BadRequest('Player is not in any queues')
+        raise BadRequest('Player is not in any queues')    
+    division_machine=queue.division_machine
     remove_result = remove_player_from_queue(current_app,player)
-    return jsonify({'data':to_dict(remove_result)})
+    new_queue = get_queue_from_division_machine(division_machine,True)
+    return jsonify({'data':{division_machine.division_machine_id:{'queues':new_queue}}})
 
 
 @admin_manage_blueprint.route('/queue/division_machine/<division_machine_id>',methods=['PUT'])

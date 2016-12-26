@@ -33,6 +33,7 @@ def get_queues(division_id):
             'division_machine_name':"%s"%division_machine.machine.machine_name,
             'division_machine_id':division_machine.division_machine_id,
             'division_id':division_machine.division_id,
+            'player_id':division_machine.player_id,
             'queues':get_queue_from_division_machine(division_machine,json_output=True)
         }
     return jsonify({'data':queues})

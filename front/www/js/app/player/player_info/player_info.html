@@ -1,4 +1,4 @@
-<ion-view view-title="">
+<ion-view view-title="Player Info">
   <ion-content>      
     <div class="skinny-list list">
       <div class="item-divider item" id='add_user_user_info_title'>
@@ -20,7 +20,7 @@
           {{resources.player.data.player_id}}          
         </div>        
       </div>
-      <div class='item row padding-vertical'>
+      <div class='item row padding-vertical' ng-if='User.logged_in_user().is_player == false'>
         <div style='text-align:right' class='col padding-vertical'>
           PIN # : 
         </div>

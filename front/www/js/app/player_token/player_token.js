@@ -43,7 +43,7 @@ angular.module('app.player_token').controller(
                 });
                 _.forEach($scope.token_info.teams, function(value, key) {
                     division_price = $scope.resources.divisions.data[key].local_price;
-                    divisions_total = divisions_total + ($scope.token_info.divisions[key]*parseInt(division_price));
+                    divisions_total = divisions_total + ($scope.token_info.teams[key]*parseInt(division_price));
                     $scope.token_info.divisions_names[key]=$scope.resources.divisions.data[key].tournament_name;
                 });                
                 _.forEach($scope.token_info.metadivisions, function(value, key) {

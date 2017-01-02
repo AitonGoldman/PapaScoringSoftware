@@ -5,6 +5,8 @@
         Review Before Purchase
       </div>  
       <div class='item' ng-repeat='(division_id,token_count) in token_info.divisions' align='left' > {{token_info.divisions_names[division_id]}} : {{token_count}}</div>
+      <div class='item' ng-repeat='(division_id,token_count) in token_info.teams' align='left' > {{token_info.divisions_names[division_id]}} : {{token_count}} </div>
+
       <div class='item' ng-repeat='(metadivision_id,token_count) in token_info.metadivisions' align='left' > {{token_info.metadivisions_names[metadivision_id]}} : {{token_count}}</div>
       <button style='font-size:38px;line-height:38px' class="button button-full button-positive icon-right ion-chevron-right" ng-click="create_tickets()">
         Purchase Tickets

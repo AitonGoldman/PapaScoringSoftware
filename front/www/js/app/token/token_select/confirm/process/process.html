@@ -1,4 +1,4 @@
-<ion-view view-title="Tickets Purchased">
+<ion-view view-title="Tickets Purchased" hide-back-button="true">
   <ion-content>      
     <div class='icon-label-header row first-element'>
       <div><i class="icon ion-plus-circled"></i></div>
@@ -6,6 +6,10 @@
     </div>
     <div class='skinny-list skinny-list-results'>
       <div class='row item' ng-repeat='(div_id,count) in resources.added_tokens.data.divisions'>
+        <div style='text-align:right;padding-right:15px' class='col'>{{resources.divisions.data[div_id].tournament_name}}</div>
+        <div class='col'> : {{count}} Tickets</div>
+      </div>
+      <div class='row item' ng-repeat='(div_id,count) in resources.added_tokens.data.teams'>
         <div style='text-align:right;padding-right:15px' class='col'>{{resources.divisions.data[div_id].tournament_name}}</div>
         <div class='col'> : {{count}} Tickets</div>
       </div>

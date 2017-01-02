@@ -59,6 +59,9 @@ app.controller(
                 return Utils.resolved_promise();
             }                                 
         };
+        $scope.customBackButtonNav = function(){
+            $state.go('^');
+        };
         $scope.randomNumber = $rootScope.randomNumber;        
         $scope.controller_bootstrap($scope,$state);
         $scope.User = User;

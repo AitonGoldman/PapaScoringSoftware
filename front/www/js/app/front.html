@@ -12,7 +12,11 @@
       <a ui-sref=".player_token" class="item item-icon-left  item-padding" ng-if='User.has_role("player")'>
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
-      </a>      
+      </a>
+      <a ui-sref=".player_info({player_id:User.logged_in_user().player.player_id})" class="item item-icon-left  item-padding" ng-if='User.has_role("player")'>
+        <i class="icon ion-ios-cart"></i>
+        <span>Player Info</span>
+      </a>            
       <a id='home_manage_players_button' ui-sref='.player' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
         <i class="icon ion-person-add"></i>
         <span>Add Player</span>

@@ -19,9 +19,13 @@
   <ion-side-menu side="right">
     <!--<ion-header-bar class="bar-positive" ng-style="menu_bar_title_style">-->
         <ion-header-bar class="bar-positive">
-        <div ng-if="User.logged_in() == true">
-            <img id="side_menu_user_icon" align="bottom" src="http://98.111.232.93/pics/{{User.logged_in_user().user_id}}.jpg?{{randomNumber}}" class="avatar-frame-small">
+        <div ng-if="User.logged_in() == true && User.logged_in_player().is_player == false">
+            <img id="side_menu_user_icon" align="bottom" src="http://{{server_ip_address}}/pics/user_{{User.logged_in_user().user_id}}.jpg?{{randomNumber}}" class="avatar-frame-small">
         </div>
+        <div ng-if="User.logged_in() == true && User.logged_in_player().is_player == true">
+            <img id="side_menu_user_icon" align="bottom" src="http://{{server_ip_address}}/pics/player_{{User.logged_in_user().user_id}}.jpg?{{randomNumber}}" class="avatar-frame-small">
+        </div>
+        
       <h1  ng-if="User.logged_in() == false" class="title">
           TD 1.0
         </h1>

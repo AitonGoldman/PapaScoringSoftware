@@ -4,6 +4,8 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
     'app.scorekeeping.machine_select.player_select',[
         '$scope','$state','TimeoutResources','Utils','Modals','$animate','$filter','$timeout',
         function($scope, $state, TimeoutResources, Utils,Modals,$animate,$filter,$timeout) {
+            $animate.enabled(false);                                          
+
             $scope.site=$state.params.site;
 	    $scope.division_id=$state.params.division_id;
 	    $scope.division_machine_id=$state.params.division_machine_id;
@@ -17,17 +19,22 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             $scope.queues = [];
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             Modals.loading();
+            $scope.selected_players=[];
             players_promise = TimeoutResources.GetPlayers(undefined,{site:$scope.site});
-            queues_promise = TimeoutResources.GetQueues(players_promise,{site:$scope.site,division_id:$scope.division_id});                     queues_promise.then(function(data){
+            queues_promise = TimeoutResources.GetQueues(players_promise,{site:$scope.site,division_id:$scope.division_id});
+            queues_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();            
                 $scope.queues = $scope.resources.queues.data[$scope.division_machine_id].queues;
                 if($scope.queues.length > 0){
                     $scope.queue_player.player_id=$scope.queues[0].player.player_id;
+                    $scope.poop = true;
+                    $scope.selected_players = [$scope.queue_player];
                 }                
-                $scope.flattened_players = _.values($scope.resources.players.data);                                              $animate.enabled(true);                                          
+                $scope.flattened_players = _.values($scope.resources.players.data);
+                $animate.enabled(true);                                          
                 Modals.loaded();
             });
-            $scope.selected_players=[];
+            
         
             $scope.onPlayerIdChange = function(){                
                 $scope.poop = true;

@@ -29,6 +29,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                     $scope.queue_player.player_id=$scope.queues[0].player.player_id;
                     $scope.poop = true;
                     $scope.selected_players = [$scope.queue_player];
+                    $scope.player_img_id = $scope.queue_player.player_id;
                 }                
                 $scope.flattened_players = _.values($scope.resources.players.data);
                 $animate.enabled(true);                                          

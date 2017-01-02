@@ -53,7 +53,8 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             $scope.poop_2 = true;
             $scope.testChange = function(){
                 $scope.poop_2 = false;
-                Modals.loading();                
+                Modals.loading();
+                $scope.selected_players = [];
                 bump_queue_promise = TimeoutResources.BumpQueue(undefined,{site:$scope.site,division_machine_id:$scope.division_machine_id});                                         
                 bump_queue_promise.then(function(data){                    
                     $scope.resources = TimeoutResources.GetAllResources();                                        
@@ -64,7 +65,10 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                         $scope.queues.pop();
                     }
                     if($scope.queues.length > 0){
-                        $scope.queue_player.player_id=$scope.queues[0].player.player_id;                        
+                        $scope.queue_player.player_id=$scope.queues[0].player.player_id;
+                        $scope.player_img_id = $scope.queue_player.player_id;
+                        $scope.selected_players = [$scope.queue_player];
+                        
                     }
                     $scope.poop_2 = true;                    
                     Modals.loaded();

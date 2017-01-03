@@ -139,63 +139,63 @@ a.badge1 {
 }
 
 .platform-browser {
-.sample-show-hide {   
-  transition: all linear 0.5s;
-  backface-visibility: hidden;
-  -webkit-backface-visibility:hidden;
-}
-
-.sample-show-hide-back.ng-hide {
-  transition: all linear 0.5s;
-  transform: rotateY( 180deg );
-}
-
-.sample-show-hide-front.ng-hide {
-  transition: all linear 0.5s;
-  transform: rotateY( -180deg );
-}
+    .sample-show-hide {   
+        transition: all linear 0.5s;
+        backface-visibility: hidden;
+        -webkit-backface-visibility:hidden;
+    }
+    
+    .sample-show-hide-back.ng-hide {
+        transition: all linear 0.5s;
+        transform: rotateY( 180deg );
+    }
+    
+    .sample-show-hide-front.ng-hide {
+        transition: all linear 0.5s;
+        transform: rotateY( -180deg );
+    }
 }
 
 .platform-ios {
     .sample-show-hide {
-  transition-duration: .1s;
-  //transition: all linear 0.5s;
-  //backface-visibility: hidden;
-  //-webkit-backface-visibility:hidden;
-}
-
-.sample-show-hide-back.ng-hide {
-  transition-duration: .1s;
-    //transition: all linear 0.5s;
-    //transform: rotateY( 180deg );
-}
-
-.sample-show-hide-front.ng-hide {
-  transition-duration: .1s;
-    //transition: all linear 0.5s;
-  //transform: rotateY( -180deg );
-}
+        transition-duration: .1s;
+        //transition: all linear 0.5s;
+        //backface-visibility: hidden;
+        //-webkit-backface-visibility:hidden;
+    }
+    
+    .sample-show-hide-back.ng-hide {
+        transition-duration: .1s;
+        //transition: all linear 0.5s;
+        //transform: rotateY( 180deg );
+    }
+    
+    .sample-show-hide-front.ng-hide {
+        transition-duration: .1s;
+        //transition: all linear 0.5s;
+        //transform: rotateY( -180deg );
+    }
 }
 
 .platform-android {
     .sample-show-hide {
-  //transition-duration: .5s;
-  transition: all linear 0.5s;
-  //backface-visibility: hidden;
-  //-webkit-backface-visibility:hidden;
-}
-
-.sample-show-hide-back.ng-hide {
-  //transition-duration: .5s;
-    transition: all linear 0.5s;
-    //transform: rotateY( 180deg );
-}
-
-.sample-show-hide-front.ng-hide {
-  //transition-duration: .5s;
-  transition: all linear 0.5s;
-  //transform: rotateY( -180deg );
-}
+        //transition-duration: .5s;
+        transition: all linear 0.5s;
+        backface-visibility: hidden;
+        -webkit-backface-visibility:hidden;
+    }
+    
+    .sample-show-hide-back.ng-hide {
+        //transition-duration: .5s;
+        transition: all linear 0.5s;
+        transform: rotateY( 180deg );
+    }
+    
+    .sample-show-hide-front.ng-hide {
+        //transition-duration: .5s;
+        transition: all linear 0.5s;
+        transform: rotateY( -180deg );
+    }
 }
 
 .player-info-avatar {

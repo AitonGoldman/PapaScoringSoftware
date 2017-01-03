@@ -25,9 +25,15 @@ angular.module('app.scorekeeping.machine_select.record_score').controller(
         // $scope.resources = TimeoutResources.GetAllResources();
         //  Modals.loaded();
             //})
-            $scope.test_submit = function(){                
-                $state.go('.confirm',{score:$scope.score.score});
+            $scope.keyDown = function(event){
+                if(event.keyCode == 9 || event.keyCode==13){                    
+                    $state.go('.confirm',{score:$scope.score.score});
+                }                
             };
+
+            // $scope.test_submit = function(){                
+            //     $state.go('.confirm',{score:$scope.score.score});
+            // };
             $scope.onScoreChange = function(){
                 $scope.score.score = $scope.score.score.replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
             };

@@ -83,7 +83,7 @@ def route_audit_log_missing_tokens(player_id):
     teams = tables.Player.query.filter_by(player_id=player_id).first().teams
     if len(teams)>0:
         team_id = teams[0].team_id
-        audit_logs = audit_logs + tables.AuditLog.query.filter_by(team_id=team_id).all()                
+        audit_logs = audit_logs + tables.AuditLog.query.filter_by(team_id=team_id,player_id=None).all()                
     audit_log_list = []
     users = {user.user_id:user.to_dict_simple() for user in tables.User.query.all()}
     divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
@@ -97,8 +97,8 @@ def route_audit_log_missing_tokens(player_id):
     #    audit_log_index=audit_log_index+1
     audit_log_index = 0
     super_short_audit_log_list=[]
-    while audit_log_index < len(audit_logs):        
-        if(audit_log_index == len(audit_logs)-1):            
+    while audit_log_index < len(audit_logs):                
+        if(audit_log_index == len(audit_logs)-1):                        
             super_short_audit_log_list.append(audit_logs[audit_log_index])
             audit_log_index=audit_log_index+1
             continue
@@ -129,6 +129,7 @@ def route_audit_log_missing_tokens(player_id):
         if audit_log.division_machine_id: 
             machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                    
         if audit_log.purchase_date is not None:
+            print audit_log_index
             if audit_log.token.metadivision_id:
             #while audit_log_index < len(audit_logs) and audit_logs[audit_log_index+1].purchase_date and audit_logs[audit_log_index+1].token.metadivision_id:
                 #audit_log_index=audit_log_index+1
@@ -161,11 +162,6 @@ def route_audit_log_missing_tokens(player_id):
                 audit_log_list.append({
                     'audit_log_id':audit_log.audit_log_id,
                     'contents':"Game score (%s) submitted on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.entry.scores[0].score,audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
-                })
-            if audit_log.voided is True:
-                audit_log_list.append({
-                    'audit_log_id':audit_log.audit_log_id,
-                    'contents':"Void submitted on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
                 })
                 
         audit_log_index=audit_log_index+1

@@ -157,10 +157,17 @@ def route_audit_log_missing_tokens(player_id):
                 'contents':"Game voided on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.voided_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
             })
         if audit_log.used_date is not None:            
-            audit_log_list.append({
-                'audit_log_id':audit_log.audit_log_id,
-                'contents':"Game score (%s) submitted on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.entry.scores[0].score,audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
-            })
+            if audit_log.voided is False:
+                audit_log_list.append({
+                    'audit_log_id':audit_log.audit_log_id,
+                    'contents':"Game score (%s) submitted on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.entry.scores[0].score,audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
+                })
+            if audit_log.voided is True:
+                audit_log_list.append({
+                    'audit_log_id':audit_log.audit_log_id,
+                    'contents':"Void submitted on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
+                })
+                
         audit_log_index=audit_log_index+1
         
     return jsonify({'data':audit_log_list})

@@ -62,7 +62,37 @@
         <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.tournament' ng-if="User.logged_in() == true && User.has_role('admin')">
           
           <div>
-            Tourneys
+            Manage Tourneys
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.user' ng-if="User.logged_in() == true && User.has_role('admin')">          
+          <div>
+            Manage Users
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.queues({manage:true})' ng-if="User.logged_in() == true && User.has_role('desk')">          
+          <div>
+            Manage Queues
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.oops' ng-if="User.logged_in() == true && User.has_role('admin')">          
+          <div>
+            Oops
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>        
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.queue_view' ng-if="User.logged_in() == true && User.has_role('admin')">          
+          <div>
+            Queue View
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.jagoffs' ng-if="User.logged_in() == true && User.has_role('admin')">          
+          <div>
+            Jagoffs
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>

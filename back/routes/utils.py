@@ -5,6 +5,44 @@ from flask import current_app,jsonify
 from flask_login import current_user
 import stripe
 from flask_restless.helpers import to_dict
+import requests
+
+def record_ioniccloud_push_token(token,user_id=None,player_id=None):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)    
+    if user_id:
+        user = fetch_entity(tables.User,user_id)
+    if player_id:
+        player = fetch_entity(tables.Player,player_id)
+        user=player.user
+    user.ioniccloud_push_token=token
+    db.session.commit()
+    
+def send_push_notification(message,user_id=None,player_id=None):
+    if user_id:
+        user = fetch_entity(tables.User,user_id)
+    if player_id:
+        player = fetch_entity(tables.Player,player_id)
+        user=player.user
+    
+    url = "https://api.ionic.io/push/notifications"
+    token = user.ioniccloud_push_token
+
+    payload = {
+        "tokens":[token],
+        "profile":current_app.td_config['IONICCLOUD_PROFILE_TAG'],
+        "notification":{
+            "message":message
+        }
+    }
+    headers = {
+        'Authorization': "Bearer %s" % token,
+        'Content-Type': "application/json"
+    }
+
+    response = requests.get(url, data=json.dumps(payload), headers=headers)
+
+    print(response.text)
 
 def get_valid_sku(sku,STRIPE_API_KEY):
     if 'STRIPE_API_KEY' is None:

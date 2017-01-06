@@ -2,6 +2,7 @@ app = angular.module(
 	'TDApp',
     [
         'ionic',
+        'ionic.cloud',
         'ngCordova',
  	'ui.router',            
         'ngCookies',            
@@ -98,6 +99,11 @@ app.controller(
 );
 
 app.run(function($ionicPlatform,$rootScope) {
+    $rootScope.$on('cloud:push:notification', function(event, data) {
+        var msg = data.message;
+        alert(msg.title + ': ' + msg.text);
+    });
+
     $rootScope.$on('$stateChangeStart', 
                    function(event, toState, toParams, fromState, fromParams, options){
                        $rootScope.randomNumber=_.random(0,10);
@@ -110,13 +116,30 @@ app.run(function($ionicPlatform,$rootScope) {
 });
   
 
-app.config(function($httpProvider,$ionicConfigProvider) {
+app.config(function($httpProvider,$ionicConfigProvider,$ionicCloudProvider) {
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     $ionicConfigProvider.backButton.previousTitleText(false);
     $ionicConfigProvider.backButton.text(" ");
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
+ $ionicCloudProvider.init({
+    "core": {
+      "app_id": "a302e6bc"
+    },
+    "push": {
+      "sender_id": "566222718762",
+      "pluginConfig": {
+        "ios": {
+          "badge": true,
+          "sound": true
+        },
+        "android": {
+          "iconColor": "#343434"
+        }
+      }
+    }
+  });    
 });
 
 app.filter('orderObjectBy', function() {

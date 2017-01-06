@@ -1,8 +1,8 @@
 angular.module('app.login.process',[/*REPLACEMECHILD*/]);
 angular.module('app.login.process').controller(
     'app.login.process',[
-        '$scope','$state','TimeoutResources','Utils','Modals','User',
-        function($scope, $state, TimeoutResources, Utils,Modals,User) {            
+        '$scope','$state','TimeoutResources','Utils','Modals','User','$ionicPush',
+        function($scope, $state, TimeoutResources, Utils,Modals,User,$ionicPush) {            
             $scope.site=$state.params.site;        
             $scope.utils = Utils;
             $scope.controller_bootstrap($scope,$state,true);                
@@ -22,6 +22,13 @@ angular.module('app.login.process').controller(
             $login_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
                 User.set_logged_in_user($scope.resources.logged_in_user.data,"user");
+                $ionicPush.register().then(function(t) {
+                    return $ionicPush.saveToken(t);
+                }).then(function(t) {
+                    console.log('Token saved:', t.token);
+                });
+
+
                 Modals.loaded();
             },function(data){
                 //FIXME : need a better way to handle situation where we want

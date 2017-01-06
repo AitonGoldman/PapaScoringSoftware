@@ -11,7 +11,10 @@ def get_config_values_from_env():
     config_dict['MAX_TICKETS_ALLOWED_PER_DIVISION']=None
     config_dict['STRIPE_API_KEY']=None
     config_dict['QUEUE_BUMP_AMOUNT']=None
-    config_dict['PLAYER_LOGIN']=None    
+    config_dict['PLAYER_LOGIN']=None
+    config_dict['IONICCLOUD_PROFILE_TAG']=None
+    config_dict['IONICCLOUD_API_KEY']=None
+    
     for key,value in config_dict.iteritems():
         config_dict[key]=os.getenv(key,None)
     return config_dict

@@ -13,6 +13,9 @@ from Queue import generate_queue_class
 from Score import generate_score_class
 from Entry import generate_entry_class
 from AuditLog import generate_audit_log_class
+from DivisionFinal import generate_division_final_class
+from FinalsPlayer import generate_finals_player_class
+
 
 class ImportedTables():
     def __init__(self,db_handle):
@@ -20,6 +23,8 @@ class ImportedTables():
         self.User = generate_user_class(db_handle)        
         self.Tournament = generate_tournament_class(db_handle)
         self.Division = generate_division_class(db_handle)
+        self.DivisionFinal = generate_division_final_class(db_handle)                
+        self.FinalsPlayer = generate_finals_player_class(db_handle)
         self.Machine = generate_machine_class(db_handle)
         self.DivisionMachine = generate_division_machine_class(db_handle)
         self.MetaDivision = generate_meta_division_class(db_handle)

@@ -1,10 +1,10 @@
 <ion-view view-title="Home"  hide-back-button='true' >
   <ion-content>     
     <div class="skinny-list list">
-      <a id="home_manage_user_button" ui-sref='.user' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'>
-        <i class="icon ion-person-stalker"></i>
-        <span>Manage Users</span>
-      </a>
+      <!-- <a id="home_manage_user_button" ui-sref='.user' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'> -->
+      <!--   <i class="icon ion-person-stalker"></i> -->
+      <!--   <span>Manage Users</span> -->
+      <!-- </a> -->
       <a ui-sref=".token" class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
@@ -19,11 +19,11 @@
       </a>            
       <a id='home_manage_players_button' ui-sref='.player' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
         <i class="icon ion-person-add"></i>
-        <span>Add Player</span>
+        <span>Manage Players</span>
       </a>
       <a id='home_manage_players_button' ui-sref='.teams' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
         <i class="icon ion-person-add"></i>
-        <span>Add Team</span>
+        <span>Manage Teams</span>
       </a>      
       <a ui-sref='.scorekeeping' class="item item-icon-left  item-padding" ng-if='User.has_role("scorekeeper")'>
         <i class="icon ion-clipboard"></i>
@@ -33,96 +33,26 @@
         <i class="icon ion-clipboard"></i>
         <span>Queues</span>
       </a>
-      <a ng-if='User.has_role("desk") == true' ui-sref='.queues({manage:true})' class="item item-icon-left  item-padding">
-        <i class="icon ion-clipboard"></i>
-        <span>Queues</span>
-      </a>      
+      <!-- <a ng-if='User.has_role("desk") == true' ui-sref='.queues({manage:true})' class="item item-icon-left  item-padding"> -->
+      <!--   <i class="icon ion-clipboard"></i> -->
+      <!--   <span>Queues</span> -->
+      <!-- </a>       -->
       <a ui-sref='.results' class="item item-icon-left  item-padding">
         <i class="icon ion-clipboard"></i>
         <span>Results</span>
       </a>
-      <a id="home_manage_user_button" ui-sref='.oops' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'>
-        <i class="icon ion-person-stalker"></i>
-        <span>Oops</span>
-      </a>
-      <a id="home_manage_user_button" ui-sref='.queue_view' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'>
-        <i class="icon ion-person-stalker"></i>
-        <span>Queue View</span>
-      </a>
-      <a id="home_manage_user_button" ui-sref='.jagoffs' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'>
-        <i class="icon ion-person-stalker"></i>
-        <span>Jagoffs</span>
-      </a>
-      
-      <!--<div class="list">
-        
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Lightsaber
-          </div>
-          <select>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>                        
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>                        
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>                        
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>                        
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>                        
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>                        
-            
-          </select>
-        </label>
-
-      </div>-->
-       <!-- <label class="item"> -->
-       <!--   <div class="input-label"> -->
-       <!--     Lightsaber -->
-       <!--   </div> -->
-       <!--   <select style='font-size:48px'> -->
-       <!--     <option >Blue</option> -->
-       <!--     <option selected>Green</option> -->
-       <!--     <option>Red</option> -->
-       <!--   </select> -->
-       <!-- </label> -->
-      <!--<div class='item row' style='padding:0;font-size:24px'>
-        <div style='padding-top:32px;'>Main Division : </div>
-        <ion-radio ng-model="choice" ng-value="'A'">A Division</ion-radio>
-        <ion-radio ng-model="choice" ng-value="'B'">B Division</ion-radio>
-      </div>-->
-
-      <!--<div class="item range">
-        <i class="icon ion-volume-low"></i>
-        <input ng-model='slider.value' type="range" name="volume"  min="0" max="{{slider.max}}" value="0">
-        {{slider.value}}   
-      </div>-->
+      <!-- <a id="home_manage_user_button" ui-sref='.oops' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'> -->
+      <!--   <i class="icon ion-person-stalker"></i> -->
+      <!--   <span>Oops</span> -->
+      <!-- </a> -->
+      <!-- <a id="home_manage_user_button" ui-sref='.queue_view' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'> -->
+      <!--   <i class="icon ion-person-stalker"></i> -->
+      <!--   <span>Queue View</span> -->
+      <!-- </a> -->
+      <!-- <a id="home_manage_user_button" ui-sref='.jagoffs' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'> -->
+      <!--   <i class="icon ion-person-stalker"></i> -->
+      <!--   <span>Jagoffs</span> -->
+      <!-- </a>       -->
     </div>
   </ion-content>
 </ion-view>

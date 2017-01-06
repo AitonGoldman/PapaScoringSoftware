@@ -32,6 +32,10 @@
         },
         "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.ionicframework.myapp906580"
+        },
+        "phonegap-plugin-push": {
+            "SENDER_ID": "566222718762",
+            "PACKAGE_NAME": "com.ionicframework.myapp906580"
         }
     },
     "dependent_plugins": {

@@ -26,6 +26,7 @@ def generate_user_class(db_handle):
         has_picture = db_handle.Column(db_handle.Boolean(),default=False)
         is_player = db_handle.Column(db_handle.Boolean(),default=True)
         pin = db_handle.Column(db_handle.Integer)
+        ioniccloud_push_token=db_handle.Column(db_handle.String(500))
         roles = db_handle.relationship(
            'Role',
            secondary=Role_User_mapping

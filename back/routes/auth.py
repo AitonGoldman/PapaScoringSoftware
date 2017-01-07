@@ -5,7 +5,7 @@ from werkzeug.exceptions import Unauthorized,Conflict,BadRequest
 from flask_login import login_required, login_user, logout_user, current_user
 from util import db_util
 from flask_principal import identity_changed, Identity
-from routes.utils import record_ioniccloud_push_token
+from routes.utils import record_ioniccloud_push_token,send_push_notification
 
 @admin_login_blueprint.route('/auth/logout',methods=['GET'])
 def route_logout():
@@ -36,10 +36,12 @@ def route_login():
     login_user(user)
     identity_changed.send(current_app._get_current_object(), identity=Identity(user.user_id))
     user_dict = user.to_dict_simple()
-    user_dict['roles'] = [r.name for r in user.roles]
+    user_dict['roles'] = [r.name for r in user.roles]    
     if "ioniccloud_push_token" in input_data:
         record_ioniccloud_push_token(input_data['ioniccloud_push_token'],user_id=user.user_id)
         send_push_notification('you are logged in - good job!',user_id=user.user_id)
+        send_push_notification('okay - push notifications work!',user_id=user.user_id,postpone=120)
+        
     return jsonify({'data':user.to_dict_simple()})
 
 @admin_login_blueprint.route('/auth/player_login',methods=['PUT'])

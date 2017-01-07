@@ -1,8 +1,8 @@
 angular.module('app.login.process',[/*REPLACEMECHILD*/]);
 angular.module('app.login.process').controller(
     'app.login.process',[
-        '$scope','$state','TimeoutResources','Utils','Modals','User','$ionicPush',
-        function($scope, $state, TimeoutResources, Utils,Modals,User,$ionicPush) {            
+        '$scope','$state','TimeoutResources','Utils','Modals','User','$ionicPush','$ionicPlatform',
+        function($scope, $state, TimeoutResources, Utils,Modals,User,$ionicPush,$ionicPlatform) {            
             $scope.site=$state.params.site;        
             $scope.utils = Utils;
             $scope.controller_bootstrap($scope,$state,true);                
@@ -15,18 +15,22 @@ angular.module('app.login.process').controller(
             
             $scope.user_info=$state.params.user_info;
             
-            Modals.loading();            
-            $login_promise = TimeoutResources.Login(undefined,{site:$scope.site},
-                                                    {username:$scope.user_info.username,password:$scope.user_info.password});
+            Modals.loading();
+            post_obj = {username:$scope.user_info.username,password:$scope.user_info.password};
+            if(ionic.Platform.isWebView() == true){
+                ionic_push_promise = $ionicPush.register().then(function(t) {
+                    $scope.ioniccloud_push_token = t;
+                    post_obj["ioniccloud_push_token"] = $scope.ioniccloud_push_token.token;
+                });
+            } else {
+                ionic_push_promise = Utils.resolved_promise();
+            }                                            
+            
+            $login_promise = TimeoutResources.Login(ionic_push_promise,{site:$scope.site},post_obj);
             
             $login_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
                 User.set_logged_in_user($scope.resources.logged_in_user.data,"user");
-                $ionicPush.register().then(function(t) {
-                    return $ionicPush.saveToken(t);
-                }).then(function(t) {
-                    console.log('Token saved:', t.token);
-                });
 
 
                 Modals.loaded();

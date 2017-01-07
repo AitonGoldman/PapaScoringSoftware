@@ -345,9 +345,17 @@ def create_entry(app,division_machine_id,division_id,score,player_id=None,team_i
         division_id=division_id
     )
     if player_id:
+        existing_score = tables.Score.query.filter_by(division_machine_id=division_machine_id,score=score).join(tables.Entry).filter_by(player_id=player_id).first()
+        if existing_score:
+            return existing_score.entry
         entry.player_id=player_id
     if team_id:
+        existing_score = tables.Score.query.filter_by(division_machine_id=division_machine_id,score=score).join(tables.Entry).filter_by(team_id=team_id).first()
+        if existing_score:
+            return existing_score.entry
+
         entry.team_id=team_id
+    
     db.session.add(entry)
     db.session.commit()
     score = tables.Score(

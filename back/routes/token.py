@@ -190,7 +190,7 @@ def add_token(paid_for):
     else:
         comped = False
     player = fetch_entity(tables.Player,tokens_data['player_id'])
-    if tokens_data.has_key('team_id'):
+    if tokens_data.has_key('team_id'):        
         team_id = tokens_data['team_id']
         team = fetch_entity(tables.Player,team_id)
     #else:
@@ -223,7 +223,9 @@ def add_token(paid_for):
         if player_id:
             audit_log.player_id = player_id
         if team_id:
-            audit_log.team_id = team_id
+            token_division_id = token['division_id']
+            if tables.Division.query.filter_by(division_id=token_division_id).first().team_tournament:
+                audit_log.team_id = team_id
             
         audit_log.token_id=token['token_id']
         audit_log.deskworker_id=current_user.user_id

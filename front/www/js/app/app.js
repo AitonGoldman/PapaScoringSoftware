@@ -108,6 +108,7 @@ app.run(function($ionicPlatform,$rootScope) {
         alert(msg.title + ': ' + msg.text);
     });
 
+
     $rootScope.$on('$stateChangeStart', 
                    function(event, toState, toParams, fromState, fromParams, options){
                        $rootScope.randomNumber=_.random(0,10);

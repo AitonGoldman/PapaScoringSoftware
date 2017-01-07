@@ -6,6 +6,7 @@ from flask_login import current_user
 import stripe
 from flask_restless.helpers import to_dict
 import requests
+import json
 
 def record_ioniccloud_push_token(token,user_id=None,player_id=None):
     db = db_util.app_db_handle(current_app)
@@ -18,7 +19,10 @@ def record_ioniccloud_push_token(token,user_id=None,player_id=None):
     user.ioniccloud_push_token=token
     db.session.commit()
     
-def send_push_notification(message,user_id=None,player_id=None):
+def send_push_notification(message,user_id=None,player_id=None,postpone=None):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)    
+
     if user_id:
         user = fetch_entity(tables.User,user_id)
     if player_id:
@@ -27,7 +31,8 @@ def send_push_notification(message,user_id=None,player_id=None):
     
     url = "https://api.ionic.io/push/notifications"
     token = user.ioniccloud_push_token
-
+    api_key = current_app.td_config['IONICCLOUD_API_KEY']
+    
     payload = {
         "tokens":[token],
         "profile":current_app.td_config['IONICCLOUD_PROFILE_TAG'],
@@ -35,12 +40,19 @@ def send_push_notification(message,user_id=None,player_id=None):
             "message":message
         }
     }
+    if postpone:
+        now = datetime.datetime.now()
+        now_plus = now + datetime.timedelta(seconds = postpone)
+        now_plus_adjusted = now_plus + datetime.timedelta(hours = 5)
+        #2017-01-07T14:15:00Z
+        scheduled_time_string = now_plus_adjusted.strftime("%Y-%m-%dT%H:%M:%SZ")
+        payload['scheduled']=scheduled_time_string
     headers = {
-        'Authorization': "Bearer %s" % token,
+        'Authorization': "Bearer %s" % api_key,
         'Content-Type': "application/json"
     }
 
-    response = requests.get(url, data=json.dumps(payload), headers=headers)
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
 
     print(response.text)
 

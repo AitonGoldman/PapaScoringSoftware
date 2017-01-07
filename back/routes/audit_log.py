@@ -21,6 +21,7 @@ def route_audit_log_missing_scores(player_id,audit_log_id,minutes):
     metadivisions = {meta_division.meta_division_id:meta_division.to_dict_simple() for meta_division in tables.MetaDivision.query.all()}
     division_machines = {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in tables.DivisionMachine.query.all()}
     players = {player.player_id:player.to_dict_simple() for player in tables.Player.query.all()}
+    teams = {team.team_id:team.to_dict_simple() for team in tables.Team.query.all()}
     
     audit_log_base = fetch_entity(tables.AuditLog,audit_log_id)
     if audit_log_base.used_date:
@@ -56,18 +57,23 @@ def route_audit_log_missing_scores(player_id,audit_log_id,minutes):
         audit_log=audit_logs[audit_log_index]        
         if audit_log.division_machine_id: 
             machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                    
-        if audit_log.game_started_date is not None:            
-            audit_log_list.append(
-                "Game started on %s - %s %s - by %s - for player %s - remaining tokens : %s " % (audit_log.game_started_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],players[audit_log.player_id]['first_name']+" "+players[audit_log.player_id]['first_name'],audit_log.remaining_tokens)
-            )
+        if audit_log.team_id:
+            player_team_string = "team %s " % teams[audit_log.team_id]['team_name']
+        else:
+            player_team_string = "player %s "% players[audit_log.player_id]['first_name']+" "+players[audit_log.player_id]['first_name']
+        # if audit_log.game_started_date is not None:            
+        #     audit_log_list.append(
+        #         "Game started on %s - %s %s - by %s - for %s" % (audit_log.game_started_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],player_team_string)
+        #     )
         if audit_log.used_date is not None:
             if audit_log.voided_date is not None:            
-                audit_log_list.append(
-                    "Game voided on %s - %s %s - by %s - for player %s - remaining tokens : %s " % (audit_log.voided_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],players[audit_log.player_id]['first_name']+" "+players[audit_log.player_id]['first_name'], audit_log.remaining_tokens)
-                )
+                # audit_log_list.append(
+                #     "Game voided on %s - %s %s - by %s - for %s - remaining tokens : %s " % (audit_log.voided_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],player_team_string, audit_log.remaining_tokens)
+                # )
+                pass
             else:
                 audit_log_list.append(
-                    "Game score (%s) submitted on %s - %s %s - by %s - for player %s - remaining tokens : %s " % (audit_log.entry.scores[0].score,audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'], players[audit_log.player_id]['first_name']+" "+players[audit_log.player_id]['first_name'], audit_log.remaining_tokens)
+                    "Game score (%s) submitted on %s - %s %s - by %s - for %s" % (audit_log.entry.scores[0].score,audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],player_team_string)
                 )
         audit_log_index=audit_log_index+1
         

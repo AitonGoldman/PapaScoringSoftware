@@ -1,8 +1,8 @@
 angular.module('app.login_player.process',[/*REPLACEMECHILD*/]);
 angular.module('app.login_player.process').controller(
     'app.login_player.process',[
-        '$scope','$state','TimeoutResources','Utils','Modals','User',
-        function($scope, $state, TimeoutResources, Utils,Modals,User) {
+        '$scope','$state','TimeoutResources','Utils','Modals','User','$ionicPush','$ionicPlatform',
+        function($scope, $state, TimeoutResources, Utils,Modals,User, $ionicPush, $ionicPlatform) {
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
@@ -14,10 +14,20 @@ angular.module('app.login_player.process').controller(
             return;
         }
         
-        $scope.player=$state.params.player;
-        Modals.loading();            
-        login_promise = TimeoutResources.LoginPlayer(undefined,{site:$scope.site},
-                                                {player_pin:$scope.player.pin});
+            $scope.player=$state.params.player;
+            Modals.loading();            
+            post_obj = {player_pin:$scope.player.pin};
+            if(ionic.Platform.isWebView() == true){
+                ionic_push_promise = $ionicPush.register().then(function(t) {
+                    console.log(t);
+                    $scope.ioniccloud_push_token = t;
+                    post_obj["ioniccloud_push_token"] = $scope.ioniccloud_push_token.token;
+                });
+            } else {
+                ionic_push_promise = Utils.resolved_promise();
+            }                                            
+
+            login_promise = TimeoutResources.LoginPlayer(ionic_push_promise,{site:$scope.site},post_obj);
         
         login_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

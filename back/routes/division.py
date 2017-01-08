@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue,get_valid_sku
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue,get_valid_sku,get_queue_from_division_machine,send_push_notification,get_player_list_to_notify
 from orm_creation import create_division, create_division_machine
 import datetime
 
@@ -127,7 +127,14 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     set_token_start_time(current_app,player,division_machine)    
     division_machine.player_id=player.player_id
     tables.db_handle.session.commit()
-    remove_player_from_queue(current_app,player)    
+    queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
+    players_to_alert = []
+    if queue:
+        players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)            
+    removed_queue = remove_player_from_queue(current_app,player)
+    if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
+        push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
+        send_push_notification(push_notification_message, players=players_to_alert)    
     return jsonify({'data':division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/undo',

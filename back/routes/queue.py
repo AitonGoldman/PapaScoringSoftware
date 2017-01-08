@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission, Desk_permission, Token_permission, Queue_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time, remove_player_from_queue,get_queue_from_division_machine
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time, remove_player_from_queue,get_queue_from_division_machine,send_push_notification,get_player_list_to_notify
 import os
 from flask_restless.helpers import to_dict
 from orm_creation import create_queue
@@ -60,8 +60,16 @@ def add_player_to_queue():
     
     if check_player_team_can_start_game(current_app,division_machine,player) is False:
         raise BadRequest("Can't queue - player has no tokens")
+
+    queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
+    players_to_alert = []
+    if queue:
+        players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)        
         
-    remove_player_from_queue(current_app,player)    
+    removed_queue = remove_player_from_queue(current_app,player)        
+    if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
+        push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
+        send_push_notification(push_notification_message, players=players_to_alert)
     new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])    
     return jsonify({'data':new_queue.to_dict_simple()})
 
@@ -104,8 +112,15 @@ def route_remove_player_from_queue(player_id):
     if queue is None:
         raise BadRequest('Player is not in any queues')    
     division_machine=queue.division_machine
+    players_to_alert = get_player_list_to_notify(player.player_id,division_machine)    
     remove_result = remove_player_from_queue(current_app,player)
     new_queue = get_queue_from_division_machine(division_machine,True)
+    if len(players_to_alert) > 0:
+        push_notification_message = """
+        The queue for %s has changed! Check the queue to see your new position.
+        """ % division_machine.machine.machine_name
+        send_push_notification(push_notification_message, players=players_to_alert)
+    
     return jsonify({'data':{division_machine.division_machine_id:{'queues':new_queue}}})
 
 
@@ -124,9 +139,9 @@ def add_player_to_machine_from_queue(division_machine_id):
     player = fetch_entity(tables.Player,root_queue.player_id)
     if check_player_team_can_start_game(current_app,division_machine,player=player) is False:
         raise BadRequest('Player can not start game - either no tickets or already on another machine')    
-    set_token_start_time(current_app,player,division_machine)
-    # need to check player is allowed to play the game (i.e. tokens available, not playing in other division, etc)
-    division_machine.player_id = root_queue.player_id
+    players_to_alert = get_player_list_to_notify(player.player_id,division_machine)
+    set_token_start_time(current_app,player,division_machine)    
+    division_machine.player_id = root_queue.player_id    
     if len(root_queue.queue_child)==0:
         division_machine.queue_id = None
         db.session.commit()        
@@ -139,4 +154,7 @@ def add_player_to_machine_from_queue(division_machine_id):
     return_dict = {'division_machine':division_machine.to_dict_simple()}
     #if division_machine.queue_id:
     #    return_dict['next_queue']=division_machine.queue.to_dict_simple()
+    if len(players_to_alert) > 0:
+        send_push_notification("The queue for %s has changed!  Please check the queue to see your new position." % division_machine.machine.machine_name,
+                               players=players_to_alert)
     return jsonify({'data': division_machine.to_dict_simple()})

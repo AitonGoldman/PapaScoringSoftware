@@ -59,5 +59,8 @@ def route_player_login():
         raise Unauthorized('Bad player pin #')
     login_user(player.user)
     identity_changed.send(current_app._get_current_object(), identity=Identity(player.player_id))
+    if "ioniccloud_push_token" in input_data:
+        record_ioniccloud_push_token(input_data['ioniccloud_push_token'],user_id=player.user.user_id)
+    
     return jsonify({'data':player.user.to_dict_simple()})
 

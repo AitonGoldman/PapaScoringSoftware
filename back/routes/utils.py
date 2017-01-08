@@ -8,6 +8,24 @@ from flask_restless.helpers import to_dict
 import requests
 import json
 
+def check_player_is_on_device(player_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)    
+    player = fetch_entity(tables.Player,player_id)
+    if player and player.user.ioniccloud_push_token:
+        return True
+    return False
+
+def get_player_list_to_notify(player_id,division_machine):
+    queue_for_machine = get_queue_from_division_machine(division_machine,True)
+    queue_item_for_player = next(x for x in queue_for_machine if x['player_id'] == player_id)
+    # we are interested in the queue_item_index after the current head of the queue, so
+    # we don't change the position we get back into an index (i.e. subtract one)
+    queue_item_index = int(queue_item_for_player['queue_position'])
+    players_to_alert = queue_for_machine[queue_item_index:]
+    players_to_alert_filtered = [player_to_alert for player_to_alert in players_to_alert if check_player_is_on_device(player_to_alert['player_id'])]
+    return players_to_alert_filtered
+
 def record_ioniccloud_push_token(token,user_id=None,player_id=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
@@ -19,22 +37,33 @@ def record_ioniccloud_push_token(token,user_id=None,player_id=None):
     user.ioniccloud_push_token=token
     db.session.commit()
     
-def send_push_notification(message,user_id=None,player_id=None,postpone=None):
+def send_push_notification(message,user_id=None,player_id=None,postpone=None,players=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
 
     if user_id:
         user = fetch_entity(tables.User,user_id)
+        token = user.ioniccloud_push_token
+        token_list = [token]        
     if player_id:
         player = fetch_entity(tables.Player,player_id)
         user=player.user
+        token = user.ioniccloud_push_token
+        token_list = [token]
+    if players:
+        token_list = []
+        for player_queue_item in players:
+            player = fetch_entity(tables.Player,player_queue_item['player_id'])
+            user=player.user
+            token = user.ioniccloud_push_token
+            token_list.append(token)
+            
     
     url = "https://api.ionic.io/push/notifications"
-    token = user.ioniccloud_push_token
     api_key = current_app.td_config['IONICCLOUD_API_KEY']
     
     payload = {
-        "tokens":[token],
+        "tokens":token_list,
         "profile":current_app.td_config['IONICCLOUD_PROFILE_TAG'],
         "notification":{
             "message":message
@@ -52,9 +81,7 @@ def send_push_notification(message,user_id=None,player_id=None,postpone=None):
         'Content-Type': "application/json"
     }
 
-    response = requests.post(url, data=json.dumps(payload), headers=headers)
-
-    print(response.text)
+    response = requests.post(url, data=json.dumps(payload), headers=headers)    
 
 def get_valid_sku(sku,STRIPE_API_KEY):
     if 'STRIPE_API_KEY' is None:
@@ -164,6 +191,8 @@ def remove_player_from_queue(app,player=None,division_machine=None):
     tables = db_util.app_db_tables(app)
     if player:
         queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
+        if queue is None:
+            return None
     if division_machine:
         queue = division_machine.queue
     if queue is None:
@@ -184,7 +213,7 @@ def remove_player_from_queue(app,player=None,division_machine=None):
     db.session.delete(queue)    
     db.session.commit()    
     return queue
-    
+
 def get_queue_from_division_machine(division_machine,json_output=False):
     if division_machine.queue is None:
         return []

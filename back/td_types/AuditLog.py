@@ -22,6 +22,9 @@ def generate_audit_log_class(db_handle):
         deskworker_id = db_handle.Column('deskworker_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
         scorekeeper_id = db_handle.Column('scorekeeper_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
         purchase_date = db_handle.Column(db_handle.DateTime)
+        player_purchase_request_date = db_handle.Column(db_handle.DateTime)        
+        player_purchase_complete_date = db_handle.Column(db_handle.DateTime)
+
         game_started_date = db_handle.Column(db_handle.DateTime)
         used_date = db_handle.Column(db_handle.DateTime)
         voided_date = db_handle.Column(db_handle.DateTime)        

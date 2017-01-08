@@ -216,15 +216,33 @@ def add_token(paid_for):
             tokens = create_division_tokens(num_tokens,div_id=div_id,team_id=team_id,paid_for=paid_for,comped=comped,player_id_for_team_audit_log=player_id)
             total_tokens = total_tokens + tokens            
     db.session.commit()
+    division_token_summary = {}
     for token in total_tokens:
+        if token['division_id'] not in division_token_summary:
+            if team_id:            
+                token_division_id = token['division_id']            
+                token_division = tables.Division.query.filter_by(division_id=token_division_id).first()
+                if token_division and token_division.team_tournament:
+                    division_token_summary[token['division_id']]=token
+            if token['metadivision_id'] is not None:
+                    division_token_summary[99]=token
+            if token['division_id'] is not None:
+                    division_token_summary[token['division_id']]=token                            
+
+#    for token in total_tokens:
+    for div_id,token in division_token_summary.iteritems():
         audit_log = tables.AuditLog()
         if paid_for == 1:
             audit_log.purchase_date = datetime.datetime.now()
+        if paid_for == 0:
+            audit_log.player_purchase_request_date = datetime.datetime.now()            
         if player_id:
             audit_log.player_id = player_id
-        if team_id:
+        if team_id:            
             token_division_id = token['division_id']
-            if tables.Division.query.filter_by(division_id=token_division_id).first().team_tournament:
+            
+            token_division = tables.Division.query.filter_by(division_id=token_division_id).first()
+            if token_division and token_division.team_tournament:
                 audit_log.team_id = team_id
             
         audit_log.token_id=token['token_id']
@@ -235,8 +253,16 @@ def add_token(paid_for):
             audit_log.num_tokens_purchased_in_batch=int(tokens_data['divisions'][str(token['division_id'])])
         elif token['metadivision_id'] is not None:
             audit_log.num_tokens_purchased_in_batch=int(tokens_data['metadivisions'][str(token['metadivision_id'])])                        
-        tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
-        audit_log.remaining_tokens = tokens_left_string        
+        #tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
+        #audit_log.remaining_tokens = tokens_left_string        
+        db.session.add(audit_log)
+        db.session.commit()
+    tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
+    if paid_for == 1:
+        audit_log = tables.AuditLog()
+        audit_log.action="purchase_summary"
+        audit_log.description=tokens_left_string
+        audit_log.player_id=player_id
         db.session.add(audit_log)
         db.session.commit()
     total_divisions_tokens_summary = {}

@@ -10,6 +10,7 @@ def generate_division_machine_class(db_handle):
         removed = db_handle.Column(db_handle.Boolean, default=False)
         division_machine_id = db_handle.Column(db_handle.Integer, primary_key=True)
         #FIXME : need constraint on machine_id + division_id    
+        avg_play_time = db_handle.Column(db_handle.String(255))
         machine_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'machine.machine_id'
         ))

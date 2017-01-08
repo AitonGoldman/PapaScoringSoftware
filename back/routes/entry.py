@@ -152,6 +152,7 @@ def route_jagoff(division_machine_id):
     tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
     audit_log.remaining_tokens = tokens_left_string
     audit_log.description = "declared jagoff"
+    audit_log.action="jagoff"
     db.session.add(audit_log)    
     db.session.commit()
     

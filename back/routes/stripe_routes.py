@@ -5,8 +5,10 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission,Token_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity
+from routes.utils import fetch_entity,calc_audit_log_remaining_tokens
 import stripe
+import datetime
+
 
 @admin_manage_blueprint.route('/stripe/sku/<sku>', methods=['GET'])
 def get_valid_sku(sku):
@@ -117,10 +119,39 @@ def start_sale():
         order_response=order.pay(
             source=stripe_token 
         )
+        order_id_string =  "order_id %s, " % order_response.id
+        stripe_purchase_summary_string = order_id_string
+        
+        #for item in order_response.items():
+        #    if item[0] == 'items':
+        #        for actual_item in item[1]:
+        #            if actual_item.amount != 0:
+        #                stripe_purchase_summary_string = stripe_purchase_summary_string + "amount : %s, description : %s, quantity : %s " % (actual_item.amount/100,actual_item.description,actual_item.quantity)
+        #                #print "amount : %s, description : %s, quantity : %s " % (actual_item.amount,actual_item.description,actual_item.quantity)
+
         for json_token in tokens:            
             token = tables.Token.query.filter_by(token_id=json_token['token_id']).first()            
             token.paid_for=True
             db.session.commit()
+
+        audit_log = tables.AuditLog()
+        audit_log.player_purchase_complete_date = datetime.datetime.now()            
+        audit_log.description = stripe_purchase_summary_string
+        audit_log.player_id = current_user.player.player_id
+        db.session.add(audit_log)
+        db.session.commit()
+        if len(current_user.player.teams) > 0:
+            team_id = current_user.player.teams[0].team_id
+        else:
+            team_id = None
+        tokens_left_string = calc_audit_log_remaining_tokens(current_user.player.player_id,team_id)        
+        audit_log = tables.AuditLog()
+        audit_log.action="purchase_summary"
+        audit_log.description=tokens_left_string
+        audit_log.player_id=current_user.player.player_id
+        db.session.add(audit_log)
+        db.session.commit()
+        
         return jsonify({"data":"success"})
     except stripe.error.CardError as e:
         # The card has been declined        

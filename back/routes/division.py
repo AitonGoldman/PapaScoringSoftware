@@ -7,6 +7,7 @@ from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue,get_valid_sku
 from orm_creation import create_division, create_division_machine
+import datetime
 
 
 @admin_manage_blueprint.route('/division',methods=['GET'])
@@ -30,6 +31,39 @@ def route_get_division_machines(division_id):
     tables = db_util.app_db_tables(current_app)
     division_machines = tables.DivisionMachine.query.filter_by(division_id=division_id).all()
     return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
+
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/play_time_avg',methods=['GET'])
+def route_get_division_machines_avg_playtime(division_id,division_machine_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)    
+    audit_logs = tables.AuditLog.query.filter_by(division_machine_id=division_machine_id).all()
+    start_time = None
+    end_time = None
+    avg_times = []
+    for audit_log in audit_logs:
+        if audit_log.game_started_date:
+            start_time = audit_log.game_started_date
+            end_time = None
+        if audit_log.used_date is not None and audit_log.voided_date is None:
+            end_time = audit_log.used_date            
+        if audit_log.voided_date and audit_log.action != "jagoff":
+            end_time = audit_log.voided_date
+        if end_time:
+            time_delta = end_time - start_time
+            avg_times.append(time_delta.total_seconds())        
+    total_time = 0
+    avg_game_time = 0
+    for avg_time in avg_times:
+        total_time = total_time + avg_time
+    if len(avg_times) > 0:
+        avg_game_time = total_time/len(avg_times)
+    division_machine.avg_play_time = datetime.datetime.fromtimestamp(avg_game_time).strftime('%M min, %S sec')
+    db.session.commit()
+    #print datetime.datetime.fromtimestamp(avg_game_time).strftime('%M:%S')
+    #return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
+    return jsonify({})
+
 
 @admin_manage_blueprint.route('/division_machine',methods=['GET'])
 def route_get_all_division_machines():

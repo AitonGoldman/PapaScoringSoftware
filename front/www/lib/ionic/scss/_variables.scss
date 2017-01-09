@@ -23,6 +23,10 @@ $font-family-serif:               serif !default;
 $font-family-monospace:           monospace !default;
 
 $font-family-base:                $font-family-sans-serif !default;
+//CHANGED THESE 3 
+//$font-size-base:                  28px !default;
+//$font-size-large:                 36px !default;
+//$font-size-small:                 22px !default;
 $font-size-base:                  14px !default;
 $font-size-large:                 18px !default;
 $font-size-small:                 11px !default;
@@ -88,13 +92,18 @@ $button-small-height:             28px !default;
 $button-small-padding:            4px !default;
 $button-small-icon-size:          16px !default;
 
+//CHANGED THIS 
 $button-bar-button-font-size:     13px !default;
+//$button-bar-button-font-size:     $font-size-base*9;
 $button-bar-button-height:        32px !default;
 $button-bar-button-padding:       8px !default;
+//CHANGED THIS
 $button-bar-button-icon-size:     20px !default;
+//$button-bar-button-icon-size:     99px;
 
-$button-default-border:       transparent;
-$button-default-active-border:null;
+
+$button-default-border:           transparent !default;
+$button-default-active-border:    null !default;
 
 $button-light-bg:                 $light !default;
 $button-light-text:               #444 !default;
@@ -160,8 +169,13 @@ $button-default-active-border:    $button-stable-active-border !default;
 // Bars
 // -------------------------------
 
-$bar-height:                      44px !default;
+//CHANGED THESE 2
+//$bar-height:                      44px !default;
+//$bar-height:                      $font-size-base*3;
+$bar-height:                      $font-size-base*4.5;
 $bar-title-font-size:             17px !default;
+//$bar-title-font-size:             $font-size-base*1.5;
+
 $bar-padding-portrait:            5px !default;
 $bar-padding-landscape:           5px !default;
 $bar-transparency:                1 !default;

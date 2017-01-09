@@ -18,42 +18,54 @@ $dark:                            #444 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
-$item-font-size: 20px !default;
-//$font-size-large: $item-font-size + 44;
-$font-size-large: $item-font-size + 20;
-$font-size-med: $item-font-size + 20;
-$font-size-small: $item-font-size;
-
-$bar-title-font-size:             24px !default;
-$bar-title-font-size-small:             $font-size-small;
-$bar-title-font-size-med:             $font-size-med;
-$bar-title-font-size-large:            $font-size-large;
-
-$bar-height-small:                  42 + $bar-title-font-size-small;
-$bar-height-large:                  42 + $bar-title-font-size-large;
-$bar-height-med:                    42 + $bar-title-font-size-med;
-
-$button-menu-icon-size:          102px !default;
-$button-menu-icon-size-small: $button-menu-icon-size/1.5;
-$button-menu-icon-size-med:   $button-menu-icon-size;
-$button-menu-icon-size-large: $button-menu-icon-size;
-
-$checkbox-med-width:                  48px !default;
-$checkbox-med-height:                 48px !default;
-$checkbox-med-check-width:            1px !default;
-
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-@import "bar.scss";
-@import "side_menu.scss";
-@import "list.scss";
-@import "form.scss";
-@import "checkbox.scss";
-@import "label.scss";
-@import "spacing.scss";
-@import "button.scss";
-@import "radio_buttons.scss";
 
+/* .item-checkbox { */
+/*     padding-top:$font-size-base; */
+/*     padding-bottom:$font-size-base;      */
+/* } */
+
+.item-radio {
+    //padding-top: $font-size-base;
+    float:right;
+    width:50px;
+}
+
+/* .item-select { */
+/*     padding-top: $font-size-base; */
+/*     padding-bottom: $font-size-base;     */
+/* } */
+
+.item {
+    font-size: $font-size-base;
+}
+
+/* .input-label { */
+/*     font-size: $font-size-base; */
+/* } */
+
+.bar {
+    .button {
+        &.button-icon {
+            &:before {
+                padding-top:$font-size-base/1.5;
+                font-size:$font-size-base*4.5;
+            }
+        }
+    }
+}
+
+ion-side-menu {
+    ion-header-bar.bar {
+        padding-bottom:$font-size-base*6;
+    }
+    ion-content {
+        .scroll {
+            padding-top:$font-size-base*2;
+        }
+    }
+}
 
 .avatar-frame{border: 2px solid #c7b89e;}
 .avatar-frame,.avatar-frame img{
@@ -75,42 +87,6 @@ $checkbox-med-check-width:            1px !default;
     margin-right:20px;
 }
 
-.avatar-user-pic-relative {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            height:104px;
-            width:104px;
-            border-radius:52px;
-        }
-        @media screen and (min-device-height: 751px){
-            height:154px;
-            width:154px;
-            border-radius:96px;
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-        height:154px;
-        width:154px;
-        border-radius:96px;
-    }
-    @media screen and (min-width: 971px) {
-        height:154px;
-        width:154px;
-        border-radius:96px;
-    }   
-}
-
-a.badge1 {
-    padding-right:15px;
-    padding-left:15px;
-    //    width:70px;
-    //    height:50px;
-    text-align:center;
-    background:green;
-    color:white;
-    border-radius:25px;
-    box-shadow: 4px 6px 8px rgba(0, 0, 0, .5);
-}
 
 .avatar-user-pic {
     position:absolute;
@@ -138,65 +114,6 @@ a.badge1 {
     }   
 }
 
-.platform-browser {
-    .sample-show-hide {   
-        transition: all linear 0.5s;
-        backface-visibility: hidden;
-        -webkit-backface-visibility:hidden;
-    }
-    
-    .sample-show-hide-back.ng-hide {
-        transition: all linear 0.5s;
-        transform: rotateY( 180deg );
-    }
-    
-    .sample-show-hide-front.ng-hide {
-        transition: all linear 0.5s;
-        transform: rotateY( -180deg );
-    }
-}
-
-.platform-ios {
-    .sample-show-hide {
-        transition-duration: .1s;
-        //transition: all linear 0.5s;
-        //backface-visibility: hidden;
-        //-webkit-backface-visibility:hidden;
-    }
-    
-    .sample-show-hide-back.ng-hide {
-        transition-duration: .1s;
-        //transition: all linear 0.5s;
-        //transform: rotateY( 180deg );
-    }
-    
-    .sample-show-hide-front.ng-hide {
-        transition-duration: .1s;
-        //transition: all linear 0.5s;
-        //transform: rotateY( -180deg );
-    }
-}
-
-.platform-android {
-    .sample-show-hide {
-        //transition-duration: .5s;
-        transition: all linear 0.5s;
-        backface-visibility: hidden;
-        -webkit-backface-visibility:hidden;
-    }
-    
-    .sample-show-hide-back.ng-hide {
-        //transition-duration: .5s;
-        transition: all linear 0.5s;
-        transform: rotateY( 180deg );
-    }
-    
-    .sample-show-hide-front.ng-hide {
-        //transition-duration: .5s;
-        transition: all linear 0.5s;
-        transform: rotateY( -180deg );
-    }
-}
 
 .player-info-avatar {
     z-index:99;
@@ -256,25 +173,29 @@ a.badge1 {
     }
 }
 
-.mobile-hide {
+.skinny-list {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
-         display:none;
         }
         @media screen and (min-device-height: 751px){
+            margin-left:10%;
+            margin-right:10%;
         }
     }
     @media screen and (max-width: 970px) and (min-width:611px) {
+            margin-left:15%;
+            margin-right:15%;
     }
     @media screen and (min-width: 971px) {
+            margin-left:20%;
+            margin-right:20%;
     }
 }
-.platform-android,.platform-browser{
-    .bar {
-        button.back-button {
-            .icon::before{
-                font-size: 72px;
-            }
-        }
-    }
+
+.standard_big_font {
+    font-size: $font-size-base*2;
+}
+
+.button-no-margin {
+    margin-top:0px;
 }

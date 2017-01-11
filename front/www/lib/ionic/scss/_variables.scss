@@ -24,12 +24,12 @@ $font-family-monospace:           monospace !default;
 
 $font-family-base:                $font-family-sans-serif !default;
 //CHANGED THESE 3 
-//$font-size-base:                  28px !default;
-//$font-size-large:                 36px !default;
-//$font-size-small:                 22px !default;
-$font-size-base:                  14px !default;
-$font-size-large:                 18px !default;
-$font-size-small:                 11px !default;
+$font-size-base:                  28px !default;
+$font-size-large:                 36px !default;
+$font-size-small:                 22px !default;
+//$font-size-base:                  14px !default;
+//$font-size-large:                 18px !default;
+//$font-size-small:                 11px !default;
 
 $line-height-base:                1.428571429 !default; // 20/14
 $line-height-computed:            floor($font-size-base * $line-height-base) !default; // ~20px
@@ -77,10 +77,14 @@ $button-clear-padding:            6px !default;
 $button-border-radius:            4px !default;
 $button-border-width:             1px !default;
 
-$button-font-size:                16px !default;
-$button-height:                   42px !default;
+//CHANGED
+//$button-font-size:                16px !default;
+$button-font-size:                $font-size-base;
+//$button-height:                   42px !default;
+$button-height:                   $font-size-base*2;
 $button-padding:                  12px !default;
-$button-icon-size:                24px !default;
+//$button-icon-size:                24px !default;
+$button-icon-size:                 $font-size-base !default;
 
 $button-large-font-size:          20px !default;
 $button-large-height:             54px !default;
@@ -93,8 +97,8 @@ $button-small-padding:            4px !default;
 $button-small-icon-size:          16px !default;
 
 //CHANGED THIS 
-$button-bar-button-font-size:     13px !default;
-//$button-bar-button-font-size:     $font-size-base*9;
+//$button-bar-button-font-size:     13px !default;
+$button-bar-button-font-size:     $font-size-base*9;
 $button-bar-button-height:        32px !default;
 $button-bar-button-padding:       8px !default;
 //CHANGED THIS
@@ -172,9 +176,9 @@ $button-default-active-border:    $button-stable-active-border !default;
 //CHANGED THESE 2
 //$bar-height:                      44px !default;
 //$bar-height:                      $font-size-base*3;
-$bar-height:                      $font-size-base*4.5;
-$bar-title-font-size:             17px !default;
-//$bar-title-font-size:             $font-size-base*1.5;
+$bar-height:                      $font-size-base*3;
+//$bar-title-font-size:             17px !default;
+$bar-title-font-size:             $font-size-base*1.5;
 
 $bar-padding-portrait:            5px !default;
 $bar-padding-landscape:           5px !default;
@@ -312,8 +316,9 @@ $item-padding:                    16px !default;
 
 $item-button-font-size:           18px !default;
 $item-button-line-height:         32px !default;
+
 $item-icon-font-size:             32px !default;
-$item-icon-fill-font-size:        28px !default;
+$item-icon-fill-font-size:        42px !default;
 
 $item-icon-accessory-color:       #ccc !default;
 $item-icon-accessory-font-size:   16px !default;
@@ -568,6 +573,8 @@ $range-default-track-bg:          #ccc !default;
 
 $menu-bg:                         #fff !default;
 $menu-width:                      275px !default;
+
+
 $menu-animation-speed:            200ms !default;
 
 $menu-side-shadow:                -1px 0px 2px rgba(0, 0, 0, 0.2), 1px 0px 2px rgba(0,0,0,0.2) !default;

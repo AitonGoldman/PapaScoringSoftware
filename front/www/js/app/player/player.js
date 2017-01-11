@@ -10,7 +10,7 @@ angular.module('app.player').controller(
             $scope.ActionSheets = ActionSheets;    
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        players_promise = TimeoutResources.GetPlayers(undefined,{site:$scope.site});
+        players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         players_promise.then(function(data){

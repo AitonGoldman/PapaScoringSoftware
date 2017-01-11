@@ -1,16 +1,16 @@
 <ion-view view-title="Login">
   <ion-content>
     <div class="skinny-list list">
-      <label style='padidng:0' class='item-input item'>
+      <label class='item-input item'>
         <span class='input-label'>Username : </span>
         <input ng-model='user.username' type="text" placeholder="Username">
       </label>
-      <label style='padidng:0' class='item-input item'>
+      <label  class='item-input item'>
         <span class='input-label'>Password : </span>
-        <input ng-model='user.password' type="text" placeholder="Password">
+        <input ng-model='user.password' type="password" placeholder="Password">
       </label>
-      <button id="LoginButton" ui-sref='.process({user_info:user})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(user.username)||utils.var_empty(user.password)'>
-      <i class="icon ion-chevron-right"></i>
+      <button id="LoginButton" ui-sref='.process({user_info:user})' class="button button-full button-calm item-icon-right " style='text-align:left' ng-disabled='utils.var_empty(user.username)||utils.var_empty(user.password)'>
+      <i class="icon ion-chevron-right padding"></i>
       <span >Login</span>
     </button>
     </div>

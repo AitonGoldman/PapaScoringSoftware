@@ -1,58 +1,50 @@
 <ion-view view-title="Home"  hide-back-button='true' >
   <ion-content>     
     <div class="skinny-list list">
-      <!-- <a id="home_manage_user_button" ui-sref='.user' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'> -->
-      <!--   <i class="icon ion-person-stalker"></i> -->
-      <!--   <span>Manage Users</span> -->
-      <!-- </a> -->
-      <a ui-sref=".token" class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
+      <a ui-sref=".token" class="item item-icon-left item-icon-right" ng-if='User.has_role("desk")'>
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
+        <i class="icon ion-chevron-right"></i>                
       </a>
-      <a ui-sref=".player_token" class="item item-icon-left  item-padding" ng-if='User.has_role("player")'>
+      <a ui-sref=".player_token" class="item item-icon-left item-icon-right  " ng-if='User.has_role("player")'>
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
+        <i class="icon ion-chevron-right"></i>                
       </a>
-      <a ui-sref=".player_info({player_id:User.logged_in_user().player.player_id})" class="item item-icon-left  item-padding" ng-if='User.has_role("player")'>
-        <i class="icon ion-ios-cart"></i>
+      <a ui-sref=".player_info({player_id:User.logged_in_user().player.player_id})" class="item item-icon-left item-icon-right  " ng-if='User.has_role("player")'>
+        <i class="icon ion-information-circled"></i>
         <span>Player Info</span>
+        <i class="icon ion-chevron-right"></i>                
       </a>            
-      <a id='home_manage_players_button' ui-sref='.player' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
-        <i class="icon ion-person-add"></i>
+      <a id='home_manage_players_button' ui-sref='.player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk")'>
+        <i class="icon ion-person"></i>
         <span>Manage Players</span>
+        <i class="icon ion-chevron-right"></i>        
+        
       </a>
-      <a id='home_manage_players_button' ui-sref='.teams' class="item item-icon-left  item-padding" ng-if='User.has_role("desk")'>
-        <i class="icon ion-person-add"></i>
+      <a id='home_manage_players_button' ui-sref='.teams' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk")'>
+        <i class="icon ion-person-stalker"></i>
         <span>Manage Teams</span>
+        <i class="icon ion-chevron-right"></i>        
+        
       </a>      
-      <a ui-sref='.scorekeeping' class="item item-icon-left  item-padding" ng-if='User.has_role("scorekeeper")'>
+      <a ui-sref='.scorekeeping' class="item item-icon-left item-icon-right  " ng-if='User.has_role("scorekeeper")'>
         <i class="icon ion-clipboard"></i>
         <span>Scorekeeping</span>
+        <i class="icon ion-chevron-right"></i>        
+        
       </a>
-      <a ng-if='User.has_role("desk") == false' ui-sref='.queues({manage:false})' class="item item-icon-left  item-padding">
-        <i class="icon ion-clipboard"></i>
+      <a ng-if='User.has_role("desk") == false' ui-sref='.queues({manage:false})' class="item item-icon-left item-icon-right  ">
+        <i class="icon ion-pull-request"></i>
         <span>Queues</span>
+        <i class="icon ion-chevron-right"></i>        
+        
       </a>
-      <!-- <a ng-if='User.has_role("desk") == true' ui-sref='.queues({manage:true})' class="item item-icon-left  item-padding"> -->
-      <!--   <i class="icon ion-clipboard"></i> -->
-      <!--   <span>Queues</span> -->
-      <!-- </a>       -->
-      <a ui-sref='.results' class="item item-icon-left  item-padding">
-        <i class="icon ion-clipboard"></i>
+      <a ui-sref='.results' class="item item-icon-left item-icon-right">
+        <i class="icon ion-stats-bars"></i>
         <span>Results</span>
+        <i class="icon ion-chevron-right"></i>                
       </a>
-      <!-- <a id="home_manage_user_button" ui-sref='.oops' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'> -->
-      <!--   <i class="icon ion-person-stalker"></i> -->
-      <!--   <span>Oops</span> -->
-      <!-- </a> -->
-      <!-- <a id="home_manage_user_button" ui-sref='.queue_view' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'> -->
-      <!--   <i class="icon ion-person-stalker"></i> -->
-      <!--   <span>Queue View</span> -->
-      <!-- </a> -->
-      <!-- <a id="home_manage_user_button" ui-sref='.jagoffs' class="item item-icon-left item-padding" ng-if='User.has_role("admin")'> -->
-      <!--   <i class="icon ion-person-stalker"></i> -->
-      <!--   <span>Jagoffs</span> -->
-      <!-- </a>       -->
     </div>
   </ion-content>
 </ion-view>

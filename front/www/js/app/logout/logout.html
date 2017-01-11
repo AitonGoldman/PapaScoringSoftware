@@ -1,23 +1,22 @@
 <ion-view view-title="Logged Out" hide-back-button='true'>
   <ion-content>      
-    <div class='col icon-label first-element'>
-      <div class='row'>
-        <div><i class="icon ion-log-out"></i></div>
-        <div>Logged Out</div>
-      </div>
-      <div class='row'>
-        <div >Bye Bye</div>
-      </div>
-    </div>
-    <center>
-      
-      <a ng-if='type_of_page=="user"' id="LoginAgainButton" class='button button-large button-positive tablet-friendly-button' ui-sref='app.login({site:site})'>
-        <span>Login Again</span>
-      </a>
-      <a ng-if='type_of_page=="player"' id="LoginAgainButton" class='button button-large button-positive tablet-friendly-button' ui-sref='app.login_player({site:site})'>
-        <span>Login Again</span>
-      </a>
-      
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-log-out padding"></i><span>Logged Out</u></span></div>
+          <div>
+            <i class='icon padding'></i>Bye Bye!
+          </div>
+          <br>
+          <a ng-if='type_of_page=="user"' id="LoginAgainButton" class='button button-full button-positive item-icon-right' ui-sref='app.login({site:site})'>
+            <span>Login Again</span>
+            <i class="icon ion-chevron-right"></i>          
+        
+          </a>
+          <button ng-if='type_of_page=="player"' id="LoginAgainButton" class='button button-full button-positive item-icon-right' ui-sref='app.login_player({site:site})'>
+            <span>Login Again</span>
+            <i class="icon ion-chevron-right"></i>                  
+          </button>
+        </div>
     </center>
   </ion-content>
 </ion-view>

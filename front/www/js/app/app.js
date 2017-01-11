@@ -181,6 +181,26 @@ app.filter('range', function() {
             input.push(i);
         }
     return input;
-  };
+    };
+    
+});
+
+app.filter('rangeObject', function() {
+    
+    return function(input, total, start,increment) {            
+        if(increment == undefined){
+            increment=1;
+        }
+        if(start == undefined){
+            start = 0;
+        }
+        total = parseInt(total);
+        
+        for (var i=start; i<total; i=i+increment) {
+            input.push({"value":i});
+        }                        
+        return input;
+    };
+    
 });
 

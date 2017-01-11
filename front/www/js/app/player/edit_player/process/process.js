@@ -16,7 +16,7 @@ angular.module('app.player.edit_player.process').controller(
         }
         
         $scope.player_info=$state.params.player_info;
-        update_player_promise = TimeoutResources.UpdatePlayer(undefined,{site:$scope.site,player_id:$scope.player_id},$scope.player_info);
+        update_player_promise = TimeoutResources.UpdatePlayer($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id},$scope.player_info);
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         update_player_promise.then(function(data){

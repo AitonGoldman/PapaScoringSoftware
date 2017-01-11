@@ -1,29 +1,32 @@
 <ion-view view-title="">
   <ion-content>      
-    <div class="skinny-list list">
-      <div class="item-divider item" id='add_user_user_info_title'>
-        Confirm Queue Add
-      </div>
-      <div class='item row padding-vertical' >
-        <div class='col' style='text-align:right'>
-          Machine : 
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>
+          <table>
+            <tr>
+              <td class='padding' align="right">
+                <i class="icon padding"></i> Machine : 
+              </td>
+              <td class='padding'>
+                {{division_machine_to_queue_on_name}}
+            </tr>
+            <tr>
+              <td class='padding' align="right">
+                <i class="icon padding"></i> Player : 
+              </td>
+              <td class='padding'>
+                (#{{player_id}}) {{player_name}}
+            </tr>
+            
+          </table>
+          <br>
+          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref=".process({process_step:{process:true}})">
+            <span>Add To Queue</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
         </div>
-        <div class='col'>        
-          {{division_machine_to_queue_on_name}}
-        </div>
-      </div>
-      <div class='item row  padding-vertical'>
-        <div class='col' style='text-align:right'>
-           Player : 
-        </div>
-        <div class='col'>
-        (#{{player_id}}) {{player_name}}
-        </div>
-      </div>
-    </div>
-    <button style='font-size:38px;line-height:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".process({process_step:{process:true}})">
-      Add To Queue
-    </button>    
+      </center>
   </ion-content>
 </ion-view>
 

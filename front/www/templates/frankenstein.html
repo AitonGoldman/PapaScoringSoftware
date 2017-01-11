@@ -1,3 +1,47 @@
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-person-add padding"></i><span>{{resources.added_player.data.first_name+" "+resources.added_player.data.last_name}}</u></span></div>
+        <table>
+          <tr>
+            <td class='padding' align="right">
+              <i class="icon padding"></i>Player ID : 
+            </td>
+            <td class='padding'>
+              {{resources.added_player.data.player_id}}
+            </td>
+          </tr>
+          <tr>
+            <td class='padding' align="right"> 
+              <i class="icon padding"></i>Player PIN : 
+            </td>
+            <td class='padding'>
+              {{resources.added_player.data.pin}}          
+            </td>
+          </tr>
+        </table>
+          <br>
+          <a id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref='app({site:site})'>
+            <span>Home</span>
+            <i class="icon ion-chevron-right"></i>          
+          </a>
+        </div>
+      </center>
+
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-person padding"></i><span>{{resources.updated_player.data.first_name+" "+resources.updated_player.data.last_name}}</u></span></div>
+          <div>
+            <i class='icon padding'></i>Changes Applied!
+          </div>
+          <br>
+          <a id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref='app({site:site})'>
+            <span>Home</span>
+            <i class="icon ion-chevron-right"></i>          
+          </a>
+        </div>
+      </center>
+      
+
 <!-- Non form input -->
 @media screen and (max-width: 610px){
     @media screen and (max-height: 800px){

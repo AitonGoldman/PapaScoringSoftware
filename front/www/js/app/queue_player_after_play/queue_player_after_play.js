@@ -16,7 +16,7 @@ angular.module('app.queue_player_after_play').controller(
         console.log('--');
         console.log($scope.division_id);
         console.log($scope.division_machine_just_played_id);
-        division_machines_promise = TimeoutResources.GetDivisionMachines(undefined,{site:$scope.site,division_id:$scope.division_id});        
+        division_machines_promise = TimeoutResources.GetDivisionMachines($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});        
         Modals.loading();
         division_machines_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

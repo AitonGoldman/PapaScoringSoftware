@@ -9,7 +9,7 @@ angular.module('app.results.division_machines.machines').controller(
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        division_machines_promise = TimeoutResources.GetDivisionMachines(undefined,{site:$scope.site,division_id:$scope.division_id});
+        division_machines_promise = TimeoutResources.GetDivisionMachines($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         division_machines_promise.then(function(data){

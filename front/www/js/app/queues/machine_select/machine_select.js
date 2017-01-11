@@ -10,7 +10,7 @@ angular.module('app.queues.machine_select').controller(
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);
 
-        queues_promise = TimeoutResources.GetQueues(undefined,{site:$scope.site,division_id:$scope.division_id});
+        queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         queues_promise.then(function(data){

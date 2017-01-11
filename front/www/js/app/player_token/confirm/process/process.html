@@ -1,29 +1,42 @@
 <ion-view view-title="Tickets Purchased" hide-back-button="true">
   <ion-content>    
-    <div class='icon-label-header row first-element'>
-      <div><i class="icon ion-plus-circled"></i></div>
-      <div>Tickets Purchased</div>
-    </div>
-    <div class='skinny-list skinny-list-results'>
-      <div class='row item' ng-repeat='(div_id,count) in token_info.addedTokens.divisions'>
-        <div style='text-align:right;padding-right:15px' class='col'>{{resources.divisions.data[div_id].tournament_name}}</div>
-        <div class='col'> : {{count}} Tickets</div>
-      </div>
-      <div class='row item' ng-repeat='(div_id,count) in token_info.addedTokens.teams'>
-        <div style='text-align:right;padding-right:15px' class='col'>{{resources.divisions.data[div_id].tournament_name}}</div>
-        <div class='col'> : {{count}} Tickets</div>
-      </div>      
-      <div class='row item' ng-repeat='(metadiv_id,count) in token_info.addedTokens.metadivisions'>
-        <div style='text-align:right;padding-right:15px' class='col'>{{resources.divisions.data.metadivisions[metadiv_id].meta_division_name}}</div>
-        <div class='col'> : {{count}} Tickets</div>
-      </div>        
-    </div>    
-    <center>
-      <a id='AddAnotherUser' class='button button-large button-positive tablet-friendly-button' ui-sref='.^.^({site:site})'>
-        <span>Purchase More Tickets</span>
-      </a>
-    </center>
-     <!-- ui-sref=".process({token_info: ,})" -->    
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-cash padding"></i><span>Tickets Purchased</u></span></div>
+          <table>
+            <tr ng-repeat='(division_id,token_count) in token_info.addedTokens.divisions'>
+              <td class='padding' align="right">
+                <i class="icon padding"></i>{{resources.divisions.data[division_id].tournament_name}} : 
+              </td>
+              <td class='padding'>
+                {{token_count}}
+              </td>
+            </tr>
+            <tr ng-repeat='(division_id,token_count) in token_info.addedTokens.teams'>
+              <td class='padding' align="right">
+                <i class="icon padding"></i>{{resources.divisions.data[division_id].tournament_name}} : 
+              </td>
+              <td class='padding'>
+                {{token_count}}
+              </td>
+            </tr>
+            <tr ng-repeat='(metadivision_id,token_count) in token_info.addedTokens.metadivisions'>
+              <td class='padding' align="right">
+                <i class="icon padding"></i>{{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : 
+              </td>
+              <td class='padding'>
+                {{token_count}}
+              </td>
+            </tr>            
+          </table>
+          <br>
+          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref='.^.^({site:site})'>
+            <span>Purchase More Tickets</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
+        </div>
+      </center>
+
   </ion-content>
 </ion-view>
 

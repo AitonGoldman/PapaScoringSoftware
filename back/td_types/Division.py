@@ -18,6 +18,11 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         use_stripe = db_handle.Column(db_handle.Boolean)
         stripe_sku = db_handle.Column(db_handle.String(100))
         local_price = db_handle.Column(db_handle.Integer)
+        ifpa_range_start = db_handle.Column(db_handle.Integer)
+        ifpa_range_end = db_handle.Column(db_handle.Integer)
+        ppo_a_ifpa_range_end = db_handle.Column(db_handle.Integer)                
+        
+        
         finals_player_selection_type = db_handle.Column(db_handle.String(100))
         finals_num_qualifiers = db_handle.Column(db_handle.Integer)
         finals_num_qualifiers_ppo_a = db_handle.Column(db_handle.Integer)

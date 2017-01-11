@@ -231,7 +231,20 @@ def route_edit_division(division_id):
             if 'local_price' in division_data:                            
                 division.local_price = division_data['local_price']
             else:
-                raise BadRequest('use_stripe is false, but no local price specified')            
+                raise BadRequest('use_stripe is false, but no local price specified')
+    if 'finals_player_selection_type' in division_data:
+        division.finals_player_selection_type=division_data['finals_player_selection_type']
+    if 'finals_num_qualifiers_ppo_a' in division_data:
+        division.finals_num_qualifiers_ppo_a=division_data['finals_num_qualifiers_ppo_a']
+    if 'finals_num_qualifiers_ppo_b' in division_data:
+        division.finals_num_qualifiers_ppo_b=division_data['finals_num_qualifiers_ppo_b']
+    if 'ifpa_range_start' in division_data:
+        division.ifpa_range_start=division_data['ifpa_range_start']
+    if 'ifpa_range_end' in division_data:
+        division.ifpa_range_end=division_data['ifpa_range_end']
+    if 'ppo_a_ifpa_range_end' in division_data:
+        division.ppo_a_ifpa_range_end=division_data['ppo_a_ifpa_range_end']
+    
     db.session.commit()
     return jsonify({'data':division.to_dict_simple()})
             

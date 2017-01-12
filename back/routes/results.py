@@ -257,7 +257,6 @@ def get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker
 def route_get_division_ppo_qualifying_results(division_id):
     absent_players_raw = request.args.get('absent_players')
     tie_breaker_ranks = json.loads(request.data)    
-
     reranked_ppo_qualifying_list = get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker_ranks)
     return jsonify({'data':reranked_ppo_qualifying_list})
 
@@ -268,17 +267,20 @@ def route_get_division_ppo_qualifying_results_list(division_id):
     tie_breaker_ranks = json.loads(request.data)    
     reranked_ppo_qualifying_list = get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker_ranks)
     division = fetch_entity(tables.Division,division_id)         
-    num_a_qualifiers = division.finals_num_qualifiers_ppo_a
-    num_b_qualifiers = division.finals_num_qualifiers_ppo_b
-    
-    a_end_rank=num_a_qualifiers
-    if len(reranked_ppo_qualifying_list) < a_end_rank:
-        a_end_rank = len(reranked_ppo_qualifying_list)
-    b_end_rank=a_end_rank + num_b_qualifiers    
-    if len(reranked_ppo_qualifying_list) < b_end_rank:                
-        b_end_rank = len(reranked_ppo_qualifying_list)    
-    return jsonify({'data':{'a':reranked_ppo_qualifying_list[0:a_end_rank],'b':reranked_ppo_qualifying_list[a_end_rank:b_end_rank]}})
+    if division.finals_player_selection_type == "ppo":
+        num_a_qualifiers = division.finals_num_qualifiers_ppo_a
+        num_b_qualifiers = division.finals_num_qualifiers_ppo_b
+        a_end_rank=num_a_qualifiers
+        if len(reranked_ppo_qualifying_list) < a_end_rank:
+            a_end_rank = len(reranked_ppo_qualifying_list)
+        b_end_rank=a_end_rank + num_b_qualifiers    
+        if len(reranked_ppo_qualifying_list) < b_end_rank:                
+            b_end_rank = len(reranked_ppo_qualifying_list)    
+        return jsonify({'data':{'a':reranked_ppo_qualifying_list[0:a_end_rank],'b':reranked_ppo_qualifying_list[a_end_rank:b_end_rank]}})
 
+    if division.finals_player_selection_type == "papa":
+        return jsonify({'data':reranked_ppo_qualifying_list})
+        
 
 @admin_manage_blueprint.route('/results/division_machine/<division_machine_id>',methods=['GET'])
 def route_get_division_machine_results(division_machine_id):

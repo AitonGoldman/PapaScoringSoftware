@@ -18,7 +18,7 @@ angular.module('app.tournament.division_list.add_division.process').controller(
         $scope.division_info=$state.params.division_info;
      
         Modals.loading();
-        add_division_promise = TimeoutResources.AddDivision(undefined,{site:$scope.site},$scope.division_info);
+        add_division_promise = TimeoutResources.AddDivision($scope.bootstrap_promise,{site:$scope.site},$scope.division_info);
         // = TimeoutResources.GetEtcData();
         add_division_promise.then(function(data){
          $scope.resources = TimeoutResources.GetAllResources();

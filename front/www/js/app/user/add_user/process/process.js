@@ -23,7 +23,7 @@ angular.module('app.user.add_user.process').controller(
                 $scope.user_info.roles.push(key);
             }            
         });
-        add_user_promise = TimeoutResources.AddUser(undefined,{site:$scope.site},$scope.user_info);
+        add_user_promise = TimeoutResources.AddUser($scope.bootstrap_promise,{site:$scope.site},$scope.user_info);
         // = TimeoutResources.GetEtcData();
         add_user_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

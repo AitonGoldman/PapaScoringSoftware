@@ -1,4 +1,4 @@
-<ion-view view-title="">
+<ion-view view-title="Results" hide-back-button="true">
   <ion-content>      
     <div style='text-align:center'>
 
@@ -20,13 +20,19 @@
       </tr>
       <tr ng-repeat='result in resources.division_machine_results.data'>
         <td style='padding-top:10px;' >{{result.rank}}</td>
-        <td style='padding-left:50px;padding-top:10px;'>
+        <td style='padding-left:50px;padding-top:10px;'>          
+          <span ng-if='team_tournament==false'>
           <a ui-sref='.^.^.^.players.player({player_id:result.player_id,player_name:result.player_name})'>
             {{result.player_name}}
           </a>
+          </span>
+          <span ng-if='team_tournament==true'>
+            {{result.team_name}}
+          </span>
+          
         </td>
         <td style='padding-left:50px;padding-top:10px;'>{{result.points}}</td>
-        <td style='padding-left:50px;padding-top:10px;'>{{result.score}}</td>
+        <td style='padding-left:50px;padding-top:10px;'>{{result.score|number}}</td>
       </tr>
     </table>
   </ion-content>

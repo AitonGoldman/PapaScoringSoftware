@@ -17,7 +17,7 @@ angular.module('app.token.token_select.confirm.process').controller(
         
         $scope.token_info=$state.params.token_info;
         console.log($scope.token_info);
-        divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+        divisions_promise = TimeoutResources.GetDivisions($scope.bootstrap_promise,{site:$scope.site});
         token_add_promise = TimeoutResources.AddTokens(divisions_promise,{site:$scope.site},$scope.token_info);                
         Modals.loading();
         // = TimeoutResources.GetEtcData();

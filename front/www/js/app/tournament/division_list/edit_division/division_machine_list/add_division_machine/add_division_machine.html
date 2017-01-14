@@ -1,21 +1,16 @@
-<ion-view view-title="">
+<ion-view view-title="Select Machine">
   <ion-content>      
-    <center style='padding:100px'>
-      <div class='item-input-inset'>
-        <label class="item-input-wrapper">
-          <i style='font-size:48px' class="icon ion-ios-search placeholder-icon"></i>
-          <input id='add_division_machine_search_input' style='height:58px;font-size:48px' type="search" placeholder="Search" ng-change='update_machine_list()' ng-model='division_machine.division_machine_name'>
-        </label>
-        <button class="button button-clear">
-          Cancel
-        </button>
-      </div>
-      <div class='list skinny-list'>
-        <a id='add_division_machine_{{match.machine_name}}_to_add' ng-click='add_division_machine(match)' ng-repeat='match in matches' class='item'>
-          {{match.machine_name}}
-        </a>
-      </div>
-    </center>
+    <label class='item-input item'>
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input id='add_division_machine_search_input'  type="search" placeholder="Search" ng-change='update_machine_list()' ng-model='division_machine.division_machine_name'>
+    </label>
+    <div class='list skinny-list'>
+      <a id='add_division_machine_{{match.machine_name}}_to_add' ng-click='add_division_machine(match)' ng-repeat='match in matches' class='item item-icon-right'>
+        {{match.machine_name}}
+        <i class="icon ion-chevron-right"></i>          
+
+      </a>
+    </div>
   </ion-content>
 </ion-view>
 

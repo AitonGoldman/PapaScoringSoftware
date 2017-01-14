@@ -11,7 +11,7 @@ angular.module('app.user').controller(
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         
         Modals.loading();
-        get_users_promise = TimeoutResources.GetUsers(undefined,{site:$scope.site});        
+        get_users_promise = TimeoutResources.GetUsers($scope.bootstrap_promise,{site:$scope.site});        
         // = TimeoutResources.GetEtcData();
         get_users_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

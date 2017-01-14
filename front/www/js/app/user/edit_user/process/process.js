@@ -21,7 +21,7 @@ angular.module('app.user.edit_user.process').controller(
                 $scope.user_info.roles.push(key);
             }            
         });
-        update_user_promise = TimeoutResources.UpdateUser(undefined,{site:$scope.site},$scope.user_info);        
+        update_user_promise = TimeoutResources.UpdateUser($scope.bootstrap_promise,{site:$scope.site},$scope.user_info);        
         update_user_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             console.log($scope.resources.updated_user.data);

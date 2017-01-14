@@ -31,7 +31,14 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
     if division_id:
         division = tables.Division.query.filter_by(division_id=division_id).first()
         if division.team_tournament:
+            print "found team"
             team=True
+    if division_machine_id_external:
+        division_machine_external = tables.DivisionMachine.query.filter_by(division_machine_id=division_machine_id_external).first()
+        if division_machine_external and division_machine_external.division.team_tournament:
+            print "found team machine"
+            team=True
+            
     first_query = get_first_query(division_id,division_machine_id_external,team)
     second_query = get_herb_second_query(first_query,team)
     third_query = get_herb_third_query(second_query)

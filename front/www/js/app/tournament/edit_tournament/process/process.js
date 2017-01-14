@@ -18,7 +18,7 @@ angular.module('app.tournament.edit_tournament.process').controller(
         $scope.division_info=$state.params.division_info;
      
         Modals.loading();
-        update_div_promise = TimeoutResources.UpdateDivision(undefined,{site:$scope.site,division_id:$scope.division_id},$scope.division_info);
+        update_div_promise = TimeoutResources.UpdateDivision($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id},$scope.division_info);
         // = TimeoutResources.GetEtcData();
         update_div_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

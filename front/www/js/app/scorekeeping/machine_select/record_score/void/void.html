@@ -1,31 +1,31 @@
 <ion-view view-title="Score Voided" hide-back-button='true'>
   <ion-content>      
-    <div class='icon-label-header row first-element'>
-      <div><i class="icon ion-plus-circled"></i></div>
-      <div>Score Voided</div>
-    </div>
-    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^">
-      Return to Machine List
-    </button>
-    <span ng-if='team_tournament=="false"'>
-    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
-      Add new player to machine
-    </button>    
-    <button ng-if='resources.divisions.data[division_id].queuing == true' style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
-      Add {{player_name}} to new queue
-    </button>    
-    </span>
-    <span ng-if='team_tournament=="true"'>
-    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^.team_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
-      Add new team to machine
-    </button>    
-    </span>
-    
-    <!-- <a style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" -->
-    <!--         href='/#/test/app/scorekeeping/machine_select/division_id/{{division_id}}/record_score/division_machine_id/{{division_machine_id}}/division_machine_name/{{division_machine_name}}/player_name/{{player_name}}/player_id/{{player_id}}/confirm/score//process/queue_add'> -->
-    <!--   Add {{player_name}} to new queue -->
-    <!-- </a>     -->
-    
+    <center>
+      <div class='standard_big_font'>
+        <div class='padding'><u><i class="icon ion-close padding"></i><span>Score Voided</u></span></div>
+        <button class="button button-full button-positive item-icon-right" ui-sref=".^.^">
+          Return to Machine List
+          <i class="icon ion-chevron-right"></i>          
+        </button>
+        
+        <span ng-if='team_tournament=="false"'>
+          <button class="button button-full button-positive item-icon-right" ui-sref=".^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
+            Add new player to machine
+            <i class="icon ion-chevron-right"></i>          
+          </button>    
+          <button ng-if='resources.divisions.data[division_id].queuing == true' class="button button-full button-positive item-icon-right" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
+            Add {{player_name}} to new queue
+            <i class="icon ion-chevron-right"></i>          
+          </button>    
+        </span>
+        <span ng-if='team_tournament=="true"'>
+          <button style='font-size:38px' class="button button-full button-positive item-icon-right" ui-sref=".^.^.team_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
+            Add new team to machine
+            <i class="icon ion-chevron-right"></i>          
+          </button>    
+        </span>
+      </div>
+    </center>    
   </ion-content>
 </ion-view>
 

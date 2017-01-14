@@ -6,7 +6,7 @@ angular.module('app.results.division_machines.machines.machine').controller(
         $scope.site=$state.params.site;
         $scope.division_machine_id=$state.params.division_machine_id;
 	$scope.division_machine_name=$state.params.division_machine_name;        
-	$scope.division_id=$state.params.division_id;
+	$scope.division_id=$state.params.division_id;        
         $scope.jump_to_division_machine = {data:{division_machine_name:"Jump To Machine..."}};
         $scope.utils = Utils;        
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                                
@@ -18,7 +18,8 @@ angular.module('app.results.division_machines.machines.machine').controller(
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         division_machines_promise.then(function(data){
-            $scope.resources = TimeoutResources.GetAllResources();                        
+            $scope.resources = TimeoutResources.GetAllResources();
+            $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
             $scope.resources.division_machines.data["-1"]=$scope.jump_to_division_machine.data;
             Modals.loaded();            
         });

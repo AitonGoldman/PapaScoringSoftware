@@ -7,7 +7,6 @@ angular.module('app.teams.add_team').controller(
             $scope.site=$state.params.site;
 
             $scope.utils = Utils;
-            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
 
             $animate.enabled(false);
             $scope.test_submit = function(){
@@ -41,7 +40,7 @@ angular.module('app.teams.add_team').controller(
             $scope.team_players = [{},{}];
             $scope.utils = Utils;
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-            players_promise = TimeoutResources.GetPlayers(undefined,{site:$scope.site});
+            players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
             Modals.loading();
             // = TimeoutResources.GetEtcData();
             players_promise.then(function(data){

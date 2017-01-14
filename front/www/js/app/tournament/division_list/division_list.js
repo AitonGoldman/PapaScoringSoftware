@@ -11,7 +11,7 @@ angular.module('app.tournament.division_list').controller(
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        tournament_divisions_promise = TimeoutResources.GetTournamentDivisions(undefined,{site:$scope.site,tournament_id:$scope.tournament_id});
+        tournament_divisions_promise = TimeoutResources.GetTournamentDivisions($scope.bootstrap_promise,{site:$scope.site,tournament_id:$scope.tournament_id});
         
         Modals.loading();
         // = TimeoutResources.GetEtcData();

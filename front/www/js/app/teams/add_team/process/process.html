@@ -1,19 +1,18 @@
 <ion-view view-title="Team Created"  hide-back-button="true">
   <ion-content>      
-    <div class='col icon-label first-element'>
-      <div class='row'>
-        <div><i class="icon ion-person-add"></i></div>
-        <div>{{resources.added_team.data.team_name}}</div>
-      </div>
-      <div class='row'>
-        <div>Has Been Created</div>
-      </div>
-    </div>
-    <center>
-      <a id='AddAnotherPlayer' class='button button-large button-positive tablet-friendly-button' ui-sref='.^.^({site:site})'>
-        <span>Add Another Team</span>
-      </a>
-    </center>
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-plus padding"></i><span>{{resources.added_team.data.team_name}}</u></span></div>
+          <div>
+            <i class='icon padding'></i>Has Been Created!
+          </div>
+          <br>
+          <button id='HomeButton' class='button button-full button-positive item item-icon-right' ui-sref='app({site:site})'>
+            <span>Home</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
+        </div>
+      </center>
   </ion-content>
 </ion-view>
 

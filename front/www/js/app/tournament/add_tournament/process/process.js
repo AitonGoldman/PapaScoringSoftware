@@ -15,7 +15,7 @@ angular.module('app.tournament.add_tournament.process').controller(
         }
         $scope.tournament_info=$state.params.tournament_info;        
         Modals.loading();
-        add_tournament_promise = TimeoutResources.AddTournament(undefined,{site:$scope.site},$scope.tournament_info);        
+        add_tournament_promise = TimeoutResources.AddTournament($scope.bootstrap_promise,{site:$scope.site},$scope.tournament_info);        
         // = TimeoutResources.GetEtcData();
         add_tournament_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

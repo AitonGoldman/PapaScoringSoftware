@@ -12,10 +12,10 @@ angular.module('app.token.token_select.confirm').controller(
         $scope.token_info = $state.params.token_info;
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-            //})
+        $scope.bootstrap_promise.then(function(data){
+            $scope.resources = TimeoutResources.GetAllResources();
+            Modals.loaded();
+        });
             $scope.create_tickets = function(){
                 $scope.added_tokens = {};
                 $scope.added_tokens['divisions']=$scope.token_info.divisions;

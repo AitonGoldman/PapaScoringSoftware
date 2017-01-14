@@ -89,6 +89,34 @@ ion-side-menu {
     margin-right:20px;
 }
 
+.avatar-user-pic-relative {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+        height: $font-size-base*7;
+        width: $font-size-base*7;
+        border-radius:$font-size-base*7;
+            
+        }
+        @media screen and (min-device-height: 751px){
+            height: $font-size-base*6;
+            width: $font-size-base*6;
+            border-radius:$font-size-base*6;
+            
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        height: $font-size-base*6;
+        width: $font-size-base*6;
+        border-radius:$font-size-base*6;
+        
+    }
+    @media screen and (min-width: 971px) {
+        height: $font-size-base*6;
+        width: $font-size-base*6;
+        border-radius:$font-size-base*6;
+        
+    }   
+}
 
 .avatar-user-pic {
     position:absolute;
@@ -153,7 +181,7 @@ ion-side-menu {
 }
 
 .machine-info-avatar {
-    z-index:99;
+    z-index:4;
     position:absolute;
     transform-style: preserve-3d;
     background-color: rgba(0, 0, 0, 0.5);
@@ -161,23 +189,23 @@ ion-side-menu {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
             top:0px;
-            left:60%;
+            right: $font-size-base*10;
             perspective:400px;
         }
         @media screen and (min-device-height: 751px){
             top:0px;
-            left:60%;
+            right: $font-size-base*10;
             perspective:400px;
         }
     }
     @media screen and (max-width: 970px) and (min-width:611px) {
         top:0px;
-        left:65%;
+        right: $font-size-base*10;
         perspective:400px;
     }
     @media screen and (min-width: 971px) {
         top:0px;
-        left:70%;
+        right: $font-size-base*10;
         perspective:400px;
     }
 }
@@ -205,6 +233,9 @@ ion-side-menu {
     font-size: $font-size-base;
 }
 
+.standard-med-font {
+    font-size: $font-size-base/2;
+}
 .button-no-margin {
     margin-top:0px;
 }
@@ -247,4 +278,19 @@ ion-side-menu {
           display:none;
         }
     }
+}
+
+.red {
+     background-color:red;
+}
+
+.test-select {
+    select {        
+    position:relative;
+    //margin-right:100px;    
+    }
+}
+.test-select::after {
+    position:relative;
+    //margin-right:100px;        
 }

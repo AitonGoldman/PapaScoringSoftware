@@ -7,6 +7,7 @@
   <!--<link rel="stylesheet" href="https://rawgit.com/guylabs/ion-autocomplete/master/src/ion-autocomplete.css">-->
 
   <link rel="manifest" href="manifest.json">
+
   <script src="https://checkout.stripe.com/checkout.js"></script>
   <script src="js/app/config.js"></script>
   <script src="lib/ionic/js/ionic.bundle.js"></script>
@@ -146,6 +147,24 @@
 
 
 <body ng-app="TDApp">
+  <script id="e_select.html" type="text/ng-template">
+  <!-- The title of the ion-view will be shown on the navbar -->
+  <ion-view view-title="Event Select">
+    <ion-content>
+          Elizabeth  <a ui-sref='app({site:"elizabeth"})'> go </a> <br><br>
+          Bret <a ui-sref='app({site:"bret"})'> go </a> <br><br>
+          AJ <a ui-sref='app({site:"aj"})'> go </a> <br><br>
+          4 <a ui-sref='app({site:"four"})'> go </a> <br><br>
+          5 <a ui-sref='app({site:"five"})'> go </a> <br><br>
+          6 <a ui-sref='app({site:"six"})'> go </a> <br><br>
+          7 <a ui-sref='app({site:"seven"})'> go </a> <br><br>
+          8 <a ui-sref='app({site:"eight"})'> go </a> <br><br>
+          9 <a ui-sref='app({site:"nine"})'> go </a> <br><br>
+          10 <a ui-sref='app({site:"ten"})'> go </a> <br><br>      
+    </ion-content>
+  </ion-view>
+</script>
+
   <ion-nav-view></ion-nav-view>
 </body>
 

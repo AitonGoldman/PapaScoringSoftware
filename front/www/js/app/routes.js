@@ -6,7 +6,14 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
     $stateProvider.state(
         'event_select', {
             url: '/event_select',
-            templateUrl: 'js/app/event_select.html'
+            views: {
+                '@': {
+                    templateUrl: 'js/app/event_select.html',
+                },
+                'e_select_view@event_select':{
+                    templateUrl: 'e_select.html'
+                }
+            }
         }
     ).state(
         'app', {

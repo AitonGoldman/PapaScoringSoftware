@@ -20,54 +20,20 @@ $testwidth: 971;
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
+/*
+$font-size-base:                  20px !default;
+$bar-height:                      $font-size-base*3;
+//$bar-title-font-size:             $font-size-base*1.5;
+$bar-title-font-size:             $font-size-base*1.5;
+//$bar-title-font-size:             $font-size-base*4;
+$button-font-size:                $font-size-base;
+$button-height:                   $font-size-base*2;
+$button-icon-size:                 $font-size-base*2 !default;
+$button-bar-button-font-size:     $font-size-base*9;
+*/
+
+
 @import "www/lib/ionic/scss/ionic";
-
-/* .item-checkbox { */
-/*     padding-top:$font-size-base; */
-/*     padding-bottom:$font-size-base;      */
-/* } */
-
-.item-radio {
-    //padding-top: $font-size-base;
-    float:right;
-    width:50px;
-}
-
-/* .item-select { */
-/*     padding-top: $font-size-base; */
-/*     padding-bottom: $font-size-base;     */
-/* } */
-
-.item {
-    font-size: $font-size-base;
-}
-
- .input-label { 
-     font-size: $font-size-base; 
- } 
-
-.bar {
-    .button {
-        &.button-icon {
-            &:before {
-                //padding-top:$font-size-base/1.5;
-                padding-top:0;
-                font-size:$font-size-base*4.5;
-            }
-        }
-    }
-}
-
-ion-side-menu {
-    ion-header-bar.bar {
-        padding-bottom:$font-size-base*4;
-    }
-    ion-content {
-        .scroll {
-            padding-top:$font-size-base;
-        }
-    }
-}
 
 .avatar-frame{border: 2px solid #c7b89e;}
 .avatar-frame,.avatar-frame img{
@@ -122,9 +88,9 @@ ion-side-menu {
     position:absolute;
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
-        height: $font-size-base*7;
-        width: $font-size-base*7;
-        border-radius:$font-size-base*7;
+        height: $font-size-base*5;
+        width: $font-size-base*5;
+        border-radius:$font-size-base*5;
             
         }
         @media screen and (min-device-height: 751px){
@@ -156,7 +122,7 @@ ion-side-menu {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
         top:0px;
-        right: $font-size-base*6;
+        right: $font-size-base*5;
         perspective:400px;
 
         }
@@ -189,7 +155,7 @@ ion-side-menu {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
             top:0px;
-            right: $font-size-base*10;
+            right: $font-size-base*9;
             perspective:400px;
         }
         @media screen and (min-device-height: 751px){
@@ -229,46 +195,6 @@ ion-side-menu {
     }
 }
 
-.standard_big_font {
-    font-size: $font-size-base;
-}
-
-.standard-med-font {
-    font-size: $font-size-base/2;
-}
-.button-no-margin {
-    margin-top:0px;
-}
-
-.modal-padding {
-   padding-top: $font-size-base*1.5;            
-}
-
-.action-sheet-title {
-   font-size : $font-size-base;
-}
-
-.action-sheet-cancel {
-   font-size : $font-size-base;
-   height:$font-size-base*3;
-}
-.action-sheet-group {
-.action-sheet-option {
-   //font-size : $font-size-base*.90;
-   //margin-top:55px;
-   height:$font-size-base*3;
-}
-}
-
-.queue_span_margin {
-//   margin-left: $font-size-base;
-   
-}
-
-.results_table {
-  font-size: 20px;
-}
-
 .mobile-hide {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
@@ -284,13 +210,87 @@ ion-side-menu {
      background-color:red;
 }
 
-.test-select {
-    select {        
-    position:relative;
-    //margin-right:100px;    
-    }
+.item-radio {
+    //padding-top: $font-size-base;
+    float:right;
+    width:50px;
 }
-.test-select::after {
-    position:relative;
-    //margin-right:100px;        
+
+.platform-ios {
+    input[type="text"],
+    input[type="password"] {
+   padding-top: 10px;
+  }
 }
+
+/* .item { */
+/*     font-size: $font-size-base; */
+/* } */
+
+/*  .input-label {  */
+/*      font-size: $font-size-base;  */
+/*  }  */
+
+/* .bar { */
+/*     .button { */
+/*         &.button-icon { */
+/*             &:before { */
+/*                 //padding-top:$font-size-base/1.5; */
+/*                 padding-top:0; */
+/*                 //font-size:$font-size-base*4.5; */
+/*                 font-size:$font-size-base*3.5; */
+/*             } */
+/*         } */
+/*     } */
+/* } */
+
+/* ion-side-menu { */
+/*     ion-header-bar.bar { */
+/*         padding-bottom:$font-size-base*4; */
+/*     } */
+/*     ion-content { */
+/*         .scroll { */
+/*             padding-top:$font-size-base; */
+/*         } */
+/*     } */
+/* } */
+
+/* .test-select { */
+/*     select {         */
+/*     position:relative; */
+/*     //margin-right:100px;     */
+/*     } */
+/* } */
+/* .test-select::after { */
+/*     position:relative; */
+/*     //margin-right:100px;         */
+/* } */
+
+/* .platform-android { */
+
+/*   .bar { */
+
+/*     .title { */
+/*       //CHANGED THIS */
+/*       //font-size: $font-size-base*2.5; */
+/*       font-size: $font-size-base; */
+/*       //font-size: 15px; */
+/*     } */
+/*   } */
+/* } */
+
+ .ticket_purchase_summary_font { 
+     font-size:$font-size-base; 
+ } 
+
+//
+//
+//
+/* .item-checkbox { */
+/*     padding-top:$font-size-base; */
+/*     padding-bottom:$font-size-base;      */
+/* } */
+/* .item-select { */
+/*     padding-top: $font-size-base; */
+/*     padding-bottom: $font-size-base;     */
+/* } */

@@ -3,13 +3,13 @@
     <div class='avatar-label'>
       <table style='width:100%;font-size:20px'>
         <tr>
-          <td style='width:33%;vertical-align:middle'><div align='right' style='margin-top:auto;margin-bottom:auto'>{{resources.player_tokens.data.player.first_name}} {{resources.player_tokens.data.player.last_name}}</div></td>
+          <td style='width:33%;vertical-align:middle'><div align='right' style='margin-top:auto;margin-bottom:auto' class='ticket_purchase_summary_font'>{{resources.player_tokens.data.player.first_name}} {{resources.player_tokens.data.player.last_name}}</div></td>
           <td style='width:33%;'><center><img class='avatar-user-pic-relative' src="http://{{server_ip_address}}/pics/player_{{player_id}}.jpg"></center></td>
           <td style='width:33%;vertical-align:middle'>
 
-            <div ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.divisions' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}</div>
-            <div ng-repeat='(metadivision_id,token_count) in resources.player_tokens.data.tokens.metadivisions' align='left' >{{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : {{token_count}}</div>
-            <div ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.teams' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}</div>
+            <div class='ticket_purchase_summary_font' ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.divisions' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}</div>
+            <div class='ticket_purchase_summary_font' ng-repeat='(metadivision_id,token_count) in resources.player_tokens.data.tokens.metadivisions' align='left' >{{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : {{token_count}}</div>
+            <div class='ticket_purchase_summary_font' ng-repeat='(division_id,token_count) in resources.player_tokens.data.tokens.teams' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}}</div>
           </td>
         </tr>
       </table>

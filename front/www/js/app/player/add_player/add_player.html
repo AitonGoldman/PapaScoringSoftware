@@ -1,11 +1,11 @@
 <ion-view view-title="Add Player">
   <ion-content>      
-    <div class="skinny-list list">
+    <ion-list class="skinny-list">
       <div class="item-divider item" id='add_user_user_info_title'>
         Player Info
       </div>
       <label  class="item-input item">
-        <span>First Name : </span>
+        <span class='input-label'>First Name : </span>
         <input ng-model='player_info.first_name' type="text" placeholder="First Name">
       </label>
 
@@ -28,16 +28,17 @@
 <!--        <img ng-if='player_info.has_picture==true' align="bottom" class="avatar-frame-small" style='float:right;margin-right:48px'> -->
       </a>
 
-      <button id='add_player_get_ifpa_ranking' class="button-full item item-icon-right item-calm" style='text-align:left;maring-top:0px' ng-click='get_ifpa_ranking()' ng-disabled='player_info.first_name==undefined && player_info.last_name==undefined'>
+      <a id='add_player_get_ifpa_ranking' class="item item-icon-right item-calm" style='text-align:left;maring-top:0px' ng-click='get_ifpa_ranking()' ng-disabled='player_info.first_name==undefined && player_info.last_name==undefined'>
         <i class="icon ion-search"></i>
         <span >Lookup Ifpa Ranking <span id="add_player_ifpa_ranking" ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>
-      </button>
-      <button id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='form_not_ready_for_submit()'>
+      </a>
+    </ion-list>
+      <a id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right item-calm input-list-button" style='text-align:left;margin-top:15px' ng-disabled='form_not_ready_for_submit()'>
         
         <i class="icon ion-chevron-right"></i>
         <span >Add Player</span>
-      </button>
-    </div>
+      </a>
+    
   </ion-content>
 </ion-view>
 

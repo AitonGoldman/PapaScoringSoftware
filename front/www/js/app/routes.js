@@ -11,7 +11,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
                     templateUrl: 'js/app/event_select.html',
                 },
                 'e_select_view@event_select':{
-                    templateUrl: 'e_select.html'
+                    templateUrl: 'js/app/e_select.html'
                 }
             }
         }

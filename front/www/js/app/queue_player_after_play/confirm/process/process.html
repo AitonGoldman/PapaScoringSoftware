@@ -1,18 +1,37 @@
 <ion-view view-title="Queued"  hide-back-button="true">
   <ion-content>      
-    <div class='icon-label-header row first-element'>
-      <div><i class="icon ion-plus-circled"></i></div>
-      <div>{{division_machine_to_queue_on_name}}</div>
-    </div>
-    <div style='text-align:center;font-size:38px;line-height:38px'>
-      (#{{player_id}}) {{player_name}}.
-    </div>
-    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref="app.scorekeeping.machine_select({site:site,division_id:division_id})">
-      Return to Machine List
-    </button>
-    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref="app.scorekeeping.machine_select.player_select({division_machine_id:division_machine_just_played_id,division_machine_name:division_machine_just_played_name,division_id:division_id,team_tournament:false})">
-      Add new player to machine
-    </button>    
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-fork-repo padding"></i><span>Queued</u></span></div>
+          <table>
+            <tr>
+              <td class='padding' align="right">
+                <i class="icon padding"></i> Machine : 
+              </td>
+              <td class='padding'>
+                {{division_machine_to_queue_on_name}}
+            </tr>
+            <tr>
+              <td class='padding' align="right">
+                <i class="icon padding"></i> Player : 
+              </td>
+              <td class='padding'>
+                (#{{player_id}}) {{player_name}}
+            </tr>
+            
+          </table>
+          <br>
+          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref="app.scorekeeping.machine_select({site:site,division_id:division_id})">
+            <span>Return To Machine List</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
+          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref="app.scorekeeping.machine_select.player_select({division_machine_id:division_machine_just_played_id,division_machine_name:division_machine_just_played_name,division_id:division_id,team_tournament:false})">
+            <span>Add New Player To Machine</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>          
+        </div>
+      </center>
+
   </ion-content>
 </ion-view>
 

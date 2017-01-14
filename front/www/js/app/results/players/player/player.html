@@ -1,4 +1,4 @@
-<ion-view view-title="">
+<ion-view view-title="Results" hide-back-button="true">
   <ion-content>      
     <div class='first-element'>
     </div>
@@ -26,7 +26,7 @@
           <tr ng-repeat='machine_score in player_division_results.entries|limitTo:3'>
             <td style='padding-top:10px;' >{{machine_score.rank}}</td>
             <td style='padding-left:20px;padding-top:10px;'>
-              <a ui-sref='.^.^.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name})'>
+              <a ui-sref='app.results.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name,division_id:division_id})'>
               {{machine_score.machine_name}}
               </a>
             </td>
@@ -59,9 +59,12 @@
           <tr ng-repeat='machine_score in player_division_results.entries' ng-if='$index > 2'>
             <td style='padding-top:10px;' >{{machine_score.rank}}</td>
             <td style='padding-left:20px;padding-top:10px;'>
-                          <a ui-sref='.^.^.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name})'>
-                            {{machine_score.machine_name}}
-                          </a>
+              <a ui-sref='app.results.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name,division_id:division_id})'>
+              {{machine_score.machine_name}}
+              </a>
+              <!-- <a ui-sref='.^.^.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name})'> -->
+              <!--               {{machine_score.machine_name}} -->
+              <!--             </a> -->
             </td>
             <td style='padding-left:20px;padding-top:10px;'>{{machine_score.points}}</td>
             <td style='padding-left:20px;padding-top:10px;'>{{machine_score.score}}</td>            

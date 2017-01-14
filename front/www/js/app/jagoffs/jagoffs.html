@@ -1,13 +1,13 @@
 <ion-view view-title="Jagoffs">
   <ion-content>      
-    <table class='first-element table'>
+    <table class='table'>
       <tr>
-        <th>Count </th>
-        <th>Player </th>
+        <th class='padding'>Count </th>
+        <th class='padding'>Player </th>
       </tr>
       <tr ng-repeat='jagoff in resources.jagoffs.data'>                
-        <td>{{jagoff.asshole_count}}</td>
-        <td>( #{{jagoff.player_id}} ){{jagoff.first_name}} {{jagoff.last_name}}</td>
+        <td class='padding'>{{jagoff.asshole_count}}</td>
+        <td class='padding'>( #{{jagoff.player_id}} ){{jagoff.first_name}} {{jagoff.last_name}}</td>
       </tr>
     </table>
   </ion-content>

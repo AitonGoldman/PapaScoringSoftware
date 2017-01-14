@@ -1,18 +1,55 @@
 <ion-view view-title="">
   <ion-content>      
-    <div class="skinny-list list" style='margin-left:0;margin-right:0'>
-      <div class="item-divider item" id='add_user_user_info_title'>
-        Review Before Purchase 
-      </div>  
-      <div class='item' ng-repeat='(division_id,token_count) in token_info.divisions' align='left' > {{token_info.divisions_names[division_id]}} : {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span>  </div>
-      <div class='item' ng-repeat='(division_id,token_count) in token_info.teams' align='left' > {{token_info.divisions_names[division_id]}} : {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span> </div>
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>
+          <table>
+            <tr ng-repeat='(division_id,token_count) in token_info.divisions'>
+              <td class='padding' align="right">
+                <i class="icon padding"></i>{{token_info.divisions_names[division_id]}} : 
+              </td>
+              <td class='padding'>
+                {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+              </td>
+            </tr>
+            <tr ng-repeat='(division_id,token_count) in token_info.teams'>
+              <td class='padding' align="right">
+                <i class="icon padding"></i>{{token_info.divisions_names[division_id]}} : 
+              </td>
+              <td class='padding'> 
+                {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+              </td>
+            </tr>
+            <tr ng-repeat='(metadivision_id,token_count) in token_info.metadivisions'>
+              <td class='padding' align="right">
+                <i class="icon padding"></i>{{token_info.metadivisions_names[metadivision_id]}} : 
+              </td>
+              <td class='padding'>
+                {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+              </td>
+            </tr>            
+          </table>
+          <br>
+          <button id='HomeButton' class='button button-full button-positive item-icon-right' ng-click="create_tickets()">
+            <span>Purchase Tickets</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
+        </div>
+      </center>
+
+    <!-- <div class="skinny-list list" style='margin-left:0;margin-right:0'> -->
+    <!--   <div class="item-divider item" id='add_user_user_info_title'> -->
+    <!--     Review Before Purchase  -->
+    <!--   </div>   -->
+    <!--   <div class='item' ng-repeat='(division_id,token_count) in token_info.divisions' align='left' > {{token_info.divisions_names[division_id]}} : {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span>  </div> -->
+    <!--   <div class='item' ng-repeat='(division_id,token_count) in token_info.teams' align='left' > {{token_info.divisions_names[division_id]}} : {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span> </div> -->
       
-      <div class='item' ng-repeat='(metadivision_id,token_count) in token_info.metadivisions' align='left' > {{token_info.metadivisions_names[metadivision_id]}} : {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span> </div>
-      <button style='font-size:38px;line-height:38px' class="button button-full button-positive icon-right ion-chevron-right" ng-click="create_tickets()">
-        Purchase Tickets
-      </button>    
+    <!--   <div class='item' ng-repeat='(metadivision_id,token_count) in token_info.metadivisions' align='left' > {{token_info.metadivisions_names[metadivision_id]}} : {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span> </div> -->
+    <!--   <button style='font-size:38px;line-height:38px' class="button button-full button-positive icon-right ion-chevron-right" ng-click="create_tickets()"> -->
+    <!--     Purchase Tickets -->
+    <!--   </button>     -->
       
-    <!-- ui-sref=".confirm({token_info: ,})" -->    
+    <!-- <\!-- ui-sref=".confirm({token_info: ,})" -\->     -->
   </ion-content>
 </ion-view>
 

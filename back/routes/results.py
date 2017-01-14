@@ -8,6 +8,8 @@ from flask import jsonify, request, abort, current_app
 from util import db_util
 from sqlalchemy import null, func, text, and_
 from sqlalchemy.sql import select
+from routes.utils import fetch_entity
+import json
 
 def get_papa_points_from_rank(rank):
     if rank == 1:
@@ -20,7 +22,7 @@ def get_papa_points_from_rank(rank):
         return 0
     return 100-rank-12
 
-def get_division_results(division_id=None,division_machine_id_external=None,player_id_external=None,team_id_external=None):
+def get_division_results(division_id=None,division_machine_id_external=None,player_id_external=None,team_id_external=None,return_json=True):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     if division_id=="0":
@@ -29,7 +31,14 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
     if division_id:
         division = tables.Division.query.filter_by(division_id=division_id).first()
         if division.team_tournament:
+            print "found team"
             team=True
+    if division_machine_id_external:
+        division_machine_external = tables.DivisionMachine.query.filter_by(division_machine_id=division_machine_id_external).first()
+        if division_machine_external and division_machine_external.division.team_tournament:
+            print "found team machine"
+            team=True
+            
     first_query = get_first_query(division_id,division_machine_id_external,team)
     second_query = get_herb_second_query(first_query,team)
     third_query = get_herb_third_query(second_query)
@@ -78,7 +87,7 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                 top_6_machines[division.division_id][team.team_id]=[]
         else:
             for player in players:        
-                player_results_dict[player.player_id][division.division_id]={'points':[],'sum':0,'player_name':player.first_name+" "+player.last_name}            
+                player_results_dict[player.player_id][division.division_id]={'points':[],'sum':0,'player_name':player.first_name+" "+player.last_name,'ifpa_ranking':player.ifpa_ranking}            
                 top_6_machines[division.division_id][player.player_id]=[]
                 
     for result in results:        
@@ -195,7 +204,7 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
     else:
         for player_id,div in player_results_dict.iteritems():
             for div_id, player in div.iteritems():
-                sorted_player_list[div_id].append({'player_id':player_id,'sum':player['sum'],'player_name':player['player_name']})
+                sorted_player_list[div_id].append({'player_id':player_id,'sum':player['sum'],'player_name':player['player_name'],'ifpa_ranking':player['ifpa_ranking']})
         for division in divisions:
             sorted_player_list[division.division_id] = sorted(sorted_player_list[division.division_id], key= lambda e: e['sum'],reverse=True)
             ranked_player_list[division.division_id] = list(Ranking(sorted_player_list[division.division_id],key=lambda pp: pp['sum']))
@@ -205,7 +214,10 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                     if ranked_result[1]['player_id']==int(player_id_external):                    
                         player_entry_dict[ranked_division_id]['rank']=ranked_result[0]
             return jsonify({'data':player_entry_dict})        
-        return jsonify({'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}})
+        if return_json:
+            return jsonify({'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}})
+        else:
+            return {'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}}
 
 
 @admin_manage_blueprint.route('/results/player/<player_id>',methods=['GET'])
@@ -215,6 +227,67 @@ def route_get_player_results(player_id):
 @admin_manage_blueprint.route('/results/division/<division_id>',methods=['GET'])
 def route_get_division_results(division_id):
     return get_division_results(division_id=division_id)
+
+def get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker_ranks):
+    tables = db_util.app_db_tables(current_app)
+    if absent_players_raw:
+        absent_players = absent_players_raw.split(',')
+    else:
+        absent_players = []
+    division = fetch_entity(tables.Division,division_id)         
+    max_ifpa_rank = division.ppo_a_ifpa_range_end
+    num_a_qualifiers = division.finals_num_qualifiers_ppo_a
+    ppo_results = get_division_results(division_id=division_id,return_json=False)
+    ppo_qualifying_list = []
+    match_absent_player = lambda x: str(x[1]['player_id']) in absent_players
+    for div_id,div_results in ppo_results['data']['ranked_player_list'].iteritems():        
+        if div_id != division.division_id:
+            continue
+        for idx,player_result in enumerate(div_results):                        
+            player = player_result[1]
+            if str(player['player_id']) in absent_players:
+                continue
+            if player['ifpa_ranking'] < max_ifpa_rank and idx + 1 > num_a_qualifiers:
+                continue
+            if str(player['player_id']) in tie_breaker_ranks:
+                new_rank = tie_breaker_ranks[str(player['player_id'])]
+                player_result[1]['temp_rank']=int(new_rank)                
+                ppo_qualifying_list.append(player_result[1])
+            else:
+                player_result[1]['temp_rank']=player_result[0]
+                ppo_qualifying_list.append(player_result[1])
+    sorted_list = sorted(ppo_qualifying_list, key= lambda e: e['temp_rank'])
+    return list(Ranking(sorted_list,key=lambda pp: pp['temp_rank'],reverse=True))
+    
+
+@admin_manage_blueprint.route('/results/division/<division_id>/ppo/qualifying',methods=['GET'])
+def route_get_division_ppo_qualifying_results(division_id):
+    absent_players_raw = request.args.get('absent_players')
+    tie_breaker_ranks = json.loads(request.data)    
+    reranked_ppo_qualifying_list = get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker_ranks)
+    return jsonify({'data':reranked_ppo_qualifying_list})
+
+@admin_manage_blueprint.route('/results/division/<division_id>/ppo/qualifying/list',methods=['GET'])
+def route_get_division_ppo_qualifying_results_list(division_id):
+    tables = db_util.app_db_tables(current_app)
+    absent_players_raw = request.args.get('absent_players')    
+    tie_breaker_ranks = json.loads(request.data)    
+    reranked_ppo_qualifying_list = get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker_ranks)
+    division = fetch_entity(tables.Division,division_id)         
+    if division.finals_player_selection_type == "ppo":
+        num_a_qualifiers = division.finals_num_qualifiers_ppo_a
+        num_b_qualifiers = division.finals_num_qualifiers_ppo_b
+        a_end_rank=num_a_qualifiers
+        if len(reranked_ppo_qualifying_list) < a_end_rank:
+            a_end_rank = len(reranked_ppo_qualifying_list)
+        b_end_rank=a_end_rank + num_b_qualifiers    
+        if len(reranked_ppo_qualifying_list) < b_end_rank:                
+            b_end_rank = len(reranked_ppo_qualifying_list)    
+        return jsonify({'data':{'a':reranked_ppo_qualifying_list[0:a_end_rank],'b':reranked_ppo_qualifying_list[a_end_rank:b_end_rank]}})
+
+    if division.finals_player_selection_type == "papa":
+        return jsonify({'data':reranked_ppo_qualifying_list})
+        
 
 @admin_manage_blueprint.route('/results/division_machine/<division_machine_id>',methods=['GET'])
 def route_get_division_machine_results(division_machine_id):

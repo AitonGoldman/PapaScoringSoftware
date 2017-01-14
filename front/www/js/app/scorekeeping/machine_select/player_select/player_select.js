@@ -20,7 +20,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             Modals.loading();
             $scope.selected_players=[];
-            players_promise = TimeoutResources.GetPlayers(undefined,{site:$scope.site});
+            players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
             queues_promise = TimeoutResources.GetQueues(players_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();            

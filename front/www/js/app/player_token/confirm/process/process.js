@@ -14,7 +14,7 @@ angular.module('app.player_token.confirm.process').controller(
         }
             $scope.token_info=$state.params.token_info;            
             Modals.loading();
-            complete_token_promise = TimeoutResources.CompletePlayerTokens(undefined,{site:$scope.site},$scope.token_info);
+            complete_token_promise = TimeoutResources.CompletePlayerTokens($scope.bootstrap_promise,{site:$scope.site},$scope.token_info);
             
             // = TimeoutResources.GetEtcData();
                 complete_token_promise.then(function(data){

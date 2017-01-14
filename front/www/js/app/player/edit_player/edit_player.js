@@ -10,15 +10,15 @@ angular.module('app.player.edit_player').controller(
             $scope.utils = Utils;            
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             Modals.loading();
-            divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
-            player_promise = TimeoutResources.GetPlayer(divisions_promise,{site:$scope.site,player_id:$scope.player_id});
+            //divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+            player_promise = TimeoutResources.GetPlayer($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
             
             // = TimeoutResources.GetEtcData();
             player_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
-                $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});
                 $scope.player_info = $scope.resources.player.data;
-                $scope.player_info.old_linked_division_id = $scope.player_info.linked_division_id;                
+                $scope.player_info.old_linked_division_id = $scope.player_info.linked_division_id;
+                $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});                
                 Modals.loaded();
             });
             $scope.on_div_change=function(){

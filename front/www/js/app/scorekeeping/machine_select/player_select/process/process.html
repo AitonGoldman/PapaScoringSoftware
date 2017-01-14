@@ -1,18 +1,30 @@
 <ion-view view-title="Player Added" hide-back-button='true'>
   <ion-content>
-    <div class='icon-label-header row first-element'>
-      <div><i class="icon ion-plus-circled"></i></div>
-      <div>{{resources.machine_added_to.data.player.player_name}}</div>
-    </div>
-    <div style='text-align:center;font-size:38px'>
-      is now playing {{resources.machine_added_to.data.division_machine_name}}.
-    </div>
-    <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^">
-      Return to Machine List
-    </button>    
-    <!--<button style='font-size:48px' ng-if="queues.length > 0" class="button button-full button-assertive icon-right ion-chevron-right" ui-sref=".undo({process_step:{process:true}})">
-      Remove Player from {{resources.machine_added_to.data.division_machine_name}}-->
-    </button>
+      <center>
+        <div class='standard_big_font'>
+          <div class='padding'><u><i class="icon ion-plus padding"></i><span>(#{{resources.machine_added_to.data.player.player_id}}) {{resources.machine_added_to.data.player.player_name}}</u></span></div>
+          <div>
+            <i class='icon padding'></i>Is now playing {{resources.machine_added_to.data.division_machine_name}}!
+          </div>
+          <br>
+          <button id='HomeButton' class='button button-full button-positive item item-icon-right' ui-sref=".^.^">
+            <span>Return To Machine List</span>
+            <i class="icon ion-chevron-right"></i>          
+          </a>
+        </div>
+      </center>
+
+    <!-- <div class='icon-label-header row first-element'> -->
+    <!--   <div><i class="icon ion-plus-circled"></i></div> -->
+    <!--   <div>{{resources.machine_added_to.data.player.player_name}}</div> -->
+    <!-- </div> -->
+    <!-- <div style='text-align:center;font-size:38px'> -->
+    <!--   is now playing {{resources.machine_added_to.data.division_machine_name}}. -->
+    <!-- </div> -->
+    <!-- <button style='font-size:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".^.^"> -->
+    <!--   Return to Machine List -->
+    <!-- </button>     -->
+    <!-- </button> -->
   </ion-content>
 </ion-view>
 

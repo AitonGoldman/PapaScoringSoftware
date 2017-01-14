@@ -14,7 +14,7 @@ angular.module('TD_services.camera').factory('Camera', ['$state','$timeout','$ro
     return{
         take_user_pic_and_upload: function(type_of_pic){
             //FIXME : need to use ngCordova so we can have proper callbacks, and thus unset has_picture if needed                                                                
-            take_pic_promise = $cordovaCamera.getPicture({}).then(function(imageUri) {                
+            take_pic_promise = $cordovaCamera.getPicture({targetWidth:200,targetHeight:200}).then(function(imageUri) {                
                 return imageUri;
             }, function(err) {
                 

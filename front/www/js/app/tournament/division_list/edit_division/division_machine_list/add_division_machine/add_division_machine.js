@@ -10,7 +10,7 @@ angular.module('app.tournament.division_list.edit_division.division_machine_list
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         Modals.loading();
-        machines_p = TimeoutResources.GetMachines(undefined,{site:$scope.site});
+        machines_p = TimeoutResources.GetMachines($scope.bootstrap_promise,{site:$scope.site});
         // = TimeoutResources.GetEtcData();
         machines_p.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

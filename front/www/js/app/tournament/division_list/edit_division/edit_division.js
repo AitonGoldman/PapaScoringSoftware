@@ -12,7 +12,7 @@ angular.module('app.tournament.division_list.edit_division').controller(
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         Modals.loading();
-        division_promise = TimeoutResources.GetDivision(undefined,{site:$scope.site,division_id:$scope.division_id});
+        division_promise = TimeoutResources.GetDivision($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
         // = TimeoutResources.GetEtcData();
         division_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

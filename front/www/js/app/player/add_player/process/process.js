@@ -22,7 +22,7 @@ angular.module('app.player.add_player.process').controller(
             $scope.player_info.ifpa_ranking=-1;
         }
         Modals.loading();
-        player_add_promise = TimeoutResources.AddPlayer(undefined,{site:$scope.site},$scope.player_info);
+        player_add_promise = TimeoutResources.AddPlayer($scope.bootstrap_promise,{site:$scope.site},$scope.player_info);
         // = TimeoutResources.GetEtcData();
         player_add_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

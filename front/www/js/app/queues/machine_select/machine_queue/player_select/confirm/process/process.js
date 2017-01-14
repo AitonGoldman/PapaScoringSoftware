@@ -25,7 +25,7 @@ angular.module('app.queues.machine_select.machine_queue.player_select.confirm.pr
             return;
         }
         
-        add_to_queue_promise = TimeoutResources.AddToQueue(undefined,{site:$scope.site},{division_machine_id:$scope.division_machine_id,player_id:$scope.player_id});
+        add_to_queue_promise = TimeoutResources.AddToQueue($scope.bootstrap_promise,{site:$scope.site},{division_machine_id:$scope.division_machine_id,player_id:$scope.player_id});
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         add_to_queue_promise.then(function(data){

@@ -11,7 +11,7 @@ angular.module('app.user.edit_user').controller(
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             $scope.random_img=_.random(0,99999);
             Modals.loading();
-            get_roles_promise = TimeoutResources.GetRoles(undefined,{site:$scope.site});
+            get_roles_promise = TimeoutResources.GetRoles($scope.bootstrap_promise,{site:$scope.site});
             get_user_promise = TimeoutResources.GetUser(get_roles_promise,{site:$scope.site,user_id:$scope.user_id});
             
             // = TimeoutResources.GetEtcData();

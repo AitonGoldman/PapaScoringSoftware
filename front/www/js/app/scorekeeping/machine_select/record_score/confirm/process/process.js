@@ -25,7 +25,7 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm.process').c
         $scope.confirmed_score=$state.params.confirmed_score;
         $scope.confirmed_score.score_with_commas = $scope.confirmed_score.score;
         $scope.confirmed_score.score = $scope.confirmed_score.score.replace(/,/g, '');
-        add_score_promise = TimeoutResources.AddScore(undefined,{site:$scope.site,division_machine_id:$scope.division_machine_id,score:$scope.confirmed_score.score});
+        add_score_promise = TimeoutResources.AddScore($scope.bootstrap_promise,{site:$scope.site,division_machine_id:$scope.division_machine_id,score:$scope.confirmed_score.score});
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         add_score_promise.then(function(data){

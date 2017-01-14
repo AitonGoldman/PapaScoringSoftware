@@ -1,36 +1,72 @@
 <ion-view view-title="Record Score">
   <ion-content>      
-    <div class="skinny-list list" >
+    <div class="list" >
       <!-- REMOVE ME -->
       <div class='player-select'>
-        <label class="item-input item" style='z-index:199;background-color: rgba(0, 0, 0, 0.0)'>          
-          <i ng-if='score.score == undefined' class="icon ion-search placeholder-icon"></i>
+        <label class="item-input item">
+          <i class="icon ion-edit placeholder-icon"></i>
           <form ng-submit='test_submit()'>
-            <input ng-keydown='keyDown($event)' ng-change='onScoreChange()' type="tel" placeholder="Score" ng-model="score.score">
+            <input ng-keydown='keyDown($event)' ng-change='onScoreChange()' type="tel" placeholder="Score" ng-model="score.score"> 
           </form>
         </label>
+        <div class='item'>
+          (#{{player_id}})</span>{{player_name}}
+        </div>
       </div>
-      <div class='item' style='z-index:199;background-color: rgba(0, 0, 0, 0.0);padding-left:48px;'>
-          {{division_machine_name}}
+      <div style='text-align:center' class='standard-big-font'>
+        {{division_machine_name}}
       </div>
-      
+     <button  class="button button-full button-assertive item-icon-right" ng-click="choose_void_action()">
+      Void Ticket
+            <i class="icon ion-chevron-right"></i>          
+
+     </button>
+     <button  class="button button-full button-positive item-icon-right" ui-sref=".confirm_jagoff"> 
+       <span ng-if='team_tournament=="false"'> (#{{player_id}}) </span> {{player_name}} is not here.
+            <i class="icon ion-chevron-right"></i>          
+
+     </button> 
+
     </div>
-    <div style='font-size:38px;margin-left:15%;margin-right:15%;text-align:center'>
-      <span ng-if='team_tournament=="false"'>(#{{player_id}})</span>{{player_name}}
+    
+    <div class='player-info-avatar'>
+      <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg"> 
     </div>
     <div style='z-index:4' class='machine-info-avatar'>
       <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg">
     </div>
-    <div style='z-index:200' class='player-info-avatar'>
-      <img class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{player_id}}.jpg">
-    </div>
+
+    <!-- <div class="skinny-list list" > -->
+    <!--   <\!-- REMOVE ME -\-> -->
+    <!--   <div class='player-select'> -->
+    <!--     <label class="item-input item" style='z-index:199;background-color: rgba(0, 0, 0, 0.0)'>           -->
+    <!--       <i ng-if='score.score == undefined' class="icon ion-search placeholder-icon"></i> -->
+    <!--       <form ng-submit='test_submit()'> -->
+    <!--         <input ng-keydown='keyDown($event)' ng-change='onScoreChange()' type="tel" placeholder="Score" ng-model="score.score"> -->
+    <!--       </form> -->
+    <!--     </label> -->
+    <!--   </div> -->
+    <!--   <div class='item' style='z-index:199;background-color: rgba(0, 0, 0, 0.0);padding-left:48px;'> -->
+    <!--       {{division_machine_name}} -->
+    <!--   </div> -->
+      
+    <!-- </div> -->
+    <!-- <div style='font-size:38px;margin-left:15%;margin-right:15%;text-align:center'> -->
+    <!--   <span ng-if='team_tournament=="false"'>(#{{player_id}})</span>{{player_name}} -->
+    <!-- </div> -->
+    <!-- <div style='z-index:4' class='machine-info-avatar'> -->
+    <!--   <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg"> -->
+    <!-- </div> -->
+    <!-- <div style='z-index:200' class='player-info-avatar'> -->
+    <!--   <img class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{player_id}}.jpg"> -->
+    <!-- </div> -->
     
-    <button style='font-size:48px' class="button button-full button-assertive icon-right ion-chevron-right" ng-click="choose_void_action()">
-      Void Ticket
-    </button>
-    <button style='font-size:48px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".confirm_jagoff">
-      <span ng-if='team_tournament=="false"'> (#{{player_id}}) </span> {{player_name}} is not here.
-    </button>
+    <!-- <button style='font-size:48px' class="button button-full button-assertive icon-right ion-chevron-right" ng-click="choose_void_action()"> -->
+    <!--   Void Ticket -->
+    <!-- </button> -->
+    <!-- <button style='font-size:48px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".confirm_jagoff"> -->
+    <!--   <span ng-if='team_tournament=="false"'> (#{{player_id}}) </span> {{player_name}} is not here. -->
+    <!-- </button> -->
 
   </ion-content>
 </ion-view>

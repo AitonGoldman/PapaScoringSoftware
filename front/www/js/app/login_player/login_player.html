@@ -1,11 +1,11 @@
 <ion-view view-title="Login">
   <ion-content>      
     <div class="skinny-list list">
-      <label style='padidng:0' class='item-input item'>
+      <label class='item-input item'>
         <span class='input-label'>Pin # : </span>
-        <input ng-model='player.pin' type="text" placeholder="Username">
+        <input ng-model='player.pin' type="text" placeholder="Pin #">
       </label>
-      <button id="LoginPlayerButton" ui-sref='.process({process_step:{process:true},player:player})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(player.pin)'>
+      <button id="LoginPlayerButton" ui-sref='.process({process_step:{process:true},player:player})' class="item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(player.pin)'>
       <i class="icon ion-chevron-right"></i>
       <span >Login</span>
     </button>

@@ -9,7 +9,7 @@ angular.module('app.results.players.player').controller(
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        results_promise = TimeoutResources.GetPlayerResults(undefined,{site:$scope.site,player_id:$scope.player_id});
+        results_promise = TimeoutResources.GetPlayerResults($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         results_promise.then(function(data){

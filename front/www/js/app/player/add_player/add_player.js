@@ -8,10 +8,10 @@ angular.module('app.player.add_player').controller(
             $scope.player_info={ifpa_result:{},linked_division_id:undefined};
             $scope.utils = Utils;
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-            divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+            //divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
             Modals.loading();
             // = TimeoutResources.GetEtcData();
-            divisions_promise.then(function(data){
+            $scope.bootstrap_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
                 $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});                
                 Modals.loaded();

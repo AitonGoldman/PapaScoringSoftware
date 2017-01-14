@@ -5,7 +5,7 @@ angular.module('app.login.process').controller(
         function($scope, $state, TimeoutResources, Utils,Modals,User,$ionicPush,$ionicPlatform) {            
             $scope.site=$state.params.site;        
             $scope.utils = Utils;
-            $scope.controller_bootstrap($scope,$state,true);                
+            //$scope.controller_bootstrap($scope,$state,true);                
             $scope.process_step=$state.params.process_step;
             $scope.User=User;
             
@@ -17,7 +17,7 @@ angular.module('app.login.process').controller(
             
             Modals.loading();
             post_obj = {username:$scope.user_info.username,password:$scope.user_info.password};
-            if(ionic.Platform.isWebView() == true){
+            if(ionic.Platform.isWebView() == true && ionic.Platform.device().isVirtual==false && ionic.Platform.isIOS() == false){
                 ionic_push_promise = $ionicPush.register().then(function(t) {
                     $scope.ioniccloud_push_token = t;
                     post_obj["ioniccloud_push_token"] = $scope.ioniccloud_push_token.token;

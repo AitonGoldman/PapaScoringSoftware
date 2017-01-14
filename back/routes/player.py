@@ -71,5 +71,7 @@ def route_add_player():
         raise Conflict('Duplicate player')
     new_player = create_player(current_app,input_data)
     db.session.commit()
-    return jsonify({'data':new_player.to_dict_simple()})
+    new_player_dict = new_player.to_dict_simple()
+    new_player_dict['pin']=new_player.pin
+    return jsonify({'data':new_player_dict})
     

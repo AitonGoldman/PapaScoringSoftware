@@ -47,7 +47,7 @@ angular.module('TD_services.action_sheets')
                           buttons: [
                               { text: 'Continue' }                              
                           ],                    
-                          titleText: '<h1>This will void all tickets in the old division!  Are you sure you want to do this?</h1>',
+                          titleText: '<b>This will void all tickets in the old division!  Are you sure you want to do this?</b>',
                           cancelText: 'Cancel',
                           cancel: function() {
                               player_info.linked_division_id = player_info.old_linked_division_id;

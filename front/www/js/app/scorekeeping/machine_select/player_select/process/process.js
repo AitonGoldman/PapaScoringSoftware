@@ -21,7 +21,7 @@ angular.module('app.scorekeeping.machine_select.player_select.process').controll
         $scope.from_queue=$state.params.from_queue;
         if($scope.from_queue == 0){
             Modals.loading();
-            add_player_to_machine_promise = TimeoutResources.AddPlayerToMachine(undefined,{site:$scope.site,division_id:$scope.division_id,division_machine_id:$scope.division_machine_id,player_id:$scope.player_info.player_id});
+            add_player_to_machine_promise = TimeoutResources.AddPlayerToMachine($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id,division_machine_id:$scope.division_machine_id,player_id:$scope.player_info.player_id});
             //= TimeoutResources.GetEtcData();
             add_player_to_machine_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
@@ -32,7 +32,7 @@ angular.module('app.scorekeeping.machine_select.player_select.process').controll
 
         if($scope.from_queue == 1){
             Modals.loading();
-            add_player_to_machine_promise = TimeoutResources.AddPlayerToMachineFromQueue(undefined,{site:$scope.site,division_machine_id:$scope.division_machine_id});
+            add_player_to_machine_promise = TimeoutResources.AddPlayerToMachineFromQueue($scope.bootstrap_promise,{site:$scope.site,division_machine_id:$scope.division_machine_id});
             //= TimeoutResources.GetEtcData();
             add_player_to_machine_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();

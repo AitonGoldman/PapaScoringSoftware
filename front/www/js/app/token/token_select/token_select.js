@@ -18,20 +18,25 @@ angular.module('app.token.token_select').controller(
             $scope.utils = Utils;
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             $scope.utils = Utils;
-            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                        
             $scope.bootstrap_promise.then(function(data){
                 Modals.loading();                
 	        //$scope.player_id=User.logged_in_user().player.player_id;
                 $scope.player_id=$state.params.player_id;
 
                 token_promise = TimeoutResources.GetPlayerTokens(undefined,{site:$scope.site,player_id:$scope.player_id});            
-                divisions_promise = TimeoutResources.GetDivisions(token_promise,{site:$scope.site});
-                divisions_promise.then(function(data){
+                token_promise.then(function(data){
                     $scope.resources = TimeoutResources.GetAllResources();
-                    console.log($scope.resources);
+                    _.forEach($scope.resources.player_tokens.data.tokens.divisions, function(value, key) {
+                        $scope.token_info.divisions[key]=0;
+                    });
+                    _.forEach($scope.resources.player_tokens.data.tokens.teams, function(value, key) {
+                        $scope.token_info.teams[key]=0;                    
+                    });                
+                    _.forEach($scope.resources.player_tokens.data.tokens.metadivisions, function(value, key) {
+                        
+                        $scope.token_info.metadivisions[key]=0;
+                    });                    
                     Modals.loaded();
-                    
-                    
                 });
             });
             $scope.calc_total_cost = function(){

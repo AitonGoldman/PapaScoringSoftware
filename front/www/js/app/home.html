@@ -9,14 +9,11 @@
       </ion-nav-buttons>
       <ion-nav-back-button style='margin-top:auto;margin-bottom:auto;' ng-click="customBackButtonNav()">
       </ion-nav-back-button>                    
-
-
-
     </ion-nav-bar>
     <test id="test_element"></test>
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
-  <ion-side-menu side="right">
+  <ion-side-menu side="right" width='375'>
     <!--<ion-header-bar class="bar-positive" ng-style="menu_bar_title_style">-->
         <ion-header-bar class="bar-positive">
         <div ng-if="User.logged_in() == true && User.logged_in_player().is_player == false">
@@ -33,7 +30,7 @@
     </ion-header-bar>
         <ion-content>          
           <ion-list>
-        <a id='home_link' class='item item-icon-right' menu-close ui-sref='app' ng-if="User.logged_in() == true">
+        <a id='home_link' class='item item-icon-right' menu-close ui-sref='app'>
           <div>
             Home
           </div>
@@ -53,12 +50,6 @@
           <i class="icon ion-chevron-right"></i>
         </a>
         
-        <a id='logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
-          <div>
-            Logout
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>
         <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.tournament' ng-if="User.logged_in() == true && User.has_role('admin')">
           
           <div>
@@ -93,6 +84,34 @@
         <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.jagoffs' ng-if="User.logged_in() == true && User.has_role('admin')">          
           <div>
             Jagoffs
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>                
+        <a id='logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
+          <div>
+            Logout
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <a class="item item-divider">
+          &nbsp;
+        </a>
+        
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.results.divisions'>          
+          <div>
+            Division Results
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.results.division_machines'>          
+          <div>
+            Machine Results
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.results.players'>          
+          <div>
+            Player Results
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>

@@ -15,7 +15,7 @@ angular.module('app.teams.add_team.process').controller(
         }
         
         $scope.team_info=$state.params.team_info;
-        add_team_promise = TimeoutResources.AddTeam(undefined,{site:$scope.site},$scope.team_info);
+        add_team_promise = TimeoutResources.AddTeam($scope.bootstrap_promise,{site:$scope.site},$scope.team_info);
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         add_team_promise.then(function(data){

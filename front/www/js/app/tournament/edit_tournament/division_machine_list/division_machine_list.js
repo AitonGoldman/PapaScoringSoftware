@@ -12,7 +12,7 @@ angular.module('app.tournament.edit_tournament.division_machine_list').controlle
              
         Modals.loading();
         // = TimeoutResources.GetEtcData();
-        division_machines_p = TimeoutResources.GetDivisionMachines(undefined,{site:$scope.site,division_id:$scope.division_id});
+        division_machines_p = TimeoutResources.GetDivisionMachines($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
         division_machines_p.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();

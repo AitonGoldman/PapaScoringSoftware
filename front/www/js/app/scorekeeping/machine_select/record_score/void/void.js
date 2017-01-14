@@ -19,7 +19,7 @@ angular.module('app.scorekeeping.machine_select.record_score.void').controller(
             Modals.error('Tried to reload a page that submits data.',$scope.site,'app');
             return;
         }        
-        void_promise = TimeoutResources.VoidScore(undefined,{site:$scope.site,division_machine_id:$scope.division_machine_id});
+        void_promise = TimeoutResources.VoidScore($scope.bootstrap_promise,{site:$scope.site,division_machine_id:$scope.division_machine_id});
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         void_promise.then(function(data){

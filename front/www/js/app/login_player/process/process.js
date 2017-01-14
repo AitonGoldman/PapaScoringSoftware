@@ -6,7 +6,7 @@ angular.module('app.login_player.process').controller(
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
-        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+        //$scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
          $scope.process_step=$state.params.process_step;
         if(_.size($scope.process_step)==0){
             //Utils.stop_post_reload();
@@ -17,17 +17,17 @@ angular.module('app.login_player.process').controller(
             $scope.player=$state.params.player;
             Modals.loading();            
             post_obj = {player_pin:$scope.player.pin};
-            if(ionic.Platform.isWebView() == true){
+            if(ionic.Platform.isWebView() == true && ionic.Platform.device().isVirtual==false && ionic.Platform.isIOS() == false){                
                 ionic_push_promise = $ionicPush.register().then(function(t) {
-                    console.log(t);
                     $scope.ioniccloud_push_token = t;
                     post_obj["ioniccloud_push_token"] = $scope.ioniccloud_push_token.token;
-                });
+                });                
             } else {
                 ionic_push_promise = Utils.resolved_promise();
             }                                            
+            logout_promise = TimeoutResources.Logout(ionic_push_promise,{site:$scope.site});
 
-            login_promise = TimeoutResources.LoginPlayer(ionic_push_promise,{site:$scope.site},post_obj);
+            login_promise = TimeoutResources.LoginPlayer(logout_promise,{site:$scope.site},post_obj);
         
         login_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
@@ -35,6 +35,7 @@ angular.module('app.login_player.process').controller(
             User.set_logged_in_user($scope.resources.logged_in_player.data,"player");            
             Modals.loaded();
         },function(data){
+            alert(data);
             //FIXME : need a better way to handle situation where we want
             //        a different error message than what is given back
             //        by the server.            

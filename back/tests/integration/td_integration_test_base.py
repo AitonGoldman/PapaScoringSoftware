@@ -139,7 +139,7 @@ class TdIntegrationSetupTestBase(TdIntegrationTestBase):
         self.assertFalse((os.getenv('DB_USERNAME',None) is None or os.getenv('DB_PASSWORD',None) is None),
                          "You forgot to set DB_USERNAME and DB_PASSWORD")
         if os.getenv('USE_REAL_TEST_DB',None):
-            self.poop_db_name='test'        
+            self.poop_db_name=os.getenv('USE_REAL_TEST_DB')        
         db_util.create_db_and_tables(dummy_app,self.poop_db_name,DbInfo({'DB_TYPE':'postgres','DB_USERNAME':os.getenv('DB_USERNAME'),'DB_PASSWORD':os.getenv('DB_PASSWORD')}),drop_tables=True)
         del dummy_app
         self.app = PathDispatcher(app_build.get_meta_admin_app, app_build.get_admin_app)                

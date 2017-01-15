@@ -78,5 +78,7 @@
     <variable name="SENDER_ID" value="566222718762"/>
   </plugin>
   <allow-navigation href="https://checkout.stripe.com/v3/*" />
-  
+  <platform name="ios">
+    <preference name="Orientation" value="all" />
+  </platform>  
 </widget>

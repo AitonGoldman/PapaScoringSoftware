@@ -30,17 +30,17 @@ angular.module('app.teams.add_team').controller(
                 }
             };
             $scope.keyDown = function(event){
-                if(event.keyCode == 9 || event.keyCode==13){
-                    $state.go('.process',{process_step:{process:true},
-                                          team_info:{player_one_id:$scope.selected_players[0][0].player_id,
-                                                     player_one_name:$scope.selected_players[0][0].first_name+" "+$scope.selected_players[0][0].last_name,
-                                                     player_two_id:$scope.selected_players[1][0].player_id,
-                                                     player_two_name:$scope.selected_players[1][0].first_name+" "+$scope.selected_players[1][0].last_name
-                                                    }
-                                         });
+                // if(event.keyCode == 9 || event.keyCode==13){
+                //     $state.go('.process',{process_step:{process:true},
+                //                           team_info:{player_one_id:$scope.selected_players[0][0].player_id,
+                //                                      player_one_name:$scope.selected_players[0][0].first_name+" "+$scope.selected_players[0][0].last_name,
+                //                                      player_two_id:$scope.selected_players[1][0].player_id,
+                //                                      player_two_name:$scope.selected_players[1][0].first_name+" "+$scope.selected_players[1][0].last_name
+                //                                     }
+                //                          });
                     
-                    //$state.go('.process',{team_info:{player_one_id:$scope.selected_players[0][0].player_id,player_two_id:$scope.selected_players[1][0].player_id}});
-                }
+                //     //$state.go('.process',{team_info:{player_one_id:$scope.selected_players[0][0].player_id,player_two_id:$scope.selected_players[1][0].player_id}});
+                // }
                 //keyCode 9               
             };
             $scope.player = {};

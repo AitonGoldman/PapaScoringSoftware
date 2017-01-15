@@ -15,8 +15,9 @@
           {{resources.divisions.data[division_id].tournament_name}}
         </div>
 
-        <select ng-change='calc_total_cost()' ng-model="token_info.divisions[division_id]" ng-options="option for option in []|range:resources.player_tokens.data.available_tokens.divisions[division_id]+1 track by option">          
-          <!--<option ng-repeat="option in []|range:resources.player_tokens.data.available_tokens.divisions[division_id]+1:0" value="{{option}}">{{option}}</option>-->
+        <!--        <select ng-change='calc_total_cost()' ng-model="token_info.divisions[division_id]" ng-options="option for option in []|range:resources.player_tokens.data.available_tokens.divisions[division_id]+1 track by option">          -->
+          <select class='test' ng-change='calc_total_cost()' ng-model="token_info.divisions[division_id]" ng-options="option[0] for option in resources.player_tokens.data.available_tokens.divisions_remaining_token_list[division_id]">
+        </select>        
           
         </select>
       </label>
@@ -24,7 +25,9 @@
         <div class="input-label">
           {{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}}
         </div>
-        <select ng-change='calc_total_cost()' ng-model="token_info.metadivisions[metadivision_id]" ng-options="option for option in []|range:resources.player_tokens.data.available_tokens.metadivisions[metadivision_id]+1:0 track by option">          
+        <!--<select ng-change='calc_total_cost()' ng-model="token_info.metadivisions[metadivision_id]" ng-options="option for option in []|range:resources.player_tokens.data.available_tokens.metadivisions[metadivision_id]+1:0 track by option">          -->
+        <select ng-change='calc_total_cost()' ng-model="token_info.metadivisions[metadivision_id]" ng-options="option[0] for option in resources.player_tokens.data.available_tokens.metadivisions_remaining_token_list[metadivision_id]">          
+
           
         </select>
       </label>      
@@ -33,7 +36,9 @@
           {{resources.divisions.data[division_id].tournament_name}}
         </div>
 
-        <select ng-change='calc_total_cost()' ng-model="token_info.teams[division_id]" ng-options="option for option in []|range:resources.player_tokens.data.available_tokens.teams[division_id]+1 track by option">          
+        <!--<select ng-change='calc_total_cost()' ng-model="token_info.teams[division_id]" ng-options="option for option in []|range:resources.player_tokens.data.available_tokens.teams[division_id]+1 track by option">-->
+        <select ng-change='calc_total_cost()' ng-model="token_info.teams[division_id]" ng-options="option[0] for option in resources.player_tokens.data.available_tokens.teams_remaining_token_list[division_id]">          
+        
           
         </select>
       </label>

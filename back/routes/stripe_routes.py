@@ -102,14 +102,14 @@ def start_sale():
             metadivision_skus[metadivision.meta_division_id]=division.stripe_sku
     stripe_items=[]
     for division_id,num_tokens in added_token_count['divisions'].iteritems():        
-        if int(num_tokens) > 0:            
-            stripe_items.append({"quantity":int(num_tokens),"type":"sku","parent":division_skus[int(division_id)]})
+        if int(num_tokens[0]) > 0:            
+            stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":division_skus[int(division_id)]})
     for division_id,num_tokens in added_token_count['metadivisions'].iteritems():        
-        if int(num_tokens) > 0:            
-            stripe_items.append({"quantity":int(num_tokens),"type":"sku","parent":metadivision_skus[int(division_id)]})
+        if int(num_tokens[0]) > 0:            
+            stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":metadivision_skus[int(division_id)]})
     for division_id,num_tokens in added_token_count['teams'].iteritems():        
-        if int(num_tokens) > 0:            
-            stripe_items.append({"quantity":int(num_tokens),"type":"sku","parent":division_skus[int(division_id)]})    
+        if int(num_tokens[0]) > 0:            
+            stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":division_skus[int(division_id)]})    
     try:
         order = stripe.Order.create(
             currency="usd",

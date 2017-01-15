@@ -29,15 +29,24 @@ angular.module('app.player_token').controller(
                 token_promise.then(function(data){
                     $scope.resources = TimeoutResources.GetAllResources();                    
                     
-                    _.forEach($scope.resources.player_tokens.data.tokens.divisions, function(value, key) {
-                        $scope.token_info.divisions[key]=0;
-                    });
-                    _.forEach($scope.resources.player_tokens.data.tokens.teams, function(value, key) {
-                        $scope.token_info.teams[key]=0;                    
-                    });                
-                    _.forEach($scope.resources.player_tokens.data.tokens.metadivisions, function(value, key) {
+                    // _.forEach($scope.resources.player_tokens.data.tokens.divisions, function(value, key) {
+                    //     $scope.token_info.divisions[key]=0;
+                    // });
+                    // _.forEach($scope.resources.player_tokens.data.tokens.teams, function(value, key) {
+                    //     $scope.token_info.teams[key]=0;                    
+                    // });                
+                    // _.forEach($scope.resources.player_tokens.data.tokens.metadivisions, function(value, key) {
                         
-                        $scope.token_info.metadivisions[key]=0;
+                    //     $scope.token_info.metadivisions[key]=0;
+                    // });
+                    _.forEach($scope.resources.player_tokens.data.available_tokens.divisions_remaining_token_list, function(value, key) {
+                        $scope.token_info.divisions[key]=value[0];
+                    });
+                    _.forEach($scope.resources.player_tokens.data.available_tokens.teams_remaining_token_list, function(value, key) {
+                        $scope.token_info.teams[key]=value[0];
+                    });
+                    _.forEach($scope.resources.player_tokens.data.available_tokens.metadivisions_remaining_token_list, function(value, key) {
+                        $scope.token_info.metadivisions[key]=value[0];
                     });
                     
                     Modals.loaded();
@@ -47,31 +56,46 @@ angular.module('app.player_token').controller(
             });
             $scope.calc_total_cost = function(){
                 divisions_total=0;
-                
                 _.forEach($scope.token_info.divisions, function(value, key) {
-                        division_price = $scope.resources.divisions.data[key].local_price;
-                        divisions_total = divisions_total + ($scope.token_info.divisions[key]*parseInt(division_price));
-                        $scope.token_info.divisions_names[key]=$scope.resources.divisions.data[key].tournament_name;
-                        console.log("division total " + divisions_total + " for "+key);
+                    divisions_total = divisions_total + value[1];
+                    $scope.token_info.divisions_names[key]=$scope.resources.divisions.data[key].tournament_name;
                 });
                 _.forEach($scope.token_info.teams, function(value, key) {
-                    division_price = $scope.resources.divisions.data[key].local_price;
-                    divisions_total = divisions_total + ($scope.token_info.teams[key]*parseInt(division_price));
+                    //division_price = $scope.resources.divisions.data[key].local_price;
+                    divisions_total = divisions_total + value[1];//($scope.token_info.teams[key]*parseInt(division_price));
                     $scope.token_info.divisions_names[key]=$scope.resources.divisions.data[key].tournament_name;
-                    console.log("division total " + divisions_total + " for team "+key);
-                    
                 });                
-                _.forEach($scope.token_info.metadivisions, function(value, key) {
-                    console.log("division total " + divisions_total + " for meta "+key);
+                 _.forEach($scope.token_info.metadivisions, function(value, key) {
+                       divisions_total = divisions_total + value[1];//($scope.token_info.teams[key]*parseInt(division_price));
+                  
+                     $scope.token_info.metadivisions_names[key]=$scope.resources.divisions.data.metadivisions[key].meta_division_name;
+                 });
+                
+                
+                // _.forEach($scope.token_info.divisions, function(value, key) {
+                //         division_price = $scope.resources.divisions.data[key].local_price;
+                //         divisions_total = divisions_total + ($scope.token_info.divisions[key]*parseInt(division_price));
+                //         $scope.token_info.divisions_names[key]=$scope.resources.divisions.data[key].tournament_name;
+                //         console.log("division total " + divisions_total + " for "+key);
+                // });
+                // _.forEach($scope.token_info.teams, function(value, key) {
+                //     division_price = $scope.resources.divisions.data[key].local_price;
+                //     divisions_total = divisions_total + ($scope.token_info.teams[key]*parseInt(division_price));
+                //     $scope.token_info.divisions_names[key]=$scope.resources.divisions.data[key].tournament_name;
+                //     console.log("division total " + divisions_total + " for team "+key);
                     
-                    //FIXME : ugh
-                    for(x in $scope.resources.divisions.data){                        
-                        if ($scope.resources.divisions.data.metadivisions[key].divisions[x] != undefined){
-                            division_price = $scope.resources.divisions.data[x].local_price;        
-                        }
-                    }
-                    divisions_total = divisions_total + ($scope.token_info.metadivisions[key]*parseInt(division_price));
-                    $scope.token_info.metadivisions_names[key]=$scope.resources.divisions.data.metadivisions[key].meta_division_name                });
+                // });                
+                // _.forEach($scope.token_info.metadivisions, function(value, key) {
+                //     console.log("division total " + divisions_total + " for meta "+key);
+                    
+                //     //FIXME : ugh
+                //     for(x in $scope.resources.divisions.data){                        
+                //         if ($scope.resources.divisions.data.metadivisions[key].divisions[x] != undefined){
+                //             division_price = $scope.resources.divisions.data[x].local_price;        
+                //         }
+                //     }
+                //     divisions_total = divisions_total + ($scope.token_info.metadivisions[key]*parseInt(division_price));
+                //     $scope.token_info.metadivisions_names[key]=$scope.resources.divisions.data.metadivisions[key].meta_division_name                     //});
                 
                 
                 $scope.token_info.total_cost = divisions_total;

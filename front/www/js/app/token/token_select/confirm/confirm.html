@@ -11,7 +11,7 @@
                 <i class="icon padding"></i>{{token_info.divisions_names[division_id]}} : 
               </td>
               <td class='padding-left'>
-                {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+                {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
             </tr>
             <tr ng-repeat='(division_id,token_count) in token_info.teams'>
@@ -19,7 +19,7 @@
                 <i class="icon padding"></i>{{token_info.divisions_names[division_id]}} : 
               </td>
               <td class='padding-left'> 
-                {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+                {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
             </tr>
             <tr ng-repeat='(metadivision_id,token_count) in token_info.metadivisions'>
@@ -27,7 +27,7 @@
                 <i class="icon padding"></i>{{token_info.metadivisions_names[metadivision_id]}} : 
               </td>
               <td class='padding-left'>
-                {{token_count}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+                {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
             </tr>            
           </table>

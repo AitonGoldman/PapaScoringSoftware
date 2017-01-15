@@ -104,6 +104,19 @@ app.controller(
 );
 
 app.run(function($ionicPlatform,$rootScope) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+
+  //Change this to false to return accessory bar 
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
+    }
+    if(window.StatusBar) {
+      // org.apache.cordova.statusbar required
+      StatusBar.styleDefault();
+    }
+  });
     $rootScope.$on('cloud:push:notification', function(event, data) {
         var msg = data.message;
         alert(msg.title + ': ' + msg.text);

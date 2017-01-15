@@ -20,17 +20,17 @@ $testwidth: 971;
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
-/*
-$font-size-base:                  20px !default;
+
+//$font-size-base:                  28px !default;
+$font-size-base:                  14px !default;
+$item-font-size: $font-size-base;
 $bar-height:                      $font-size-base*3;
-//$bar-title-font-size:             $font-size-base*1.5;
 $bar-title-font-size:             $font-size-base*1.5;
-//$bar-title-font-size:             $font-size-base*4;
 $button-font-size:                $font-size-base;
 $button-height:                   $font-size-base*2;
 $button-icon-size:                 $font-size-base*2 !default;
 $button-bar-button-font-size:     $font-size-base*9;
-*/
+
 
 
 @import "www/lib/ionic/scss/ionic";
@@ -219,65 +219,61 @@ $button-bar-button-font-size:     $font-size-base*9;
 .platform-ios {
     input[type="text"],
     input[type="password"] {
-   padding-top: 10px;
+    padding-top: 10px;
   }
 }
 
-/* .item { */
-/*     font-size: $font-size-base; */
-/* } */
+ .input-label {
+     font-size: $font-size-base;
+ }
 
-/*  .input-label {  */
-/*      font-size: $font-size-base;  */
-/*  }  */
+.bar {
+    .button {
+        &.button-icon {
+            &:before {
+                //padding-top:$font-size-base/1.5;
+                padding-top:0;
+                //font-size:$font-size-base*4.5;
+                font-size:$font-size-base*3.5;
+            }
+        }
+    }
+}
 
-/* .bar { */
-/*     .button { */
-/*         &.button-icon { */
-/*             &:before { */
-/*                 //padding-top:$font-size-base/1.5; */
-/*                 padding-top:0; */
-/*                 //font-size:$font-size-base*4.5; */
-/*                 font-size:$font-size-base*3.5; */
-/*             } */
-/*         } */
-/*     } */
-/* } */
+ion-side-menu {
+    ion-header-bar.bar {
+        padding-bottom:$font-size-base*4;
+    }
+    ion-content {
+        .scroll {
+            padding-top:$font-size-base;
+        }
+    }
+}
 
-/* ion-side-menu { */
-/*     ion-header-bar.bar { */
-/*         padding-bottom:$font-size-base*4; */
-/*     } */
-/*     ion-content { */
-/*         .scroll { */
-/*             padding-top:$font-size-base; */
-/*         } */
-/*     } */
-/* } */
+.test-select {
+    select {
+    position:relative;
+    //margin-right:100px;
+    }
+}
+.test-select::after {
+    position:relative;
+    //margin-right:100px;
+}
 
-/* .test-select { */
-/*     select {         */
-/*     position:relative; */
-/*     //margin-right:100px;     */
-/*     } */
-/* } */
-/* .test-select::after { */
-/*     position:relative; */
-/*     //margin-right:100px;         */
-/* } */
+.platform-android {
 
-/* .platform-android { */
+  .bar {
 
-/*   .bar { */
-
-/*     .title { */
-/*       //CHANGED THIS */
-/*       //font-size: $font-size-base*2.5; */
-/*       font-size: $font-size-base; */
-/*       //font-size: 15px; */
-/*     } */
-/*   } */
-/* } */
+    .title {
+      //CHANGED THIS
+      //font-size: $font-size-base*2.5;
+      font-size: $font-size-base;
+      //font-size: 15px;
+    }
+  }
+}
 
 .ticket_purchase_summary_font { 
      font-size:$font-size-base; 
@@ -301,3 +297,8 @@ $button-bar-button-font-size:     $font-size-base*9;
 /*     padding-top: $font-size-base; */
 /*     padding-bottom: $font-size-base;     */
 /* } */
+
+/* .item { */
+/*     font-size: $font-size-base; */
+/* } */
+

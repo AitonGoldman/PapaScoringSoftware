@@ -62,18 +62,18 @@ def check_add_token_request_is_valid(tokens_data, tables):
             raise BadRequest('Tried to add a token for a single player in a team tournament')
         if division.meta_division_id is not None:
             raise BadRequest('Tried to add a division token to a metadivision')                    
-        num_tokens = tokens_data['divisions'][div_id]
+        num_tokens = tokens_data['divisions'][div_id][0]
         check_add_token_for_max_tokens(num_tokens,div_id=div_id,player_id=player_id)        
     for div_id in tokens_data['teams']:
         division=fetch_entity(tables.Division,div_id)
         if division.team_tournament is False:
             raise BadRequest('Tried to add a token for a team in a non-team tournament')
-        num_tokens = tokens_data['teams'][div_id]
+        num_tokens = tokens_data['teams'][div_id][0]
         if int(num_tokens) > 0:
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)        
     for metadiv_id in tokens_data['metadivisions']:
         meta_division=fetch_entity(tables.MetaDivision,metadiv_id)
-        num_tokens = tokens_data['metadivisions'][metadiv_id]        
+        num_tokens = tokens_data['metadivisions'][metadiv_id][0]        
         check_add_token_for_max_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id)                     
     
 def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None,team_id=None, paid_for=1, comped=False, player_id_for_team_audit_log=None):
@@ -124,6 +124,46 @@ def get_team_tokens_for_player(player_id):
             token_dict['teams'][token.division_id]=token_dict['teams'][token.division_id] + 1      
     return jsonify(token_dict)
 
+def get_available_ticket_list(max_count,increments=None):        
+    normal_cost = 5
+    discount_count = 3
+    discount_cost = 12
+    cur_count = 0
+    cur_value = 0
+    #max_count = 25
+    multiplier = 1    
+    #increments = [[2,5],
+    #               [4,10],
+    #               [6,15],
+    #               [9,20],
+    #               [10,25],
+    #               [12,30]]
+    
+    available_ticket_list = [[0,0]]
+    available_ticket_list_pruned = []    
+    if increments:
+        for idx,increment in enumerate(increments):
+            if increments[idx][0]>max_count:
+                break
+            available_ticket_list.append(increment)
+        return available_ticket_list
+    while(cur_count < max_count):
+        cur_count = cur_count+1
+        is_discount_count = cur_count%discount_count        
+        multiplier = cur_count/discount_count
+        if is_discount_count == 0 and cur_count != 1:                        
+            ticket_cost = multiplier*discount_cost
+        else:
+            ticket_cost = cur_count*normal_cost            
+        available_ticket_list.append([cur_count,ticket_cost])
+    ticket_list_len = len(available_ticket_list)
+    for idx,available_ticket in enumerate(available_ticket_list):
+        if idx > 0 and idx < ticket_list_len-1:
+            if available_ticket_list[idx][1] > available_ticket_list[idx+1][1]:
+                continue
+        available_ticket_list_pruned.append(available_ticket_list[idx])
+    return available_ticket_list_pruned
+    
 @admin_manage_blueprint.route('/token/player_id/<player_id>',methods=['GET'])
 def get_tokens_for_player(player_id):
     #FIXME : needs more protection?
@@ -133,7 +173,10 @@ def get_tokens_for_player(player_id):
     team_ids = tables.Team.query.filter(tables.Team.players.any(player_id=player.player_id)).all()
     tokens = tables.Token.query.filter_by(player_id=player.player_id, paid_for=True).all()
     token_dict = {'divisions':{},'metadivisions':{},'teams':{}}
-    remaining_tokens_dict={'divisions':{},'metadivisions':{},'teams':{}}
+    remaining_tokens_dict={'divisions':{},'metadivisions':{},'teams':{},
+                           'divisions_remaining_token_list':{},
+                           'teams_remaining_token_list':{},
+                           'metadivisions_remaining_token_list':{}}
     #FIXME : need only active divisions
     divisions = tables.Division.query.all()    
     metadivisions = tables.MetaDivision.query.all()
@@ -143,17 +186,23 @@ def get_tokens_for_player(player_id):
             if division.tournament.single_division or division.tournament.single_division is False and division.division_id == player.linked_division_id:
                 div_count = get_existing_token_count(player_id=player_id, div_id=division.division_id)                
                 token_dict['divisions'][division.division_id]=div_count
-                remaining_tokens_dict['divisions'][division.division_id] = max_tickets_allowed - div_count
+                remaining_tokens = max_tickets_allowed - div_count
+                remaining_tokens_dict['divisions'][division.division_id] = remaining_tokens                
+                remaining_tokens_dict['divisions_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens)
         if division.meta_division_id is not None:
             metadiv_count = get_existing_token_count(player_id=player_id,metadiv_id=division.meta_division_id)
             token_dict['metadivisions'][division.meta_division_id]= metadiv_count
-            remaining_tokens_dict['metadivisions'][division.meta_division_id] = max_tickets_allowed - metadiv_count
+            remaining_tokens = max_tickets_allowed - metadiv_count             
+            remaining_tokens_dict['metadivisions'][division.meta_division_id] = remaining_tokens
+            remaining_tokens_dict['metadivisions_remaining_token_list'][division.meta_division_id]=get_available_ticket_list(remaining_tokens)            
         if division.team_tournament is True:
             for team in team_ids:
                 team_count = get_existing_token_count(team_id=team.team_id,div_id=division.division_id)
+                remaining_tokens = max_tickets_allowed - team_count
                 token_dict['teams'][division.division_id]= team_count
-                remaining_tokens_dict['teams'][division.division_id] = max_tickets_allowed - team_count
-            
+                remaining_tokens_dict['teams'][division.division_id] = remaining_tokens
+                remaining_tokens_dict['teams_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens)
+                
     return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict,'player':player.to_dict_simple()}})
 
 @admin_manage_blueprint.route('/token/confirm_paid_for', methods=['PUT'])
@@ -200,17 +249,18 @@ def add_token(paid_for):
         team_id=None
     # FIXME : we rely on team_id being passed in - should check for it here
     for div_id in tokens_data['divisions']:
-        num_tokens = tokens_data['divisions'][div_id]
+        #num_tokens = tokens_data['divisions'][div_id]
+        num_tokens = tokens_data['divisions'][div_id][0]
         if num_tokens > 0:
             tokens = create_division_tokens(num_tokens,div_id=div_id,player_id=player_id, paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens
     for metadiv_id in tokens_data['metadivisions']:
-        num_tokens = tokens_data['metadivisions'][metadiv_id]
+        num_tokens = tokens_data['metadivisions'][metadiv_id][0]
         if num_tokens > 0:
             tokens = create_division_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id, paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens
     for div_id in tokens_data['teams']:
-        num_tokens = tokens_data['teams'][div_id]
+        num_tokens = tokens_data['teams'][div_id][0]
         if int(num_tokens) > 0:
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)
             tokens = create_division_tokens(num_tokens,div_id=div_id,team_id=team_id,paid_for=paid_for,comped=comped,player_id_for_team_audit_log=player_id)
@@ -248,11 +298,11 @@ def add_token(paid_for):
         audit_log.token_id=token['token_id']
         audit_log.deskworker_id=current_user.user_id
         if token['team_id'] is not None:            
-            audit_log.num_tokens_purchased_in_batch=int(tokens_data['teams'][str(token['division_id'])])
+            audit_log.num_tokens_purchased_in_batch=int(tokens_data['teams'][str(token['division_id'])][0])
         elif token['division_id'] is not None:
-            audit_log.num_tokens_purchased_in_batch=int(tokens_data['divisions'][str(token['division_id'])])
+            audit_log.num_tokens_purchased_in_batch=int(tokens_data['divisions'][str(token['division_id'])][0])
         elif token['metadivision_id'] is not None:
-            audit_log.num_tokens_purchased_in_batch=int(tokens_data['metadivisions'][str(token['metadivision_id'])])                        
+            audit_log.num_tokens_purchased_in_batch=int(tokens_data['metadivisions'][str(token['metadivision_id'])][0])                        
         #tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
         #audit_log.remaining_tokens = tokens_left_string        
         db.session.add(audit_log)

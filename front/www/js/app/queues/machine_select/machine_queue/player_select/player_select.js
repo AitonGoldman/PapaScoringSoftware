@@ -17,11 +17,13 @@ angular.module('app.queues.machine_select.machine_queue.player_select').controll
             if($scope.selected_players.length != 0){
                 console.log($scope.selected_players[0]);
                 //$state.go('.confirm',{player_id:$scope.selected_players[0].player_id,player_name:$scope.selected_players[0].first_name+" "+$scope.selected_players[0].last_name});
+                $state.go('.confirm',{player_id:$scope.selected_players[0].player_id,player_name:$scope.selected_players[0].first_name+" "+$scope.selected_players[0].last_name});
+                
             }
         };
         $scope.keyDown = function(event){
             if(event.keyCode == 9 || event.keyCode==13){
-                $state.go('.confirm',{player_id:$scope.selected_players[0].player_id,player_name:$scope.selected_players[0].first_name+" "+$scope.selected_players[0].last_name});
+                //$state.go('.confirm',{player_id:$scope.selected_players[0].player_id,player_name:$scope.selected_players[0].first_name+" "+$scope.selected_players[0].last_name});
             }
             //keyCode 9               
         };

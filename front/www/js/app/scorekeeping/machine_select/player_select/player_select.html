@@ -16,15 +16,22 @@
           <div ng-if='queues.length > 0' >{{queues[0].player.player_name}}</div>          
         </div>
       </div>
-      <div style='text-align:center' class='standard-big-font'>
+      <div style='text-align:center' class='item'>
         {{division_machine_name}}
       </div>
-      <button ng-if="queues.length > 0" class="button button-full button-positive item-icon-right ion-chevron-right" ui-sref=".process({process_step:{process:true}, player_info:queues[0].player,from_queue:1})">
+      <a ng-if="queues.length == 0" ng-click='test_submit()' class='item item-icon-right item-positive seperate_button'>
+        Select Player
+        <i class="icon ion-chevron-right"></i>          
+      </a>
+      
+      <a ng-if="queues.length > 0" class="seperate_button item item-positive item-icon-right" ui-sref=".process({process_step:{process:true}, player_info:queues[0].player,from_queue:1})">
         Start Player On Machine
-      </button>
-      <button ng-if="queues.length > 0" class="button button-full button-positive item-icon-right ion-chevron-right" ng-click="testChange()">
+        <i class="icon ion-chevron-right"></i>          
+      </a>
+      <a ng-if="queues.length > 0" class="item item-positive item-icon-right" ng-click="testChange()">
         Next Player In Queue
-      </button>
+        <i class="icon ion-chevron-right"></i>                 
+      </a>
     </div>
     
     <div class='player-info-avatar'>

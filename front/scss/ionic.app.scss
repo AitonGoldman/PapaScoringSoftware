@@ -279,10 +279,17 @@ $button-bar-button-font-size:     $font-size-base*9;
 /*   } */
 /* } */
 
- .ticket_purchase_summary_font { 
+.ticket_purchase_summary_font { 
      font-size:$font-size-base; 
- } 
+} 
 
+.seperate_button {
+ margin-top:15px;
+}
+
+.standard_big_font {
+   font-size:$font-size-base;                    
+}
 //
 //
 //

@@ -36,14 +36,14 @@ angular.module('app.scorekeeping.machine_select.team_select').controller(
             };
             $scope.keyDown = function(event){
                 if(event.keyCode == 9 || event.keyCode==13){                    
-                    $state.go('.process',{process_step:{process:true},team_info:$scope.selected_players[0].teams[0],from_queue:0});
+                    //$state.go('.process',{process_step:{process:true},team_info:$scope.selected_players[0].teams[0],from_queue:0});
                 }                
             };
             
             $scope.poop_2 = true;
             $scope.test_submit_new = function(){
                 if($scope.selected_players.length != 0){                    
-                    //$state.go('.process',{process_step:{process:true},team_info:$scope.selected_players[0].teams[0]});
+                    $state.go('.process',{process_step:{process:true},team_info:$scope.selected_players[0].teams[0]});
 
                 }
             };

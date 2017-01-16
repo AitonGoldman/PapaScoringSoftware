@@ -125,44 +125,31 @@ def get_team_tokens_for_player(player_id):
     return jsonify(token_dict)
 
 def get_available_ticket_list(max_count,increments=None):        
-    normal_cost = 5
-    discount_count = 3
-    discount_cost = 12
-    cur_count = 0
-    cur_value = 0
-    #max_count = 25
-    multiplier = 1    
-    #increments = [[2,5],
-    #               [4,10],
-    #               [6,15],
-    #               [9,20],
-    #               [10,25],
-    #               [12,30]]
-    
     available_ticket_list = [[0,0]]
-    available_ticket_list_pruned = []    
     if increments:
         for idx,increment in enumerate(increments):
             if increments[idx][0]>max_count:
                 break
             available_ticket_list.append(increment)
         return available_ticket_list
+    normal_cost = 5
+    discount_count = 3
+    discount_cost = 12
+    cur_count = 0
+    cur_value = 0
+    multiplier = 1    
+    
     while(cur_count < max_count):
         cur_count = cur_count+1
-        is_discount_count = cur_count%discount_count        
+        is_discount_count = True if cur_count%discount_count == 0 else False
         multiplier = cur_count/discount_count
-        if is_discount_count == 0 and cur_count != 1:                        
+        if is_discount_count and cur_count != 1:                        
             ticket_cost = multiplier*discount_cost
         else:
-            ticket_cost = cur_count*normal_cost            
+            ticket_cost = cur_value+normal_cost            
         available_ticket_list.append([cur_count,ticket_cost])
-    ticket_list_len = len(available_ticket_list)
-    for idx,available_ticket in enumerate(available_ticket_list):
-        if idx > 0 and idx < ticket_list_len-1:
-            if available_ticket_list[idx][1] > available_ticket_list[idx+1][1]:
-                continue
-        available_ticket_list_pruned.append(available_ticket_list[idx])
-    return available_ticket_list_pruned
+        cur_value = ticket_cost
+    return available_ticket_list
     
 @admin_manage_blueprint.route('/token/player_id/<player_id>',methods=['GET'])
 def get_tokens_for_player(player_id):

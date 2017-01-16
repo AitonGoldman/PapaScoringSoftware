@@ -85,11 +85,14 @@ def route_audit_log_missing_scores(player_id,audit_log_id,minutes):
 def route_audit_log_missing_tokens(player_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)                
-    audit_logs = tables.AuditLog.query.filter_by(player_id=player_id).all()
-    teams = tables.Player.query.filter_by(player_id=player_id).first().teams
+    teams = tables.Player.query.filter_by(player_id=player_id).first().teams    
     if len(teams)>0:
         team_id = teams[0].team_id
-        audit_logs = audit_logs + tables.AuditLog.query.filter_by(team_id=team_id,player_id=None).all()                
+        #audit_logs = audit_logs + tables.AuditLog.query.filter_by(team_id=team_id,player_id=None).all()
+        audit_logs = tables.AuditLog.query.filter(or_(tables.AuditLog.team_id==team_id,
+                                                      tables.AuditLog.player_id==int(player_id))).all()
+    else:
+        audit_logs = tables.AuditLog.query.filter_by(player_id=player_id).all()
     audit_log_list = []
     users = {user.user_id:user.to_dict_simple() for user in tables.User.query.all()}
     divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
@@ -134,15 +137,21 @@ def route_audit_log_missing_tokens(player_id):
     ##    while audit_log_index < len(super_short_audit_log_list):        
     ##        audit_log=super_short_audit_log_list[audit_log_index]
     for audit_log in audit_logs:
+        
+        if audit_log.token:
+            if audit_log.token.metadivision_id:
+                div_string = " for metadivision %s" % metadivisions[audit_log.token.metadivision_id]['meta_division_name']
+            else:                
+                div_string = " for division %s" % divisions[audit_log.token.division_id]['tournament_name']
+
         if audit_log.division_machine_id: 
             machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                    
         if audit_log.purchase_date is not None or audit_log.player_purchase_request_date is not None:            
-            if audit_log.token.metadivision_id:
-                div_string = " for metadivision %s" % metadivisions[audit_log.token.metadivision_id]['meta_division_name']
-            else:
-                div_string = " for division %s" % divisions[audit_log.token.division_id]['tournament_name']
+            # if audit_log.token.metadivision_id:
+            #     div_string = " for metadivision %s" % metadivisions[audit_log.token.metadivision_id]['meta_division_name']
+            # else:                
+            #     div_string = " for division %s" % divisions[audit_log.token.division_id]['tournament_name']
             if audit_log.purchase_date is not None:
-                #audit_log_string = "Purchased on %s - %s - sold by %s - number purchased : %s, remaining tokens : %s " % (audit_log.purchase_date,div_string, users[audit_log.deskworker_id]['username'],audit_log.num_tokens_purchased_in_batch, audit_log.remaining_tokens)
                 audit_log_string = "Purchased on %s - %s - sold by %s - number purchased : %s" % (audit_log.purchase_date,div_string, users[audit_log.deskworker_id]['username'],audit_log.num_tokens_purchased_in_batch)                
             else:
                 audit_log_string = "Player started a purchase on %s - %s - number purchased : %s" % (audit_log.player_purchase_request_date,div_string, audit_log.num_tokens_purchased_in_batch)                

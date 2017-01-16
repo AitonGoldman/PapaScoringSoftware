@@ -1,14 +1,11 @@
-<ion-view view-title="">
+<ion-view view-title="Add Machine">
   <ion-content>      
-    <center style='padding:100px'>
-      <div class='item-input-inset'>
+    <center>
+      <div class='item-input-inset item'>
         <label class="item-input-wrapper">
           <i style='font-size:48px' class="icon ion-ios-search placeholder-icon"></i>
           <input id='add_division_machine_search_input' style='height:58px;font-size:48px' type="search" placeholder="Search" ng-change='update_machine_list()' ng-model='division_machine.division_machine_name'>
         </label>
-        <button class="button button-clear">
-          Cancel
-        </button>
       </div>
       <div class='list skinny-list'>
         <a ui-sref='^.({player_id:player_id,new_division_machine_id:match.division_machine_id,new_division_machine_name:match.division_machine_name})' ng-repeat='match in matches' class='item'>

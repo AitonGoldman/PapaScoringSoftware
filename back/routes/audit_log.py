@@ -98,6 +98,7 @@ def route_audit_log_missing_tokens(player_id):
         audit_logs = tables.AuditLog.query.filter_by(player_id=player_id).all()
     audit_log_list = []
     users = {user.user_id:user.to_dict_simple() for user in tables.User.query.all()}
+    players = {player.player_id:player for player in tables.Player.query.all()}
     divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
     metadivisions = {meta_division.meta_division_id:meta_division.to_dict_simple() for meta_division in tables.MetaDivision.query.all()}
     division_machines = {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in tables.DivisionMachine.query.all()}
@@ -111,20 +112,20 @@ def route_audit_log_missing_tokens(player_id):
             username = users[audit_log.user_id]['username']
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': [audit_log.action_date,audit_log.action,"",audit_log.description]
+                'contents': [audit_log.action_date,audit_log.action,username,audit_log.description]
             })
         if audit_log.action == "Player Ticket Purchase Completed":
-            username = users[audit_log.user_id]['username']
+            playername = players[audit_log.player_id].get_full_name()            
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': [audit_log.action_date,audit_log.action,"",audit_log.description]
+                'contents': [audit_log.action_date,audit_log.action,playername,audit_log.description]
             })
 
         if audit_log.action == "Player Ticket Purchase Started":
-            username = users[audit_log.user_id]['username']
+            playername = players[audit_log.player_id].get_full_name()
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': [audit_log.action_date,audit_log.action,username,audit_log.description]
+                'contents': [audit_log.action_date,audit_log.action,playername,audit_log.description]
             })                        
         if audit_log.action == "Ticket Summary":                        
             audit_log_list.append({

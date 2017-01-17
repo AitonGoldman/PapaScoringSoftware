@@ -4,6 +4,7 @@ from enum import Enum
 import stripe
 import os
 import random
+import datetime
 
 class RolesEnum(Enum):
     admin = 1
@@ -96,7 +97,9 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None):
         new_tournament.divisions.append(new_division)
         db.session.commit()        
     new_metadivision = create_meta_division(app,{
-        'meta_division_name':'Classics'
+        'meta_division_name':'Classics',
+        'use_stripe':True,
+        'stripe_sku':stripe_skus['Classics Meta']
     })
     new_team_tournament_data={'tournament_name':'Split Flipper',
                                                          'single_division':True,
@@ -199,9 +202,23 @@ def create_meta_division(app,meta_division_data):
     if 'divisions' in meta_division_data:
         for division in meta_division_data['divisions']:
             division_table = fetch_entity(tables.Division,int(division))
-            new_meta_division.divisions.append(division_table)        
+            new_meta_division.divisions.append(division_table)
+    if 'use_stripe' in meta_division_data and meta_division_data['use_stripe']:
+        new_meta_division.use_stripe = True
+        if get_valid_sku(meta_division_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
+            raise BadRequest('invalid SKU specified')
+        new_meta_division.stripe_sku=meta_division_data['stripe_sku']
+    else:
+        new_meta_division.use_stripe = False
+    if 'local_price' in meta_division_data and meta_division_data['use_stripe'] == False: 
+        new_meta_division.local_price=meta_division_data['local_price']
+            
     tables.db_handle.session.add(new_meta_division)
     tables.db_handle.session.commit()
+    if new_meta_division.use_stripe:
+        set_stripe_api_key(app.td_config['STRIPE_API_KEY'])
+        fetch_stripe_price(app,new_meta_division)
+    
     return new_meta_division
 
 def create_division(app,division_data):
@@ -255,7 +272,56 @@ def create_tournament(app,tournament_data):
         new_tournament.single_division=False
     db.session.commit()
     return new_tournament
+
+def create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id):
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+    ticket_purchase = tables.TicketPurchase()
+    ticket_purchase.player_id=player_id
+    ticket_purchase.division_id=division_id
+    ticket_purchase.meta_division_id=metadivision_id
+    ticket_purchase.user_id=user_id
+    ticket_purchase.purchase_date=datetime.datetime.now()
+    return ticket_purchase
     
+def create_ticket_purchase(app,ticket_count,player_id,user_id,division_id=None,metadivision_id=None):    
+    if ticket_count == 0:
+        return
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+    if division_id:
+        division = tables.Division.query.filter_by(division_id=division_id).first()
+    if metadivision_id:
+        division = tables.MetaDivision.query.filter_by(meta_division_id=metadivision_id).first()
+        
+    discount_for = division.discount_ticket_count
+    discount_price = division.discount_ticket_price
+    if discount_for is None or discount_price is None:
+        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
+        ticket_purchase.amount=ticket_count
+        ticket_purchase.description="1"
+        db.session.add(ticket_purchase)
+        db.session.commit()
+        return
+    if ticket_count >= discount_for:
+        discount_count = ticket_count/discount_for
+        normal_count = ticket_count%discount_for
+    else:
+        discount_count = 0
+        normal_count = ticket_count
+    if discount_count > 0:
+        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
+        ticket_purchase.amount=discount_count
+        ticket_purchase.description="%s"%discount_for
+        db.session.add(ticket_purchase)
+        db.session.commit()
+    if normal_count > 0:
+        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
+        ticket_purchase.amount=normal_count
+        ticket_purchase.description="1"
+        db.session.add(ticket_purchase)
+        db.session.commit()
+        
 def create_roles(app,custom_roles=[]):
     roles = []
     new_roles = []

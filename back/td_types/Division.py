@@ -32,6 +32,9 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         finals_num_players_per_group = db_handle.Column(db_handle.Integer)
         finals_num_games_per_match = db_handle.Column(db_handle.Integer)
         queuing = db_handle.Column(db_handle.Boolean,default=False)
+        discount_ticket_count = db_handle.Column(db_handle.Integer)
+        discount_ticket_price = db_handle.Column(db_handle.Integer)
+        
         meta_division_id = db_handle.Column(db_handle.Integer,
                                          db_handle.ForeignKey(
                                              'meta_division.meta_division_id'))

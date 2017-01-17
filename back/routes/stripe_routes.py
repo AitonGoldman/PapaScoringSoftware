@@ -99,8 +99,9 @@ def start_sale():
         division_skus[division.division_id]=division.stripe_sku
     #FIXME : need to associate a cost with metadiv directly
     for metadivision in tables.MetaDivision.query.all():
-        for division in metadivision.divisions:
-            metadivision_skus[metadivision.meta_division_id]=division.stripe_sku
+    #    for division in metadivision.divisions:
+    #        metadivision_skus[metadivision.meta_division_id]=division.stripe_sku
+        metadivision_skus[metadivision.meta_division_id]=metadivision.stripe_sku
     stripe_items=[]
     for division_id,num_tokens in added_token_count['divisions'].iteritems():        
         if int(num_tokens[0]) > 0:            
@@ -111,9 +112,9 @@ def start_sale():
             stripe_items.append({"description":"suck it", "amount":discount,"currency":"usd","quantity":int(num_tokens[0]),"type":"discount"})
             
             
-    for division_id,num_tokens in added_token_count['metadivisions'].iteritems():        
+    for metadivision_id,num_tokens in added_token_count['metadivisions'].iteritems():        
         if int(num_tokens[0]) > 0:            
-            stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":metadivision_skus[int(division_id)]})
+            stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":metadivision_skus[int(metadivision_id)]})
     for division_id,num_tokens in added_token_count['teams'].iteritems():        
         if int(num_tokens[0]) > 0:            
             stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":division_skus[int(division_id)]})    

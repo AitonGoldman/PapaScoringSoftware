@@ -22,6 +22,7 @@ def generate_audit_log_class(db_handle):
         user_id = db_handle.Column('deskworker_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
         action_date = db_handle.Column(db_handle.DateTime)
         description = db_handle.Column(db_handle.String(255))
+        amount = db_handle.Column(db_handle.Integer)
         action=db_handle.Column(db_handle.String(255))
         division_machine = db_handle.relationship(
             'DivisionMachine',

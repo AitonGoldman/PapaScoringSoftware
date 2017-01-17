@@ -10,6 +10,7 @@ import os
 from flask_restless.helpers import to_dict
 import datetime
 from routes.audit_log_utils import create_audit_log
+from orm_creation import create_ticket_purchase
 
 def get_existing_token_count(player_id=None,team_id=None,div_id=None,metadiv_id=None):
     db = db_util.app_db_handle(current_app)
@@ -125,7 +126,7 @@ def get_team_tokens_for_player(player_id):
             token_dict['teams'][token.division_id]=token_dict['teams'][token.division_id] + 1      
     return jsonify(token_dict)
 
-def get_available_ticket_list(max_count,increments=None):        
+def get_available_ticket_list(max_count,division,increments=None):        
     available_ticket_list = [[0,0]]
     if increments:
         for idx,increment in enumerate(increments):
@@ -133,16 +134,23 @@ def get_available_ticket_list(max_count,increments=None):
                 break
             available_ticket_list.append(increment)
         return available_ticket_list
-    normal_cost = 5
-    discount_count = 3
-    discount_cost = 12
+    
+    #normal_cost = 5
+    normal_cost = division.local_price    
+    if division.discount_ticket_count:
+        #discount_count = 3
+        discount_count = division.discount_ticket_count
+        #discount_cost = 12
+        discount_cost = division.discount_ticket_price
+    else:
+        discount_count = 1
+        discount_cost = 0
     cur_count = 0
-    cur_value = 0
-    multiplier = 1    
+    cur_value = 0    
     
     while(cur_count < max_count):
         cur_count = cur_count+1
-        is_discount_count = True if cur_count%discount_count == 0 else False
+        is_discount_count = True if cur_count%discount_count == 0 and discount_count != 1 else False
         multiplier = cur_count/discount_count
         if is_discount_count and cur_count != 1:                        
             ticket_cost = multiplier*discount_cost
@@ -176,20 +184,21 @@ def get_tokens_for_player(player_id):
                 token_dict['divisions'][division.division_id]=div_count
                 remaining_tokens = max_tickets_allowed - div_count
                 remaining_tokens_dict['divisions'][division.division_id] = remaining_tokens                
-                remaining_tokens_dict['divisions_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens)
+                remaining_tokens_dict['divisions_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division)
         if division.meta_division_id is not None:
+            metadivision = tables.MetaDivision.query.filter_by(meta_division_id=division.meta_division_id).first()
             metadiv_count = get_existing_token_count(player_id=player_id,metadiv_id=division.meta_division_id)
             token_dict['metadivisions'][division.meta_division_id]= metadiv_count
             remaining_tokens = max_tickets_allowed - metadiv_count             
             remaining_tokens_dict['metadivisions'][division.meta_division_id] = remaining_tokens
-            remaining_tokens_dict['metadivisions_remaining_token_list'][division.meta_division_id]=get_available_ticket_list(remaining_tokens)            
+            remaining_tokens_dict['metadivisions_remaining_token_list'][division.meta_division_id]=get_available_ticket_list(remaining_tokens,metadivision)            
         if division.team_tournament is True:
             for team in team_ids:
                 team_count = get_existing_token_count(team_id=team.team_id,div_id=division.division_id)
                 remaining_tokens = max_tickets_allowed - team_count
                 token_dict['teams'][division.division_id]= team_count
                 remaining_tokens_dict['teams'][division.division_id] = remaining_tokens
-                remaining_tokens_dict['teams_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens)
+                remaining_tokens_dict['teams_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division)
                 
     return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict,'player':player.to_dict_simple()}})
 
@@ -266,7 +275,9 @@ def add_token(paid_for):
     if paid_for == 1:            
         action="Ticket Purchase"
     if paid_for == 0:
-        action="Player Ticket Purchase Started"                        
+        action="Player Ticket Purchase Started"
+    if comped:
+        division_ticket_summary = division_ticket_summary + " (COMPED)"
     create_audit_log(action,datetime.datetime.now(),
                      division_ticket_summary,user_id=current_user.user_id,
                      player_id=int(player_id),team_id=int(team_id))    
@@ -279,12 +290,38 @@ def add_token(paid_for):
                          player_id=player_id,team_id=team_id)
     total_divisions_tokens_summary = {}
     total_metadivisions_tokens_summary = {}
+    # for each div/metadiv
+    #   calculate num of single
+    #   calculate num of discount 
+    #   create audit_logs for both
+    
     for div_id in tokens_data['divisions']:
         total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token['division_id'])==str(div_id)])
+        if paid_for == 1 and comped is False:
+            create_ticket_purchase(current_app,
+                                   total_divisions_tokens_summary[div_id],
+                                   player_id,
+                                   current_user.user_id,
+                                   division_id=div_id)
     for div_id in tokens_data['teams']:
         total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token['division_id'])==str(div_id)])
+        if paid_for == 1 and comped is False:
+            create_ticket_purchase(current_app,
+                                   total_divisions_tokens_summary[div_id],
+                                   player_id,
+                                   current_user.user_id,
+                                   division_id=div_id)
+
+        
     for metadiv_id in tokens_data['metadivisions']:
         total_metadivisions_tokens_summary[metadiv_id] = len([token for token in total_tokens if str(token['metadivision_id'])==str(metadiv_id)])
+        if paid_for == 1 and comped is False:
+            create_ticket_purchase(current_app,
+                                   total_metadivisions_tokens_summary[metadiv_id],
+                                   player_id,
+                                   current_user.user_id,
+                                   metadivision_id=metadiv_id)
+
          
     return jsonify({'data':{'divisions':total_divisions_tokens_summary,
                             'metadivisions':total_metadivisions_tokens_summary,                            

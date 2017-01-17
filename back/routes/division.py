@@ -244,6 +244,10 @@ def route_edit_division(division_id):
         division.ifpa_range_end=division_data['ifpa_range_end']
     if 'ppo_a_ifpa_range_end' in division_data:
         division.ppo_a_ifpa_range_end=division_data['ppo_a_ifpa_range_end']
+    if 'discount_ticket_count' in division_data:
+        division.discount_ticket_count=division_data['discount_ticket_count']
+    if 'discount_ticket_price' in division_data:
+        division.discount_ticket_price=division_data['discount_ticket_price']
     
     db.session.commit()
     return jsonify({'data':division.to_dict_simple()})

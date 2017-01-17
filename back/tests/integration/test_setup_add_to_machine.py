@@ -21,7 +21,8 @@ class SetupAddToMachineTD(td_integration_test_base.TdIntegrationSetupTestBase):
             'Split Flipper':'sku_8cVf2tetzJ4f8D',
             'Classics 1':'sku_8beHMnaBSdH4NA',
             'Classics 2':'sku_9jugzXV5S8oafx',
-            'Classics 3':'sku_9juhywxXYAFfW7'
+            'Classics 3':'sku_9juhywxXYAFfW7',
+            'Classics Meta':'sku_9wtQxO4yXCGV9w'
         }
         orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus)
         orm_creation.init_papa_tournaments_division_machines(self.flask_app)        

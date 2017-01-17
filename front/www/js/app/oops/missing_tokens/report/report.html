@@ -3,9 +3,16 @@
     <center>
       <div class='first-element'>
       </div>
-      <div style='font-size:14px' ng-repeat="audit_log_entry in resources.audit_log_missing_tokens.data">
-        {{audit_log_entry.contents}}
-      </div>
+      <table class='table'>
+        <th>Date</th>        <th>Action</th>        <th>Responsible</th>        <th>Description</th>
+       
+        <tr ng-class='{grey: audit_log_entry.contents[1]=="Ticket Summary"}' ng-repeat="audit_log_entry in resources.audit_log_missing_tokens.data">
+
+          <td class='padding-right' ng-repeat='audit_log_field in audit_log_entry.contents'>
+            <u>{{audit_log_field}}</u>
+          </td>          
+        </tr>
+      </table>
     </center>
   </ion-content>
 </ion-view>

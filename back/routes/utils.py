@@ -7,6 +7,7 @@ import stripe
 from flask_restless.helpers import to_dict
 import requests
 import json
+from audit_log_utils import create_audit_log
 
 def check_player_is_on_device(player_id):
     db = db_util.app_db_handle(current_app)
@@ -165,26 +166,26 @@ def set_token_start_time(app,player,division_machine,team_id=None):
             
     token_to_set.game_started_date=datetime.datetime.now()
     token_to_set.division_machine_id = division_machine.division_machine_id
-    db.session.commit()    
-    audit_log = tables.AuditLog()
-    if player:
-        audit_log.player_id=player.player_id
-    if team_id:
-        audit_log.team_id=team_id
-    audit_log.token_id=token_to_set.token_id
-    audit_log.division_machine_id=division_machine.division_machine_id
-    audit_log.scorekeeper_id=current_user.user_id
-    audit_log.game_started_date=datetime.datetime.now()
-    if player:
-        tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
-    else:
-        tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
-        
-    audit_log.remaining_tokens = tokens_left_string            
-    db.session.add(audit_log)
     db.session.commit()
+    if player:
+        player_id=player.player_id
+    else:
+        player_id=None        
+    
+    create_audit_log("Game Started",datetime.datetime.now(),
+                     "",user_id=current_user.user_id,
+                     player_id=player_id,team_id=team_id,
+                     division_machine_id=division_machine.division_machine_id,
+                     token_id=token_to_set.token_id)        
+    #if player:
+    #    tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
+    #else:
+    #    tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
 
-    pass
+    #create_audit_log("Ticket Summary",datetime.datetime.now(),
+    #                 tokens_left_string,user_id=current_user.user_id,
+    #                 player_id=player_id,team_id=team_id)
+        
 
 def remove_player_from_queue(app,player=None,division_machine=None):
     db = db_util.app_db_handle(app)
@@ -259,9 +260,8 @@ def calc_audit_log_remaining_tokens(player_id,team_id=None):
                 division_tokens_left[token.division_id]=1
             else:
                 division_tokens_left[token.division_id]=division_tokens_left[token.division_id]+1
-    tokens_left_string = ""
-    for division_id,division_token_count in division_tokens_left.iteritems():
-        tokens_left_string=tokens_left_string+" %s : %s | " % (divisions[division_id]['tournament_name'],division_token_count)
-    for metadivision_id,metadivision_token_count in metadivision_tokens_left.iteritems():
-        tokens_left_string=tokens_left_string+" %s : %s | " % (metadivisions[metadivision_id]['meta_division_name'],metadivision_token_count)
+    tokens_left_string = ", ".join(["%s : %s" % (divisions[division_id]['tournament_name'],division_token_count) for division_id,division_token_count in division_tokens_left.iteritems()] +     ["%s : %s" % (metadivisions[metadivision_id]['meta_division_name'],metadivision_token_count) for metadivision_id,metadivision_token_count in metadivision_tokens_left.iteritems()])
+    if tokens_left_string == "":
+        tokens_left_string="No Tickets Left"
+
     return tokens_left_string

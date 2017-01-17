@@ -8,7 +8,7 @@ from flask_login import login_required,current_user
 from routes.utils import fetch_entity,calc_audit_log_remaining_tokens
 import stripe
 import datetime
-
+from routes.audit_log_utils import create_audit_log
 
 @admin_manage_blueprint.route('/stripe/sku/<sku>', methods=['GET'])
 def get_valid_sku(sku):
@@ -94,6 +94,7 @@ def start_sale():
     stripe.api_key = current_app.td_config['STRIPE_API_KEY']
     division_skus={}
     metadivision_skus={}
+    
     for division in tables.Division.query.all():        
         division_skus[division.division_id]=division.stripe_sku
     #FIXME : need to associate a cost with metadiv directly
@@ -104,6 +105,12 @@ def start_sale():
     for division_id,num_tokens in added_token_count['divisions'].iteritems():        
         if int(num_tokens[0]) > 0:            
             stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":division_skus[int(division_id)]})
+            discounted_price = int(num_tokens[1])
+            stripe_price = tables.Division.query.filter_by(division_id=division_id).first().local_price
+            discount = discounted_price - (stripe_price*num_tokens[0])
+            stripe_items.append({"description":"suck it", "amount":discount,"currency":"usd","quantity":int(num_tokens[0]),"type":"discount"})
+            
+            
     for division_id,num_tokens in added_token_count['metadivisions'].iteritems():        
         if int(num_tokens[0]) > 0:            
             stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":metadivision_skus[int(division_id)]})
@@ -134,24 +141,18 @@ def start_sale():
             token.paid_for=True
             db.session.commit()
 
-        audit_log = tables.AuditLog()
-        audit_log.player_purchase_complete_date = datetime.datetime.now()            
-        audit_log.description = stripe_purchase_summary_string
-        audit_log.player_id = current_user.player.player_id
-        db.session.add(audit_log)
-        db.session.commit()
+        create_audit_log("Player Ticket Purchase Completed",datetime.datetime.now(),
+                         stripe_purchase_summary_string,user_id=current_user.user_id,
+                         player_id=current_user.player.player_id)    
+        
         if len(current_user.player.teams) > 0:
             team_id = current_user.player.teams[0].team_id
         else:
             team_id = None
         tokens_left_string = calc_audit_log_remaining_tokens(current_user.player.player_id,team_id)        
-        audit_log = tables.AuditLog()
-        audit_log.action="purchase_summary"
-        audit_log.description=tokens_left_string
-        audit_log.player_id=current_user.player.player_id
-        db.session.add(audit_log)
-        db.session.commit()
-        
+        create_audit_log("Ticket Summary",datetime.datetime.now(),
+                         tokens_left_string,
+                         player_id=current_user.player.player_id)       
         return jsonify({"data":"success"})
     except stripe.error.CardError as e:
         # The card has been declined        

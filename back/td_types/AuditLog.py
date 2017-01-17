@@ -19,21 +19,10 @@ def generate_audit_log_class(db_handle):
         division_machine_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'division_machine.division_machine_id'
         ))        
-        deskworker_id = db_handle.Column('deskworker_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
-        scorekeeper_id = db_handle.Column('scorekeeper_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
-        purchase_date = db_handle.Column(db_handle.DateTime)
-        player_purchase_request_date = db_handle.Column(db_handle.DateTime)        
-        player_purchase_complete_date = db_handle.Column(db_handle.DateTime)
-
-        game_started_date = db_handle.Column(db_handle.DateTime)
-        used_date = db_handle.Column(db_handle.DateTime)
-        voided_date = db_handle.Column(db_handle.DateTime)        
-        voided = db_handle.Column(db_handle.Boolean,default=False)
-        used = db_handle.Column(db_handle.Boolean,default=False)
-        remaining_tokens = db_handle.Column(db_handle.String(255))
+        user_id = db_handle.Column('deskworker_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
+        action_date = db_handle.Column(db_handle.DateTime)
         description = db_handle.Column(db_handle.String(255))
         action=db_handle.Column(db_handle.String(255))
-        num_tokens_purchased_in_batch=db_handle.Column(db_handle.Integer)
         division_machine = db_handle.relationship(
             'DivisionMachine',
             foreign_keys=[division_machine_id]

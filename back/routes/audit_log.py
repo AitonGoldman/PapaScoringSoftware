@@ -9,6 +9,10 @@ from routes.utils import fetch_entity,check_player_team_can_start_game,set_token
 from orm_creation import create_entry
 import datetime
 from sqlalchemy import and_,or_
+import locale
+from sqlalchemy import desc
+
+locale.setlocale(locale.LC_ALL, 'en_US')
 
 @admin_manage_blueprint.route('/admin/audit_log/where_all_my_scores_at/player_id/<player_id>/audit_log_id/<audit_log_id>/time_delta/<minutes>',methods=['GET'])
 #@login_required
@@ -88,9 +92,8 @@ def route_audit_log_missing_tokens(player_id):
     teams = tables.Player.query.filter_by(player_id=player_id).first().teams    
     if len(teams)>0:
         team_id = teams[0].team_id
-        #audit_logs = audit_logs + tables.AuditLog.query.filter_by(team_id=team_id,player_id=None).all()
         audit_logs = tables.AuditLog.query.filter(or_(tables.AuditLog.team_id==team_id,
-                                                      tables.AuditLog.player_id==int(player_id))).all()
+                                                      tables.AuditLog.player_id==int(player_id))).order_by(desc(tables.AuditLog.action_date)).all()
     else:
         audit_logs = tables.AuditLog.query.filter_by(player_id=player_id).all()
     audit_log_list = []
@@ -101,95 +104,64 @@ def route_audit_log_missing_tokens(player_id):
     audit_log_index = 0
     short_audit_log_list=[]
     prev_type_of_purchase=None
-    #while audit_log_index < len(audit_logs):
-    #    short_audit_log_list.append(audit_logs[audit_log_index])                    
-    #    audit_log_index=audit_log_index+1
-    audit_log_index = 0
-    super_short_audit_log_list=[]
-    #    while audit_log_index < len(audit_logs):                
-    #        if(audit_log_index == len(audit_logs)-1):                        
-    #            super_short_audit_log_list.append(audit_logs[audit_log_index])
-    #            audit_log_index=audit_log_index+1
-    #            continue
-    #        if audit_logs[audit_log_index].purchase_date is not None:            
-    #            next_al_purchase_d = audit_logs[audit_log_index+1].purchase_date
-    #            this_al_div_id = audit_logs[audit_log_index].token.division_id
-    #            next_al_div_id = audit_logs[audit_log_index+1].token.division_id            
-    #            this_al_mdiv_id = audit_logs[audit_log_index].token.metadivision_id
-    #            next_al_mdiv_id = audit_logs[audit_log_index+1].token.metadivision_id            
-    #            
-    #            if (this_al_div_id and next_al_div_id != this_al_div_id) or (next_al_purchase_d is None):                
-    #                super_short_audit_log_list.append(audit_logs[audit_log_index])
-    #                audit_log_index=audit_log_index+1                
-    #                continue
-    #            if (this_al_mdiv_id and next_al_mdiv_id != this_al_mdiv_id) or (next_al_purchase_d is None):                
-    #                #if audit_logs[audit_log_index].token.metadivision_id and audit_logs[audit_log_index+1].token.metadivision_id is None:
-    #                super_short_audit_log_list.append(audit_logs[audit_log_index])
-    #                audit_log_index=audit_log_index+1
-    #                continue
-    #            audit_log_index=audit_log_index+1
-    #        else:
-    #            print audit_logs[audit_log_index].player_purchase_complete_date
-    #            super_short_audit_log_list.append(audit_logs[audit_log_index])            
-    #            audit_log_index=audit_log_index+1
-    #
-    #    audit_log_index = 0    
-    ##    while audit_log_index < len(super_short_audit_log_list):        
-    ##        audit_log=super_short_audit_log_list[audit_log_index]
-    for audit_log in audit_logs:
-        
-        if audit_log.token:
-            if audit_log.token.metadivision_id:
-                div_string = " for metadivision %s" % metadivisions[audit_log.token.metadivision_id]['meta_division_name']
-            else:                
-                div_string = " for division %s" % divisions[audit_log.token.division_id]['tournament_name']
+    audit_log_index = 0    
+    for audit_log in audit_logs:        
+        # on purchase (player)                                
+        if audit_log.action == "Ticket Purchase":
+            username = users[audit_log.user_id]['username']
+            audit_log_list.append({
+                'audit_log_id':audit_log.audit_log_id,
+                'contents': [audit_log.action_date,audit_log.action,"",audit_log.description]
+            })
+        if audit_log.action == "Player Ticket Purchase Completed":
+            username = users[audit_log.user_id]['username']
+            audit_log_list.append({
+                'audit_log_id':audit_log.audit_log_id,
+                'contents': [audit_log.action_date,audit_log.action,"",audit_log.description]
+            })
 
-        if audit_log.division_machine_id: 
-            machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                    
-        if audit_log.purchase_date is not None or audit_log.player_purchase_request_date is not None:            
-            # if audit_log.token.metadivision_id:
-            #     div_string = " for metadivision %s" % metadivisions[audit_log.token.metadivision_id]['meta_division_name']
-            # else:                
-            #     div_string = " for division %s" % divisions[audit_log.token.division_id]['tournament_name']
-            if audit_log.purchase_date is not None:
-                audit_log_string = "Purchased on %s - %s - sold by %s - number purchased : %s" % (audit_log.purchase_date,div_string, users[audit_log.deskworker_id]['username'],audit_log.num_tokens_purchased_in_batch)                
+        if audit_log.action == "Player Ticket Purchase Started":
+            username = users[audit_log.user_id]['username']
+            audit_log_list.append({
+                'audit_log_id':audit_log.audit_log_id,
+                'contents': [audit_log.action_date,audit_log.action,username,audit_log.description]
+            })                        
+        if audit_log.action == "Ticket Summary":                        
+            audit_log_list.append({
+                'audit_log_id':audit_log.audit_log_id,
+                'contents': [audit_log.action_date,audit_log.action," ",audit_log.description]
+            })
+        if audit_log.action == "Game Started":            
+            username = users[audit_log.user_id]['username']            
+            machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                                
+            audit_log_list.append({
+                'audit_log_id':audit_log.audit_log_id,
+                'contents': [audit_log.action_date,audit_log.action,username,machine_name]
+            })
+        if audit_log.action == "Score Added":            
+            username = users[audit_log.user_id]['username']            
+            machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                                
+            if audit_log.entry and len(audit_log.entry.scores) > 0:
+                score = locale.format("%d",audit_log.entry.scores[0].score,grouping=True)
             else:
-                audit_log_string = "Player started a purchase on %s - %s - number purchased : %s" % (audit_log.player_purchase_request_date,div_string, audit_log.num_tokens_purchased_in_batch)                
+                score = "SOMEONE DONE FUCKED UP"
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': audit_log_string
+                'contents': [audit_log.action_date,audit_log.action,username,score]
             })
-        if audit_log.action == "purchase_summary":
-            audit_log_string = "Summary of player tickets %s" % (audit_log.description)                
+        if audit_log.action == "Score Voided":            
+            username = users[audit_log.user_id]['username']            
+            machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                                
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': audit_log_string
+                'contents': [audit_log.action_date,audit_log.action,username,machine_name]
             })
-            
-        if audit_log.player_purchase_complete_date is not None:            
-            audit_log_list.append({
-                'audit_log_id':audit_log.audit_log_id,                
-                'contents':"Player finished a purchase on %s - %s " % (audit_log.player_purchase_complete_date,audit_log.description)
-            })
-            
-        if audit_log.game_started_date is not None:            
-            audit_log_list.append({
-                'audit_log_id':audit_log.audit_log_id,                
-                'contents':"Game started on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.game_started_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
-            })
-            
-        if audit_log.voided_date is not None:            
+        if audit_log.action == "Jagoff Declared":            
+            username = users[audit_log.user_id]['username']            
+            machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                                
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents':"Game voided on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.voided_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
+                'contents': [audit_log.action_date,audit_log.action,username,machine_name]
             })
-        if audit_log.used_date is not None:            
-            if audit_log.voided is False:
-                audit_log_list.append({
-                    'audit_log_id':audit_log.audit_log_id,
-                    'contents':"Game score (%s) submitted on %s - %s %s - by %s - remaining tokens : %s " % (audit_log.entry.scores[0].score,audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],audit_log.remaining_tokens)
-                })
-                
-        audit_log_index=audit_log_index+1
         
     return jsonify({'data':audit_log_list})

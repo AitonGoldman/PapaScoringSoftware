@@ -57,6 +57,11 @@ def generate_division_class(db_handle,relationship=None,fk=None):
                 return tournament.tournament_name
             return tournament.tournament_name+", "+self.division_name
 
+        def get_self_tournament_name(self):
+            if self.tournament.single_division:
+                return self.tournament.tournament_name
+            return self.tournament.tournament_name+", "+self.division_name
+        
         
         
     return Division

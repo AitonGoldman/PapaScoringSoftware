@@ -8,7 +8,8 @@ from flask_login import login_required,current_user
 from routes.utils import fetch_entity,calc_audit_log_remaining_tokens
 import stripe
 import datetime
-
+from routes.audit_log_utils import create_audit_log
+from orm_creation import create_ticket_purchase
 
 @admin_manage_blueprint.route('/stripe/sku/<sku>', methods=['GET'])
 def get_valid_sku(sku):
@@ -81,6 +82,35 @@ def confirm_tokens(tokens):
     
     return jsonify({'data':token.to_dict_simple()})
 
+def build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_division_skus,division_id=None,metadivision_id=None):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+
+    if division_id:
+        division = tables.Division.query.filter_by(division_id=division_id).first()
+        sku_division_id=division.division_id
+    if metadivision_id:
+        division = tables.MetaDivision.query.filter_by(meta_division_id=metadivision_id).first()
+        sku_division_id=division.meta_division_id
+        
+    discount_for = division.discount_ticket_count
+    discount_price = division.discount_ticket_price    
+    if discount_for is None or discount_price is None:
+        if division_id:
+            stripe_items.append({"quantity":ticket_count,"type":"sku","parent":division_skus[sku_division_id]})            
+        return            
+    if  ticket_count >= discount_for:
+        discount_count = ticket_count/discount_for
+        normal_count = ticket_count%discount_for
+    else:
+        discount_count = 0
+        normal_count = ticket_count
+    if discount_count > 0:
+        stripe_items.append({"quantity":discount_count,"type":"sku","parent":discount_division_skus[sku_division_id]})
+    if normal_count > 0:
+        stripe_items.append({"quantity":normal_count,"type":"sku","parent":division_skus[sku_division_id]})
+
+    
 @admin_manage_blueprint.route('/stripe', methods=['POST'])
 @login_required
 @Token_permission.require(403)
@@ -93,23 +123,54 @@ def start_sale():
     email = json.loads(request.data)['email']    
     stripe.api_key = current_app.td_config['STRIPE_API_KEY']
     division_skus={}
+    discount_division_skus={}
     metadivision_skus={}
+    discount_metadivision_skus={}
+    
     for division in tables.Division.query.all():        
         division_skus[division.division_id]=division.stripe_sku
+        discount_division_skus[division.division_id]=division.discount_stripe_sku
+
     #FIXME : need to associate a cost with metadiv directly
     for metadivision in tables.MetaDivision.query.all():
-        for division in metadivision.divisions:
-            metadivision_skus[metadivision.meta_division_id]=division.stripe_sku
+        metadivision_skus[metadivision.meta_division_id]=metadivision.stripe_sku
+        discount_metadivision_skus[metadivision.meta_division_id]=metadivision.discount_stripe_sku
+        
     stripe_items=[]
     for division_id,num_tokens in added_token_count['divisions'].iteritems():        
+        if int(num_tokens[0]) > 0:
+            ticket_count = int(num_tokens[0])
+            build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_division_skus,int(division_id))            
+            # division = tables.Division.query.filter_by(division_id=division_id).first()
+            # discount_for = division.discount_ticket_count
+            # discount_price = division.discount_ticket_price
+            
+            # if discount_for is None or discount_price is None:
+            #     stripe_items.append({"quantity":ticket_count,"type":"sku","parent":division_skus[int(division_id)]})
+            #     continue            
+            # if  ticket_count >= discount_for:
+            #     discount_count = ticket_count/discount_for
+            #     normal_count = ticket_count%discount_for
+            # else:
+            #     discount_count = 0
+            #     normal_count = ticket_count
+            # if discount_count > 0:
+            #     stripe_items.append({"quantity":int(discount_count),"type":"sku","parent":discount_division_skus[int(division_id)]})
+            # if normal_count > 0:
+            #     stripe_items.append({"quantity":int(normal_count),"type":"sku","parent":division_skus[int(division_id)]})
+                         
+    for metadivision_id,num_tokens in added_token_count['metadivisions'].iteritems():        
         if int(num_tokens[0]) > 0:            
-            stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":division_skus[int(division_id)]})
-    for division_id,num_tokens in added_token_count['metadivisions'].iteritems():        
-        if int(num_tokens[0]) > 0:            
-            stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":metadivision_skus[int(division_id)]})
+            ticket_count = int(num_tokens[0])
+            #stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":metadivision_skus[int(metadivision_id)]})
+            build_stripe_purchases(ticket_count,stripe_items,metadivision_skus,discount_metadivision_skus,metadivision_id=int(metadivision_id))            
+            
     for division_id,num_tokens in added_token_count['teams'].iteritems():        
         if int(num_tokens[0]) > 0:            
-            stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":division_skus[int(division_id)]})    
+            ticket_count = int(num_tokens[0])
+            build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_division_skus,int(division_id))            
+
+            #stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":division_skus[int(division_id)]})    
     try:
         order = stripe.Order.create(
             currency="usd",
@@ -128,30 +189,44 @@ def start_sale():
         #            if actual_item.amount != 0:
         #                stripe_purchase_summary_string = stripe_purchase_summary_string + "amount : %s, description : %s, quantity : %s " % (actual_item.amount/100,actual_item.description,actual_item.quantity)
         #                #print "amount : %s, description : %s, quantity : %s " % (actual_item.amount,actual_item.description,actual_item.quantity)
-
+        for division_id,num_tokens in added_token_count['divisions'].iteritems():        
+            if int(num_tokens[0]) > 0:
+                create_ticket_purchase(current_app,
+                                       num_tokens[0],
+                                       current_user.player.player_id,
+                                       current_user.user_id,
+                                       division_id=division_id)
+        for metadivision_id,num_tokens in added_token_count['metadivisions'].iteritems():        
+            if int(num_tokens[0]) > 0:            
+                create_ticket_purchase(current_app,
+                                       num_tokens[0],
+                                       current_user.player.player_id,
+                                       current_user.user_id,
+                                       metadivision_id=metadivision_id)
+        for division_id,num_tokens in added_token_count['teams'].iteritems():        
+            if int(num_tokens[0]) > 0:            
+                create_ticket_purchase(current_app,
+                                       num_tokens[0],
+                                       current_user.player.player_id,
+                                       current_user.user_id,
+                                       division_id=division_id)
         for json_token in tokens:            
             token = tables.Token.query.filter_by(token_id=json_token['token_id']).first()            
             token.paid_for=True
             db.session.commit()
 
-        audit_log = tables.AuditLog()
-        audit_log.player_purchase_complete_date = datetime.datetime.now()            
-        audit_log.description = stripe_purchase_summary_string
-        audit_log.player_id = current_user.player.player_id
-        db.session.add(audit_log)
-        db.session.commit()
+        create_audit_log("Player Ticket Purchase Completed",datetime.datetime.now(),
+                         stripe_purchase_summary_string,user_id=current_user.user_id,
+                         player_id=current_user.player.player_id)    
+        
         if len(current_user.player.teams) > 0:
             team_id = current_user.player.teams[0].team_id
         else:
             team_id = None
         tokens_left_string = calc_audit_log_remaining_tokens(current_user.player.player_id,team_id)        
-        audit_log = tables.AuditLog()
-        audit_log.action="purchase_summary"
-        audit_log.description=tokens_left_string
-        audit_log.player_id=current_user.player.player_id
-        db.session.add(audit_log)
-        db.session.commit()
-        
+        create_audit_log("Ticket Summary",datetime.datetime.now(),
+                         tokens_left_string,
+                         player_id=current_user.player.player_id)       
         return jsonify({"data":"success"})
     except stripe.error.CardError as e:
         # The card has been declined        

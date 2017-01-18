@@ -61,7 +61,12 @@ def route_edit_meta_division(meta_division_id):
             if str(division.division_id) not in meta_division_data['divisions']:
                 meta_division.divisions.remove(division)
     if 'meta_division_name' in meta_division_data:
-        meta_division.meta_division_name=meta_division_data['meta_division_name']    
+        meta_division.meta_division_name=meta_division_data['meta_division_name']
+    if 'discount_ticket_count' in meta_division_data:
+        meta_division.discount_ticket_count=meta_division_data['discount_ticket_count']
+    if 'discount_ticket_price' in meta_division_data:
+        meta_division.discount_ticket_price=meta_division_data['discount_ticket_price']
+        
     tables.db_handle.session.commit()
     return jsonify({'data':meta_division.to_dict_simple()})
 

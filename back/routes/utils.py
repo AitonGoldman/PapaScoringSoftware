@@ -7,6 +7,7 @@ import stripe
 from flask_restless.helpers import to_dict
 import requests
 import json
+from audit_log_utils import create_audit_log
 
 def check_player_is_on_device(player_id):
     db = db_util.app_db_handle(current_app)
@@ -87,15 +88,28 @@ def get_valid_sku(sku,STRIPE_API_KEY):
     if 'STRIPE_API_KEY' is None:
         raise BadRequest('Stripe API key is not set')
     stripe.api_key = STRIPE_API_KEY
-    product_list = stripe.Product.list()
+    product_list = stripe.Product.list(limit=25)    
     items = product_list['data']
     dict_sku_prices = {}
-    for item in items:        
-        dict_sku_prices[item['skus']['data'][0]['id']]=item['skus']['data'][0]['price']/100                
+    for item in items:
+        for sku_dict in item['skus']['data']:            
+            dict_sku_prices[sku_dict['id']]=sku_dict['price']/100                
     if sku in dict_sku_prices:        
-        return {'sku':to_dict(item['skus']['data'][0])}
+        return {'sku':sku}
     else:        
         return {'sku':None}
+
+def get_valid_skus(STRIPE_API_KEY):
+    if 'STRIPE_API_KEY' is None:
+        raise BadRequest('Stripe API key is not set')
+    stripe.api_key = STRIPE_API_KEY
+    product_list = stripe.Product.list(limit=25)    
+    items = product_list['data']
+    dict_sku_prices = {}
+    for item in items:
+        print item['skus']['data'][0]['id']
+        dict_sku_prices[item['skus']['data'][0]['id']]=item['skus']['data'][0]['price']/100                
+    return dict_sku_prices
 
 def fetch_entity(model_class,model_id):
     found_entity = model_class.query.get(model_id)    
@@ -114,25 +128,25 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)    
     if player:
+        if tables.DivisionMachine.query.filter_by(player_id=player.player_id).first():            
+            return False        
         if division_machine.division.meta_division_id:
             tokens = tables.Token.query.filter_by(player_id=player.player_id,
                                                   metadivision_id=division_machine.division.meta_division_id,
-                                                  used=False).all()
+                                                  used=False,paid_for=True).all()
         else:
             tokens = tables.Token.query.filter_by(player_id=player.player_id,
                                                   division_id=division_machine.division.division_id,
-                                                  used=False).all()
-        if tables.DivisionMachine.query.filter_by(player_id=player.player_id).first():            
-            return False
+                                                  used=False,paid_for=True).all()
     if team:
         if division_machine.division.meta_division_id:
             tokens = tables.Token.query.filter_by(team_id=team.team_id,
                                                   metadivision_id=division_machine.division.meta_division_id,
-                                                  used=False).all()
+                                                  used=False,paid_for=True).all()
         else:
             tokens = tables.Token.query.filter_by(team_id=team.team_id,
                                                   division_id=division_machine.division.division_id,
-                                                  used=False).all()
+                                                  used=False,paid_for=True).all()
         if tables.DivisionMachine.query.filter_by(team_id=team.team_id).first():            
             return False
     
@@ -143,7 +157,7 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
     return True
     
 
-def set_token_start_time(app,player,division_machine,team_id=None):
+def set_token_start_time(app,player,division_machine,team_id=None,commit=True):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)        
     if division_machine.division.meta_division_id is None:
@@ -165,28 +179,30 @@ def set_token_start_time(app,player,division_machine,team_id=None):
             
     token_to_set.game_started_date=datetime.datetime.now()
     token_to_set.division_machine_id = division_machine.division_machine_id
-    db.session.commit()    
-    audit_log = tables.AuditLog()
+    if commit:
+        db.session.commit()
     if player:
-        audit_log.player_id=player.player_id
-    if team_id:
-        audit_log.team_id=team_id
-    audit_log.token_id=token_to_set.token_id
-    audit_log.division_machine_id=division_machine.division_machine_id
-    audit_log.scorekeeper_id=current_user.user_id
-    audit_log.game_started_date=datetime.datetime.now()
-    if player:
-        tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
+        player_id=player.player_id
     else:
-        tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+        player_id=None        
+    
+    create_audit_log("Game Started",datetime.datetime.now(),
+                     "",user_id=current_user.user_id,
+                     player_id=player_id,team_id=team_id,
+                     division_machine_id=division_machine.division_machine_id,
+                     token_id=token_to_set.token_id,
+                     commit=commit)        
+    #if player:
+    #    tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
+    #else:
+    #    tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+
+    #create_audit_log("Ticket Summary",datetime.datetime.now(),
+    #                 tokens_left_string,user_id=current_user.user_id,
+    #                 player_id=player_id,team_id=team_id)
         
-    audit_log.remaining_tokens = tokens_left_string            
-    db.session.add(audit_log)
-    db.session.commit()
 
-    pass
-
-def remove_player_from_queue(app,player=None,division_machine=None):
+def remove_player_from_queue(app,player=None,division_machine=None,commit=True):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
     if player:
@@ -202,16 +218,17 @@ def remove_player_from_queue(app,player=None,division_machine=None):
     if len(queue.queue_child) > 0:        
         if queue.parent_id is None:            
             division_machine.queue_id=queue.queue_child[0].queue_id
-            db.session.commit()                            
+            ##db.session.commit()                            
         else:            
             queue.queue_child[0].parent_id=queue.parent_id
-            db.session.commit()                
+            ##db.session.commit()                
     else:
         if queue.parent_id is None:
             division_machine.queue_id=None
-            db.session.commit()                            
+            ##db.session.commit()                                
     db.session.delete(queue)    
-    db.session.commit()    
+    if commmit:
+        db.session.commit()    
     return queue
 
 def get_queue_from_division_machine(division_machine,json_output=False):
@@ -259,9 +276,8 @@ def calc_audit_log_remaining_tokens(player_id,team_id=None):
                 division_tokens_left[token.division_id]=1
             else:
                 division_tokens_left[token.division_id]=division_tokens_left[token.division_id]+1
-    tokens_left_string = ""
-    for division_id,division_token_count in division_tokens_left.iteritems():
-        tokens_left_string=tokens_left_string+" %s : %s | " % (divisions[division_id]['tournament_name'],division_token_count)
-    for metadivision_id,metadivision_token_count in metadivision_tokens_left.iteritems():
-        tokens_left_string=tokens_left_string+" %s : %s | " % (metadivisions[metadivision_id]['meta_division_name'],metadivision_token_count)
+    tokens_left_string = ", ".join(["%s : %s" % (divisions[division_id]['tournament_name'],division_token_count) for division_id,division_token_count in division_tokens_left.iteritems()] +     ["%s : %s" % (metadivisions[metadivision_id]['meta_division_name'],metadivision_token_count) for metadivision_id,metadivision_token_count in metadivision_tokens_left.iteritems()])
+    if tokens_left_string == "":
+        tokens_left_string="No Tickets Left"
+
     return tokens_left_string

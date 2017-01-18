@@ -50,7 +50,7 @@ def add_player_to_queue():
     if division_machine.player_id is None and division_machine.queue is None:
         raise BadRequest('No player is on machine - just jump on it')    
     player = fetch_entity(tables.Player,queue_data['player_id'])
-    check_player_team_can_start_game(current_app,division_machine,player)
+    #check_player_team_can_start_game(current_app,division_machine,player)
     if player.division_machine:
         raise BadRequest("Can't queue - player  is already playing a machine")                
         
@@ -140,21 +140,21 @@ def add_player_to_machine_from_queue(division_machine_id):
     if check_player_team_can_start_game(current_app,division_machine,player=player) is False:
         raise BadRequest('Player can not start game - either no tickets or already on another machine')    
     players_to_alert = get_player_list_to_notify(player.player_id,division_machine)
-    set_token_start_time(current_app,player,division_machine)    
+    set_token_start_time(current_app,player,division_machine,commit=False)    
     division_machine.player_id = root_queue.player_id    
     if len(root_queue.queue_child)==0:
         division_machine.queue_id = None
-        db.session.commit()        
+        ##db.session.commit()        
     else:
         division_machine.queue_id = root_queue.queue_child[0].queue_id
         root_queue.queue_child[0].parent_id=None        
-        db.session.commit()        
+        ##db.session.commit()        
     db.session.delete(root_queue)
     db.session.commit()    
     return_dict = {'division_machine':division_machine.to_dict_simple()}
     #if division_machine.queue_id:
     #    return_dict['next_queue']=division_machine.queue.to_dict_simple()
-    if len(players_to_alert) > 0:
+    if len(players_to_alert) > 0:        
         send_push_notification("The queue for %s has changed!  Please check the queue to see your new position." % division_machine.machine.machine_name,
                                players=players_to_alert)
     return jsonify({'data': division_machine.to_dict_simple()})

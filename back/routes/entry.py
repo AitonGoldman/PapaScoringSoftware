@@ -8,6 +8,7 @@ from flask_login import login_required,current_user
 from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,calc_audit_log_remaining_tokens
 from orm_creation import create_entry
 import datetime
+from routes.audit_log_utils import create_audit_log
 
 @admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/score/<int:score>',methods=['POST'])
 @login_required
@@ -39,39 +40,34 @@ def route_add_score(division_machine_id, score):
                              score=score,team_id=division_machine.team_id)
 
     token.used=True
-    token.used_date = datetime.datetime.now()
-    db.session.commit()
-    
-    
-    audit_log = tables.AuditLog()
-
-    if division_machine.player_id:
-        audit_log.player_id = token.player_id
-    if division_machine.team_id:
-        audit_log.team_id = token.team_id
-        
-    audit_log.token_id=token.token_id
-    audit_log.scorekeeper_id=current_user.user_id
-    audit_log.used_date=datetime.datetime.now()
-    audit_log.used=True
-    if token.player_id:
-        tokens_left_string = calc_audit_log_remaining_tokens(token.player_id)
-    if token.team_id:
-        tokens_left_string = calc_audit_log_remaining_tokens(None,token.team_id)
-        
-    audit_log.remaining_tokens = tokens_left_string
-    audit_log.division_machine_id=division_machine.division_machine_id
-    audit_log.entry_id = entry.entry_id
+    token.used_date = datetime.datetime.now()    
+    player_id=division_machine.player_id
+    team_id=division_machine.team_id
     division_machine.player_id=None
-    division_machine.team_id=None    
-    db.session.add(audit_log)    
-    db.session.commit()
+    division_machine.team_id=None
+    create_audit_log("Score Added",datetime.datetime.now(),
+                     "",user_id=current_user.user_id,
+                     player_id=player_id,team_id=team_id,
+                     division_machine_id=division_machine.division_machine_id,
+                     entry_id=entry.entry_id,token_id=token.token_id,
+                     commit=False)    
+
+    if player_id:
+        tokens_left_string = calc_audit_log_remaining_tokens(player_id)
+    if team_id:
+        tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+    create_audit_log("Ticket Summary",datetime.datetime.now(),
+                     tokens_left_string,user_id=current_user.user_id,
+                     player_id=player_id,team_id=team_id,
+                     commit=False)
+    db.session.commit()    
     return jsonify({'data':entry.to_dict_simple()})
 
 @admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/void',methods=['PUT'])
 @login_required
 @Scorekeeper_permission.require(403)
 def route_void_score(division_machine_id):        
+    print "poop"
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)                
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
@@ -84,27 +80,27 @@ def route_void_score(division_machine_id):
         raise BadRequest('Tried to void a ticket that does not exist')
     player_id = division_machine.player_id
     team_id = division_machine.team_id
-    division_machine.player_id=None
-    division_machine.team_id=None
 
     token.used=True
     token.used_date = datetime.datetime.now()
     token.voided=True
     db.session.commit()
+    create_audit_log("Score Voided",datetime.datetime.now(),
+                     "",user_id=current_user.user_id,
+                     player_id=player_id,team_id=team_id,
+                     division_machine_id=division_machine.division_machine_id,
+                     token_id=token.token_id)    
 
-    audit_log = tables.AuditLog()
-    audit_log.player_id = player_id
-    audit_log.team_id = team_id
-    audit_log.token_id=token.token_id
-    audit_log.scorekeeper_id=current_user.user_id
-    audit_log.voided_date=datetime.datetime.now()
-    audit_log.used_date=datetime.datetime.now()
-    audit_log.used=True
-    audit_log.voided=True
-    audit_log.division_machine_id=division_machine.division_machine_id    
-    tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
-    audit_log.remaining_tokens = tokens_left_string
-    db.session.add(audit_log)    
+    if division_machine.player_id:
+        tokens_left_string = calc_audit_log_remaining_tokens(division_machine.player_id)
+    if division_machine.team_id:
+        tokens_left_string = calc_audit_log_remaining_tokens(None,division_machine.team_id)
+    create_audit_log("Ticket Summary",datetime.datetime.now(),
+                     tokens_left_string,user_id=current_user.user_id,
+                     player_id=player_id,team_id=team_id)
+
+    division_machine.player_id=None
+    division_machine.team_id=None    
     db.session.commit()
     
     return jsonify({'data':token.to_dict_simple()})
@@ -146,23 +142,20 @@ def route_jagoff(division_machine_id):
     token.voided=True
     db.session.commit()
 
-    audit_log = tables.AuditLog()
-    audit_log.player_id = player_id
-    audit_log.team_id = team_id
-    audit_log.token_id=token.token_id
-    audit_log.scorekeeper_id=current_user.user_id
-    audit_log.voided_date=datetime.datetime.now()
-    audit_log.used_date=datetime.datetime.now()
-    audit_log.used=True
-    audit_log.voided=True
-    audit_log.division_machine_id=division_machine.division_machine_id    
-    tokens_left_string = calc_audit_log_remaining_tokens(player_id,team_id)        
-    audit_log.remaining_tokens = tokens_left_string
-    audit_log.description = "declared jagoff"
-    audit_log.action="jagoff"
-    db.session.add(audit_log)    
-    db.session.commit()
-    
+    create_audit_log("Jagoff Declared",datetime.datetime.now(),
+                     "",user_id=current_user.user_id,
+                     player_id=player_id,team_id=team_id,
+                     division_machine_id=division_machine.division_machine_id,
+                     token_id=token.token_id)    
+
+    if player_id:
+        tokens_left_string = calc_audit_log_remaining_tokens(player_id)
+    if team_id:
+        tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+    create_audit_log("Ticket Summary",datetime.datetime.now(),
+                     tokens_left_string,user_id=current_user.user_id,
+                     player_id=player_id,team_id=team_id)
+        
     return jsonify({'data':token.to_dict_simple()})
 
 

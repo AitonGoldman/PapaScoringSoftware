@@ -210,6 +210,10 @@ $button-bar-button-font-size:     $font-size-base*9;
      background-color:red;
 }
 
+.grey {
+     background-color:grey;
+}
+
 .item-radio {
     //padding-top: $font-size-base;
     float:right;
@@ -286,6 +290,14 @@ ion-side-menu {
 .standard_big_font {
    font-size:$font-size-base;                    
 }
+
+.selectable-text {
+-webkit-user-select: text;
+-moz-user-select: text;
+-ms-user-select: text;
+user-select: text;
+}
+
 //
 //
 //

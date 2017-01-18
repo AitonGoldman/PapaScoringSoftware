@@ -54,6 +54,8 @@ def generate_player_class(db_handle,Team_Player_mapping):
             """No anon players"""
             return False
 
+        def get_full_name(self):
+            return "%s %s"%(self.first_name,self.last_name)
         def get_id(self):
             """Get the players's id"""
             return self.player_id

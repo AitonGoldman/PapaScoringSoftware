@@ -17,6 +17,8 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         number_of_scores_per_entry = db_handle.Column(db_handle.Integer)
         use_stripe = db_handle.Column(db_handle.Boolean)
         stripe_sku = db_handle.Column(db_handle.String(100))
+        discount_stripe_sku = db_handle.Column(db_handle.String(100))
+        
         local_price = db_handle.Column(db_handle.Integer)
         ifpa_range_start = db_handle.Column(db_handle.Integer)
         ifpa_range_end = db_handle.Column(db_handle.Integer)
@@ -32,6 +34,9 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         finals_num_players_per_group = db_handle.Column(db_handle.Integer)
         finals_num_games_per_match = db_handle.Column(db_handle.Integer)
         queuing = db_handle.Column(db_handle.Boolean,default=False)
+        discount_ticket_count = db_handle.Column(db_handle.Integer)
+        discount_ticket_price = db_handle.Column(db_handle.Integer)
+        
         meta_division_id = db_handle.Column(db_handle.Integer,
                                          db_handle.ForeignKey(
                                              'meta_division.meta_division_id'))
@@ -57,6 +62,11 @@ def generate_division_class(db_handle,relationship=None,fk=None):
                 return tournament.tournament_name
             return tournament.tournament_name+", "+self.division_name
 
+        def get_self_tournament_name(self):
+            if self.tournament.single_division:
+                return self.tournament.tournament_name
+            return self.tournament.tournament_name+", "+self.division_name
+        
         
         
     return Division

@@ -14,14 +14,35 @@ from json import loads, dumps
 from werkzeug.exceptions import default_exceptions, HTTPException
 from traceback import format_exception_only
 from flask_principal import Permission
-
 import routes
-
 from blueprints import admin_login_blueprint,meta_admin_blueprint,admin_manage_blueprint
+import calendar
+import datetime
+from flask.json import JSONEncoder
 
-    
+class CustomJSONEncoder(JSONEncoder):
+
+    def default(self, obj):
+        try:
+            if isinstance(obj, datetime):
+                if obj.utcoffset() is not None:
+                    obj = obj - obj.utcoffset()
+                millis = int(
+                    calendar.timegm(obj.timetuple()) * 1000 +
+                    obj.microsecond / 1000
+                )
+                return millis
+            iterable = iter(obj)
+        except TypeError:
+            pass
+        else:
+            return list(iterable)
+        return JSONEncoder.default(self, obj)
+
+
 def get_generic_app(name):    
     app = Flask(name)
+    app.json_encoder = CustomJSONEncoder
     app.config['UPLOAD_FOLDER']='/var/www/html/pics'
     app.config['DEBUG']=True
     td_config.assign_loaded_configs_to_app(app)    
@@ -34,6 +55,7 @@ def get_generic_app(name):
         send_wildcard=False,
         supports_credentials=True,
     )
+    
     return app
 
 def make_json_error(ex):

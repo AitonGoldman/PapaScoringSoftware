@@ -17,6 +17,8 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         number_of_scores_per_entry = db_handle.Column(db_handle.Integer)
         use_stripe = db_handle.Column(db_handle.Boolean)
         stripe_sku = db_handle.Column(db_handle.String(100))
+        discount_stripe_sku = db_handle.Column(db_handle.String(100))
+        
         local_price = db_handle.Column(db_handle.Integer)
         ifpa_range_start = db_handle.Column(db_handle.Integer)
         ifpa_range_end = db_handle.Column(db_handle.Integer)

@@ -88,15 +88,28 @@ def get_valid_sku(sku,STRIPE_API_KEY):
     if 'STRIPE_API_KEY' is None:
         raise BadRequest('Stripe API key is not set')
     stripe.api_key = STRIPE_API_KEY
-    product_list = stripe.Product.list()
+    product_list = stripe.Product.list(limit=25)    
     items = product_list['data']
     dict_sku_prices = {}
-    for item in items:        
-        dict_sku_prices[item['skus']['data'][0]['id']]=item['skus']['data'][0]['price']/100                
+    for item in items:
+        for sku_dict in item['skus']['data']:            
+            dict_sku_prices[sku_dict['id']]=sku_dict['price']/100                
     if sku in dict_sku_prices:        
-        return {'sku':to_dict(item['skus']['data'][0])}
+        return {'sku':sku}
     else:        
         return {'sku':None}
+
+def get_valid_skus(STRIPE_API_KEY):
+    if 'STRIPE_API_KEY' is None:
+        raise BadRequest('Stripe API key is not set')
+    stripe.api_key = STRIPE_API_KEY
+    product_list = stripe.Product.list(limit=25)    
+    items = product_list['data']
+    dict_sku_prices = {}
+    for item in items:
+        print item['skus']['data'][0]['id']
+        dict_sku_prices[item['skus']['data'][0]['id']]=item['skus']['data'][0]['price']/100                
+    return dict_sku_prices
 
 def fetch_entity(model_class,model_id):
     found_entity = model_class.query.get(model_id)    

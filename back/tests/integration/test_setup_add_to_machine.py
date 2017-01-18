@@ -5,6 +5,7 @@ import td_integration_test_base
 import json
 from routes import orm_creation
 from util import db_util
+import random
 
 class SetupAddToMachineTD(td_integration_test_base.TdIntegrationSetupTestBase):
     def setUp(self):
@@ -22,9 +23,18 @@ class SetupAddToMachineTD(td_integration_test_base.TdIntegrationSetupTestBase):
             'Classics 1':'sku_8beHMnaBSdH4NA',
             'Classics 2':'sku_9jugzXV5S8oafx',
             'Classics 3':'sku_9juhywxXYAFfW7',
-            'Classics Meta':'sku_9wtQxO4yXCGV9w'
+            'Classics Meta':'sku_9wukf1rcx9hWsb'
         }
-        orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus)
+        discount_stripe_skus = {
+            'A':'sku_9wugGsS0eFracR',
+            'B':'sku_9wuhUNp2629DGp',
+            'C':'sku_9wuigiEVZ61TBJ',
+            'D':'sku_8beJOPdNmnoQgw',
+            'Split Flipper':'sku_9wvPotSYBuA13h',
+            'Classics Meta':'sku_9wtQxO4yXCGV9w'            
+        }
+        
+        orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus=stripe_skus,discount_stripe_skus=discount_stripe_skus)
         orm_creation.init_papa_tournaments_division_machines(self.flask_app)        
         self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
         self.player_pin = self.player.pin

@@ -10,6 +10,7 @@ def generate_meta_division_class(db_handle):
         discount_ticket_price = db_handle.Column(db_handle.Integer)
         use_stripe = db_handle.Column(db_handle.Boolean)
         stripe_sku = db_handle.Column(db_handle.String(100))
+        discount_stripe_sku = db_handle.Column(db_handle.String(100))
         local_price = db_handle.Column(db_handle.Integer)
 
         divisions = db_handle.relationship("Division")

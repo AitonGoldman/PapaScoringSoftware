@@ -5,6 +5,7 @@ import stripe
 import os
 import random
 import datetime
+from werkzeug.exceptions import BadRequest,Conflict
 
 class RolesEnum(Enum):
     admin = 1
@@ -21,12 +22,15 @@ def set_stripe_api_key(stripe_api_key):
 
 def fetch_stripe_price(app,division):
     db = db_util.app_db_handle(app)
-    product_list = stripe.Product.list()
+    product_list = stripe.Product.list(limit=25)
     items = product_list['data']            
     dict_sku_prices = {}
     for item in items:        
-        dict_sku_prices[item['skus']['data'][0]['id']]=item['skus']['data'][0]['price']/100    
+        for sku_dict in item['skus']['data']:
+            dict_sku_prices[sku_dict['id']]=sku_dict['price']/100    
     division.local_price = dict_sku_prices[division.stripe_sku]
+    if division.discount_stripe_sku:
+        division.discount_ticket_price = dict_sku_prices[division.discount_stripe_sku]    
     db.session.commit()        
 
 def create_stanard_roles_and_users(app):
@@ -71,7 +75,7 @@ def init_papa_tournaments_division_machines(app):
         machine_counter=machine_counter+12
         
         
-def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None):
+def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discount_stripe_skus=None):
     db = app.tables.db_handle
     tables = app.tables
     new_tournament = create_tournament(app,{'tournament_name':'Main','single_division':False})
@@ -91,16 +95,27 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None):
     for division_name in ['A','B','C','D']:        
         if use_stripe:
             new_tournament_data['stripe_sku']=stripe_skus[division_name]
+        elif 'stripe_sku' in new_tournament_data:
+            new_tournament_data.pop('stripe_sku')            
+        if discount_stripe_skus and division_name in discount_stripe_skus:
+            new_tournament_data['discount_stripe_sku']=discount_stripe_skus[division_name]
+        elif 'discount_stripe_sku' in new_tournament_data:
+            new_tournament_data.pop('discount_stripe_sku')
         new_tournament_data['division_name']=division_name
         new_division = create_division(app,new_tournament_data)
         db.session.commit()
         new_tournament.divisions.append(new_division)
         db.session.commit()        
-    new_metadivision = create_meta_division(app,{
+    metadivision_data = {
         'meta_division_name':'Classics',
-        'use_stripe':True,
-        'stripe_sku':stripe_skus['Classics Meta']
-    })
+        'use_stripe':use_stripe        
+    }
+    if use_stripe:
+        metadivision_data['stripe_sku'] = stripe_skus['Classics Meta']        
+    if discount_stripe_skus and "Classics Meta" in discount_stripe_skus:
+        metadivision_data['discount_stripe_sku'] = discount_stripe_skus['Classics Meta']
+    
+    new_metadivision = create_meta_division(app,metadivision_data)
     new_team_tournament_data={'tournament_name':'Split Flipper',
                                                          'single_division':True,
                                                          'active':True,
@@ -114,6 +129,9 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None):
     else:
         new_team_tournament_data['use_stripe']=False
         new_team_tournament_data['local_price']=5
+    if discount_stripe_skus and "Split Flipper" in discount_stripe_skus:
+        new_team_tournament_data['discount_stripe_sku']=discount_stripe_skus["Split Flipper"]
+        
     new_tournament = create_tournament(app,new_team_tournament_data)
     new_classics_tournament_data = {'single_division':True,
                                     'active':True,
@@ -132,6 +150,7 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None):
         if use_stripe:
             new_classics_tournament_data['stripe_sku']=stripe_skus[tournament_name]
         new_classics_tournament_data['tournament_name']=tournament_name
+        
         new_tournament = create_tournament(app,new_classics_tournament_data)
         new_metadivision.divisions.append(new_tournament.divisions[0])
         db.session.commit()        
@@ -208,6 +227,11 @@ def create_meta_division(app,meta_division_data):
         if get_valid_sku(meta_division_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
             raise BadRequest('invalid SKU specified')
         new_meta_division.stripe_sku=meta_division_data['stripe_sku']
+        if 'discount_stripe_sku' in meta_division_data and meta_division_data['discount_stripe_sku']:
+            if get_valid_sku(meta_division_data['discount_stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:                
+                raise BadRequest('invalid SKU specified')        
+            new_meta_division.discount_stripe_sku=meta_division_data['discount_stripe_sku']
+        
     else:
         new_meta_division.use_stripe = False
     if 'local_price' in meta_division_data and meta_division_data['use_stripe'] == False: 
@@ -235,8 +259,14 @@ def create_division(app,division_data):
     if 'use_stripe' in division_data and division_data['use_stripe']:
         new_division.use_stripe = True
         if get_valid_sku(division_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
+            print "trying to get normal %s %s"%(division_data['division_name'], division_data['stripe_sku'])
             raise BadRequest('invalid SKU specified')
-        new_division.stripe_sku=division_data['stripe_sku']
+        new_division.stripe_sku=division_data['stripe_sku']        
+        if 'discount_stripe_sku' in division_data and division_data['discount_stripe_sku']:
+            if get_valid_sku(division_data['discount_stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
+                print "trying to get %s"%division_data['discount_stripe_sku']
+                raise BadRequest('invalid SKU specified')        
+            new_division.discount_stripe_sku=division_data['discount_stripe_sku']
     else:
         new_division.use_stripe = False
     if 'local_price' in division_data and division_data['use_stripe'] == False: 

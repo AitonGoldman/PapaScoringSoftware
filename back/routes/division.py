@@ -36,32 +36,48 @@ def route_get_division_machines(division_id):
 def route_get_division_machines_avg_playtime(division_id,division_machine_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)    
-    audit_logs = tables.AuditLog.query.filter_by(division_machine_id=division_machine_id).all()
-    start_time = None
-    end_time = None
-    avg_times = []
-    for audit_log in audit_logs:
-        if audit_log.game_started_date:
-            start_time = audit_log.game_started_date
-            end_time = None
-        if audit_log.used_date is not None and audit_log.voided_date is None:
-            end_time = audit_log.used_date            
-        if audit_log.voided_date and audit_log.action != "jagoff":
-            end_time = audit_log.voided_date
-        if end_time:
-            time_delta = end_time - start_time
-            avg_times.append(time_delta.total_seconds())        
-    total_time = 0
-    avg_game_time = 0
-    for avg_time in avg_times:
-        total_time = total_time + avg_time
-    if len(avg_times) > 0:
-        avg_game_time = total_time/len(avg_times)
-    division_machine.avg_play_time = datetime.datetime.fromtimestamp(avg_game_time).strftime('%M min, %S sec')
-    db.session.commit()
-    #print datetime.datetime.fromtimestamp(avg_game_time).strftime('%M:%S')
-    #return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
+    if division_machine_id == "0":
+        if division_id == "0":
+            division_machines = tables.DivisionMachine.query.all()        
+        else:
+            division_machines = tables.DivisionMachine.query.filter_by(division_id=division_id).all()        
+    else:            
+        division_machines = [fetch_entity(tables.DivisionMachine,division_machine_id)]    
+    #audit_logs = tables.AuditLog.query.filter_by(division_machine_id=division_machine_id).all()
+    audit_logs = tables.AuditLog.query.filter(tables.DivisionMachine.division_machine_id.in_([division_machine.division_machine_id for division_machine in division_machines])).all()
+    start_times = {}
+    end_times = {}
+    #start_time = None
+    #end_time = None
+    #avg_times = []
+    avg_times = {}
+    for audit_log in audit_logs:        
+        if audit_log.action == "Game Started":
+            start_times[audit_log.division_machine_id] = audit_log.action_date
+            end_times[audit_log.division_machine_id] = None
+        if audit_log.action == "Score Added" or audit_log.action == "Score Voided":
+            end_times[audit_log.division_machine_id] = audit_log.action_date
+        #if audit_log.voided_date and audit_log.action != "jagoff":
+        #    end_time = audit_log.voided_date
+        if audit_log.division_machine_id in end_times and end_times[audit_log.division_machine_id]:
+            if audit_log.division_machine_id in start_times:
+                time_delta = end_times[audit_log.division_machine_id] - start_times[audit_log.division_machine_id]
+                if audit_log.division_machine_id not in avg_times:
+                    avg_times[audit_log.division_machine_id]=[]
+                avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
+                start_times[audit_log.division_machine_id]=None
+    for avg_time_division_machine_id,machine_times in avg_times.iteritems():        
+        total_time = 0
+        avg_game_time = 0        
+        #for avg_time in machine_times:
+        #total_time = total_time + avg_time
+        total_time = sum(machine_times)        
+        avg_game_time = total_time/len(machine_times)    
+        division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=avg_time_division_machine_id).first()
+        division_machine.avg_play_time = datetime.datetime.fromtimestamp(avg_game_time).strftime('%M min, %S sec')
+        db.session.commit()
+        #print datetime.datetime.fromtimestamp(avg_game_time).strftime('%M:%S')
+        #return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
     return jsonify({})
 
 

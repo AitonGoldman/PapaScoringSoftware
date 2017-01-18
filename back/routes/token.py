@@ -12,6 +12,7 @@ import datetime
 from routes.audit_log_utils import create_audit_log
 from orm_creation import create_ticket_purchase
 
+# gets_all_available tokens for a given division or metadiv for a given player or team
 def get_existing_token_count(player_id=None,team_id=None,div_id=None,metadiv_id=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -26,11 +27,13 @@ def get_existing_token_count(player_id=None,team_id=None,div_id=None,metadiv_id=
     if team_id:
         query = query.filter_by(team_id=team_id)
     return query.count()
+    
 
 def check_linked_division(division_id, player_id=None, team_id=None):
     #FIXME : this should have actual contents
     pass
-        
+
+
 def check_add_token_for_max_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None,team_id=None):        
     if player_id:
         existing_token_count = get_existing_token_count(div_id=div_id,metadiv_id=metadiv_id,player_id=player_id)        
@@ -42,7 +45,9 @@ def check_add_token_for_max_tokens(num_tokens,div_id=None,metadiv_id=None,player
     if int(num_tokens) + int(existing_token_count) > int(current_app.td_config['MAX_TICKETS_ALLOWED_PER_DIVISION']):
         raise Conflict('Token add requested will push you over the max tokens for this division')
 
-
+# retrieving player
+# retrieve each division for teams, metadivisions, and divisions
+# call check_add_token_for_max_tokens for all teams, metadivisions, and divisions
 def check_add_token_request_is_valid(tokens_data, tables):
     if tokens_data.has_key('player_id') is False:
         raise BadRequest('No player_id specified')
@@ -64,8 +69,9 @@ def check_add_token_request_is_valid(tokens_data, tables):
             raise BadRequest('Tried to add a token for a single player in a team tournament')
         if division.meta_division_id is not None:
             raise BadRequest('Tried to add a division token to a metadivision')                    
-        num_tokens = tokens_data['divisions'][div_id][0]
-        check_add_token_for_max_tokens(num_tokens,div_id=div_id,player_id=player_id)        
+        num_tokens = tokens_data['divisions'][div_id][0]        
+        if int(num_tokens) > 0: 
+            check_add_token_for_max_tokens(num_tokens,div_id=div_id,player_id=player_id)        
     for div_id in tokens_data['teams']:
         division=fetch_entity(tables.Division,div_id)
         if division.team_tournament is False:
@@ -75,8 +81,9 @@ def check_add_token_request_is_valid(tokens_data, tables):
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)        
     for metadiv_id in tokens_data['metadivisions']:
         meta_division=fetch_entity(tables.MetaDivision,metadiv_id)
-        num_tokens = tokens_data['metadivisions'][metadiv_id][0]        
-        check_add_token_for_max_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id)                     
+        num_tokens = tokens_data['metadivisions'][metadiv_id][0]
+        if int(num_tokens) > 0:
+            check_add_token_for_max_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id)                     
     
 def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None,team_id=None, paid_for=1, comped=False, player_id_for_team_audit_log=None):
     db = db_util.app_db_handle(current_app)
@@ -100,9 +107,9 @@ def create_division_tokens(num_tokens,div_id=None,metadiv_id=None,player_id=None
             new_token.deskworker_id=current_user.user_id
         
         db.session.add(new_token)                
-        db.session.commit()
-        db.session.commit()
-        tokens.append(to_dict(new_token))
+        ##db.session.commit()
+        ##tokens.append(to_dict(new_token))
+        tokens.append(new_token)        
     return tokens
 
 @admin_manage_blueprint.route('/token/teams/<player_id>',methods=['GET'])
@@ -218,6 +225,10 @@ def confirm_tokens():
             
     return jsonify({'data':token.to_dict_simple()})
 
+# fetch player
+# fetch divisions
+# create_division_tokens
+
 @admin_manage_blueprint.route('/token/paid_for/<int:paid_for>', methods=['POST'])
 @login_required
 @Token_permission.require(403)
@@ -228,7 +239,7 @@ def add_token(paid_for):
     tables = db_util.app_db_tables(current_app)    
     total_tokens=[]
     #tokens = []
-    tokens_data = json.loads(request.data)
+    tokens_data = json.loads(request.data)    
     check_add_token_request_is_valid(tokens_data, tables)    
     player_id = tokens_data['player_id']
     if 'comped' in tokens_data:
@@ -250,9 +261,10 @@ def add_token(paid_for):
 
     for div_id in tokens_data['divisions']:
         #num_tokens = tokens_data['divisions'][div_id]
-        num_tokens = tokens_data['divisions'][div_id][0]
+        num_tokens = int(tokens_data['divisions'][div_id][0])
         if num_tokens > 0:
             division_token_summary[tables.Division.query.filter_by(division_id=div_id).first().get_self_tournament_name()]=num_tokens
+            ## back 
             tokens = create_division_tokens(num_tokens,div_id=div_id,player_id=player_id, paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens
     for metadiv_id in tokens_data['metadivisions']:
@@ -267,10 +279,9 @@ def add_token(paid_for):
         if int(num_tokens) > 0:
             division_token_summary[tables.Division.query.filter_by(division_id=div_id).first().get_self_tournament_name()]=num_tokens
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)
-            tokens = create_division_tokens(num_tokens,div_id=div_id,team_id=team_id,paid_for=paid_for,comped=comped,player_id_for_team_audit_log=player_id)
-            total_tokens = total_tokens + tokens            
+            tokens = create_division_tokens(num_tokens,div_id=div_id,team_id=team_id,paid_for=paid_for,comped=comped,player_id_for_team_audit_log=player_id)            
+            total_tokens = total_tokens + tokens        
     db.session.commit()
-    
     division_ticket_summary = ", ".join(["%s : %s"%(div_name,div_count) for div_name,div_count in division_token_summary.iteritems()]+["%s : %s"%(div_name,div_count) for div_name,div_count in metadivision_token_summary.iteritems()])    
     if paid_for == 1:            
         action="Ticket Purchase"
@@ -280,14 +291,14 @@ def add_token(paid_for):
         division_ticket_summary = division_ticket_summary + " (COMPED)"
     create_audit_log(action,datetime.datetime.now(),
                      division_ticket_summary,user_id=current_user.user_id,
-                     player_id=int(player_id),team_id=int(team_id))    
+                     player_id=player_id,team_id=team_id,commit=False)    
     
     if paid_for == 1:
         if player_id:
             tokens_left_string = calc_audit_log_remaining_tokens(player_id)
         create_audit_log("Ticket Summary",datetime.datetime.now(),
                          tokens_left_string,user_id=current_user.user_id,
-                         player_id=player_id,team_id=team_id)
+                         player_id=player_id,team_id=team_id,commit=False)
     total_divisions_tokens_summary = {}
     total_metadivisions_tokens_summary = {}
     # for each div/metadiv
@@ -296,35 +307,40 @@ def add_token(paid_for):
     #   create audit_logs for both
     
     for div_id in tokens_data['divisions']:
-        total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token['division_id'])==str(div_id)])
+        ##total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token['division_id'])==str(div_id)])
+        total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token.division_id)==str(div_id)])
         if paid_for == 1 and comped is False:
             create_ticket_purchase(current_app,
                                    total_divisions_tokens_summary[div_id],
                                    player_id,
                                    current_user.user_id,
-                                   division_id=div_id)
+                                   division_id=div_id,commit=False)
+            pass
     for div_id in tokens_data['teams']:
-        total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token['division_id'])==str(div_id)])
+        total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token.division_id)==str(div_id)])
         if paid_for == 1 and comped is False:
             create_ticket_purchase(current_app,
                                    total_divisions_tokens_summary[div_id],
                                    player_id,
                                    current_user.user_id,
-                                   division_id=div_id)
-
+                                   division_id=div_id,commit=False)
+            pass
         
     for metadiv_id in tokens_data['metadivisions']:
-        total_metadivisions_tokens_summary[metadiv_id] = len([token for token in total_tokens if str(token['metadivision_id'])==str(metadiv_id)])
+        total_metadivisions_tokens_summary[metadiv_id] = len([token for token in total_tokens if str(token.metadivision_id)==str(metadiv_id)])
         if paid_for == 1 and comped is False:
             create_ticket_purchase(current_app,
                                    total_metadivisions_tokens_summary[metadiv_id],
                                    player_id,
                                    current_user.user_id,
-                                   metadivision_id=metadiv_id)
-
-         
+                                   metadivision_id=metadiv_id,commit=False)
+            pass
+    ##db.session.commit()
+    ##return jsonify({})
+    for idx,tok in enumerate(total_tokens):
+        total_tokens[idx] = to_dict(tok)            
     return jsonify({'data':{'divisions':total_divisions_tokens_summary,
                             'metadivisions':total_metadivisions_tokens_summary,                            
                             'tokens':total_tokens}})
-
+    
 

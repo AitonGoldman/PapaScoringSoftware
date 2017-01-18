@@ -314,7 +314,7 @@ def create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_i
     ticket_purchase.purchase_date=datetime.datetime.now()
     return ticket_purchase
     
-def create_ticket_purchase(app,ticket_count,player_id,user_id,division_id=None,metadivision_id=None):    
+def create_ticket_purchase(app,ticket_count,player_id,user_id,division_id=None,metadivision_id=None,commit=True):    
     if ticket_count == 0:
         return
     db = db_util.app_db_handle(app)
@@ -343,15 +343,14 @@ def create_ticket_purchase(app,ticket_count,player_id,user_id,division_id=None,m
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
         ticket_purchase.amount=discount_count
         ticket_purchase.description="%s"%discount_for
-        db.session.add(ticket_purchase)
-        db.session.commit()
     if normal_count > 0:
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
         ticket_purchase.amount=normal_count
         ticket_purchase.description="1"
-        db.session.add(ticket_purchase)
+    db.session.add(ticket_purchase)
+    if commit:        
         db.session.commit()
-        
+
 def create_roles(app,custom_roles=[]):
     roles = []
     new_roles = []
@@ -454,12 +453,13 @@ def create_entry(app,division_machine_id,division_id,score,player_id=None,team_i
         entry.team_id=team_id
     
     db.session.add(entry)
-    db.session.commit()
+    ##db.session.commit()
     score = tables.Score(
         score=score,
-        entry_id=entry.entry_id,
+        ##entry_id=entry.entry_id,
         division_machine_id=division_machine_id
     )
     db.session.add(score)
+    entry.scores.append(score)
     db.session.commit()    
     return entry

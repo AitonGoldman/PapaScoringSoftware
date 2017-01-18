@@ -140,17 +140,19 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     if len(player.teams) > 0:
         if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():            
             raise BadRequest('Player can not start game - his team is playing on another machine')        
-    set_token_start_time(current_app,player,division_machine)    
+    set_token_start_time(current_app,player,division_machine,commit=False)    
     division_machine.player_id=player.player_id
-    tables.db_handle.session.commit()
+    ##db.session.commit()
     queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
     players_to_alert = []
     if queue:
         players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)            
-    removed_queue = remove_player_from_queue(current_app,player)
-    if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
+    removed_queue = remove_player_from_queue(current_app,player,commit=False)
+    
+    if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:                
         push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
-        send_push_notification(push_notification_message, players=players_to_alert)    
+        send_push_notification(push_notification_message, players=players_to_alert)
+    db.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/undo',

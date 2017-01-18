@@ -3,7 +3,7 @@ from flask import current_app
 
 def create_audit_log(action,action_date,description,user_id=None,
                      player_id=None,team_id=None,division_machine_id=None,
-                     entry_id=None,token_id=None,amount=None):
+                     entry_id=None,token_id=None,amount=None,commit=True):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)                
     audit_log = tables.AuditLog()
@@ -25,4 +25,5 @@ def create_audit_log(action,action_date,description,user_id=None,
     if amount:
         audit_log.amount=amount
     db.session.add(audit_log)
-    db.session.commit()
+    if commit is True:
+        db.session.commit()

@@ -45,12 +45,12 @@ def route_add_score(division_machine_id, score):
     team_id=division_machine.team_id
     division_machine.player_id=None
     division_machine.team_id=None
-    db.session.commit()
     create_audit_log("Score Added",datetime.datetime.now(),
                      "",user_id=current_user.user_id,
                      player_id=player_id,team_id=team_id,
                      division_machine_id=division_machine.division_machine_id,
-                     entry_id=entry.entry_id,token_id=token.token_id)    
+                     entry_id=entry.entry_id,token_id=token.token_id,
+                     commit=False)    
 
     if player_id:
         tokens_left_string = calc_audit_log_remaining_tokens(player_id)
@@ -58,7 +58,9 @@ def route_add_score(division_machine_id, score):
         tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
     create_audit_log("Ticket Summary",datetime.datetime.now(),
                      tokens_left_string,user_id=current_user.user_id,
-                     player_id=player_id,team_id=team_id)
+                     player_id=player_id,team_id=team_id,
+                     commit=False)
+    db.session.commit()    
     return jsonify({'data':entry.to_dict_simple()})
 
 @admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/void',methods=['PUT'])

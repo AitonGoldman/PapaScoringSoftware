@@ -128,25 +128,25 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)    
     if player:
+        if tables.DivisionMachine.query.filter_by(player_id=player.player_id).first():            
+            return False        
         if division_machine.division.meta_division_id:
             tokens = tables.Token.query.filter_by(player_id=player.player_id,
                                                   metadivision_id=division_machine.division.meta_division_id,
-                                                  used=False).all()
+                                                  used=False,paid_for=True).all()
         else:
             tokens = tables.Token.query.filter_by(player_id=player.player_id,
                                                   division_id=division_machine.division.division_id,
-                                                  used=False).all()
-        if tables.DivisionMachine.query.filter_by(player_id=player.player_id).first():            
-            return False
+                                                  used=False,paid_for=True).all()
     if team:
         if division_machine.division.meta_division_id:
             tokens = tables.Token.query.filter_by(team_id=team.team_id,
                                                   metadivision_id=division_machine.division.meta_division_id,
-                                                  used=False).all()
+                                                  used=False,paid_for=True).all()
         else:
             tokens = tables.Token.query.filter_by(team_id=team.team_id,
                                                   division_id=division_machine.division.division_id,
-                                                  used=False).all()
+                                                  used=False,paid_for=True).all()
         if tables.DivisionMachine.query.filter_by(team_id=team.team_id).first():            
             return False
     
@@ -157,7 +157,7 @@ def check_player_team_can_start_game(app,division_machine,player=None,team=None)
     return True
     
 
-def set_token_start_time(app,player,division_machine,team_id=None):
+def set_token_start_time(app,player,division_machine,team_id=None,commit=True):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)        
     if division_machine.division.meta_division_id is None:
@@ -179,7 +179,8 @@ def set_token_start_time(app,player,division_machine,team_id=None):
             
     token_to_set.game_started_date=datetime.datetime.now()
     token_to_set.division_machine_id = division_machine.division_machine_id
-    db.session.commit()
+    if commit:
+        db.session.commit()
     if player:
         player_id=player.player_id
     else:
@@ -189,7 +190,8 @@ def set_token_start_time(app,player,division_machine,team_id=None):
                      "",user_id=current_user.user_id,
                      player_id=player_id,team_id=team_id,
                      division_machine_id=division_machine.division_machine_id,
-                     token_id=token_to_set.token_id)        
+                     token_id=token_to_set.token_id,
+                     commit=commit)        
     #if player:
     #    tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
     #else:
@@ -200,7 +202,7 @@ def set_token_start_time(app,player,division_machine,team_id=None):
     #                 player_id=player_id,team_id=team_id)
         
 
-def remove_player_from_queue(app,player=None,division_machine=None):
+def remove_player_from_queue(app,player=None,division_machine=None,commit=True):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
     if player:
@@ -216,16 +218,17 @@ def remove_player_from_queue(app,player=None,division_machine=None):
     if len(queue.queue_child) > 0:        
         if queue.parent_id is None:            
             division_machine.queue_id=queue.queue_child[0].queue_id
-            db.session.commit()                            
+            ##db.session.commit()                            
         else:            
             queue.queue_child[0].parent_id=queue.parent_id
-            db.session.commit()                
+            ##db.session.commit()                
     else:
         if queue.parent_id is None:
             division_machine.queue_id=None
-            db.session.commit()                            
+            ##db.session.commit()                                
     db.session.delete(queue)    
-    db.session.commit()    
+    if commmit:
+        db.session.commit()    
     return queue
 
 def get_queue_from_division_machine(division_machine,json_output=False):

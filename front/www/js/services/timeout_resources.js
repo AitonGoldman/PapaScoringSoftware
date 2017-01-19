@@ -219,7 +219,8 @@ angular.module('TD_services.timeout_resources')
                   var declareJagoffResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/jagoff','PUT');
                   var getJagoffsResource = generate_resource_definition(':site/jagoff','GET');                  
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
-                  var addToQueueResource = generate_resource_definition(':site/queue','POST');                                    
+                  var addToQueueResource = generate_resource_definition(':site/queue','POST');
+                  var removePlayerFromMachineResource = generate_resource_definition(':site/division_machine/:division_machine_id/player/:player_id','DELETE');
                   var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');
                   var getDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET');
                   var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET');
@@ -285,6 +286,7 @@ angular.module('TD_services.timeout_resources')
                       DeclareJagoff: generate_custom_http_executor(declareJagoffResource,'jagoff','put'),
                       AddScore: generate_custom_http_executor(addScoreResource,'added_score','put'),
                       RemovePlayerFromQueue: generate_custom_http_executor(removePlayerFromQueueResource,'modified_queue','delete'),
+                      RemovePlayerFromMachine: generate_custom_http_executor(removePlayerFromMachineResource,'machine_removed_from','delete'),
                       GetPlayerResults: generate_custom_http_executor(getPlayerResultsResource,'player_results','get'),
                       GetPlayerEntries: generate_custom_http_executor(getPlayerEntriesResource,'player_entries','get'),                      
                       AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put'),

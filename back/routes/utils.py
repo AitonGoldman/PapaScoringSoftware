@@ -227,7 +227,7 @@ def remove_player_from_queue(app,player=None,division_machine=None,commit=True):
             division_machine.queue_id=None
             ##db.session.commit()                                
     db.session.delete(queue)    
-    if commmit:
+    if commit:
         db.session.commit()    
     return queue
 

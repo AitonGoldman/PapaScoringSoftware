@@ -26,6 +26,7 @@ app = angular.module(
     'app.teams',
     'app.queue_player_after_play',
     'app.jagoffs',
+    'app.remove_player',
     /*REPLACEMECHILD*/
 	]
 );

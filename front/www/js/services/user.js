@@ -6,10 +6,12 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
     var logged_in_status = false;
     var type_of_user = undefined;
     var user_site = undefined;
+    var login_time = undefined;
     var set_logged_in_user_func = function(new_user,new_user_type) {        
         logged_in_user = new_user;
         type_of_user = new_user_type;
         logged_in_status=true;
+        login_time = new Date();
     };
 
     
@@ -35,7 +37,6 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
                     } else {
                         set_logged_in_user_func(data.data,'user');
                     }
-                    
                 }
                 Modals.loaded();
             },function(data){

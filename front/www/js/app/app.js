@@ -49,20 +49,32 @@ app.controller(
         //        Utils because it will cause a circular reference
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){
             $scope.site=state.params.site;            
-            User.set_user_site($scope.site);            
+            User.set_user_site($scope.site);
+            if (User.logged_in() == true) {
+                if (User.login_time == undefined){
+                    User.login_time = new Date();                    
+                } else {
+                    cur_time = new Date();
+                    time_delta = cur_time - User.login_time;                                        
+                    if((time_delta/1000) > (60)){
+                        return TimeoutResources.GetDivisions(undefined,{site:$scope.site});                        
+                    }
+                }
+                return Utils.resolved_promise();
+            }             
             if(do_not_check_current_user == undefined && User.logged_in() == false){                
                 
                 check_user_promise = User.check_current_user();
-                get_divisions_promise = check_user_promise.then(function(data){
-                    Modals.loading();
-                    return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+                get_divisions_promise = check_user_promise.then(function(data){                    
+                    if(TimeoutResources.GetAllResources().divisions==undefined){
+                        Modals.loading();
+                        return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+                    }
                 });
                 
                 return get_divisions_promise.then(function(data){
                     Modals.loaded();
                 });
-            } else {
-                return Utils.resolved_promise();
             }                                 
         };
         $scope.customBackButtonNav = function(){
@@ -86,6 +98,12 @@ app.controller(
                 //alert('on a native app');
             }
         });
+        $scope.force_reload = function(){
+            divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});            
+            divisions_promise.then(function(data){
+                $state.reload($state.current);
+            });
+        };
         $scope.server_ip_address=server_ip_address;
         $scope.take_pic_and_upload = function(type,info_object){            
             upload_pic_promise = Camera.take_user_pic_and_upload(type);

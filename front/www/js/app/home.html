@@ -92,7 +92,14 @@
             Jagoffs
           </div>
           <i class="icon ion-chevron-right"></i>
+        </a>
+        <a id='menu_tournament_link' class='item item-icon-right' menu-close ui-sref='.ppo_qualifying_list' ng-if="User.logged_in() == true && User.has_role('admin')">
+          <div>
+            Finals
+          </div>
+          <i class="icon ion-chevron-right"></i>
         </a>                
+        
         <a id='logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
           <div>
             Logout

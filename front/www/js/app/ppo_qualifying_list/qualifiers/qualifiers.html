@@ -1,0 +1,77 @@
+<ion-view view-title="Qualifiers List">
+  <ion-content>
+    <div class='list' ng-if='selecting_players == true'>
+      <!--<div class='item'>-->
+      <div ng-if='display_removed_players' class='item item-divider'>Removed Players</div>
+      <label style='padding:0px;' class="item item-input item-select" ng-repeat='player in removed_players.data'>
+        <div style='padding:0px' class="input-label">
+          <ion-checkbox ng-change='on_change()' ng-model='players_present.data[player.player_id].present' style='border-width:0px'><span></span> <span>{{player.player_name}} (id #{{player[1].player_id}}) (ifpa ranking {{player[1].ifpa_ranking}})</span>
+            {{}}
+          </ion-checkbox>
+        </div>
+      </label>
+      <!--</div>-->
+      <div class='item item-divider'>A Players</div>      
+      <label style='padding:0px;' class="item item-input item-select" ng-repeat='player in resources.ppo_qualifying_list.data.a'>
+        <div style='padding:0px' class="input-label">
+          <ion-checkbox ng-change='on_change()' ng-model='players_present.data[player[1].player_id].present' style='border-width:0px'><span>RANK : {{player[0]+1}}</span> <span>{{player[1].player_name}} (id #{{player[1].player_id}}) (ifpa ranking {{player[1].ifpa_ranking}})</span>
+            {{}}
+          </ion-checkbox>
+        </div>
+        <select ng-if='player[1].select_options != undefined' ng-options="item for item in player[1].select_options" ng-model="player[1].selected_option"></select>          
+        <!--          <select ng-model='player[1].selected_option' ng-if='player[1].select_options!=undefined'>
+                      <option ng-repeat='option in player[1].select_options'>{{option}}</option>
+        </select>-->
+      </label>
+      <!--</div>-->
+      <div class='item item-divider'>B Players</div>
+      <label style='padding:0px;' class="item item-input item-select" ng-repeat='player in resources.ppo_qualifying_list.data.b'>
+        <div style='padding:0px' class="input-label">
+          <ion-checkbox ng-change='on_change()' ng-model='players_present.data[player[1].player_id].present' style='border-width:0px'><span>RANK : {{player[0]+1}}</span> <span>{{player[1].player_name}} (id #{{player[1].player_id}}) (ifpa ranking {{player[1].ifpa_ranking}})</span>
+            {{}}
+          </ion-checkbox>
+        </div>
+        <select ng-if='player[1].select_options != undefined' ng-options="item for item in player[1].select_options" ng-model="player[1].selected_option"></select>          
+        
+        <!--          <select ng-if='player[1].select_options!=undefined'>
+                      <option ng-repeat='option in player[1].select_options'>{{option}}</option>
+        </select>-->
+        
+        <!--          <select ng-if='show_tiebreaker_input($index,"b")'>
+                      <option ng-repeat='option in get_num_ties($index,"b")'>{{option}}</option>
+        </select>-->
+      </label>
+      <!--</div>-->
+      <div class='item item-divider'>Losers</div>
+      <label style='padding:0px;' class="item item-input item-select" ng-repeat='player in resources.ppo_qualifying_list.data.rest|limitTo:5'>
+        <div style='padding:0px' class="input-label">
+          <ion-checkbox ng-change='on_change()' ng-model='players_present.data[player[1].player_id].present' style='border-width:0px'><span>RANK : {{player[0]+1}}</span> <span>{{player[1].player_name}} (#{{player[1].player_id}})</span>
+            {{}}
+          </ion-checkbox>
+        </div>
+      </label>
+      <a class='seperate_button item item-calm item-icon-right' ng-click='on_submit()'>
+        Generate Finals List
+        <i class="icon ion-chevron-right"></i>                    
+      </a>
+    </div>
+    <div data-tap-disabled="true" style='padding-top:128px' ng-if='selecting_players == false'>     
+      <b>A division</b>
+      <hr>
+      <span class="selectable-text" ng-repeat='player in resources.ppo_qualifying_list.data.a'>
+        {{player[1].player_name}} <br>
+      </span>
+      <br>
+      <br>
+      <b>B division</b>
+      <hr>
+      <span class="selectable-text" ng-repeat='player in resources.ppo_qualifying_list.data.b'>
+        {{player[1].player_name}} <br>
+      </span>
+      
+    </div>
+    
+    
+  </ion-content>
+</ion-view>
+

@@ -228,30 +228,26 @@ def route_get_player_results(player_id):
 def route_get_division_results(division_id):
     return get_division_results(division_id=division_id)
 
-def get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker_ranks):
+def get_ranked_qualifying_ppo_players(division_id,absent_players,tie_breaker_ranks):
     tables = db_util.app_db_tables(current_app)
-    if absent_players_raw:
-        absent_players = absent_players_raw.split(',')
-    else:
-        absent_players = []
     division = fetch_entity(tables.Division,division_id)         
     max_ifpa_rank = division.ppo_a_ifpa_range_end
     num_a_qualifiers = division.finals_num_qualifiers_ppo_a
     ppo_results = get_division_results(division_id=division_id,return_json=False)
     ppo_qualifying_list = []
-    match_absent_player = lambda x: str(x[1]['player_id']) in absent_players
+    #match_absent_player = lambda x: str(x[1]['player_id']) in absent_players    
     for div_id,div_results in ppo_results['data']['ranked_player_list'].iteritems():        
         if div_id != division.division_id:
             continue
         for idx,player_result in enumerate(div_results):                        
-            player = player_result[1]
-            if str(player['player_id']) in absent_players:
+            player = player_result[1]            
+            if str(player['player_id']) in absent_players:                                
                 continue
             if player['ifpa_ranking'] < max_ifpa_rank and idx + 1 > num_a_qualifiers:
-                continue
-            if str(player['player_id']) in tie_breaker_ranks:
-                new_rank = tie_breaker_ranks[str(player['player_id'])]
-                player_result[1]['temp_rank']=int(new_rank)                
+                continue            
+            if str(player['player_id']) in tie_breaker_ranks:                
+                new_rank = tie_breaker_ranks[str(player['player_id'])]                
+                player_result[1]['temp_rank']=int(new_rank)-1                
                 ppo_qualifying_list.append(player_result[1])
             else:
                 player_result[1]['temp_rank']=player_result[0]
@@ -267,12 +263,22 @@ def route_get_division_ppo_qualifying_results(division_id):
     reranked_ppo_qualifying_list = get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker_ranks)
     return jsonify({'data':reranked_ppo_qualifying_list})
 
-@admin_manage_blueprint.route('/results/division/<division_id>/ppo/qualifying/list',methods=['GET'])
+@admin_manage_blueprint.route('/results/division/<division_id>/ppo/qualifying/list',methods=['PUT'])
 def route_get_division_ppo_qualifying_results_list(division_id):
     tables = db_util.app_db_tables(current_app)
-    absent_players_raw = request.args.get('absent_players')    
-    tie_breaker_ranks = json.loads(request.data)    
-    reranked_ppo_qualifying_list = get_ranked_qualifying_ppo_players(division_id,absent_players_raw,tie_breaker_ranks)
+    #absent_players_raw = request.args.get('absent_players',None)    
+    #tie_breaker_ranks = json.loads(request.data)
+    json_data = json.loads(request.data)
+    if 'tie_breaker_ranks' in json_data:
+        tie_breaker_ranks = json_data['tie_breaker_ranks']
+    else:
+        tie_breaker_ranks = {}
+    if 'absent_players' in json_data:        
+        absent_players = json_data['absent_players']        
+    else:
+        absent_players = {}
+        
+    reranked_ppo_qualifying_list = get_ranked_qualifying_ppo_players(division_id,absent_players,tie_breaker_ranks)    
     division = fetch_entity(tables.Division,division_id)         
     if division.finals_player_selection_type == "ppo":
         num_a_qualifiers = division.finals_num_qualifiers_ppo_a
@@ -280,10 +286,18 @@ def route_get_division_ppo_qualifying_results_list(division_id):
         a_end_rank=num_a_qualifiers
         if len(reranked_ppo_qualifying_list) < a_end_rank:
             a_end_rank = len(reranked_ppo_qualifying_list)
+        while(reranked_ppo_qualifying_list[a_end_rank-1][0] == reranked_ppo_qualifying_list[a_end_rank][0]):
+            a_end_rank = a_end_rank+1
         b_end_rank=a_end_rank + num_b_qualifiers    
         if len(reranked_ppo_qualifying_list) < b_end_rank:                
-            b_end_rank = len(reranked_ppo_qualifying_list)    
-        return jsonify({'data':{'a':reranked_ppo_qualifying_list[0:a_end_rank],'b':reranked_ppo_qualifying_list[a_end_rank:b_end_rank]}})
+            b_end_rank = len(reranked_ppo_qualifying_list)
+        while(reranked_ppo_qualifying_list[b_end_rank-1][0] == reranked_ppo_qualifying_list[b_end_rank][0]):
+            b_end_rank = b_end_rank+1
+            
+        #print reranked_ppo_qualifying_list[0:a_end_rank]
+        return jsonify({'data':{'a':reranked_ppo_qualifying_list[0:a_end_rank],
+                                'b':reranked_ppo_qualifying_list[a_end_rank:b_end_rank],
+                                'rest':reranked_ppo_qualifying_list[b_end_rank:]}})
 
     if division.finals_player_selection_type == "papa":
         return jsonify({'data':reranked_ppo_qualifying_list})

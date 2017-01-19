@@ -27,6 +27,7 @@ app = angular.module(
     'app.queue_player_after_play',
     'app.jagoffs',
     'app.remove_player',
+    'app.ppo_qualifying_list',
     /*REPLACEMECHILD*/
 	]
 );

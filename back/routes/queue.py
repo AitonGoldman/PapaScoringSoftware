@@ -142,13 +142,14 @@ def add_player_to_machine_from_queue(division_machine_id):
     players_to_alert = get_player_list_to_notify(player.player_id,division_machine)
     set_token_start_time(current_app,player,division_machine,commit=False)    
     division_machine.player_id = root_queue.player_id    
+    ##remove_player_from_queue(current_app,player,division_machine)
     if len(root_queue.queue_child)==0:
         division_machine.queue_id = None
-        ##db.session.commit()        
+        db.session.commit()        
     else:
         division_machine.queue_id = root_queue.queue_child[0].queue_id
         root_queue.queue_child[0].parent_id=None        
-        ##db.session.commit()        
+        db.session.commit()        
     db.session.delete(root_queue)
     db.session.commit()    
     return_dict = {'division_machine':division_machine.to_dict_simple()}

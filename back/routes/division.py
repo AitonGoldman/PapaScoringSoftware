@@ -173,16 +173,19 @@ def route_undo_division_machine_player_team(division_id,division_machine_id):
     db.session.commit()    
     return jsonify({'data':division_machine.to_dict_simple()})
 
-@admin_manage_blueprint.route('/division/<division_id>/division_machine/<int:division_machine_id>/player',
+@admin_manage_blueprint.route('/division_machine/<int:division_machine_id>/player/<player_id>',
                               methods=['DELETE'])
 @login_required
 @Scorekeeper_permission.require(403)
-def route_remove_division_machine_player(division_id,division_machine_id):            
+def route_remove_division_machine_player(division_machine_id,player_id):            
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)                            
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)            
     if division_machine.player_id is None:
-        raise BadRequest('No player playing on this machine')
+        raise BadRequest('No player playing on this machine!')
+    if division_machine.player_id != int(player_id):
+        raise BadRequest('Player is not playing on this machine!')
+
     division_machine.player_id=None
     tables.db_handle.session.commit()
     return jsonify({'data':division_machine.to_dict_simple()})

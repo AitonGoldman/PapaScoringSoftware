@@ -66,6 +66,7 @@ def generate_player_class(db_handle,Team_Player_mapping):
         def to_dict_simple(self):
             player_dict = to_dict(self)
             player_dict['pin']=None
+            player_dict['full_name']=self.get_full_name()
             if self.roles:
                 player_dict['roles']={role.role_id:role.to_dict_simple() for role in self.roles}
             if self.linked_division_id:

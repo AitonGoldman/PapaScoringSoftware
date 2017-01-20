@@ -291,6 +291,31 @@ ion-side-menu {
    font-size:$font-size-base;                    
 }
 
+.standard_small_font {
+   font-size:$font-size-base*.75;                    
+}
+
+
+.queue_span_margin {
+   float:right;                                   
+   padding-left:15px;                
+}
+
+.custom_queue_item_small {
+    color:white;
+    font-size: $font-size-base - 2;
+    position:relative;
+    left: -1*$font-size-base*1.4;
+}
+
+.custom_queue_item_large {
+    color:white;
+    font-size: $font-size-base - 2;
+    position:relative;
+    left: -1*$font-size-base*1.65;
+}
+
+
 .selectable-text {
 -webkit-user-select: text;
 -moz-user-select: text;

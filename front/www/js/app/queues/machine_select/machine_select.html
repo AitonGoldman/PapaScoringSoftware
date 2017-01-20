@@ -1,9 +1,13 @@
 <ion-view view-title="Queues">
   <ion-content>      
     <div class="skinny-list list">
-      <a  ng-if='division_machine.player_id != undefined || (division_machine.queues.length > 0)' class="item item-icon-right" ng-repeat='division_machine in resources.queues.data' ui-sref='.machine_queue({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})'>        
-        <span  style='background-color:yellow;border-style:solid;border-width:1px;border-radius:15px;padding:5px;'>{{division_machine.queues.length}}</span>
-        <span class='queue_span_margin'>{{division_machine.division_machine_name}}</span>
+      <a  ng-if='division_machine.player_id != undefined || (division_machine.queues.length > 0)' class="item item-icon-left item-icon-right" ng-repeat='division_machine in resources.queues.data' ui-sref='.machine_queue({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})'>        
+        <!--<span  style='background-color:yellow;border-style:solid;border-width:1px;border-radius:15px;padding:5px;'>{{division_machine.queues.length}}</span>-->
+        <i class="icon ion-record"><span ng-class='{custom_queue_item_small:division_machine.queues.length<10,custom_queue_item_large:division_machine.queues.length > 9}'>{{division_machine.queues.length}}</span></i>
+        
+        <span>{{division_machine.division_machine_name}}
+          <br>
+          Avg Time : {{division_machine.avg_play_time}}</span>
         <i class="icon ion-chevron-right"></i>
       </a>
       <button class="button button-calm button-full item-icon-right" ui-sref=".^">

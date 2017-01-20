@@ -34,6 +34,7 @@ def get_queues(division_id):
             'division_machine_id':division_machine.division_machine_id,
             'division_id':division_machine.division_id,
             'player_id':division_machine.player_id,
+            'avg_play_time':division_machine.avg_play_time,
             'queues':get_queue_from_division_machine(division_machine,json_output=True)
         }
     return jsonify({'data':queues})

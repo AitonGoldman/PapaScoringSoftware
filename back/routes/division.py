@@ -9,6 +9,7 @@ from routes.utils import fetch_entity,check_player_team_can_start_game,set_token
 from orm_creation import create_division, create_division_machine
 import datetime
 from sqlalchemy import and_,or_
+import random
 
 
 @admin_manage_blueprint.route('/division',methods=['GET'])
@@ -83,13 +84,10 @@ def route_get_division_machines_avg_playtime(division_id,division_machine_id):
     for avg_time_division_machine_id,machine_times in avg_times.iteritems():                
         total_time = 0
         avg_game_time = 0        
-        #for avg_time in machine_times:
-        #total_time = total_time + avg_time
-        
         total_time = sum(machine_times)        
         avg_game_time = total_time/len(machine_times)    
         division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=avg_time_division_machine_id).first()
-        division_machine.avg_play_time = datetime.datetime.fromtimestamp(avg_game_time).strftime('%M min, %S sec')        
+        division_machine.avg_play_time = datetime.datetime.fromtimestamp(avg_game_time).strftime('%M min')        
         #print datetime.datetime.fromtimestamp(avg_game_time).strftime('%M:%S')
         #return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
     db.session.commit()        

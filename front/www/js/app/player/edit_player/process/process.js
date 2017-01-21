@@ -7,17 +7,17 @@ angular.module('app.player.edit_player.process').controller(
 	$scope.player_id=$state.params.player_id;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
          $scope.process_step=$state.params.process_step;
         if(_.size($scope.process_step)==0){
             //Utils.stop_post_reload();
             Modals.error('Tried to reload a page that submits data.',$scope.site,'app');
             return;
-        }
-        
+        }        
         $scope.player_info=$state.params.player_info;
         update_player_promise = TimeoutResources.UpdatePlayer($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id},$scope.player_info);
-        Modals.loading();
+        
         // = TimeoutResources.GetEtcData();
         update_player_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

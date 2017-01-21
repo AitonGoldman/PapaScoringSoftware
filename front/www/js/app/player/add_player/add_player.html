@@ -10,7 +10,7 @@
       </label>
 
       <label class="item-input item">
-        <span>Last Name : </span>
+        <span class='input-label'>Last Name : </span>
         <input class="myinput" ng-model='player_info.last_name' type="text" placeholder="Last Name" />
       </label>
       <div style='padding:0px' class='item row'>
@@ -21,11 +21,9 @@
           <ion-radio  id="add_player_linked_division_{{division.division_name}}" class='item' style='border-width:0px' ng-model="player_info.linked_division_id" ng-repeat='division in main_divisions' ng-value="division.division_id"> {{division.division_name}}</ion-radio>          
         </div>
       </div>
-      <a ng-if='is_native == true' class="item item-icon-right item-calm" style='text-align:left' ng-click='take_pic_and_upload("player",player_info)'>
+      <a ng-if='is_native == true' class="item item-icon-right item-calm" style='text-align:left' ng-click='take_pic_and_upload("player",player_info,site)'>
         <i class="icon ion-camera"></i>
         <span >Take Picture</span>
-        <!--    <img align="bottom" src="" class="avatar-frame-small" style='margin-left:100%'>-->
-<!--        <img ng-if='player_info.has_picture==true' align="bottom" class="avatar-frame-small" style='float:right;margin-right:48px'> -->
       </a>
 
       <a id='add_player_get_ifpa_ranking' class="item item-icon-right item-calm" style='text-align:left;maring-top:0px' ng-click='get_ifpa_ranking()' ng-disabled='player_info.first_name==undefined && player_info.last_name==undefined'>
@@ -33,11 +31,11 @@
         <span >Lookup Ifpa Ranking <span id="add_player_ifpa_ranking" ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>
       </a>
     </ion-list>
-      <a id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="item item-icon-right item-calm input-list-button" style='text-align:left;margin-top:15px' ng-disabled='form_not_ready_for_submit()'>
+      <button id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="button button-full item-icon-right button-calm input-list-button seperate_button" style='text-align:left;margin-top:15px' ng-disabled='form_not_ready_for_submit()'>
         
         <i class="icon ion-chevron-right"></i>
         <span >Add Player</span>
-      </a>
+      </button>
     
   </ion-content>
 </ion-view>

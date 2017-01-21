@@ -1,17 +1,19 @@
-<ion-view view-title="Logged In">
+<ion-view view-title="Logged In" hide-back-button='true'>
   <ion-content>      
       <center>
         <div class='standard_big_font'>
-          <div class='padding'><u><i class="icon ion-log-in padding"></i><span>{{resources.logged_in_player.data.player.first_name}} {{resources.logged_in_player.data.player.last_name}}</u></span></div>
-          <div>
-            <i class='icon padding'></i>Has Logged In!
-          </div>
-          <br>
-          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref='app({site:site})'>
-            <span>Home</span>
-            <i class="icon ion-chevron-right"></i>          
+          <button class='button button-clear button-stable icon-left ion-log-in review-icon' >            
+              <span id='login_player_process_logged_in_playername'><u>{{resources.logged_in_player.data.player.full_name}}</u></span>
           </button>
+          <div>
+            Has Logged In!
+          </div>
         </div>
+          <button id='login_player_process_return_home_button' class='seperate_button button button-full button-calm item-icon-right' ui-sref="app">
+            <span>Return Home</span>
+            <i class="icon ion-chevron-right"></i>          
+        </button>
+
       </center>
   </ion-content>
 </ion-view>

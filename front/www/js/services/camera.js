@@ -12,7 +12,7 @@ angular.module('TD_services.camera').factory('Camera', ['$state','$timeout','$ro
     };
     
     return{
-        take_user_pic_and_upload: function(type_of_pic){
+        take_user_pic_and_upload: function(type_of_pic,site,id){
             //FIXME : need to use ngCordova so we can have proper callbacks, and thus unset has_picture if needed                                                                
             take_pic_promise = $cordovaCamera.getPicture({targetWidth:200,targetHeight:200}).then(function(imageUri) {                
                 return imageUri;
@@ -25,11 +25,17 @@ angular.module('TD_services.camera').factory('Camera', ['$state','$timeout','$ro
                 
                 var localFileName = data.substr(data.lastIndexOf('/') + 1);
                 var randomNumber = Math.floor((Math.random() * 1000) + 1); 
-                var dest_pic_name=localFileName+"-"+randomNumber+".jpg";
+                if(id == undefined){
+                    var dest_pic_name=localFileName+"-"+randomNumber+".jpg";
+                } else {
+                    var dest_pic_name="player_"+id+".jpg";
+                }
+                
                 //var dest_pic_name=user_id+".jpg";
                 //var upload_host="http://98.111.232.93:8000";
                 //var upload_host="http://192.168.1.178:8000";
-                var upload_url_path="/test/media_upload/"+type_of_pic+"_pic";            
+                var upload_host="http://"+server_ip_address+":"+server_port;
+                var upload_url_path="/"+site+"/media_upload/"+type_of_pic+"_pic";            
                 var cordova_options = {};
                 cordova_options.timeout = 10000;
                 cordova_options.chunkedMode = false;

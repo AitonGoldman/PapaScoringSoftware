@@ -23,7 +23,7 @@ if(argv.help){
     console.log('--test_stripe_sku <stripe_sku> (for tests that need stripe sku)');
     return;
 }
-gulp.task('default', ['sass']);
+gulp.task('default', ['sass','sassmobile']);
 
 gulp.task('e2e', function(done) {
     if(argv.test_instance_ip == undefined){
@@ -64,6 +64,19 @@ gulp.task('unit', function (done) {
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
+    .pipe(sass())
+    .on('error', sass.logError)
+    .pipe(gulp.dest('./www/css/'))
+    .pipe(minifyCss({
+      keepSpecialComments: 0
+    }))
+    .pipe(rename({ extname: '.min.css' }))
+    .pipe(gulp.dest('./www/css/'))
+    .on('end', done);
+});
+
+gulp.task('sassmobile', function(done) {
+  gulp.src('./scss/ionic.mobile.app.scss')
     .pipe(sass())
     .on('error', sass.logError)
     .pipe(gulp.dest('./www/css/'))

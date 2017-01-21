@@ -18,8 +18,9 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
     
     return {
         //FIXME : this should not be here - we should pass site in when needed
-        loaded: function(){                        
-            $timeout(function(){
+        loaded: function(){
+            console.log('hi there - in loaded');            
+            $timeout(function(){                
                 $ionicLoading.hide();                                
             },500);            
         },

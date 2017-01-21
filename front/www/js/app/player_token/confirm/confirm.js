@@ -4,28 +4,22 @@ angular.module('app.player_token.confirm').controller(
     'app.player_token.confirm',[
         '$scope','$state','TimeoutResources','Utils','Modals','User',
         function($scope, $state, TimeoutResources, Utils,Modals,User) {
-        $scope.site=$state.params.site;
+            $scope.site=$state.params.site;
 
-        $scope.utils = Utils;
-        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        $scope.token_info = $state.params.token_info;
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-            //})
+            $scope.utils = Utils;
+            $scope.token_info = $state.params.token_info;
+            Modals.loading();
+            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+            $scope.bootstrap_promise.then(function(data){
+                $scope.resources = TimeoutResources.GetAllResources();
+                Modals.loaded();
+            });
             $scope.create_tickets = function(){
                 $scope.added_tokens = {};
                 $scope.added_tokens['divisions']=$scope.token_info.divisions;
                 $scope.added_tokens['metadivisions']=$scope.token_info.metadivisions;
                 $scope.added_tokens['teams']=$scope.token_info.teams;
                 $scope.added_tokens['player_id']=User.logged_in_user().player.player_id;
-                // if($scope.resources.player.team != undefined){
-                //     $scope.added_tokens['team_id']=$scope.resources.player.team.team_id;
-                // } else {
-                //     $scope.added_tokens['team_id'] = undefined;
-                // }
                 Modals.loading();
                 token_add_promise = TimeoutResources.AddPlayerTokens(undefined,{site:$scope.site},$scope.added_tokens);                
                 token_add_promise.then(function(data){

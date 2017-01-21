@@ -2,13 +2,13 @@
   <ion-content>      
       <center>
         <div class='standard_big_font'>
-          <button class='button button-clear button-stable icon-left ion-ios-eye' >            
+          <button class='button button-clear button-dark icon-left ion-ios-eye review-icon' >            
               <span><u>Review</u></span>
           </button>
           <table>
             <tr ng-repeat='(division_id,token_count) in token_info.divisions'>
               <td class='padding-right' align="right">
-                <i class="icon padding"></i>{{token_info.divisions_names[division_id]}} : 
+                {{token_info.divisions_names[division_id]}} : 
               </td>
               <td class='padding-left'>
                 {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
@@ -16,7 +16,7 @@
             </tr>
             <tr ng-repeat='(division_id,token_count) in token_info.teams'>
               <td class='padding-right' align="right">
-                <i class="icon padding"></i>{{token_info.divisions_names[division_id]}} : 
+                {{token_info.divisions_names[division_id]}} : 
               </td>
               <td class='padding-left'> 
                 {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
@@ -24,7 +24,7 @@
             </tr>
             <tr ng-repeat='(metadivision_id,token_count) in token_info.metadivisions'>
               <td class='padding-right' align="right">
-                <i class="icon padding"></i>{{token_info.metadivisions_names[metadivision_id]}} : 
+                {{token_info.metadivisions_names[metadivision_id]}} : 
               </td>
               <td class='padding-left'>
                 {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
@@ -32,10 +32,10 @@
             </tr>            
           </table>
           <br>
-          <a id='HomeButton' class='item item-positive item-icon-right' ng-click="create_tickets()">
+          <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ng-click="create_tickets()">
             <span>Purchase Tickets</span>
             <i class="icon ion-chevron-right"></i>          
-          </a>
+          </button>
         </div>
       </center>
 

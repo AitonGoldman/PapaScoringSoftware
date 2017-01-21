@@ -55,7 +55,10 @@ def route_add_score(division_machine_id, score):
     if player_id:
         tokens_left_string = calc_audit_log_remaining_tokens(player_id)
     if team_id:
-        tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+        team = tables.Team.query.filter_by(team_id=team_id).first()
+        player_id = [player.player_id for player in team.players][0]
+        #tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+        tokens_left_string = calc_audit_log_remaining_tokens(player_id)
     create_audit_log("Ticket Summary",datetime.datetime.now(),
                      tokens_left_string,user_id=current_user.user_id,
                      player_id=player_id,team_id=team_id,

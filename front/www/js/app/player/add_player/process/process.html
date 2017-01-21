@@ -2,31 +2,65 @@
   <ion-content>      
       <center>
         <div class='standard_big_font'>
-          <div class='padding'><u><i class="icon ion-person-add padding"></i><span>{{resources.added_player.data.first_name+" "+resources.added_player.data.last_name}}</u></span></div>
-        <table>
-          <tr>
-            <td class='padding' align="right">
-              <i class="icon padding"></i>Player ID : 
-            </td>
-            <td class='padding'>
-              {{resources.added_player.data.player_id}}
-            </td>
-          </tr>
-          <tr>
-            <td class='padding' align="right"> 
-              <i class="icon padding"></i>Player PIN : 
-            </td>
-            <td class='padding'>
-              {{resources.added_player.data.pin}}          
-            </td>
-          </tr>
-        </table>
-
-          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref='app({site:site})'>
-            <span>Home</span>
+          <button class='button button-clear button-stable icon-left ion-ios-eye review-icon' >            
+              <span><u>{{resources.added_player.data.full_name}}</u></span>
+          </button>
+          <table>
+            <tr>
+              <td class='padding-right' align="right">
+                Player ID : 
+              </td>
+              <td id="player_add_player_process_player_id" class='padding-left'>
+                {{resources.added_player.data.player_id}}
+              </td>
+            </tr>
+            <tr>
+              <td class='padding-right' align="right">
+                Player Pin # : 
+              </td>
+              <td id="player_add_player_process_player_pin" class='padding-left'> 
+                {{resources.added_player.data.pin}}
+              </td>
+            </tr>
+          </table>
+          
+          <button id='player_add_player_process_purchase_tickets_button' class='button button-full seperate_button button-calm item-icon-right' ui-sref='app.token.token_select({site:site,player_id:resources.added_player.data.player_id})'>
+            <span>Purchase Tickets</span>
             <i class="icon ion-chevron-right"></i>          
           </button>
+          <button id='player_add_player_process_home_button' class='button button-full seperate_button button-calm item-icon-right' ui-sref='app'>
+            <span>Return Home</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
+          
         </div>
+
+        <!-- <div class='standard_big_font'> -->
+        <!--   <div class='padding'><u><i class="icon ion-person-add padding"></i><span>{{resources.added_player.data.first_name+" "+resources.added_player.data.last_name}}</u></span></div> -->
+        <!-- <table> -->
+        <!--   <tr> -->
+        <!--     <td class='padding' align="right"> -->
+        <!--       <i class="icon padding"></i>Player ID :  -->
+        <!--     </td> -->
+        <!--     <td class='padding'> -->
+        <!--       {{resources.added_player.data.player_id}} -->
+        <!--     </td> -->
+        <!--   </tr> -->
+        <!--   <tr> -->
+        <!--     <td class='padding' align="right">  -->
+        <!--       <i class="icon padding"></i>Player PIN :  -->
+        <!--     </td> -->
+        <!--     <td class='padding'> -->
+        <!--       {{resources.added_player.data.pin}}           -->
+        <!--     </td> -->
+        <!--   </tr> -->
+        <!-- </table> -->
+
+        <!--   <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref='app({site:site})'> -->
+        <!--     <span>Home</span> -->
+        <!--     <i class="icon ion-chevron-right"></i>           -->
+        <!--   </button> -->
+        <!-- </div> -->
       </center>
 
   </ion-content>

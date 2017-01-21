@@ -2,21 +2,16 @@
   <ion-content>      
       <center>
         <div class='standard_big_font'>
-          <div class='padding'><u><i class="icon ion-log-out padding"></i><span>Logged Out</u></span></div>
-          <div>
-            <i class='icon padding'></i>Bye Bye!
-          </div>
-          <br>
-          <a ng-if='type_of_page=="user"' id="LoginAgainButton" class='button button-full button-positive item-icon-right' ui-sref='app.login({site:site})'>
-            <span>Login Again</span>
-            <i class="icon ion-chevron-right"></i>          
-        
-          </a>
-          <button ng-if='type_of_page=="player"' id="LoginAgainButton" class='button button-full button-positive item-icon-right' ui-sref='app.login_player({site:site})'>
-            <span>Login Again</span>
-            <i class="icon ion-chevron-right"></i>                  
+          <button class='button button-clear button-stable icon-left ion-log-out review-icon' >            
+              <span id='login_process_logged_in_username'><u>Logged Out</u></span>
           </button>
+          <div>
+          </div>
         </div>
+          <button id='logout_return_home_button' class='seperate_button button button-full button-calm item-icon-right' ui-sref="app">
+            <span>Return Home</span>
+            <i class="icon ion-chevron-right"></i>          
+        </button>
     </center>
   </ion-content>
 </ion-view>

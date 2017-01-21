@@ -1,9 +1,9 @@
-<ion-view view-title="" class='selectable-text'>
+<ion-view view-title="Missing Tokens" class='selectable-text' >
   <ion-content >      
     <center >
       <div class='first-element' >
       </div>
-      <table class='table' data-tap-disabled="true" class='selectable-text'>
+      <table data-tap-disabled="true" class="selectable-text small-text-table">
         <th>Date</th>        <th>Action</th>        <th>Responsible</th>        <th>Description</th>
        
         <tr ng-class='{grey: audit_log_entry.contents[1]=="Ticket Summary"}' ng-repeat="audit_log_entry in resources.audit_log_missing_tokens.data">

@@ -35,35 +35,13 @@
         <div class="input-label">
           {{resources.divisions.data[division_id].tournament_name}}
         </div>
-
-        <!--<select ng-change='calc_total_cost()' ng-model="token_info.teams[division_id]" ng-options="option for option in []|range:resources.player_tokens.data.available_tokens.teams[division_id]+1 track by option">-->
         <select ng-change='calc_total_cost()' ng-model="token_info.teams[division_id]" ng-options="option[0] for option in resources.player_tokens.data.available_tokens.teams_remaining_token_list[division_id]">          
-        
-          
         </select>
       </label>
-      
-
-      <!-- <div ng-if='division.team_tournament == false && division.meta_division_id == null' class='item' ng-repeat='(division_id,division) in resources.divisions.data' align='left' >{{resources.divisions.data[division_id].tournament_name}} : {{token_count}} -->
-      <!--   <select ng-change='calc_total_cost()' name="repeatSelect" id="repeatSelect" ng-model="token_info.divisions[division_id]"> -->
-      <!--     <option ng-repeat="option in []|range:resources.player_tokens.data.available_tokens.divisions[division_id]+1:0" value="{{option}}">{{option}}</option> -->
-      <!--   </select> -->
-      <!-- </div> -->
-      <!-- <div class='item' ng-repeat='(metadivision_id,metadivision) in resources.divisions.data.metadivisions' align='left' >{{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : -->
-      <!--   <select ng-change='calc_total_cost()' name="repeatSelect" id="repeatSelect" ng-model="token_info.metadivisions[metadivision_id]"> -->
-      <!--     <option ng-repeat="option in []|range:resources.player_tokens.data.available_tokens.metadivisions[metadivision_id]+1:0" value="{{option}}">{{option}}</option> -->
-      <!--   </select> -->
-      <!-- </div> -->
-      <!-- <div ng-if='team_division.team_tournament == true' class='item' ng-repeat='(division_id,team_division) in resources.divisions.data' align='left' >{{resources.divisions.data[division_id].tournament_name}} : -->
-      <!--   <select ng-change='calc_total_cost()' name="repeatSelect" id="repeatSelect" ng-model="token_info.teams[division_id]"> -->
-      <!--     <option ng-repeat="option in []|range:resources.player_tokens.data.available_tokens.teams[division_id]+1:0" value="{{option}}">{{option}}</option> -->
-      <!--   </select> -->
-
-      <!-- </div>       -->
       <div class="item-divider item" id='add_user_user_info_title'>
         Total Cost : {{token_info.total_cost}}
       </div>
-      <button  class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".confirm({token_info:token_info})">
+      <button  class="button button-full button-calm icon-right ion-chevron-right seperate_button" ui-sref=".confirm({token_info:token_info})">
       Review Purchase
     </button>    
     </div>    

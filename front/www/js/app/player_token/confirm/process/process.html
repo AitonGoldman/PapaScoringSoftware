@@ -2,39 +2,42 @@
   <ion-content>    
       <center>
         <div class='standard_big_font'>
-          <div class='padding'><u><i class="icon ion-cash padding"></i><span>Tickets Purchased</u></span></div>
+          <button class='button button-clear button-stable icon-left ion-cash review-icon' >            
+              <span><u>Purchased!</u></span>
+          </button>
           <table>
             <tr ng-repeat='(division_id,token_count) in token_info.addedTokens.divisions'>
-              <td class='padding' align="right">
-                <i class="icon padding"></i>{{resources.divisions.data[division_id].tournament_name}} : 
+              <td class='padding-right' align="right">
+                {{resources.divisions.data[division_id].tournament_name}} : 
               </td>
-              <td class='padding'>
+              <td class='padding-left'>
                 {{token_count[0]}}
               </td>
             </tr>
             <tr ng-repeat='(division_id,token_count) in token_info.addedTokens.teams'>
-              <td class='padding' align="right">
-                <i class="icon padding"></i>{{resources.divisions.data[division_id].tournament_name}} : 
+              <td class='padding-right' align="right">
+                {{resources.divisions.data[division_id].tournament_name}} : 
               </td>
-              <td class='padding'>
+              <td class='padding-left'>
                 {{token_count[0]}}
               </td>
             </tr>
             <tr ng-repeat='(metadivision_id,token_count) in token_info.addedTokens.metadivisions'>
-              <td class='padding' align="right">
-                <i class="icon padding"></i>{{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : 
+              <td class='padding-right' align="right">
+                {{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : 
               </td>
-              <td class='padding'>
+              <td class='padding-left'>
                 {{token_count[0]}}
               </td>
             </tr>            
           </table>
           <br>
-          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref='.^.^({site:site})'>
-            <span>Purchase More Tickets</span>
+          <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref='app'>
+            <span>Home</span>
             <i class="icon ion-chevron-right"></i>          
           </button>
         </div>
+
       </center>
 
   </ion-content>

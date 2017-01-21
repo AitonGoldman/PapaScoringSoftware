@@ -21,15 +21,18 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 
-//$font-size-base:                  28px !default;
-$font-size-base:                  14px !default;
+$font-size-base:                  28px !default;
+//$font-size-base:                  14px !default;
 $item-font-size: $font-size-base;
 $bar-height:                      $font-size-base*3;
 $bar-title-font-size:             $font-size-base*1.5;
 $button-font-size:                $font-size-base;
-$button-height:                   $font-size-base*2;
+$button-height:                   $font-size-base*3;
 $button-icon-size:                 $font-size-base*2 !default;
 $button-bar-button-font-size:     $font-size-base*9;
+$button-large-font-size:          $font-size-base !default;
+$button-large-height:             $font-size-base*2 !default;
+$button-large-icon-size:          $font-size-base*2 !default;
 
 
 
@@ -279,12 +282,27 @@ ion-side-menu {
   }
 }
 
+.action-sheet-title {
+    //padding: $sheet-margin * 2;
+    @media screen and (max-device-height: 750px){
+        font-size: $font-size-base;
+    }
+    @media screen and (min-device-height: 751px){
+        font-size: $font-size-base*.75;
+    }    
+}
+
 .ticket_purchase_summary_font { 
      font-size:$font-size-base; 
 } 
 
-.seperate_button {
- margin-top:15px;
+.button.seperate_button {
+    margin-top: $font-size-base*1.5;
+}
+
+
+.review_confirm_process_screen_text {
+    padding-bottom:$font-size-base*2;
 }
 
 .standard_big_font {
@@ -292,28 +310,83 @@ ion-side-menu {
 }
 
 .standard_small_font {
-   font-size:$font-size-base*.75;                    
+   font-size:$font-size-base*.5;                    
+}
+
+.queue_item_padding {
+    padding-left: $font-size-base*3.5;
+}
+
+.review-icon::before {   
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            font-size:$font-size-base*3;
+        }
+        @media screen and (min-device-height: 751px){
+            font-size: $font-size-base*3;
+        }
+    }
+    @media screen and (min-width:611px) {
+        font-size: $font-size-base*9;            
+    }
 }
 
 
-.queue_span_margin {
-   float:right;                                   
-   padding-left:15px;                
+
+.item-icon-left {
+    .queue_circle {
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){
+                font-size:$font-size-base*3;
+            }
+            @media screen and (min-device-height: 751px){
+                font-size: $font-size-base*3;
+            }
+        }
+        @media screen and (min-width:611px) {
+            font-size: $font-size-base*3;            
+        }
+    }
 }
 
 .custom_queue_item_small {
     color:white;
-    font-size: $font-size-base - 2;
     position:relative;
-    left: -1*$font-size-base*1.4;
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            font-size: $font-size-base - 2;
+            left: -1*$font-size-base*1.4;
+
+        }
+        @media screen and (min-device-height: 751px){
+            font-size: $font-size-base - 2;
+            left: -1*$font-size-base*.25;
+
+        }
+    }
+    @media screen and (min-width:611px) {
+        font-size: $font-size-base - 2;
+        left: -1*$font-size-base*.25;                    
+    }
 }
 
 .custom_queue_item_large {
     color:white;
-    font-size: $font-size-base - 2;
     position:relative;
-    left: -1*$font-size-base*1.65;
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            font-size: $font-size-base - 2;
+            left: -1*$font-size-base*1.55;            
+        }
+        @media screen and (min-device-height: 751px){
+            font-size: $font-size-base - 2;
+            left: -1*$font-size-base*.45;            
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+    }    
 }
+
 
 
 .selectable-text {
@@ -339,3 +412,16 @@ user-select: text;
 /*     font-size: $font-size-base; */
 /* } */
 
+.small-text-table {
+    @media screen and (max-width: 610px){
+        @media screen and (min-device-height: 751px){
+            font-size: $font-size-base*.5;
+        }
+    }
+    @media screen and (min-width:611px) {
+        font-size: $font-size-base*.5;
+    }    
+}
+
+// submit buttons : calm
+//

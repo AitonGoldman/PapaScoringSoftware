@@ -7,9 +7,9 @@ angular.module('app.player.add_player').controller(
             $scope.site=$state.params.site;
             $scope.player_info={ifpa_result:{},linked_division_id:undefined};
             $scope.utils = Utils;
-            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-            //divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
             Modals.loading();
+            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+            //divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});            
             // = TimeoutResources.GetEtcData();
             $scope.bootstrap_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
@@ -20,6 +20,8 @@ angular.module('app.player.add_player').controller(
                 player_name = $scope.player_info.first_name;
                 if(Utils.var_empty($scope.player_info.last_name) == false){
                     player_name=player_name+$scope.player_info.last_name;
+                } else {
+                    return
                 }
                 Modals.loading();
                 player_name = player_name.replace(/ /g, ""); 

@@ -10,9 +10,9 @@ angular.module('app.oops.edit_player_entries.player_entries').controller(
         $scope.new_division_machine_id = $state.params.new_division_machine_id;
         $scope.new_division_machine_name = $state.params.new_division_machine_name;        
         $scope.new_entry = {division_machine_id:$scope.new_division_machine_id,score:undefined,division_machine_name:$scope.new_division_machine_name};        
-        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        player_entries_promise = TimeoutResources.GetPlayerEntries(undefined,{site:$scope.site,player_id:$scope.player_id});
         Modals.loading();
+        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+        player_entries_promise = TimeoutResources.GetPlayerEntries($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});        
         // = TimeoutResources.GetEtcData();
         player_entries_promise.then(function(data){
          $scope.resources = TimeoutResources.GetAllResources();
@@ -44,8 +44,9 @@ angular.module('app.oops.edit_player_entries.player_entries').controller(
         };
         $scope.add_entry = function(new_entry){
             console.log(new_entry);
-            add_entry_promise = TimeoutResources.AddEntry(undefined,{site:$scope.site,player_id:$scope.player_id,division_machine_id:new_entry.division_machine_id,score:new_entry.score});
             Modals.loading();
+
+            add_entry_promise = TimeoutResources.AddEntry(undefined,{site:$scope.site,player_id:$scope.player_id,division_machine_id:new_entry.division_machine_id,score:new_entry.score});
             // = TimeoutResources.GetEtcData();
             add_entry_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();

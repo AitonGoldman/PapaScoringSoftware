@@ -8,8 +8,8 @@ angular.module('app.player.edit_player').controller(
 	    $scope.player_id=$state.params.player_id;
             $scope.ActionSheets = ActionSheets;
             $scope.utils = Utils;            
-            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             Modals.loading();
+            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                            
             //divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
             player_promise = TimeoutResources.GetPlayer($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
             

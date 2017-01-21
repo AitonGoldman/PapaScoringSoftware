@@ -15,13 +15,14 @@ angular.module('app.queue_player_after_play.confirm').controller(
 	$scope.player_id=$state.params.player_id;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
              
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
+        
+        
+        $scope.bootstrap_promise.then(function(data){
+         $scope.resources = TimeoutResources.GetAllResources();
+          Modals.loaded();
+        });
     }]
 );

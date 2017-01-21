@@ -2,12 +2,10 @@
   <ion-content>      
       <center>
         <div class='standard_big_font'>
-          <div class='padding'><u><i class="icon ion-person padding"></i><span>{{resources.updated_player.data.first_name+" "+resources.updated_player.data.last_name}}</u></span></div>
-          <div>
-            <i class='icon padding'></i>Changes Applied!
-          </div>
-          <br>
-          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref='app({site:site})'>
+          <button class='button button-clear button-stable icon-left ion-edit review-icon' >            
+              <span><u>Changes Applied!</u></span>
+          </button>
+          <button id='player_edit_player_process_go_home_button' class='button button-full button-calm item-icon-right seperate_button' ui-sref='app({site:site})'>
             <span>Home</span>
             <i class="icon ion-chevron-right"></i>          
           </button>

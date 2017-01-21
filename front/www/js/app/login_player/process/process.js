@@ -34,8 +34,7 @@ angular.module('app.login_player.process').controller(
             console.log($scope.resources);
             User.set_logged_in_user($scope.resources.logged_in_player.data,"player");            
             Modals.loaded();
-        },function(data){
-            alert(data);
+        },function(data){            
             //FIXME : need a better way to handle situation where we want
             //        a different error message than what is given back
             //        by the server.            

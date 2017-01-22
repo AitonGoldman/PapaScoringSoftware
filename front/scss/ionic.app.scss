@@ -234,6 +234,14 @@ $button-large-icon-size:          $font-size-base*2 !default;
      font-size: $font-size-base;
  }
 
+.platform-android {
+    .bar {      
+      .back-button .icon:before {
+          font-size: $font-size-base*2.5;
+      }
+    }
+}
+
 .bar {
     .button {
         &.button-icon {

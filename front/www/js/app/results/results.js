@@ -9,13 +9,12 @@ angular.module('app.results').controller(
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
              
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
+        $scope.bootstrap_promise.then(function(data){
+        $scope.resources = TimeoutResources.GetAllResources();
+         Modals.loaded();
+        })
     }]
 );

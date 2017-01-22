@@ -17,8 +17,8 @@ angular.module('app.scorekeeping.machine_select.team_select').controller(
 
             $scope.utils = Utils;
             $scope.queues = [];
-            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             Modals.loading();
+            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                            
             players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
             players_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();            

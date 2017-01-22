@@ -7,25 +7,12 @@ angular.module('app.queue_view').controller(
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
-        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);
-
-                      
-        divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});        
-             
         Modals.loading();
-        // = TimeoutResources.GetEtcData();
+        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                      
+        divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});        
         divisions_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
         });
-             
-
-             
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
     }]
 );

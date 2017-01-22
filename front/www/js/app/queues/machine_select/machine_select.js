@@ -10,14 +10,10 @@ angular.module('app.queues.machine_select').controller(
         $scope.utils = Utils;
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);
-
         queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
-        
-        // = TimeoutResources.GetEtcData();
         queues_promise.then(function(data){            
             $scope.resources = TimeoutResources.GetAllResources();
             _.forEach($scope.resources.queues.data, function(machine, key) {
-                
                 if(machine.queues.length > 0 || machine.player_id != undefined){                    
                     $scope.queueing_available = true;
                 }

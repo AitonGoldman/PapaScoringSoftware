@@ -14,13 +14,14 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm_jagoff').co
 	$scope.division_machine_name=$state.params.division_machine_name;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
              
-        //Modals.loading();
+        //
         // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
+        $scope.bootstrap_promise.then(function(data){
+            $scope.resources = TimeoutResources.GetAllResources();
+            Modals.loaded();
+        });
     }]
 );

@@ -8,6 +8,7 @@ angular.module('app.scorekeeping.machine_select.team_select.process').controller
 	$scope.division_machine_id=$state.params.division_machine_id;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
          $scope.process_step=$state.params.process_step;
         if(_.size($scope.process_step)==0){
@@ -17,7 +18,6 @@ angular.module('app.scorekeeping.machine_select.team_select.process').controller
         }
         
         $scope.team_info=$state.params.team_info;        
-        Modals.loading();
         console.log($scope.team_info);
         add_team_to_machine_promise = TimeoutResources.AddTeamToMachine($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id,division_machine_id:$scope.division_machine_id,team_id:$scope.team_info.team_id});
         //= TimeoutResources.GetEtcData();
@@ -25,13 +25,6 @@ angular.module('app.scorekeeping.machine_select.team_select.process').controller
             $scope.resources = TimeoutResources.GetAllResources();
             //console.log($scope.resources);
             Modals.loaded();
-        });            
-        
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
+        });                    
     }]
 );

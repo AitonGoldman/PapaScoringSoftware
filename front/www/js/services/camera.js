@@ -22,7 +22,10 @@ angular.module('TD_services.camera').factory('Camera', ['$state','$timeout','$ro
             return take_pic_promise.then(function(data){                                    
                 //var image = document.getElementById('user_edit_user_pic');                                       
                 //image.src=data;
-                
+                if(data == undefined){
+                    return;
+                }
+                Modals.loading();
                 var localFileName = data.substr(data.lastIndexOf('/') + 1);
                 var randomNumber = Math.floor((Math.random() * 1000) + 1); 
                 if(id == undefined){
@@ -43,13 +46,15 @@ angular.module('TD_services.camera').factory('Camera', ['$state','$timeout','$ro
                 cordova_options.fileName = dest_pic_name;                
                 return $cordovaFileTransfer.upload(upload_host+upload_url_path, data, cordova_options, true)
                     .then(function(result) {
-                        alert('transfer is good');
+                        Modals.loaded();                        
                         return {result:TRANSFER_SUCCESS,file_name:dest_pic_name,local_file_path:data};
                     }, function(err) {
+                        Modals.loaded();
                         alert('transfer is bad '+err.code);                        
                         return {result:TRANSFER_FAILED};
                     });                                        
             }, function(err){
+                Modals.loaded();
                 alert('aborted camera');
                 return {result:CAMERA_FAILED};
             });            

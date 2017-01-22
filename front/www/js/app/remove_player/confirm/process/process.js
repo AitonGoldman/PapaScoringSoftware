@@ -6,8 +6,10 @@ angular.module('app.remove_player.confirm.process').controller(
         $scope.site=$state.params.site;
 	$scope.player_id=$state.params.player_id;
 	$scope.division_machine_id=$state.params.division_machine_id;
+	$scope.machine_name=$state.params.machine_name;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
          $scope.process_step=$state.params.process_step;
         if(_.size($scope.process_step)==0){
@@ -20,7 +22,7 @@ angular.module('app.remove_player.confirm.process').controller(
                                                                    player_id:$scope.player_id,
                                                                    division_machine_id:$scope.division_machine_id});
      
-        Modals.loading();
+        
         // = TimeoutResources.GetEtcData();
         remove_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

@@ -1,29 +1,20 @@
-<ion-view view-title="">
+<ion-view view-title="Player Missing">
   <ion-content>      
-    <div class="skinny-list list">
-      <div class="item-divider item" id='add_user_user_info_title'>
-        Confirm This Player Has Walked Away
+    <center>
+    <div class='standard_big_font'>
+      <button class='button button-clear button-dark icon-left ion-alert-circled review-icon'>
+        <span><u>Player Has Walked Away</u></span>
+      </button>
+      <div>
+        Please confirm that player <br>(#{{player_id}}) {{player_name}}<br> has left the machine
+        without<br>recording their score with you or voiding.  
       </div>
-      <div class='item row padding-vertical' >
-        <div class='col' style='text-align:right'>
-          Player Id: 
-        </div>
-        <div class='col'>        
-          {{player_id}}
-        </div>
-      </div>
-      <div class='item row  padding-vertical'>
-        <div class='col' style='text-align:right'>
-          Player Name : 
-        </div>
-        <div class='col'>
-        {{player_name}}
-        </div>
-      </div>
+      <button style='font-size:38px;line-height:38px' class="button button-full button-calm item-icon-right" ui-sref=".process({process_step:{process:true}})">
+        {{player_name}} walked away
+        <i class="icon ion-chevron-right"></i>          
+      </button>          
     </div>
-    <button style='font-size:38px;line-height:38px' class="button button-full button-positive icon-right ion-chevron-right" ui-sref=".process({process_step:{process:true}})">
-      {{player_name}} walked away.
-    </button>    
+    </center>
   </ion-content>
 </ion-view>
 

@@ -26,5 +26,16 @@ angular.module('app.player.edit_player').controller(
                     ActionSheets.choose_change_div($scope.player_info);
                 }
             };
+            $scope.disable_division_radio = function(division_id){
+                division_name = $scope.resources.divisions.data[division_id].division_name;
+                linked_division_name = $scope.resources.divisions.data[$scope.player_info.linked_division_id].division_name;
+                if(division_name>linked_division_name){
+                    return true;
+                } else {
+                    return false;
+                }
+                
+                    //< resources.divisions.data[player_info.linked_division_id].division_name
+            };
         }]
 );

@@ -77,6 +77,8 @@ def generate_player_class(db_handle,Team_Player_mapping):
                 player_dict['division_machine']={'division_machine_id':self.division_machine.division_machine_id,'division_machine_name':self.division_machine.machine.machine_name}
             if self.teams:
                 player_dict['teams']=[team.to_dict_simple() for team in self.teams]
+                if len(self.teams)>0 and self.teams[0].division_machine:
+                    player_dict['team_division_machine']={'division_machine_id':self.teams[0].division_machine.division_machine_id,'division_machine_name':self.teams[0].division_machine.machine.machine_name}
             return player_dict
             
     return Player

@@ -36,6 +36,14 @@
           {{resources.player.data.linked_division_name}}
         </div>
       </div>
+      <div ng-if='resources.player.data.teams != undefined' class='item row padding-vertical'>
+        <div style='text-align:right' class='col padding-vertical'>
+          Team Name : 
+        </div>
+        <div class='col padding-vertical' style='text-align:left'>
+          {{resources.player.data.teams[0].team_name}}
+        </div>
+      </div>      
       <div ng-if='resources.player.data.division_machine != undefined' class='item row padding-vertical'>
         <div style='text-align:right' class='col padding-vertical'>
           Currently Playing : 
@@ -44,6 +52,14 @@
           {{resources.player.data.division_machine.division_machine_name}}
         </div>
       </div>
+      <div ng-if='resources.player.data.team_division_machine != undefined' class='item row padding-vertical'>
+        <div style='text-align:right' class='col padding-vertical'>
+          Currently Playing : 
+        </div>
+        <div class='col padding-vertical' style='text-align:left'>
+          {{resources.player.data.team_division_machine.division_machine_name}}
+        </div>
+      </div>      
       <div ng-if='resources.player_queue.data != undefined' class='item row padding-vertical'>
         <div style='text-align:right' class='col padding-vertical'>
           Queued on : 

@@ -42,6 +42,13 @@ def route_edit_player(player_id):
     if 'ifpa_ranking' in input_data:
         player.ifpa_ranking = input_data['ifpa_ranking']
     if 'linked_division_id' in input_data:
+        # Get all scores from old division
+        # void all those scores
+        # change linked_division_id
+        if int(input_data['linked_division_id']) != player.linked_division_id:
+            entries = tables.Entry.query.filter_by(player_id=player_id,division_id=player.linked_division_id).all()
+            for entry in entries:
+                entry.voided=True
         player.linked_division_id = input_data['linked_division_id']
     db.session.commit()                        
     return jsonify({'data':player.to_dict_simple()})        

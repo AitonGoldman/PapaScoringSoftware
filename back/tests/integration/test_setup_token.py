@@ -77,7 +77,7 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
                 print rv.status                
                 while num_entries < 3:                    
                     if player_num<100:
-                        for division_machine in division_machines[1]:                        
+                        for division_machine in division_machines[1][:6]:                        
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/1/division_machine/%s/player/%s'%(division_machine_id,player_num))
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))

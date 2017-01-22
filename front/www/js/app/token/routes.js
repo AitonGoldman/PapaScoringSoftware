@@ -18,7 +18,9 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       templateUrl: 'js/app/token/token_select/token_select.html',
  	       controller: 'app.token.token_select'
  	     }
- 	   }
+ 	   }, params: {             
+             hide_back_button:false             
+          }
        }).state('app.token.token_select.process', 
         { 
          cache: false,

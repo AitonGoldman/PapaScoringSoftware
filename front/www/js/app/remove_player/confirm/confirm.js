@@ -10,13 +10,11 @@ angular.module('app.remove_player.confirm').controller(
 	$scope.machine_name=$state.params.machine_name;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-             
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
+        $scope.bootstrap_promise.then(function(data){
+            $scope.resources = TimeoutResources.GetAllResources();
+            Modals.loaded();
+        });
     }]
 );

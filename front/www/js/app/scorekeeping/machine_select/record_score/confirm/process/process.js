@@ -30,6 +30,7 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm.process').c
         // = TimeoutResources.GetEtcData();
         add_score_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
+            console.log($scope.resources);
             Modals.loaded();
         });
     }]

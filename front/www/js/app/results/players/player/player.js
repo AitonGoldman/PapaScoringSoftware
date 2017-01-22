@@ -8,21 +8,12 @@ angular.module('app.results.players.player').controller(
 	$scope.player_name=$state.params.player_name;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         results_promise = TimeoutResources.GetPlayerResults($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
-        Modals.loading();
-        // = TimeoutResources.GetEtcData();
         results_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
         });
-
-        
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
     }]
 );

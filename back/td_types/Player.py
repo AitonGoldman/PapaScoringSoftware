@@ -15,6 +15,7 @@ def generate_player_class(db_handle,Team_Player_mapping):
     class Player(db_handle.Model):
         player_id = db_handle.Column(db_handle.Integer,primary_key=True)
         asshole_count = db_handle.Column(db_handle.Integer)
+        bump_count = db_handle.Column(db_handle.Integer)        
         first_name = db_handle.Column(db_handle.String(1000))
         last_name = db_handle.Column(db_handle.String(1000))
         

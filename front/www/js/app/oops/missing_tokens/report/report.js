@@ -8,8 +8,8 @@ angular.module('app.oops.missing_tokens.report').controller(
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        audit_log_promise = TimeoutResources.GetAuditLogMissingTokens(undefined,{site:$scope.site,player_id:$scope.player_id});
         Modals.loading();
+        audit_log_promise = TimeoutResources.GetAuditLogMissingTokens($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});        
         // = TimeoutResources.GetEtcData();
         audit_log_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

@@ -6,6 +6,7 @@ angular.module('app.player.add_player.process').controller(
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
+        Modals.loading();        
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
          $scope.process_step=$state.params.process_step;
         if(_.size($scope.process_step)==0){
@@ -21,7 +22,6 @@ angular.module('app.player.add_player.process').controller(
         } else {
             $scope.player_info.ifpa_ranking=-1;
         }
-        Modals.loading();
         player_add_promise = TimeoutResources.AddPlayer($scope.bootstrap_promise,{site:$scope.site},$scope.player_info);
         // = TimeoutResources.GetEtcData();
         player_add_promise.then(function(data){

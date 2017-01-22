@@ -9,6 +9,7 @@ from routes.utils import fetch_entity,check_player_team_can_start_game,set_token
 from orm_creation import create_entry
 import datetime
 from routes.audit_log_utils import create_audit_log
+from flask_restless.helpers import to_dict
 
 @admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/score/<int:score>',methods=['POST'])
 @login_required
@@ -22,9 +23,10 @@ def route_add_score(division_machine_id, score):
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
     token = None
     if division_machine.player_id:        
-        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,player_id=division_machine.player_id).first()
+        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,player_id=division_machine.player_id).first()        
     if division_machine.team_id:        
         token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,team_id=division_machine.team_id).first()
+
     if token is None:        
         raise BadRequest('Tried to add a score without starting a game.')        
     if division_machine.player_id:        
@@ -53,15 +55,35 @@ def route_add_score(division_machine_id, score):
                      commit=False)    
 
     if player_id:
-        tokens_left_string = calc_audit_log_remaining_tokens(player_id)
+        tokens_left_info = calc_audit_log_remaining_tokens(player_id,return_string=False)
+        tokens_left_string = tokens_left_info['tokens_left_string']
+        #tokens_left_string = calc_audit_log_remaining_tokens(player_id)
     if team_id:
-        tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+        tokens_left_info = calc_audit_log_remaining_tokens(None,team_id,return_string=False)        
+        team = tables.Team.query.filter_by(team_id=team_id).first()
+        player_id = [player.player_id for player in team.players][0]
+        #tokens_left_string = calc_audit_log_remaining_tokens(None,team_id)
+        #tokens_left_string = calc_audit_log_remaining_tokens(player_id)
+        tokens_left_string = tokens_left_info['tokens_left_string']
+        
     create_audit_log("Ticket Summary",datetime.datetime.now(),
                      tokens_left_string,user_id=current_user.user_id,
                      player_id=player_id,team_id=team_id,
                      commit=False)
-    db.session.commit()    
-    return jsonify({'data':entry.to_dict_simple()})
+    db.session.commit()
+    return_dict = {'data':entry.to_dict_simple()}
+    if tokens_left_info is None:
+        return jsonify(return_dict)
+    
+    meta_division_id = division_machine.division.meta_division_id
+    if division_machine.division_id in tokens_left_info['division_tokens_left']:
+        return_dict['player_token_data']=tokens_left_info['division_tokens_left'][division_machine.division_id]
+    if meta_division_id and meta_division_id in tokens_left_info['metadivision_tokens_left']:            
+        return_dict['player_token_data']=tokens_left_info['metadivision_tokens_left'][meta_division_id]
+    if 'player_token_data' not in return_dict:
+        return_dict['player_token_data']=0
+            
+    return jsonify(return_dict)
 
 @admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/void',methods=['PUT'])
 @login_required

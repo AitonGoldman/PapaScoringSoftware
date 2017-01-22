@@ -28,7 +28,7 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
         },        
         check_current_user:function(){
             
-            Modals.loading();            
+            //Modals.loading();            
             $current_user_promise = TimeoutResources.CurrentUser(undefined,{site:user_site});
             return $current_user_promise.then(function(data){                                
                 if(data.data!=null){
@@ -38,13 +38,13 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
                         set_logged_in_user_func(data.data,'user');
                     }
                 }
-                Modals.loaded();
+                //Modals.loaded();
             },function(data){
                 //FIXME : If you are not logged in, you will be whisked away to login page
                 //        this can be confusing, and needs to pop up a "hey - you are not
                 //        logged in - click ok to login" message
                 $state.go('app.login',{site:user_site});
-                Modals.loaded();
+                //Modals.loaded();
             });            
         },
         logged_in: function(){

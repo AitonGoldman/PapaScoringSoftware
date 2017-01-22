@@ -1,9 +1,9 @@
-<ion-view view-title="">
+<ion-view view-title="Edit Entries">
   <ion-content>
     <div class='first-element'>
     </div>
 
-    <div class="card">
+   <div class="card">
       <div class="item item-divider">
         New Score
       </div>
@@ -14,7 +14,7 @@
               Score : 
             </td>
             <td>
-              <input style='font-size:18px' type="text" ng-model='new_entry.score'>
+              <input  type="text" ng-model='new_entry.score'>
             </td>
           </tr>
           <tr>
@@ -38,6 +38,7 @@
     <div class="card" ng-repeat='player_entry in resources.player_entries.data'>
       <div class="item item-divider">
         {{player_entry.score.division_machine_name}} (#{{player_entry.entry_id}})
+        <span ng-if='player_entry.voided == true '>VOIDED</span>
       </div>
       <div class="item item-text-wrap">
         <table>
@@ -46,28 +47,36 @@
               Score : 
             </td>
             <td>
-              <input style='font-size:18px' type="text" ng-model='player_entry.score.score'>
+              <input  type="text" ng-model='player_entry.score.score'>
             </td>
-            <td style='vertical-align:middle'>
+            <!--<td>
               <button ng-click='change_score(player_entry.score)'>Save Score</button>
-            </td>
-            <td style='vertical-align:middle'>
+            </td>-->
+            <!--<td>
               <i ng-if='player_entry.score.changed==true' style='margin-left:10px' class="icon ion-checkmark"></i>
-            </td>
+            </td>-->
           </tr>
           <tr>
             <td>
               Machine : 
             </td>
             <td>
-              <a ui-sref='.select_division_machine({player_id:player_id})'>{{player_entry.score.division_machine_name}}</a>
+              {{player_entry.score.division_machine_name}}
+            </td>
+            <td>
+              &nbsp;
             </td>
           </tr>
           <tr>
-            <td style='padding-top:10px'>
-              <button ng-click='void_entry(player_entry,1)' ng-if='player_entry.voided==false'>Void Ticket</button>
-              <span ng-if='player_entry.voided == true '>VOIDED</span>
-              <button ng-click='void_entry(player_entry,0)' ng-if='player_entry.voided==true'>UnVoid Ticket</button>
+            <td class='padding-right'>
+              <button class='button-assertive' ng-click='void_entry(player_entry,1)' ng-if='player_entry.voided==false'>Void</button>
+              <button class='button-assertive' ng-click='void_entry(player_entry,0)' ng-if='player_entry.voided==true'>UnVoid</button>
+            </td>
+            <td class='padding-left'>
+              <button class='button-assertive' ng-click='change_score(player_entry.score)'>Save Score</button>
+            </td>
+            <td>
+              &nbsp;
             </td>
           </tr>
         </table>

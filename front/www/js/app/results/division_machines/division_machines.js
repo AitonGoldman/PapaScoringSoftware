@@ -7,22 +7,11 @@ angular.module('app.results.division_machines').controller(
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        //divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});        
-             
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //divisions_promise.then(function(data){
         $scope.bootstrap_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
-            //Modals.loaded();
-        });
-             
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
+            Modals.loaded();
+        });             
     }]
 );

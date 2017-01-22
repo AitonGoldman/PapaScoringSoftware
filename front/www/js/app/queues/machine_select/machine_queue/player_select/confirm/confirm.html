@@ -1,8 +1,11 @@
-<ion-view view-title="Queues">
+<ion-view view-title="Add To Queue">
   <ion-content>      
       <center>
         <div class='standard_big_font'>
-          <div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>
+          <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-ios-eye review-icon'>
+            <span><u>Review</u></span>
+          </button>
           <table>
             <tr>
               <td class='padding-right' align="right">
@@ -21,7 +24,7 @@
             
           </table>
           <br>
-          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref=".process({process_step:{process:true}})">
+          <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({process_step:{process:true}})">
             <span>Add To Queue</span>
             <i class="icon ion-chevron-right"></i>          
           </button>

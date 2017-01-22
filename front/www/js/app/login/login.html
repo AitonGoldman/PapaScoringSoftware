@@ -3,16 +3,16 @@
     <div class="skinny-list list">
       <label class='item-input item'>
         <span class='input-label'>Username : </span>
-        <input ng-model='user.username' type="text" placeholder="Username">
+        <input id="login_username_field" ng-model='user.username' type="text" placeholder="Username">
       </label>
       <label  class='item-input item'>
         <span class='input-label'>Password : </span>
-        <input ng-model='user.password' type="password" placeholder="Password">
+        <input id="login_password_field" ng-model='user.password' type="password" placeholder="Password">
       </label>
-      <button id="LoginButton" ui-sref='.process({user_info:user})' class="button button-full button-calm item-icon-right " style='text-align:left' ng-disabled='utils.var_empty(user.username)||utils.var_empty(user.password)'>
+      <button id="login_submit_button" ui-sref='.process({user_info:user})' class="button button-full button-calm item-icon-right seperate_button" style='text-align:left' ng-disabled='utils.var_empty(user.username)||utils.var_empty(user.password)'>
       <i class="icon ion-chevron-right padding"></i>
       <span >Login</span>
-    </button>
+      </button>
     </div>
   </ion-content>
 </ion-view>

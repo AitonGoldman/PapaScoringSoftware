@@ -17,18 +17,18 @@
         {{division_machine_name}}
       </div>
      </div>
-      <a ng-click='test_submit()' class='item item-icon-right item-positive seperate_button'>
+      <button ng-disabled='utils.var_empty(score.score)' ng-click='test_submit()' class='button button-full item-icon-right button-calm seperate_button'>
         Review Score
         <i class="icon ion-chevron-right"></i>          
-      </a> 
-     <a  class="item item-assertive item-icon-right seperate_button" ng-click="choose_void_action()">
+      </button> 
+     <button  class="button button-full button-assertive item-icon-right seperate_button" ng-click="choose_void_action()">
       Void Ticket
       <i class="icon ion-chevron-right"></i>          
-     </a>
-     <a  class="item item-positive item-icon-right seperate_button" ui-sref=".confirm_jagoff"> 
+     </button>
+     <button  class="button button-full button-assertive item-icon-right seperate_button" ui-sref=".confirm_jagoff"> 
        <span ng-if='team_tournament=="false"'> (#{{player_id}}) </span> {{player_name}} is not here.
             <i class="icon ion-chevron-right"></i>          
-     </a> 
+     </button> 
 
     
     <div class='player-info-avatar'>

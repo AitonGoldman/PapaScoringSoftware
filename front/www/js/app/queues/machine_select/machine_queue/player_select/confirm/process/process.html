@@ -2,29 +2,32 @@
   <ion-content>      
       <center>
         <div class='standard_big_font'>
-          <div class='padding'><u><i class="icon ion-fork-repo padding"></i><span>Queued</u></span></div>
+          <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-fork-repo review-icon'>
+            <span><u>Added To Queue!</u></span>
+          </button>
           <table>
             <tr>
-              <td class='padding' align="right">
-                <i class="icon padding"></i> Machine : 
+              <td class='padding-right' align="right">
+                Machine : 
               </td>
-              <td class='padding'>
+              <td class='padding-left'>
                 {{division_machine_name}}
             </tr>
             <tr>
-              <td class='padding' align="right">
-                <i class="icon padding"></i> Player : 
+              <td class='padding-right' align="right">
+                 Player : 
               </td>
-              <td class='padding'>
+              <td class='padding-left'>
                 (#{{player_id}}) {{player_name}}
             </tr>
             
           </table>
           <br>
-          <button id='HomeButton' class='button button-full button-positive item-icon-right' ui-sref="app">
+          <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref="app">
             <span>Return Home</span>
             <i class="icon ion-chevron-right"></i>          
-          </button>          
+          </button>
         </div>
       </center>
 

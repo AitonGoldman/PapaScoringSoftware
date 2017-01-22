@@ -13,6 +13,7 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm_jagoff.proc
 	$scope.player_id=$state.params.player_id;
         
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
          $scope.process_step=$state.params.process_step;
         if(_.size($scope.process_step)==0){
@@ -23,7 +24,7 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm_jagoff.proc
 
         declare_jagoff_promise = TimeoutResources.DeclareJagoff(undefined,{site:$scope.site,division_machine_id:$scope.division_machine_id});
      
-        Modals.loading();
+        
         // = TimeoutResources.GetEtcData();
         declare_jagoff_promise.then(function(data){
         $scope.resources = TimeoutResources.GetAllResources();

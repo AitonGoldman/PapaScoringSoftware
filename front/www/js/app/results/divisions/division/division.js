@@ -8,10 +8,10 @@ angular.module('app.results.divisions.division').controller(
 	$scope.division_name=$state.params.division_name;
 
         $scope.utils = Utils;
+        Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         results_promise = TimeoutResources.GetDivisionResults($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
-        Modals.loading();
-        // = TimeoutResources.GetEtcData();
+                
         results_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();            
             $scope.jump_to_division = {data:$scope.resources.divisions.data[$scope.division_id]};

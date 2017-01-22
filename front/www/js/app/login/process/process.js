@@ -8,10 +8,13 @@ angular.module('app.login.process').controller(
             //$scope.controller_bootstrap($scope,$state,true);                
             $scope.process_step=$state.params.process_step;
             $scope.User=User;
-            
+
             if(_.size($scope.process_step)==0){
-                Utils.stop_post_reload();
-            }
+                //Utils.stop_post_reload();
+                //Modals.error('Tried to reload a page that submits data.',$scope.site,'app');
+                //return;
+                //FIXME : eh, I guess it's okay if you resubmit a login?
+            }            
             
             $scope.user_info=$state.params.user_info;
             
@@ -31,14 +34,12 @@ angular.module('app.login.process').controller(
             $login_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
                 User.set_logged_in_user($scope.resources.logged_in_user.data,"user");
-
-
                 Modals.loaded();
             },function(data){
                 //FIXME : need a better way to handle situation where we want
                 //        a different error message than what is given back
                 //        by the server.            
-                //console.log(data.config.url.split('/')[3]);
+                //console.log(data.config.url.split('/')[3]);                
                 Modals.error('Login Failed. Check your username and password.', $scope.site, '^');
             });                     
         }

@@ -160,7 +160,7 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     players_to_alert = []
     if queue:
         players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)            
-    removed_queue = remove_player_from_queue(current_app,player,commit=False)
+    removed_queue = remove_player_from_queue(current_app,player,commit=True)
     
     if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:                
         push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
@@ -282,7 +282,9 @@ def route_edit_division(division_id):
         division.discount_ticket_count=division_data['discount_ticket_count']
     if 'discount_ticket_price' in division_data:
         division.discount_ticket_price=division_data['discount_ticket_price']
-    
+    if 'discount_stripe_sku' in division_data:
+        division.discount_stripe_sku=division_data['discount_stripe_sku']
+        
     db.session.commit()
     return jsonify({'data':division.to_dict_simple()})
             

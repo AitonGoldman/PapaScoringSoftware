@@ -3,9 +3,9 @@
     <div class="skinny-list list">
       <label class='item-input item'>
         <span class='input-label'>Pin # : </span>
-        <input ng-model='player.pin' type="text" placeholder="Pin #">
+        <input id="login_player_pin_field" ng-model='player.pin' type="text" placeholder="Pin #">
       </label>
-      <button id="LoginPlayerButton" ui-sref='.process({process_step:{process:true},player:player})' class="item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='utils.var_empty(player.pin)'>
+      <button id="login_player_submit_button" ui-sref='.process({process_step:{process:true},player:player})' class="item-icon-right button button-full button-calm input-list-button seperate_button" style='text-align:left' ng-disabled='utils.var_empty(player.pin)'>
       <i class="icon ion-chevron-right"></i>
       <span >Login</span>
     </button>

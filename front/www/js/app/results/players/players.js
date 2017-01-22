@@ -7,22 +7,14 @@ angular.module('app.results.players').controller(
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
-        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-
-        players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
         Modals.loading();
-        // = TimeoutResources.GetEtcData();
+        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+        players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});        
         players_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.flat_players = _.values($scope.resources.players.data);
             Modals.loaded();
         });
         
-        //Modals.loading();
-        // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
     }]
 );

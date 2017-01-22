@@ -14,6 +14,7 @@ def get_config_values_from_env():
     config_dict['PLAYER_LOGIN']=None
     config_dict['IONICCLOUD_PROFILE_TAG']=None
     config_dict['IONICCLOUD_API_KEY']=None
+    config_dict['UPLOAD_FOLDER']=None
     
     for key,value in config_dict.iteritems():
         config_dict[key]=os.getenv(key,None)

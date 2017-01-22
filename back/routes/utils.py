@@ -217,15 +217,13 @@ def remove_player_from_queue(app,player=None,division_machine=None,commit=True):
     
     if len(queue.queue_child) > 0:        
         if queue.parent_id is None:            
-            division_machine.queue_id=queue.queue_child[0].queue_id
-            ##db.session.commit()                            
+            division_machine.queue_id=queue.queue_child[0].queue_id            
         else:            
-            queue.queue_child[0].parent_id=queue.parent_id
-            ##db.session.commit()                
+            queue.queue_child[0].parent_id=queue.parent_id            
     else:
         if queue.parent_id is None:
-            division_machine.queue_id=None
-            ##db.session.commit()                                
+            division_machine.queue_id=None            
+    db.session.commit()
     db.session.delete(queue)    
     if commit:
         db.session.commit()    
@@ -248,7 +246,7 @@ def get_queue_from_division_machine(division_machine,json_output=False):
     return queue_list
 
 
-def calc_audit_log_remaining_tokens(player_id,team_id=None):
+def calc_audit_log_remaining_tokens(player_id,team_id=None,return_string=True):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
@@ -279,5 +277,11 @@ def calc_audit_log_remaining_tokens(player_id,team_id=None):
     tokens_left_string = ", ".join(["%s : %s" % (divisions[division_id]['tournament_name'],division_token_count) for division_id,division_token_count in division_tokens_left.iteritems()] +     ["%s : %s" % (metadivisions[metadivision_id]['meta_division_name'],metadivision_token_count) for metadivision_id,metadivision_token_count in metadivision_tokens_left.iteritems()])
     if tokens_left_string == "":
         tokens_left_string="No Tickets Left"
-
-    return tokens_left_string
+    if return_string:
+        return tokens_left_string
+    else:
+        return {
+            "tokens_left_string":tokens_left_string,
+            "division_tokens_left":division_tokens_left,
+            "metadivision_tokens_left":metadivision_tokens_left
+        }

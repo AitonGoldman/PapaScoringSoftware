@@ -49,7 +49,7 @@ app.controller(
         $scope.slider={value:0, max:10};
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference
-        $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){
+        $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             $scope.site=state.params.site;            
             User.set_user_site($scope.site);
             if (User.logged_in() == true) {
@@ -69,13 +69,13 @@ app.controller(
                 check_user_promise = User.check_current_user();
                 get_divisions_promise = check_user_promise.then(function(data){                    
                     if(TimeoutResources.GetAllResources().divisions==undefined){
-                        Modals.loading();
+                        //Modals.loading();
                         return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
                     }
                 });
                 
                 return get_divisions_promise.then(function(data){
-                    Modals.loaded();
+                    //Modals.loaded();
                 });
             }                                 
         };
@@ -83,7 +83,9 @@ app.controller(
             $state.go('^');
         };
         $scope.randomNumber = $rootScope.randomNumber;        
-        $scope.controller_bootstrap($scope,$state);
+        if($state.current.name == "app"){
+            $scope.controller_bootstrap($scope,$state);
+        }        
         $scope.User = User;
         $scope.isIOS = ionic.Platform.isIOS();
         //FIXME : don't need this anymore
@@ -107,8 +109,8 @@ app.controller(
             });
         };
         $scope.server_ip_address=server_ip_address;
-        $scope.take_pic_and_upload = function(type,info_object){            
-            upload_pic_promise = Camera.take_user_pic_and_upload(type);
+        $scope.take_pic_and_upload = function(type,info_object,site,id){            
+            upload_pic_promise = Camera.take_user_pic_and_upload(type,site,id);
             upload_pic_promise.then(function(data){
                 if(data.result == Camera.TRANSFER_SUCCESS){                    
                     //$scope.user_info.pic_file = data.file_name;

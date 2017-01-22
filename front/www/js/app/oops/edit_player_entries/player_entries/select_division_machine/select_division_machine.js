@@ -7,9 +7,10 @@ angular.module('app.oops.edit_player_entries.player_entries.select_division_mach
 	$scope.player_id=$state.params.player_id;
 
         $scope.utils = Utils;
+        Modals.loading();        
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
 
-        machines_p = TimeoutResources.GetAllDivisionMachines(undefined,{site:$scope.site});
+        machines_p = TimeoutResources.GetAllDivisionMachines($scope.bootstrap_promise,{site:$scope.site});
         // = TimeoutResources.GetEtcData();
         machines_p.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

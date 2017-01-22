@@ -9,7 +9,8 @@ from routes.utils import fetch_entity,check_player_team_can_start_game,set_token
 import os
 from flask_restless.helpers import to_dict
 from orm_creation import create_queue
-
+from audit_log_utils import create_audit_log
+import datetime
 
 @admin_manage_blueprint.route('/queue/player_id/<player_id>',methods=['GET'])
 def get_queue_for_player(player_id):
@@ -98,7 +99,17 @@ def bump_player_down_queue(division_machine_id):
     if allow_bump:        
         create_queue(current_app,division_machine.division_machine_id,player_id,bumped=True)
     #return jsonify({'data':moved_up_queue.to_dict_simple()})    
-    return_queue = get_queue_from_division_machine(division_machine,True)    
+    return_queue = get_queue_from_division_machine(division_machine,True)
+    create_audit_log("Player Bumped",datetime.datetime.now(),
+                     "",user_id=current_user.user_id,
+                     player_id=player_id,
+                     division_machine_id=division_machine.division_machine_id,                     
+                     commit=False)        
+    if player.bump_count:
+        player.bump_count = player.bump_count+1
+    else:
+        player.bump_count = 1        
+    db.session.commit()
     return jsonify({'data':{division_machine_id:{'queues':return_queue}}})
 
 

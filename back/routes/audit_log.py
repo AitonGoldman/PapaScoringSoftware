@@ -1,3 +1,4 @@
+from flask_restless.helpers import to_dict
 from blueprints import admin_login_blueprint,admin_manage_blueprint
 from flask import jsonify,current_app,request
 import json
@@ -10,7 +11,7 @@ from orm_creation import create_entry
 import datetime
 from sqlalchemy import and_,or_
 import locale
-from sqlalchemy import desc
+from sqlalchemy import desc,asc
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 
@@ -28,58 +29,50 @@ def route_audit_log_missing_scores(player_id,audit_log_id,minutes):
     teams = {team.team_id:team.to_dict_simple() for team in tables.Team.query.all()}
     
     audit_log_base = fetch_entity(tables.AuditLog,audit_log_id)
-    if audit_log_base.used_date:
-        audit_log_base_date = audit_log_base.used_date
-    if audit_log_base.game_started_date:
-        audit_log_base_date = audit_log_base.game_started_date        
+    if audit_log_base.action_date:
+        audit_log_base_date = audit_log_base.action_date    
+    #if audit_log_base.game_started_date:
+    #    audit_log_base_date = audit_log_base.game_started_date        
     audit_log_end_range = audit_log_base_date+datetime.timedelta(minutes=int(minutes))
+    print "%s - %s" % (audit_log_base_date,audit_log_end_range)
     division_id = audit_log_base.token.division_id
-    metadivision_id = audit_log_base.token.metadivision_id        
-    #audit_logs_query = tables.AuditLog.query.filter_by(player_id=player_id,used=True)
+    metadivision_id = audit_log_base.token.metadivision_id            
     audit_logs_query = tables.AuditLog.query
     if metadivision_id:
         div_string = " for metadivision %s" % metadivisions[metadivision_id]['meta_division_name']
         audit_logs_query = audit_logs_query.filter(tables.AuditLog.token.has(metadivision_id=metadivision_id))
     else:
         div_string = " for division %s" % divisions[division_id]['tournament_name']        
-        audit_logs_query = audit_logs_query.filter(tables.AuditLog.token.has(division_id=division_id))    
+        audit_logs_query = audit_logs_query.filter(tables.AuditLog.token.has(division_id=division_id))        
+    audit_logs_query=audit_logs_query.filter_by(action="Score Added")
     audit_logs = audit_logs_query.filter(
-        or_(
-            and_(
-                tables.AuditLog.used_date >= audit_log_base_date,
-                tables.AuditLog.used_date <= audit_log_end_range
-            )
-            ,and_(
-                tables.AuditLog.game_started_date >= audit_log_base_date,
-                tables.AuditLog.game_started_date <= audit_log_end_range
-            )
+        and_(
+            tables.AuditLog.action_date >= audit_log_base_date,
+            tables.AuditLog.action_date <= audit_log_end_range
         )
-    ).all()
+    ).order_by(asc(tables.AuditLog.action_date)).all()
+    #audit_logs = audit_logs_query.all()
     audit_log_list = []
-    audit_log_index = 0    
-    while audit_log_index < len(audit_logs):        
-        audit_log=audit_logs[audit_log_index]        
+    audit_log_index = 0
+    print len(audit_logs)
+    for audit_log in audit_logs:
+        #while audit_log_index < len(audit_logs):        
+        #audit_log=audit_logs[audit_log_index]        
         if audit_log.division_machine_id: 
             machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                    
         if audit_log.team_id:
             player_team_string = "team %s " % teams[audit_log.team_id]['team_name']
         else:
             player_team_string = "player %s "% players[audit_log.player_id]['first_name']+" "+players[audit_log.player_id]['first_name']
-        # if audit_log.game_started_date is not None:            
-        #     audit_log_list.append(
-        #         "Game started on %s - %s %s - by %s - for %s" % (audit_log.game_started_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],player_team_string)
-        #     )
-        if audit_log.used_date is not None:
-            if audit_log.voided_date is not None:            
-                # audit_log_list.append(
-                #     "Game voided on %s - %s %s - by %s - for %s - remaining tokens : %s " % (audit_log.voided_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],player_team_string, audit_log.remaining_tokens)
-                # )
-                pass
-            else:
-                audit_log_list.append(
-                    "Game score (%s) submitted on %s - %s %s - by %s - for %s" % (audit_log.entry.scores[0].score,audit_log.used_date,machine_name,div_string,users[audit_log.scorekeeper_id]['username'],player_team_string)
-                )
-        audit_log_index=audit_log_index+1
+        if audit_log.action == "Voided":
+            continue
+        division_machine_name = division_machines[audit_log.division_machine_id]['division_machine_name']
+        score = locale.format("%d",audit_log.entry.scores[0].score,grouping=True)
+
+        audit_log_list.append({
+            'audit_log_id':audit_log.audit_log_id,
+            'contents': [audit_log.action_date,audit_log.action,player_team_string,score,division_machine_name]
+        })
         
     return jsonify({'data':audit_log_list})
 
@@ -148,7 +141,7 @@ def route_audit_log_missing_tokens(player_id):
                 score = "SOMEONE DONE FUCKED UP"
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': [audit_log.action_date,audit_log.action,username,score]
+                'contents': [audit_log.action_date,audit_log.action,username,"(%s) %s"%(machine_name,score)]
             })
         if audit_log.action == "Score Voided":            
             username = users[audit_log.user_id]['username']            

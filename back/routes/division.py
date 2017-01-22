@@ -302,11 +302,23 @@ def route_add_division_machine_team(division_id,division_machine_id,team_id):
     if check_player_team_can_start_game(current_app,division_machine,team=team) is False:
         raise BadRequest('Player can not start game - either no tickets or already on another machine')    
     if tables.DivisionMachine.query.filter_by(player_id=team.players[0].player_id).first() or tables.DivisionMachine.query.filter_by(player_id=team.players[1].player_id).first():            
-        raise BadRequest('Team can not start game - one player is playing on another machine')        
-    
+        raise BadRequest('Team can not start game - one player is playing on another machine')            
     set_token_start_time(current_app,None,division_machine,team_id=team_id)    
     division_machine.team_id=team.team_id
     tables.db_handle.session.commit()
+    players_to_alert = []
+    removed_queues = []
+    for player in team.players:
+        queue = tables.Queue.query.filter_by(player_id=player.player_id).first()        
+        if queue:
+            players_to_alert = players_to_alert + get_player_list_to_notify(player.player_id,queue.division_machine)            
+        removed_queue = remove_player_from_queue(current_app,player,commit=True)
+        removed_queues.append(removed_queue)
+        db.session.commit()
+    if all(item is not None and item is not False for item in removed_queues) and len(players_to_alert) > 0:    
+        push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
+        send_push_notification(push_notification_message, players=players_to_alert)
+        
     return jsonify({'data':division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<int:division_machine_id>/team',

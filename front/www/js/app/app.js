@@ -3,6 +3,7 @@ app = angular.module(
     [
         'ionic',
         'ionic.cloud',
+        'ionic.ion.imageCacheFactory',
         'ngCordova',
  	'ui.router',            
         'ngCookies',            
@@ -95,6 +96,7 @@ app.controller(
             $scope.menu_bar_title_style={'height':'120'};
         }
         $scope.is_native = false;
+        $scope.uploaded_pic_name=undefined;
         $ionicPlatform.ready(function() {        
             dev_info = ionic.Platform.device();
             if (_.size(dev_info)!=0){
@@ -120,7 +122,77 @@ app.controller(
                     $scope.random_img=_.random(0,99999);
                 }                    
             });
-        };        
+        };
+        /* 
+         //example of how to use imagecache 
+         // make sure module/function inserts $ImageCacheFactory
+         image_cache_list = [];
+         for(x=1;x<500;x++){
+                    image_cache_list[x]="http://192.168.1.178/pics/player_"+x+".jpg";
+                }
+                $ImageCacheFactory.Cache(
+                    image_cache_list
+                ).then(function(){
+                    console.log("Images done loading!");
+                    Modals.loaded();
+                },function(failed){
+                    console.log("An image failed: "+failed);
+                    Modals.loaded();
+                });                
+
+         */
+
+        /*
+         //THESE 3 HANDLE FILE UPLOADS
+         //SEE COMMENTED SECTION OF FRONT.HTML
+        $scope.uploadedFile = function(element) {
+            console.log('in uploadedFiled');
+            $scope.$apply(function($scope) {
+                console.log('in uploadedFiled apply');
+                $scope.files = element.files;         
+            });
+        };
+        $scope.addFile = function() {
+            console.log('in addfile');
+            $scope.uploadfile($scope.files,
+                                     function( msg ) // success
+                              {
+                                  console.log('in addfile - success');
+                                  console.log('uploaded');
+                              },
+                              function( msg ) // error
+                              {
+                                  console.log('in addfile - failure');                                  
+                                  console.log('error');
+                              });
+        };
+        $scope.uploadfile = function(files,success,error){
+ 
+            var url = 'http://192.168.1.178:8000/elizabeth/test/media_upload';
+
+            for ( var i = 0; i < files.length; i++)
+            {
+                var fd = new FormData();
+                fd.append("file", files[i]);
+                console.log(files[i]);
+                $http.post(url, fd, { 
+                    withCredentials : false,
+                    headers : {
+                        'Content-Type' : undefined
+                    },
+                    transformRequest : angular.identity
+
+                }).success(function(data){
+                    console.log('success!');
+                    console.log(data);
+                    $scope.uploaded_pic_name=data.poop;
+
+                }).error(function(data){
+                    console.log('uh oh!');                    
+                    console.log(data);
+                });
+            }
+        };*/        
         //FIXME : rename this more logically
     }
 );

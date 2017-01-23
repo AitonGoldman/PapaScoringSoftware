@@ -39,7 +39,8 @@ angular.module('app.player_token.confirm').controller(
                                           token_info:{addedTokens:$scope.added_tokens,
                                                       stripeToken:token.id,
                                                       email:token.email,
-                                                      tokens:$scope.resources.added_player_tokens.data.tokens}
+                                                      tokens:$scope.resources.added_player_tokens.data.tokens,
+                                                      total_cost:$scope.token_info.total_cost}
                                          });                    
                 }
             });

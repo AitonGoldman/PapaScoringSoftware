@@ -2,7 +2,7 @@
   <ion-content>    
       <center>
         <div class='standard_big_font'>
-          <button class='button button-clear button-stable icon-left ion-cash review-icon' >            
+          <button class='button button-clear button-dark icon-left ion-cash review-icon' >            
               <span><u>Purchased!</u></span>
           </button>
           <table>
@@ -28,6 +28,14 @@
               </td>
               <td class='padding-left'>
                 {{token_count[0]}}
+              </td>
+            </tr>
+            <tr style='border-style:solid;border-width:0;border-top-width:1px;'>
+              <td class='padding-right' align='right'>
+                Total Cost : 
+              </td>
+              <td class='padding-left'>
+                ${{token_info.total_cost}}
               </td>
             </tr>            
           </table>

@@ -25,7 +25,8 @@ angular.module('app.token.token_select.confirm').controller(
                 //$scope.added_tokens['player_id']=User.logged_in_user().player.player_id;
                 $scope.added_tokens['player_id']=$scope.player_id;
                 $state.go('.process',{process_step:{process:true},
-                                      token_info:$scope.added_tokens
+                                      token_info:$scope.added_tokens,
+                                      total_cost:$scope.token_info.total_cost
                                      });                    
             };
     }]

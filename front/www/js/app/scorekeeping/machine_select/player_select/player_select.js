@@ -33,8 +33,8 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                     $scope.player_img_id = $scope.queue_player.player_id;
                 }                
                 $scope.flattened_players = _.values($scope.resources.players.data);
-                $animate.enabled(true);                                          
-                Modals.loaded();
+                $animate.enabled(true);
+                
             });
             
         

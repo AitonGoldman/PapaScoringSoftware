@@ -1,4 +1,4 @@
-<ion-view view-title="Purchase Tickets">
+<ion-view view-title="Review Tickets">
   <ion-content>      
       <center>
         <div class='standard_big_font'>
@@ -29,7 +29,15 @@
               <td class='padding-left'>
                 {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
-            </tr>            
+            </tr>
+            <tr style='border-style:solid;border-width:0;border-top-width:1px;'>
+              <td class='padding-right' align='right'>
+                Total Cost : 
+              </td>
+              <td class='padding-left'>
+                ${{token_info.total_cost}}
+              </td>
+            </tr>
           </table>
           <br>
           <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ng-click="create_tickets()">

@@ -32,7 +32,7 @@
       <td ng-if='result[1].divider == undefined' style='padding-left:50px;padding-top:10px;'>{{result[1].sum}}</td>
       <td ng-if='result[1].divider == undefined' style='padding-left:50px;padding-top:10px;' class='mobile-hide'>
         <span ng-if='team_division==true' ng-repeat='top_player_machine in resources.division_results.data.top_machines[division_id][result[1].team_id]|limitTo:3'>          
-          <a ng-if='team_division==true' ui-sref='app.results.division_machines.machines.machine({division_machine_name:top_player_machine.machine_name,division_id:division_id,division_machine_id:top_player_machine.division_machine_id})'>({{top_player_machine.machine_abbreviation}}{{top_player_machine.rank}})</a>          
+          <a ng-if='team_division==true' ui-sref='app.results.division_machines.machines.machine({division_machine_name:top_player_machine.machine_name,division_id:division_id,division_machine_id:top_player_machine.division_machine_id})'>{{top_player_machine.machine_abbreviation}}({{top_player_machine.rank}})</a>          
           <span ng-if='$last == false'> | </span>             
         </span>        
       </td>
@@ -53,7 +53,7 @@
         <td  ng-if='result[1].divider == undefined' style='padding-left:50px;padding-top:10px;'>{{result[1].sum}}</td>
         <td  ng-if='result[1].divider == undefined'  style='padding-left:50px;padding-top:10px;' class='mobile-hide'>
           <span ng-if='team_division==false' ng-repeat='top_player_machine in resources.division_results.data.top_machines[division_id][result[1].player_id]|limitTo:3'>
-            <a ng-if='team_division==false' ui-sref='app.results.division_machines.machines.machine({division_machine_name:top_player_machine.machine_name,division_id:division_id,division_machine_id:top_player_machine.division_machine_id})'>({{top_player_machine.machine_abbreviation}}{{top_player_machine.rank}})</a>          
+            <a ng-if='team_division==false' ui-sref='app.results.division_machines.machines.machine({division_machine_name:top_player_machine.machine_name,division_id:division_id,division_machine_id:top_player_machine.division_machine_id})'>{{top_player_machine.machine_abbreviation}}({{top_player_machine.rank}})</a>          
             <span ng-if='$last == false'> | </span>             
           </span>        
         </td>

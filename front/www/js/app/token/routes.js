@@ -59,9 +59,9 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.token.token_select.confirm.process'
  	     }
  	   }, params: {
-             process_step:{}
-             ,token_info:{}             
-
+               process_step:{}
+               ,token_info:{},
+               total_cost:undefined
           }    
 
        })//REPLACE_ME

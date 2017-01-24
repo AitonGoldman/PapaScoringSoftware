@@ -29,6 +29,7 @@ def get_queues(division_id):
     tables = db_util.app_db_tables(current_app)
     division_machines = tables.DivisionMachine.query.filter_by(division_id=division_id,removed=False)
     queues = {}
+    machine_players = {}
     for division_machine in division_machines:
         queues[division_machine.division_machine_id]={
             'division_machine_name':"%s"%division_machine.machine.machine_name,
@@ -38,7 +39,11 @@ def get_queues(division_id):
             'avg_play_time':division_machine.avg_play_time,
             'queues':get_queue_from_division_machine(division_machine,json_output=True)
         }
-    return jsonify({'data':queues})
+        if division_machine.player:            
+            machine_players[division_machine.division_machine_id]="%s %s" %(division_machine.player.first_name,division_machine.player.last_name)
+        else:
+            machine_players[division_machine.division_machine_id]=None
+    return jsonify({'data':queues,'machine_players':machine_players})
 
 
 @admin_manage_blueprint.route('/queue',methods=['POST'])

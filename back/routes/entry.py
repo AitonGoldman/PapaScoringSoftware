@@ -10,6 +10,7 @@ from orm_creation import create_entry
 import datetime
 from routes.audit_log_utils import create_audit_log
 from flask_restless.helpers import to_dict
+from sqlalchemy import desc,asc
 
 @admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/score/<int:score>',methods=['POST'])
 @login_required
@@ -189,4 +190,17 @@ def route_get_player_entries(player_id):
     tables = db_util.app_db_tables(current_app)                    
     player_entries = tables.Entry.query.filter_by(player_id=player_id).all()    
     return jsonify({'data':{player_entry.entry_id:player_entry.to_dict_simple() for player_entry in player_entries}})
+
+@admin_manage_blueprint.route('/entry/player/<player_id>/division_machine/<division_machine_id>',methods=['GET'])
+#@login_required
+#@Admin_permission.require(403)
+def route_get_top_player_entry(player_id,division_machine_id):        
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                    
+    top_player_score_for_machine = tables.Score.query.filter_by(division_machine_id=division_machine_id).join(tables.Entry).filter_by(player_id=player_id,voided=False).order_by(desc(tables.Score.score)).first()    
+    if top_player_score_for_machine:
+        top_score = top_player_score_for_machine.score
+    else:
+        top_score = None
+    return jsonify({'data':top_score})
 

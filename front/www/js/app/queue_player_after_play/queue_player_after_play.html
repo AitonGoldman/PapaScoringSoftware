@@ -2,21 +2,23 @@
   <ion-content>      
     <div class="skinny-list list">
 
-      <a ng-if='division_machine.player_id != undefined || (division_machine.player_id == undefined && division_machine.queue_id != undefined)' class="item item-icon-right item-icon-left queue_item_padding" ng-repeat='division_machine in resources.queues.data' ui-sref='.confirm({division_machine_to_queue_on_id:division_machine.division_machine_id,division_machine_to_queue_on_name:division_machine.division_machine_name})'>
-        <i class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length<10,custom_queue_item_large:division_machine.queues.length > 9}'>{{division_machine.queues.length}}</span></i>
-        <span>{{division_machine.division_machine_name}}</span>
-        <i class='icon ion-chevron-right'></i>
+      <a  class="item item-icon-right item-icon-left queue_item_padding" ng-repeat='division_machine in resources.queues.data' ng-click="choose_queue_action_or_no_action(division_machine)">
+        <i ng-if="division_machine.player_id != undefined" class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length+1<10,custom_queue_item_large:division_machine.queues.length+1 > 9}'>{{division_machine.queues.length+1}}</span></i>        
+        <i ng-if="division_machine.player_id == undefined && division_machine.queues.length > 0" class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length<10,custom_queue_item_large:division_machine.queues.length > 9}'>{{division_machine.queues.length}}</span></i>
+        <i ng-if="division_machine.player_id == undefined && division_machine.queues.length == 0" class="icon ion-android-walk queue_walking"></i>
+
+        <!-- <i class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length<10,custom_queue_item_large:division_machine.queues.length > 9}'>{{division_machine.queues.length}}</span></i> -->
+        <!-- <span>{{division_machine.division_machine_name}}</span> -->
+        <!-- <i class='icon ion-chevron-right'></i> -->
+
+        <b>{{division_machine.division_machine_name}}</b> <br class='mobile-show'> <span ng-if='division_machine.avg_play_time!=undefined'> Avg Time : {{division_machine.avg_play_time}}</span>
+        <i class="icon ion-chevron-right"></i>        
       </a>
-      <a class='item queue_item_padding item-icon-left'>
-        <i class="icon ion-android-walk queue_circle"></i>
-        All <span ng-if='queueing_available==true'>other </span> machines are unoccupied!<br>
-        Walk over to one!
-      </a>      
-      <button class="button button-full button-calm item-icon-right seperate_button" ui-sref='^.scorekeeping.machine_select({division_id:division_id})'>
+      <button class="button button-full button-calm item-icon-right small_seperate_button" ui-sref='^.scorekeeping.machine_select({division_id:division_id})'>
         <span>Return to machine list</span>
         <i class='icon ion-chevron-right'></i>        
       </button>
-      <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref="app.scorekeeping.machine_select.player_select({division_machine_id:division_machine_just_played_id,division_machine_name:division_machine_just_played_name,division_id:division_id,team_tournament:false})">
+      <button id='HomeButton' class='button button-full button-calm item-icon-right small_seperate_button' ui-sref="app.scorekeeping.machine_select.player_select({division_machine_id:division_machine_just_played_id,division_machine_name:division_machine_just_played_name,division_id:division_id,team_tournament:false})">
         <span>Add New Player To Current Machine</span>
         <i class="icon ion-chevron-right"></i>
       </button>          

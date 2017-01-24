@@ -35,7 +35,6 @@ $button-large-height:             $font-size-base*2 !default;
 $button-large-icon-size:          $font-size-base*2 !default;
 
 
-
 @import "www/lib/ionic/scss/ionic";
 
 .avatar-frame{border: 2px solid #c7b89e;}
@@ -323,6 +322,10 @@ ion-side-menu {
 
 .button.seperate_button {
     margin-top: $font-size-base*1.5;
+}
+
+.button.small_seperate_button {
+    margin-top: $font-size-base;
 }
 
 

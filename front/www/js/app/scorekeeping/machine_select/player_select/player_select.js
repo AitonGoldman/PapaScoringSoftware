@@ -34,7 +34,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 }                
                 $scope.flattened_players = _.values($scope.resources.players.data);
                 $animate.enabled(true);
-                
+                Modals.loaded();
             });
             
         

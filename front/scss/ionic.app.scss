@@ -209,6 +209,23 @@ $button-large-icon-size:          $font-size-base*2 !default;
     }
 }
 
+.mobile-show {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+        }
+        @media screen and (min-device-height: 751px){
+            display:none;
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        display:none;
+    }
+    @media screen and (min-width: 971px) {
+        display:none;
+    }
+}
+
+
 .red {
      background-color:red;
 }
@@ -323,6 +340,30 @@ ion-side-menu {
 
 .queue_item_padding {
     padding-left: $font-size-base*3.5;
+    //font-size: $font-size-base*.75;    
+    //font-size: $font-size-base;
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            font-size: $font-size-base*1.25;
+        }
+        @media screen and (min-device-height: 751px){
+            font-size: $font-size-base*.75;
+            padding-top: 5px;
+            padding-bottom:5px;            
+        }
+    }
+    @media screen and (max-width: 970px) and (min-width:611px) {
+        font-size: $font-size-base*.75;
+        padding-top: 5px;
+        padding-bottom:5px;
+    }
+    @media screen and (min-width: 971px) {
+        padding-top: 5px;
+        padding-bottom:5px;
+        font-size: $font-size-base*.75;
+    }
+
+    
 }
 
 .review-icon::before {   
@@ -345,37 +386,80 @@ ion-side-menu {
     .queue_circle {
         @media screen and (max-width: 610px){
             @media screen and (max-device-height: 750px){
+                //font-size:$font-size-base*3;
                 font-size:$font-size-base*3;
+                padding-top:0px;
+                padding-bottom:0px;        
             }
             @media screen and (min-device-height: 751px){
-                font-size: $font-size-base*3;
+                   //font-size: $font-size-base*3;
+                   font-size: $font-size-base*2;
+                   padding-top:0px;
+                   padding-bottom:0px;                           
             }
         }
         @media screen and (min-width:611px) {
-            font-size: $font-size-base*3;            
+            //font-size: $font-size-base*3;
+            font-size: $font-size-base*2;
         }
     }
 }
+
+.item-icon-left {
+    .queue_walking {
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){
+                //font-size:$font-size-base*3;
+                font-size:$font-size-base*2.5;
+                padding-top:0px;
+                padding-bottom:0px;
+                padding-left:0px;
+            }
+            @media screen and (min-device-height: 751px){
+                   //font-size: $font-size-base*3;
+                   font-size: $font-size-base*1.5;
+                   padding-top:0px;
+                   padding-bottom:0px;
+                   padding-left:10px;
+            }
+        }
+        @media screen and (min-width:611px) {
+            //font-size: $font-size-base*2.5;
+            font-size: $font-size-base*1.5;
+            padding-left:10px;
+        }
+    }
+}
+
 
 .custom_queue_item_small {
     color:white;
     position:relative;
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
-            font-size: $font-size-base - 2;
+            font-size: $font-size-base*1.25;
+            //left: -1*$font-size-base*1.4;
             left: -1*$font-size-base*1.4;
 
         }
         @media screen and (min-device-height: 751px){
             font-size: $font-size-base - 2;
-            left: -1*$font-size-base*.25;
+            //left: -1*$font-size-base*.25;
+            left: -1*$font-size-base*.5;
 
         }
     }
-    @media screen and (min-width:611px) {
-        font-size: $font-size-base - 2;
-        left: -1*$font-size-base*.25;                    
+    @media screen and (max-width: 970px) and (min-width:611px) {
+            font-size: $font-size-base - 2;
+            //left: -1*$font-size-base*.25;
+            left: -1*$font-size-base*.5;
     }
+    @media screen and (min-width: 971px) {
+        font-size: $font-size-base - 2;
+        //left: -1*$font-size-base*.25;
+        left: -1*$font-size-base*.5;                    
+    }
+    
 }
 
 .custom_queue_item_large {
@@ -384,15 +468,25 @@ ion-side-menu {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
             font-size: $font-size-base - 2;
-            left: -1*$font-size-base*1.55;            
+            left: -1*$font-size-base*1.55;
+            //left: -1*$font-size-base;            
         }
         @media screen and (min-device-height: 751px){
             font-size: $font-size-base - 2;
-            left: -1*$font-size-base*.45;            
+            //left: -1*$font-size-base*.45;
+            left: -1*$font-size-base*.85;            
         }
     }
     @media screen and (max-width: 970px) and (min-width:611px) {
-    }    
+        font-size: $font-size-base - 2;
+        //left: -1*$font-size-base*.45;
+        left: -1*$font-size-base*.85;            
+    }
+    @media screen and (min-width: 971px) {
+        font-size: $font-size-base - 2;
+        //left: -1*$font-size-base*.45;
+        left: -1*$font-size-base*.85;                    
+    }
 }
 
 

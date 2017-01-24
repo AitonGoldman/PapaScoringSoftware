@@ -98,6 +98,12 @@ angular.module('TD_services.action_sheets')
                           }
                       });
                   };                  
+                  var queue_no_action = function(){            
+                      var hideSheet = $ionicActionSheet.show({                    
+                          titleText: 'No one is playing the machine.<br>See the scorekeeper to start playing it.',
+                          cancelText: 'Ok'
+                      });
+                  };                  
                   
                   var choose_void_action = function(division_machine_id,prefixroute){            
                       var hideSheet = $ionicActionSheet.show({
@@ -162,6 +168,7 @@ angular.module('TD_services.action_sheets')
                       choose_ifpa_lookup_action:choose_ifpa_lookup_action,
                       choose_change_div:choose_change_div,
                       choose_void_action:choose_void_action,
-                      choose_queue_action:choose_queue_action
+                      choose_queue_action:choose_queue_action,
+                      queue_no_action:queue_no_action
                   };
               }]);

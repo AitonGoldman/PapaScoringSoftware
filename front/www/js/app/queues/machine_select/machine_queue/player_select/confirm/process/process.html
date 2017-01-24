@@ -21,16 +21,23 @@
               <td class='padding-left'>
                 (#{{player_id}}) {{player_name}}
             </tr>
-            
-          </table>
-          <br>
-          <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref="app">
-            <span>Return Home</span>
-            <i class="icon ion-chevron-right"></i>          
-          </button>
+          </table>          
         </div>
+        <div class='standard_big_font'>
+          <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-alert review-icon'>
+            <span><u>Reminder!</u></span>
+          </button>
+          <div>
+            When it is <span ng-if="manage=='false'"> your </span> <span ng-if="manage=='true'"> the players </span> turn to play,<br>
+            a scorekeeper must start <span ng-if="manage=='false'"> you </span> <span ng-if="manage=='true'"> the player </span> on the game.
+          </div>
+        </div>
+        <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref="app">
+          <span>Return Home</span>
+          <i class="icon ion-chevron-right"></i>          
+        </button>        
       </center>
-
   </ion-content>
 </ion-view>
 

@@ -2,8 +2,8 @@ angular.module('app.queues.machine_select',['app.queues.machine_select.machine_q
     /*REPLACEMECHILD*/]);
 angular.module('app.queues.machine_select').controller(
     'app.queues.machine_select',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
+        '$scope','$state','TimeoutResources','Utils','Modals','ActionSheets',
+        function($scope, $state, TimeoutResources, Utils,Modals,ActionSheets) {
         $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
         $scope.queueing_available = false;
@@ -19,6 +19,21 @@ angular.module('app.queues.machine_select').controller(
                 }
             });
             Modals.loaded();
-        });                                  
+        });
+        //division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name
+        $scope.choose_queue_action_or_no_action = function(division_machine){            
+            if(division_machine.player_id == undefined && division_machine.queues.length > 0){
+                $state.go('.machine_queue',{division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name});
+                return;
+            }
+            if(division_machine.player_id != undefined){
+                $state.go('.machine_queue',{division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name});
+                return;
+            }
+            
+            ActionSheets.queue_no_action();
+            //ui-sref='.machine_queue({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})'
+        };
+        
     }]
 );

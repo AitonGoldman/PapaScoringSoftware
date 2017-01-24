@@ -9,6 +9,7 @@ angular.module('app.queues.machine_select.machine_queue.player_select.confirm.pr
 	    $scope.division_id=$state.params.division_id;
             $scope.player_id = $state.params.player_id;
             $scope.player_name = $state.params.player_name;                
+            $scope.manage = $state.params.manage;
             $scope.utils = Utils;
             Modals.loading();
             $scope.process_step=$state.params.process_step;

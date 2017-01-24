@@ -20,6 +20,7 @@ angular.module('app.queues.machine_select.machine_queue').controller(
                     $scope.logged_in_player_name = User.logged_in_user().player.first_name+" "+User.logged_in_user().player.last_name;
                 }                
                 $scope.resources = TimeoutResources.GetAllResources();            
+                console.log($scope.resources);
                 $scope.division_machine = $scope.resources.queues.data[$scope.division_machine_id];                        
                 Modals.loaded();            
             });             

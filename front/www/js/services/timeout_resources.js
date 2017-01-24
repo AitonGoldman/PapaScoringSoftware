@@ -182,7 +182,9 @@ angular.module('TD_services.timeout_resources')
                   var getDivisionResource = generate_resource_definition(':site/division/:division_id',
                                                                          'GET');
                   var getDivisionsResource = generate_resource_definition(':site/division',
-                                                                     'GET');                                                      
+                                                                          'GET');
+                  var getPlayerBestScoreForMachineResource = generate_resource_definition(':site/entry/player/:player_id/division_machine/:division_machine_id',
+                                                                                          'GET');                                                                        
                   var addDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                                 'POST');
                   var addTokensResource = generate_resource_definition(':site/token/paid_for/1',
@@ -251,6 +253,7 @@ angular.module('TD_services.timeout_resources')
                       GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
                       GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
+                      GetPlayerBestScoreForMachine: generate_custom_http_executor(getPlayerBestScoreForMachineResource,'player_best_score_for_machine','get'),
                       GetTeams: generate_custom_http_executor(getTeamsResource,'teams','get'),                      
                       GetPlayer: generate_custom_http_executor(getPlayersResource,'player','get'),                      
                       GetJagoffs: generate_custom_http_executor(getJagoffsResource,'jagoffs','get'),                                            

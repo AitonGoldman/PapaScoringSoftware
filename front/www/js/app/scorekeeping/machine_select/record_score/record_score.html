@@ -16,6 +16,9 @@
       <div style='text-align:center' class='item'>
         {{division_machine_name}}
       </div>
+      <div ng-if='resources.player_best_score_for_machine.data != undefined' style='text-align:center' class='item'>
+        Previous Best Score : {{resources.player_best_score_for_machine.data|number}}
+      </div>      
      </div>
       <button ng-disabled='utils.var_empty(score.score)' ng-click='test_submit()' class='button button-full item-icon-right button-calm seperate_button'>
         Review Score

@@ -49,7 +49,31 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.queues.machine_select.machine_queue.player_select.confirm'
  	     }
  	   }
+       }).state('app.queues.machine_select.machine_queue.confirm', 
+        { 
+         cache: false,
+ 	 url: '/confirm/player_id/:player_id/player_name/:player_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/queues/machine_select/machine_queue/player_select/confirm/confirm.html',
+ 	       controller: 'app.queues.machine_select.machine_queue.player_select.confirm'
+ 	     }
+ 	   }
        }).state('app.queues.machine_select.machine_queue.player_select.confirm.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/queues/machine_select/machine_queue/player_select/confirm/process/process.html',
+ 	       controller: 'app.queues.machine_select.machine_queue.player_select.confirm.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
+       }).state('app.queues.machine_select.machine_queue.confirm.process', 
         { 
          cache: false,
  	 url: '/process',

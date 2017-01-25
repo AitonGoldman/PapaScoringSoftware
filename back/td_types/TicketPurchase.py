@@ -16,7 +16,9 @@ def generate_ticket_purchase_class(db_handle):
         user_id = db_handle.Column('deskworker_id', db_handle.Integer, db_handle.ForeignKey('user.user_id'))
         purchase_date = db_handle.Column(db_handle.DateTime)
         description = db_handle.Column(db_handle.String(255))
-        amount = db_handle.Column(db_handle.Integer)        
+        amount = db_handle.Column(db_handle.Integer)
+        use_stripe = db_handle.Column(db_handle.Boolean,default=False)
+        stripe_charge_id = db_handle.Column(db_handle.String(255))
         division = db_handle.relationship(
             'Division',
             foreign_keys=[division_id]

@@ -314,7 +314,15 @@ def create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_i
     ticket_purchase.purchase_date=datetime.datetime.now()
     return ticket_purchase
     
-def create_ticket_purchase(app,ticket_count,player_id,user_id,division_id=None,metadivision_id=None,commit=True):    
+def create_ticket_purchase(app,
+                           ticket_count,
+                           player_id,
+                           user_id,
+                           division_id=None,
+                           metadivision_id=None,
+                           commit=True,
+                           use_stripe=False,
+                           stripe_charge_id=None):    
     if ticket_count == 0:
         return
     db = db_util.app_db_handle(app)
@@ -330,6 +338,9 @@ def create_ticket_purchase(app,ticket_count,player_id,user_id,division_id=None,m
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
         ticket_purchase.amount=ticket_count
         ticket_purchase.description="1"
+        ticket_purchase.use_stripe=use_stripe
+        if use_stripe:
+            ticket_purchase.stripe_charge_id = stripe_charge_id
         db.session.add(ticket_purchase)
         db.session.commit()
         return

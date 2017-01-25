@@ -141,36 +141,16 @@ def start_sale():
         if int(num_tokens[0]) > 0:
             ticket_count = int(num_tokens[0])
             build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_division_skus,int(division_id))            
-            # division = tables.Division.query.filter_by(division_id=division_id).first()
-            # discount_for = division.discount_ticket_count
-            # discount_price = division.discount_ticket_price
-            
-            # if discount_for is None or discount_price is None:
-            #     stripe_items.append({"quantity":ticket_count,"type":"sku","parent":division_skus[int(division_id)]})
-            #     continue            
-            # if  ticket_count >= discount_for:
-            #     discount_count = ticket_count/discount_for
-            #     normal_count = ticket_count%discount_for
-            # else:
-            #     discount_count = 0
-            #     normal_count = ticket_count
-            # if discount_count > 0:
-            #     stripe_items.append({"quantity":int(discount_count),"type":"sku","parent":discount_division_skus[int(division_id)]})
-            # if normal_count > 0:
-            #     stripe_items.append({"quantity":int(normal_count),"type":"sku","parent":division_skus[int(division_id)]})
                          
     for metadivision_id,num_tokens in added_token_count['metadivisions'].iteritems():        
         if int(num_tokens[0]) > 0:            
-            ticket_count = int(num_tokens[0])
-            #stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":metadivision_skus[int(metadivision_id)]})
+            ticket_count = int(num_tokens[0])            
             build_stripe_purchases(ticket_count,stripe_items,metadivision_skus,discount_metadivision_skus,metadivision_id=int(metadivision_id))            
             
     for division_id,num_tokens in added_token_count['teams'].iteritems():        
         if int(num_tokens[0]) > 0:            
             ticket_count = int(num_tokens[0])
             build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_division_skus,int(division_id))            
-
-            #stripe_items.append({"quantity":int(num_tokens[0]),"type":"sku","parent":division_skus[int(division_id)]})    
     try:
         order = stripe.Order.create(
             currency="usd",
@@ -183,33 +163,33 @@ def start_sale():
         order_id_string =  "order_id %s, " % order_response.id
         stripe_purchase_summary_string = order_id_string
         
-        #for item in order_response.items():
-        #    if item[0] == 'items':
-        #        for actual_item in item[1]:
-        #            if actual_item.amount != 0:
-        #                stripe_purchase_summary_string = stripe_purchase_summary_string + "amount : %s, description : %s, quantity : %s " % (actual_item.amount/100,actual_item.description,actual_item.quantity)
-        #                #print "amount : %s, description : %s, quantity : %s " % (actual_item.amount,actual_item.description,actual_item.quantity)
         for division_id,num_tokens in added_token_count['divisions'].iteritems():        
             if int(num_tokens[0]) > 0:
                 create_ticket_purchase(current_app,
                                        num_tokens[0],
                                        current_user.player.player_id,
                                        current_user.user_id,
-                                       division_id=division_id)
+                                       division_id=division_id,
+                                       use_stripe=True,
+                                       stripe_charge_id=order_response.charge)
         for metadivision_id,num_tokens in added_token_count['metadivisions'].iteritems():        
             if int(num_tokens[0]) > 0:            
                 create_ticket_purchase(current_app,
                                        num_tokens[0],
                                        current_user.player.player_id,
                                        current_user.user_id,
-                                       metadivision_id=metadivision_id)
+                                       metadivision_id=metadivision_id,
+                                       use_stripe=True,
+                                       stripe_charge_id=order_response.charge)
         for division_id,num_tokens in added_token_count['teams'].iteritems():        
             if int(num_tokens[0]) > 0:            
                 create_ticket_purchase(current_app,
                                        num_tokens[0],
                                        current_user.player.player_id,
                                        current_user.user_id,
-                                       division_id=division_id)
+                                       division_id=division_id,
+                                       use_stripe=True,
+                                       stripe_charge_id=order_response.charge)
         for json_token in tokens:            
             token = tables.Token.query.filter_by(token_id=json_token['token_id']).first()            
             token.paid_for=True

@@ -12,6 +12,18 @@ from orm_creation import create_stanard_roles_and_users,create_queue
 import os
 import random
 
+
+@meta_admin_blueprint.route('/meta_admin/list_of_events',methods=['GET'])
+def route_get_list_of_events():        
+    event_file = open(current_app.td_config['EVENT_FILE_PATH']) 
+    event_file_contents = event_file.read()
+    event_file.close()
+    
+    input_data = json.loads(event_file_contents)
+    #print input_data
+    return jsonify({'data':input_data})    
+    #return jsonify({})
+
 #FIXME : needs protection
 #FIXME : need to pull db creation out into seperate function
 @meta_admin_blueprint.route('/meta_admin/db',methods=['POST'])

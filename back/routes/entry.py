@@ -89,8 +89,7 @@ def route_add_score(division_machine_id, score):
 @admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/void',methods=['PUT'])
 @login_required
 @Scorekeeper_permission.require(403)
-def route_void_score(division_machine_id):        
-    print "poop"
+def route_void_score(division_machine_id):            
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)                
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
@@ -115,9 +114,15 @@ def route_void_score(division_machine_id):
                      token_id=token.token_id)    
 
     if division_machine.player_id:
-        tokens_left_string = calc_audit_log_remaining_tokens(division_machine.player_id)
+        tokens_left_info = calc_audit_log_remaining_tokens(division_machine.player_id,return_string=False)
+        tokens_left_string = tokens_left_info['tokens_left_string']
+        #tokens_left_string = calc_audit_log_remaining_tokens(division_machine.player_id)
     if division_machine.team_id:
-        tokens_left_string = calc_audit_log_remaining_tokens(None,division_machine.team_id)
+        tokens_left_info = calc_audit_log_remaining_tokens(None,division_machine.team_id,return_string=False)        
+        team = tables.Team.query.filter_by(team_id=division_machine.team_id).first()
+        player_id = [player.player_id for player in team.players][0]
+        tokens_left_string = tokens_left_info['tokens_left_string']
+        #tokens_left_string = calc_audit_log_remaining_tokens(None,division_machine.team_id)
     create_audit_log("Ticket Summary",datetime.datetime.now(),
                      tokens_left_string,user_id=current_user.user_id,
                      player_id=player_id,team_id=team_id)
@@ -125,8 +130,21 @@ def route_void_score(division_machine_id):
     division_machine.player_id=None
     division_machine.team_id=None    
     db.session.commit()
+
+    return_dict = {'data':token.to_dict_simple()}
+    if tokens_left_info is None:
+        return jsonify(return_dict)
+
+    meta_division_id = division_machine.division.meta_division_id
+    if division_machine.division_id in tokens_left_info['division_tokens_left']:
+        return_dict['player_token_data']=tokens_left_info['division_tokens_left'][division_machine.division_id]
+    if meta_division_id and meta_division_id in tokens_left_info['metadivision_tokens_left']:            
+        return_dict['player_token_data']=tokens_left_info['metadivision_tokens_left'][meta_division_id]
+    if 'player_token_data' not in return_dict:
+        return_dict['player_token_data']=0
     
-    return jsonify({'data':token.to_dict_simple()})
+    #return jsonify({'data':token.to_dict_simple()})
+    return jsonify(return_dict)
 
 @admin_manage_blueprint.route('/entry/division_machine/<division_machine_id>/jagoff',methods=['PUT'])
 @login_required

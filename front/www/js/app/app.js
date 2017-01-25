@@ -36,7 +36,7 @@ app = angular.module(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera) {
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {
         //$scope.type_of_page = type_of_page;
         if(ionic.Platform.isWebView() == false){
             if ($location.absUrl().includes('player.html#')!=true){
@@ -52,6 +52,10 @@ app.controller(
         //        Utils because it will cause a circular reference
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             $scope.site=state.params.site;            
+
+            poop_elem = angular.element(document).find('poop');
+            console.log(poop_elem.html());
+
             User.set_user_site($scope.site);
             if (User.logged_in() == true) {
                 if (User.login_time == undefined){
@@ -81,7 +85,12 @@ app.controller(
             }                                 
         };
         $scope.customBackButtonNav = function(){
-            $state.go('^');
+            if($state.current.name.match(/results/) != undefined){                
+                $ionicHistory.goBack();           
+            } else {
+                $state.go('^');
+            }
+            
         };
         $scope.randomNumber = $rootScope.randomNumber;        
         if($state.current.name == "app"){
@@ -99,6 +108,7 @@ app.controller(
         $scope.uploaded_pic_name=undefined;
         $ionicPlatform.ready(function() {        
             dev_info = ionic.Platform.device();
+            
             if (_.size(dev_info)!=0){
                 $scope.is_native=true;
                 //alert('on a native app');

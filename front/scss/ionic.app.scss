@@ -253,10 +253,21 @@ $button-large-icon-size:          $font-size-base*2 !default;
 .platform-android {
     .bar {      
       .back-button .icon:before {
+          padding-top:10px;
           font-size: $font-size-base*2.5;
       }
     }
 }
+
+.platform-ios {
+    .bar {      
+      .back-button .icon:before {
+          padding-top:15px;
+          font-size: $font-size-base*2;
+      }
+    }
+}
+
 
 .bar {
     .button {
@@ -281,18 +292,20 @@ ion-side-menu {
         }
     }
 }
-
+.platform-ios,.platform-android,.platform-browser{
 .test-select {
     select {
-    position:relative;
-    //margin-right:100px;
+        //position:relative;
+        float:right;
+        //margin-right:100px;
     }
 }
 .test-select::after {
-    position:relative;
+    float:right;
+    //position:relative;
     //margin-right:100px;
 }
-
+}
 .platform-android {
 
   .bar {
@@ -426,11 +439,18 @@ ion-side-menu {
                    padding-left:10px;
             }
         }
-        @media screen and (min-width:611px) {
+        @media screen and (max-width:970px) and (min-width:611px) {
+            //font-size: $font-size-base*2.5;
+            font-size: $font-size-base*1.5;
+            padding-left:10px;
+            //background-color:purple;
+        }
+        @media screen and (min-width:970px){
             //font-size: $font-size-base*2.5;
             font-size: $font-size-base*1.5;
             padding-left:10px;
         }
+        
     }
 }
 
@@ -526,6 +546,9 @@ user-select: text;
     @media screen and (min-width:611px) {
         font-size: $font-size-base*.5;
     }    
+}
+
+.results_table_machine{
 }
 
 // submit buttons : calm

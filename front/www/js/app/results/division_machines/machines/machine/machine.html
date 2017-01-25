@@ -1,4 +1,4 @@
-<ion-view view-title="Results" hide-back-button="true">
+<ion-view view-title="Results">
   <ion-content>      
     <div style='text-align:center'>
 
@@ -10,17 +10,15 @@
         {{division_machine_name}}
       </b>
     </div>
-    <table style='margin-left:auto;margin-right:auto;' class='results_table'>
+    <table class='results_table_machine'>
       <tr>
         <th><b>Rank</b></th>
-        <th style='padding-left:50px'><b>Player</b></th>
-        <th style='padding-left:50px'><b>Points</b></th>
-        <th style='padding-left:50px'><b>Score</b></th>
-        
+        <th style='padding-left:25px'><b>Player</b></th>
+        <th style='padding-left:25px'><b>Points/Score</b></th>
       </tr>
       <tr ng-repeat='result in resources.division_machine_results.data'>
         <td style='padding-top:10px;' >{{result.rank}}</td>
-        <td style='padding-left:50px;padding-top:10px;'>          
+        <td style='padding-left:25px;padding-top:10px;'>          
           <span ng-if='team_tournament==false'>
           <a ui-sref='.^.^.^.players.player({player_id:result.player_id,player_name:result.player_name})'>
             {{result.player_name}}
@@ -31,8 +29,7 @@
           </span>
           
         </td>
-        <td style='padding-left:50px;padding-top:10px;'>{{result.points}}</td>
-        <td style='padding-left:50px;padding-top:10px;'>{{result.score|number}}</td>
+        <td style='padding-left:25px;padding-top:10px;'>{{result.points}} / {{result.score|number}}</td>
       </tr>
     </table>
   </ion-content>

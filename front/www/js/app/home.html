@@ -11,7 +11,7 @@
     <test id="test_element"></test>
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
-  <ion-side-menu side="right" width='300'>
+  <ion-side-menu side="right" width='250'>
     <ion-header-bar class="bar-positive">
       <div ng-if="User.logged_in() == true && User.logged_in_player().is_player == false">
         <img id="side_menu_user_icon" align="bottom" src="http://{{server_ip_address}}/pics/user_{{User.logged_in_user().user_id}}.jpg?{{randomNumber}}" class="avatar-frame-small">
@@ -33,7 +33,6 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
-
         <a id='menu_login_link' class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false && type_of_page == 'user'">
           <div>
             Login
@@ -60,18 +59,15 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
-        <a id='menu_manage_queues_link' class='item item-icon-right' menu-close ui-sref='.queues({manage:true})' ng-if="User.logged_in() == true && User.has_role('desk')">          
-          <div>
-            Manage Queues
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>
         <a id='menu_oops_link' class='item item-icon-right' menu-close ui-sref='.oops' ng-if="User.logged_in() == true && User.has_role('admin')">          
           <div>
             Oops
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
+        <a ng-if="User.logged_in() == true && User.has_role('scorekeeper')" class="item item-divider">
+          &nbsp;
+        </a>        
         <a id='menu_remove_player_link' class='item item-icon-right' menu-close ui-sref='.remove_player' ng-if="User.logged_in() == true && User.has_role('scorekeeper')">          
           <div>
             Remove Player
@@ -95,45 +91,26 @@
             Finals
           </div>
           <i class="icon ion-chevron-right"></i>
+        </a>                        
+        <a ng-if="User.logged_in() == true" class="item item-divider">
+          &nbsp;
+        </a>
+        <a ng-if='is_native==true && User.logged_in() == true' id='menu_reload_link' class='item item-icon-right' menu-close ng-click='force_reload()'>          
+          <div>
+            Reload Page
+          </div>
+          <i class="icon ion-chevron-right"></i>
         </a>                
-        
+        <a ng-if='is_native==true && User.logged_in() == true' class="item item-divider">
+          &nbsp;
+        </a>
         <a id='menu_logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
           <div>
             Logout
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
-        <a class="item item-divider">
-          &nbsp;
-        </a>
-        <a id='menu_reload_link' class='item item-icon-right' menu-close ng-click='force_reload()'>          
-          <div>
-            Reload Page
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>        
         
-        <a id='menu_results_divisions_link' class='item item-icon-right' menu-close ui-sref='.results.divisions'>          
-          <div>
-            Division Results
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>
-        <a id='menu_results_machines_link' class='item item-icon-right' menu-close ui-sref='.results.division_machines'>          
-          <div>
-            Machine Results
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>
-        <a id='menu_results_players_link' class='item item-icon-right' menu-close ui-sref='.results.players'>          
-          <div>
-            Player Results
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>
-        <a class="item item-divider">
-          &nbsp;
-        </a>
       </ion-list>
     </ion-content>
   </ion-side-menu>

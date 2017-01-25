@@ -8,7 +8,8 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
             url: '/event_select',
             views: {
                 '@': {
-                    templateUrl: 'js/app/event_select.html',
+                    templateUrl: 'js/app/event_select.html'
+
                 },
                 'e_select_view@event_select':{
                     templateUrl: 'js/app/e_select.html'

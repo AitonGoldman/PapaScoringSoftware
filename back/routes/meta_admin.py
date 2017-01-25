@@ -13,7 +13,7 @@ import os
 import random
 
 
-@meta_admin_blueprint.route('/meta_admin/list_of_events',methods=['GET'])
+@meta_admin_blueprint.route('/meta_admin/events',methods=['GET'])
 def route_get_list_of_events():        
     event_file = open(current_app.td_config['EVENT_FILE_PATH']) 
     event_file_contents = event_file.read()

@@ -10,6 +10,7 @@ def get_config_values_from_env():
     config_dict['FLASK_SECRET_KEY']=None
     config_dict['MAX_TICKETS_ALLOWED_PER_DIVISION']=None
     config_dict['STRIPE_API_KEY']=None
+    config_dict['STRIPE_PUBLIC_KEY']=None    
     config_dict['QUEUE_BUMP_AMOUNT']=None
     config_dict['PLAYER_LOGIN']=None
     config_dict['IONICCLOUD_PROFILE_TAG']=None

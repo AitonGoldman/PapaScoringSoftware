@@ -175,7 +175,8 @@ angular.module('TD_services.timeout_resources')
                                                                            'POST');
                   var addDivisionResource = generate_resource_definition(':site/division',
                                                                            'POST');                  
-                  var getTournamentResource = generate_resource_definition(':site/tournament/:tournament_id',
+                  var getTournamentResource = generate_resource_definition(':site/tournament/:tournament_id','GET');
+                  var getEventsResource = generate_resource_definition('meta_admin/events',
                                                                            'GET');
                   var getTournamentDivisionsResource = generate_resource_definition(':site/tournament/:tournament_id/division',
                                                                                     'GET');
@@ -251,6 +252,8 @@ angular.module('TD_services.timeout_resources')
                       CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get'),
                       GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
                       GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
+                      GetEvents: generate_custom_http_executor(getEventsResource,'events','get'),
+
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
                       GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
                       GetPlayerBestScoreForMachine: generate_custom_http_executor(getPlayerBestScoreForMachineResource,'player_best_score_for_machine','get'),

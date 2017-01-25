@@ -11,6 +11,10 @@ import datetime
 from routes.audit_log_utils import create_audit_log
 from orm_creation import create_ticket_purchase
 
+@admin_manage_blueprint.route('/stripe/public_key', methods=['GET'])
+def get_public_key():
+    return jsonify({'data':current_app.td_config['STRIPE_PUBLIC_KEY']})
+
 @admin_manage_blueprint.route('/stripe/sku/<sku>', methods=['GET'])
 def get_valid_sku(sku):
     if 'STRIPE_API_KEY' not in current_app.td_config or current_app.td_config['STRIPE_API_KEY'] is None:

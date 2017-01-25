@@ -34,6 +34,18 @@ app = angular.module(
 );
 
 app.controller(
+    'EventSelectController',    
+    function($scope, $location, $http, 
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {
+        Modals.loading();
+        events_promise = TimeoutResources.GetEvents();
+        events_promise.then(function(data){
+            $scope.resources = TimeoutResources.GetAllResources();
+            Modals.loaded();
+        });
+    }
+);
+app.controller(
     'IndexController',    
     function($scope, $location, $http, 
              $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {
@@ -53,8 +65,6 @@ app.controller(
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             $scope.site=state.params.site;            
 
-            poop_elem = angular.element(document).find('poop');
-            console.log(poop_elem.html());
 
             User.set_user_site($scope.site);
             if (User.logged_in() == true) {

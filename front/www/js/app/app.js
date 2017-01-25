@@ -62,36 +62,35 @@ app.controller(
         $scope.slider={value:0, max:10};
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference
+        $scope.is_login_age_old = function(login_time){
+            cur_time = new Date();
+            time_delta = cur_time - login_time;                                        
+            if((time_delta/1000) > (60)){
+                return true;
+            } else {
+                return false;
+            }            
+        };
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             $scope.site=state.params.site;            
 
-
             User.set_user_site($scope.site);
             if (User.logged_in() == true) {
-                if (User.login_time == undefined){
-                    User.login_time = new Date();                    
+                if($scope.is_login_age_old(User.login_time) || TimeoutResources.GetAllResources().divisions==undefined){
+                    return TimeoutResources.GetDivisions(undefined,{site:$scope.site});                    
                 } else {
-                    cur_time = new Date();
-                    time_delta = cur_time - User.login_time;                                        
-                    if((time_delta/1000) > (60)){
-                        return TimeoutResources.GetDivisions(undefined,{site:$scope.site});                        
-                    }
+                    return Utils.resolved_promise();
                 }
-                return Utils.resolved_promise();
             }             
-            if(do_not_check_current_user == undefined && User.logged_in() == false){                
-                
-                check_user_promise = User.check_current_user();
-                get_divisions_promise = check_user_promise.then(function(data){                    
-                    if(TimeoutResources.GetAllResources().divisions==undefined){
-                        //Modals.loading();
-                        return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
-                    }
-                });
-                
-                return get_divisions_promise.then(function(data){
-                    //Modals.loaded();
-                });
+            if(do_not_check_current_user == undefined && User.logged_in() == false){                                
+                if(TimeoutResources.GetAllResources().divisions==undefined){
+                    prom = TimeoutResources.GetDivisions(undefined,{site:$scope.site});                    
+                } else {
+                    prom = Utils.resolved_promise();
+                }
+                return prom.then(function(data){
+                    return check_user_promise = User.check_current_user();
+                });                
             }                                 
         };
         $scope.customBackButtonNav = function(){

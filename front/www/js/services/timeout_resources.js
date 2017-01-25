@@ -182,6 +182,8 @@ angular.module('TD_services.timeout_resources')
                                                                                     'GET');
                   var getDivisionResource = generate_resource_definition(':site/division/:division_id',
                                                                          'GET');
+                  var getStripePublicKeyResource = generate_resource_definition(':site/stripe/public_key',
+                                                                         'GET');                  
                   var getDivisionsResource = generate_resource_definition(':site/division',
                                                                           'GET');
                   var getPlayerBestScoreForMachineResource = generate_resource_definition(':site/entry/player/:player_id/division_machine/:division_machine_id',
@@ -253,7 +255,7 @@ angular.module('TD_services.timeout_resources')
                       GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
                       GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
                       GetEvents: generate_custom_http_executor(getEventsResource,'events','get'),
-
+                      GetStripePublicKey: generate_custom_http_executor(getStripePublicKeyResource,'stripe_public_key','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
                       GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
                       GetPlayerBestScoreForMachine: generate_custom_http_executor(getPlayerBestScoreForMachineResource,'player_best_score_for_machine','get'),

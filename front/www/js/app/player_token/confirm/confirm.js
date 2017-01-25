@@ -9,9 +9,11 @@ angular.module('app.player_token.confirm').controller(
             $scope.utils = Utils;
             $scope.token_info = $state.params.token_info;
             Modals.loading();
-            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-            $scope.bootstrap_promise.then(function(data){
+            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);
+            pub_key_promise = TimeoutResources.GetStripePublicKey($scope.bootstrap_promise,{site:$scope.site});
+            pub_key_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
+                $scope.stripe_public_key = $scope.resources.stripe_public_key.data;
                 Modals.loaded();
             });
             $scope.create_tickets = function(){
@@ -30,7 +32,7 @@ angular.module('app.player_token.confirm').controller(
             };
         $scope.stripe_dialog = function(){
             var handler = StripeCheckout.configure({
-                key: 'pk_test_ogpldo01jdDiemTfT8MMTtMU',
+                key: $scope.stripe_public_key,
                 image: 'http://cdn.marketplaceimages.windowsphone.com/v8/images/efd6e87a-ad46-49fd-bc4c-acdb2dd827aa?imageType=ws_icon_large',
                 locale: 'auto',
                 token: function(token) {                    
@@ -50,6 +52,7 @@ angular.module('app.player_token.confirm').controller(
                 description: 'Purchase Tickets',
                 amount: $scope.token_info.total_cost*100
             });
+            Modals.loaded();
         };                            
     }]
 );

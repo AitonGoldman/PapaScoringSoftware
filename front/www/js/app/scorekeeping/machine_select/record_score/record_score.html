@@ -35,10 +35,10 @@
 
     
     <div class='player-info-avatar'>
-      <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{player_id}}.jpg"> 
+      <img class='avatar-frame avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_id}}.jpg"> 
     </div>
     <div style='z-index:4' class='machine-info-avatar'>
-      <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg">
+      <img class='avatar-frame avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg">
     </div>
 
     <!-- <div class="skinny-list list" > -->
@@ -60,10 +60,10 @@
     <!--   <span ng-if='team_tournament=="false"'>(#{{player_id}})</span>{{player_name}} -->
     <!-- </div> -->
     <!-- <div style='z-index:4' class='machine-info-avatar'> -->
-    <!--   <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg"> -->
+    <!--   <img class='avatar-frame avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg"> -->
     <!-- </div> -->
     <!-- <div style='z-index:200' class='player-info-avatar'> -->
-    <!--   <img class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{player_id}}.jpg"> -->
+    <!--   <img class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_id}}.jpg"> -->
     <!-- </div> -->
     
     <!-- <button style='font-size:48px' class="button button-full button-assertive icon-right ion-chevron-right" ng-click="choose_void_action()"> -->

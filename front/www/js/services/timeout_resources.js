@@ -125,7 +125,7 @@ angular.module('TD_services.timeout_resources')
                       //     server_port = "8000";
                       // }
                       if(url_params.host != undefined){
-                          api_host.set_api_host('http://'+url_params.host+':'+server_port+'/');
+                          api_host.set_api_host(http_prefix+'://'+url_params.host+':'+server_port+'/');
                       } else {
                           var ip_start = $location.absUrl().indexOf('//')+2;
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
@@ -137,7 +137,7 @@ angular.module('TD_services.timeout_resources')
                               //ip="98.111.232.93";
                               ip=server_ip_address;                              
                           }
-                          api_host.set_api_host('http://'+ip+':'+server_port+'/');
+                          api_host.set_api_host(http_prefix+'://'+ip+':'+server_port+'/');
                       }
                   };
 

@@ -20,8 +20,8 @@
       <i class="icon ion-chevron-right"></i>          
     </button>
     <div class='player-info-avatar'>
-      <img src="http://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players.length == 0 && poop == true'>
-      <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">
+      <img src="{{http_prefix}}://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players.length == 0 && poop == true'>
+      <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">
       <img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'>
     </div>
 

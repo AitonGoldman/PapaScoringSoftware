@@ -33,7 +33,7 @@ angular.module('app.player_token.confirm').controller(
         $scope.stripe_dialog = function(){
             var handler = StripeCheckout.configure({
                 key: $scope.stripe_public_key,
-                image: 'http://cdn.marketplaceimages.windowsphone.com/v8/images/efd6e87a-ad46-49fd-bc4c-acdb2dd827aa?imageType=ws_icon_large',
+                image: 'https://cdn.marketplaceimages.windowsphone.com/v8/images/efd6e87a-ad46-49fd-bc4c-acdb2dd827aa?imageType=ws_icon_large',
                 locale: 'auto',
                 token: function(token) {                    
                     $scope.ticket_purchase_in_progress = true;

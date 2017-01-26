@@ -130,6 +130,8 @@ app.controller(
             });
         };
         $scope.server_ip_address=server_ip_address;
+        $scope.http_prefix=http_prefix;
+
         $scope.take_pic_and_upload = function(type,info_object,site,id){            
             upload_pic_promise = Camera.take_user_pic_and_upload(type,site,id);
             upload_pic_promise.then(function(data){

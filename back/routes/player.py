@@ -10,6 +10,13 @@ import os
 from orm_creation import create_player,create_user,RolesEnum
 import random
 
+@admin_manage_blueprint.route('/player/division_id/<division_id>',methods=['GET'])
+def route_get_players_for_division_with_tickets(division_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    players = {player.player_id:player.to_dict_simple() for player in tables.Player.query.filter_by(linked_division_id=division_id).all()}
+    return jsonify({'data':players})
+
 @admin_manage_blueprint.route('/player',methods=['GET'])
 def route_get_players():
     db = db_util.app_db_handle(current_app)

@@ -17,7 +17,7 @@ angular.module('app.login_player.process').controller(
             $scope.player=$state.params.player;
             Modals.loading();            
             post_obj = {player_pin:$scope.player.pin};
-            if(ionic.Platform.isWebView() == true && ionic.Platform.device().isVirtual==false && ionic.Platform.isIOS() == false){                
+            if(ionic.Platform.isWebView() == true && ionic.Platform.device().isVirtual==false){                
                 ionic_push_promise = $ionicPush.register().then(function(t) {
                     $scope.ioniccloud_push_token = t;
                     post_obj["ioniccloud_push_token"] = $scope.ioniccloud_push_token.token;

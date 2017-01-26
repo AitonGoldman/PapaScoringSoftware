@@ -20,7 +20,7 @@ angular.module('app.login.process').controller(
             
             Modals.loading();
             post_obj = {username:$scope.user_info.username,password:$scope.user_info.password};
-            if(ionic.Platform.isWebView() == true && ionic.Platform.device().isVirtual==false && ionic.Platform.isIOS() == false){
+            if(ionic.Platform.isWebView() == true && ionic.Platform.device().isVirtual==false){
                 ionic_push_promise = $ionicPush.register().then(function(t) {
                     $scope.ioniccloud_push_token = t;
                     post_obj["ioniccloud_push_token"] = $scope.ioniccloud_push_token.token;

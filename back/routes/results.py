@@ -215,7 +215,10 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                         player_entry_dict[ranked_division_id]['rank']=ranked_result[0]
             return jsonify({'data':player_entry_dict})        
         if return_json:
-            return jsonify({'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}})
+            top_6_machines_division_only = {key: value for (key, value) in top_6_machines.iteritems() if key == int(division_id)}
+            ranked_player_list_division_only = {key: value for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}
+            #return jsonify({'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}})
+            return jsonify({'data':{'top_machines':top_6_machines_division_only,'ranked_player_list':ranked_player_list_division_only}})
         else:
             return {'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}}
 
@@ -225,7 +228,7 @@ def route_get_player_results(player_id):
     return get_division_results(player_id_external=player_id)
                        
 @admin_manage_blueprint.route('/results/division/<division_id>',methods=['GET'])
-def route_get_division_results(division_id):
+def route_get_division_results(division_id):    
     return get_division_results(division_id=division_id)
 
 def get_ranked_qualifying_ppo_players(division_id,absent_players,tie_breaker_ranks):

@@ -13,7 +13,7 @@ from sqlalchemy import and_,or_
 import locale
 from sqlalchemy import desc,asc
 
-locale.setlocale(locale.LC_ALL, 'en_US')
+locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 @admin_manage_blueprint.route('/admin/audit_log/where_all_my_scores_at/player_id/<player_id>/audit_log_id/<audit_log_id>/time_delta/<minutes>',methods=['GET'])
 #@login_required

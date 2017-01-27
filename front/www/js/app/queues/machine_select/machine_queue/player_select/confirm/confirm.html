@@ -21,10 +21,12 @@
               <td class='padding-left'>
                 (#{{player_id}}) {{player_name}}
             </tr>
-            
+            <tr class='red' ng-if="num_tokens_left==0">
+              <td colspan=2>No More {{resources.divisions.data[division_id].tournament_name}} Tickets Left!</td>
+            </tr>
           </table>
           <br>
-          <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({process_step:{process:true}})">
+          <button ng-if="num_tokens_left > 0" id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({process_step:{process:true}})">
             <span>Add To Queue</span>
             <i class="icon ion-chevron-right"></i>          
           </button>

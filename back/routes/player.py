@@ -88,4 +88,25 @@ def route_add_player():
     new_player_dict = new_player.to_dict_simple()
     new_player_dict['pin']=new_player.pin
     return jsonify({'data':new_player_dict})
-    
+
+@admin_manage_blueprint.route('/pre_reg_player',methods=['POST'])
+def route_add_prereg_player():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    input_data = json.loads(request.data)
+    for key in ['first_name','last_name','ifpa_ranking']:
+        if key not in input_data:
+            raise BadRequest("You did not specify a first name and/or a last name and/or a ifpa ranking")        
+    player = tables.Player.query.filter_by(first_name=input_data['first_name'],last_name=input_data['last_name']).first()
+    if player is not None:
+        if player.active is True:
+            raise Conflict('Duplicate player')
+        if player.active is False and player.pre_reg_paid is True:
+            raise Conflict('Duplicate player')            
+    input_data['active']=False
+    new_player = create_player(current_app,input_data)
+    db.session.commit()
+    new_player_dict = new_player.to_dict_simple()
+    new_player_dict['pin']=new_player.pin
+    return jsonify({'data':new_player_dict})
+

@@ -1,0 +1,37 @@
+<ion-content>
+  <div>
+    <div class="card">
+      <div class="item item-divider">
+        Step 5 : Pay the registration fee
+      </div>
+      <div class="item item-text-wrap">
+        Review the information below.<br><br>
+        If it is correct, click the "Pay Fee" button.<br><br>
+        If not, click the "back" button to change your information.<br><br>
+        <table>
+          <tr>
+            <td>First Name</td><td>{{first_name}}</td>
+          </tr>
+          <tr>
+            <td>Last Name</td><td>{{last_name}}</td>
+          </tr>
+          <tr>
+            <td>Ifpa Ranking</td><td>{{ifpa_ranking}}</td>
+          </tr>
+          <tr>
+            <td>Email Address</td><td>{{player_email}}</td>
+          </tr>
+          <tr>
+            <td>Main Division</td><td>{{linked_division_id}}</td>
+          </tr>
+        </table>
+        <br>
+        <button style='float:left;margin-bottom:25px;margin-top:25px;' ui-sref='prereg.step1' class='button button-calm'>Re-enter Info</button>
+        <button style='float:right;margin-bottom:25px;margin-top:25px;'ng-click='stripe_dialog()' class='button button-calm'> Pay Fee </button>
+        <br><br>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+

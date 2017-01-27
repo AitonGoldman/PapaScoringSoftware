@@ -1,0 +1,30 @@
+</ion-content>
+<div>
+  <div class="card">
+    <div class="item item-divider">
+      Step 1 : Enter your information
+    </div>
+    <div class="item item-text-wrap">
+      <div class="list">
+        <form name='myForm'>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">First Name</span>
+          <input ng-model='player.first_name' type="text" placeholder="First Name">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Last Name</span>
+          <input ng-model='player.last_name' type="text" placeholder="Last Name">
+        </label>
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Email</span>
+          <input ng-model='player.email' type="email" placeholder="Email">
+        </label>
+        <label class="item item-input item-floating-label">
+        </label>
+        </form>
+      </div>
+      <button ng-disabled='utils.var_empty(player.first_name) || utils.var_empty(player.last_name) || utils.var_empty(player.email) || myForm.$valid == false' style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step2({player_first_name:player.first_name,player_last_name:player.last_name,player_email:player.email})' class='button button-calm'> Next </button>
+    </div>
+  </div>
+</div>
+</ion-content>

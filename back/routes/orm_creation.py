@@ -179,9 +179,12 @@ def create_player(app,player_data):
     new_player = tables.Player(
         first_name=player_data['first_name'],
         last_name=player_data['last_name'],
-        asshole_count=0,
-        active=True        
+        asshole_count=0        
     )
+    if 'active' in player_data and player_data['active'] is False:
+        new_player.active=False
+    else:
+        new_player.active=True
     if app.td_config['DB_TYPE']=='sqlite':        
         new_player.pin= random.randrange(1234,9999999)
         db.session.commit()

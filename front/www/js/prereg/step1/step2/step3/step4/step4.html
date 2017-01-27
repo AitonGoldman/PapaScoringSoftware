@@ -1,0 +1,35 @@
+<ion-content>
+<div>
+  <div class="card">
+    <div class="item item-divider">
+      Step 4 : Upload Player Picture 
+    </div>
+    <div class="item item-text-wrap">
+      All players at PAPA 20<br> must upload a player picture.<br><br>
+      The picture will allow officials to identify you during the tournament.<br><br>
+      The picure must be a picture of your face from the neck up.<br><br>
+      <div ng-if='is_native != true'>
+        Please use the "Choose Files" button to select a photo, and then click the "Upload" button. <br><br>
+        <form name="upload" class="form" data-ng-submit="addFile()">
+          <input type="file" name="file" multiple 
+                 onchange="angular.element(this).scope().uploadedFile(this)"
+                 />
+          <br>
+          <br>
+          <button type="submit"><span ng-if='uploaded_pic_name != undefined'>{{Re}}</span>Upload</button>
+          <br>
+          <br>
+        </form>        
+      </div>
+      <div ng-if='uploaded_pic_name != undefined'>
+        The picture displayed above is what will be used.  If you like this picture, please click the "Next" button.  If you do not like this picture, please select and upload another picture.  
+      </div>
+      <button style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step5({uploaded_file_name:uploaded_pic_name})' ng-disabled="uploaded_pic_name == undefined" class='button button-calm'> Next </button>
+              <br><br>
+    </div>
+  </div>
+</div>
+<div ng-if='uploaded_pic_name != undefined' class='player-info-avatar' style='height:250px'>
+  <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/{{uploaded_pic_name}}">
+</div>
+</ion-content>

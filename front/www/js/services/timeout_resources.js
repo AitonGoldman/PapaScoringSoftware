@@ -76,7 +76,7 @@ angular.module('TD_services.timeout_resources')
 	              return resource_results[scope_name].$promise;	
                   };
                   
-                  var generate_resource_definition = function(url,http_method,custom_interceptor){                                                    
+                  var generate_resource_definition = function(url,http_method,custom_interceptor,use_results_server){                                                    
                       url_chunks = url.split("/");
                       gen_post_args = {};
                       for(url_chunk_index in url_chunks){
@@ -92,7 +92,12 @@ angular.module('TD_services.timeout_resources')
                       } else {
                           response_interceptor_to_use = custom_interceptor;
                       }
-                      var target_api_host = api_host.api_host();
+                      if (use_results_server == undefined){
+                          target_api_host = api_host.api_host();
+                      } else {
+                          target_api_host = api_host.results_host();
+                      }
+                      
                       
                       resource_to_return= $resource(target_api_host+url,gen_post_args,
                                                     {                             
@@ -119,25 +124,20 @@ angular.module('TD_services.timeout_resources')
                   
                   var set_api_host = function(){                                                             
                       var url_params = $location.search();
-                      // if (type_of_page == "player"){
-                      //     server_port = "8001";
-                      // } else {
-                      //     server_port = "8000";
-                      // }
                       if(url_params.host != undefined){
-                          api_host.set_api_host(http_prefix+'://'+url_params.host+':'+server_port+'/');
+                          api_url=http_prefix+'://'+url_params.host+':'+server_port+'/';
+                          api_host.set_api_host(api_url);
+                          api_host.set_results_host(api_url);                          
                       } else {
                           var ip_start = $location.absUrl().indexOf('//')+2;
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
                           if(ip == undefined || ip == ""){
-                              //ip = "192.168.1.178";
-                              //ip = "9.75.197.73";
-                              //ip="9.75.197.135";
-                              //ip="98.111.232.93";
                               ip=server_ip_address;                              
                           }
-                          api_host.set_api_host(http_prefix+'://'+ip+':'+server_port+'/');
+                          api_url=http_prefix+'://'+ip+':'+server_port+'/';
+                          api_host.set_api_host(api_url);                          
+                          api_host.set_results_host(api_url);
                       }
                   };
 
@@ -229,11 +229,11 @@ angular.module('TD_services.timeout_resources')
                   
                   var removePlayerFromMachineResource = generate_resource_definition(':site/division_machine/:division_machine_id/player/:player_id','DELETE');
                   var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');
-                  var getDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET');
-                  var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET');
+                  var getDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET',undefined,true);
+                  var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET',undefined,true);
                   var voidEntryResource = generate_resource_definition(':site/admin/entry_id/:entry_id/void/:void','DELETE');
                   var addEntryResource = generate_resource_definition(':site/admin/division_machine_id/:division_machine_id/score/:score/player_id/:player_id','POST');                                    
-                  var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET');
+                  var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET',undefined,true);
                   var getPlayerEntriesResource = generate_resource_definition(':site/entry/player/:player_id','GET');
                   var setScoreResource = generate_resource_definition(':site/admin/score_id/:score_id/score/:score','PUT');
                   var getAuditLogMissingTokensResource = generate_resource_definition(':site/admin/audit_log/where_all_my_tokens_at/player_id/:player_id','GET');

@@ -13,11 +13,6 @@ angular.module('app.queues.machine_select').controller(
         queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
         queues_promise.then(function(data){            
             $scope.resources = TimeoutResources.GetAllResources();
-            _.forEach($scope.resources.queues.data, function(machine, key) {
-                if(machine.queues.length > 0 || machine.player_id != undefined){                    
-                    $scope.queueing_available = true;
-                }
-            });
             Modals.loaded();
         });
         //division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name
@@ -31,9 +26,13 @@ angular.module('app.queues.machine_select').controller(
                 return;
             }
             
-            ActionSheets.queue_no_action();
-            //ui-sref='.machine_queue({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})'
+            ActionSheets.queue_no_action();            
         };
-        
+        $scope.doRefresh = function() {
+            queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
+            queues_promise.then(function(data){
+                $scope.$broadcast('scroll.refreshComplete');                
+            });
+        };                
     }]
 );

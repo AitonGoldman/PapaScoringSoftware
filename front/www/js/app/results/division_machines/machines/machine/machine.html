@@ -1,5 +1,10 @@
 <ion-view view-title="Results">
   <ion-content>      
+    <ion-refresher
+       pulling-text="Pull to refresh..."
+       on-refresh="doRefresh()">
+    </ion-refresher>    
+
     <div style='text-align:center'>
 
       <select ng-change="jump_to_machine_results()" ng-model='jump_to_division_machine.data' ng-options='machine as machine.division_machine_name for machine in resources.division_machines.data'>

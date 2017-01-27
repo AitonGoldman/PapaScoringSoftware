@@ -24,6 +24,16 @@ angular.module('app.results.division_machines.machines.machine').controller(
             Modals.loaded();            
         });
 
+        $scope.doRefresh = function() {
+            results_promise = TimeoutResources.GetDivisionMachineResults(undefined,
+                                                                         {site:$scope.site,division_machine_id:$scope.division_machine_id});            
+            results_promise.then(function(data){                
+                $scope.resources = TimeoutResources.GetAllResources();
+                $scope.$broadcast('scroll.refreshComplete');                
+            });
+        };                        
+
+        
         $scope.jump_to_machine_results = function(){                        
             if($scope.jump_to_division_machine.data == undefined || $scope.jump_to_division_machine.data.division_machine_id == undefined){
                 return;

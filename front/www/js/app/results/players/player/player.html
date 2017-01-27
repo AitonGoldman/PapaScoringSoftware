@@ -1,7 +1,9 @@
 <ion-view view-title="Results">
   <ion-content>      
-    <div class='first-element'>
-    </div>
+    <ion-refresher
+       pulling-text="Pull to refresh..."
+       on-refresh="doRefresh()">
+    </ion-refresher>        
     <center>
     <div style='padding:10px;'>
       <b>{{player_name}}</b>

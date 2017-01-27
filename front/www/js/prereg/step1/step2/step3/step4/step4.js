@@ -20,7 +20,10 @@ angular.module('prereg.step1.step2.step3.step4').controller(
         // $scope.resources = TimeoutResources.GetAllResources();
         //  Modals.loaded();
         //})
-        $scope.server_ip_address=server_ip_address;
+            $scope.server_ip_address=server_ip_address;
+            $scope.http_prefix=http_prefix;
+            $scope.server_port=server_port;
+            
 
         $scope.uploadedFile = function(element) {
             console.log('in uploadedFiled');
@@ -45,7 +48,7 @@ angular.module('prereg.step1.step2.step3.step4').controller(
         };
         $scope.uploadfile = function(files,success,error){
  
-            var url = 'http://192.168.1.178:8000/elizabeth/test/media_upload';
+            var url = $scope.http_prefix+'://'+$scope.server_ip_address+':'+$scope.server_port+'/'+$scope.site+'/test/media_upload';
 
             for ( var i = 0; i < files.length; i++)
             {

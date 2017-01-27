@@ -260,9 +260,11 @@ $button-large-icon-size:          $font-size-base*2 !default;
 }
 
 .platform-ios {
-    .bar {      
+    .bar {
       .back-button .icon:before {
-          padding-top:15px;
+          //margin-top:auto;
+          //margin-bottom:auto;
+          //padding-top:15px;
           font-size: $font-size-base*2;
       }
     }

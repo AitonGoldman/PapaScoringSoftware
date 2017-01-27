@@ -24,6 +24,8 @@ angular.module('app.login.process').controller(
                 ionic_push_promise = $ionicPush.register().then(function(t) {
                     $scope.ioniccloud_push_token = t;
                     post_obj["ioniccloud_push_token"] = $scope.ioniccloud_push_token.token;
+                },function(error){
+                    alert('Something has gone wrong while logging in.  Please see the front desk');
                 });
             } else {
                 ionic_push_promise = Utils.resolved_promise();

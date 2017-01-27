@@ -113,7 +113,6 @@ app.controller(
         } else {
             $scope.menu_bar_title_style={'height':'120'};
         }
-        $scope.is_native = false;
         $scope.uploaded_pic_name=undefined;
         $ionicPlatform.ready(function() {        
         });
@@ -217,11 +216,6 @@ app.run(function($ionicPlatform,$rootScope) {
         ionic.Platform.showStatusBar(false);        
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-      dev_info = ionic.Platform.device();
-      console.log(dev_info);
-      if (_.size(dev_info)!=0){
-          $scope.is_native=true;          
-      }
       if(window.cordova && window.cordova.plugins.Keyboard) {
   //Change this to false to return accessory bar 
           cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);

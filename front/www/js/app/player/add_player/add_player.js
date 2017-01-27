@@ -13,7 +13,11 @@ angular.module('app.player.add_player').controller(
             // = TimeoutResources.GetEtcData();
             $scope.bootstrap_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
-                $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});                
+                $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});
+                dev_info = ionic.Platform.device();            
+                if (_.size(dev_info)!=0){
+                    $scope.is_native=true;          
+                }                
                 Modals.loaded();
             });
             $scope.get_ifpa_ranking = function(){
@@ -42,7 +46,7 @@ angular.module('app.player.add_player').controller(
                 } else {
                     return false;
                 }
-            };
+            };            
         }
     ]
 );

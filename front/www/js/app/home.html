@@ -92,18 +92,6 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>                        
-        <a ng-if="User.logged_in() == true" class="item item-divider">
-          &nbsp;
-        </a>
-        <a ng-if='is_native==true && User.logged_in() == true' id='menu_reload_link' class='item item-icon-right' menu-close ng-click='force_reload()'>          
-          <div>
-            Reload Page
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>                
-        <a ng-if='is_native==true && User.logged_in() == true' class="item item-divider">
-          &nbsp;
-        </a>
         <a id='menu_logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
           <div>
             Logout

@@ -12,6 +12,13 @@ angular.module('app.queues').controller(
         $scope.bootstrap_promise.then(function(data){        
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
-        });             
+        });
+        $scope.doRefresh = function() {
+            divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});            
+            divisions_promise.then(function(data){
+                $scope.$broadcast('scroll.refreshComplete');                
+            });
+        };        
+        
     }]
 );

@@ -1,0 +1,29 @@
+<ion-content>
+  <div>
+  <div class="card">
+    <div class="item item-divider">
+      Step 3 : Main Tournament Division Selection
+    </div>
+    <div class="item item-text-wrap">
+      <div ng-if='num_div_allowed > 1'>
+        <div>
+          In order to compete in the Main tournament, you must select one of the divisions below to compete in.
+          <br><br>
+          Please note : once the tournament begins it is not possible to move down a division (i.e. Move from B to C).
+          <br>
+          <br>
+        </div>        
+        
+        <ion-radio ng-if='division_ifpa_limits[division.division_id] < ifpa_ranking' id="add_player_linked_division_{{division.division_name}}" class='item item-radio' style='border-width:0px' ng-model="division_selection.linked_division_id" ng-repeat='division in main_divisions' ng-value="division.division_id"> {{division.tournament_name}}</ion-radio>
+                   </div>
+<div ng-if='num_div_allowed == 1'>
+  You are limited to A division in the Main tournament.  Click the Next button to continue
+</div>
+<button style='float:left;margin-bottom:25px;margin-top:25px;' ui-sref='.^' class='button button-calm'>Back</button>
+
+<button  ng-disabled="num_div_allowed > 1 && division_selection.linked_division_id == undefined" style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step4({linked_division_id:division_selection.linked_division_id})' class='button button-calm'> Next </button>
+
+</div>
+</div>
+</div>
+</ion-content>

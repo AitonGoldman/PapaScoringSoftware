@@ -15,5 +15,12 @@ angular.module('app.results.players.player').controller(
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
         });
+        $scope.doRefresh = function(){
+            results_promise = TimeoutResources.GetPlayerResults($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
+            results_promise.then(function(data){
+                $scope.resources = TimeoutResources.GetAllResources();
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
     }]
 );

@@ -159,6 +159,8 @@ angular.module('TD_services.timeout_resources')
                                                                      'POST');
                   var addPlayerResource = generate_resource_definition(':site/player',
                                                                        'POST');
+                  var addPreRegPlayerResource = generate_resource_definition(':site/pre_reg_player',
+                                                                       'POST');                  
                   var addTeamResource = generate_resource_definition(':site/team',
                                                                        'POST');                  
                   var getPlayersResource = generate_resource_definition(':site/player/:player_id',
@@ -174,7 +176,9 @@ angular.module('TD_services.timeout_resources')
                   var addTournamentResource = generate_resource_definition(':site/tournament',
                                                                            'POST');
                   var addDivisionResource = generate_resource_definition(':site/division',
-                                                                           'POST');                  
+                                                                         'POST');
+                  var payRegistrationFeeResource = generate_resource_definition(':site/stripe_registration',
+                                                                           'POST');                                    
                   var getTournamentResource = generate_resource_definition(':site/tournament/:tournament_id','GET');
                   var getEventsResource = generate_resource_definition('meta_admin/events',
                                                                            'GET');
@@ -249,7 +253,8 @@ angular.module('TD_services.timeout_resources')
                       _GenerateResourceDefinition: generate_resource_definition,        
                       _GenerateCustomHttpExecutor: generate_custom_http_executor,
                       Login: generate_custom_http_executor(loginResource,'logged_in_user','post'),
-                      LoginPlayer: generate_custom_http_executor(loginPlayerResource,'logged_in_player','post'),                      
+                      LoginPlayer: generate_custom_http_executor(loginPlayerResource,'logged_in_player','post'),
+                      PayRegistrationFee: generate_custom_http_executor(payRegistrationFeeResource,'paid_pre_reg_player','post'),
                       Logout: generate_custom_http_executor(logoutResource,'logout_result','get'),        
                       CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get'),
                       GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
@@ -266,6 +271,7 @@ angular.module('TD_services.timeout_resources')
                       AddTokens: generate_custom_http_executor(addTokensResource,'added_tokens','post'),
                       AddPlayerTokens: generate_custom_http_executor(addPlayerTokensResource,'added_player_tokens','post'),                      
                       AddPlayer: generate_custom_http_executor(addPlayerResource,'added_player','post'),
+                      AddPreRegPlayer: generate_custom_http_executor(addPreRegPlayerResource,'added_pre_reg_player','post'),
                       AddTeam: generate_custom_http_executor(addTeamResource,'added_team','post'),                      
                       CompletePlayerTokens: generate_custom_http_executor(completePlayerTokensResource,'completed_player_tokens','post'),                                            
                       UpdateUser: generate_custom_http_executor(updateUserResource,'updated_user','post'),

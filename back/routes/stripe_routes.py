@@ -10,6 +10,7 @@ import stripe
 import datetime
 from routes.audit_log_utils import create_audit_log
 from orm_creation import create_ticket_purchase
+import os
 
 @admin_manage_blueprint.route('/stripe/public_key', methods=['GET'])
 def get_public_key():
@@ -114,7 +115,45 @@ def build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_divi
     if normal_count > 0:
         stripe_items.append({"quantity":normal_count,"type":"sku","parent":division_skus[sku_division_id]})
 
+
+
+@admin_manage_blueprint.route('/stripe_registration', methods=['POST'])
+def start_pre_reg_sale():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    stripe_token = json.loads(request.data)['stripe_token']
+    player_id = json.loads(request.data)['player_id']
+    email = json.loads(request.data)['player_email']    
+    stripe.api_key = current_app.td_config['STRIPE_API_KEY']
+    registration_sku = os.getenv('REGISTRATION_FEE_SKU',None)
+    stripe_items = [{"quantity":1,"type":"sku","parent":registration_sku}]
+    player = fetch_entity(tables.Player,player_id)
+    try:
+        order = stripe.Order.create(
+            currency="usd",
+            email=email,
+            items=stripe_items
+        )
+        order_response=order.pay(
+            source=stripe_token 
+        )
+        order_id_string =  "order_id %s, " % order_response.id
+        
+        
+        create_audit_log("Player Ticket Registration Completed",datetime.datetime.now(),
+                         order_id_string,None,
+                         player_id=int(player_id))
+        player.pre_reg_paid = True
+        db.session.commit()
+        player_dict = player.to_dict_simple()
+        player_dict['pin']=player.pin
+        return jsonify({'data':player_dict})
+        
+    except stripe.error.CardError as e:
+        # The card has been declined        
+        return jsonify({"data":"FAILURE"})            
     
+
 @admin_manage_blueprint.route('/stripe', methods=['POST'])
 @login_required
 @Token_permission.require(403)

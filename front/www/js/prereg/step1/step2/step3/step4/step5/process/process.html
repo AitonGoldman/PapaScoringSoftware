@@ -1,0 +1,27 @@
+<ion-content>
+  <div>
+    <div class="card">
+      <div class="item item-divider">
+        Pre-Registration Completed!
+      </div>
+      <div class="item item-text-wrap">
+        <b>You Are Pre-Registered for PAPA 20</b><br><br>
+        Below is your player number and your player pin.  Please record this information as you will need it once PAPA 20 starts.<br><br>
+        <table>
+          <tr>
+            <td>Player Name : </td><td>{{resources.paid_pre_reg_player.data.full_name}}</td>
+          </tr>
+          <tr>
+            <td>Player Number : </td><td>{{resources.paid_pre_reg_player.data.player_id}}</td>
+          </tr>
+          <tr>
+            <td>Player PIN : </td><td>{{resources.paid_pre_reg_player.data.pin}}</td>
+          </tr>          
+        </table>
+        <button style='float:right' class='button button-calm' ui-sref='app'>Return Home</button>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+

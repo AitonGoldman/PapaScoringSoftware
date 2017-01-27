@@ -18,7 +18,11 @@ angular.module('app.player.edit_player').controller(
                 $scope.resources = TimeoutResources.GetAllResources();
                 $scope.player_info = $scope.resources.player.data;
                 $scope.player_info.old_linked_division_id = $scope.player_info.linked_division_id;
-                $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});                
+                $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});
+                dev_info = ionic.Platform.device();            
+                if (_.size(dev_info)!=0){
+                    $scope.is_native=true;          
+                }                                
                 Modals.loaded();
             });
             $scope.on_div_change=function(){

@@ -18,7 +18,7 @@ def generate_player_class(db_handle,Team_Player_mapping):
         bump_count = db_handle.Column(db_handle.Integer)        
         first_name = db_handle.Column(db_handle.String(1000))
         last_name = db_handle.Column(db_handle.String(1000))
-        
+        pre_reg_paid = db_handle.Column(db_handle.Boolean,default=False)
         ifpa_ranking = db_handle.Column(db_handle.Integer)
         email_address = db_handle.Column(db_handle.String(120))
         active = db_handle.Column(db_handle.Boolean, default=True)

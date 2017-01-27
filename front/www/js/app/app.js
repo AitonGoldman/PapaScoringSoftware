@@ -12,23 +12,25 @@ app = angular.module(
         'app.login',
         'TD_services',
         'app.login',        
-    'app.logout',
-    'app.user',
-    'app.tournament',
-    'app.player',
-    'app.token',
+        'app.logout',
+        'app.user',
+        'app.tournament',
+        'app.player',
+        'app.token',
         'app.scorekeeping',
         'app.login_player',    
-    'app.queues',
-    'app.results',
-    'app.queue_view',
-    'app.oops',
-    'app.player_token',
-    'app.teams',
-    'app.queue_player_after_play',
-    'app.jagoffs',
-    'app.remove_player',
-    'app.ppo_qualifying_list',
+        'app.queues',
+        'app.results',
+        'app.queue_view',
+        'app.oops',
+        'app.player_token',
+        'app.teams',
+        'app.queue_player_after_play',
+        'app.jagoffs',
+        'app.remove_player',
+        'app.ppo_qualifying_list',
+        'prereg',
+        'prereg.step1',
     /*REPLACEMECHILD*/
 	]
 );
@@ -113,15 +115,8 @@ app.controller(
         } else {
             $scope.menu_bar_title_style={'height':'120'};
         }
-        $scope.is_native = false;
         $scope.uploaded_pic_name=undefined;
         $ionicPlatform.ready(function() {        
-            dev_info = ionic.Platform.device();
-            
-            if (_.size(dev_info)!=0){
-                $scope.is_native=true;
-                //alert('on a native app');
-            }
         });
         $scope.force_reload = function(){
             divisions_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});            
@@ -163,75 +158,24 @@ app.controller(
 
          */
 
-        /*
-         //THESE 3 HANDLE FILE UPLOADS
-         //SEE COMMENTED SECTION OF FRONT.HTML
-        $scope.uploadedFile = function(element) {
-            console.log('in uploadedFiled');
-            $scope.$apply(function($scope) {
-                console.log('in uploadedFiled apply');
-                $scope.files = element.files;         
-            });
-        };
-        $scope.addFile = function() {
-            console.log('in addfile');
-            $scope.uploadfile($scope.files,
-                                     function( msg ) // success
-                              {
-                                  console.log('in addfile - success');
-                                  console.log('uploaded');
-                              },
-                              function( msg ) // error
-                              {
-                                  console.log('in addfile - failure');                                  
-                                  console.log('error');
-                              });
-        };
-        $scope.uploadfile = function(files,success,error){
- 
-            var url = 'http://192.168.1.178:8000/elizabeth/test/media_upload';
-
-            for ( var i = 0; i < files.length; i++)
-            {
-                var fd = new FormData();
-                fd.append("file", files[i]);
-                console.log(files[i]);
-                $http.post(url, fd, { 
-                    withCredentials : false,
-                    headers : {
-                        'Content-Type' : undefined
-                    },
-                    transformRequest : angular.identity
-
-                }).success(function(data){
-                    console.log('success!');
-                    console.log(data);
-                    $scope.uploaded_pic_name=data.poop;
-
-                }).error(function(data){
-                    console.log('uh oh!');                    
-                    console.log(data);
-                });
-            }
-        };*/        
-        //FIXME : rename this more logically
     }
 );
 
 app.run(function($ionicPlatform,$rootScope) {
-  $ionicPlatform.ready(function() {
+    $ionicPlatform.ready(function() {
+        ionic.Platform.showStatusBar(false);        
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-
+      if(window.cordova && window.cordova.plugins.Keyboard) {
   //Change this to false to return accessory bar 
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
-    }
+          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
+      }
     if(window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
   });
+
     $rootScope.$on('cloud:push:notification', function(event, data) {
         var msg = data.message;
         alert(msg.title + ': ' + msg.text);
@@ -255,9 +199,10 @@ app.config(function($httpProvider,$ionicConfigProvider,$ionicCloudProvider) {
     $httpProvider.defaults.withCredentials = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     $ionicConfigProvider.backButton.previousTitleText(false);
-    $ionicConfigProvider.backButton.text(" ");
+    $ionicConfigProvider.backButton.text(" ");        
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
- $ionicCloudProvider.init({
+
+    $ionicCloudProvider.init({
     "core": {
       "app_id": "a302e6bc"
     },

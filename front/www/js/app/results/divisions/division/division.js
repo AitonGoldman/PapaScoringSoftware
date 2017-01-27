@@ -13,6 +13,11 @@ angular.module('app.results.divisions.division').controller(
         results_promise = TimeoutResources.GetDivisionResults($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
                 
         results_promise.then(function(data){
+            $scope.process_division_results();                            
+            Modals.loaded();
+        });
+
+        $scope.process_division_results = function(){
             $scope.resources = TimeoutResources.GetAllResources();            
             $scope.jump_to_division = {data:$scope.resources.divisions.data[$scope.division_id]};
             division = $scope.resources.divisions.data[$scope.division_id];            
@@ -21,8 +26,7 @@ angular.module('app.results.divisions.division').controller(
                 raw_results = $scope.resources.division_results.data.ranked_player_list[$scope.division_id];
             } else {                
                 raw_results = $scope.resources.division_results.data.ranked_team_list[$scope.division_id];
-            }
-            
+            }            
             top_machines = $scope.resources.division_results.data.top_machines[division.division_id];
             results = _.remove(raw_results,function(n) {
                 if($scope.team_division==false){
@@ -59,8 +63,6 @@ angular.module('app.results.divisions.division').controller(
                 } else {
                     $scope.concat_results = _.concat($scope.results_a,$scope.divider_a);          
                 }
-                
-  
             }
             if(division.finals_player_selection_type == "papa"){               
                 $scope.div_cutoff=division.finals_num_qualifiers;                                                
@@ -70,11 +72,9 @@ angular.module('app.results.divisions.division').controller(
                 $scope.rest_results = _.slice(results,div_index+1);
                 $scope.divider = [[0,{divider:'QUALIFYING CUTOFF'}]];                
                 $scope.concat_results = _.concat($scope.qualifying_results,$scope.divider,$scope.rest_results);                
-            }
-            
-                
-            Modals.loaded();
-        });
+            }                            
+            //Modals.loaded();
+        };
         $scope.find_last_div_player_ppo_idx = function(cutoff,results,division){
             if(results.length <= cutoff ){                                                
                 idx = results.length-1;
@@ -116,6 +116,16 @@ angular.module('app.results.divisions.division').controller(
             
             return false;
         };
+        $scope.doRefresh = function() {
+            $scope.resources.division_results.data = undefined;
+            results_promise = TimeoutResources.GetDivisionResults(undefined,{site:$scope.site,division_id:$scope.division_id});
+            
+            results_promise.then(function(data){
+                $scope.$broadcast('scroll.refreshComplete');
+                $scope.process_division_results();                            
+                //Modals.loaded();
+            });
+        };                
         
     }]
 );

@@ -1,0 +1,48 @@
+</ion-content>
+<div>
+  <div class="card">
+    <div class="item item-divider">
+      Step 2 : IFPA Ranking Lookup
+    </div>
+    <div class="item item-text-wrap">
+      <div ng-if="no_players_found == false && too_many_players_found == false && only_one_player_found == false">
+
+        IFPA found multiple players that match the name {{player_first_name+" "+player_last_name}}.
+        <br>
+        <br>
+        Please select the correct player and click the Next button.
+        <br>
+        <br>
+        <ion-list>          
+          <ion-radio ng-repeat='result in resources.ifpa_rankings.data.search' ng-model="ifpa_result_selected.wppr_rank" ng-value="result.wppr_rank">I'm {{result.first_name+" "+result.last_name}} (#{{result.wppr_rank}})</ion-radio>
+          
+        </ion-list>
+      </div>
+      <div ng-if="too_many_players_found == true">
+        IFPA reported {{resources.ifpa_rankings.data.search.length}} players that matched the name you entered.<br>
+        <br>
+        Please go back and re-enter the name.
+      </div>
+
+      <div ng-if="no_players_found == true">
+        IFPA does not have a ranking for a player named {{player_first_name+" "+player_last_name}}.
+        <br><br>
+        If you have never played in an IFPA ranked tournament, this is expected.
+        <br><br>
+        If you expected IFPA to have a ranking for you, please go back and re-enter your name.
+      </div>
+
+      <div ng-if="only_one_player_found == true">
+        The IFPA ranking for {{player_first_name+" "+player_last_name}} is {{resources.ifpa_rankings.data.search[0].wppr_rank}}.
+        <br><br>
+        If this is incorrect, please go back and re-enter your name.
+      </div>     
+      <button ng-if="no_players_found == false && too_many_players_found == false && only_one_player_found == false" ng-disabled='ifpa_result_selected.wppr_rank ==undefined' style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step3({ifpa_ranking:ifpa_result_selected.wppr_rank})' class='button button-calm'> Next </button>
+      <button ng-if="no_players_found == true || only_one_player_found == true" style='float:left;margin-bottom:25px;margin-top:25px;' ui-sref='.^' class='button button-calm'> Back </button>      
+      <button ng-if="no_players_found == true || only_one_player_found == true" style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step3({ifpa_ranking:resources.ifpa_rankings.data.search[0].wppr_rank})' class='button button-calm'> Next </button>
+      
+      <button ng-if="too_many_players_found == true" style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.^' class='button button-calm'> Back </button>
+    </div>
+  </div>
+</div>
+</ion-content>

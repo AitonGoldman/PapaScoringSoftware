@@ -22,15 +22,15 @@ def test_players_with_tickets(division_id):
         players_with_tickets = tables.Player.query.join(tables.Token).filter_by(used=False,
                                                                                 paid_for=True,
                                                                                 voided=False,
-                                                                                metadivision_id=division.meta_division_id).all()
+                                                                                metadivision_id=division.meta_division_id).all()        
     else:
         players_with_tickets = tables.Player.query.join(tables.Token).filter_by(used=False,
                                                                                 paid_for=True,
                                                                                 voided=False,
                                                                                 division_id=division_id).all()
+        #players_with_tickets = db.session.query(tables.Token.player_id).filter(tables.Token.used==False).group_by(tables.Token.player_id).all()
         
-    return jsonify({'data':{player.player_id:player.to_dict_simple() for player in players_with_tickets}})
-    pass
+    return jsonify({'data':{player.player_id:player.to_dict_fast() for player in players_with_tickets}})    
     # check if the post request has the file part            
 
 @admin_manage_blueprint.route('/test/media_upload', methods=['POST'])

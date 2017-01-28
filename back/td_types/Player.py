@@ -63,6 +63,13 @@ def generate_player_class(db_handle,Team_Player_mapping):
     
         def gen_pin(self):        
             self.pin = self.player_id
+
+        def to_dict_fast(self):
+            player_dict = to_dict(self)
+            player_dict['pin']=None
+            player_dict['full_name']=self.get_full_name()
+            if self.teams and len(self.teams) > 0:
+                player_dict['team_id']=self.teams[0].team_id
         
         def to_dict_simple(self):
             player_dict = to_dict(self)

@@ -11,7 +11,9 @@
           </form>
         </label>
         <div class='item'>
-          <div ng-if='queues.length ==0'>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>
+          <!--<div ng-if='queues.length ==0'>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>-->
+          <div ng-if='queues.length ==0'>&nbsp;{{selected_players[0].full_name}}</div>
+          
           <div ng-if='queues.length > 0' >{{queues[0].player.player_name}}</div>          
         </div>
       </div>

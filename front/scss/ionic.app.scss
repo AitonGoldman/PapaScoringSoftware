@@ -90,9 +90,9 @@ $button-large-icon-size:          $font-size-base*2 !default;
     position:absolute;
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
-        height: $font-size-base*5;
-        width: $font-size-base*5;
-        border-radius:$font-size-base*5;
+        height: $font-size-base*7;
+        width: $font-size-base*7;
+        border-radius:$font-size-base*7;
             
         }
         @media screen and (min-device-height: 751px){
@@ -124,7 +124,7 @@ $button-large-icon-size:          $font-size-base*2 !default;
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
         top:0px;
-        right: $font-size-base*5;
+        right: $font-size-base*7;
         perspective:400px;
 
         }

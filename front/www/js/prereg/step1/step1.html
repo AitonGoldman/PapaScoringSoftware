@@ -24,6 +24,7 @@
         </label>
         </form>
       </div>
+      <button style='float:left;margin-bottom:25px;margin-top:25px' ui-sref='.^' class='button button-calm'> Back </button>      
       <button ng-disabled='utils.var_empty(player.first_name) || utils.var_empty(player.last_name) || utils.var_empty(player.email) || myForm.$valid == false' style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step2({player_first_name:player.first_name,player_last_name:player.last_name,player_email:player.email})' class='button button-calm'> Next </button>
     </div>
   </div>

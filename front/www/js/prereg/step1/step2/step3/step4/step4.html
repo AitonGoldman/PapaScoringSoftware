@@ -4,10 +4,9 @@
     <div class="item item-divider">
       Step 4 : Upload Player Picture 
     </div>
-    <div class="item item-text-wrap">
-      All players at PAPA 20<br> must upload a player picture.<br><br>
-      The picture will allow officials to identify you during the tournament.<br><br>
-      The picure must be a picture of your face from the neck up.<br><br>
+    <div class="item item-text-wrap" style='font-size:12px'>
+      All players at PAPA 20 must upload <br> a player picture.
+      For more information on why, see <a href="" target="_new_window"> this. </a> <br><br>
       <div ng-if='is_native != true'>
         Please use the "Choose Files" button to select a photo, and then click the "Upload" button. <br><br>
         <form name="upload" class="form" data-ng-submit="addFile()">
@@ -24,6 +23,8 @@
       <div ng-if='uploaded_pic_name != undefined'>
         The picture displayed above is what will be used.  If you like this picture, please click the "Next" button.  If you do not like this picture, please select and upload another picture.  
       </div>
+      <button style='float:left;margin-bottom:25px;margin-top:25px' ui-sref='.^' class='button button-calm'> Back </button>
+
       <button style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step5({uploaded_file_name:uploaded_pic_name})' ng-disabled="uploaded_pic_name == undefined" class='button button-calm'> Next </button>
               <br><br>
     </div>

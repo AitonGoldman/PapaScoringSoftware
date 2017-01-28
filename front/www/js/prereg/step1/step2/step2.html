@@ -38,10 +38,8 @@
         If this is incorrect, please go back and re-enter your name.
       </div>     
       <button ng-if="no_players_found == false && too_many_players_found == false && only_one_player_found == false" ng-disabled='ifpa_result_selected.wppr_rank ==undefined' style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step3({ifpa_ranking:ifpa_result_selected.wppr_rank})' class='button button-calm'> Next </button>
-      <button ng-if="no_players_found == true || only_one_player_found == true" style='float:left;margin-bottom:25px;margin-top:25px;' ui-sref='.^' class='button button-calm'> Back </button>      
+      <button style='float:left;margin-bottom:25px;margin-top:25px' ui-sref='.^' class='button button-calm'> Back </button>
       <button ng-if="no_players_found == true || only_one_player_found == true" style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step3({ifpa_ranking:resources.ifpa_rankings.data.search[0].wppr_rank})' class='button button-calm'> Next </button>
-      
-      <button ng-if="too_many_players_found == true" style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.^' class='button button-calm'> Back </button>
     </div>
   </div>
 </div>

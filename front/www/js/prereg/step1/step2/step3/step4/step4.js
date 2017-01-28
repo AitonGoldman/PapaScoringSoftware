@@ -47,7 +47,7 @@ angular.module('prereg.step1.step2.step3.step4').controller(
                               });
         };
         $scope.uploadfile = function(files,success,error){
- 
+            Modals.loading();
             var url = $scope.http_prefix+'://'+$scope.server_ip_address+':'+$scope.server_port+'/'+$scope.site+'/test/media_upload';
 
             for ( var i = 0; i < files.length; i++)
@@ -66,10 +66,12 @@ angular.module('prereg.step1.step2.step3.step4').controller(
                     console.log('success!');
                     console.log(data);
                     $scope.uploaded_pic_name=data.poop;
+                    Modals.loaded();
 
                 }).error(function(data){
                     console.log('uh oh!');                    
                     console.log(data);
+                    Modals.loaded();
                 });
             }
         };

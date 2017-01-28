@@ -7,11 +7,8 @@
     <div class="item item-text-wrap">
       <div ng-if='num_div_allowed > 1'>
         <div>
-          In order to compete in the Main tournament, you must select one of the divisions below to compete in.
+          You must select one of the Main tournament divisions below to compete in.<br><br>  More information about the differences between divisions is available <a href="" target="_new_window"> here.</a>
           <br><br>
-          Please note : once the tournament begins it is not possible to move down a division (i.e. Move from B to C).
-          <br>
-          <br>
         </div>        
         
         <ion-radio ng-if='division_ifpa_limits[division.division_id] < ifpa_ranking' id="add_player_linked_division_{{division.division_name}}" class='item item-radio' style='border-width:0px' ng-model="division_selection.linked_division_id" ng-repeat='division in main_divisions' ng-value="division.division_id"> {{division.tournament_name}}</ion-radio>

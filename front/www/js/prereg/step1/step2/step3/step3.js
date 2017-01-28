@@ -2,8 +2,8 @@ angular.module('prereg.step1.step2.step3',['prereg.step1.step2.step3.step4',
     /*REPLACEMECHILD*/]);
 angular.module('prereg.step1.step2.step3').controller(
     'prereg.step1.step2.step3',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
+        '$scope','$state','TimeoutResources','Utils','Modals',
+        function($scope, $state, TimeoutResources, Utils,Modals) {
         $scope.site=$state.params.site;
         $scope.ifpa_ranking=$state.params.ifpa_ranking;
         if($scope.ifpa_ranking == ""){
@@ -15,10 +15,17 @@ angular.module('prereg.step1.step2.step3').controller(
         $scope.division_ifpa_limits[2]=500;
         $scope.division_ifpa_limits[3]=1000;
         $scope.division_ifpa_limits[4]=1000;        
+            dev_info = ionic.Platform.device();            
+            if (_.size(dev_info)!=0){
+                $scope.is_native=true;          
+            } else {
+                $scope.is_native=false;
+            }                
         
         //$scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        Modals.loading();
-        div_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});     
+            Modals.loading();
+            div_promise = TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+            
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         div_promise.then(function(data){

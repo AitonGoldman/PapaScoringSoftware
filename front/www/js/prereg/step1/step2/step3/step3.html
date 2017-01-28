@@ -7,7 +7,7 @@
     <div class="item item-text-wrap">
       <div ng-if='num_div_allowed > 1'>
         <div>
-          You must select one of the Main tournament divisions below to compete in.<br><br>  More information about the differences between divisions is available <a href="" target="_new_window"> here.</a>
+          You must select one of the Main tournament divisions below to compete in.<br><br>  More information about the differences between divisions is available <a ng-if='is_native == false' href="/td/static/prereg-divisions.html" target="_new_window"> here.</a> <a ng-if='is_native == true' ng-click='utils.native_open_in_browser("/td/static/prereg-divisions.html")'> here.</a>
           <br><br>
         </div>        
         

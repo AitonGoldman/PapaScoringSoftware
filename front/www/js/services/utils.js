@@ -1,5 +1,5 @@
 angular.module('TD_services.utils', []);
-angular.module('TD_services.utils').factory('Utils', ['$q',function($q) {                
+angular.module('TD_services.utils').factory('Utils', ['$q','$cordovaInAppBrowser',function($q,$cordovaInAppBrowser) {                
     var resolved_promise = function(value){
 	var defer = $q.defer();
 	defer.resolve(value);
@@ -11,6 +11,10 @@ angular.module('TD_services.utils').factory('Utils', ['$q',function($q) {
 	defer.reject(value);
 	return defer.promise;
     };
+    var native_open_in_browser = function(url){        
+        $cordovaInAppBrowser.open(http_prefix + '://'+server_ip_address+url, '_system');
+    };            
+
     
     return {        
         stop_post_reload : function(){
@@ -22,7 +26,7 @@ angular.module('TD_services.utils').factory('Utils', ['$q',function($q) {
             }
             return false;
         },
-
+        native_open_in_browser:native_open_in_browser,
         resolved_promise:resolved_promise,
         rejected_promise:rejected_promise                
     };

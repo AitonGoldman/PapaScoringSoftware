@@ -6,7 +6,7 @@
     </div>
     <div class="item item-text-wrap" style='font-size:12px'>
       All players at PAPA 20 must upload <br> a player picture.
-      For more information on why, see <a href="" target="_new_window"> this. </a> <br><br>
+      For more information on why, see <a ng-if='is_native == false' href="/td/static/prereg-photos.html" target="_new_window"> this.</a> <a ng-if='is_native == true' ng-click='utils.native_open_in_browser("/td/static/prereg-photos.html")'> this.</a><br><br>
       <div>
         Please use the "Choose Files" button to select a photo, and then click the "Upload" button. <br><br>
         <form name="upload" class="form" data-ng-submit="addFile()">

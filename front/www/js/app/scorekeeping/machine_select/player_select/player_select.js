@@ -2,8 +2,8 @@ angular.module('app.scorekeeping.machine_select.player_select',['app.scorekeepin
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select.player_select').controller(
     'app.scorekeeping.machine_select.player_select',[
-        '$scope','$state','TimeoutResources','Utils','Modals','$animate','$filter','$timeout',
-        function($scope, $state, TimeoutResources, Utils,Modals,$animate,$filter,$timeout) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$animate','$filter','$timeout','$ImageCacheFactory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$animate,$filter,$timeout,$ImageCacheFactory) {
             $animate.enabled(false);                                          
 
             $scope.site=$state.params.site;
@@ -21,7 +21,8 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             
             $scope.selected_players=[];
-            players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
+            //players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
+            players_promise = TimeoutResources.GetPlayersWithTicketsForDivision($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise = TimeoutResources.GetQueues(players_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();            
@@ -32,9 +33,21 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                     $scope.selected_players = [$scope.queue_player];
                     $scope.player_img_id = $scope.queue_player.player_id;
                 }                
-                $scope.flattened_players = _.values($scope.resources.players.data);
+                $scope.flattened_players = _.values($scope.resources.players_with_tickets.data);
                 $animate.enabled(true);
-                Modals.loaded();
+                image_cache_list = [];
+                for(x=0;x<$scope.flattened_players.length;x++){
+                    image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
+                }
+                $ImageCacheFactory.Cache(
+                    image_cache_list
+                ).then(function(){
+                    console.log("Images done loading!");
+                    Modals.loaded();
+                },function(failed){
+                    console.log("An image failed: "+failed);
+                    Modals.loaded();
+                });                                                
             });
             
         

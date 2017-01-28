@@ -28,8 +28,6 @@ def test_players_with_tickets(division_id):
                                                                                 paid_for=True,
                                                                                 voided=False,
                                                                                 division_id=division_id).all()
-        #players_with_tickets = db.session.query(tables.Token.player_id).filter(tables.Token.used==False).group_by(tables.Token.player_id).all()
-        
     return jsonify({'data':{player.player_id:player.to_dict_fast() for player in players_with_tickets}})    
     # check if the post request has the file part            
 
@@ -47,6 +45,7 @@ def test_upload_file():
         file.save(save_path)
         file.close()
         #convert /var/www/html/pics/player_1.jpg  -resize 128x128  /var/www/html/pics/resize_player_1.jpg
-        subprocess.call(["convert", save_path,"-resize", "128x128","%s_resize"%save_path])
+        subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])        
+        subprocess.call(["mv","%s_resize"%save_path,save_path])
     return jsonify({'poop':filename})
 

@@ -12,6 +12,12 @@ angular.module('prereg.step1.step2').controller(
         $scope.ifpa_result_selected = {};
         $scope.get_ifpa_ranking = function(){
             player_name = $scope.player_first_name+$scope.player_last_name;
+            dev_info = ionic.Platform.device();            
+            if (_.size(dev_info)!=0){
+                $scope.is_native=true;          
+            } else {
+                $scope.is_native=false;
+            }                
             Modals.loading();
             player_name = player_name.replace(/ /g, ""); 
             ifpa_promise = TimeoutResources.GetIfpaRanking(undefined,{site:$scope.site,player_name:player_name});

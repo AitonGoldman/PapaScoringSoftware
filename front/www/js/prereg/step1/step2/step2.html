@@ -38,7 +38,7 @@
       <div ng-if="only_one_player_found == true">
         The IFPA ranking for {{player_first_name+" "+player_last_name}} is {{resources.ifpa_rankings.data.search[0].wppr_rank}}.
         <br><br>
-        If this is incorrect, please go back and re-enter your name.
+        If this is incorrect, please click <a ng-if='is_native == false' href="/td/static/prereg-ifpa.html" target="_new_window"> here.</a> <a ng-if='is_native == true' ng-click='utils.native_open_in_browser("/td/static/prereg-ifpa.html")'> here.</a>
       </div>     
       <button ng-if="no_players_found == false && too_many_players_found == false && only_one_player_found == false" ng-disabled='ifpa_result_selected.wppr_rank ==undefined' style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step3({ifpa_ranking:ifpa_result_selected.wppr_rank})' class='button button-calm'> Next </button>
       <button style='float:left;margin-bottom:25px;margin-top:25px' ui-sref='.^' class='button button-calm'> Back </button>

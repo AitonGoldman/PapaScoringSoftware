@@ -197,8 +197,9 @@ $button-large-icon-size:          $font-size-base*2 !default;
     }
 }
 
+
 .mobile-hide {
-     @media screen and (min-device-width: 601px){
+     @media screen and (min-device-width: 601px) and (max-device-width: 900px){
           @media screen and (max-device-height: 750px){     
               //display:none;
               //background-color:red;
@@ -211,15 +212,22 @@ $button-large-icon-size:          $font-size-base*2 !default;
           }          
      }
      @media screen and (max-width: 500px){
-          @media screen and (max-height: 750px){     
-              display:none;
-              //rotated and unrotated phone
-              //background-color:green;
-          }
-    }
-     
+         @media screen and (max-height: 750px){     
+             display:none;
+             //rotated and unrotated phone
+             //background-color:green;
+         }
+     }     
 }
-
+.mobile-show-vertical-only {
+    @media screen and (max-width: 375px){
+    }
+    @media screen and (min-width: 376px){
+        display:none;
+        //background-color:red;
+    }
+    
+}
 .mobile-show {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){

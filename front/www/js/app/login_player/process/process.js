@@ -16,7 +16,7 @@ angular.module('app.login_player.process').controller(
         
             $scope.player=$state.params.player;
             Modals.loading();            
-            post_obj = {player_pin:$scope.player.pin};
+            post_obj = {player_pin:$scope.player.pin,player_id:$scope.player.player_id};
             if(ionic.Platform.isWebView() == true && ionic.Platform.device().isVirtual==false){                
                 ionic_push_promise = $ionicPush.register().then(function(t) {
                     $scope.ioniccloud_push_token = t;
@@ -41,7 +41,7 @@ angular.module('app.login_player.process').controller(
             //        a different error message than what is given back
             //        by the server.            
             //console.log(data.config.url.split('/')[3]);
-            Modals.error('Login Failed. Check your pin #.', $scope.site, '^');
+            Modals.error('Login Failed. Check your player # and pin #.', $scope.site, '^');
         });                     
      
         //Modals.loading();

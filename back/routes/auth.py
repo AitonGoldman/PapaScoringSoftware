@@ -51,12 +51,11 @@ def route_player_login():
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Player pin # not specified')        
-    if 'player_pin' not in input_data:
-        raise BadRequest('Player pin # not specified')
-        
-    player = tables.Player.query.filter_by(pin=input_data['player_pin']).first()
+    if 'player_pin' not in input_data or 'player_id' not in input_data:
+        raise BadRequest('Player pin # or Player Number not specified')    
+    player = tables.Player.query.filter_by(pin=input_data['player_pin'],player_id=input_data['player_id']).first()
     if player is None:
-        raise Unauthorized('Bad player pin #')
+        raise Unauthorized('Bad player pin # and player number')
     login_user(player.user)
     identity_changed.send(current_app._get_current_object(), identity=Identity(player.player_id))
     if "ioniccloud_push_token" in input_data:

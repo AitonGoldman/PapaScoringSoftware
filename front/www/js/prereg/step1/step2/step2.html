@@ -13,6 +13,9 @@
         Please select the correct player and click the Next button.
         <br>
         <br>
+        If you are having problems, please click <a ng-if='is_native == false' href="/td/static/prereg-ifpa.html" target="_new_window"> here.</a> <a ng-if='is_native == true' ng-click='utils.native_open_in_browser("/td/static/prereg-ifpa.html")'> here.</a> 
+        <br>
+        <br>        
         <ion-list>          
           <ion-radio ng-repeat='result in resources.ifpa_rankings.data.search' ng-model="ifpa_result_selected.wppr_rank" ng-value="result.wppr_rank">I'm {{result.first_name+" "+result.last_name}} (#{{result.wppr_rank}})</ion-radio>
           
@@ -21,7 +24,7 @@
       <div ng-if="too_many_players_found == true">
         IFPA reported {{resources.ifpa_rankings.data.search.length}} players that matched the name you entered.<br>
         <br>
-        Please go back and re-enter the name.
+        Please go back and re-enter your name.
       </div>
 
       <div ng-if="no_players_found == true">
@@ -29,7 +32,7 @@
         <br><br>
         If you have never played in an IFPA ranked tournament, this is expected.
         <br><br>
-        If you expected IFPA to have a ranking for you, please go back and re-enter your name.
+        If you expected IFPA to have a ranking for you, please click <a ng-if='is_native == false' href="/td/static/prereg-ifpa.html" target="_new_window"> here.</a> <a ng-if='is_native == true' ng-click='utils.native_open_in_browser("/td/static/prereg-ifpa.html")'> here.</a>
       </div>
 
       <div ng-if="only_one_player_found == true">

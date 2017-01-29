@@ -61,6 +61,15 @@ app.controller(
         } else {
             $scope.type_of_page = type_of_page;            
         }
+        if(window.screen.availWidth < 600){
+            $scope.menu_width = 250;
+        } else {
+            $scope.menu_width = 350;
+        }
+        
+        //alert($scope.menu_width);
+        //window.screen.availHeight
+        
         $scope.slider={value:0, max:10};
         //FIXME : there has got to be a better place to put this, but I can't put it in
         //        Utils because it will cause a circular reference

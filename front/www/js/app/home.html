@@ -11,7 +11,7 @@
     <test id="test_element"></test>
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
-  <ion-side-menu side="right" width='250'>
+  <ion-side-menu side="right" width='menu_width'>
     <ion-header-bar class="bar-positive">
       <div ng-if="User.logged_in() == true && User.logged_in_player().is_player == false">
         <!--<img id="side_menu_user_icon" align="bottom" src="http://{{server_ip_address}}/pics/user_{{User.logged_in_user().user_id}}.jpg?{{randomNumber}}" class="avatar-frame-small">-->
@@ -19,11 +19,18 @@
       <div ng-if="User.logged_in() == true && User.logged_in_player().is_player == true">
         <!--<img id="side_menu_user_icon" align="bottom" src="http://{{server_ip_address}}/pics/player_{{User.logged_in_user().user_id}}.jpg?{{randomNumber}}" class="avatar-frame-small">-->
       </div>
-      
-      <h1  ng-if="User.logged_in() == false" class="title">
-        TD 1.0
-      </h1>
-      <h1 ng-if="User.logged_in() == true" class="title">{{User.logged_in_user().username}}</h1>
+
+      <div style='align:center' ng-if="User.logged_in() == false" class="title">
+        YAPSS 1.0
+      </div>
+      <center>
+      <div ng-if="User.logged_in() == true && !User.has_role('player')">
+        {{User.logged_in_user().username}}
+      </div>
+      <div ng-if="User.logged_in() == true && User.has_role('player')">
+        {{User.logged_in_user().player.full_name}}
+      </div>
+      </center>
     </ion-header-bar>
     <ion-content>          
       <ion-list>

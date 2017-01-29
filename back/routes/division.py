@@ -284,6 +284,8 @@ def route_edit_division(division_id):
         division.discount_ticket_price=division_data['discount_ticket_price']
     if 'discount_stripe_sku' in division_data:
         division.discount_stripe_sku=division_data['discount_stripe_sku']
+    if 'number_of_relevant_scores' in division_data:
+        division.number_of_relevant_scores=division_data['number_of_relevant_scores']
         
     db.session.commit()
     return jsonify({'data':division.to_dict_simple()})

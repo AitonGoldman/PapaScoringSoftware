@@ -17,7 +17,10 @@ def route_logout():
 def route_get_current_user():
     if current_user.is_anonymous():
         return jsonify({'data':None})
-    return jsonify({'data':current_user.to_dict_simple()})
+    current_user_dict = current_user.to_dict_simple()
+    #if current_user.is_player:
+    #    current_user_dict['full_name']=current_user.player.get_full_name()
+    return jsonify({'data':current_user_dict})
 
 @admin_login_blueprint.route('/auth/login',methods=['PUT'])
 def route_login():
@@ -60,6 +63,7 @@ def route_player_login():
     identity_changed.send(current_app._get_current_object(), identity=Identity(player.player_id))
     if "ioniccloud_push_token" in input_data:
         record_ioniccloud_push_token(input_data['ioniccloud_push_token'],user_id=player.user.user_id)
-    
-    return jsonify({'data':player.user.to_dict_simple()})
+    player_dict = player.user.to_dict_simple()
+    #player_dict['full_name']=player.get_full_name()
+    return jsonify({'data':player_dict})
 

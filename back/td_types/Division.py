@@ -15,6 +15,7 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         scoring_type = db_handle.Column(db_handle.String(100))
         division_name = db_handle.Column(db_handle.String(100))
         number_of_scores_per_entry = db_handle.Column(db_handle.Integer)
+        number_of_relevant_scores = db_handle.Column(db_handle.Integer)
         use_stripe = db_handle.Column(db_handle.Boolean)
         stripe_sku = db_handle.Column(db_handle.String(100))
         discount_stripe_sku = db_handle.Column(db_handle.String(100))

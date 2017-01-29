@@ -140,7 +140,8 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
             ## machine view            
         if division_machine_id_external is None:
             if team:
-                if len(team_results_dict[team_id][entry_div_id]['points'])<3:
+                #if len(team_results_dict[team_id][entry_div_id]['points'])<3:
+                if len(team_results_dict[team_id][entry_div_id]['points'])<division.number_of_relevant_scores:
                     filter_score = get_papa_points_from_rank(result['filter_rank'])
                     team_results_dict[result['team_team_id']][result['entry_division_id']]['points'].append(filter_score)        
                     team_results_dict[result['team_team_id']][result['entry_division_id']]['sum'] = sum(team_results_dict[result['team_team_id']][result['entry_division_id']]['points'])
@@ -151,7 +152,8 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                                                                       'rank':result['filter_rank'],
                                                                       'points':filter_score})                
             else:
-                if len(player_results_dict[player_id][entry_div_id]['points'])<3:
+                #if len(player_results_dict[player_id][entry_div_id]['points'])<3:
+                if len(player_results_dict[player_id][entry_div_id]['points'])<division.number_of_relevant_scores:
                     filter_score = get_papa_points_from_rank(result['filter_rank'])
                     player_results_dict[result['player_player_id']][result['entry_division_id']]['points'].append(filter_score)        
                     player_results_dict[result['player_player_id']][result['entry_division_id']]['sum'] = sum(player_results_dict[result['player_player_id']][result['entry_division_id']]['points'])

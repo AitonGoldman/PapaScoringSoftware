@@ -198,14 +198,26 @@ $button-large-icon-size:          $font-size-base*2 !default;
 }
 
 .mobile-hide {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-          display:none;
-        }
-        @media screen and (min-device-height: 751px){
-          display:none;
-        }
+     @media screen and (min-device-width: 601px){
+          @media screen and (max-device-height: 750px){     
+              //display:none;
+              //background-color:red;
+              //rotated tablet
+          }
+          @media screen and (min-device-height: 751px){     
+              display:none;
+              //Background-color:purple;
+              //unrotated tablet
+          }          
+     }
+     @media screen and (max-width: 500px){
+          @media screen and (max-height: 750px){     
+              display:none;
+              //rotated and unrotated phone
+              //background-color:green;
+          }
     }
+     
 }
 
 .mobile-show {
@@ -356,6 +368,11 @@ ion-side-menu {
 .standard_big_font {
    font-size:$font-size-base;                    
 }
+
+.standard_large_font {
+   font-size:$font-size-base*2;                    
+}
+
 
 .standard_small_font {
    font-size:$font-size-base*.5;                    

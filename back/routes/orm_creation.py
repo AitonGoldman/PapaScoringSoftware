@@ -48,6 +48,21 @@ def create_stanard_roles_and_users(app):
                             str(RolesEnum.queue.value)])            
     return test_admin,test_scorekeeper,test_desk
 
+def init_papa_players(app):
+    from data_files import first_names,last_names    
+    for player_num in range(100):
+        name_index = random.randrange(0,len(first_names.first_names)-1)        
+        create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'1'})
+    for player_num in range(100,200):
+        create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
+    for player_num in range(200,300):
+        create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'3'})
+    for player_num in range(300,400):
+        create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'4'})                                           
+    for team_num in range(1,100,2):
+        create_team(app,{'team_name':'test_team_%s'%team_num,'players':[team_num,team_num+1]})
+
+    
 def init_papa_tournaments_division_machines(app):
     db = app.tables.db_handle
     tables = app.tables

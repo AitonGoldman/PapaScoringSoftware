@@ -31,16 +31,17 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
         orm_creation.init_papa_tournaments_division_machines(self.flask_app)        
         self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
         self.player_pin = self.player.pin
-        for player_num in range(100):
-            orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
-        for player_num in range(100,200):
-            orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
-        for player_num in range(200,300):
-            orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'3'})
-        for player_num in range(300,400):
-            orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'4'})                                           
-        for team_num in range(1,100,2):
-            orm_creation.create_team(self.flask_app,{'team_name':'test_team_%s'%team_num,'players':[team_num,team_num+1]})
+        orm_creation.init_papa_players(self.flask_app)
+        # for player_num in range(100):
+        #     orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
+        # for player_num in range(100,200):
+        #     orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
+        # for player_num in range(200,300):
+        #     orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'3'})
+        # for player_num in range(300,400):
+        #     orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'4'})                                           
+        # for team_num in range(1,100,2):
+        #     orm_creation.create_team(self.flask_app,{'team_name':'test_team_%s'%team_num,'players':[team_num,team_num+1]})
             # need 5000*5 = 25000 entries spread over 7 divisions (main + classics) - 3572 entries per division
             # Scenarios : 
             # 1 : 100 players per main div -  per player, enter 35 total spread over 6 machines - 6 per machine
@@ -69,7 +70,7 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
                                        4:[15,1]},                          
                           "metadivisions":{1:[15,1]}}
                 if player_num < 100:
-                    tokens["teams"]={5:[15,1]}
+                    tokens["teams"]={5:[7,1]}
                 else:
                     tokens["teams"]={5:[0,0]}
                 rv = c.post('/token/paid_for/1',
@@ -101,7 +102,7 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
                         for division_machine in division_machines[6]:
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/6/division_machine/%s/player/%s'%(division_machine_id,player_num))
-                            rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
+                            rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(123456789123456)))
                         # for division_machine in division_machines[7]:
                         #     division_machine_id = division_machine.division_machine_id
                         #     rv = c.put('/division/7/division_machine/%s/player/%s'%(division_machine_id,player_num))

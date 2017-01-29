@@ -13,7 +13,8 @@ angular.module('app.queues.machine_select.machine_queue.player_select.confirm').
             $scope.utils = Utils;           
             Modals.loading();
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                            
-            token_promise = TimeoutResources.GetPlayerTokens($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
+            queue_promise = TimeoutResources.GetPlayerQueue($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
+            token_promise = TimeoutResources.GetPlayerTokens(queue_promise,{site:$scope.site,player_id:$scope.player_id});
             token_promise.then(function(data){
                 if(User.logged_in()==true){
                     $scope.logged_in_player_id = User.logged_in_user().player_id;

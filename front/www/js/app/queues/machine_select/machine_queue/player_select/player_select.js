@@ -27,12 +27,15 @@ angular.module('app.queues.machine_select.machine_queue.player_select').controll
             }
             //keyCode 9               
         };
-        players_promise = TimeoutResources.GetPlayers(undefined,{site:$scope.site});
-        Modals.loading();
+        //players_promise = TimeoutResources.GetPlayers(undefined,{site:$scope.site});
+            players_promise = TimeoutResources.GetPlayersWithTicketsForDivision($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
+
+            Modals.loading();
         // = TimeoutResources.GetEtcData();
         players_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
-            $scope.flattened_players = _.values($scope.resources.players.data);                                              $animate.enabled(true);                              
+            $scope.flattened_players = _.values($scope.resources.players_with_tickets.data);
+            $animate.enabled(true);                              
             Modals.loaded();
         });
         $scope.selected_players=[];

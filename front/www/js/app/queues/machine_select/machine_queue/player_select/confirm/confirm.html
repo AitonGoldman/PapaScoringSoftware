@@ -24,6 +24,11 @@
             <tr class='red' ng-if="num_tokens_left==0">
               <td colspan=2>No More {{resources.divisions.data[division_id].tournament_name}} Tickets Left!</td>
             </tr>
+            <tr ng-if='resources.player_queue.data != undefined'>
+              <td class='padding-right' style='color:red'>Already Queued On : </td><td class='padding-right'>
+                {{resources.player_queue.data.division_machine.division_machine_name}}
+              </td>
+            </tr>
           </table>
           <br>
           <button ng-if="num_tokens_left > 0" id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({process_step:{process:true}})">

@@ -34,18 +34,11 @@
         <i class="icon ion-chevron-right"></i>        
         
       </a>
-      <a  id="front_queues_link" ng-if='User.has_role("player") == true' ui-sref='.queues({manage:false})' class="item item-icon-left item-icon-right  ">
-        <i class="icon ion-pull-request"></i>
-        <span>Queues</span>
-        <i class="icon ion-chevron-right"></i>        
-        
-      </a>
-      <a  id="front_queues_link" ng-if='User.has_role("desk") == true' ui-sref='.queues({manage:true})' class="item item-icon-left item-icon-right  ">
+      <a  id="front_queues_link" ui-sref='.queues({manage:false})' class="item item-icon-left item-icon-right  ">
         <i class="icon ion-pull-request"></i>
         <span>Queues</span>
         <i class="icon ion-chevron-right"></i>                
-      </a>
-      
+      </a>      
       <a  id="front_results_link" ui-sref='.results' class="item item-icon-left item-icon-right">
         <i class="icon ion-stats-bars"></i>
         <span>Results</span>

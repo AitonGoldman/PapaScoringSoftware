@@ -4,23 +4,23 @@
       <div class='item item-divider'>
         <b>{{division_machine_name}}</b>
       </div>
-      <a ng-if="manage=='true'" id="manage_tournaments_add_tournament_button" ui-sref='.player_select' class="item item-icon-left item-icon-right">
+      <a ng-if="User.has_role('desk') == true" id="manage_tournaments_add_tournament_button" ui-sref='.player_select' class="item item-icon-left item-icon-right">
         <i class="icon ion-plus-circled"></i>
         <span>Add To Queue</span>
         <i class="icon ion-chevron-right"></i>        
       </a>
-      <a ng-if="manage=='false'" id="manage_tournaments_add_tournament_button" ui-sref='.confirm({player_id:logged_in_player_id,player_name:logged_in_player_name})' class="item item-icon-left item-icon-right">
+      <a ng-if="User.has_role('player') == true" id="manage_tournaments_add_tournament_button" ui-sref='.confirm({player_id:logged_in_player_id,player_name:logged_in_player_name})' class="item item-icon-left item-icon-right">
         <i class="icon ion-plus-circled"></i>
         <span>Add Me To Queue</span>
         <i class="icon ion-chevron-right"></i>        
       </a>
       <a ng-if='resources.queues.machine_players[division_machine_id]!=undefined' class='item'>{{resources.queues.machine_players[division_machine_id]}}</a>
       <div ng-repeat="queue in division_machine.queues">
-        <a ng-if="manage=='true' || queue.player_id==logged_in_player_id" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item item-icon-right" ng-click="choose_queue_action(queue.player_id,queue.player.player_name)">
+        <a ng-if="User.has_role('desk') || queue.player_id==logged_in_player_id" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item item-icon-right" ng-click="choose_queue_action(queue.player_id,queue.player.player_name)">
           <span>{{queue.player.player_name}}</span>
           <i class="icon ion-ios-minus-outline" style='color:red'></i>
         </a>
-        <a ng-if="manage=='false' && queue.player_id!=logged_in_player_id" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item">
+        <a ng-if="User.logged_in == false || queue.player_id!=logged_in_player_id" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item">
           <span>{{queue.player.player_name}}</span>
         </a>        
       </div>

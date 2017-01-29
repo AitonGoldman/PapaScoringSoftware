@@ -29,8 +29,8 @@
             <span><u>Reminder!</u></span>
           </button>
           <div>
-            When it is <span ng-if="manage=='false'"> your </span> <span ng-if="manage=='true'"> the players </span> turn to play,<br>
-            a scorekeeper must start <span ng-if="manage=='false'"> you </span> <span ng-if="manage=='true'"> the player </span> on the game.
+            When it is <span ng-if="User.has_role('player') == true"> your </span> <span ng-if="User.has_role('desk') == true"> the players </span> turn to play,<br>
+            a scorekeeper must start <span ng-if="User.has_role('player') == true"> you </span> <span ng-if="User.has_role('desk') == true"> the player </span> on the game.
           </div>
         </div>
         <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref="app">

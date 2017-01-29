@@ -11,6 +11,7 @@ angular.module('app.queues.machine_select.machine_queue').controller(
 	    $scope.division_machine_name=$state.params.division_machine_name;
             $scope.manage = $state.params.manage;
             $scope.utils = Utils;
+            $scope.User = User;
             Modals.loading();            
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                            
             queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});

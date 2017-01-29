@@ -11,6 +11,7 @@ angular.module('app.queues.machine_select.machine_queue.player_select.confirm.pr
             $scope.player_name = $state.params.player_name;                
             $scope.manage = $state.params.manage;
             $scope.utils = Utils;
+            $scope.User = User;            
             Modals.loading();
             $scope.process_step=$state.params.process_step;
             if(_.size($scope.process_step)==0){

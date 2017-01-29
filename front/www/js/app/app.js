@@ -50,7 +50,7 @@ app.controller(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory,$ionicSideMenuDelegate) {
         //$scope.type_of_page = type_of_page;
         if(ionic.Platform.isWebView() == false){
             if ($location.absUrl().includes('player.html#')!=true){
@@ -72,6 +72,26 @@ app.controller(
             } else {
                 return false;
             }            
+        };
+        $scope.jump_up_results = function(){
+            $state.go('^');
+            $ionicSideMenuDelegate.toggleRight();            
+        };
+        $scope.is_results_page = function(){
+            if($state.current.name.match(/app.results/) != undefined){                
+                if($state.current.name == "app.results.division_machines.machines.machine"){
+                    return "Division Machines";
+                }
+                if($state.current.name == "app.results.divisions.division"){
+                    return "Divisions";
+                }                
+                if($state.current.name == "app.results.players.player"){
+                    return "Players";
+                }                
+                
+            } else {
+                return undefined;
+            }
         };
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             $scope.site=state.params.site;            

@@ -33,6 +33,12 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
+        <a ng-if='is_results_page() != undefined' id='menu_home_link' class='item item-icon-right' ng-click='jump_up_results()'>
+          <div>
+            {{is_results_page()}}
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>        
         <a id='menu_login_link' class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false && type_of_page == 'user'">
           <div>
             Login

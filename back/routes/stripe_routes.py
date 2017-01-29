@@ -104,7 +104,7 @@ def build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_divi
         if division_id:
             stripe_items.append({"quantity":ticket_count,"type":"sku","parent":division_skus[sku_division_id]})            
         return            
-    if  ticket_count >= discount_for:
+    if  discount_for and ticket_count >= discount_for:
         discount_count = ticket_count/discount_for
         normal_count = ticket_count%discount_for
     else:

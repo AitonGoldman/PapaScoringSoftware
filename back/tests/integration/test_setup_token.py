@@ -60,23 +60,23 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
             division_machines[7] = self.flask_app.tables.DivisionMachine.query.filter_by(division_id=7).order_by(self.flask_app.tables.DivisionMachine.division_id.desc()).all()                
             division_machines[8] = self.flask_app.tables.DivisionMachine.query.filter_by(division_id=8).order_by(self.flask_app.tables.DivisionMachine.division_id.desc()).all()                
             
-            for player_num in range(1,100):
+            for player_num in range(1,400):
                 print "Starting on player %s"% player_num
                 num_entries=1
                 tokens = {"player_id":player_num,                                        
-                          "divisions":{1:[15,1],
-                                       2:[15,1],
-                                       3:[15,1],
-                                       4:[15,1]},                          
-                          "metadivisions":{1:[15,1]}}
+                          "divisions":{1:[165,1],
+                                       2:[165,1],
+                                       3:[165,1],
+                                       4:[165,1]},                          
+                          "metadivisions":{1:[135,1]}}
                 if player_num < 100:
-                    tokens["teams"]={5:[7,1]}
+                    tokens["teams"]={5:[165,1]}
                 else:
                     tokens["teams"]={5:[0,0]}
                 rv = c.post('/token/paid_for/1',
                             data=json.dumps(tokens))                
                 print rv.status
-                while num_entries < 2:                    
+                while num_entries < 8:                    
                     if player_num<100:
                         for division_machine in division_machines[1][0:]:                        
                             division_machine_id = division_machine.division_machine_id
@@ -102,15 +102,15 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
                         for division_machine in division_machines[6]:
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/6/division_machine/%s/player/%s'%(division_machine_id,player_num))
-                            rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(123456789123456)))
-                        # for division_machine in division_machines[7]:
-                        #     division_machine_id = division_machine.division_machine_id
-                        #     rv = c.put('/division/7/division_machine/%s/player/%s'%(division_machine_id,player_num))
-                        #     rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
-                        # for division_machine in division_machines[8]:
-                        #     division_machine_id = division_machine.division_machine_id
-                        #     rv = c.put('/division/8/division_machine/%s/player/%s'%(division_machine_id,player_num))
-                        #     rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
+                            rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(3456789123456)))
+                        for division_machine in division_machines[7]:
+                            division_machine_id = division_machine.division_machine_id
+                            rv = c.put('/division/7/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
+                        for division_machine in division_machines[8]:
+                            division_machine_id = division_machine.division_machine_id
+                            rv = c.put('/division/8/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
                         
                     if player_num < 100:
                         team_id = self.flask_app.tables.Player.query.filter_by(player_id=player_num).first().teams[0].team_id

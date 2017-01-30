@@ -1,4 +1,4 @@
-angular.module('prereg.step1.step2.step3.step4',['prereg.step1.step2.step3.step4.step5',
+angular.module('prereg.step1.step2.step3.step4',['prereg.step1.step2.step3.step4.confirm',
     /*REPLACEMECHILD*/]);
 angular.module('prereg.step1.step2.step3.step4').controller(
     'prereg.step1.step2.step3.step4',[

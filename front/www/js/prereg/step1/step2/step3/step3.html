@@ -18,7 +18,7 @@
 </div>
 <button style='float:left;margin-bottom:25px;margin-top:25px;' ui-sref='.^' class='button button-calm'>Back</button>
 
-<button  ng-disabled="num_div_allowed > 1 && division_selection.linked_division_id == undefined" style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step4({linked_division_id:division_selection.linked_division_id})' class='button button-calm'> Next </button>
+<button  ng-disabled="num_div_allowed > 1 && division_selection.linked_division_id == undefined" style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step4({linked_division_id:division_selection.linked_division_id,linked_division_name:resources.divisions.data[division_selection.linked_division_id].tournament_name})' class='button button-calm'> Next </button>
 
 </div>
 </div>

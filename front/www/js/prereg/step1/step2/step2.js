@@ -25,6 +25,7 @@ angular.module('prereg.step1.step2').controller(
             ifpa_promise = TimeoutResources.GetIfpaRanking(players_promise,{site:$scope.site,player_name:player_name});
             ifpa_promise.then(function(data){                
                 $scope.resources = TimeoutResources.GetAllResources();
+                $scope.dup_player = false;
                 Modals.loaded();               
                 results = _.filter($scope.resources.players.data, function(value,key){                                        
                     if(value.first_name+value.last_name == player_name){                        

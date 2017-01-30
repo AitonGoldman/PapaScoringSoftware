@@ -80,6 +80,42 @@ def add_player_to_queue():
     new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])    
     return jsonify({'data':new_queue.to_dict_simple()})
 
+@admin_manage_blueprint.route('/queue/other_player',methods=['POST'])
+@login_required
+@Queue_permission.require(403)
+def add_other_player_to_queue():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    queue_data = json.loads(request.data)
+    division_machine = fetch_entity(tables.DivisionMachine, queue_data['division_machine_id'])
+    if division_machine.player_id is None and division_machine.queue is None:
+        raise BadRequest('No player is on machine - just jump on it')    
+    player = fetch_entity(tables.Player,queue_data['other_player_id'])
+    if player.pin != int(queue_data['other_player_pin']):
+        raise BadRequest('Invalid player id and player pin')
+    #check_player_team_can_start_game(current_app,division_machine,player)
+    if player.division_machine:
+        raise BadRequest("Can't queue - player  is already playing a machine")                
+        
+    if len(player.teams) > 0:
+        if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():
+            raise BadRequest("Can't queue - player's team is on another machine")
+    
+    if check_player_team_can_start_game(current_app,division_machine,player) is False:
+        raise BadRequest("Can't queue - player has no tokens")
+
+    queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
+    players_to_alert = []
+    if queue:
+        players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)        
+        
+    removed_queue = remove_player_from_queue(current_app,player)        
+    if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
+        push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
+        send_push_notification(push_notification_message, players=players_to_alert)
+    new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['other_player_id'])    
+    return jsonify({'data':new_queue.to_dict_simple()})
+
 @admin_manage_blueprint.route('/queue/division_machine/<division_machine_id>/bump',methods=['PUT'])
 @login_required
 @Queue_permission.require(403)

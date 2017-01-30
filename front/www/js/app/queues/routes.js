@@ -87,7 +87,33 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
              
           }    
 
+       }).state('app.queues.machine_select.machine_queue.add_other_player', 
+        { 
+         cache: false,
+ 	 url: '/add_other_player',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/queues/machine_select/machine_queue/add_other_player/add_other_player.html',
+ 	       controller: 'app.queues.machine_select.machine_queue.add_other_player'
+ 	     }
+ 	   }
+       }).state('app.queues.machine_select.machine_queue.add_other_player.process', 
+        { 
+         cache: false,
+ 	 url: '/process/other_player_id/:other_player_id/other_player_pin/:other_player_pin',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/queues/machine_select/machine_queue/add_other_player/process/process.html',
+ 	       controller: 'app.queues.machine_select.machine_queue.add_other_player.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
        })//REPLACE_ME
+
+
 
 
 

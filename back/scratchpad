@@ -1,0 +1,147 @@
+# generating finals 
+* get a list of players
+** for B, exclude any players that are A restricted
+* display list of players, with cutoff shown
+* allow user to de-select a player
+** server will be requeried ( providing absent played id )
+** ui will change rankings (i.e. same list of players, new rankings) and change cutoff display
+
+SUMMARY :
+* Need a list of ranked players (rank x - rank y)
+** need to be able to specifiy players that are not present 
+** need to be able to specify a or b division, and have a restricted players removed from b, and 
+* need to make UI which displays results
+** need javascript to do initial query, and then requery based on removed players
+** display results in challonge friendly format
+* in results, need to denote a-restricted players
+* in results, need to denote cutoff for A and B
+
+
+# finals - models
+* For each final, there are x number of players that are seeded in the final
+
+* For each round, there are y number matches
+* For each round, there is a "finalized/completed" field
+
+* For each match, there are z number of games played as part of a match
+* for each match, there are f number of finals players
+* for each match, there are g potential bye players
+* for each match, each player has a rank based on sum of game rank/papa points
+* for each match, there is a potential for a tie-breaker
+* for each match, there is a "finalized/completed" field
+* each match potentially has 1 or more parent matches
+
+* for each game played in a match, each player has a score
+* for each game played in a match, each player has a rank/papa points
+* for each game played in a match, the game potentially is declared done
+
+* for each finals player, there is a final rank (i.e. 1st, 2nd, 3rd) based on which round they went out
+* for each finals player, there is a initial seed
+
+* DivisionFinalMatch
+** number_of_games
+** finals_players
+** finals_player_match_results
+** finals_match_game_results
+** tiebreaker_machine
+
+* FinalsMatchGameResult
+** division_finals_match_id
+** division_machine_id
+** finals_match_game_player_results
+
+* FinalsMatchGamePlayerResults
+** finals_player_id
+** finalsmatchgameresult_id
+** score
+** papa_points
+
+* FinalsPlayer
+** player_id
+** overall_rank
+** initial_seed
+
+*FinalsPlayerMatchResult
+** finals_match_id
+** finals_player_id
+** papa_points_sum
+** needs tiebreaker
+** won_tiebreaker
+
+* DivisionFinalRound
+** division_final_id
+** num_matches
+** completed
+** DivisionFinalMatches
+
+* DivisionFinal
+** num_qualifiers
+** list_of_qualifiers
+** division_id
+
+
+#finals - workflows
+* List of qualifiers is produced (along with x number of non-qualifiers)
+* List of qualifiers that showed up is submitted
+* Finals Bracket is produced (assuming 4 players)
+** With 8 players
+*** generate 3 matches, 2 in round 1, 1 in round 2 
+** With 12 players
+*** genrate 5 matches, 2 in round 1, 2 in round 2, 1 in round 3.
+** With 16 players
+*** genrate 7 matches, 4 in round 1, 2 in round 2, 1 in round 3.
+** With 24 players
+*** genrate 7 matches, 4 in round 1, 4 in round 2, 2 in round 3, 1 in round 4
+* Finals bracket is populated
+** create list of players
+** remove bye players
+** for first round matches, group remaining players based on seed
+** for second round matches, insert bye players as appropriate
+* match machine is selected
+* score for player on machine is entered
+* game on machine is delcared finished
+* match is declared finished
+* tie-breaker result is entered
+* round is declared done
+** next round is populated - pull bye players out of matches and regroup for round based on seeds
+
+** With 16 players
+** With 24 players
+** With 32 players
+** With 48 players
+** With 64 players
+** base case : 8 player
+** base case + 1 : 8 players + 4  = 12 (yes)
+** base case + 2 : 12 + 4  = 16 (no)
+** base case + 3 : 16 + 8 = 24 (yes)
+** base case + 4 : 24 + 8 = 32 (no)
+** base case + 5 : 32 + 16 = 48 (yes)
+** base case + 6 : 48 + 16 = 64 (no)
+** psuedo code
+if val_to_check == 8 :
+  return false
+cur_val = last_val + inc * count
+if cur_val == val_to_check:
+  if last_val/cur_val is not remainder:
+   return true
+  if last_val/cur_val is remainder:
+   return false
+else:
+  if count == 2:
+   count = 1
+   last_val=cur_val
+   inc=inc*2
+  else :
+   count = 2
+   recurse(last_val,inc,count,val_to_check)
+}
+
+recurse(last_val=8,inc=4,count=1,val_to_check=8)
+
+note : recurse can give the number of byes (assuming a first round bye only)
+
+* List of qualifiers that showed up is used to populate bracket
+
+## DivisionFinal
+## DivisionFinalRound
+## 

@@ -234,6 +234,7 @@ angular.module('TD_services.timeout_resources')
                   var getJagoffsResource = generate_resource_definition(':site/jagoff','GET');                  
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
                   var addToQueueResource = generate_resource_definition(':site/queue','POST');
+                  var addOtherPlayerToQueueResource = generate_resource_definition(':site/queue/other_player','POST',{});                  
                   var getDivisionQualifyingResultsPPOResource = generate_resource_definition(':site/results/division/:division_id/ppo/qualifying/list','PUT');
                   
                   var removePlayerFromMachineResource = generate_resource_definition(':site/division_machine/:division_machine_id/player/:player_id','DELETE');
@@ -314,6 +315,7 @@ angular.module('TD_services.timeout_resources')
                       GetPlayerResults: generate_custom_http_executor(getPlayerResultsResource,'player_results','get'),
                       GetPlayerEntries: generate_custom_http_executor(getPlayerEntriesResource,'player_entries','get'),                      
                       AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put'),
+                      AddOtherPlayerToQueue: generate_custom_http_executor(addOtherPlayerToQueueResource,'added_queue','put'),                      
                       SetScore: generate_custom_http_executor(setScoreResource,'score_set','put'),
                       VoidEntry: generate_custom_http_executor(voidEntryResource,'score_set','delete'),
                       AddEntry: generate_custom_http_executor(addEntryResource,'entry_added','get'),

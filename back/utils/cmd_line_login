@@ -1,0 +1,3 @@
+curl -c /tmp/cookie -H "Content-Type: application/json" -X PUT -d username:test_admin http://localhost:8000/test/auth/login curl -c /tmp/cookie -H "Content-Type: application/json" -X PUT -d password:test_admin http://localhost:8000/test/auth/login
+sed  's/\#HttpOnly_//g' /tmp/cookie > /tmp/cookie.real
+curl -b /tmp/cookie.real  http://localhost:8000/test/auth/current_user

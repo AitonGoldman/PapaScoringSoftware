@@ -1,0 +1,44 @@
+<ion-view view-title="Queued Up" hide-back-button='true'>
+  <ion-content>      
+      <center>
+        <div class='standard_big_font'>
+          <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-fork-repo review-icon'>
+            <span><u>Added To Queue!</u></span>
+          </button>
+          <table>
+            <tr>
+              <td class='padding-right' align="right">
+                Machine : 
+              </td>
+              <td class='padding-left'>
+                {{division_machine_name}}
+            </tr>
+            <tr>
+              <td class='padding-right' align="right">
+                 Player : 
+              </td>
+              <td class='padding-left'>
+                (#{{resources.added_queue.data.player.player_id}}) {{resources.added_queue.data.player.player_name}}
+            </tr>
+          </table>          
+        </div>
+        <div class='standard_big_font'>
+          <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-alert review-icon'>
+            <span><u>Reminder!</u></span>
+          </button>
+          <div>
+            When it is your turn to play,<br>
+            a scorekeeper must start you on the game.
+          </div>
+        </div>
+        <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref="app">
+          <span>Return Home</span>
+          <i class="icon ion-chevron-right"></i>          
+        </button>        
+      </center>
+  </ion-content>
+</ion-view>
+
+

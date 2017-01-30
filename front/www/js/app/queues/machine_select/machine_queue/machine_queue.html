@@ -14,6 +14,11 @@
         <span>Add Me To Queue</span>
         <i class="icon ion-chevron-right"></i>        
       </a>
+      <a ng-if="User.has_role('player') == true" id="manage_tournaments_add_tournament_button" ui-sref='.add_other_player' class="item item-icon-left item-icon-right">
+        <i class="icon ion-plus-circled"></i>
+        <span>Add Another Player To Queue</span>
+        <i class="icon ion-chevron-right"></i>        
+      </a>            
       <a ng-if='resources.queues.machine_players[division_machine_id]!=undefined' class='item'>{{resources.queues.machine_players[division_machine_id]}}</a>
       <div ng-repeat="queue in division_machine.queues">
         <a ng-if="User.has_role('desk') || queue.player_id==logged_in_player_id" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item item-icon-right" ng-click="choose_queue_action(queue.player_id,queue.player.player_name)">

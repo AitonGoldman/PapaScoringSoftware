@@ -1,5 +1,6 @@
 angular.module('app.queues.machine_select.machine_queue',[
-    'app.queues.machine_select.machine_queue.player_select'
+    'app.queues.machine_select.machine_queue.player_select',
+    'app.queues.machine_select.machine_queue.add_other_player',
     /*REPLACEMECHILD*/]);
 angular.module('app.queues.machine_select.machine_queue').controller(
     'app.queues.machine_select.machine_queue',[

@@ -1,0 +1,31 @@
+<ion-view view-title="Add To Queue">
+  <ion-content>      
+      <center>
+        <div class='standard_big_font'>
+          <button class='button button-clear button-dark icon-left ion-person review-icon'>
+            <span><u>Add Another Player To Queue</u></span>
+          </button>          
+          <div class="skinny-list list">
+            <label class='item-input item'>
+              <span class='input-label'>Machine : </span>
+              <input id="login_username_field" ng-model='user.username' type="text" ng-disabled="true" ng-value="division_machine_name">
+            </label>            
+            <label class='item-input item'>
+              <span class='input-label'>Player ID : </span>
+              <input id="login_username_field" ng-model='other_player.player_id' type="text" placeholder="Player ID">
+            </label>
+            <label  class='item-input item'>
+              <span class='input-label'>Player Pin : </span>
+              <input id="login_password_field" ng-model='other_player.pin' type="password" placeholder="Player PIN">
+            </label>
+            <button id="login_submit_button" ui-sref='.process({other_player_id:other_player.player_id,other_player_pin:other_player.pin,process_step:{process:true}})' class="button button-full button-calm item-icon-right seperate_button" style='text-align:left' ng-disabled='utils.var_empty(other_player.player_id)||utils.var_empty(other_player.pin)'>
+              <i class="icon ion-chevron-right padding"></i>
+              <span >Login</span>
+            </button>
+          </div>
+        </div>
+      </center>
+  </ion-content>
+</ion-view>
+
+

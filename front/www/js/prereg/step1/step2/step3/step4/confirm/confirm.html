@@ -2,11 +2,11 @@
   <div>
     <div class="card">
       <div class="item item-divider">
-        Step 5 : Pay the registration fee
+        Confirm Information 
       </div>
       <div class="item item-text-wrap">
         Review the information below.<br><br>
-        If it is correct, click the "Pay Fee" button.<br><br>
+        If it is correct, click the "Next" button.<br><br>
         If not, click the "back" button to change your information.<br><br>
         <table>
           <tr>
@@ -22,12 +22,16 @@
             <td  class='padding-right'>Email Address : </td><td  class='padding-left'>{{player_email}}</td>
           </tr>
           <tr>
-            <td  class='padding-right'>Main Division : </td><td  class='padding-left'>{{linked_division_id}}</td>
+            <td  class='padding-right'>Main Division : </td><td  class='padding-left'>{{linked_division_name}}</td>
           </tr>
+          <tr>
+            <td  class='padding-right'>T-shirt size : </td><td  class='padding-left'>{{player_shirt_size}}</td>
+          </tr>
+          
         </table>
         <br>
-        <button style='float:left;margin-bottom:25px;margin-top:25px;' ui-sref='prereg.step1' class='button button-calm'>Re-enter Info</button>
-        <button style='float:right;margin-bottom:25px;margin-top:25px;'ng-click='stripe_dialog()' class='button button-calm'> Pay Fee </button>
+        <button style='float:left;margin-bottom:25px;margin-top:25px;' ui-sref='prereg.step1({site:site})' class='button button-calm'>Re-enter Info</button>
+        <button style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step5' class='button button-calm'>Next </button>
         <br><br>
       </div>
     </div>

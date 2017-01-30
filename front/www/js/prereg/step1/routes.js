@@ -53,7 +53,18 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
              
           }    
 
+       }).state('prereg.step1.step2.step3.step4.confirm', 
+        { 
+         cache: false,
+ 	 url: '/confirm',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/prereg/step1/step2/step3/step4/confirm/confirm.html',
+ 	       controller: 'prereg.step1.step2.step3.step4.confirm'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
 
 
 

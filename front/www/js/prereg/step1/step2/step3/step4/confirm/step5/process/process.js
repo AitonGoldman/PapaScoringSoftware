@@ -1,6 +1,6 @@
-angular.module('prereg.step1.step2.step3.step4.step5.process',[/*REPLACEMECHILD*/]);
-angular.module('prereg.step1.step2.step3.step4.step5.process').controller(
-    'prereg.step1.step2.step3.step4.step5.process',[
+angular.module('prereg.step1.step2.step3.step4.confirm.step5.process',[/*REPLACEMECHILD*/]);
+angular.module('prereg.step1.step2.step3.step4.confirm.step5.process').controller(
+    'prereg.step1.step2.step3.step4.confirm.step5.process',[
     '$scope','$state','TimeoutResources','Utils','Modals',
     function($scope, $state, TimeoutResources, Utils,Modals) {
         $scope.site=$state.params.site;

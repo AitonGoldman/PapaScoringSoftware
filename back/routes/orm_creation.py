@@ -90,7 +90,7 @@ def init_papa_tournaments_division_machines(app):
         machine_counter=machine_counter+12
         
         
-def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discount_stripe_skus=None):
+def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discount_stripe_skus=None,discount_ticket_counts=None):
     db = app.tables.db_handle
     tables = app.tables
     new_tournament = create_tournament(app,{'tournament_name':'Main','single_division':False})
@@ -114,6 +114,7 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discou
             new_tournament_data.pop('stripe_sku')            
         if discount_stripe_skus and division_name in discount_stripe_skus:
             new_tournament_data['discount_stripe_sku']=discount_stripe_skus[division_name]
+            new_tournament_data['discount_ticket_count']=discount_ticket_counts[division_name]
         elif 'discount_stripe_sku' in new_tournament_data:
             new_tournament_data.pop('discount_stripe_sku')
         new_tournament_data['division_name']=division_name
@@ -129,6 +130,7 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discou
         metadivision_data['stripe_sku'] = stripe_skus['Classics Meta']        
     if discount_stripe_skus and "Classics Meta" in discount_stripe_skus:
         metadivision_data['discount_stripe_sku'] = discount_stripe_skus['Classics Meta']
+        metadivision_data['discount_ticket_count'] = discount_ticket_counts['Classics Meta']
     
     new_metadivision = create_meta_division(app,metadivision_data)
     new_team_tournament_data={'tournament_name':'Split Flipper',
@@ -146,6 +148,7 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discou
         new_team_tournament_data['local_price']=5
     if discount_stripe_skus and "Split Flipper" in discount_stripe_skus:
         new_team_tournament_data['discount_stripe_sku']=discount_stripe_skus["Split Flipper"]
+        new_team_tournament_data['discount_ticket_count']=discount_ticket_counts["Split Flipper"]
         
     new_tournament = create_tournament(app,new_team_tournament_data)
     new_classics_tournament_data = {'single_division':True,
@@ -249,6 +252,7 @@ def create_meta_division(app,meta_division_data):
             if get_valid_sku(meta_division_data['discount_stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:                
                 raise BadRequest('invalid SKU specified')        
             new_meta_division.discount_stripe_sku=meta_division_data['discount_stripe_sku']
+            new_meta_division.discount_ticket_count=meta_division_data['discount_ticket_count']
         
     else:
         new_meta_division.use_stripe = False
@@ -284,7 +288,9 @@ def create_division(app,division_data):
             if get_valid_sku(division_data['discount_stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
                 print "trying to get %s"%division_data['discount_stripe_sku']
                 raise BadRequest('invalid SKU specified')        
-            new_division.discount_stripe_sku=division_data['discount_stripe_sku']
+            new_division.discount_stripe_sku=division_data['discount_stripe_sku']            
+            new_division.discount_ticket_count=division_data['discount_ticket_count']
+            
     else:
         new_division.use_stripe = False
     if 'local_price' in division_data and division_data['use_stripe'] == False: 

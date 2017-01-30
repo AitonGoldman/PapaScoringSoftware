@@ -13,8 +13,7 @@
           <a class='standard_large_font' ui-sref='.^.^.divisions.division({division_id:division_id,division_name:player_division_results.tournament_name})'>
             {{player_division_results.tournament_name}}
           </a>
-          <br>
-          Rank : {{player_division_results.rank}}        
+          <div style='margin-top:10px'>Rank : {{player_division_results.rank+1}}</div>
         </div>
         <div style='background-color:bisque'>
           <b>Best {{resources.divisions.data[division_id].number_of_relevant_scores}} Scores</b><br>

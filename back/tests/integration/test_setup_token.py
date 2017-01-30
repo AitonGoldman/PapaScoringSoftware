@@ -27,25 +27,26 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
             'Classics 3':'sku_9juhywxXYAFfW7',
             'Classics Meta':'sku_9wukf1rcx9hWsb'
         }
-        orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus)
+        discount_stripe_skus = {
+            'A':'sku_9wugGsS0eFracR',
+            'B':'sku_9wuhUNp2629DGp',
+            'C':'sku_9wuigiEVZ61TBJ',            
+            'Split Flipper':'sku_9wvPotSYBuA13h',
+            'Classics Meta':'sku_9wtQxO4yXCGV9w'            
+        }
+        discount_ticket_counts = {
+            'A':3,
+            'B':3,
+            'C':3,            
+            'Split Flipper':3,
+            'Classics Meta':3            
+        }        
+        
+        orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus=stripe_skus,discount_stripe_skus=discount_stripe_skus,discount_ticket_counts=discount_ticket_counts)
         orm_creation.init_papa_tournaments_division_machines(self.flask_app)        
         self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
         self.player_pin = self.player.pin
         orm_creation.init_papa_players(self.flask_app)
-        # for player_num in range(100):
-        #     orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
-        # for player_num in range(100,200):
-        #     orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
-        # for player_num in range(200,300):
-        #     orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'3'})
-        # for player_num in range(300,400):
-        #     orm_creation.create_player(self.flask_app,{'first_name':'test_%s'%player_num,'last_name':'player_%s'%player_num,'ifpa_ranking':random.randrange(999),'linked_division_id':'4'})                                           
-        # for team_num in range(1,100,2):
-        #     orm_creation.create_team(self.flask_app,{'team_name':'test_team_%s'%team_num,'players':[team_num,team_num+1]})
-            # need 5000*5 = 25000 entries spread over 7 divisions (main + classics) - 3572 entries per division
-            # Scenarios : 
-            # 1 : 100 players per main div -  per player, enter 35 total spread over 6 machines - 6 per machine
-            #     100 players per classics
     def test_setup_before_token(self):        
         with self.flask_app.test_client() as c:
             rv = c.put('/auth/login',

@@ -4,7 +4,13 @@
     <div class="item item-divider">
       Step 2 : IFPA Ranking Lookup
     </div>
-    <div class="item item-text-wrap">
+    <div class="item item-text-wrap" ng-if="dup_player == true">
+      There is already a player named {{player_first_name+" "+player_last_name}}.<br><br>
+      Please go back and re-enter your information, adding an identifying string to your name. <br><br>
+      For example : if you are from West Virginia, you can add "(wv)" to the end of your name.<br><br>
+      <button style='float:left;margin-bottom:25px;margin-top:25px' ui-sref='.^' class='button button-calm'> Back </button>      
+    </div>
+    <div class="item item-text-wrap" ng-if="dup_player == false">
       <div ng-if="no_players_found == false && too_many_players_found == false && only_one_player_found == false">
 
         IFPA found multiple players that match the name {{player_first_name+" "+player_last_name}}.

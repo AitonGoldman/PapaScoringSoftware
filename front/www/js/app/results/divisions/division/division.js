@@ -43,6 +43,7 @@ angular.module('app.results.divisions.division').controller(
                     }                    
                 }
             });
+            console.log(results);
             if(division.finals_player_selection_type == "ppo"){               
                 $scope.a_cutoff=division.finals_num_qualifiers_ppo_a;                
                 $scope.b_cutoff=division.finals_num_qualifiers_ppo_b;

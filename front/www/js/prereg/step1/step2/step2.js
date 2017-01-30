@@ -19,11 +19,24 @@ angular.module('prereg.step1.step2').controller(
                 $scope.is_native=false;
             }                
             Modals.loading();
-            player_name = player_name.replace(/ /g, ""); 
-            ifpa_promise = TimeoutResources.GetIfpaRanking(undefined,{site:$scope.site,player_name:player_name});
+            player_name = player_name.replace(/ /g, "");
+            players_promise = TimeoutResources.GetPlayersFast(undefined,{site:$scope.site});
+            
+            ifpa_promise = TimeoutResources.GetIfpaRanking(players_promise,{site:$scope.site,player_name:player_name});
             ifpa_promise.then(function(data){                
                 $scope.resources = TimeoutResources.GetAllResources();
-                Modals.loaded();
+                Modals.loaded();               
+                results = _.filter($scope.resources.players.data, function(value,key){                                        
+                    if(value.first_name+value.last_name == player_name){                        
+                        return true;
+                    }                    
+                });
+                if(results.length > 0 ){
+                    $scope.dup_player = true;
+                    return;
+                }
+                
+                
                 $scope.no_players_found = false;
                 $scope.too_many_players_found = false;
                 $scope.only_one_player_found = false;

@@ -20,7 +20,7 @@
           <span>{{queue.player.player_name}}</span>
           <i class="icon ion-ios-minus-outline" style='color:red'></i>
         </a>
-        <a ng-if="User.logged_in == false || queue.player_id!=logged_in_player_id" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item">
+        <a ng-if="User.logged_in() == false || (logged_in_player_id != undefined && queue.player_id!=logged_in_player_id)" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item">
           <span>{{queue.player.player_name}}</span>
         </a>        
       </div>

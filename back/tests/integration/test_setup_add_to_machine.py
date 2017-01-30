@@ -28,13 +28,18 @@ class SetupAddToMachineTD(td_integration_test_base.TdIntegrationSetupTestBase):
         discount_stripe_skus = {
             'A':'sku_9wugGsS0eFracR',
             'B':'sku_9wuhUNp2629DGp',
-            'C':'sku_9wuigiEVZ61TBJ',
-            'D':'sku_8beJOPdNmnoQgw',
+            'C':'sku_9wuigiEVZ61TBJ',            
             'Split Flipper':'sku_9wvPotSYBuA13h',
             'Classics Meta':'sku_9wtQxO4yXCGV9w'            
         }
-        
-        orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus=stripe_skus,discount_stripe_skus=discount_stripe_skus)
+        discount_ticket_counts = {
+            'A':3,
+            'B':3,
+            'C':3,            
+            'Split Flipper':3,
+            'Classics Meta':3            
+        }                
+        orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus=stripe_skus,discount_stripe_skus=discount_stripe_skus,discount_ticket_counts=discount_ticket_counts)
         orm_creation.init_papa_tournaments_division_machines(self.flask_app)        
         self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
         self.player_pin = self.player.pin

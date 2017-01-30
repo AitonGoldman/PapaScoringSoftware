@@ -66,7 +66,8 @@ def route_edit_meta_division(meta_division_id):
         meta_division.discount_ticket_count=meta_division_data['discount_ticket_count']
     if 'discount_ticket_price' in meta_division_data:
         meta_division.discount_ticket_price=meta_division_data['discount_ticket_price']
-        
+    if 'discount_stripe_sku' in meta_division_data and meta_division_data['discount_stripe_sku']:
+        meta_division.discount_stripe_sku=meta_division_data['discount_stripe_sku']
     tables.db_handle.session.commit()
     return jsonify({'data':meta_division.to_dict_simple()})
 

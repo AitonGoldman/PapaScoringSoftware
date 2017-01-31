@@ -58,6 +58,8 @@ def add_player_to_queue():
         raise BadRequest('No player is on machine - just jump on it')    
     player = fetch_entity(tables.Player,queue_data['player_id'])
     #check_player_team_can_start_game(current_app,division_machine,player)
+    if player.active is False:
+        raise BadRequest("Player is not active - please see front desk")                        
     if player.division_machine:
         raise BadRequest("Can't queue - player  is already playing a machine")                
         
@@ -91,6 +93,8 @@ def add_other_player_to_queue():
     if division_machine.player_id is None and division_machine.queue is None:
         raise BadRequest('No player is on machine - just jump on it')    
     player = fetch_entity(tables.Player,queue_data['other_player_id'])
+    if player.active is False:
+        raise BadRequest("Player is not active - please see front desk")                        
     if player.pin != int(queue_data['other_player_pin']):
         raise BadRequest('Invalid player id and player pin')
     #check_player_team_can_start_game(current_app,division_machine,player)

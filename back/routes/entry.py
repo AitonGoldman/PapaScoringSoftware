@@ -27,7 +27,7 @@ def route_add_score(division_machine_id, score):
         token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,player_id=division_machine.player_id).first()        
     if division_machine.team_id:        
         token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,team_id=division_machine.team_id).first()
-
+        
     if token is None:        
         raise BadRequest('Tried to add a score without starting a game.')        
     if division_machine.player_id:        

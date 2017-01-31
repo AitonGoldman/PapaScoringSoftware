@@ -17,7 +17,7 @@ def allowed_file(filename):
 def test_players_fast():    
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.all()}
+    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.all() if player.active is True}
     return jsonify({'data':players})
     # check if the post request has the file part            
 
@@ -44,7 +44,7 @@ def test_players_with_tickets(division_id):
                                                                                 paid_for=True,
                                                                                 voided=False,
                                                                                 division_id=division_id).all()
-    return jsonify({'data':{player.player_id:player.to_dict_fast() for player in players_with_tickets}})    
+    return jsonify({'data':{player.player_id:player.to_dict_fast() for player in players_with_tickets if player.active is True}})    
     # check if the post request has the file part            
 
 @admin_manage_blueprint.route('/test/media_upload', methods=['POST'])

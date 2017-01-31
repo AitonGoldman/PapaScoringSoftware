@@ -10,7 +10,7 @@ import os
 from flask_restless.helpers import to_dict
 import datetime
 from routes.audit_log_utils import create_audit_log
-from orm_creation import create_ticket_purchase
+from orm_creation import create_ticket_purchase,create_purchase_summary
 
 # gets_all_available tokens for a given division or metadiv for a given player or team
 def get_existing_token_count(player_id=None,team_id=None,div_id=None,metadiv_id=None):
@@ -305,42 +305,52 @@ def add_token(paid_for):
     #   calculate num of single
     #   calculate num of discount 
     #   create audit_logs for both
-    
+
+    if paid_for == 1 and comped is False:
+        purchase_summary = create_purchase_summary(current_app,
+                                                   player_id)
+    divisions_count={}
+    teams_count={}
+    metadivisions_count={}
     for div_id in tokens_data['divisions']:
         ##total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token['division_id'])==str(div_id)])
         total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token.division_id)==str(div_id)])
         if paid_for == 1 and comped is False:
-            create_ticket_purchase(current_app,
-                                   total_divisions_tokens_summary[div_id],
-                                   player_id,
-                                   current_user.user_id,
-                                   division_id=div_id,commit=False)
-            pass
+            divisions_count[div_id]=create_ticket_purchase(current_app,
+                                                            total_divisions_tokens_summary[div_id],
+                                                            player_id,
+                                                            current_user.user_id,
+                                                            purchase_summary.purchase_summary_id,
+                                                            division_id=div_id,
+                                                            commit=False)            
     for div_id in tokens_data['teams']:
         total_divisions_tokens_summary[div_id] = len([token for token in total_tokens if str(token.division_id)==str(div_id)])
         if paid_for == 1 and comped is False:
-            create_ticket_purchase(current_app,
-                                   total_divisions_tokens_summary[div_id],
-                                   player_id,
-                                   current_user.user_id,
-                                   division_id=div_id,commit=False)
-            pass
-        
+            divisions_count[div_id] = create_ticket_purchase(current_app,
+                                                             total_divisions_tokens_summary[div_id],
+                                                             player_id,
+                                                             current_user.user_id,
+                                                             purchase_summary.purchase_summary_id,
+                                                             division_id=div_id,
+                                                             commit=False)
     for metadiv_id in tokens_data['metadivisions']:
         total_metadivisions_tokens_summary[metadiv_id] = len([token for token in total_tokens if str(token.metadivision_id)==str(metadiv_id)])
         if paid_for == 1 and comped is False:
-            create_ticket_purchase(current_app,
-                                   total_metadivisions_tokens_summary[metadiv_id],
-                                   player_id,
-                                   current_user.user_id,
-                                   metadivision_id=metadiv_id,commit=False)
-            pass
-    ##db.session.commit()
+            metadivisions_count[metadiv_id] = create_ticket_purchase(current_app,
+                                                                     total_metadivisions_tokens_summary[metadiv_id],
+                                                                     player_id,
+                                                                     current_user.user_id,
+                                                                     purchase_summary.purchase_summary_id,                                   
+                                                                     metadivision_id=metadiv_id,commit=False)
+    db.session.commit()
     ##return jsonify({})
     for idx,tok in enumerate(total_tokens):
         total_tokens[idx] = to_dict(tok)            
     return jsonify({'data':{'divisions':total_divisions_tokens_summary,
                             'metadivisions':total_metadivisions_tokens_summary,                            
-                            'tokens':total_tokens}})
+                            'tokens':total_tokens,
+                            'divisions_count':divisions_count,
+                            'teams_count':teams_count,
+                            'metadivisions_count':metadivisions_count}})
     
 

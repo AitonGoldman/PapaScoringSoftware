@@ -9,7 +9,7 @@ from routes.utils import fetch_entity,calc_audit_log_remaining_tokens
 import stripe
 import datetime
 from routes.audit_log_utils import create_audit_log
-from orm_creation import create_ticket_purchase
+from orm_creation import create_ticket_purchase, create_purchase_summary
 import os
 
 @admin_manage_blueprint.route('/stripe/public_key', methods=['GET'])
@@ -205,34 +205,40 @@ def start_sale():
         )
         order_id_string =  "order_id %s, " % order_response.id
         stripe_purchase_summary_string = order_id_string
-        
+        purchase_summary = create_purchase_summary(current_app,
+                                                   current_user.player.player_id,
+                                                   use_stripe=True,
+                                                   stripe_charge_id=order_response.id)
         for division_id,num_tokens in added_token_count['divisions'].iteritems():        
             if int(num_tokens[0]) > 0:
                 create_ticket_purchase(current_app,
                                        num_tokens[0],
                                        current_user.player.player_id,
                                        current_user.user_id,
-                                       division_id=division_id,
-                                       use_stripe=True,
-                                       stripe_charge_id=order_response.charge)
+                                       purchase_summary.purchase_summary_id,                                       
+                                       division_id=division_id)#,
+                                       #use_stripe=True,
+                                       #stripe_charge_id=order_response.charge)
         for metadivision_id,num_tokens in added_token_count['metadivisions'].iteritems():        
             if int(num_tokens[0]) > 0:            
                 create_ticket_purchase(current_app,
                                        num_tokens[0],
                                        current_user.player.player_id,
                                        current_user.user_id,
-                                       metadivision_id=metadivision_id,
-                                       use_stripe=True,
-                                       stripe_charge_id=order_response.charge)
+                                       purchase_summary.purchase_summary_id,                                       
+                                       metadivision_id=metadivision_id)#,
+                                       #use_stripe=True,
+                                       #stripe_charge_id=order_response.charge)
         for division_id,num_tokens in added_token_count['teams'].iteritems():        
             if int(num_tokens[0]) > 0:            
                 create_ticket_purchase(current_app,
                                        num_tokens[0],
                                        current_user.player.player_id,
                                        current_user.user_id,
-                                       division_id=division_id,
-                                       use_stripe=True,
-                                       stripe_charge_id=order_response.charge)
+                                       purchase_summary.purchase_summary_id,                                       
+                                       division_id=division_id)#,
+                                       #use_stripe=True,
+                                       #stripe_charge_id=order_response.charge)
         for json_token in tokens:            
             token = tables.Token.query.filter_by(token_id=json_token['token_id']).first()            
             token.paid_for=True

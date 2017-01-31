@@ -337,16 +337,30 @@ def create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_i
     ticket_purchase.user_id=user_id
     ticket_purchase.purchase_date=datetime.datetime.now()
     return ticket_purchase
+
+def create_purchase_summary(app,
+                            player_id,
+                            use_stripe=False,
+                            stripe_charge_id=None):
+    db = db_util.app_db_handle(app)
+    tables = db_util.app_db_tables(app)
+    purchase_summary = tables.PurchaseSummary(player_id=player_id,
+                                              purchase_date=datetime.datetime.now(),
+                                              use_stripe=use_stripe,
+                                              stripe_charge_id=stripe_charge_id)
+    db.session.add(purchase_summary)
+    db.session.commit()
+    return purchase_summary
+
     
 def create_ticket_purchase(app,
                            ticket_count,
                            player_id,
                            user_id,
+                           purchase_summary_id,
                            division_id=None,
                            metadivision_id=None,
-                           commit=True,
-                           use_stripe=False,
-                           stripe_charge_id=None):    
+                           commit=True):    
     if ticket_count == 0:
         return
     db = db_util.app_db_handle(app)
@@ -360,11 +374,9 @@ def create_ticket_purchase(app,
     discount_price = division.discount_ticket_price
     if discount_for is None or discount_price is None:
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
+        ticket_purchase.purchase_summary_id = purchase_summary_id
         ticket_purchase.amount=ticket_count
         ticket_purchase.description="1"
-        ticket_purchase.use_stripe=use_stripe
-        if use_stripe:
-            ticket_purchase.stripe_charge_id = stripe_charge_id
         db.session.add(ticket_purchase)
         db.session.commit()
         return
@@ -375,16 +387,20 @@ def create_ticket_purchase(app,
         discount_count = 0
         normal_count = ticket_count
     if discount_count > 0:
+        print "discount count is happening : %s"% discount_count
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
         ticket_purchase.amount=discount_count
         ticket_purchase.description="%s"%discount_for
+        db.session.add(ticket_purchase)        
     if normal_count > 0:
+        print "count is happening : %s"% normal_count
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
         ticket_purchase.amount=normal_count
         ticket_purchase.description="1"
-    db.session.add(ticket_purchase)
+        db.session.add(ticket_purchase)
     if commit:        
         db.session.commit()
+    return {'discount_count':discount_count,'normal_count':normal_count}
 
 def create_roles(app,custom_roles=[]):
     roles = []

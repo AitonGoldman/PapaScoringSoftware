@@ -16,6 +16,7 @@ from AuditLog import generate_audit_log_class
 from DivisionFinal import generate_division_final_class
 from FinalsPlayer import generate_finals_player_class
 from TicketPurchase import generate_ticket_purchase_class
+from PurchaseSummary import generate_purchase_summary_class
 
 class ImportedTables():
     def __init__(self,db_handle):
@@ -37,6 +38,7 @@ class ImportedTables():
         self.Entry = generate_entry_class(db_handle)
         self.AuditLog = generate_audit_log_class(db_handle)
         self.TicketPurchase = generate_ticket_purchase_class(db_handle)
+        self.PurchaseSummary = generate_purchase_summary_class(db_handle)
         self.db_handle = db_handle
         
  

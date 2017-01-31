@@ -13,7 +13,7 @@
                 {{resources.divisions.data[division_id].tournament_name}} : 
               </td>
               <td class='padding-left'>
-                {{token_count}}
+                {{token_count}} ({{resources.added_tokens.data.divisions_count[division_id].discount_count}} discount, {{resources.added_tokens.data.divisions_count[division_id].normal_count}} normal)
               </td>
             </tr>
             <tr ng-repeat='(division_id,token_count) in resources.added_tokens.data.teams'>
@@ -29,7 +29,7 @@
                 {{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : 
               </td>
               <td class='padding-left'>
-                {{token_count}}
+                {{token_count}} ({{resources.added_tokens.data.metadivisions_count[metadivision_id].discount_count}} discount, {{resources.added_tokens.data.metadivisions_count[metadivision_id].normal_count}} normal)
               </td>
             </tr>
             <tr style='border-style:solid;border-width:0;border-top-width:1px;'>

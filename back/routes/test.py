@@ -6,6 +6,7 @@ import os
 import subprocess
 from util import db_util
 from routes.utils import fetch_entity
+import datetime
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -57,11 +58,13 @@ def test_upload_file():
         return jsonify({})        
     if file:                        
         filename = secure_filename(file.filename)                        
-        save_path=os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        #save_path=os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        random_file_name = datetime.datetime.now().strftime("%s")
+        save_path=os.path.join(current_app.config['UPLOAD_FOLDER'],"%s.jpg"%random_file_name)
         file.save(save_path)
         file.close()
         #convert /var/www/html/pics/player_1.jpg  -resize 128x128  /var/www/html/pics/resize_player_1.jpg
         subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])        
         subprocess.call(["mv","%s_resize"%save_path,save_path])
-    return jsonify({'poop':filename})
+    return jsonify({'poop':"%s.jpg"%(random_file_name)})
 

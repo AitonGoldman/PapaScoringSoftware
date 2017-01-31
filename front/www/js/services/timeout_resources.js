@@ -14,43 +14,52 @@ angular.module('TD_services.timeout_resources')
                        api_host,
                        $location) {
                   var resource_results = {};
-                  var response_interceptor = {
-	              'responseError': function(rejection) {            
-                          //FIXME : need error dialog to display
-                          poop = rejection;
-                          console.log(rejection);                          
-	                  //rejection.data={};
-	                  if(rejection.status == -1){
-                              rejection.data = {};
-		              rejection.data.message="Can not perform action requested.  The server is unreachable.";
-		              rejection.data.debug="HTTP Timeout while getting<br>"+rejection.config.url;
+                  var reject_and_redirect = function(rejection,ui_route){
+                      site = rejection.config.url.split('/')[3];
+                      Modals.error(rejection.data.message,site,ui_route);
+	              return $q.reject(rejection);
+                  };
+                  var generate_response_interceptor = function(custom_error){
+                      if(custom_error == undefined){
+                          ui_route='app';
+                      } else {
+                          ui_route=custom_error.ui_route;                          
+                      }
+                      var response_interceptor = {
+	                  'responseError': function(rejection) {            
+                              //FIXME : need error dialog to display
+                              console.log('erroring out');
+                              if(custom_error != undefined){
+		                  rejection.data.message=custom_error.message;
+                                  
+                                  return reject_and_redirect(rejection,ui_route);
+                              }
+	                      if(rejection.status == -1){
+                                  rejection.data = {};
+		                  rejection.data.message="Can not perform action requested.  The server is unreachable.";
+		                  rejection.data.debug="HTTP Timeout while getting<br>"+rejection.config.url;
+	                      }
+                              if(rejection.status == 400){                
+                              }
+                              if(rejection.status == 401){                
+		                  rejection.data.message="You are not authroized to do this.";
+                              }
+                              if(rejection.status == 409){                
+		                  rejection.data.debug="";
+                              }
+                              if(rejection.status == 500){                
+		                  rejection.data.message="WHOAH!  Server puked.";
+		                  rejection.data.debug="";
+                              }
+                              if(rejection.data.message == undefined){
+                                  rejection.data.message="I have no earthly idea what the hell just happened.";
+                              }
+                              return reject_and_redirect(rejection,ui_route);
 	                  }
-                          if(rejection.status == 400){                
-		              //rejection.data.message="The server did not accept the request.";
-		              //rejection.data.debug="";
-                          }
-                          if(rejection.status == 401){                
-		              rejection.data.message="You are not authroized to do this.";
-		              //rejection.data.debug="";
-                          }
-                          if(rejection.status == 409){                
-		              //rejection.data.message="The server reports a conflict.";
-		              rejection.data.debug="";
-                          }
-                          if(rejection.status == 500){                
-		              rejection.data.message="WHOAH!  Server puked.";
-		              rejection.data.debug="";
-                          }
-                          if(rejection.data.message == undefined){
-                              rejection.data.message="I have no earthly idea what the hell just happened.";
-                          }
-                          //console.log('HTTP problems encountered on request - stand by for more details');
-	                  //console.log(rejection);
-                          site = rejection.config.url.split('/')[3];
-                          Modals.error(rejection.data.message,site);
-	                  return $q.reject(rejection);
-	              }
-                  };                                                            
+                      };
+                      return response_interceptor;
+
+                  };
                   global_timeout = 15000;
 
                   
@@ -76,7 +85,7 @@ angular.module('TD_services.timeout_resources')
 	              return resource_results[scope_name].$promise;	
                   };
                   
-                  var generate_resource_definition = function(url,http_method,custom_interceptor,use_results_server){                                                    
+                  var generate_resource_definition = function(url,http_method,custom_interceptor_error,use_results_server){                                                    
                       url_chunks = url.split("/");
                       gen_post_args = {};
                       for(url_chunk_index in url_chunks){
@@ -87,10 +96,12 @@ angular.module('TD_services.timeout_resources')
                           };
                       }
                       response_interceptor_to_use = undefined;
-                      if(custom_interceptor == undefined){
-                          response_interceptor_to_use = response_interceptor;
+                      if(custom_interceptor_error == undefined){
+                          //response_interceptor_to_use = response_interceptor;
+                          response_interceptor_to_use = generate_response_interceptor();
                       } else {
-                          response_interceptor_to_use = custom_interceptor;
+                          response_interceptor_to_use = generate_response_interceptor(custom_interceptor_error);
+                          //response_interceptor_to_use = custom_interceptor;
                       }
                       if (use_results_server == undefined){
                           target_api_host = api_host.api_host();
@@ -143,9 +154,9 @@ angular.module('TD_services.timeout_resources')
 
                   set_api_host();                                    
                   var loginResource = generate_resource_definition(':site/auth/login',
-                                                                   'PUT',{});
+                                                                   'PUT',{ui_route:'.^',message:'Incorrect login info.  Please try again.'});
                   var loginPlayerResource = generate_resource_definition(':site/auth/player_login',
-                                                               'PUT',{});    
+                                                               'PUT',{ui_route:'.^',message:'Incorrect login info.  Please try again.'});    
                   
                   var logoutResource = generate_resource_definition(':site/auth/logout',
                                                                 'GET');                                                             
@@ -236,7 +247,7 @@ angular.module('TD_services.timeout_resources')
                   var getJagoffsResource = generate_resource_definition(':site/jagoff','GET');                  
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
                   var addToQueueResource = generate_resource_definition(':site/queue','POST');
-                  var addOtherPlayerToQueueResource = generate_resource_definition(':site/queue/other_player','POST',{});                  
+                  var addOtherPlayerToQueueResource = generate_resource_definition(':site/queue/other_player','POST',{ui_route:'.^',message:'Incorrect player number and pin.  Please try again.'});                  
                   var getDivisionQualifyingResultsPPOResource = generate_resource_definition(':site/results/division/:division_id/ppo/qualifying/list','PUT');
                   
                   var removePlayerFromMachineResource = generate_resource_definition(':site/division_machine/:division_machine_id/player/:player_id','DELETE');
@@ -257,7 +268,7 @@ angular.module('TD_services.timeout_resources')
 	              GetAllResources: function(){
 	                  return resource_results;
 	              },
-                      _ResponseInterceptor: response_interceptor,
+                      _ResponseInterceptor: generate_response_interceptor,
                       _GenerateResourceDefinition: generate_resource_definition,        
                       _GenerateCustomHttpExecutor: generate_custom_http_executor,
                       Login: generate_custom_http_executor(loginResource,'logged_in_user','post'),

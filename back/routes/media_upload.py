@@ -3,6 +3,7 @@ from flask import jsonify,current_app,request
 from werkzeug.utils import secure_filename
 import json
 import os
+import datetime
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -18,9 +19,10 @@ def upload_file(pic_type):
     file = request.files['file']            
     if file.filename == '':            
         return jsonify({})        
-    if file:                        
-        filename = secure_filename(file.filename)                        
-        save_path=os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+    if file:        
+        filename = secure_filename(file.filename)
+        random_file_name = datetime.datetime.now().strftime("%s")        
+        save_path=os.path.join(current_app.config['UPLOAD_FOLDER'], "%s.jpg"%random_file_name)
         file.save(save_path)
-    return jsonify({})
+    return jsonify({'data':"%s.jpg"%random_file_name})
 

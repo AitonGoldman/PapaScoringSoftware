@@ -37,12 +37,6 @@ angular.module('app.login.process').controller(
                 $scope.resources = TimeoutResources.GetAllResources();
                 User.set_logged_in_user($scope.resources.logged_in_user.data,"user");
                 Modals.loaded();
-            },function(data){
-                //FIXME : need a better way to handle situation where we want
-                //        a different error message than what is given back
-                //        by the server.            
-                //console.log(data.config.url.split('/')[3]);                
-                Modals.error('Login Failed. Check your username and password.', $scope.site, '^');
             });                     
         }
     ]

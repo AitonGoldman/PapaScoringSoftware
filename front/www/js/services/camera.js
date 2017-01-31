@@ -47,7 +47,7 @@ angular.module('TD_services.camera').factory('Camera', ['$state','$timeout','$ro
                 return $cordovaFileTransfer.upload(upload_host+upload_url_path, data, cordova_options, true)
                     .then(function(result) {
                         Modals.loaded();                        
-                        return {result:TRANSFER_SUCCESS,file_name:dest_pic_name,local_file_path:data};
+                        return {result:TRANSFER_SUCCESS,file_name:JSON.parse(result.response).data,local_file_path:data};
                     }, function(err) {
                         Modals.loaded();
                         alert('transfer is bad '+err.code);                        

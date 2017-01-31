@@ -169,6 +169,8 @@ angular.module('TD_services.timeout_resources')
                                                                         'GET');
                   var getPlayersFastResource = generate_resource_definition(':site/test/player_fast',
                                                                         'GET');
+                  var getPlayersPreregFastResource = generate_resource_definition(':site/test/player_prereg_fast',
+                                                                        'GET');
                   
                   var getTeamsResource = generate_resource_definition(':site/team/:player_id',
                                                                      'GET');                                                      
@@ -269,7 +271,8 @@ angular.module('TD_services.timeout_resources')
                       GetStripePublicKey: generate_custom_http_executor(getStripePublicKeyResource,'stripe_public_key','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
                       GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
-                      GetPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),                      
+                      GetPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),
+                      GetPlayersPreregFast: generate_custom_http_executor(getPlayersPreregFastResource,'players','get'),
                       GetPlayersWithTicketsForDivision: generate_custom_http_executor(getPlayersWithTicketsForDivisionResource,'players_with_tickets','get'),
                       GetPlayerBestScoreForMachine: generate_custom_http_executor(getPlayerBestScoreForMachineResource,'player_best_score_for_machine','get'),
                       GetTeams: generate_custom_http_executor(getTeamsResource,'teams','get'),                      

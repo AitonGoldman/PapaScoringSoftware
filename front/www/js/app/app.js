@@ -31,6 +31,7 @@ app = angular.module(
         'app.ppo_qualifying_list',
         'prereg',
         'prereg.step1',
+    'app.prereg_complete',
     /*REPLACEMECHILD*/
 	]
 );

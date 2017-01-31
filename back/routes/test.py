@@ -21,6 +21,14 @@ def test_players_fast():
     return jsonify({'data':players})
     # check if the post request has the file part            
 
+@admin_manage_blueprint.route('/test/player_prereg_fast', methods=['GET'])
+def test_prereg_players_fast():    
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.filter_by(pre_reg_paid=True,active=False).all()}
+    return jsonify({'data':players})
+    # check if the post request has the file part            
+    
 @admin_manage_blueprint.route('/test/players_with_tickets/<division_id>', methods=['GET'])
 def test_players_with_tickets(division_id):    
     db = db_util.app_db_handle(current_app)

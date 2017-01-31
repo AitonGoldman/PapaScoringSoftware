@@ -1,0 +1,20 @@
+<ion-view view-title="Pre-Registered Players">
+  <ion-content>
+    <center>
+      Click on a player to complete their registration.
+    </center>
+    <div class="skinny-list list">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search" ng-model="searchText">
+      </label>
+      <div ng-repeat="player in flat_players|filter:searchText">
+        <a id="manage_players_edit_player_{{player.player_id}}_link" ui-sref='.confirm({player_id:player.player_id,player_name:player.full_name})' class="item item-icon-left item-icon-right">
+          <i class="icon ion-person"></i>
+          <span>{{player.full_name}}</span>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

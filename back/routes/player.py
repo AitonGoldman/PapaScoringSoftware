@@ -48,6 +48,8 @@ def route_edit_player(player_id):
         player.email_address = input_data['email_address']
     if 'ifpa_ranking' in input_data:
         player.ifpa_ranking = input_data['ifpa_ranking']
+    if 'active' in input_data:
+        player.active=input_data['active']
     if 'linked_division_id' in input_data:
         # Get all scores from old division
         # void all those scores

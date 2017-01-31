@@ -59,6 +59,11 @@
         <span>PreReg</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
+      <a  ng-if='User.has_role("desk")' id="front_results_link" ui-sref='.prereg_complete' class="item item-icon-left item-icon-right">
+        <i class="icon ion-stats-bars"></i>
+        <span>Complete Registration for Pre-Registered</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>
       
     </div>
     

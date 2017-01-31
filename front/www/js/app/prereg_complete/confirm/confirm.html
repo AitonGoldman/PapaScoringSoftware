@@ -1,0 +1,35 @@
+<ion-view view-title="">
+  <ion-content>      
+      <center>
+        <div class='standard_big_font'>
+          <button class='button button-clear button-stable icon-left ion-person-add review-icon' >            
+              <span><u>Review before completing registration.</u></span>
+          </button>
+          <table>
+            <tr>
+              <td class='padding-right' align="right">
+                Player ID : 
+              </td>
+              <td id="player_add_player_process_player_id" class='padding-left'>
+                {{player_id}}
+              </td>
+            </tr>
+            <tr>
+              <td class='padding-right' align="right">
+                Player Name : 
+              </td>
+              <td id="player_add_player_process_player_pin" class='padding-left'> 
+                {{player_name}}
+              </td>
+            </tr>
+          </table>
+          
+          <button id='player_add_player_process_purchase_tickets_button' class='button button-full seperate_button button-calm item-icon-right' ui-sref='.process({process_step:{process:true}})'>
+            <span>Complete Registration</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>          
+        </div>
+      </center>
+  </ion-content>
+</ion-view>
+

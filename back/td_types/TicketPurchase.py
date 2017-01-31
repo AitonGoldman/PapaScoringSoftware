@@ -29,6 +29,11 @@ def generate_ticket_purchase_class(db_handle):
             'MetaDivision',
             foreign_keys=[meta_division_id]
         )
+        purchase_summary = db_handle.relationship(
+            'PurchaseSummary',
+            foreign_keys=[purchase_summary_id]
+        )
+        
         
         def to_dict_simple(self):
             return to_dict(self)        

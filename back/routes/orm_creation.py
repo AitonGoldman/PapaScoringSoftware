@@ -327,7 +327,7 @@ def create_tournament(app,tournament_data):
     db.session.commit()
     return new_tournament
 
-def create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id):
+def create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id,purchase_summary_id):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
     ticket_purchase = tables.TicketPurchase()
@@ -336,6 +336,7 @@ def create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_i
     ticket_purchase.meta_division_id=metadivision_id
     ticket_purchase.user_id=user_id
     ticket_purchase.purchase_date=datetime.datetime.now()
+    ticket_purchase.purchase_summary_id=purchase_summary_id
     return ticket_purchase
 
 def create_purchase_summary(app,
@@ -373,8 +374,7 @@ def create_ticket_purchase(app,
     discount_for = division.discount_ticket_count
     discount_price = division.discount_ticket_price
     if discount_for is None or discount_price is None:
-        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
-        ticket_purchase.purchase_summary_id = purchase_summary_id
+        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id,purchase_summary_id)            
         ticket_purchase.amount=ticket_count
         ticket_purchase.description="1"
         db.session.add(ticket_purchase)
@@ -388,13 +388,13 @@ def create_ticket_purchase(app,
         normal_count = ticket_count
     if discount_count > 0:
         print "discount count is happening : %s"% discount_count
-        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
+        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id,purchase_summary_id)    
         ticket_purchase.amount=discount_count
         ticket_purchase.description="%s"%discount_for
         db.session.add(ticket_purchase)        
     if normal_count > 0:
         print "count is happening : %s"% normal_count
-        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id)    
+        ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id,purchase_summary_id)    
         ticket_purchase.amount=normal_count
         ticket_purchase.description="1"
         db.session.add(ticket_purchase)

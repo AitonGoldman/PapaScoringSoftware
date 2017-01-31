@@ -208,7 +208,7 @@ def start_sale():
         purchase_summary = create_purchase_summary(current_app,
                                                    current_user.player.player_id,
                                                    use_stripe=True,
-                                                   stripe_charge_id=order_response.id)
+                                                   stripe_charge_id=order_response.charge)
         for division_id,num_tokens in added_token_count['divisions'].iteritems():        
             if int(num_tokens[0]) > 0:
                 create_ticket_purchase(current_app,

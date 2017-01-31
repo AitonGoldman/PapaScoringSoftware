@@ -11,7 +11,7 @@ def generate_purchase_summary_class(db_handle):
         description = db_handle.Column(db_handle.String(255))
         use_stripe = db_handle.Column(db_handle.Boolean,default=False)
         stripe_charge_id = db_handle.Column(db_handle.String(255))
-        
+        ticket_purchase = db_handle.relationship('TicketPurchase')        
         def to_dict_simple(self):
             return to_dict(self)        
     return PurchaseSummary

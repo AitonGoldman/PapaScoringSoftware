@@ -72,7 +72,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('prereg.step1.step2.step3.step4.confirm.step5.process', 
         { 
          cache: false,
- 	 url: '/process/stripe_token/:stripe_token/player_id/:player_id/player_email/:player_email',
+ 	 url: '/process/stripe_token/:stripe_token/player_id/:player_id/player_cc_email/:player_cc_email',
  	 views: {
  	     '@': {
  	       templateUrl: 'js/prereg/step1/step2/step3/step4/confirm/step5/process/process.html',

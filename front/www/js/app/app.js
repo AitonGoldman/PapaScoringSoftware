@@ -53,7 +53,7 @@ app.controller(
     function($scope, $location, $http, 
              $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory,$ionicSideMenuDelegate) {
         //$scope.type_of_page = type_of_page;
-        if(ionic.Platform.isWebView() == false){
+        if(ionic.Platform.isWebView() == false && type_of_page != 'prereg'){
             if ($location.absUrl().includes('player.html#')!=true){
                 $scope.type_of_page = 'user';
             } else {
@@ -156,7 +156,7 @@ app.controller(
         };
         $scope.server_ip_address=server_ip_address;
         $scope.http_prefix=http_prefix;
-
+        //$scope.type_of_page=
         $scope.take_pic_and_upload = function(type,info_object,site,id){            
             upload_pic_promise = Camera.take_user_pic_and_upload(type,site,id);
             upload_pic_promise.then(function(data){

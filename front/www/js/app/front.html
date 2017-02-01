@@ -1,11 +1,18 @@
 <ion-view view-title="Home"  hide-back-button='true' >
   <ion-content>     
     <center>
-      <button ng-if='User.has_role("player")' class='button button-clear button-dark icon-left ion-person review-icon' >            
+      <button ng-if='User.has_role("player")' class='button button-clear button-dark icon-left ion-person review-icon' ng-if="type_of_page != 'prereg'">            
         <span><u>{{User.logged_in_user().player.full_name}}</u></span>
       </button>
     </center>
-    <div class="skinny-list list">
+    <div class="skinny-list list" ng-if="type_of_page == 'prereg'">      
+      <a  ng-if='!User.logged_in()' id="front_results_link" ui-sref='prereg({site:site})' class="item item-icon-left item-icon-right">
+        <i class="icon ion-stats-bars"></i>
+        <span>PreReg</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>
+    </div>
+    <div class="skinny-list list" ng-if="type_of_page != 'prereg'">
       <a id="front_purchase_tickets_link" ui-sref=".token" class="item item-icon-left item-icon-right" ng-if='User.has_role("desk")'>
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
@@ -53,11 +60,6 @@
         <i class="icon ion-stats-bars"></i>
         My Results
         <i class="icon ion-chevron-right"></i>        
-      </a>
-      <a  ng-if='!User.logged_in()' id="front_results_link" ui-sref='prereg({site:site})' class="item item-icon-left item-icon-right">
-        <i class="icon ion-stats-bars"></i>
-        <span>PreReg</span>
-        <i class="icon ion-chevron-right"></i>                
       </a>
       <a  ng-if='User.has_role("desk")' id="front_results_link" ui-sref='.prereg_complete' class="item item-icon-left item-icon-right">
         <i class="icon ion-stats-bars"></i>

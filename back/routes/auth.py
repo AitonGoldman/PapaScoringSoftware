@@ -56,7 +56,7 @@ def route_player_login():
         raise BadRequest('Player pin # not specified')        
     if 'player_pin' not in input_data or 'player_id' not in input_data:
         raise BadRequest('Player pin # or Player Number not specified')    
-    player = tables.Player.query.filter_by(pin=input_data['player_pin'],player_id=input_data['player_id']).first()
+    player = tables.Player.query.filter_by(pin=input_data['player_pin'],player_id=input_data['player_id'],active=True).first()
     if player is None:
         raise Unauthorized('Bad player pin # and player number')
     login_user(player.user)

@@ -7,6 +7,8 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5.process').controlle
 	$scope.stripe_token=$state.params.stripe_token;
 	$scope.player_id=$state.params.player_id;
 	$scope.player_email=$state.params.player_email;        
+	$scope.player_cc_email=$state.params.player_cc_email;        
+
 	$scope.linked_division_id=$state.params.linked_division_id;
 	$scope.uploaded_file_name=$state.params.uploaded_file_name;
 
@@ -21,7 +23,8 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5.process').controlle
         pay_promise = TimeoutResources.PayRegistrationFee(undefined,{site:$scope.site},
                                                           {stripe_token:$scope.stripe_token,
                                                            player_id:$scope.player_id,
-                                                           player_email:$scope.player_email
+                                                           player_email:$scope.player_email,
+                                                           player_cc_email:$scope.player_cc_email
                                                           });
         //Modals.loading();
         // = TimeoutResources.GetEtcData();

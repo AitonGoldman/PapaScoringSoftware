@@ -11,6 +11,8 @@ import datetime
 from routes.audit_log_utils import create_audit_log
 from orm_creation import create_ticket_purchase, create_purchase_summary
 import os
+import sendgrid
+from sendgrid.helpers.mail import *
 
 @admin_manage_blueprint.route('/stripe/public_key', methods=['GET'])
 def get_public_key():
@@ -123,7 +125,8 @@ def start_pre_reg_sale():
     tables = db_util.app_db_tables(current_app)
     stripe_token = json.loads(request.data)['stripe_token']
     player_id = json.loads(request.data)['player_id']
-    email = json.loads(request.data)['player_email']    
+    email = json.loads(request.data)['player_email']
+    cc_email = json.loads(request.data)['player_cc_email']    
     stripe.api_key = current_app.td_config['STRIPE_API_KEY']
     registration_sku = os.getenv('REGISTRATION_FEE_SKU',None)
     stripe_items = [{"quantity":1,"type":"sku","parent":registration_sku}]
@@ -131,7 +134,7 @@ def start_pre_reg_sale():
     try:
         order = stripe.Order.create(
             currency="usd",
-            email=email,
+            email=cc_email,
             items=stripe_items
         )
         order_response=order.pay(
@@ -146,7 +149,14 @@ def start_pre_reg_sale():
         player.pre_reg_paid = True
         db.session.commit()
         player_dict = player.to_dict_simple()
-        player_dict['pin']=player.pin
+        player_dict['pin']=player.pin        
+        sg = sendgrid.SendGridAPIClient(apikey=current_app.td_config['SENDGRID_API_KEY'])
+        from_email = Email("test@example.com")
+        subject = "You have been pre-registered for PAPA 20!"
+        to_email = Email(email)
+        content = Content("text/plain", "Text needs to go here")
+        mail = Mail(from_email, subject, to_email, content)
+        response = sg.client.mail.send.post(request_body=mail.get())
         return jsonify({'data':player_dict})
         
     except stripe.error.CardError as e:

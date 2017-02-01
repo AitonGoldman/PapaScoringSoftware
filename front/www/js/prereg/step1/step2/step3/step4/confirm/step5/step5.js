@@ -44,7 +44,7 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5').controller(
                     //$scope.ticket_purchase_in_progress = true;                    
                     $state.go('.process',{process_step:{process:true},
                                           player_id:$scope.resources.added_pre_reg_player.data.player_id,
-                                          player_email:token.email,                                          
+                                          player_cc_email:token.email,                                          
                                           stripe_token:token.id
                                        });                    
                 }

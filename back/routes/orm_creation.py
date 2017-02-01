@@ -305,6 +305,7 @@ def create_division(app,division_data):
         new_division.team_tournament = False    
     new_division.scoring_type=division_data['scoring_type']
     new_division.finals_player_selection_type = "papa"
+    new_division.number_of_relevant_scores = 6
     db.session.add(new_division)
     db.session.commit()
     if new_division.use_stripe:

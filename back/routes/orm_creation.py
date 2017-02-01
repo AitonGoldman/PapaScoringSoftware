@@ -203,10 +203,14 @@ def create_player(app,player_data):
         new_player.active=False
     else:
         new_player.active=True
+    pin_range = set(range(1523, 9999))
+    existing_player_pins = set([player.pin for player in tables.Player.query.all()])
+    allowed_values = pin_range - existing_player_pins        
+    random_value = random.choice(list(allowed_values))  
+    new_player.pin = random_value
     if app.td_config['DB_TYPE']=='sqlite':        
         new_player.pin= random.randrange(1234,9999999)
-        db.session.commit()
-        pass
+        db.session.commit()        
     
     db.session.add(new_player)
     db.session.commit()

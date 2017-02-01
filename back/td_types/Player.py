@@ -9,11 +9,11 @@ def generate_player_role_mapping(db_handle):
     return Role_Player_mapping
 
 
-def generate_player_class(db_handle,Team_Player_mapping):    
+def generate_player_class(db_handle,Team_Player_mapping,player_id_start):    
     Role_Player_mapping = generate_player_role_mapping(db_handle)
     #Team_Player_mapping = generate_player_team_mapping(db_handle)
     class Player(db_handle.Model):
-        player_id = db_handle.Column(db_handle.Integer,primary_key=True)
+        player_id = db_handle.Column(db_handle.Integer,db_handle.Sequence(name='player_id_seq',start=player_id_start),primary_key=True)
         asshole_count = db_handle.Column(db_handle.Integer)
         bump_count = db_handle.Column(db_handle.Integer)        
         first_name = db_handle.Column(db_handle.String(1000))
@@ -22,7 +22,7 @@ def generate_player_class(db_handle,Team_Player_mapping):
         ifpa_ranking = db_handle.Column(db_handle.Integer)
         email_address = db_handle.Column(db_handle.String(120))
         active = db_handle.Column(db_handle.Boolean, default=True)
-        pin = db_handle.Column(db_handle.Integer, db_handle.Sequence(name='player_pin_seq',start=1234,increment=13))
+        pin = db_handle.Column(db_handle.Integer)
         user_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('user.user_id'))
         linked_division_id = db_handle.Column(db_handle.Integer,
                                             db_handle.ForeignKey(

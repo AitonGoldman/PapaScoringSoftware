@@ -12,7 +12,7 @@ def get_config_values_from_env():
     config_dict['STRIPE_API_KEY']=None
     config_dict['STRIPE_PUBLIC_KEY']=None    
     config_dict['QUEUE_BUMP_AMOUNT']=1
-    config_dict['PLAYER_LOGIN']=None
+    #config_dict['PLAYER_LOGIN']=None
     config_dict['IONICCLOUD_PROFILE_TAG']=None
     config_dict['IONICCLOUD_API_KEY']=None
     config_dict['UPLOAD_FOLDER']='/var/www/html/pics'
@@ -21,16 +21,17 @@ def get_config_values_from_env():
 
     missing_params = []
     for key,value in config_dict.iteritems():
-        env_value = os.getenv(key)        
-        if env_value is None and value is None:
-            missing_params.append(key)
+        env_value = os.getenv(key)                
+        if env_value is None and value is None:            
+            missing_params.append(key)            
         if value and env_value is None:            
             continue
         config_dict[key]=env_value
         if len(missing_params) > 0:
             print "\n\n\n----WARNING----\n\n\nThe following parameters were not set : \n"
-            for missing_val in config_dict:
+            for missing_val in missing_params:
                 print missing_val
+            pass
     return config_dict
 
 def get_config_values_from_file(config_dict,td_config_filename=None,db_config_filename=None):

@@ -22,10 +22,12 @@ def get_papa_points_from_rank(rank):
         return 0
     return 100-rank-12
 
-def check_if_team(division_id=None,division_machine_id_external=None):
+def check_if_team(division_id=None,division_machine_id_external=None,team_id_external=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     team=False
+    if team_id_external:
+        return True
     if division_id:
         division = tables.Division.query.filter_by(division_id=division_id).first()
         if division.team_tournament:            
@@ -43,6 +45,7 @@ def init_dicts(player_results_dict,
                sorted_team_list,
                ranked_team_list,
                player_entry_dict,
+               team_entry_dict,
                top_6_machines,
                divisions,
                division_id,
@@ -73,6 +76,8 @@ def init_dicts(player_results_dict,
         #player_entry_dict[division.division_id]=[]
         division_name = division.get_tournament_name(division.tournament)        
         player_entry_dict[division.division_id]={'tournament_name':division_name,'entries':[],'sum':0,'rank':0}
+        team_entry_dict[division.division_id]={'tournament_name':division_name,'entries':[],'sum':0,'rank':0}
+        
         top_6_machines[division.division_id]={}    
         if team:
             for team in teams:        
@@ -175,7 +180,7 @@ def return_team_results(team_results_dict,sorted_team_list,divisions,ranked_team
     for team_id,div in team_results_dict.iteritems():
         for div_id, team in div.iteritems():                
             sorted_team_list[div_id].append({'team_id':team_id,'sum':team['sum'],'team_name':team['team_name']})
-    for division in divisions:
+    for division in [division for division in divisions if division.team_tournament is True]:
         sorted_team_list[division.division_id] = sorted(sorted_team_list[division.division_id], key= lambda e: e['sum'],reverse=True)
         ranked_team_list[division.division_id] = list(Ranking(sorted_team_list[division.division_id],key=lambda pp: pp['sum']))
     if team_id_external:
@@ -212,7 +217,7 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
     tables = db_util.app_db_tables(current_app)
     if division_id=="0":
         division_id=None
-    team=check_if_team(division_id,division_machine_id_external)
+    team=check_if_team(division_id,division_machine_id_external,team_id_external)
     first_query = get_first_query(division_id,division_machine_id_external,team)
     second_query = get_herb_second_query(first_query,team)
     third_query = get_herb_third_query(second_query)
@@ -239,6 +244,7 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                sorted_team_list,
                ranked_team_list,
                player_entry_dict,
+               team_entry_dict,
                top_6_machines,
                divisions,
                division_id,
@@ -270,9 +276,9 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
 def route_get_player_results(player_id):
     return get_division_results(player_id_external=player_id)
 
-@admin_manage_blueprint.route('/results/team/<team_id>/division/<division_id>',methods=['GET'])
-def route_get_team_results(team_id,division_id):
-    return get_division_results(team_id_external=team_id,division_id=division_id)
+@admin_manage_blueprint.route('/results/team/<team_id>',methods=['GET'])
+def route_get_team_results(team_id):
+    return get_division_results(team_id_external=team_id)
  
 @admin_manage_blueprint.route('/results/division/<division_id>',methods=['GET'])
 def route_get_division_results(division_id):    

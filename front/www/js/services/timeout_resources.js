@@ -257,6 +257,8 @@ angular.module('TD_services.timeout_resources')
                   var voidEntryResource = generate_resource_definition(':site/admin/entry_id/:entry_id/void/:void','DELETE');
                   var addEntryResource = generate_resource_definition(':site/admin/division_machine_id/:division_machine_id/score/:score/player_id/:player_id','POST');                                    
                   var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET',undefined,true);
+                  var getTeamResultsResource = generate_resource_definition(':site/results/team/:team_id','GET',undefined,true);
+                  
                   var getPlayerEntriesResource = generate_resource_definition(':site/entry/player/:player_id','GET');
                   var setScoreResource = generate_resource_definition(':site/admin/score_id/:score_id/score/:score','PUT');
                   var getAuditLogMissingTokensResource = generate_resource_definition(':site/admin/audit_log/where_all_my_tokens_at/player_id/:player_id','GET');
@@ -327,6 +329,7 @@ angular.module('TD_services.timeout_resources')
                       RemovePlayerFromQueue: generate_custom_http_executor(removePlayerFromQueueResource,'modified_queue','delete'),
                       RemovePlayerFromMachine: generate_custom_http_executor(removePlayerFromMachineResource,'machine_removed_from','delete'),
                       GetPlayerResults: generate_custom_http_executor(getPlayerResultsResource,'player_results','get'),
+                      GetTeamResults: generate_custom_http_executor(getTeamResultsResource,'team_results','get'),                      
                       GetPlayerEntries: generate_custom_http_executor(getPlayerEntriesResource,'player_entries','get'),                      
                       AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put'),
                       AddOtherPlayerToQueue: generate_custom_http_executor(addOtherPlayerToQueueResource,'added_queue','put'),                      

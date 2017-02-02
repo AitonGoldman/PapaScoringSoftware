@@ -72,14 +72,25 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.results.players.player', 
         { 
          cache: false,
- 	 url: '/player/player_id/:player_id/player_name/:player_name',
+ 	 url: '/player/player_id/:player_id/player_name/:player_name/team_id/:team_id',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/results/players/player/player.html',
  	       controller: 'app.results.players.player'
  	     }
  	   }
+       }).state('app.results.players.player.team', 
+        { 
+         cache: false,
+ 	 url: '/team/team_id/:team_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/results/players/player/team/team.html',
+ 	       controller: 'app.results.players.player.team'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
 
 
 

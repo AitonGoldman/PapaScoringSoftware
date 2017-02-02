@@ -6,18 +6,14 @@
     </ion-refresher>        
     <center>
       <div style='padding:10px;'>
-        <b class='standard_large_font'>{{player_name}}</b>
+        <b class='standard_large_font'>{{resources.player.data.teams[0].team_name}}</b>
       </div>
-      <div ng-if="team_id != ''" style='padding:10px;'>
-        <a class='standard_big_font' ui-sref='.team({team_id:team_id})'>Team Results</a>
-      </div>
-      
-      <div ng-if='player_division_results.entries.length > 0' ng-repeat='(division_id,player_division_results) in resources.player_results.data' style='padding-bottom:10px;'>
+      <div ng-if='team_division_results.entries.length > 0' ng-repeat='(division_id,team_division_results) in resources.team_results.data' style='padding-bottom:10px;'>
         <div style='background-color:tan;padding-top:15px;padding-bottom:15px'>
-          <a class='standard_large_font' ui-sref='.^.^.divisions.division({division_id:division_id,division_name:player_division_results.tournament_name})'>
-            {{player_division_results.tournament_name}}
+          <a class='standard_large_font' ui-sref='.^.^.divisions.division({division_id:division_id,division_name:team_division_results.tournament_name})'>
+            {{team_division_results.tournament_name}}
           </a>
-          <div style='margin-top:10px'>Rank : {{player_division_results.rank+1}}</div>
+          <div style='margin-top:10px'>Rank : {{team_division_results.rank+1}}</div>
         </div>
         <div style='background-color:bisque'>
           <b>Best {{resources.divisions.data[division_id].number_of_relevant_scores}} Scores</b><br>
@@ -28,7 +24,7 @@
               <th align='center' style='padding-left:0px'><b>Points</b></th>
               <th align='center' style='padding-left:0px'><b>Score</b></th>            
             </tr>
-            <tr ng-repeat='machine_score in player_division_results.entries|limitTo:resources.divisions.data[division_id].number_of_relevant_scores'>
+            <tr ng-repeat='machine_score in team_division_results.entries|limitTo:resources.divisions.data[division_id].number_of_relevant_scores'>
               <td align='center' style='vertical-align:middle;padding-top:10px;' >{{machine_score.rank}}</td>
               <td align='center' style='vertical-align:middle;padding-top:10px;'>
                 <a ui-sref='app.results.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name,division_id:division_id})'>
@@ -45,13 +41,13 @@
                 <b>Total</b>
               </td>
               <td align='center' style='padding-top:10px;'>
-                <b>{{player_division_results.sum}}</b>
+                <b>{{team_division_results.sum}}</b>
               </td>
               <td style='padding-top:10px;'>
               </td>
             </tr>
           </table>
-          <div ng-if='player_division_results.entries.length > resources.divisions.data[division_id].number_of_relevant_scores'>
+          <div ng-if='team_division_results.entries.length > resources.divisions.data[division_id].number_of_relevant_scores'>
             <hr>
             <b>All Scores</b><br>
             <table style='margin-left:auto;margin-right:auto;'>
@@ -61,7 +57,7 @@
                 <th align='center'  style='padding-left:0px'><b>Points</b></th>
                 <th align='center'  style='padding-left:10px'><b>Score</b></th>            
               </tr>
-              <tr ng-repeat='machine_score in player_division_results.entries' ng-if='$index > 2'>
+              <tr ng-repeat='machine_score in team_division_results.entries' ng-if='$index > 2'>
                 <td align='center' style='vertical-align:middle;padding-top:10px;' >{{machine_score.rank}}</td>
                 <td align='center' style='vertical-align:middle;padding-left:0px;padding-top:10px;'>
                   <a ui-sref='app.results.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name,division_id:division_id})'>

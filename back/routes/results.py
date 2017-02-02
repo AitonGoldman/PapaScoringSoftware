@@ -22,43 +22,36 @@ def get_papa_points_from_rank(rank):
         return 0
     return 100-rank-12
 
-def get_division_results(division_id=None,division_machine_id_external=None,player_id_external=None,team_id_external=None,return_json=True):
+def check_if_team(division_id=None,division_machine_id_external=None):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    if division_id=="0":
-        division_id=None
     team=False
     if division_id:
         division = tables.Division.query.filter_by(division_id=division_id).first()
-        if division.team_tournament:
-            print "found team"
+        if division.team_tournament:            
             team=True
     if division_machine_id_external:
         division_machine_external = tables.DivisionMachine.query.filter_by(division_machine_id=division_machine_id_external).first()
-        if division_machine_external and division_machine_external.division.team_tournament:
-            print "found team machine"
+        if division_machine_external and division_machine_external.division.team_tournament:            
             team=True
-            
-    first_query = get_first_query(division_id,division_machine_id_external,team)
-    second_query = get_herb_second_query(first_query,team)
-    third_query = get_herb_third_query(second_query)
-    fourth_query = get_herb_fourth_query(third_query)
-    results = db.engine.execute(fourth_query)
-    divisions = tables.Division.query.all()
+    return team
+
+def init_dicts(player_results_dict,
+               team_results_dict,               
+               sorted_player_list,
+               ranked_player_list,
+               sorted_team_list,
+               ranked_team_list,
+               player_entry_dict,
+               top_6_machines,
+               divisions,
+               division_id,
+               team):
+    db = db_util.app_db_handle(current_app)    
+    tables = db_util.app_db_tables(current_app)    
     players = tables.Player.query.all()
     if team:
-        teams = tables.Team.query.all()
-    return_dict = {}
-    player_results_dict = {}
-    team_results_dict = {}
-    player_entry_dict = {}
-    team_entry_dict={}
-    sorted_player_list = {}
-    sorted_team_list = {}    
-    ranked_player_list = {}
-    ranked_team_list = {}
-    top_6_machines = {}    
-    division_machine_results = []    
+        teams = tables.Team.query.all()    
     for player in players:        
         player_results_dict[player.player_id]={}
     if team:
@@ -69,9 +62,9 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
             division_machines = tables.DivisionMachine.query.filter_by(division_id=division.division_id).all()
         else:
             division_machines = tables.DivisionMachine.query.all()
-        return_dict[division.division_id]={}
-        for division_machine in division_machines:
-            return_dict[division.division_id][division_machine.division_machine_id]=[]
+        #return_dict[division.division_id]={}
+        #for division_machine in division_machines:
+        #    return_dict[division.division_id][division_machine.division_machine_id]=[]
         sorted_player_list[division.division_id]=[]
         ranked_player_list[division.division_id]=[]
         sorted_team_list[division.division_id]=[]
@@ -90,145 +83,197 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                 player_results_dict[player.player_id][division.division_id]={'points':[],'sum':0,'player_name':player.first_name+" "+player.last_name,'ifpa_ranking':player.ifpa_ranking}            
                 top_6_machines[division.division_id][player.player_id]=[]
                 
+
+def build_division_machine_results(division_machine_results,new_dict,team):
+    division_machine_result = new_dict
+    if team:
+        division_machine_results.append({'team_name':division_machine_result['team_name'],
+                                         'team_id':division_machine_result['team_id'],
+                                         'machine_name':division_machine_result['machine_name'],
+                                         'division_machine_id':division_machine_result['division_machine_id'],
+                                         'score':division_machine_result['score'],
+                                         'rank':division_machine_result['filter_rank'],
+                                         'points': get_papa_points_from_rank(division_machine_result['filter_rank'])})                                
+    else:
+        division_machine_results.append({'player_name':division_machine_result['player_name'],
+                                         'player_id':division_machine_result['player_id'],
+                                         'machine_name':division_machine_result['machine_name'],
+                                         'division_machine_id':division_machine_result['division_machine_id'],
+                                         'score':division_machine_result['score'],
+                                         'rank':division_machine_result['filter_rank'],
+                                         'points': get_papa_points_from_rank(division_machine_result['filter_rank'])})                
+
+def build_new_dict(result,team):
+    new_dict={
+        'division_id':result['entry_division_id'],
+        'machine_name':result['machine_machine_name'],
+        'division_machine_id':result['score_division_machine_id'],
+        'score':result['score_score'],
+        'rank':result['scorerank'],
+        'filter_rank':result['filter_rank']            
+    }
+    if team:
+        new_dict['team_id']=result['team_team_id']
+        new_dict['team_name']=result['team_team_name']
+    else:
+        new_dict['player_id']=result['player_player_id']
+        new_dict['player_name']=result['player_first_name']+" "+result['player_last_name']
+    return new_dict
+
+def build_team_player_results(team_results_dict,player_results_dict, top_6_machines, result, divisions_lookup, team, player_id, team_id, entry_div_id):
+    if team:                
+        if len(team_results_dict[team_id][entry_div_id]['points'])<divisions_lookup[result['entry_division_id']].number_of_relevant_scores:
+            filter_score = get_papa_points_from_rank(result['filter_rank'])
+            team_results_dict[result['team_team_id']][result['entry_division_id']]['points'].append(filter_score)        
+            team_results_dict[result['team_team_id']][result['entry_division_id']]['sum'] = sum(team_results_dict[result['team_team_id']][result['entry_division_id']]['points'])
+            if(result['filter_rank'] < 150):
+                top_6_machines[entry_div_id][team_id].append({'machine_name':result['machine_machine_name'],
+                                                              'machine_abbreviation':result['machine_abbreviation'],
+                                                              'division_machine_id':result['score_division_machine_id'],
+                                                              'rank':result['filter_rank'],
+                                                              'points':filter_score})                
+    else:        
+        if len(player_results_dict[player_id][entry_div_id]['points'])<divisions_lookup[result['entry_division_id']].number_of_relevant_scores:
+            filter_score = get_papa_points_from_rank(result['filter_rank'])
+            player_results_dict[result['player_player_id']][result['entry_division_id']]['points'].append(filter_score)        
+            player_results_dict[result['player_player_id']][result['entry_division_id']]['sum'] = sum(player_results_dict[result['player_player_id']][result['entry_division_id']]['points'])
+            if(result['filter_rank'] < 150):
+                top_6_machines[entry_div_id][player_id].append({'machine_name':result['machine_machine_name'],
+                                                                'machine_abbreviation':result['machine_abbreviation'],
+                                                                'division_machine_id':result['score_division_machine_id'],
+                                                                'rank':result['filter_rank'],
+                                                                'points':filter_score})
+
+def build_team_player_entry_dict(team, team_id_external, team_id, player_id_external, player_id, team_entry_dict, player_entry_dict,
+                                 entry_div_id, result, player_results_dict, team_results_dict):
+    if team:
+        if team_id_external and int(team_id_external) == team_id:
+            team_entry_dict[entry_div_id]['entries'].append(
+                {
+                    'machine_name':result['machine_machine_name'],
+                    'division_machine_id':result['score_division_machine_id'],                        
+                    'score':result['score_score'],
+                    'rank':result['filter_rank'],
+                    'points': get_papa_points_from_rank(result['filter_rank'])
+                }
+            )
+            team_entry_dict[entry_div_id]['sum']=team_results_dict[result['team_team_id']][result['entry_division_id']]['sum']                                
+    else:
+        if player_id_external and int(player_id_external) == player_id:
+            player_entry_dict[entry_div_id]['entries'].append(
+                {
+                    'machine_name':result['machine_machine_name'],
+                    'division_machine_id':result['score_division_machine_id'],                        
+                    'score':result['score_score'],
+                    'rank':result['filter_rank'],
+                    'points': get_papa_points_from_rank(result['filter_rank'])
+                }
+            )
+            player_entry_dict[entry_div_id]['sum']=player_results_dict[result['player_player_id']][result['entry_division_id']]['sum']                
+
+def return_team_results(team_results_dict,sorted_team_list,divisions,ranked_team_list,team_id_external,team_entry_dict,top_6_machines):
+    for team_id,div in team_results_dict.iteritems():
+        for div_id, team in div.iteritems():                
+            sorted_team_list[div_id].append({'team_id':team_id,'sum':team['sum'],'team_name':team['team_name']})
+    for division in divisions:
+        sorted_team_list[division.division_id] = sorted(sorted_team_list[division.division_id], key= lambda e: e['sum'],reverse=True)
+        ranked_team_list[division.division_id] = list(Ranking(sorted_team_list[division.division_id],key=lambda pp: pp['sum']))
+    if team_id_external:
+        for (ranked_division_id,ranked_results) in ranked_team_list.iteritems():
+            for ranked_result in ranked_results:                                
+                if ranked_result[1]['team_id']==int(team_id_external):                    
+                    team_entry_dict[ranked_division_id]['rank']=ranked_result[0]
+        return jsonify({'data':team_entry_dict})        
+    return jsonify({'data':{'top_machines':top_6_machines,'ranked_team_list':ranked_team_list}})        
+
+def return_player_results(player_results_dict,sorted_player_list,divisions,ranked_player_list,player_id_external,player_entry_dict,top_6_machines, return_json, division_id):
+    for player_id,div in player_results_dict.iteritems():
+        for div_id, player in div.iteritems():
+            sorted_player_list[div_id].append({'player_id':player_id,'sum':player['sum'],'player_name':player['player_name'],'ifpa_ranking':player['ifpa_ranking']})
+    for division in divisions:
+        sorted_player_list[division.division_id] = sorted(sorted_player_list[division.division_id], key= lambda e: e['sum'],reverse=True)
+        ranked_player_list[division.division_id] = list(Ranking(sorted_player_list[division.division_id],key=lambda pp: pp['sum']))
+    if player_id_external:
+        for (ranked_division_id,ranked_results) in ranked_player_list.iteritems():
+            for ranked_result in ranked_results:                                
+                if ranked_result[1]['player_id']==int(player_id_external):                    
+                    player_entry_dict[ranked_division_id]['rank']=ranked_result[0]
+        return jsonify({'data':player_entry_dict})        
+    if return_json:
+        top_6_machines_division_only = {key: value for (key, value) in top_6_machines.iteritems() if key == int(division_id)}
+        ranked_player_list_division_only = {key: value for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}
+        #return jsonify({'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}})
+        return jsonify({'data':{'top_machines':top_6_machines_division_only,'ranked_player_list':ranked_player_list_division_only}})
+    else:
+        return {'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}}
+    
+def get_division_results(division_id=None,division_machine_id_external=None,player_id_external=None,team_id_external=None,return_json=True):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    if division_id=="0":
+        division_id=None
+    team=check_if_team(division_id,division_machine_id_external)
+    first_query = get_first_query(division_id,division_machine_id_external,team)
+    second_query = get_herb_second_query(first_query,team)
+    third_query = get_herb_third_query(second_query)
+    fourth_query = get_herb_fourth_query(third_query)
+    results = db.engine.execute(fourth_query)
+    divisions = tables.Division.query.all()
+    divisions_lookup = {division.division_id:division for division in divisions}
+
+    player_results_dict = {}
+    team_results_dict = {}
+    player_entry_dict = {}
+    team_entry_dict={}
+    sorted_player_list = {}
+    sorted_team_list = {}    
+    ranked_player_list = {}
+    ranked_team_list = {}
+    top_6_machines = {}    
+    division_machine_results = []    
+
+    init_dicts(player_results_dict,
+               team_results_dict,
+               sorted_player_list,
+               ranked_player_list,
+               sorted_team_list,
+               ranked_team_list,
+               player_entry_dict,
+               top_6_machines,
+               divisions,
+               division_id,
+               team)    
     for result in results:        
-        new_dict={
-            'division_id':result['entry_division_id'],
-            #'player_id':result['player_player_id'],
-            #'player_name':result['player_first_name']+" "+result['player_last_name'],
-            'machine_name':result['machine_machine_name'],
-            'division_machine_id':result['score_division_machine_id'],
-            'score':result['score_score'],
-            'rank':result['scorerank'],
-            ##'points':result['scorepoints']#,
-            #'filter_points':result['filter_score'],
-            'filter_rank':result['filter_rank']            
-        }
-        if team:
-            new_dict['team_id']=result['team_team_id']
-            new_dict['team_name']=result['team_team_name']
-        else:
-            new_dict['player_id']=result['player_player_id']
-            new_dict['player_name']=result['player_first_name']+" "+result['player_last_name']
+        new_dict = build_new_dict(result,team)
         entry_div_id = result['entry_division_id']
-        score_div_machine_id = result['score_division_machine_id']        
-        return_dict[entry_div_id][score_div_machine_id].append(new_dict)
         if team:
             team_id = result['team_team_id']
+            player_id = None
         else:
             player_id = result['player_player_id']
-        
-        entry_div_id = result['entry_division_id']
+            team_id = None
         if division_machine_id_external:            
-            #for division_machine_result in return_dict[entry_div_id][score_div_machine_id]:
-            division_machine_result = new_dict
-            if team:
-                division_machine_results.append({'team_name':division_machine_result['team_name'],
-                                                 'team_id':division_machine_result['team_id'],
-                                                 'machine_name':division_machine_result['machine_name'],
-                                                 'division_machine_id':division_machine_result['division_machine_id'],
-                                                 'score':division_machine_result['score'],
-                                                 'rank':division_machine_result['filter_rank'],
-                                                 'points': get_papa_points_from_rank(division_machine_result['filter_rank'])})                                
-            else:
-                division_machine_results.append({'player_name':division_machine_result['player_name'],
-                                                 'player_id':division_machine_result['player_id'],
-                                                 'machine_name':division_machine_result['machine_name'],
-                                                 'division_machine_id':division_machine_result['division_machine_id'],
-                                                 'score':division_machine_result['score'],
-                                                 'rank':division_machine_result['filter_rank'],
-                                                 'points': get_papa_points_from_rank(division_machine_result['filter_rank'])})                
-            ## machine view            
+            build_division_machine_results(division_machine_results,new_dict,team)
         if division_machine_id_external is None:
-            if team:
-                #if len(team_results_dict[team_id][entry_div_id]['points'])<3:
-                if len(team_results_dict[team_id][entry_div_id]['points'])<division.number_of_relevant_scores:
-                    filter_score = get_papa_points_from_rank(result['filter_rank'])
-                    team_results_dict[result['team_team_id']][result['entry_division_id']]['points'].append(filter_score)        
-                    team_results_dict[result['team_team_id']][result['entry_division_id']]['sum'] = sum(team_results_dict[result['team_team_id']][result['entry_division_id']]['points'])
-                    if(result['filter_rank'] < 150):
-                        top_6_machines[entry_div_id][team_id].append({'machine_name':result['machine_machine_name'],
-                                                                      'machine_abbreviation':result['machine_abbreviation'],
-                                                                      'division_machine_id':result['score_division_machine_id'],
-                                                                      'rank':result['filter_rank'],
-                                                                      'points':filter_score})                
-            else:
-                #if len(player_results_dict[player_id][entry_div_id]['points'])<3:
-                if len(player_results_dict[player_id][entry_div_id]['points'])<division.number_of_relevant_scores:
-                    filter_score = get_papa_points_from_rank(result['filter_rank'])
-                    player_results_dict[result['player_player_id']][result['entry_division_id']]['points'].append(filter_score)        
-                    player_results_dict[result['player_player_id']][result['entry_division_id']]['sum'] = sum(player_results_dict[result['player_player_id']][result['entry_division_id']]['points'])
-                    if(result['filter_rank'] < 150):
-                        top_6_machines[entry_div_id][player_id].append({'machine_name':result['machine_machine_name'],
-                                                                        'machine_abbreviation':result['machine_abbreviation'],
-                                                                        'division_machine_id':result['score_division_machine_id'],
-                                                                        'rank':result['filter_rank'],
-                                                                        'points':filter_score})
-            if team:
-                if team_id_external and int(team_id_external) == team_id:
-                    team_entry_dict[entry_div_id]['entries'].append(
-                        {
-                            'machine_name':result['machine_machine_name'],
-                            'division_machine_id':result['score_division_machine_id'],                        
-                            'score':result['score_score'],
-                            'rank':result['filter_rank'],
-                            'points': get_papa_points_from_rank(result['filter_rank'])
-                        }
-                    )
-                    team_entry_dict[entry_div_id]['sum']=team_results_dict[result['team_team_id']][result['entry_division_id']]['sum']                                
-            else:
-                if player_id_external and int(player_id_external) == player_id:
-                    player_entry_dict[entry_div_id]['entries'].append(
-                        {
-                            'machine_name':result['machine_machine_name'],
-                            'division_machine_id':result['score_division_machine_id'],                        
-                            'score':result['score_score'],
-                            'rank':result['filter_rank'],
-                            'points': get_papa_points_from_rank(result['filter_rank'])
-                        }
-                    )
-                    player_entry_dict[entry_div_id]['sum']=player_results_dict[result['player_player_id']][result['entry_division_id']]['sum']                
+            build_team_player_results(team_results_dict,player_results_dict, top_6_machines, result, divisions_lookup, team, player_id, team_id, entry_div_id)
+            build_team_player_entry_dict(team, team_id_external, team_id, player_id_external, player_id, team_entry_dict, player_entry_dict,
+                                         entry_div_id, result, player_results_dict, team_results_dict)
     if division_machine_id_external:
         return jsonify({'data': division_machine_results})
     if team:
-        for team_id,div in team_results_dict.iteritems():
-            for div_id, team in div.iteritems():                
-                sorted_team_list[div_id].append({'team_id':team_id,'sum':team['sum'],'team_name':team['team_name']})
-        for division in divisions:
-            sorted_team_list[division.division_id] = sorted(sorted_team_list[division.division_id], key= lambda e: e['sum'],reverse=True)
-            ranked_team_list[division.division_id] = list(Ranking(sorted_team_list[division.division_id],key=lambda pp: pp['sum']))
-        if team_id_external:
-            for (ranked_division_id,ranked_results) in ranked_team_list.iteritems():
-                for ranked_result in ranked_results:                                
-                    if ranked_result[1]['team_id']==int(team_id_external):                    
-                        team_entry_dict[ranked_division_id]['rank']=ranked_result[0]
-            return jsonify({'data':team_entry_dict})        
-        return jsonify({'data':{'top_machines':top_6_machines,'ranked_team_list':ranked_team_list}})        
+        return return_team_results(team_results_dict,sorted_team_list,divisions,ranked_team_list,team_id_external,team_entry_dict,top_6_machines)        
     else:
-        for player_id,div in player_results_dict.iteritems():
-            for div_id, player in div.iteritems():
-                sorted_player_list[div_id].append({'player_id':player_id,'sum':player['sum'],'player_name':player['player_name'],'ifpa_ranking':player['ifpa_ranking']})
-        for division in divisions:
-            sorted_player_list[division.division_id] = sorted(sorted_player_list[division.division_id], key= lambda e: e['sum'],reverse=True)
-            ranked_player_list[division.division_id] = list(Ranking(sorted_player_list[division.division_id],key=lambda pp: pp['sum']))
-        if player_id_external:
-            for (ranked_division_id,ranked_results) in ranked_player_list.iteritems():
-                for ranked_result in ranked_results:                                
-                    if ranked_result[1]['player_id']==int(player_id_external):                    
-                        player_entry_dict[ranked_division_id]['rank']=ranked_result[0]
-            return jsonify({'data':player_entry_dict})        
-        if return_json:
-            top_6_machines_division_only = {key: value for (key, value) in top_6_machines.iteritems() if key == int(division_id)}
-            ranked_player_list_division_only = {key: value for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}
-            #return jsonify({'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}})
-            return jsonify({'data':{'top_machines':top_6_machines_division_only,'ranked_player_list':ranked_player_list_division_only}})
-        else:
-            return {'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}}
+        return return_player_results(player_results_dict,sorted_player_list,divisions,ranked_player_list,player_id_external,player_entry_dict,top_6_machines,return_json,division_id)
 
 
 @admin_manage_blueprint.route('/results/player/<player_id>',methods=['GET'])
 def route_get_player_results(player_id):
     return get_division_results(player_id_external=player_id)
-                       
+
+@admin_manage_blueprint.route('/results/team/<team_id>/division/<division_id>',methods=['GET'])
+def route_get_team_results(team_id,division_id):
+    return get_division_results(team_id_external=team_id,division_id=division_id)
+ 
 @admin_manage_blueprint.route('/results/division/<division_id>',methods=['GET'])
 def route_get_division_results(division_id):    
     return get_division_results(division_id=division_id)

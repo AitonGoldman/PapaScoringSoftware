@@ -25,7 +25,7 @@ angular.module('app.queues.machine_select.machine_queue.add_other_player.process
             other_player_pin:$scope.other_player_pin
         };
         other_player_add = TimeoutResources.AddOtherPlayerToQueue($scope.bootstrap_promise,{site:$scope.site},other_player_data);
-        //Modals.loading();
+        Modals.loading();
         // = TimeoutResources.GetEtcData();
         other_player_add.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

@@ -11,10 +11,10 @@ angular.module('prereg.step1.step2.step3').controller(
         }        
         $scope.utils = Utils;
         $scope.division_ifpa_limits={};
-        $scope.division_ifpa_limits[1]=0;
-        $scope.division_ifpa_limits[2]=500;
-        $scope.division_ifpa_limits[3]=1000;
-        $scope.division_ifpa_limits[4]=1000;        
+        // $scope.division_ifpa_limits[1]=0;
+        // $scope.division_ifpa_limits[2]=500;
+        // $scope.division_ifpa_limits[3]=1000;
+        // $scope.division_ifpa_limits[4]=1000;        
             dev_info = ionic.Platform.device();            
             if (_.size(dev_info)!=0){
                 $scope.is_native=true;          
@@ -34,9 +34,11 @@ angular.module('prereg.step1.step2.step3').controller(
             $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});
             $scope.num_div_allowed=0;
             _.forEach($scope.main_divisions, function(value, key) {
+                $scope.division_ifpa_limits[value.division_id]=value.ifpa_range_start;
                 if($scope.division_ifpa_limits[value.division_id] < $scope.ifpa_ranking){
                     $scope.num_div_allowed=$scope.num_div_allowed+1;
-                }
+                }                
+                
             });       
             Modals.loaded();
         });

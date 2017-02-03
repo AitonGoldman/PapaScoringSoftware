@@ -12,6 +12,7 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5').controller(
         $scope.player_email = $state.params.player_email;        
         $scope.ifpa_ranking = $state.params.ifpa_ranking;
         $scope.linked_division_id = $state.params.linked_division_id;
+	$scope.linked_division_name=$state.params.linked_division_name;
         $scope.uploaded_file_name = $state.params.uploaded_file_name;        
         $scope.utils = Utils;
         $scope.player_info = {};
@@ -35,10 +36,15 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5').controller(
             //$scope.stripe_dialog();
         });
 
-        $scope.stripe_dialog = function(){
+        $scope.stripe_dialog = function(){            
+            Modals.loading();                
             var handler = StripeCheckout.configure({
                 key: $scope.stripe_public_key,
                 image: 'https://www.pbchallenge.net/pics/resize_pinball.png',
+                opened: function(){
+                    Modals.loaded();                
+                },
+                
                 locale: 'auto',
                 token: function(token) {                    
                     //$scope.ticket_purchase_in_progress = true;                    

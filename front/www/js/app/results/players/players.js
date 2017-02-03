@@ -9,7 +9,7 @@ angular.module('app.results.players').controller(
         $scope.utils = Utils;
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        players_promise = TimeoutResources.GetPlayersFast($scope.bootstrap_promise,{site:$scope.site});        
+        players_promise = TimeoutResources.GetFromResultsPlayersFast($scope.bootstrap_promise,{site:$scope.site});        
         players_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.flat_players = _.values($scope.resources.players.data);

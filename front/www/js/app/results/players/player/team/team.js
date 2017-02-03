@@ -10,7 +10,7 @@ angular.module('app.results.players.player.team').controller(
 
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-        player_promise = TimeoutResources.GetPlayer($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
+        player_promise = TimeoutResources.GetFromResultsPlayer($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});
         results_promise = TimeoutResources.GetTeamResults(player_promise,{site:$scope.site,team_id:$scope.team_id});
         results_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

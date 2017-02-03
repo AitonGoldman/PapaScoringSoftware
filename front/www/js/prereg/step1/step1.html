@@ -5,7 +5,7 @@
       Step 1 : Enter your information
     </div>
     <div class="item item-text-wrap">
-      Note : It is important that you use a REAL email address that you have access to.  Email with instructions on how to complete Pre-Registration will be sent to this address.      
+      Note : It is important that you use a REAL email address that you have access to.  Email with instructions on how to complete registration will be sent to this address.      
       <div class="list">
         <form name='myForm'>
         <label class="item item-input item-floating-label">
@@ -20,16 +20,25 @@
           <span class="input-label">Email</span>
           <input ng-model='player.email' type="email" placeholder="Email">
         </label>
-        <label class="item item-input item-floating-label">
+        <label class="item item-input item-select">
+          <div class="input-label">
+            T-Shirt Size
+          </div>
+          <select ng-model='player.tshirt_size'>
+            <option value="">Select Size</option>
+            <option ng-repeat="tshirt in ['Small','Med','Large','Xlarge','XXlarge','XXXlarge']" value="{{tshirt}}">{{tshirt}}</option>            
+          </select>
+        </label>
+        <!--        <label class="item item-input item-floating-label">
           <span class="input-label">T-shirt size</span>
           <input ng-model='player.tshirt_size' type="text" placeholder="T-Shirt size">
-        </label>        
+        </label>        -->
         <label class="item item-input item-floating-label">
         </label>
         </form>
       </div>
       <button style='float:left;margin-bottom:25px;margin-top:25px' ui-sref='.^' class='button button-calm'> Back </button>      
-      <button ng-disabled='utils.var_empty(player.first_name) || utils.var_empty(player.last_name) || utils.var_empty(player.email) || myForm.$valid == false' style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step2({player_first_name:player.first_name,player_last_name:player.last_name,player_email:player.email,player_shirt_size:player.tshirt_size})' class='button button-calm'> Next </button>
+      <button ng-disabled='utils.var_empty(player.first_name) || utils.var_empty(player.last_name) || utils.var_empty(player.email) || myForm.$valid == false || player.tshirt_size == null' style='float:right;margin-bottom:25px;margin-top:25px;' ui-sref='.step2({player_first_name:player.first_name,player_last_name:player.last_name,player_email:player.email,player_shirt_size:player.tshirt_size})' class='button button-calm'> Next </button>
     </div>
   </div>
 </div>

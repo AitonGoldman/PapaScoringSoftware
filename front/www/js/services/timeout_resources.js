@@ -137,18 +137,23 @@ angular.module('TD_services.timeout_resources')
                       var url_params = $location.search();
                       if(url_params.host != undefined){
                           api_url=http_prefix+'://'+url_params.host+':'+server_port+'/';
+                          results_url=http_prefix+'://'+url_params.host+':'+server_port+'/';
                           api_host.set_api_host(api_url);
-                          api_host.set_results_host(api_url);                          
+                          api_host.set_results_host(results_url);                          
                       } else {
                           var ip_start = $location.absUrl().indexOf('//')+2;
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
+                          var results_ip = ip;
                           if(ip == undefined || ip == ""){
-                              ip=server_ip_address;                              
+                              ip=server_ip_address;
+                              results_ip=results_ip_address;
                           }
                           api_url=http_prefix+'://'+ip+':'+server_port+'/';
+                          results_url=http_prefix+'://'+results_ip+':'+server_port+'/';
+                          
                           api_host.set_api_host(api_url);                          
-                          api_host.set_results_host(api_url);
+                          api_host.set_results_host(results_url);
                       }
                   };
 
@@ -178,8 +183,14 @@ angular.module('TD_services.timeout_resources')
                                                                                               'GET');
                   var getPlayersResource = generate_resource_definition(':site/player/:player_id',
                                                                         'GET');
+                  var getFromResultsPlayerResource = generate_resource_definition(':site/player/:player_id',
+                                                                                  'GET',undefined,true);
+                  
                   var getPlayersFastResource = generate_resource_definition(':site/test/player_fast',
-                                                                        'GET');
+                                                                            'GET');
+                  var getFromResultsPlayersFastResource = generate_resource_definition(':site/test/player_fast',
+                                                                                       'GET',undefined,true);
+                  
                   var getPlayersPreregFastResource = generate_resource_definition(':site/test/player_prereg_fast',
                                                                         'GET');
                   
@@ -220,6 +231,9 @@ angular.module('TD_services.timeout_resources')
                                                                            'POST');                                     
                   var getDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                                  'GET');
+                  var getFromResultsDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
+                                                                                            'GET',undefined,true);
+                  
                   var getAllDivisionMachinesResource = generate_resource_definition(':site/division_machine',
                                                                                  'GET');                  
                   var getMachinesResource = generate_resource_definition(':site/machine',
@@ -283,13 +297,15 @@ angular.module('TD_services.timeout_resources')
                       GetEvents: generate_custom_http_executor(getEventsResource,'events','get'),
                       GetStripePublicKey: generate_custom_http_executor(getStripePublicKeyResource,'stripe_public_key','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
-                      GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
+                      GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),                      
                       GetPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),
+                      GetFromResultsPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),                      
                       GetPlayersPreregFast: generate_custom_http_executor(getPlayersPreregFastResource,'players','get'),
                       GetPlayersWithTicketsForDivision: generate_custom_http_executor(getPlayersWithTicketsForDivisionResource,'players_with_tickets','get'),
                       GetPlayerBestScoreForMachine: generate_custom_http_executor(getPlayerBestScoreForMachineResource,'player_best_score_for_machine','get'),
                       GetTeams: generate_custom_http_executor(getTeamsResource,'teams','get'),                      
-                      GetPlayer: generate_custom_http_executor(getPlayersResource,'player','get'),                      
+                      GetPlayer: generate_custom_http_executor(getPlayersResource,'player','get'),
+                      GetFromResultsPlayer: generate_custom_http_executor(getFromResultsPlayerResource,'player','get'),                                            
                       GetJagoffs: generate_custom_http_executor(getJagoffsResource,'jagoffs','get'),                                            
                       AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
                       AddTokens: generate_custom_http_executor(addTokensResource,'added_tokens','post'),
@@ -312,6 +328,7 @@ angular.module('TD_services.timeout_resources')
                       AddPlayerToMachineFromQueue: generate_custom_http_executor(addPlayerToMachineFromQueueResource,'machine_added_to','post'),
                       DeleteDivisionMachine: generate_custom_http_executor(deleteDivisionMachineResource,'deleted_division_machine','get'),
                       GetDivisionMachines: generate_custom_http_executor(getDivisionMachinesResource,'division_machines','get'),
+                      GetFromResultsDivisionMachines: generate_custom_http_executor(getFromResultsDivisionMachinesResource,'division_machines','get'),                      
                       GetAllDivisionMachines: generate_custom_http_executor(getAllDivisionMachinesResource,'all_division_machines','get'), 
                       UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post'),
                       GetIfpaRanking: generate_custom_http_executor(getIfpaRankingResource,'ifpa_rankings','get'),                      

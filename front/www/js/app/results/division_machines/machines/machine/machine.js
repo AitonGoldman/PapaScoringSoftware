@@ -14,13 +14,13 @@ angular.module('app.results.division_machines.machines.machine').controller(
         
         results_promise = TimeoutResources.GetDivisionMachineResults($scope.bootstrap_promise,
                                                                      {site:$scope.site,division_machine_id:$scope.division_machine_id});
-        division_machines_promise = TimeoutResources.GetDivisionMachines(results_promise,{site:$scope.site,division_id:$scope.division_id});        
+        //division_machines_promise = TimeoutResources.GetDivisionMachines(results_promise,{site:$scope.site,division_id:$scope.division_id});        
         
         Modals.loading();        
-        division_machines_promise.then(function(data){
+        results_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
-            $scope.resources.division_machines.data["-1"]=$scope.jump_to_division_machine.data;
+            //$scope.resources.division_machines.data["-1"]=$scope.jump_to_division_machine.data;
             Modals.loaded();            
         });
 

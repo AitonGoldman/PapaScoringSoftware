@@ -5,7 +5,7 @@ angular.module('prereg.step1').controller(
         '$scope','$state','TimeoutResources','Utils','Modals',
         function($scope, $state, TimeoutResources, Utils,Modals) {
             $scope.site=$state.params.site;
-            $scope.player_info = {};
+            $scope.player = {tshirt_size:null};
             $scope.utils = Utils;
             //$scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
             

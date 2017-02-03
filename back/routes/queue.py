@@ -34,6 +34,7 @@ def get_queues(division_id):
         queues[division_machine.division_machine_id]={
             'division_machine_name':"%s"%division_machine.machine.machine_name,
             'division_machine_id':division_machine.division_machine_id,
+            'removed':division_machine.removed,
             'division_id':division_machine.division_id,
             'player_id':division_machine.player_id,
             'avg_play_time':division_machine.avg_play_time,

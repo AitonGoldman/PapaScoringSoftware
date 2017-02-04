@@ -53,6 +53,7 @@ app.controller(
     function($scope, $location, $http, 
              $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory,$ionicSideMenuDelegate) {
         //$scope.type_of_page = type_of_page;
+        $scope.utils = Utils;
         if(ionic.Platform.isWebView() == false && type_of_page != 'prereg'){
             if ($location.absUrl().includes('player.html#')!=true){
                 $scope.type_of_page = 'user';
@@ -139,6 +140,7 @@ app.controller(
         }        
         $scope.User = User;
         $scope.isIOS = ionic.Platform.isIOS();
+        $scope.isWebView = ionic.Platform.isWebView();        
         //FIXME : don't need this anymore
         if($scope.isIOS == true){
             $scope.menu_bar_title_style={'height':'100'};

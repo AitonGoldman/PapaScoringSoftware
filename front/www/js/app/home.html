@@ -81,7 +81,7 @@
         <a ng-if="User.logged_in() == true && User.has_role('scorekeeper')" class="item item-divider">
           &nbsp;
         </a>        
-        <a id='menu_remove_player_link' class='item item-icon-right' menu-close ui-sref='.remove_player' ng-if="User.logged_in() == true && User.has_role('scorekeeper')">          
+        <a id='menu_remove_player_link' class='item item-icon-right' menu-close ui-sref='.remove_player' ng-if="User.logged_in() == true && User.has_role('scorekeeper')">
           <div>
             Remove Player
           </div>
@@ -104,13 +104,28 @@
             Finals
           </div>
           <i class="icon ion-chevron-right"></i>
-        </a>                        
+        </a>
+        <a ng-if="User.logged_in() == true" class="item item-divider">
+          &nbsp;
+        </a>
+        <a class='item item-icon-right' menu-close href='static/help.html' ng-if="isWebView != true" target="_new_window">
+          <div>
+            Help
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        <div class='item item-icon-right' ng-click="utils.native_open_in_browser('/static/help.html')" ng-if="isWebView == true">
+          <div>
+            Help
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </div>        
         <a id='menu_logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
           <div>
             Logout
           </div>
           <i class="icon ion-chevron-right"></i>
-        </a>
+        </a>        
         
       </ion-list>
     </ion-content>

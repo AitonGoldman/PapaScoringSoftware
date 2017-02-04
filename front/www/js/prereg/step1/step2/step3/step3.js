@@ -5,7 +5,9 @@ angular.module('prereg.step1.step2.step3').controller(
         '$scope','$state','TimeoutResources','Utils','Modals',
         function($scope, $state, TimeoutResources, Utils,Modals) {
         $scope.site=$state.params.site;
-        $scope.ifpa_ranking=$state.params.ifpa_ranking;
+            $scope.ifpa_ranking=$state.params.ifpa_ranking;
+        $scope.isWebView = ionic.Platform.isWebView();        
+            
         if($scope.ifpa_ranking == ""){
             $scope.ifpa_ranking = 999999999;
         }        

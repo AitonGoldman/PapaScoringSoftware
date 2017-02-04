@@ -5,11 +5,11 @@
       Step 4 : Upload Player Picture 
     </div>
     <div class="item item-text-wrap">
-      This step will allow you to upload a picture of yourself. It must be a picture of you face from the neck up.<br><br>
+      In this step, you must upload a picture of yourself. <span style='background-color:red'>&nbsp;It must be a picture of your face from the neck up.&nbsp;</span><br><br>
       This will be used by scorekeepers and deskworkers to identify you.<br><br>
       <!-- For more information on why, see <a ng-if='is_native == false' href="/td/static/prereg-photos.html" target="_new_window"> this.</a> <a ng-if='is_native == true' ng-click='utils.native_open_in_browser("/td/static/prereg-photos.html")'> this.</a><br><br> -->
       <div>
-        Please use the "Choose Files" button to select a photo, and then click the "Upload" button. <br><br>
+        Please use the "Choose Files" button to select a photo (or on a phone, take a picture), and then click the "Upload" button. <br><br>
         <form name="upload" class="form" data-ng-submit="addFile()">
           <input type="file" name="file" multiple 
                  onchange="angular.element(this).scope().uploadedFile(this)"

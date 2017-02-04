@@ -7,6 +7,7 @@ angular.module('prereg').controller(
         $scope.site=$state.params.site;
 
         $scope.utils = Utils;
+        $scope.isWebView = ionic.Platform.isWebView();        
              
         //Modals.loading();
         // = TimeoutResources.GetEtcData();

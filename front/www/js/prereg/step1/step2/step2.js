@@ -9,6 +9,7 @@ angular.module('prereg.step1.step2').controller(
         $scope.player_last_name=$state.params.player_last_name;
         $scope.player_email = $state.params.player_email;
         $scope.utils = Utils;
+        $scope.isWebView = ionic.Platform.isWebView();        
         $scope.ifpa_result_selected = {};
         $scope.get_ifpa_ranking = function(){
             player_name = $scope.player_first_name+$scope.player_last_name;

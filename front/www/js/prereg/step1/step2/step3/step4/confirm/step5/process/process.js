@@ -8,6 +8,7 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5.process').controlle
 	$scope.player_id=$state.params.player_id;
 	$scope.player_email=$state.params.player_email;        
 	$scope.player_cc_email=$state.params.player_cc_email;        
+        $scope.isWebView = ionic.Platform.isWebView();        
 
 	$scope.linked_division_id=$state.params.linked_division_id;
 	$scope.uploaded_file_name=$state.params.uploaded_file_name;

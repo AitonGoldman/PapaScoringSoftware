@@ -14,6 +14,7 @@ angular.module('prereg.step1.step2.step3.step4.confirm').controller(
         $scope.ifpa_ranking = $state.params.ifpa_ranking;        
         $scope.uploaded_file_name = $state.params.uploaded_file_name;        
         $scope.player_shirt_size = $state.params.player_shirt_size;        
+        $scope.isWebView = ionic.Platform.isWebView();        
 
         $scope.utils = Utils;
 

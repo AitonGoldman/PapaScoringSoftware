@@ -22,6 +22,7 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5').controller(
             $scope.ifpa_ranking = 99999999;
         }
         $scope.player_info['ifpa_ranking']=$scope.ifpa_ranking;
+        $scope.isWebView = ionic.Platform.isWebView();        
         
         $scope.player_info['email_address']=$scope.player_email;
         $scope.player_info['linked_division_id']=$scope.linked_division_id;

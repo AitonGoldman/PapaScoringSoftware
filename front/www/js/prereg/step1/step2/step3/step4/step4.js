@@ -10,6 +10,8 @@ angular.module('prereg.step1.step2.step3.step4').controller(
             if (_.size(dev_info)!=0){
                 $scope.is_native=true;          
             }                
+            $scope.isWebView = ionic.Platform.isWebView();        
+
             
         $scope.utils = Utils;
         //$scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                

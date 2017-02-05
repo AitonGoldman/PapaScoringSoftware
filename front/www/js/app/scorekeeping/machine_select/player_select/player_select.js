@@ -14,6 +14,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             $scope.division_machine_name=$state.params.division_machine_name;
             $scope.player_id = $state.params.player_id;
             $scope.player_name = $state.params.player_name;
+	    $scope.hide_back_button=$state.params.hide_back_button;
 
             $scope.utils = Utils;
             $scope.queues = [];

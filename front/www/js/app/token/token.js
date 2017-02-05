@@ -5,6 +5,7 @@ angular.module('app.token').controller(
         '$scope','$state','TimeoutResources','Utils','Modals','$filter','$animate',
         function($scope, $state, TimeoutResources, Utils,Modals,$filter,$animate) {
             $animate.enabled(false);
+            $scope.hide_back_button=$state.params.hide_back_button;
             $scope.test_submit = function(){
                 if($scope.selected_players.length != 0){
                     console.log($scope.selected_players[0]);

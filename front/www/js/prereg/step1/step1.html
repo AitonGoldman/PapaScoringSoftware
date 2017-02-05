@@ -5,18 +5,17 @@
       Step 1 : Enter your information
     </div>
     <div class="item item-text-wrap">
-      <span style='background-color:red'>WARNING</span> : You must use a REAL email address that you have access to.  Email with instructions on how to complete registration will be sent to this address.      
       <div class="list">
         <form name='myForm'>
-        <label class="item item-input item-floating-label">
+        <label class="item item-input">
           <span class="input-label">First Name</span>
           <input ng-model='player.first_name' type="text" placeholder="First Name">
         </label>
-        <label class="item item-input item-floating-label">
+        <label class="item item-input ">
           <span class="input-label">Last Name</span>
           <input ng-model='player.last_name' type="text" placeholder="Last Name">
         </label>
-        <label class="item item-input item-floating-label">
+        <label class="item item-input ">
           <span class="input-label">Email</span>
           <input ng-model='player.email' type="email" placeholder="Email">
         </label>
@@ -37,6 +36,9 @@
         </label>
         </form>
       </div>
+      <span style='background-color:red'>WARNING</span> : You must use a REAL email address that you have access to.  Email with instructions on how to complete registration will be sent to this address.
+      <br>
+      <br>
       <button style='float:left;margin-bottom:25px;margin-top:0px' ui-sref='.^' class='button button-calm'> Back </button>      
       <button ng-disabled='utils.var_empty(player.first_name) || utils.var_empty(player.last_name) || utils.var_empty(player.email) || myForm.$valid == false || player.tshirt_size == null' style='float:right;margin-bottom:25px;margin-top:0px;' ui-sref='.step2({player_first_name:player.first_name,player_last_name:player.last_name,player_email:player.email,player_shirt_size:player.tshirt_size})' class='button button-calm'> Next </button>
     </div>

@@ -14,12 +14,12 @@
         <b>{{division_machine.division_machine_name}}</b> <br class='mobile-show'> <span ng-if='division_machine.avg_play_time!=undefined'> Avg Time : {{division_machine.avg_play_time}}</span>
         <i class="icon ion-chevron-right"></i>        
       </a>
-      <button class="button button-full button-calm item-icon-right small_seperate_button" ui-sref='^.scorekeeping.machine_select({division_id:division_id})'>
+      <button class="button button-full button-calm item-icon-right small_seperate_button" ui-sref='^.scorekeeping.machine_select({division_id:division_id,hide_back_button:true})'>
         <span>Return to machine list</span>
         <i class='icon ion-chevron-right'></i>        
       </button>
-      <button id='HomeButton' class='button button-full button-calm item-icon-right small_seperate_button' ui-sref="app.scorekeeping.machine_select.player_select({division_machine_id:division_machine_just_played_id,division_machine_name:division_machine_just_played_name,division_id:division_id,team_tournament:false})">
-        <span>Add New Player To Current Machine</span>
+      <button id='HomeButton' class='button button-full button-calm item-icon-right small_seperate_button' ui-sref="app.scorekeeping.machine_select.player_select({division_machine_id:division_machine_just_played_id,division_machine_name:division_machine_just_played_name,division_id:division_id,team_tournament:false,hide_back_button:true})">
+        <span>Add New Player To {{division_machine_just_played_name}}</span>
         <i class="icon ion-chevron-right"></i>
       </button>          
       

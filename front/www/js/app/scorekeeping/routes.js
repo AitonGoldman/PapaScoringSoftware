@@ -18,7 +18,9 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       templateUrl: 'js/app/scorekeeping/machine_select/machine_select.html',
  	       controller: 'app.scorekeeping.machine_select'
  	     }
- 	   }
+ 	   }, params: {             
+             hide_back_button:false             
+          }
        }).state('app.scorekeeping.machine_select.player_select', 
         { 
          cache: false,
@@ -28,7 +30,9 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       templateUrl: 'js/app/scorekeeping/machine_select/player_select/player_select.html',
  	       controller: 'app.scorekeeping.machine_select.player_select'
  	     }
- 	   }
+ 	   }, params: {             
+             hide_back_button:false             
+          }
        }).state('app.scorekeeping.machine_select.player_select.process', 
         { 
          cache: false,

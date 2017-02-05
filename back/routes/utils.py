@@ -17,13 +17,14 @@ def check_player_is_on_device(player_id):
         return True
     return False
 
-def get_player_list_to_notify(player_id,division_machine):
-    queue_for_machine = get_queue_from_division_machine(division_machine,True)
-    queue_item_for_player = next(x for x in queue_for_machine if x['player_id'] == player_id)
+def get_player_list_to_notify(player_id,division_machine):    
+    queue_for_machine = get_queue_from_division_machine(division_machine,True)    
+    queue_item_for_player = next(queue_dict for queue_dict in queue_for_machine if int(queue_dict['player_id']) == int(player_id))    
     # we are interested in the queue_item_index after the current head of the queue, so
-    # we don't change the position we get back into an index (i.e. subtract one)
+    # we don't change the position we get back into an index (i.e. subtract one)    
     queue_item_index = int(queue_item_for_player['queue_position'])
     players_to_alert = queue_for_machine[queue_item_index:]
+    
     players_to_alert_filtered = [player_to_alert for player_to_alert in players_to_alert if check_player_is_on_device(player_to_alert['player_id'])]
     return players_to_alert_filtered
 

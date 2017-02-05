@@ -146,6 +146,10 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
     tables = db_util.app_db_tables(current_app)                            
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)        
     player = fetch_entity(tables.Player,player_id)
+    if division_machine.division.active is False:
+        raise Conflict("Division is not active.")                
+    if division_machine.removed is True:
+        raise Conflict("Machine is not active.  You have been very naughty.")        
     if player.active is False:
         raise Conflict('Player is not active.  Please see the front desk.')        
     if division_machine.player_id or division_machine.team_id:

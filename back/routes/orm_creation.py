@@ -117,8 +117,8 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discou
             new_tournament_data['discount_ticket_count']=discount_ticket_counts[division_name]
         elif 'discount_stripe_sku' in new_tournament_data:
             new_tournament_data.pop('discount_stripe_sku')
-        new_tournament_data['division_name']=division_name
-        new_division = create_division(app,new_tournament_data)
+        new_tournament_data['division_name']=division_name        
+        new_division = create_division(app,new_tournament_data)        
         db.session.commit()
         new_tournament.divisions.append(new_division)
         db.session.commit()        
@@ -150,7 +150,7 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discou
         new_team_tournament_data['discount_stripe_sku']=discount_stripe_skus["Split Flipper"]
         new_team_tournament_data['discount_ticket_count']=discount_ticket_counts["Split Flipper"]
         
-    new_tournament = create_tournament(app,new_team_tournament_data)
+    new_tournament = create_tournament(app,new_team_tournament_data)    
     new_classics_tournament_data = {'single_division':True,
                                     'active':True,
                                     'team_tournament':False,
@@ -279,7 +279,9 @@ def create_division(app,division_data):
         division_name = division_data["division_name"],
         finals_num_qualifiers = division_data['finals_num_qualifiers'],
         tournament_id=division_data["tournament_id"]
-    )        
+    )
+    if 'active' in division_data:
+        new_division.active=division_data['active']
     if division_data['scoring_type'] == "HERB":
         new_division.number_of_scores_per_entry=1
     if 'use_stripe' in division_data and division_data['use_stripe']:
@@ -391,14 +393,12 @@ def create_ticket_purchase(app,
     else:
         discount_count = 0
         normal_count = ticket_count
-    if discount_count > 0:
-        print "discount count is happening : %s"% discount_count
+    if discount_count > 0:        
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id,purchase_summary_id)    
         ticket_purchase.amount=discount_count
         ticket_purchase.description="%s"%discount_for
         db.session.add(ticket_purchase)        
-    if normal_count > 0:
-        print "count is happening : %s"% normal_count
+    if normal_count > 0:        
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id,purchase_summary_id)    
         ticket_purchase.amount=normal_count
         ticket_purchase.description="1"
@@ -459,10 +459,11 @@ def create_queue(app,division_machine_id,player_id,bumped=None):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
     division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=division_machine_id).first()
+    queue_node = division_machine.queue        
     new_queue = tables.Queue(
         division_machine_id=division_machine_id,
         player_id=player_id
-    )        
+    )
     db.session.add(new_queue)
     db.session.commit()
     bump_num = int(app.td_config['QUEUE_BUMP_AMOUNT'])        
@@ -480,13 +481,13 @@ def create_queue(app,division_machine_id,player_id,bumped=None):
         return new_queue
     if division_machine.queue_id is None:
         division_machine.queue_id=new_queue.queue_id
-        db.session.commit()
+        db.session.commit()        
         return new_queue
     queue_node = division_machine.queue        
     while len(queue_node.queue_child) > 0:        
         queue_node = queue_node.queue_child[0]
     new_queue.parent_id = queue_node.queue_id
-    db.session.commit()
+    db.session.commit()    
     return new_queue
         
 #def create_entry(app,player_id,division_machine_id,division_id,score):

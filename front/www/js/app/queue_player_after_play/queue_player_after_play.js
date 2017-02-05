@@ -10,7 +10,9 @@ angular.module('app.queue_player_after_play').controller(
 	$scope.player_name=$state.params.player_name;
         //FIXME : need to add this info at the scorekeeping route level
         $scope.division_name=$state.params.division_name;
-        $scope.division_machine_just_played_id=$state.params.division_machine_just_played_id;
+            $scope.division_machine_just_played_id=$state.params.division_machine_just_played_id;
+            $scope.division_machine_just_played_name=$state.params.division_machine_just_played_name;
+            
         $scope.utils = Utils;
         $scope.queueing_available = false;
         Modals.loading();

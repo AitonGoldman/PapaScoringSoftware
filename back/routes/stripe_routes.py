@@ -13,6 +13,7 @@ from orm_creation import create_ticket_purchase, create_purchase_summary
 import os
 import sendgrid
 from sendgrid.helpers.mail import *
+import time
 
 @admin_manage_blueprint.route('/stripe/public_key', methods=['GET'])
 def get_public_key():
@@ -165,17 +166,14 @@ def start_pre_reg_sale():
         return jsonify({"data":"FAILURE"})            
     
 
-@admin_manage_blueprint.route('/stripe', methods=['POST'])
-@login_required
-@Token_permission.require(403)
-def start_sale():
+def do_stripe_sale(stripe_token):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    stripe_token = json.loads(request.data)['stripeToken']
+    #stripe_token = json.loads(request.data)['stripeToken']
     added_token_count = json.loads(request.data)['addedTokens']
     tokens = json.loads(request.data)['tokens']
     email = json.loads(request.data)['email']    
-    stripe.api_key = current_app.td_config['STRIPE_API_KEY']
+    #stripe.api_key = current_app.td_config['STRIPE_API_KEY']
     division_skus={}
     discount_division_skus={}
     metadivision_skus={}
@@ -271,5 +269,135 @@ def start_sale():
     except stripe.error.CardError as e:
         # The card has been declined        
         return jsonify({"data":"FAILURE"})        
+
+@admin_manage_blueprint.route('/stripe/test_player_purchase/<output_file_num>', methods=['POST'])
+@login_required
+@Token_permission.require(403)
+def start_test_sale(output_file_num):
+    stripe.api_key = current_app.td_config['STRIPE_API_KEY']
+    stripe_tokens = []
+    for i in range(int(output_file_num)):
+        stripe_token = stripe.Token.create(
+            card={
+                "number": '4242424242424242',
+                "exp_month": 12,
+                "exp_year": 2018,
+                "cvc": '123'
+            },
+        ).id
+        f = open('/tmp/tokens_%s.json' % i,'w')
+        f.write(json.dumps({'stripe_token':stripe_token}))
+        f.close()
+    return jsonify({})
+    
+@admin_manage_blueprint.route('/stripe', methods=['POST'])
+@login_required
+@Token_permission.require(403)
+def start_sale():
+    stripe_token = json.loads(request.data)['stripeToken']    
+    stripe.api_key = current_app.td_config['STRIPE_API_KEY']
+    return do_stripe_sale(stripe_token)
+    
+    # db = db_util.app_db_handle(current_app)
+    # tables = db_util.app_db_tables(current_app)
+    # stripe_token = json.loads(request.data)['stripeToken']
+    # added_token_count = json.loads(request.data)['addedTokens']
+    # tokens = json.loads(request.data)['tokens']
+    # email = json.loads(request.data)['email']    
+    # stripe.api_key = current_app.td_config['STRIPE_API_KEY']
+    # division_skus={}
+    # discount_division_skus={}
+    # metadivision_skus={}
+    # discount_metadivision_skus={}
+    
+    # for division in tables.Division.query.all():        
+    #     division_skus[division.division_id]=division.stripe_sku
+    #     discount_division_skus[division.division_id]=division.discount_stripe_sku
+
+    # #FIXME : need to associate a cost with metadiv directly
+    # for metadivision in tables.MetaDivision.query.all():
+    #     metadivision_skus[metadivision.meta_division_id]=metadivision.stripe_sku
+    #     discount_metadivision_skus[metadivision.meta_division_id]=metadivision.discount_stripe_sku
         
+    # stripe_items=[]
+    # for division_id,num_tokens in added_token_count['divisions'].iteritems():        
+    #     if int(num_tokens[0]) > 0:
+    #         ticket_count = int(num_tokens[0])
+    #         build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_division_skus,int(division_id))            
+                         
+    # for metadivision_id,num_tokens in added_token_count['metadivisions'].iteritems():        
+    #     if int(num_tokens[0]) > 0:            
+    #         ticket_count = int(num_tokens[0])            
+    #         build_stripe_purchases(ticket_count,stripe_items,metadivision_skus,discount_metadivision_skus,metadivision_id=int(metadivision_id))            
+            
+    # for division_id,num_tokens in added_token_count['teams'].iteritems():        
+    #     if int(num_tokens[0]) > 0:            
+    #         ticket_count = int(num_tokens[0])
+    #         build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_division_skus,int(division_id))            
+    # try:
+    #     order = stripe.Order.create(
+    #         currency="usd",
+    #         email=email,
+    #         items=stripe_items
+    #     )
+    #     order_response=order.pay(
+    #         source=stripe_token 
+    #     )
+    #     order_id_string =  "order_id %s, " % order_response.id
+    #     stripe_purchase_summary_string = order_id_string
+    #     purchase_summary = create_purchase_summary(current_app,
+    #                                                current_user.player.player_id,
+    #                                                use_stripe=True,
+    #                                                stripe_charge_id=order_response.charge)
+    #     for division_id,num_tokens in added_token_count['divisions'].iteritems():        
+    #         if int(num_tokens[0]) > 0:
+    #             create_ticket_purchase(current_app,
+    #                                    num_tokens[0],
+    #                                    current_user.player.player_id,
+    #                                    current_user.user_id,
+    #                                    purchase_summary.purchase_summary_id,                                       
+    #                                    division_id=division_id)#,
+    #                                    #use_stripe=True,
+    #                                    #stripe_charge_id=order_response.charge)
+    #     for metadivision_id,num_tokens in added_token_count['metadivisions'].iteritems():        
+    #         if int(num_tokens[0]) > 0:            
+    #             create_ticket_purchase(current_app,
+    #                                    num_tokens[0],
+    #                                    current_user.player.player_id,
+    #                                    current_user.user_id,
+    #                                    purchase_summary.purchase_summary_id,                                       
+    #                                    metadivision_id=metadivision_id)#,
+    #                                    #use_stripe=True,
+    #                                    #stripe_charge_id=order_response.charge)
+    #     for division_id,num_tokens in added_token_count['teams'].iteritems():        
+    #         if int(num_tokens[0]) > 0:            
+    #             create_ticket_purchase(current_app,
+    #                                    num_tokens[0],
+    #                                    current_user.player.player_id,
+    #                                    current_user.user_id,
+    #                                    purchase_summary.purchase_summary_id,                                       
+    #                                    division_id=division_id)#,
+    #                                    #use_stripe=True,
+    #                                    #stripe_charge_id=order_response.charge)
+    #     for json_token in tokens:            
+    #         token = tables.Token.query.filter_by(token_id=json_token['token_id']).first()            
+    #         token.paid_for=True
+    #         db.session.commit()
+
+    #     create_audit_log("Player Ticket Purchase Completed",datetime.datetime.now(),
+    #                      stripe_purchase_summary_string,user_id=current_user.user_id,
+    #                      player_id=current_user.player.player_id)    
+        
+    #     if len(current_user.player.teams) > 0:
+    #         team_id = current_user.player.teams[0].team_id
+    #     else:
+    #         team_id = None
+    #     tokens_left_string = calc_audit_log_remaining_tokens(current_user.player.player_id,team_id)        
+    #     create_audit_log("Ticket Summary",datetime.datetime.now(),
+    #                      tokens_left_string,
+    #                      player_id=current_user.player.player_id)       
+    #     return jsonify({"data":"success"})
+    # except stripe.error.CardError as e:
+    #     # The card has been declined        
+    #     return jsonify({"data":"FAILURE"})
 

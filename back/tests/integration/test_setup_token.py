@@ -10,6 +10,11 @@ import time
 
 
 class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
+    def check_request_success(self,action,rv):
+        if rv.status != "200 OK":
+            print rv.status
+            print "could not %s\n %s"%(action,rv.data)
+        
     def setUp(self):
         super(SetupTokenTD,self).setUp()
         response,results = self.dispatch_request('/%s/util/healthcheck' % self.poop_db_name)                
@@ -75,42 +80,66 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
                 else:
                     tokens["teams"]={5:[0,0]}
                 rv = c.post('/token/paid_for/1',
-                            data=json.dumps(tokens))                
-                print rv.status
-                while num_entries < 8:                    
+                            data=json.dumps(tokens))
+                self.check_request_success("buy tickets",rv)
+                while num_entries < 4:                    
                     if player_num<100:
                         for division_machine in division_machines[1][0:]:                        
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/1/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            self.check_request_success("add player to machine",rv)
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
+                            self.check_request_success("record score",rv)
+                             
                     if player_num>=100 and player_num < 200:
                         for division_machine in division_machines[2]:                        
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/2/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            self.check_request_success("add player to machine",rv)
+
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
+                            self.check_request_success("record score",rv)
+
                     if player_num>=200 and player_num < 300:
                         for division_machine in division_machines[3]:                        
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/3/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            self.check_request_success("add player to machine",rv)
+
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
+                            self.check_request_success("record score",rv)
+
+
                     if player_num>=300 and player_num < 400:
                         for division_machine in division_machines[4]:                        
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/4/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            self.check_request_success("add player to machine",rv)
+
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
+                            self.check_request_success("record score",rv)
+
                         
                     if player_num < 100:
                         for division_machine in division_machines[6]:
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/6/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            self.check_request_success("add player to machine",rv)
+
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(3456789123456)))
                         for division_machine in division_machines[7]:
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/7/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            self.check_request_success("add player to machine",rv)
+
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
+                            self.check_request_success("record score",rv)
+
                         for division_machine in division_machines[8]:
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/8/division_machine/%s/player/%s'%(division_machine_id,player_num))
+                            self.check_request_success("add player to machine",rv)
+
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,random.randrange(999999)))
                         
                     if player_num < 100:
@@ -119,8 +148,12 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
                             division_machine_id = division_machine.division_machine_id
                             rv = c.put('/division/5/division_machine/%s/team/%s'%(division_machine_id,
                                                                                     team_id))                            
+                            self.check_request_success("add team to machine",rv)
+
                             rv = c.post('/entry/division_machine/%s/score/%s'% (division_machine_id,
                                                                                 random.randrange(999999)))
+                            self.check_request_success("record score for team",rv)
+
                     
                     num_entries = num_entries + 1
             

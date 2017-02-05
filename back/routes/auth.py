@@ -25,7 +25,7 @@ def route_get_current_user():
 @admin_login_blueprint.route('/auth/login',methods=['PUT'])
 def route_login():
     tables = db_util.app_db_tables(current_app)
-    if request.data:
+    if request.data:        
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Username or password not specified')        
@@ -50,7 +50,7 @@ def route_login():
 @admin_login_blueprint.route('/auth/player_login',methods=['PUT'])
 def route_player_login():
     tables = db_util.app_db_tables(current_app)
-    if request.data:
+    if request.data:        
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Player pin # not specified')        

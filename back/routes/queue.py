@@ -79,14 +79,24 @@ def add_player_to_queue():
         return jsonify({'data':queue.to_dict_simple()})    
     players_to_alert = []    
     if queue:
-        players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)        
-    removed_queue = remove_player_from_queue(current_app,player,commit=True)        
-    if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
-        push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
-        send_push_notification(push_notification_message, players=players_to_alert)
-    new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])
-    
-    return jsonify({'data':new_queue.to_dict_simple()})
+        players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)
+    with db.session.no_autoflush:
+        try:
+            print "trying..."
+            db.session.begin_nested()
+            db.session.execute('LOCK TABLE queue IN ACCESS EXCLUSIVE MODE;')                
+            removed_queue = remove_player_from_queue(current_app,player,commit=False)        
+            if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
+                push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
+                send_push_notification(push_notification_message, players=players_to_alert)
+            new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])
+            db.session.commit()
+            db.session.commit()
+            print "done trying..."
+            return jsonify({'data':new_queue.to_dict_simple()})
+        except Exception as e:
+            print "poop...%s" % e
+            raise Conflict("Something went wrong while queueing - please try again.")
 
 @admin_manage_blueprint.route('/queue/other_player',methods=['POST'])
 @login_required

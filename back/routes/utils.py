@@ -219,12 +219,14 @@ def remove_player_from_queue(app,player=None,division_machine=None,commit=True):
     if len(queue.queue_child) > 0:        
         if queue.parent_id is None:            
             division_machine.queue_id=queue.queue_child[0].queue_id            
-        else:            
-            queue.queue_child[0].parent_id=queue.parent_id            
+        else:
+            parent_queue = tables.Queue.query.filter_by(queue_id=queue.parent_id).first()
+            parent_queue.queue_child.append(queue.queue_child[0])            
+            #queue.queue_child[0].parent_id=queue.parent_id            
     else:
         if queue.parent_id is None:
             division_machine.queue_id=None            
-    db.session.commit()
+    #db.session.commit()
     db.session.delete(queue)    
     if commit:
         db.session.commit()    

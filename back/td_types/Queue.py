@@ -30,7 +30,7 @@ def generate_queue_class(db_handle):
             queue['division_machine']={'division_machine_id':self.division_machine.division_machine_id,'division_machine_name':self.division_machine.machine.machine_name}
             queue_node = self.division_machine.queue
             queue_position = 1                        
-            while len(queue_node.queue_child)>0  and queue_node != self:                                
+            while queue_node and len(queue_node.queue_child)>0  and queue_node != self:                                
                 queue_position = queue_position + 1
                 queue_node = queue_node.queue_child[0]                
             if queue_node is None:

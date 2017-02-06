@@ -459,13 +459,13 @@ def create_queue(app,division_machine_id,player_id,bumped=None):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
     division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=division_machine_id).first()
-    queue_node = division_machine.queue        
+    #queue_node = division_machine.queue        
     new_queue = tables.Queue(
         division_machine_id=division_machine_id,
         player_id=player_id
     )
     db.session.add(new_queue)
-    db.session.commit()
+    #db.session.commit()
     bump_num = int(app.td_config['QUEUE_BUMP_AMOUNT'])        
     if bumped and bump_num!=0:
         queue_count = 1
@@ -477,17 +477,18 @@ def create_queue(app,division_machine_id,player_id,bumped=None):
         if(len(queue.queue_child)>0):
             queue.queue_child[0].parent_id=new_queue.queue_id        
         new_queue.bumped=True
-        db.session.commit()        
+        #db.session.commit()        
         return new_queue
     if division_machine.queue_id is None:
-        division_machine.queue_id=new_queue.queue_id
-        db.session.commit()        
+        division_machine.queue=new_queue
+        #db.session.commit()        
         return new_queue
     queue_node = division_machine.queue        
-    while len(queue_node.queue_child) > 0:        
+    while queue_node and len(queue_node.queue_child) > 0:        
         queue_node = queue_node.queue_child[0]
-    new_queue.parent_id = queue_node.queue_id
-    db.session.commit()    
+    if queue_node:
+        queue_node.queue_child.append(new_queue)
+    #db.session.commit()    
     return new_queue
         
 #def create_entry(app,player_id,division_machine_id,division_id,score):

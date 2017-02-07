@@ -40,15 +40,16 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 for(x=0;x<$scope.flattened_players.length;x++){
                     image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
                 }
-                $ImageCacheFactory.Cache(
-                    image_cache_list
-                ).then(function(){
-                    console.log("Images done loading!");
-                    Modals.loaded();
-                },function(failed){
-                    console.log("An image failed: "+failed);
-                    Modals.loaded();
-                });                                                
+                Modals.loaded();
+                // $ImageCacheFactory.Cache(
+                //     image_cache_list
+                // ).then(function(){
+                //     console.log("Images done loading!");
+                //     Modals.loaded();
+                // },function(failed){
+                //     console.log("An image failed: "+failed);
+                //     Modals.loaded();
+                // });                                                
             });
             
         

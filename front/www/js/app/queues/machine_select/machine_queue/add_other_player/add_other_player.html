@@ -4,11 +4,12 @@
         <div class='standard_big_font'>
           <button class='button button-clear button-dark icon-left ion-person review-icon'>
             <span><u>Add Another Player To Queue</u></span>
-          </button>          
+          </button>
           <div class="skinny-list list">
             <label class='item-input item'>
               <span class='input-label'>Machine : </span>
-              <input id="login_username_field" ng-model='user.username' type="text" ng-disabled="true" ng-value="division_machine_name">
+              <!--<input id="login_username_field" type="text" ng-disabled="true" value="{{division_machine_name}}">{{division_machine_name}}-->
+              <span> {{division_machine_name}} </span>
             </label>            
             <label class='item-input item'>
               <span class='input-label'>Player ID : </span>

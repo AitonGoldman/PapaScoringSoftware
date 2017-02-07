@@ -15,23 +15,22 @@ angular.module('TD_services.timeout_resources')
                        $location) {
                   var resource_results = {};
                   var reject_and_redirect = function(rejection,ui_route){
-                      site = rejection.config.url.split('/')[3];
+                      site = rejection.config.url.split('/')[3];                      
                       Modals.error(rejection.data.message,site,ui_route);
 	              return $q.reject(rejection);
                   };
                   var generate_response_interceptor = function(custom_error){
                       if(custom_error == undefined){
                           ui_route='app';
-                      } else {
-                          ui_route=custom_error.ui_route;                          
-                      }
+                      } 
                       var response_interceptor = {
 	                  'responseError': function(rejection) {            
                               //FIXME : need error dialog to display
                               console.log('erroring out');
                               if(custom_error != undefined){
-		                  rejection.data.message=custom_error.message;
-                                  
+		                  rejection.data.message=custom_error.message;                                  
+                                  var ui_route = custom_error.ui_route;
+                                  console.log('feeding in ...'+ui_route);                                  
                                   return reject_and_redirect(rejection,ui_route);
                               }
 	                      if(rejection.status == -1){
@@ -53,7 +52,7 @@ angular.module('TD_services.timeout_resources')
                               }
                               if(rejection.data.message == undefined){
                                   rejection.data.message="I have no earthly idea what the hell just happened.";
-                              }
+                              }                              
                               return reject_and_redirect(rejection,ui_route);
 	                  }
                       };

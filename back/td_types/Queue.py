@@ -28,7 +28,12 @@ def generate_queue_class(db_handle):
             queue = to_dict(self)
             queue['player']={'player_id':self.player_id,'player_name': "%s %s" % (self.player.first_name,self.player.last_name)}
             queue['division_machine']={'division_machine_id':self.division_machine.division_machine_id,'division_machine_name':self.division_machine.machine.machine_name}
-            queue_node = self.division_machine.queue
+            if len(self.division_machine.queue) > 0:
+                for potential_queue_head in self.division_machine.queue:
+                    if potential_queue_head.parent_id is None:
+                        queue_node = potential_queue_head
+            else:
+                queue_node = None
             queue_position = 1                        
             while queue_node and len(queue_node.queue_child)>0  and queue_node != self:                                
                 queue_position = queue_position + 1

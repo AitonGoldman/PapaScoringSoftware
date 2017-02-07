@@ -9,15 +9,16 @@ angular.module('app.queues.machine_select.machine_queue.add_other_player').contr
 	$scope.division_machine_name=$state.params.division_machine_name;
 	$scope.division_machine_id=$state.params.division_machine_id;
 	$scope.manage=$state.params.manage;
-
+        console.log($state.params);
+        $scope.other_player={};
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
              
-        //Modals.loading();
+        Modals.loading();
         // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
+        $scope.bootstrap_promise.then(function(data){
+         $scope.resources = TimeoutResources.GetAllResources();
+          Modals.loaded();
+        });
     }]
 );

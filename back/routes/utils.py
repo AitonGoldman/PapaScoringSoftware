@@ -1,4 +1,4 @@
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 import datetime
 from flask import current_app,jsonify
@@ -17,15 +17,48 @@ def check_player_is_on_device(player_id):
         return True
     return False
 
-def get_player_list_to_notify(player_id,division_machine):    
+def check_player_in_queue(player_id,division_machine):
     queue_for_machine = get_queue_from_division_machine(division_machine,True)    
-    queue_item_for_player = next(queue_dict for queue_dict in queue_for_machine if int(queue_dict['player_id']) == int(player_id))    
+    queue_item_for_player=None
+    for thing in queue_for_machine:
+        print thing['player_id']
+        if int(thing['player_id']) == int(player_id):
+            queue_item_for_player = thing
+    return queue_item_for_player
+
+def get_player_list_to_notify(player_id,division_machine):    
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    queue = tables.Queue.query.filter_by(player_id=player_id).first()
+    players_to_alert = []
+    while queue:
+        if len(queue.queue_child) > 0:
+            queue = queue.queue_child[0]
+            players_to_alert.append(queue.to_dict_simple())
+        else:
+            queue = None
+    players_to_alert_filtered = [player_to_alert for player_to_alert in players_to_alert if check_player_is_on_device(player_to_alert['player_id'])]            
+    #queue_for_machine = get_queue_from_division_machine(division_machine,True)    
+    #for thing in queue_for_machine:
+    #    pass    
+    #queue_item_for_player=None
+    #try:
+    #queue_item_for_player = next(queue_dict for queue_dict in queue_for_machine if int(queue_dict['player_id']) == int(player_id))
+    #for thing in queue_for_machine:
+    #    if int(thing['player_id']) == int(player_id):
+    #        queue_item_for_player = thing
+    #except Exception as e:
+    #    print "uh oh------"
     # we are interested in the queue_item_index after the current head of the queue, so
     # we don't change the position we get back into an index (i.e. subtract one)    
-    queue_item_index = int(queue_item_for_player['queue_position'])
-    players_to_alert = queue_for_machine[queue_item_index:]
-    
-    players_to_alert_filtered = [player_to_alert for player_to_alert in players_to_alert if check_player_is_on_device(player_to_alert['player_id'])]
+    #if queue_item_for_player:
+    #    queue_item_index = int(queue_item_for_player['queue_position'])
+    #    players_to_alert = queue_for_machine[queue_item_index:]    
+    #    players_to_alert_filtered = [player_to_alert for player_to_alert in players_to_alert if check_player_is_on_device(player_to_alert['player_id'])]
+    #else:
+    #    raise Conflict("The server encountered a problem - try again.")
+    #    #print "oh shit..."
+    #    #players_to_alert_filtered=[]
     return players_to_alert_filtered
 
 def record_ioniccloud_push_token(token,user_id=None,player_id=None):
@@ -208,24 +241,30 @@ def remove_player_from_queue(app,player=None,division_machine=None,commit=True):
     tables = db_util.app_db_tables(app)
     if player:
         queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
-        if queue is None:
+        if queue is None:            
             return None
-    if division_machine:
+    if division_machine:        
         queue = division_machine.queue
-    if queue is None:
+    if queue is None:        
         return False
     division_machine = queue.division_machine
     
     if len(queue.queue_child) > 0:        
         if queue.parent_id is None:            
-            division_machine.queue_id=queue.queue_child[0].queue_id            
-        else:
+            division_machine.queue.append(queue.queue_child[0])            
+        else:            
             parent_queue = tables.Queue.query.filter_by(queue_id=queue.parent_id).first()
             parent_queue.queue_child.append(queue.queue_child[0])            
             #queue.queue_child[0].parent_id=queue.parent_id            
-    else:
-        if queue.parent_id is None:
-            division_machine.queue_id=None            
+    else:        
+        if queue.parent_id is None:            
+            print "removing division machine queue id"
+            #division_machine.queue_id=None
+            #queue.division_machine = None
+            division_machine.queue.remove(queue)
+            #tables.DivisionMachine.query.filter_by(division_machine_id=division_machine.division_machine_id).first().queue_id=None
+            #tables.DivisionMachine.query.filter_by(division_machine_id=division_machine.division_machine_id).first().queue=None
+            
     #db.session.commit()
     db.session.delete(queue)    
     if commit:
@@ -233,10 +272,14 @@ def remove_player_from_queue(app,player=None,division_machine=None,commit=True):
     return queue
 
 def get_queue_from_division_machine(division_machine,json_output=False):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)    
+ 
     if division_machine.queue is None:
         return []
     queue_list = []
-    queue = division_machine.queue    
+    queue = tables.Queue.query.filter_by(division_machine_id=division_machine.division_machine_id,parent_id=None).first()
+    #queue = division_machine.queue[0]    
     while queue is not None:
         if json_output:
             queue_list.append(queue.to_dict_simple())            

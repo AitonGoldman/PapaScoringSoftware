@@ -21,9 +21,9 @@ def generate_division_machine_class(db_handle):
         division_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'division.division_id'
         ))
-        queue_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
-            'queue.queue_id'
-        ))        
+        # queue_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
+        #     'queue.queue_id'
+        # ))        
         #finals_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
         #    'finals.finals_id'
         #))    
@@ -43,8 +43,7 @@ def generate_division_machine_class(db_handle):
             foreign_keys=[team_id]
         )
         queue = db_handle.relationship(
-            'Queue',
-            foreign_keys=[queue_id]
+            'Queue'
         )    
         
         player = db_handle.relationship('Player')    

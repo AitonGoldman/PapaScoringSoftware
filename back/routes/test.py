@@ -7,12 +7,29 @@ import subprocess
 from util import db_util
 from routes.utils import fetch_entity
 import datetime
+import time
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@admin_manage_blueprint.route('/test/lock_row', methods=['GET'])
+def test_lock_queue():    
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    #queue = db.session.query(tables.Queue).with_for_update().filter_by(queue_id=3687).first()
+    queue = tables.Queue.query.with_for_update().filter_by(division_machine_id=11).all()    
+    #players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.all() if player.active is True}
+    queue[0].player_id=89
+    db.session.commit()
+    queue_list = []
+    division_machine = fetch_entity(tables.DivisionMachine,11)
+    for queue in division_machine.queue:
+        queue_list.append(queue.to_dict_simple())
+    return jsonify({'data':queue_list})
+    # check if the post request has the file part            
 
 @admin_manage_blueprint.route('/test/player_fast', methods=['GET'])
 def test_players_fast():    

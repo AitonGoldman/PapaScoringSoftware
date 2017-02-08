@@ -73,14 +73,18 @@ def add_player_to_queue():
             raise BadRequest("Can't queue - player's team is on another machine")
     if check_player_team_can_start_game(current_app,division_machine,player) is False:
         raise BadRequest("Can't queue - player has no tokens")    
-    queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
-    if queue and queue.division_machine_id == division_machine.division_machine_id:                
-        return jsonify({'data':queue.to_dict_simple()})
+    #queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
+    #if queue and queue.division_machine_id == division_machine.division_machine_id:                
+    #    return jsonify({'data':queue.to_dict_simple()})
     players_to_alert = []    
         
     with db.session.no_autoflush:
-        try:
+        try:            
             queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=division_machine.division_machine_id).all()
+            queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
+            if queue and queue.division_machine_id == division_machine.division_machine_id:
+                db.session.commit()
+                return jsonify({'data':queue.to_dict_simple()})
             if queue:
                 queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=queue.division_machine.division_machine_id).all()
                 players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)

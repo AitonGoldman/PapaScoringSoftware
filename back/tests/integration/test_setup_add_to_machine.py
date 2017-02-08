@@ -41,11 +41,13 @@ class SetupAddToMachineTD(td_integration_test_base.TdIntegrationSetupTestBase):
         }                
         orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus=stripe_skus,discount_stripe_skus=discount_stripe_skus,discount_ticket_counts=discount_ticket_counts)
         orm_creation.init_papa_tournaments_division_machines(self.flask_app)        
-        self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
-        self.player_pin = self.player.pin
-        self.player_two = orm_creation.create_player(self.flask_app,{'first_name':'test_two','last_name':'player_two','ifpa_ranking':'321','linked_division_id':'1'})        
-        self.player_three = orm_creation.create_player(self.flask_app,{'first_name':'test_three','last_name':'player','ifpa_ranking':'223','linked_division_id':'1'})        
-        self.player_four = orm_creation.create_player(self.flask_app,{'first_name':'test_four','last_name':'player','ifpa_ranking':'421','linked_division_id':'1'})        
+        orm_creation.init_papa_players(self.flask_app)
+
+        # self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
+        # self.player_pin = self.player.pin
+        # self.player_two = orm_creation.create_player(self.flask_app,{'first_name':'test_two','last_name':'player_two','ifpa_ranking':'321','linked_division_id':'1'})        
+        # self.player_three = orm_creation.create_player(self.flask_app,{'first_name':'test_three','last_name':'player','ifpa_ranking':'223','linked_division_id':'1'})        
+        # self.player_four = orm_creation.create_player(self.flask_app,{'first_name':'test_four','last_name':'player','ifpa_ranking':'421','linked_division_id':'1'})        
         orm_creation.create_team(self.flask_app,{'team_name':'test_team','players':['1','2']})
         
         

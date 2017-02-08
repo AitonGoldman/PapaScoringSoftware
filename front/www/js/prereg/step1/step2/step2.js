@@ -44,6 +44,7 @@ angular.module('prereg.step1.step2').controller(
                 $scope.only_one_player_found = false;
                 if($scope.resources.ifpa_rankings.data.search == "No players found"){
                     $scope.no_players_found = true;
+                    $scope.resources.ifpa_rankings.data.search[0].wppr_rank=999999;
                     return;
                 }
                 

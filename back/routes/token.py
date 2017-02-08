@@ -133,14 +133,10 @@ def get_team_tokens_for_player(player_id):
             token_dict['teams'][token.division_id]=token_dict['teams'][token.division_id] + 1      
     return jsonify(token_dict)
 
-def get_available_ticket_list(max_count,division,increments=None):        
+def get_available_ticket_list(max_count,division,increment=None):        
+    if increment is None:
+        increment = 1
     available_ticket_list = [[0,0]]
-    if increments:
-        for idx,increment in enumerate(increments):
-            if increments[idx][0]>max_count:
-                break
-            available_ticket_list.append(increment)
-        return available_ticket_list
     
     #normal_cost = 5
     normal_cost = division.local_price    
@@ -162,7 +158,11 @@ def get_available_ticket_list(max_count,division,increments=None):
         if is_discount_count and cur_count != 1:                        
             ticket_cost = multiplier*discount_cost
         else:
-            ticket_cost = cur_value+normal_cost            
+            ticket_cost = cur_value+normal_cost
+        if increment != 1:            
+            if cur_count%increment != 0 and cur_count%discount_count != 0:                
+                continue
+            pass
         available_ticket_list.append([cur_count,ticket_cost])
         cur_value = ticket_cost
     return available_ticket_list
@@ -191,21 +191,21 @@ def get_tokens_for_player(player_id):
                 token_dict['divisions'][division.division_id]=div_count
                 remaining_tokens = max_tickets_allowed - div_count
                 remaining_tokens_dict['divisions'][division.division_id] = remaining_tokens                
-                remaining_tokens_dict['divisions_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division)
+                remaining_tokens_dict['divisions_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division,division.min_num_tickets_to_purchase)
         if division.meta_division_id is not None:
             metadivision = tables.MetaDivision.query.filter_by(meta_division_id=division.meta_division_id).first()
             metadiv_count = get_existing_token_count(player_id=player_id,metadiv_id=division.meta_division_id)
             token_dict['metadivisions'][division.meta_division_id]= metadiv_count
             remaining_tokens = max_tickets_allowed - metadiv_count             
             remaining_tokens_dict['metadivisions'][division.meta_division_id] = remaining_tokens
-            remaining_tokens_dict['metadivisions_remaining_token_list'][division.meta_division_id]=get_available_ticket_list(remaining_tokens,metadivision)            
+            remaining_tokens_dict['metadivisions_remaining_token_list'][division.meta_division_id]=get_available_ticket_list(remaining_tokens,metadivision,division.min_num_tickets_to_purchase)            
         if division.team_tournament is True:
             for team in team_ids:
                 team_count = get_existing_token_count(team_id=team.team_id,div_id=division.division_id)
                 remaining_tokens = max_tickets_allowed - team_count
                 token_dict['teams'][division.division_id]= team_count
                 remaining_tokens_dict['teams'][division.division_id] = remaining_tokens
-                remaining_tokens_dict['teams_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division)
+                remaining_tokens_dict['teams_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division,division.min_num_tickets_to_purchase)
                 
     return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict,'player':player.to_dict_simple()}})
 

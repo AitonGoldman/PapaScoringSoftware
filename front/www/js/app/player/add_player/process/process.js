@@ -20,7 +20,7 @@ angular.module('app.player.add_player.process').controller(
             $scope.player_info.ifpa_ranking=$scope.player_info.ifpa_result.result.wppr_rank;
             $scope.player_info.ifpa_result=undefined;
         } else {
-            $scope.player_info.ifpa_ranking=-1;
+            $scope.player_info.ifpa_ranking=999999;
         }
         player_add_promise = TimeoutResources.AddPlayer($scope.bootstrap_promise,{site:$scope.site},$scope.player_info);
         // = TimeoutResources.GetEtcData();

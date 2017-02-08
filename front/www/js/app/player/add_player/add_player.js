@@ -15,7 +15,7 @@ angular.module('app.player.add_player').controller(
             $scope.bootstrap_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
                 $scope.limit_divisions_based_on_ranking(99999999);
-                // $scope.main_divisions = _.filter($scope.resources.divisions.data, { 'single_division': false});
+                $scope.main_division_count = _.filter($scope.resources.divisions.data, { 'single_division': false}).length;
                 dev_info = ionic.Platform.device();            
                 if (_.size(dev_info)!=0){
                     $scope.is_native=true;          
@@ -53,7 +53,10 @@ angular.module('app.player.add_player').controller(
                 if ($scope.is_native == true && $scope.player_info.has_picture != true){
                     return true;
                 }
-                if (Utils.var_empty($scope.player_info.first_name) == true || Utils.var_empty($scope.player_info.last_name) == true || Utils.var_empty($scope.player_info.linked_division_id) == true || $scope.player_info.ifpa_result.looked_up != true){                    
+                if (Utils.var_empty($scope.player_info.linked_division_id) == true && $scope.main_division_count > 0){
+                    return true;
+                }
+                if (Utils.var_empty($scope.player_info.first_name) == true || Utils.var_empty($scope.player_info.last_name) == true || $scope.player_info.ifpa_result.looked_up != true){                    
                     return true;
                 } else {
                     return false;

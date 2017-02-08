@@ -83,8 +83,11 @@ angular.module('app.results.divisions.division').controller(
             }
             idx = cutoff-1;
             top_machines = $scope.resources.division_results.data.top_machines[division.division_id];
-            while(results[idx][0]==results[idx+1][0] && idx+1 != results.length){
+            console.log("cutoff is "+cutoff+" for division "+division.division_name);
+            console.log(results[idx+1]);
+            while(idx+1 != results.length && results[idx][0]==results[idx+1][0]){                
                 idx=idx+1;
+                console.log('trying idx '+(idx+1));
             }
             return idx;
         };

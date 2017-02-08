@@ -19,7 +19,10 @@
             <td  class='padding-right'>Last Name : </td><td  class='padding-left'>{{last_name}}</td>
           </tr>
           <tr>
-            <td  class='padding-right'>Ifpa Ranking : </td><td  class='padding-left'>{{ifpa_ranking}}</td>
+            <td  class='padding-right'>Ifpa Ranking : </td><td  class='padding-left'>
+              <span ng-if='ifpa_ranking != 999999'>{{ifpa_ranking}}</span>
+              <span ng-if='ifpa_ranking == 999999'>No IFPA Ranking</span>
+            </td>
           </tr>
           <tr>
             <td  class='padding-right'>Email Address : </td><td  class='padding-left'>{{player_email}}</td>

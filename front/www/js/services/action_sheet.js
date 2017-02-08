@@ -127,7 +127,26 @@ angular.module('TD_services.action_sheets')
                               return true;
                           }
                       });
+                  };
+                  var choose_machine_action = function(division_machine,remove_machine){            
+                      var hideSheet = $ionicActionSheet.show({
+                          buttons: [
+                              { text: 'REMOVE MACHINE' },                              
+                          ],                    
+                          titleText: 'Choose action for machine',
+                          cancelText: 'Cancel',
+                          cancel: function() {
+                              // add cancel code..
+                          },
+                          buttonClicked: function(index) {
+                              if(index == 0){
+                                  remove_machine(division_machine);
+                              }
+                              return true;
+                          }
+                      });
                   };                  
+                  
                   var choose_ifpa_lookup_action = function(ifpa_search_results,result,limit_divisions_based_on_ranking){            
                       result.looked_up = true;
                       buttons = [];
@@ -164,6 +183,7 @@ angular.module('TD_services.action_sheets')
                   };
                   
                   return {
+                      choose_machine_action:choose_machine_action,
                       choose_action:choose_action,
                       choose_player_action:choose_player_action,
                       choose_ifpa_lookup_action:choose_ifpa_lookup_action,

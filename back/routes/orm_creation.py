@@ -284,6 +284,8 @@ def create_division(app,division_data):
         new_division.active=division_data['active']
     if division_data['scoring_type'] == "HERB":
         new_division.number_of_scores_per_entry=1
+        new_division.number_of_relevant_scores=6
+        
     if 'use_stripe' in division_data and division_data['use_stripe']:
         new_division.use_stripe = True
         if get_valid_sku(division_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:

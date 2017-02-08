@@ -37,6 +37,7 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         queuing = db_handle.Column(db_handle.Boolean,default=False)
         discount_ticket_count = db_handle.Column(db_handle.Integer)
         discount_ticket_price = db_handle.Column(db_handle.Integer)
+        min_num_tickets_to_purchase = db_handle.Column(db_handle.Integer)
         
         meta_division_id = db_handle.Column(db_handle.Integer,
                                          db_handle.ForeignKey(

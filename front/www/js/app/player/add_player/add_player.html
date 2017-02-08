@@ -18,7 +18,7 @@
         <span >Lookup Ifpa Ranking <span id="add_player_ifpa_ranking" ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>
       </a>
       
-      <div style='padding:0px' class='item row'>
+      <div style='padding:0px' class='item row' ng-if='main_division_count > 0'>
         <div class='col-33'>
           <label class='item' style='border-width:0px'>Playing In</label>
         </div>        

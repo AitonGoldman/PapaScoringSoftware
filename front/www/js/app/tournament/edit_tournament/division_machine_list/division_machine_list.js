@@ -2,11 +2,11 @@ angular.module('app.tournament.edit_tournament.division_machine_list',['app.tour
     /*REPLACEMECHILD*/]);
 angular.module('app.tournament.edit_tournament.division_machine_list').controller(
     'app.tournament.edit_tournament.division_machine_list',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
+        '$scope','$state','TimeoutResources','Utils','Modals','ActionSheets',
+        function($scope, $state, TimeoutResources, Utils,Modals,ActionSheets) {
         $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
-
+            $scope.choose_machine_action=ActionSheets.choose_machine_action;
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
              

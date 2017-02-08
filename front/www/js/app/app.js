@@ -55,11 +55,16 @@ app.controller(
         //$scope.type_of_page = type_of_page;
         $scope.utils = Utils;
         if(ionic.Platform.isWebView() == false && type_of_page != 'prereg'){
-            if ($location.absUrl().includes('player.html#')!=true){
-                $scope.type_of_page = 'user';
-            } else {
-                $scope.type_of_page = 'player';                
-            }            
+            $scope.type_of_page = 'user';
+            if ($location.absUrl().includes('player.html#')==true){
+                $scope.type_of_page = 'player';
+            }
+            if ($location.absUrl().includes('www.pbchallenge.net')==true){
+                $scope.type_of_page = 'player';
+            }
+            if ($location.absUrl().includes('results.pbchallenge.net')==true){
+                $scope.type_of_page = 'results';
+            }                                    
         } else {
             $scope.type_of_page = type_of_page;            
         }
@@ -122,7 +127,11 @@ app.controller(
                     prom = Utils.resolved_promise();
                 }
                 return prom.then(function(data){
-                    return check_user_promise = User.check_current_user();
+                    if($scope.type_of_page != "results"){
+                        return check_user_promise = User.check_current_user();
+                    } else {
+                        return Utils.resolved_promise();
+                    }                    
                 });                
             }                                 
         };

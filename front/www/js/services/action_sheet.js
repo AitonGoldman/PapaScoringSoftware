@@ -128,7 +128,7 @@ angular.module('TD_services.action_sheets')
                           }
                       });
                   };                  
-                  var choose_ifpa_lookup_action = function(ifpa_search_results,result){            
+                  var choose_ifpa_lookup_action = function(ifpa_search_results,result,limit_divisions_based_on_ranking){            
                       result.looked_up = true;
                       buttons = [];
                       console.log(ifpa_search_results);
@@ -156,6 +156,7 @@ angular.module('TD_services.action_sheets')
                           buttonClicked: function(index) {
                               //result.rank = buttons[index].result.wppr_rank;
                               console.log(buttons[index].result.wppr_rank);
+                              limit_divisions_based_on_ranking(buttons[index].result.wppr_rank);
                               result.result = buttons[index].result;
                               return true;
                           }

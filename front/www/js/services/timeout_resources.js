@@ -84,7 +84,7 @@ angular.module('TD_services.timeout_resources')
 	              return resource_results[scope_name].$promise;	
                   };
                   
-                  var generate_resource_definition = function(url,http_method,custom_interceptor_error,use_results_server){                                                    
+                  var generate_resource_definition = function(url,http_method,custom_interceptor_error,other_server){                                                    
                       url_chunks = url.split("/");
                       gen_post_args = {};
                       for(url_chunk_index in url_chunks){
@@ -102,10 +102,10 @@ angular.module('TD_services.timeout_resources')
                           response_interceptor_to_use = generate_response_interceptor(custom_interceptor_error);
                           //response_interceptor_to_use = custom_interceptor;
                       }
-                      if (use_results_server == undefined){
+                      if (other_server == undefined){
                           target_api_host = api_host.api_host();
                       } else {
-                          target_api_host = api_host.results_host();
+                          target_api_host = other_server;
                       }
                       
                       
@@ -137,22 +137,28 @@ angular.module('TD_services.timeout_resources')
                       if(url_params.host != undefined){
                           api_url=http_prefix+'://'+url_params.host+':'+server_port+'/';
                           results_url=http_prefix+'://'+url_params.host+':'+server_port+'/';
+                          purchase_url=http_prefix+'://'+url_params.host+':'+server_port+'/';                          
                           api_host.set_api_host(api_url);
-                          api_host.set_results_host(results_url);                          
+                          api_host.set_results_host(results_url);
+                          api_host.set_purchase_host(purchase_url);
+                          
                       } else {
                           var ip_start = $location.absUrl().indexOf('//')+2;
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
                           var results_ip = ip;
+                          var purchase_ip = ip;
                           if(ip == undefined || ip == ""){
                               ip=server_ip_address;
                               results_ip=results_ip_address;
+                              purchase_ip=purchase_ip_address;
                           }
                           api_url=http_prefix+'://'+ip+':'+server_port+'/';
                           results_url=http_prefix+'://'+results_ip+':'+server_port+'/';
-                          
+                          purchase_url=http_prefix+'://'+purchase_ip+':'+server_port+'/';                          
                           api_host.set_api_host(api_url);                          
                           api_host.set_results_host(results_url);
+                          api_host.set_purchase_host(purchase_url);
                       }
                   };
 
@@ -183,12 +189,12 @@ angular.module('TD_services.timeout_resources')
                   var getPlayersResource = generate_resource_definition(':site/player/:player_id',
                                                                         'GET');
                   var getFromResultsPlayerResource = generate_resource_definition(':site/player/:player_id',
-                                                                                  'GET',undefined,true);
+                                                                                  'GET',undefined,api_host.results_host());
                   
                   var getPlayersFastResource = generate_resource_definition(':site/test/player_fast',
                                                                             'GET');
                   var getFromResultsPlayersFastResource = generate_resource_definition(':site/test/player_fast',
-                                                                                       'GET',undefined,true);
+                                                                                       'GET',undefined,api_host.results_host());
                   
                   var getPlayersPreregFastResource = generate_resource_definition(':site/test/player_prereg_fast',
                                                                         'GET');
@@ -227,11 +233,11 @@ angular.module('TD_services.timeout_resources')
                   var addPlayerTokensResource = generate_resource_definition(':site/token/paid_for/0',
                                                                              'POST');
                   var completePlayerTokensResource = generate_resource_definition(':site/stripe',
-                                                                           'POST');                                     
+                                                                                  'POST',undefined,api_host.purchase_host());                                     
                   var getDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                                  'GET');
                   var getFromResultsDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
-                                                                                            'GET',undefined,true);
+                                                                                            'GET',undefined,api_host.results_host());
                   
                   var getAllDivisionMachinesResource = generate_resource_definition(':site/division_machine',
                                                                                  'GET');                  
@@ -265,12 +271,12 @@ angular.module('TD_services.timeout_resources')
                   
                   var removePlayerFromMachineResource = generate_resource_definition(':site/division_machine/:division_machine_id/player/:player_id','DELETE');
                   var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');
-                  var getDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET',undefined,true);
-                  var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET',undefined,true);
+                  var getDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET',undefined,api_host.results_host());
+                  var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET',undefined,api_host.results_host());
                   var voidEntryResource = generate_resource_definition(':site/admin/entry_id/:entry_id/void/:void','DELETE');
                   var addEntryResource = generate_resource_definition(':site/admin/division_machine_id/:division_machine_id/score/:score/player_id/:player_id','POST');                                    
-                  var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET',undefined,true);
-                  var getTeamResultsResource = generate_resource_definition(':site/results/team/:team_id','GET',undefined,true);
+                  var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET',undefined,api_host.results_host());
+                  var getTeamResultsResource = generate_resource_definition(':site/results/team/:team_id','GET',undefined,api_host.results_host());
                   
                   var getPlayerEntriesResource = generate_resource_definition(':site/entry/player/:player_id','GET');
                   var setScoreResource = generate_resource_definition(':site/admin/score_id/:score_id/score/:score','PUT');

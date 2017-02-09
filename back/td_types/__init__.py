@@ -17,6 +17,11 @@ from DivisionFinal import generate_division_final_class
 from FinalsPlayer import generate_finals_player_class
 from TicketPurchase import generate_ticket_purchase_class
 from PurchaseSummary import generate_purchase_summary_class
+from DivisionFinalRound import generate_division_final_round_class
+from DivisionFinalMatch import generate_division_final_match_class
+from FinalsMatchGameResult import generate_finals_match_game_result_class
+from FinalsMatchPlayerResult import generate_finals_match_player_result_class
+from FinalsMatchGamePlayerResult import generate_finals_match_game_player_result_class
 
 class ImportedTables():
     def __init__(self,db_handle):
@@ -24,8 +29,8 @@ class ImportedTables():
         self.User = generate_user_class(db_handle)        
         self.Tournament = generate_tournament_class(db_handle)
         self.Division = generate_division_class(db_handle)
-        self.DivisionFinal = generate_division_final_class(db_handle)                
-        self.FinalsPlayer = generate_finals_player_class(db_handle)
+        #self.DivisionFinal = generate_division_final_class(db_handle)                
+        #self.FinalsPlayer = generate_finals_player_class(db_handle)
         self.Machine = generate_machine_class(db_handle)
         self.DivisionMachine = generate_division_machine_class(db_handle)
         self.MetaDivision = generate_meta_division_class(db_handle)
@@ -39,6 +44,14 @@ class ImportedTables():
         self.AuditLog = generate_audit_log_class(db_handle)
         self.TicketPurchase = generate_ticket_purchase_class(db_handle)
         self.PurchaseSummary = generate_purchase_summary_class(db_handle)
+        self.DivisionFinal = generate_division_final_class(db_handle)
+        self.FinalsPlayer = generate_finals_player_class(db_handle)
+        self.DivisionFinalRound = generate_division_final_round_class(db_handle)
+        self.DivisionFinalMatch = generate_division_final_match_class(db_handle)
+        self.FinalsMatchGameResult = generate_finals_match_game_result_class(db_handle)
+        self.FinalsMatchPlayerResult = generate_finals_match_player_result_class(db_handle)
+        self.FinalsMatchGamePlayerResult = generate_finals_match_game_player_result_class(db_handle)
+
         self.db_handle = db_handle
         
  

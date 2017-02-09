@@ -51,17 +51,17 @@
               </td>
             </tr>
           </table>
-          <div ng-if='player_division_results.entries.length > resources.divisions.data[division_id].number_of_relevant_scores'>
-            <hr>
+          <!--<div ng-if='player_division_results.entries.length > resources.divisions.data[division_id].number_of_relevant_scores'>-->
+          <hr>
             <b>All Scores</b><br>
             <table style='margin-left:auto;margin-right:auto;'>
               <tr>
                 <th><b>Rank</b></th>
-                <th align='center' style='padding-left:0px'><b>Machine</b></th>
+                <th align='center' style='padding-left:0px'><b>Machine {{resources.divisions.data[division_id].number_of_relevant_scores}}</b></th>
                 <th align='center'  style='padding-left:0px'><b>Points</b></th>
                 <th align='center'  style='padding-left:10px'><b>Score</b></th>            
               </tr>
-              <tr ng-repeat='machine_score in player_division_results.entries' ng-if='$index > 2'>
+              <tr ng-repeat='machine_score in player_division_results.entries' ng-if='$index + 1  > resources.divisions.data[division_id].number_of_relevant_scores'>
                 <td align='center' style='vertical-align:middle;padding-top:10px;' >{{machine_score.rank}}</td>
                 <td align='center' style='vertical-align:middle;padding-left:0px;padding-top:10px;'>
                   <a ui-sref='app.results.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name,division_id:division_id})'>
@@ -75,7 +75,8 @@
                 <td align='center' style='vertical-align:middle;padding-left:0px;padding-top:10px;'>{{machine_score.score|number}}</td>            
               </tr>
             </table>
-          </div>
+
+        <!--</div>-->
         </div>
       </div>
       <!-- ui-sref=".player({player_id: ,})" -->    

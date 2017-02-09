@@ -41,7 +41,11 @@ angular.module('prereg.step1.step2.step3').controller(
                     $scope.num_div_allowed=$scope.num_div_allowed+1;
                 }                
                 
-            });       
+            });            
+            if($scope.num_div_allowed == 1){
+                $scope.a_division = _.filter($scope.resources.divisions.data, { 'division_name': 'A'})[0];                
+                $scope.division_selection.linked_division_id=$scope.a_division.division_id;
+            }
             Modals.loaded();
         });
     }]

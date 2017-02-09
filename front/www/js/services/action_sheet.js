@@ -131,7 +131,8 @@ angular.module('TD_services.action_sheets')
                   var choose_machine_action = function(division_machine,remove_machine){            
                       var hideSheet = $ionicActionSheet.show({
                           buttons: [
-                              { text: 'REMOVE MACHINE' },                              
+                              { text: 'REMOVE MACHINE' },
+                              { text: 'Upload Backglass Pic'}
                           ],                    
                           titleText: 'Choose action for machine',
                           cancelText: 'Cancel',
@@ -142,6 +143,10 @@ angular.module('TD_services.action_sheets')
                               if(index == 0){
                                   remove_machine(division_machine);
                               }
+                              if(index == 1){
+                                  $state.go('.upload_pic',{division_machine_id:division_machine.division_machine_id});
+                              }
+                              
                               return true;
                           }
                       });

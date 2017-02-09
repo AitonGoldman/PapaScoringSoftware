@@ -178,6 +178,9 @@ angular.module('TD_services.timeout_resources')
                                                                      'GET');                                    
                   var addUserResource = generate_resource_definition(':site/user',
                                                                      'POST');
+                  var addBackglassPicResource = generate_resource_definition(':site/division_machine/:division_machine_id',
+                                                                     'PUT');
+                  
                   var addPlayerResource = generate_resource_definition(':site/player',
                                                                        'POST');
                   var addPreRegPlayerResource = generate_resource_definition(':site/pre_reg_player',
@@ -313,6 +316,7 @@ angular.module('TD_services.timeout_resources')
                       GetFromResultsPlayer: generate_custom_http_executor(getFromResultsPlayerResource,'player','get'),                                            
                       GetJagoffs: generate_custom_http_executor(getJagoffsResource,'jagoffs','get'),                                            
                       AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
+                      AddBackglassPic: generate_custom_http_executor(addBackglassPicResource,'edited_division_machine','post'),                      
                       AddTokens: generate_custom_http_executor(addTokensResource,'added_tokens','post'),
                       AddPlayerTokens: generate_custom_http_executor(addPlayerTokensResource,'added_player_tokens','post'),                      
                       AddPlayer: generate_custom_http_executor(addPlayerResource,'added_player','post'),

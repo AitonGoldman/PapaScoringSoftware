@@ -1,4 +1,5 @@
 angular.module('app.tournament.edit_tournament.division_machine_list',['app.tournament.edit_tournament.division_machine_list.add_division_machine',
+    'app.tournament.edit_tournament.division_machine_list.upload_pic',
     /*REPLACEMECHILD*/]);
 angular.module('app.tournament.edit_tournament.division_machine_list').controller(
     'app.tournament.edit_tournament.division_machine_list',[

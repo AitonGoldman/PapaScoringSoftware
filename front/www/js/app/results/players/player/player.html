@@ -13,7 +13,7 @@
       </div>
       
       <div ng-if='player_division_results.entries.length > 0' ng-repeat='(division_id,player_division_results) in resources.player_results.data' style='padding-bottom:10px;'>
-        <div style='background-color:tan;padding-top:15px;padding-bottom:15px'>
+       <div style='background-color:tan;padding-top:15px;padding-bottom:15px'>
           <a class='standard_large_font' ui-sref='.^.^.divisions.division({division_id:division_id,division_name:player_division_results.tournament_name})'>
             {{player_division_results.tournament_name}}
           </a>

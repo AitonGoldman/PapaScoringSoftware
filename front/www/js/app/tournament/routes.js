@@ -159,7 +159,18 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.tournament.division_list.edit_division.division_machine_list.add_division_machine'
  	     }
  	   }
+       }).state('app.tournament.edit_tournament.division_machine_list.upload_pic', 
+        { 
+         cache: false,
+ 	 url: '/upload_pic/division_machine_id/:division_machine_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/tournament/edit_tournament/division_machine_list/upload_pic/upload_pic.html',
+ 	       controller: 'app.tournament.edit_tournament.division_machine_list.upload_pic'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
 
 
 }]);

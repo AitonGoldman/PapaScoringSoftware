@@ -10,7 +10,7 @@ from orm_creation import create_division, create_division_machine
 import datetime
 from sqlalchemy import and_,or_
 import random
-
+import os
 
 @admin_manage_blueprint.route('/division',methods=['GET'])
 def route_get_divisions():
@@ -108,6 +108,23 @@ def route_get_division_machine(division_id,division_machine_id):
     tables = db_util.app_db_tables(current_app)
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
     return jsonify({'data': division_machine.to_dict_simple()})
+
+@admin_manage_blueprint.route('/division_machine/<division_machine_id>',methods=['PUT'])
+@login_required
+@Admin_permission.require(403)
+def route_edit_division_machine(division_machine_id):        
+    machine_data = json.loads(request.data)
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)    
+    if 'pic_file' in machine_data:        
+        os.system('mv %s/%s /var/www/html/pics/machine_%s.jpg' % (current_app.config['UPLOAD_FOLDER'],
+                                                                  machine_data['pic_file'],
+                                                                  division_machine.division_machine_id))        
+    
+    # FIXME : need to load machines as part of init
+    
+    return jsonify({'data':division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine',methods=['POST'])
 @login_required

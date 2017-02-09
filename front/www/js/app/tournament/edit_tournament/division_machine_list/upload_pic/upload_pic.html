@@ -1,0 +1,34 @@
+<ion-view view-title="Upload Pic">
+  <ion-content>
+    <div class='standard-big-font'>
+      Select a backglass picture to upload, then click "Upload"
+      <br>
+      <br>
+    </div>
+    <form name="upload" class="form" data-ng-submit="addFile()">
+        <input type="file" name="file" onchange="angular.element(this).scope().uploadedFile(this)"/>
+    <br>
+    <br>
+    <button type="submit"><span ng-if='uploaded_pic_name != undefined'>{{Re}}</span>Upload</button>
+    </form>
+ <!--       <form name="upload" class="form" data-ng-submit="addFile()">
+          <input type="file" name="file" multiple 
+                 onchange="angular.element(this).scope().uploadedFile(this)"
+                 />
+          <br>
+          <br>
+          <button type="submit"><span ng-if='uploaded_pic_name != undefined'>{{Re}}</span>Upload</button>
+          <br>
+          <br>
+        </form>-->
+        <div ng-if='uploaded_pic_name != undefined' class='player-info-avatar' style='height:250px'>
+          <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/{{uploaded_pic_name}}">
+        </div>
+        <br>
+        <button ng-if='uploaded_pic_name != undefined' ng-click='renameUploadedFile()'>
+        Apply Picture  
+        </button>
+    <!-- ui-sref=".upload_pic({division_machine_id: ,})" -->    
+  </ion-content>
+</ion-view>
+

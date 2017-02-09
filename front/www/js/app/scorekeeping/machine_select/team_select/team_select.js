@@ -23,7 +23,7 @@ angular.module('app.scorekeeping.machine_select.team_select').controller(
             //players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
             players_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();            
-                $scope.flattened_players = _.values($scope.resources.players.data);
+                $scope.flattened_players = _.values($scope.resources.players_with_tickets.data);
                 $animate.enabled(true);                                          
                 Modals.loaded();
             });

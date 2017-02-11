@@ -62,7 +62,13 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                     if($scope.selected_players[0].has_tokens != true){
                         $scope.player_img_id=0;                        
                     } else {
-                        $scope.player_img_id=$scope.selected_players[0].player_id;
+                        if($scope.selected_players[0].on_division_machine == true){
+                            $scope.player_img_id="00";                            
+                        } else {
+                            $scope.player_img_id=$scope.selected_players[0].player_id;
+                        }
+                        console.log($scope.selected_players[0]);
+                        
                     }                    
                 }                
             };

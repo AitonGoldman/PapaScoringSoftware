@@ -52,6 +52,8 @@ def test_players_with_tickets(division_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.all()}
+    players_on_machines = {player.player_id:None for player in tables.DivisionMachine.query.filter(tables.Player.player_id is not None).all()}
+
     division = fetch_entity(tables.Division,division_id)         
     if division.meta_division_id:
         players_with_tickets = tables.Player.query.filter_by(active=True).join(tables.Token).filter_by(used=False,
@@ -63,27 +65,14 @@ def test_players_with_tickets(division_id):
                                                                                 paid_for=True,
                                                                                 voided=False,
                                                                                 division_id=division_id).all()
-    players_with_tickets_dict = {player.player_id:player.to_dict_fast() for player in players_with_tickets}
+    players_with_tickets_dict = {player.player_id:None for player in players_with_tickets}
     for player_id,player in players.iteritems():
         if player['player_id'] in players_with_tickets_dict:
             player['has_tokens']=True
+        if player['player_id'] in players_on_machines:
+            player['on_division_machine']=True            
     return jsonify({'data':players})
 
-    # db = db_util.app_db_handle(current_app)
-    # tables = db_util.app_db_tables(current_app)
-    # division = fetch_entity(tables.Division,division_id)     
-    # if division.meta_division_id:
-    #     players_with_tickets = tables.Player.query.filter_by(active=True).join(tables.Token).filter_by(used=False,
-    #                                                                             paid_for=True,
-    #                                                                             voided=False,
-    #                                                                             metadivision_id=division.meta_division_id).all()        
-    # else:
-    #     players_with_tickets = tables.Player.query.filter_by(active=True).join(tables.Token).filter_by(used=False,
-    #                                                                             paid_for=True,
-    #                                                                             voided=False,
-    #                                                                             division_id=division_id).all()
-    # return jsonify({'data':{player.player_id:player.to_dict_fast() for player in players_with_tickets}})    
-    # check if the post request has the file part            
 
 @admin_manage_blueprint.route('/test/media_upload', methods=['POST'])
 def test_upload_file():    

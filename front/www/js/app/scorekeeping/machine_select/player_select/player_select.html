@@ -20,7 +20,7 @@
       <div style='text-align:center' class='item'>
         {{division_machine_name}}
       </div>
-      <button ng-disabled='selected_players.length == 0 || selected_players[0].has_tokens != true' ng-if="queues.length == 0" ng-click='test_submit()' class='button button-calm button-full item-icon-right seperate_button'>
+      <button ng-disabled='selected_players.length == 0 || selected_players[0].has_tokens != true || selected_players[0].on_division_machine' ng-if="queues.length == 0" ng-click='test_submit()' class='button button-calm button-full item-icon-right seperate_button'>
         Select Player
         <i class="icon ion-chevron-right"></i>          
       </button>

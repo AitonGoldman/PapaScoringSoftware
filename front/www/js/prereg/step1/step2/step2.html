@@ -22,10 +22,8 @@
         If you are not one of the players listed, please click <a ng-if='isWebView == false' href="static/prereg-ifpa.html" target="_new_window"> here.</a> <a ng-if='isWebView == true' ng-click='utils.native_open_in_browser("/td/static/prereg-ifpa.html")'> here.</a> 
         <br>
         <br>        
-        <ion-list>          
-          <ion-radio ng-repeat='result in resources.ifpa_rankings.data.search' ng-model="ifpa_result_selected.wppr_rank" ng-value="result.wppr_rank">I'm {{result.first_name+" "+result.last_name}} (#{{result.wppr_rank}})</ion-radio>
-          
-        </ion-list>
+        <ion-radio class='item' style='box-shadow: 2px 2px 5px grey;' ng-repeat='result in resources.ifpa_rankings.data.search' ng-model="ifpa_result_selected.wppr_rank" ng-value="result.wppr_rank">I'm {{result.first_name+" "+result.last_name}} (#{{result.wppr_rank}})
+          </ion-radio>          
       </div>
       <div ng-if="too_many_players_found == true">
         IFPA reported {{resources.ifpa_rankings.data.search.length}} players that matched the name you entered.<br>

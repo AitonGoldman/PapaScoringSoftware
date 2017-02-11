@@ -60,7 +60,7 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5').controller(
             handler.open({
                 name: 'TD Self Service',
                 description: 'Pre-Register For PAPA 20',
-                amount: 400
+                amount: 10000
             });            
         };                            
          

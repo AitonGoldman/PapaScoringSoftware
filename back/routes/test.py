@@ -35,7 +35,7 @@ def test_lock_queue():
 def test_players_fast():    
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.all() if player.active is True}
+    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.filter_by(active=True).all()}
     return jsonify({'data':players})
     # check if the post request has the file part            
 
@@ -51,18 +51,38 @@ def test_prereg_players_fast():
 def test_players_with_tickets(division_id):    
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    division = fetch_entity(tables.Division,division_id)     
+    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.all()}
+    division = fetch_entity(tables.Division,division_id)         
     if division.meta_division_id:
-        players_with_tickets = tables.Player.query.join(tables.Token).filter_by(used=False,
+        players_with_tickets = tables.Player.query.filter_by(active=True).join(tables.Token).filter_by(used=False,
                                                                                 paid_for=True,
                                                                                 voided=False,
                                                                                 metadivision_id=division.meta_division_id).all()        
     else:
-        players_with_tickets = tables.Player.query.join(tables.Token).filter_by(used=False,
+        players_with_tickets = tables.Player.query.filter_by(active=True).join(tables.Token).filter_by(used=False,
                                                                                 paid_for=True,
                                                                                 voided=False,
                                                                                 division_id=division_id).all()
-    return jsonify({'data':{player.player_id:player.to_dict_fast() for player in players_with_tickets if player.active is True}})    
+    players_with_tickets_dict = {player.player_id:player.to_dict_fast() for player in players_with_tickets}
+    for player_id,player in players.iteritems():
+        if player['player_id'] in players_with_tickets_dict:
+            player['has_tokens']=True
+    return jsonify({'data':players})
+
+    # db = db_util.app_db_handle(current_app)
+    # tables = db_util.app_db_tables(current_app)
+    # division = fetch_entity(tables.Division,division_id)     
+    # if division.meta_division_id:
+    #     players_with_tickets = tables.Player.query.filter_by(active=True).join(tables.Token).filter_by(used=False,
+    #                                                                             paid_for=True,
+    #                                                                             voided=False,
+    #                                                                             metadivision_id=division.meta_division_id).all()        
+    # else:
+    #     players_with_tickets = tables.Player.query.filter_by(active=True).join(tables.Token).filter_by(used=False,
+    #                                                                             paid_for=True,
+    #                                                                             voided=False,
+    #                                                                             division_id=division_id).all()
+    # return jsonify({'data':{player.player_id:player.to_dict_fast() for player in players_with_tickets}})    
     # check if the post request has the file part            
 
 @admin_manage_blueprint.route('/test/media_upload', methods=['POST'])

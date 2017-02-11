@@ -44,7 +44,7 @@ angular.module('app.scorekeeping.machine_select.team_select').controller(
             $scope.poop_2 = true;
             $scope.test_submit_new = function(){
                 if($scope.selected_players.length != 0){                    
-                    $state.go('.process',{process_step:{process:true},team_info:$scope.selected_players[0].teams[0]});
+                    $state.go('.process',{process_step:{process:true},team_id:$scope.selected_players[0].team_id,team_name:$scope.selected_players[0].team_name});
 
                 }
             };

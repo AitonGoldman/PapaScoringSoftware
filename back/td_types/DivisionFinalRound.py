@@ -14,7 +14,7 @@ def generate_division_final_round_class(db_handle,relationship=None,fk=None):
             if len(self.division_final_matches) > 0:
                 division_final_round_dict['division_final_matches'] = []
                 for match in self.division_final_matches:
-                    division_final_round_dict.append(match.to_dict_simple())
+                    division_final_round_dict['division_final_matches'].append(match.to_dict_simple())
             return division_final_round_dict
         
     return DivisionFinalRound

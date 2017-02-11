@@ -6,7 +6,8 @@ angular.module('app.scorekeeping.machine_select.team_select.process').controller
         $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
 	$scope.division_machine_id=$state.params.division_machine_id;
-
+        $scope.team_id = $state.params.team_id;
+        $scope.team_name = $state.params.team_name;        
         $scope.utils = Utils;
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
@@ -17,9 +18,7 @@ angular.module('app.scorekeeping.machine_select.team_select.process').controller
             return;
         }
         
-        $scope.team_info=$state.params.team_info;        
-        console.log($scope.team_info);
-        add_team_to_machine_promise = TimeoutResources.AddTeamToMachine($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id,division_machine_id:$scope.division_machine_id,team_id:$scope.team_info.team_id});
+        add_team_to_machine_promise = TimeoutResources.AddTeamToMachine($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id,division_machine_id:$scope.division_machine_id,team_id:$scope.team_id});
         //= TimeoutResources.GetEtcData();
         add_team_to_machine_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();

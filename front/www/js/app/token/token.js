@@ -24,7 +24,7 @@ angular.module('app.token').controller(
             $scope.utils = Utils;
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                            
             Modals.loading();
-            players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});            
+            players_promise = TimeoutResources.GetPlayersFast($scope.bootstrap_promise,{site:$scope.site});            
             // = TimeoutResources.GetEtcData();
             players_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();

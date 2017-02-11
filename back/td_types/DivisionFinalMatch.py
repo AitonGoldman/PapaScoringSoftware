@@ -7,6 +7,8 @@ def generate_division_final_match_class(db_handle,relationship=None,fk=None):
         tiebreaker_division_machine_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_machine.division_machine_id'))
         
         completed = db_handle.Column(db_handle.Boolean,default=False)
+        has_tiebreaker = db_handle.Column(db_handle.Boolean,default=False)
+        
         number_of_games = db_handle.Column(db_handle.Integer)
         finals_match_player_results = db_handle.relationship('FinalsMatchPlayerResult')
         finals_match_game_results = db_handle.relationship('FinalsMatchGameResult')

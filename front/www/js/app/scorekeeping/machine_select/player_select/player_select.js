@@ -38,18 +38,20 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 $animate.enabled(true);
                 image_cache_list = [];
                 for(x=0;x<$scope.flattened_players.length;x++){
-                    image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
+                    if($scope.flattened_players[x].has_tokens == true){
+                        image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
+                    }
                 }
-                Modals.loaded();
-                // $ImageCacheFactory.Cache(
-                //     image_cache_list
-                // ).then(function(){
-                //     console.log("Images done loading!");
-                //     Modals.loaded();
-                // },function(failed){
-                //     console.log("An image failed: "+failed);
-                //     Modals.loaded();
-                // });                                                
+                //Modals.loaded();
+                $ImageCacheFactory.Cache(
+                     image_cache_list
+                 ).then(function(){
+                     console.log("Images done loading!");
+                     Modals.loaded();
+                 },function(failed){
+                     console.log("An image failed: "+failed);
+                     Modals.loaded();
+                });                                                
             });
             
         
@@ -57,7 +59,11 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 $scope.poop = true;
                 $scope.selected_players = $filter('filter')($scope.flattened_players,{player_id:parseInt($scope.player.player_id)},true);
                 if($scope.selected_players!=undefined && $scope.selected_players.length!=0){
-                    $scope.player_img_id=$scope.selected_players[0].player_id;
+                    if($scope.selected_players[0].has_tokens != true){
+                        $scope.player_img_id=0;                        
+                    } else {
+                        $scope.player_img_id=$scope.selected_players[0].player_id;
+                    }                    
                 }                
             };
             $scope.keyDown = function(event){

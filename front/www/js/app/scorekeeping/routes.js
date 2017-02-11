@@ -131,7 +131,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.scorekeeping.machine_select.team_select.process', 
         { 
          cache: false,
- 	 url: '/process',
+ 	 url: '/process/team_id/:team_id/team_name/:team_name',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/scorekeeping/machine_select/team_select/process/process.html',

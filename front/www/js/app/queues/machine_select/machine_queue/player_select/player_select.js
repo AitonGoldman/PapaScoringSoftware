@@ -2,8 +2,8 @@ angular.module('app.queues.machine_select.machine_queue.player_select',['app.que
     /*REPLACEMECHILD*/]);
 angular.module('app.queues.machine_select.machine_queue.player_select').controller(
     'app.queues.machine_select.machine_queue.player_select',[
-        '$scope','$state','TimeoutResources','Utils','Modals','$animate','$filter',
-        function($scope, $state, TimeoutResources, Utils,Modals,$animate,$filter) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$animate','$filter','$ImageCacheFactory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$animate,$filter,$ImageCacheFactory) {
         $scope.site=$state.params.site;
 	$scope.division_machine_id=$state.params.division_machine_id;
 	$scope.division_id=$state.params.division_id;
@@ -36,14 +36,35 @@ angular.module('app.queues.machine_select.machine_queue.player_select').controll
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.flattened_players = _.values($scope.resources.players_with_tickets.data);
             $animate.enabled(true);                              
-            Modals.loaded();
+            //Modals.loaded();
+                image_cache_list = [];
+                for(x=0;x<$scope.flattened_players.length;x++){
+                    if($scope.flattened_players[x].has_tokens == true){
+                        image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
+                    }
+                }
+                //Modals.loaded();
+                $ImageCacheFactory.Cache(
+                     image_cache_list
+                 ).then(function(){
+                     console.log("Images done loading!");
+                     Modals.loaded();
+                 },function(failed){
+                     console.log("An image failed: "+failed);
+                     Modals.loaded();
+                });                                                
+            
         });
         $scope.selected_players=[];
         $scope.onPlayerIdChange = function(){                
             $scope.poop = true;
             $scope.selected_players = $filter('filter')($scope.flattened_players,{player_id:parseInt($scope.player.player_id)},true);
             if($scope.selected_players!=undefined && $scope.selected_players.length!=0){
-                $scope.player_img_id=$scope.selected_players[0].player_id;
+                    if($scope.selected_players[0].has_tokens != true){
+                        $scope.player_img_id=0;                        
+                    } else {
+                        $scope.player_img_id=$scope.selected_players[0].player_id;
+                    }                                    
             }                
         };
         

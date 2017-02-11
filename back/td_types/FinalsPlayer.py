@@ -10,7 +10,7 @@ def generate_finals_player_class(db_handle,relationship=None,fk=None):
                                      db_handle.ForeignKey(
                                          'player.player_id'))
                 
-        inital_seed = db_handle.Column(db_handle.Integer)
+        initial_seed = db_handle.Column(db_handle.Integer)
         overall_rank = db_handle.Column(db_handle.Integer)
 
         def to_dict_simple(self):

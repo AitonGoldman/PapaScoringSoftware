@@ -145,6 +145,9 @@ angular.module('TD_services.timeout_resources')
                       } else {
                           var ip_start = $location.absUrl().indexOf('//')+2;
                           var ip_end = $location.absUrl().indexOf(':',ip_start);
+                          if(ip_end == -1){
+                              ip_end = $location.absUrl().indexOf('/',ip_start);
+                          }                          
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
                           var results_ip = ip;
                           var purchase_ip = ip;

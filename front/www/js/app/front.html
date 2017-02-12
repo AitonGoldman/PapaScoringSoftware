@@ -66,7 +66,16 @@
         <span>Complete Registration for Pre-Registered</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
-      
+      <a ng-if='isWebView == false' href="static/help.html" target="_new_window" class="item item-icon-left item-icon-right">
+        <i class="icon ion-help"></i>
+        <span>Help</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>
+      <a ng-if='isWebView == true' ng-click='utils.native_open_in_browser("/td/static/help.html")' class="item item-icon-left item-icon-right">
+        <i class="icon ion-help"></i>
+        <span>Help</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>       
     </div>
     
     <!--

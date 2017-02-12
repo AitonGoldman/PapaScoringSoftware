@@ -50,7 +50,7 @@ def route_edit_player(player_id):
         player.ifpa_ranking = input_data['ifpa_ranking']
     if 'active' in input_data:
         player.active=input_data['active']
-    if 'linked_division_id' in input_data:
+    if 'linked_division_id' in input_data and input_data['linked_division_id'] is not None:
         # Get all scores from old division
         # void all those scores
         # change linked_division_id

@@ -49,7 +49,11 @@ angular.module('app.results.divisions.division').controller(
                 $scope.b_cutoff=division.finals_num_qualifiers_ppo_b;
                 
                 a_index = $scope.find_last_div_player_ppo_idx($scope.a_cutoff,results,division);
-                $scope.results_a = _.slice(results,0,a_index+1);                
+                $scope.results_a = _.slice(results,0,a_index+1);
+                _.forEach($scope.results_a, function(value) {
+                    console.log(value);
+                    value[1].a_division=true;                    
+                });
                 b_index = $scope.find_last_div_player_ppo_idx($scope.b_cutoff,
                                                               _.slice(results,a_index+1),
                                                               division);
@@ -83,11 +87,8 @@ angular.module('app.results.divisions.division').controller(
             }
             idx = cutoff-1;
             top_machines = $scope.resources.division_results.data.top_machines[division.division_id];
-            console.log("cutoff is "+cutoff+" for division "+division.division_name);
-            console.log(results[idx+1]);
             while(idx+1 != results.length && results[idx][0]==results[idx+1][0]){                
-                idx=idx+1;
-                console.log('trying idx '+(idx+1));
+                idx=idx+1;                
             }
             return idx;
         };
@@ -103,7 +104,7 @@ angular.module('app.results.divisions.division').controller(
             $scope.a_cutoff=division.finals_num_qualifiers_ppo_a;
             $scope.div_cutoff=division.finals_num_qualifiers;            
             if(division.finals_player_selection_type == "ppo"){
-                if (division.ppo_a_ifpa_range_end > player.ifpa_ranking){                                        
+                if (division.ppo_a_ifpa_range_end > player.ifpa_ranking && player.a_division != true){                                        
                     return true;
                 } else {                   
                     return false;

@@ -6,7 +6,7 @@ from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
 from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue,get_valid_sku,get_queue_from_division_machine,send_push_notification,get_player_list_to_notify
-from orm_creation import create_division, create_division_machine
+from orm_creation import create_division, create_division_machine, fetch_stripe_price
 import datetime
 from sqlalchemy import and_,or_
 import random
@@ -281,6 +281,7 @@ def route_edit_division(division_id):
                 if get_valid_sku(division_data['stripe_sku'],current_app.td_config['STRIPE_API_KEY'])['sku'] is None:
                     raise BadRequest('Invalid sku specified')
                 division.stripe_sku = division_data['stripe_sku']
+                fetch_stripe_price(current_app,division)
             else:
                 raise BadRequest('Specified use_stripe, but no sku specified')
         else:
@@ -305,8 +306,12 @@ def route_edit_division(division_id):
         division.discount_ticket_count=division_data['discount_ticket_count']
     if 'discount_ticket_price' in division_data:
         division.discount_ticket_price=division_data['discount_ticket_price']
-    if 'discount_stripe_sku' in division_data:
-        division.discount_stripe_sku=division_data['discount_stripe_sku']
+    if 'discount_stripe_sku' in division_data:        
+        if get_valid_sku(division_data['discount_stripe_sku'],current_app.td_config['STRIPE_API_KEY'])['sku'] is None:
+            raise BadRequest('Invalid sku specified')
+        division.discount_stripe_sku = division_data['discount_stripe_sku']
+        fetch_stripe_price(current_app,division)
+        
     if 'number_of_relevant_scores' in division_data:
         division.number_of_relevant_scores=division_data['number_of_relevant_scores']
     if 'min_num_tickets_to_purchase' in division_data:

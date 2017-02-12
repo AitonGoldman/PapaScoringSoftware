@@ -17,6 +17,8 @@ angular.module('app.scorekeeping').controller(
         $scope.bootstrap_promise.then(function(data){
             Modals.loaded();
             $scope.resources = TimeoutResources.GetAllResources();
+            $scope.divisions_to_display = _.filter($scope.resources.divisions.data, function(value,key) { console.log(value);console.log(key);return key!="metadivisions"; });
+  
         });
     }]
 );

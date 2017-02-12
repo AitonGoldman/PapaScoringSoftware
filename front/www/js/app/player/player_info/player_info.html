@@ -28,7 +28,7 @@
           {{resources.player_pin.data}} 
         </div>        
       </div>
-      <div class='item row padding-vertical'>
+      <div ng-if='resources.player.data.linked_division_name != undefined' class='item row padding-vertical'>
         <div style='text-align:right' class='col padding-vertical'>
           Main Division : 
         </div>
@@ -77,19 +77,18 @@
             <span ng-if='type_of_div == "divisions"'>{{resources.divisions.data[div_id].tournament_name}} : </span> 
             <span ng-if='type_of_div == "teams"'>{{resources.divisions.data[div_id].tournament_name}} : </span> 
             <span ng-if='type_of_div == "metadivisions"'>{{resources.divisions.data.metadivisions[div_id.toString()].meta_division_name}} : </span>  
-            
           </div>
           <div class='col padding-vertical' style='text-align:left'>
             {{div_tokens}}
           </div>        
         </div>
       </div>
-      <div class='item row padding-vertical'>
-        <div style='text-align:right' class='col'>
-        </div>
-        <div class='col' style='text-align:left'>
-        </div>        
-      </div>
+      <!-- <div class='item row padding-vertical'> -->
+      <!--   <div style='text-align:right' class='col'> -->
+      <!--   </div> -->
+      <!--   <div class='col' style='text-align:left'> -->
+      <!--   </div>         -->
+      <!-- </div> -->
 
       
     </div>

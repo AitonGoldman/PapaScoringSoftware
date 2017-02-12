@@ -12,6 +12,7 @@ angular.module('app.results.divisions').controller(
         //divisions_promise = TimeoutResources.GetDivisions($scope.bootstrap_promise,{site:$scope.site});        
         $scope.bootstrap_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
+            $scope.divisions_to_display = _.filter($scope.resources.divisions.data, function(value,key) { console.log(value);console.log(key);return key!="metadivisions"; });
             Modals.loaded();
         });             
     }]

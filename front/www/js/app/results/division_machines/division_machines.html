@@ -1,7 +1,7 @@
 <ion-view view-title="Results">
   <ion-content>      
     <div class="skinny-list list">    
-      <a id="scorekeeping_division_select_{{division.division_id}}_link" ng-repeat='division in resources.divisions.data' class="item item-icon-right" ui-sref='.machines({division_id:division.division_id})'>
+      <a id="scorekeeping_division_select_{{division.division_id}}_link" ng-repeat='division in divisions_to_display' class="item item-icon-right" ui-sref='.machines({division_id:division.division_id})'>
         <span>{{division.tournament_name}} Machines</span>
         <i class="icon ion-chevron-right"></i>        
       </a>          

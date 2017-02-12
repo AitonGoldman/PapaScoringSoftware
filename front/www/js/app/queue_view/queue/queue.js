@@ -18,8 +18,7 @@ angular.module('app.queue_view.queue').controller(
                     $scope.resources = TimeoutResources.GetAllResources();
                     $scope.flattened_queues = _.values($scope.resources.queues.data);
                     Modals.loaded();
-                    if($state.current.name == 'app.queue_view.queue'){
-                        alert('about to cycle');
+                    if($state.current.name == 'app.queue_view.queue'){                        
                         $timeout(get_queues,15000);
                     }
                 });             

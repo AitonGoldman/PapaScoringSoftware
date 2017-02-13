@@ -24,5 +24,42 @@ angular.module('app.scorekeeping.machine_select').controller(
             });            
             Modals.loaded();
         });
+        $scope.goto_next_scorekeeping_step = function(division_machine_id){
+            Modals.loading();
+            division_machines_promise = TimeoutResources.GetDivisionMachines(undefined,
+                                                                             {site:$scope.site,division_id:$scope.division_id});        
+            division_machines_promise.then(function(data){
+                $scope.resources = TimeoutResources.GetAllResources();                
+                division_machine = $scope.resources.division_machines.data[division_machine_id];                
+                if(division_machine.team_tournament == false){
+                    if(division_machine.player_id != undefined){
+                        $state.go('.record_score',
+                                  {division_machine_id:division_machine.division_machine_id,
+                                   division_machine_name:division_machine.division_machine_name,
+                                   player_name:division_machine.player.player_name,
+                                   player_id:division_machine.player.player_id,
+                                   team_tournament:false});
+                    } else {
+                        $state.go('.player_select',
+                                  {division_machine_id:division_machine.division_machine_id,
+                                   division_machine_name:division_machine.division_machine_name});                        
+                    }
+                } else {
+                    if(division_machine.team_id != undefined){                    
+                        $state.go('.team_select',
+                                  {division_machine_id:division_machine.division_machine_id,
+                                   division_machine_name:division_machine.division_machine_name,
+                                   player_name:division_machine.team.team_name,
+                                   player_id:division_machine.team.team_id,
+                                   team_tournament:true});
+                        
+                    } else {
+                        $state.go('.team_select',
+                                  {division_machine_id:division_machine.division_machine_id,
+                                   division_machine_name:division_machine.division_machine_name});
+                    }
+                }
+            });
+        };
     }]
 );

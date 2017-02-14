@@ -38,7 +38,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 $animate.enabled(true);
                 image_cache_list = [];
                 for(x=0;x<$scope.flattened_players.length;x++){
-                    if($scope.flattened_players[x].has_tokens == true){
+                    if($scope.flattened_players[x].has_tokens == true && $scope.flattened_players[x].on_division_machine!=true){
                         image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
                     }
                 }

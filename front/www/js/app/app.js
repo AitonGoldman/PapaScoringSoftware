@@ -111,7 +111,9 @@ app.controller(
         };
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             $scope.site=state.params.site;            
-
+            // if($state.current.name.length - $state.current.name.indexOf('confirm') == 7){
+            //     Modals.information('It is important to read directions.  For example, this is the review page - you still need to click Purchase button');
+            // }
             User.set_user_site($scope.site);
             if (User.logged_in() == true) {
                 if($scope.is_login_age_old(User.login_time) || TimeoutResources.GetAllResources().divisions==undefined){

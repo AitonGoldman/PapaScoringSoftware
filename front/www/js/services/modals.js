@@ -23,6 +23,17 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
                 $ionicLoading.hide();                                
             },500);            
         },
+        information:function(message){                        
+            $ionicModal.fromTemplateUrl('js/services/information_modal.html', {                
+                animation: 'slide-in-up',
+                backdropClickToClose: false,
+                scope : $rootScope
+            }).then(function(modal) {
+                $rootScope.message = message;                            
+                $rootScope.information_modal = modal;
+                $rootScope.information_modal.show();
+            });            
+        },
         error:function(error_message,new_dest_site,new_dest_route){            
             $ionicLoading.hide();                                
             if(error_modal != undefined){

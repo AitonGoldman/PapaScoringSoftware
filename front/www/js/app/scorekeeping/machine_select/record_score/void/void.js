@@ -19,12 +19,15 @@ angular.module('app.scorekeeping.machine_select.record_score.void').controller(
             //Utils.stop_post_reload();
             Modals.error('Tried to reload a page that submits data.',$scope.site,'app');
             return;
-        }        
-        void_promise = TimeoutResources.VoidScore($scope.bootstrap_promise,{site:$scope.site,division_machine_id:$scope.division_machine_id});        
+        }
+        queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
+
+        void_promise = TimeoutResources.VoidScore(queues_promise,{site:$scope.site,division_machine_id:$scope.division_machine_id});        
         // = TimeoutResources.GetEtcData();
         void_promise.then(function(data){
-        $scope.resources = TimeoutResources.GetAllResources();
-          Modals.loaded();
+            $scope.resources = TimeoutResources.GetAllResources();
+            $scope.division_machine_queue_length = $scope.resources.queues.data[$scope.division_machine_id].queues.length;
+            Modals.loaded();
         });
     }]
 );

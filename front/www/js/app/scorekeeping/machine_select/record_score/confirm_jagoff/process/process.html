@@ -12,9 +12,12 @@
           Return to Machine List
           <i class="icon ion-chevron-right"></i>          
         </button>
-        <button class="seperate_button button button-full button-calm item-icon-right" ui-sref=".^.^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,hide_back_button:true})">
-          Add new player to machine
-          <i class="icon ion-chevron-right"></i>                
+        <button class="seperate_button button button-full button-calm item-icon-left item-icon-right" ui-sref=".^.^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,hide_back_button:true})">
+              <i ng-if="division_machine_queue_length == 0" class="icon"></i>
+              <span ng-if="division_machine_queue_length == 0">Add new player to machine</span>
+              <i ng-if='division_machine_queue_length > 0' class="icon ion-alert-circled"></i>              
+              <span ng-if='division_machine_queue_length > 0'>Add player waiting on queue</span>
+              <i class="icon ion-chevron-right"></i>          
         </button>    
       </div>
     </center>

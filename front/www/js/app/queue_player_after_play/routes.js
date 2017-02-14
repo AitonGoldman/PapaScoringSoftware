@@ -33,7 +33,33 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
              
           }    
 
+       }).state('app.queue_player_after_play.machine_add_confirm', 
+        { 
+         cache: false,
+ 	 url: '/machine_add_confirm/division_machine_to_add_to_id/:division_machine_to_add_to_id/division_machine_to_add_to_name/:division_machine_to_add_to_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/queue_player_after_play/machine_add_confirm/machine_add_confirm.html',
+ 	       controller: 'app.queue_player_after_play.machine_add_confirm'
+ 	     }
+ 	   }
+       }).state('app.queue_player_after_play.machine_add_confirm.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/queue_player_after_play/machine_add_confirm/process/process.html',
+ 	       controller: 'app.queue_player_after_play.machine_add_confirm.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
        })//REPLACE_ME
+
+
 
 
 

@@ -1,4 +1,5 @@
 angular.module('app.queue_player_after_play',['app.queue_player_after_play.confirm',
+    'app.queue_player_after_play.machine_add_confirm',
     /*REPLACEMECHILD*/]);
 angular.module('app.queue_player_after_play').controller(
     'app.queue_player_after_play',[
@@ -42,8 +43,13 @@ angular.module('app.queue_player_after_play').controller(
                 //$state.go('.machine_queue',{division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name});
                 return;
             }
+            if(division_machine.player_id == undefined && division_machine.queues.length == 0){
+                //$state.go('.machine_queue',{division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name});
+                $state.go('.machine_add_confirm',{division_machine_to_add_to_id:division_machine.division_machine_id,division_machine_to_add_to_name:division_machine.division_machine_name});
+                return;
+            }
             
-            ActionSheets.queue_no_action();
+            //ActionSheets.queue_no_action();
             //ui-sref='.machine_queue({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})'
         };
         

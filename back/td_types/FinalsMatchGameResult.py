@@ -6,6 +6,7 @@ def generate_finals_match_game_result_class(db_handle,relationship=None,fk=None)
         division_final_match_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_final_match.division_final_match_id'))
         division_machine_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_machine.division_machine_id'))
         division_machine = db_handle.relationship('DivisionMachine')
+        division_machine_string = db_handle.Column(db_handle.String(50))
         completed = db_handle.Column(db_handle.Boolean,default=False)
         finals_match_game_player_results = db_handle.relationship('FinalsMatchGamePlayerResult')
  

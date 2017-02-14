@@ -3,8 +3,8 @@ from flask_restless.helpers import to_dict
 def generate_division_final_round_class(db_handle,relationship=None,fk=None):    
     class DivisionFinalRound(db_handle.Model):        
         division_final_round_id = db_handle.Column(db_handle.Integer, primary_key=True)
-        division_final_d = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_final.division_final_id'))
-
+        division_final_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_final.division_final_id'))
+        round_number = db_handle.Column(db_handle.String(5))
         number_of_matches = db_handle.Column(db_handle.Integer)
         completed = db_handle.Column(db_handle.Boolean,default=False)
         division_final_matches = db_handle.relationship('DivisionFinalMatch')

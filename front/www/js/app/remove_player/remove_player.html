@@ -1,35 +1,44 @@
-<ion-view view-title="">
-  <ion-content>      
-    <div class="list" >
-      <!-- REMOVE ME -->
-      <div class='player-select'>
-        <label class="item-input item">
-          <i class="icon ion-search placeholder-icon"></i>
-          <form ng-submit='test_submit()'>
-            <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange()' type="tel" placeholder="Player #" ng-model="player.player_id">
-          </form>
-        </label>
-        <div class='item'>
-          <!--<div style='margin-left:68px'>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>-->
-          <div>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>
-        </div>
-        <div style='text-align:center' class='item'>
-          <span ng-if='selected_players.length == 0'> &nbsp; </span>
-          <span ng-if='selected_players[0].division_machine != undefined && selected_players.length > 0' >{{selected_players[0].division_machine.division_machine_name}}</span>
-          <span ng-if='selected_players[0].division_machine == undefined && selected_players.length > 0' >Player is not playing a game.</span>          
-        </div>
+<ion-view view-title="Remove Player">
+  <ion-content>
+    <div class="skinny-list list">
+      <div ng-repeat='division_machine in flattened_division_machines' ng-if='division_machine.removed!=true && (division_machine.player_id!=undefined || division_machine.team_id!=undefined)'>
+        <a id="scorekeeping_machine_select_{{division_machine.division_machine_id}}_link" ui-sref=".confirm({player_id:division_machine.player.player_id,player_name:division_machine.player.player_name,machine_name:division_machine.division_machine_name,division_machine_id:division_machine.division_machine_id})" class="item item-icon-right">
+          <span>{{division_machine.division_machine_name}}</span> <span class='standard_small_font'>{{division_machine.player.player_name}}</span>
+          <i class="icon ion-chevron-right"></i>
+        </a>        
+      </div>      
+    </div>
+    
+  <!--   <div class="list" > -->
+  <!--     <\!-- REMOVE ME -\-> -->
+  <!--     <div class='player-select'> -->
+  <!--       <label class="item-input item"> -->
+  <!--         <i class="icon ion-search placeholder-icon"></i> -->
+  <!--         <form ng-submit='test_submit()'> -->
+  <!--           <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange()' type="tel" placeholder="Player #" ng-model="player.player_id"> -->
+  <!--         </form> -->
+  <!--       </label> -->
+  <!--       <div class='item'> -->
+  <!--         <\!--<div style='margin-left:68px'>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>-\-> -->
+  <!--         <div>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div> -->
+  <!--       </div> -->
+  <!--       <div style='text-align:center' class='item'> -->
+  <!--         <span ng-if='selected_players.length == 0'> &nbsp; </span> -->
+  <!--         <span ng-if='selected_players[0].division_machine != undefined && selected_players.length > 0' >{{selected_players[0].division_machine.division_machine_name}}</span> -->
+  <!--         <span ng-if='selected_players[0].division_machine == undefined && selected_players.length > 0' >Player is not playing a game.</span>           -->
+  <!--       </div> -->
 
-      </div>
-    </div>
-    <button ng-disabled='selected_players.length == 0 || selected_players[0].division_machine == undefined' ng-click='test_submit()' class='button button-full button-calm seperate_button item-icon-right'>
-      Select Player
-      <i class="icon ion-chevron-right"></i>          
-    </button>
-    <div class='player-info-avatar'>
-      <img src="{{http_prefix}}://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players.length == 0 && poop == true'>
-      <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">
-      <img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'>
-    </div>
-  </ion-content>
+  <!--     </div> -->
+  <!--   </div> -->
+  <!--   <button ng-disabled='selected_players.length == 0 || selected_players[0].division_machine == undefined' ng-click='test_submit()' class='button button-full button-calm seperate_button item-icon-right'> -->
+  <!--     Select Player -->
+  <!--     <i class="icon ion-chevron-right"></i>           -->
+  <!--   </button> -->
+  <!--   <div class='player-info-avatar'> -->
+  <!--     <img src="{{http_prefix}}://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players.length == 0 && poop == true'> -->
+  <!--     <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg"> -->
+  <!--     <img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'> -->
+  <!--   </div> -->
+  <!-- </ion-content> -->
 </ion-view>
 

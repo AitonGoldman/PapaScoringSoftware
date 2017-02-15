@@ -2,7 +2,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
     $stateProvider.state('app.remove_player', 
         { 
          cache: false,
- 	 url: '/remove_player',
+ 	 url: '/remove_player/:division_id',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/remove_player/remove_player.html',

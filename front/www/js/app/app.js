@@ -54,6 +54,7 @@ app.controller(
              $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory,$ionicSideMenuDelegate) {
         //$scope.type_of_page = type_of_page;
         $scope.utils = Utils;
+        $scope.state = $state;
         if(ionic.Platform.isWebView() == false && type_of_page != 'prereg'){
             $scope.type_of_page = 'user';
             if ($location.absUrl().includes('player.html#')==true){

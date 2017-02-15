@@ -12,6 +12,7 @@ from sqlalchemy import and_,or_
 import random
 import os
 from sqlalchemy.sql.expression import desc, asc
+from routes.audit_log_utils import create_audit_log
 
 @admin_manage_blueprint.route('/division',methods=['GET'])
 def route_get_divisions():
@@ -237,7 +238,12 @@ def route_remove_division_machine_player(division_machine_id,player_id):
         raise BadRequest('Player is not playing on this machine!')
 
     division_machine.player_id=None
+    create_audit_log("Player Removed",datetime.datetime.now(),
+                     "Removed from %s"%division_machine.machine.machine_name,user_id=current_user.user_id,
+                     player_id=player_id,team_id=None,division_machine_id=division_machine.division_machine_id,commit=False)    
+
     tables.db_handle.session.commit()
+    
     return jsonify({'data':division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division',methods=['POST'])

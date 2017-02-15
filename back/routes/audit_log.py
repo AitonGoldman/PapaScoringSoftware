@@ -157,5 +157,12 @@ def route_audit_log_missing_tokens(player_id):
                 'audit_log_id':audit_log.audit_log_id,
                 'contents': [audit_log.action_date,audit_log.action,username,machine_name]
             })
+        if audit_log.action == "Player Removed":            
+            username = users[audit_log.user_id]['username']            
+            machine_name=division_machines[audit_log.division_machine_id]['division_machine_name']                                
+            audit_log_list.append({
+                'audit_log_id':audit_log.audit_log_id,
+                'contents': [audit_log.action_date,audit_log.action,username,machine_name]
+            })
         
     return jsonify({'data':audit_log_list})

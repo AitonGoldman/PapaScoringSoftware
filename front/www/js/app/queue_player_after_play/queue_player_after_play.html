@@ -2,17 +2,22 @@
   <ion-content>      
     <div class="skinny-list list">
 
+      <ion-checkbox class='item item-energized item' ng-model="isChecked">
+        <span ng-if="isChecked==false">Display Avg Times</span>
+        <span ng-if="isChecked==true">Display Player Top Scores</span>
+      </ion-checkbox>
+
       <a  class="item item-icon-right item-icon-left queue_item_padding" ng-repeat='division_machine in resources.queues.data' ng-click="choose_queue_action_or_no_action(division_machine)">
         <i ng-if="division_machine.player_id != undefined" class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length+1<10,custom_queue_item_large:division_machine.queues.length+1 > 9}'>{{division_machine.queues.length+1}}</span></i>        
         <i ng-if="division_machine.player_id == undefined && division_machine.queues.length > 0" class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length<10,custom_queue_item_large:division_machine.queues.length > 9}'>{{division_machine.queues.length}}</span></i>
         <i ng-if="division_machine.player_id == undefined && division_machine.queues.length == 0" class="icon ion-android-walk queue_walking"></i>
 
-        <!-- <i class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length<10,custom_queue_item_large:division_machine.queues.length > 9}'>{{division_machine.queues.length}}</span></i> -->
-        <!-- <span>{{division_machine.division_machine_name}}</span> -->
-        <!-- <i class='icon ion-chevron-right'></i> -->
 
-        <b>{{division_machine.division_machine_name}}</b> <br class='mobile-show'> <span class='standard_small_font' ng-if='division_machine.avg_play_time!=undefined'> Avg Time : {{division_machine.avg_play_time}}</span> <span class='standard_small_font' ng-if='resources.players_best_scores.data[division_machine.division_machine_id]'>
-          <span class='standard_small_font' ng-if='division_machine.avg_play_time!=undefined'> / </span>
+        <b>{{division_machine.division_machine_name}}</b> <br class='mobile-show'>
+        <span class='standard_small_font' ng-if='division_machine.avg_play_time!=undefined && isChecked == true'>
+          Avg Time : {{division_machine.avg_play_time}}
+        </span>
+        <span class='standard_small_font' ng-if='resources.players_best_scores.data[division_machine.division_machine_id] && isChecked==false'>          
           Best Score : {{resources.players_best_scores.data[division_machine.division_machine_id]}}
         </span> 
         <i class="icon ion-chevron-right"></i>        

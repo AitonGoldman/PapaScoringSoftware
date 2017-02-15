@@ -5,7 +5,8 @@ angular.module('app.queue_player_after_play').controller(
     'app.queue_player_after_play',[
         '$scope','$state','TimeoutResources','Utils','Modals','ActionSheets',
         function($scope, $state, TimeoutResources, Utils,Modals,ActionSheets) {
-        $scope.site=$state.params.site;
+            $scope.isChecked=false;
+            $scope.site=$state.params.site;
 	$scope.player_id=$state.params.player_id;
 	$scope.division_id=$state.params.division_id;
 	$scope.player_name=$state.params.player_name;

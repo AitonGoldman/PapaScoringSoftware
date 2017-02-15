@@ -199,6 +199,8 @@ angular.module('TD_services.timeout_resources')
                   
                   var getPlayersFastResource = generate_resource_definition(':site/test/player_fast',
                                                                             'GET');
+                  var getPlayersBestScoresForDivisionResource = generate_resource_definition(':site/results/player_best_scores/division/:division_id/player/:player_id',
+                                                                            'GET');                  
                   var getFromResultsPlayersFastResource = generate_resource_definition(':site/test/player_fast',
                                                                                        'GET',undefined,api_host.results_host());
                   
@@ -308,7 +310,9 @@ angular.module('TD_services.timeout_resources')
                       GetEvents: generate_custom_http_executor(getEventsResource,'events','get'),
                       GetStripePublicKey: generate_custom_http_executor(getStripePublicKeyResource,'stripe_public_key','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
-                      GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),                      
+                      GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
+                      GetPlayersBestScoresForDivision: generate_custom_http_executor(getPlayersBestScoresForDivisionResource,'players_best_scores','get'),                      
+                      
                       GetPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),
                       GetFromResultsPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),                      
                       GetPlayersPreregFast: generate_custom_http_executor(getPlayersPreregFastResource,'players','get'),

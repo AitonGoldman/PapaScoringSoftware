@@ -362,7 +362,19 @@ def route_get_division_ppo_qualifying_results_list(division_id):
 @admin_manage_blueprint.route('/results/division_machine/<division_machine_id>',methods=['GET'])
 def route_get_division_machine_results(division_machine_id):
     return get_division_results(division_machine_id_external=division_machine_id)
-    
+
+@admin_manage_blueprint.route('/results/player_best_scores/division/<division_id>/player/<player_id>',methods=['GET'])
+def route_get_player_best_scores_division_results(division_id,player_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    #tables.Score.query.filter(func.max(tables.Score.score)).all()
+    max_scores = db.session.query(func.max(tables.Score.score),tables.Score.division_machine_id).join(tables.Entry).filter_by(player_id=player_id,division_id=division_id).group_by(tables.Score.division_machine_id).all()            
+    for score in max_scores:
+        print score[0]
+    return jsonify({'data':{score[1]:score[0] for score in max_scores}})
+
+
+
 def get_first_query(division_id=None, division_machine_id=None,team=False):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)

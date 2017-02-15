@@ -11,6 +11,7 @@ import datetime
 from sqlalchemy import and_,or_
 import random
 import os
+from sqlalchemy.sql.expression import desc, asc
 
 @admin_manage_blueprint.route('/division',methods=['GET'])
 def route_get_divisions():
@@ -45,12 +46,13 @@ def route_get_division_machines_avg_playtime(division_id,division_machine_id):
             division_machines = tables.DivisionMachine.query.filter_by(division_id=division_id).all()        
     else:            
         division_machines = [fetch_entity(tables.DivisionMachine,division_machine_id)]    
-    #audit_logs = tables.AuditLog.query.filter_by(division_machine_id=division_machine_id).all()
     division_machine_ids = [division_machine.division_machine_id for division_machine in division_machines]            
     audit_logs = tables.AuditLog.query.filter(and_(tables.AuditLog.division_machine_id.in_(division_machine_ids),
-                                                   or_(tables.AuditLog.action == "Game Started",
-                                                       tables.AuditLog.action == "Score Added"))).order_by(tables.AuditLog.audit_log_id).all()
-    #audit_logs = tables.AuditLog.query.filter(tables.AuditLog.division_machine_id.in_(division_machine_ids)).order_by(tables.AuditLog.audit_log_id).all()
+                                                   or_(tables.AuditLog.action == action for action in ('Game Started',
+                                                                                                       'Score Added',
+                                                                                                       'Score Voided',
+                                                                                                       'Jagoff Declared')
+                                                   ))).order_by(asc(tables.AuditLog.audit_log_id)).all()
     
     start_times = {}
     end_times = {}
@@ -60,26 +62,38 @@ def route_get_division_machines_avg_playtime(division_id,division_machine_id):
     avg_times = {}
     cur_action = None
     for audit_log in audit_logs:
-        if cur_action == audit_log.action:
-            continue
-        cur_action = audit_log.action        
         if audit_log.action == "Game Started":
+            print "%s - starting on %s"%(audit_log.audit_log_id, audit_log.division_machine_id)
             start_times[audit_log.division_machine_id] = audit_log.action_date
             end_times[audit_log.division_machine_id] = None
         if audit_log.action == "Score Added" or audit_log.action == "Score Voided":
+            print "%s - ending on %s"%(audit_log.audit_log_id,audit_log.division_machine_id)
+ 
             end_times[audit_log.division_machine_id] = audit_log.action_date
+            if start_times[audit_log.division_machine_id] is None:
+                start_times[audit_log.division_machine_id]=None
+                end_times[audit_log.division_machine_id]=None                
+                print "%s"%audit_log.audit_log_id
+                continue
+            time_delta = end_times[audit_log.division_machine_id] - start_times[audit_log.division_machine_id]
+            if audit_log.division_machine_id not in avg_times:
+                avg_times[audit_log.division_machine_id]=[]
+            avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
+            start_times[audit_log.division_machine_id]=None
+            end_times[audit_log.division_machine_id]=None
+            
         #if audit_log.voided_date and audit_log.action != "jagoff":
         #    end_time = audit_log.voided_date
-        if audit_log.division_machine_id in end_times and end_times[audit_log.division_machine_id]:
-            if audit_log.division_machine_id in start_times:                
-                #if end_times[audit_log.division_machine_id] is None or start_times[audit_log.division_machine_id] is None:
-                #    continue
-                time_delta = end_times[audit_log.division_machine_id] - start_times[audit_log.division_machine_id]
-                if audit_log.division_machine_id not in avg_times:
-                    avg_times[audit_log.division_machine_id]=[]
-                avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
-                start_times[audit_log.division_machine_id]=None
-                end_times[audit_log.division_machine_id]=None
+        #if audit_log.division_machine_id in end_times and end_times[audit_log.division_machine_id]:
+        #    if audit_log.division_machine_id in start_times:                
+        #        #if end_times[audit_log.division_machine_id] is None or start_times[audit_log.division_machine_id] is None:
+        #        #    continue
+        #        time_delta = end_times[audit_log.division_machine_id] - start_times[audit_log.division_machine_id]
+        #        if audit_log.division_machine_id not in avg_times:
+        #            avg_times[audit_log.division_machine_id]=[]
+        #        avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
+        #        start_times[audit_log.division_machine_id]=None
+        #        end_times[audit_log.division_machine_id]=None
                 
     for avg_time_division_machine_id,machine_times in avg_times.iteritems():                
         total_time = 0

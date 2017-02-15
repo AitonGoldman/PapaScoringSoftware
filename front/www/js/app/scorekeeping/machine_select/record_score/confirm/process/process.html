@@ -44,7 +44,7 @@
               <i class="icon ion-chevron-right"></i>          
 
             </button>
-            <button ng-if='resources.divisions.data[division_id].queuing == true && resources.added_score.player_token_data > 0'  class="button button-full button-calm seperate_button item-icon-right" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
+            <button ng-if='resources.divisions.data[division_id].queuing == true && resources.added_score.player_token_data > 0'  class="button button-full button-calm seperate_button item-icon-right small-text-button" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
               Add {{player_name}} to new machine or queue
               <i class="icon ion-chevron-right"></i>          
             </button>    

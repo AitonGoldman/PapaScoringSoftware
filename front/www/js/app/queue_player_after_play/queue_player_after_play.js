@@ -19,7 +19,8 @@ angular.module('app.queue_player_after_play').controller(
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         //division_machines_promise = TimeoutResources.GetDivisionMachines($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});                
-        queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
+            best_scores_promise = TimeoutResources.GetPlayersBestScoresForDivision($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id,player_id:$scope.player_id});
+            queues_promise = TimeoutResources.GetQueues(best_scores_promise,{site:$scope.site,division_id:$scope.division_id});
         
         queues_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();            

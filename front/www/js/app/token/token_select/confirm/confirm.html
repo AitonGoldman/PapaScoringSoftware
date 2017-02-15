@@ -35,7 +35,9 @@
                 Total Cost : 
               </td>
               <td class='padding-left'>
-                ${{token_info.total_cost}}
+                <span ng-if='token_info.comped!=true'>${{token_info.total_cost}}</span>
+                <span ng-if='token_info.comped==true'>COMPED</span>
+                
               </td>
             </tr>
           </table>

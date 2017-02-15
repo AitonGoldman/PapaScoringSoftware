@@ -11,7 +11,10 @@
         <!-- <span>{{division_machine.division_machine_name}}</span> -->
         <!-- <i class='icon ion-chevron-right'></i> -->
 
-        <b>{{division_machine.division_machine_name}}</b> <br class='mobile-show'> <span ng-if='division_machine.avg_play_time!=undefined'> Avg Time : {{division_machine.avg_play_time}}</span>
+        <b>{{division_machine.division_machine_name}}</b> <br class='mobile-show'> <span class='standard_small_font' ng-if='division_machine.avg_play_time!=undefined'> Avg Time : {{division_machine.avg_play_time}}</span> <span class='standard_small_font' ng-if='resources.players_best_scores.data[division_machine.division_machine_id]'>
+          <span class='standard_small_font' ng-if='division_machine.avg_play_time!=undefined'> / </span>
+          Best Score : {{resources.players_best_scores.data[division_machine.division_machine_id]}}
+        </span> 
         <i class="icon ion-chevron-right"></i>        
       </a>
       <button class="button button-full button-calm item-icon-right small_seperate_button" ui-sref='^.scorekeeping.machine_select({division_id:division_id,hide_back_button:true})'>

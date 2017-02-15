@@ -9,9 +9,12 @@ while [  1 -eq 1 ]; do
     do
         for j in {1..10}
         do
-            echo "Adding player $i to machine $j"
+            echo "Adding player $j to machine $i"
             ./utils/performance_test_add_to_machine.sh $j $i;
-            ./utils/performance_test_record_score.sh $j;        
+            sleep 2
+            ./utils/performance_test_record_score.sh $j;
+            echo "Recorded score!"            
+            sleep 2
         done
     done
 done

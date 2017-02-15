@@ -591,7 +591,9 @@ user-select: text;
 } 
 .ion-icon-yellow:before {
   color:gold;                       
-} 
-
+}
+button.small-text-button{
+font-size:$font-size-base*.75;     
+}
 // submit buttons : calm
 //

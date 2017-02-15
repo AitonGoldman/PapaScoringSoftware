@@ -90,7 +90,11 @@ app.controller(
             }            
         };
         $scope.jump_up_results = function(){
-            $state.go('^');
+            parent_state = $state.current.name.substring(0,$state.current.name.lastIndexOf('.'));            
+            //console.log('jumping to '+new_state);
+            //$ionicHistory.nextViewOptions({historyRoot:true});
+            $ionicHistory.nextViewOptions({disableBack:true});            
+            $state.go('app.results.divisions');            
             $ionicSideMenuDelegate.toggleRight();            
         };
         $scope.is_results_page = function(){
@@ -109,6 +113,21 @@ app.controller(
                 return undefined;
             }
         };
+        
+        $scope.jump_to_machine_list = function(){
+            console.log($state.params.division_id);
+            $ionicHistory.nextViewOptions({disableBack:true});            
+            $state.go('app.scorekeeping.machine_select',{site:$state.params.site,division_id:$state.params.division_id});
+            $ionicSideMenuDelegate.toggleRight();            
+        };
+        $scope.is_scorekeeping_page = function(){
+            if($state.current.name.match(/app.scorekeeping/) != undefined){                
+                return true;
+            } else {
+                return undefined;
+            }
+        };
+        
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             $scope.site=state.params.site;            
             // if($state.current.name.length - $state.current.name.indexOf('confirm') == 7){
@@ -138,7 +157,9 @@ app.controller(
             }                                 
         };
         $scope.customBackButtonNav = function(){
-            if($state.current.name.match(/results/) != undefined){                
+            if($state.current.name.match(/app.results/) != undefined){                
+                console.log($ionicHistory.backView());
+                
                 $ionicHistory.goBack();           
             } else {
                 $state.go('^');

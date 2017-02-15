@@ -13,6 +13,13 @@ angular.module('app.queues.machine_select').controller(
         queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
         queues_promise.then(function(data){            
             $scope.resources = TimeoutResources.GetAllResources();
+
+            $scope.flattened_division_machines = _.values($scope.resources.queues.data);
+            $scope.flattened_division_machines.sort(function (a, b) {
+                //return (a.division_machine_id > b.division_machine_id ? 1 : -1);
+                return (a.division_machine_name > b.division_machine_name ? 1 : -1);
+            });            
+
             Modals.loaded();
         });
         //division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name

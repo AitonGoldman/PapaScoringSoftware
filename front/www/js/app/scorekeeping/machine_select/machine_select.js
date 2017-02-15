@@ -20,7 +20,8 @@ angular.module('app.scorekeeping.machine_select').controller(
             $scope.flattened_division_machines = _.values($scope.resources.division_machines.data);
             console.log($scope.flattened_division_machines);
             $scope.flattened_division_machines.sort(function (a, b) {
-                return (a.division_machine_id > b.division_machine_id ? 1 : -1);
+                //return (a.division_machine_id > b.division_machine_id ? 1 : -1);
+                return (a.division_machine_name > b.division_machine_name ? 1 : -1);
             });            
             Modals.loaded();
         });

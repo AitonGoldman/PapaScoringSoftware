@@ -5,7 +5,7 @@
        on-refresh="doRefresh()">
     </ion-refresher>    
     <div class="skinny-list list">
-      <a class="item item-icon-left item-icon-right queue_item_padding" ng-if="division_machine.removed != true" ng-repeat='division_machine in resources.queues.data' ng-click="choose_queue_action_or_no_action(division_machine)" >
+      <a class="item item-icon-left item-icon-right queue_item_padding" ng-if="division_machine.removed != true" ng-repeat='division_machine in flattened_division_machines' ng-click="choose_queue_action_or_no_action(division_machine)" >
         <i ng-if="division_machine.player_id != undefined" class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length+1<10,custom_queue_item_large:division_machine.queues.length+1 > 9}'>{{division_machine.queues.length+1}}</span></i>        
         <i ng-if="division_machine.player_id == undefined && division_machine.queues.length > 0" class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length<10,custom_queue_item_large:division_machine.queues.length > 9}'>{{division_machine.queues.length}}</span></i>
         <i ng-if="division_machine.player_id == undefined && division_machine.queues.length == 0" class="icon ion-android-walk queue_walking"></i>

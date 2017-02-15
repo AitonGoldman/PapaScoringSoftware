@@ -14,6 +14,13 @@ angular.module('app.results.division_machines.machines').controller(
                 
         division_machines_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
+
+            $scope.flattened_division_machines = _.values($scope.resources.division_machines.data);
+            $scope.flattened_division_machines.sort(function (a, b) {
+                //return (a.division_machine_id > b.division_machine_id ? 1 : -1);
+                return (a.division_machine_name > b.division_machine_name ? 1 : -1);
+            });            
+            
             Modals.loaded();
         });
     }]

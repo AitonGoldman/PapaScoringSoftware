@@ -40,7 +40,10 @@ def fill_in_player_match_results(player_string,
         if len(player_Xs) > 1:                    
             print "uh oh - found some ties"
             pass
-        player_X_id = player_Xs[0].finals_player_id        
+        if len(player_Xs)==0:
+            player_X_id = None
+        else:
+            player_X_id = player_Xs[0].finals_player_id        
         new_finals_match_player_result.finals_player_id=player_X_id        
         db.session.commit()
         
@@ -81,6 +84,50 @@ def route_set_finals_match_game_player_result_score(finals_match_game_player_res
     db.session.commit()
     return jsonify({'data':'success'})
 
+@admin_manage_blueprint.route('/finals/division_final_round/<division_final_round_id>/completed',
+                              methods=['PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_set_division_final_round_completed(division_final_round_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    division_final_round = fetch_entity(tables.DivisionFinalRound,division_final_round_id)
+    next_round=str(int(division_final_round.round_number)+1)
+    division_final_next_round = tables.DivisionFinalRound.query.filter_by(division_final_id=division_final_round.division_final_id,round_number=next_round).first()
+    division_final_round.completed=True
+    if division_final_next_round is None:
+        return jsonify({'data':'success'})    
+    db.session.commit()
+    list_of_winners=[]
+    next_round_id = division_final_next_round.division_final_round_id
+    next_round_finals_match_player_results = tables.FinalsMatchPlayerResult.query.filter(tables.FinalsMatchPlayerResult.finals_player_id!=None).join(tables.DivisionFinalMatch).filter_by(division_final_round_id=next_round_id).all()
+    for player in next_round_finals_match_player_results:
+        finals_player = tables.FinalsPlayer.query.filter_by(finals_player_id=player.finals_player_id).first()
+        list_of_winners.append([player.finals_player_id,finals_player.initial_seed])
+        player.finals_player_id=None
+    winners = tables.FinalsMatchPlayerResult.query.filter_by(winner=True).join(tables.DivisionFinalMatch).filter_by(division_final_round_id=division_final_round.division_final_round_id).all()
+    for winner in winners:
+        finals_player = tables.FinalsPlayer.query.filter_by(finals_player_id=winner.finals_player_id).first()
+        list_of_winners.append([winner.finals_player_id,finals_player.initial_seed])
+    sorted_finals_player_list = sorted(list_of_winners, key= lambda e: e[1],reverse=True)
+    halfway_idx = (len(sorted_finals_player_list)/2)
+    sorted_finals_player_list_a = sorted_finals_player_list[:halfway_idx]
+    sorted_finals_player_list_b = sorted_finals_player_list[halfway_idx:]
+    for match in tables.DivisionFinalMatch.query.filter_by(division_final_round_id=division_final_next_round.division_final_round_id).all():
+        players_to_add = []
+        players_to_add.append(sorted_finals_player_list_a.pop())
+        players_to_add.append(sorted_finals_player_list_a.pop(0))
+        players_to_add.append(sorted_finals_player_list_b.pop())
+        players_to_add.append(sorted_finals_player_list_b.pop(0))
+        for idx,final_match_player_result in enumerate(match.finals_match_player_results):
+            final_match_player_result.finals_player_id=players_to_add[idx][0]
+        db.session.commit()
+        for finals_match_game_result in match.finals_match_game_results:
+            for idx,finals_match_game_player_result in enumerate(finals_match_game_result.finals_match_game_player_results):
+                finals_match_game_player_result.finals_player_id=players_to_add[idx][0]        
+    db.session.commit()
+    return jsonify({})
+    
 @admin_manage_blueprint.route('/finals/finals_match_game_result/<finals_match_game_result_id>/completed',
                               methods=['PUT'])
 @login_required
@@ -245,29 +292,29 @@ def route_create_finals(division_id):
                 generate_rank_matchup_dict([9,16,17,24]),
                 generate_rank_matchup_dict([10,15,18,23]),
                 generate_rank_matchup_dict([11,14,19,22]),
-                generate_rank_matchup_dict([12,13,20,21]),            
+                generate_rank_matchup_dict([12,13,20,21])            
             ]
         },
         {
             'round':2,
             'matches':[
-                generate_rank_matchup_dict([1,8]),
-                generate_rank_matchup_dict([2,7]),
-                generate_rank_matchup_dict([3,6]),
-                generate_rank_matchup_dict([4,5]),                            
+                generate_rank_matchup_dict([1,8, None, None]),
+                generate_rank_matchup_dict([2,7, None, None]),
+                generate_rank_matchup_dict([3,6, None, None]),
+                generate_rank_matchup_dict([4,5, None, None])                            
             ]
         },
         {
             'round':3,
             'matches':[
-                {},
-                {}                                
+                generate_rank_matchup_dict([None,None, None, None]),
+                generate_rank_matchup_dict([None,None, None, None])                            
             ]
         },
         {
             'round':4,
             'matches':[
-                {}                                
+                generate_rank_matchup_dict([None,None, None, None])                                            
             ]
         }
     ]
@@ -289,7 +336,7 @@ def route_create_finals(division_id):
         new_round = tables.DivisionFinalRound(
             round_number=round['round']
         )
-        
+        print "new round is %s"%round['round']
         db.session.add(new_round)
         new_final.division_final_rounds.append(new_round)
         db.session.commit()
@@ -310,8 +357,8 @@ def route_create_finals(division_id):
             fill_in_player_match_results('player_three', match_template, new_finals_match_player_results[2],new_final.division_final_id)
             fill_in_player_match_results('player_four', match_template, new_finals_match_player_results[3],new_final.division_final_id)
 
-            if round['round'] != 1:
-                return jsonify(new_final.to_dict_simple())        
+            #if round['round'] != 1:
+            #    return jsonify(new_final.to_dict_simple())        
             for finals_match_player_result in new_finals_match_player_results:
                 db.session.add(finals_match_player_result)
                 new_match.finals_match_player_results.append(finals_match_player_result)
@@ -326,8 +373,10 @@ def route_create_finals(division_id):
                     if len(player_Xs) > 1:
                         raise BadRequest('oops - need code to deal with ties')
                     new_finals_match_game_player_result = tables.FinalsMatchGamePlayerResult(
-                        finals_player_id=player_Xs[0].finals_player_id
+                        #finals_player_id=player_Xs[0].finals_player_id
                     )
+                    if round['round'] == 1:
+                        new_finals_match_game_player_result.finals_player_id=player_Xs[0].finals_player_id
                     db.session.add(new_finals_match_game_player_result)                    
                     db.session.commit()
                     new_finals_match_game_results.finals_match_game_player_results.append(new_finals_match_game_player_result)

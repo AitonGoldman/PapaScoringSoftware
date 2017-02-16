@@ -1,9 +1,11 @@
 angular.module('app.scorekeeping.machine_select.player_select.process',[/*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select.player_select.process').controller(
     'app.scorekeeping.machine_select.player_select.process',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
-        $scope.site=$state.params.site;
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
+            $ionicHistory.nextViewOptions({disableBack:true});            
+
+            $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
 	$scope.player_id=$state.params.player_id;
 	$scope.division_machine_id=$state.params.division_machine_id;

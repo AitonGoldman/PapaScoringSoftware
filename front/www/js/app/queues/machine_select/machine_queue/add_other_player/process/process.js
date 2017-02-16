@@ -1,9 +1,11 @@
 angular.module('app.queues.machine_select.machine_queue.add_other_player.process',[/*REPLACEMECHILD*/]);
 angular.module('app.queues.machine_select.machine_queue.add_other_player.process').controller(
     'app.queues.machine_select.machine_queue.add_other_player.process',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
-        $scope.site=$state.params.site;
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
+            $ionicHistory.nextViewOptions({disableBack:true});            
+
+            $scope.site=$state.params.site;
 	$scope.division_machine_name=$state.params.division_machine_name;
 	$scope.other_player_id=$state.params.other_player_id;
 	$scope.manage=$state.params.manage;

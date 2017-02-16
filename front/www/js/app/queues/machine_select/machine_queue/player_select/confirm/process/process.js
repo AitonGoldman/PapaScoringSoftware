@@ -1,8 +1,9 @@
 angular.module('app.queues.machine_select.machine_queue.player_select.confirm.process',[/*REPLACEMECHILD*/]);
 angular.module('app.queues.machine_select.machine_queue.player_select.confirm.process').controller(
     'app.queues.machine_select.machine_queue.player_select.confirm.process',[
-        '$scope','$state','TimeoutResources','Utils','Modals','User',
-        function($scope, $state, TimeoutResources, Utils,Modals,User) {
+        '$scope','$state','TimeoutResources','Utils','Modals','User','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,User,$ionicHistory) {
+            $ionicHistory.nextViewOptions({disableBack:true});            
             $scope.site=$state.params.site;
 	    $scope.division_machine_id=$state.params.division_machine_id;
 	    $scope.division_machine_name=$state.params.division_machine_name;

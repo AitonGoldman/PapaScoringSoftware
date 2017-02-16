@@ -1,9 +1,11 @@
 angular.module('app.scorekeeping.machine_select.record_score.confirm_jagoff.process',[/*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select.record_score.confirm_jagoff.process').controller(
     'app.scorekeeping.machine_select.record_score.confirm_jagoff.process',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
-        $scope.site=$state.params.site;
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
+            $ionicHistory.nextViewOptions({disableBack:true});            
+
+            $scope.site=$state.params.site;
 	$scope.division_machine_name=$state.params.division_machine_name;
 	$scope.team_tournament=$state.params.team_tournament;
 	$scope.player_name=$state.params.player_name;

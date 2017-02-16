@@ -1,10 +1,11 @@
 angular.module('app.token.token_select.confirm.process',[/*REPLACEMECHILD*/]);
 angular.module('app.token.token_select.confirm.process').controller(
     'app.token.token_select.confirm.process',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
         $scope.site=$state.params.site;
 	$scope.player_id=$state.params.player_id;
+            $ionicHistory.nextViewOptions({disableBack:true});            
 
         $scope.utils = Utils;
         Modals.loading();

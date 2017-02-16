@@ -1,9 +1,11 @@
 angular.module('app.queue_player_after_play.machine_add_confirm.process',[/*REPLACEMECHILD*/]);
 angular.module('app.queue_player_after_play.machine_add_confirm.process').controller(
     'app.queue_player_after_play.machine_add_confirm.process',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
-        $scope.site=$state.params.site;
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
+            $ionicHistory.nextViewOptions({disableBack:true});            
+
+            $scope.site=$state.params.site;
 	$scope.player_id=$state.params.player_id;
 	$scope.division_machine_just_played_id=$state.params.division_machine_just_played_id;
 	$scope.division_name=$state.params.division_name;

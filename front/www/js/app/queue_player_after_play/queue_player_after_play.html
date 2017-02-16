@@ -1,11 +1,23 @@
 <ion-view view-title="Queueing" hide-back-button="true">
   <ion-content>      
-    <div class="skinny-list list">
-
-      <ion-checkbox class='item item-energized item' ng-model="isChecked">
+    <ul class="list">
+      <li class="item item-toggle">
         <span ng-if="isChecked==false">Display Avg Times</span>
         <span ng-if="isChecked==true">Display Player Top Scores</span>
-      </ion-checkbox>
+        <label class="toggle">
+          <input ng-model="isChecked" type="checkbox" >
+          <div class="track">
+            <div class="handle" ></div>
+          </div>
+        </label>
+      </li>
+    </ul>
+    <div class="skinny-list list">
+
+      <!-- <ion-checkbox class='item item-energized item' ng-model="isChecked"> -->
+      <!--   <span ng-if="isChecked==false">Display Avg Times</span> -->
+      <!--   <span ng-if="isChecked==true">Display Player Top Scores</span> -->
+      <!-- </ion-checkbox> -->
 
       <a  class="item item-icon-right item-icon-left queue_item_padding" ng-repeat='division_machine in resources.queues.data' ng-click="choose_queue_action_or_no_action(division_machine)">
         <i ng-if="division_machine.player_id != undefined" class="icon ion-record queue_circle"><span ng-class='{custom_queue_item_small:division_machine.queues.length+1<10,custom_queue_item_large:division_machine.queues.length+1 > 9}'>{{division_machine.queues.length+1}}</span></i>        

@@ -2,9 +2,11 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm.process',['
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select.record_score.confirm.process').controller(
     'app.scorekeeping.machine_select.record_score.confirm.process',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
-        $scope.site=$state.params.site;
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
+            $ionicHistory.nextViewOptions({disableBack:true});            
+
+            $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
 	$scope.division_machine_name=$state.params.division_machine_name;
 	$scope.division_machine_id=$state.params.division_machine_id;

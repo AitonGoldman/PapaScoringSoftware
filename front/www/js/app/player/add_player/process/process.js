@@ -1,9 +1,10 @@
 angular.module('app.player.add_player.process',[/*REPLACEMECHILD*/]);
 angular.module('app.player.add_player.process').controller(
     'app.player.add_player.process',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
         $scope.site=$state.params.site;
+            $ionicHistory.nextViewOptions({disableBack:true});            
 
         $scope.utils = Utils;
         Modals.loading();        

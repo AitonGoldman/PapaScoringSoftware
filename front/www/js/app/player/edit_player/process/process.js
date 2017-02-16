@@ -1,9 +1,10 @@
 angular.module('app.player.edit_player.process',[/*REPLACEMECHILD*/]);
 angular.module('app.player.edit_player.process').controller(
     'app.player.edit_player.process',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
-        $scope.site=$state.params.site;
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
+            $ionicHistory.nextViewOptions({disableBack:true});            
+            $scope.site=$state.params.site;
 	$scope.player_id=$state.params.player_id;
 
         $scope.utils = Utils;

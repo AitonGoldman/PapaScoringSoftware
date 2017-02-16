@@ -593,5 +593,28 @@ user-select: text;
 button.small-text-button{
 font-size:$font-size-base*.75;     
 }
+
+
+
+
+li.item-toggle {
+    .toggle {
+        
+        padding-top:$font-size-base*.55;
+        .handle {
+            @media screen and (max-width: 610px){
+                @media screen and (max-device-height: 750px){
+                    margin-top:$font-size-base*.20;
+                }
+                @media screen and (min-device-height: 751px){
+                    margin-top:$font-size-base*.35;
+                }
+            }
+            @media screen and (min-width:611px) {
+                margin-top:$font-size-base*.35;
+            }
+        }
+    }
+}
 // submit buttons : calm
 //

@@ -34,6 +34,12 @@
         <i class="icon ion-chevron-right"></i>        
         
       </a>
+      <a id="front_manage_users_link" id='home_manage_players_link' ui-sref='.set_player_picture' class="item item-icon-left item-icon-right" ng-if='User.has_role("desk") && isWebView==true'>
+        <i class="icon ion-person"></i>
+        <span>Set Player Picture</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>
+      
       <a  id="front_manage_teams_link" ui-sref='.teams' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk")'>
         <i class="icon ion-person-stalker"></i>
         <span>Manage Teams</span>

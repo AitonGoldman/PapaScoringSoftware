@@ -59,6 +59,10 @@ def route_edit_player(player_id):
             for entry in entries:
                 entry.voided=True
         player.linked_division_id = input_data['linked_division_id']
+    if 'pic_file' in input_data:
+        player.has_pic=True
+        os.system('mv %s/%s /var/www/html/pics/player_%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],player.player_id))        
+        
     db.session.commit()                        
     return jsonify({'data':player.to_dict_simple()})        
 

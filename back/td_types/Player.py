@@ -23,6 +23,7 @@ def generate_player_class(db_handle,Team_Player_mapping,player_id_start):
         email_address = db_handle.Column(db_handle.String(120))
         active = db_handle.Column(db_handle.Boolean, default=True)
         pin = db_handle.Column(db_handle.Integer)
+        has_pic = db_handle.Column(db_handle.Boolean,default=False)
         user_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('user.user_id'))
         linked_division_id = db_handle.Column(db_handle.Integer,
                                             db_handle.ForeignKey(

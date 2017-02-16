@@ -1,0 +1,18 @@
+<ion-view view-title="Select Player">
+  <ion-content>      
+    <div class="skinny-list list">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Search" ng-model="searchText">
+      </label>
+      <div ng-repeat="player in flat_players|filter:searchText">
+        <a id="manage_players_edit_player_{{player.player_id}}_link" ui-sref='.take_picture({player_id:player.player_id})' class="item item-icon-left item-icon-right">
+          <i class="icon ion-camera"></i>
+          <span>{{player.first_name+" "+player.last_name}}</span>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+

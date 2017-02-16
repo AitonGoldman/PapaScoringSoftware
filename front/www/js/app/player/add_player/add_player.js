@@ -51,7 +51,7 @@ angular.module('app.player.add_player').controller(
             };
             $scope.form_not_ready_for_submit = function(){
                 if ($scope.is_native == true && $scope.player_info.has_picture != true){
-                    return true;
+                    return false;
                 }
                 if (Utils.var_empty($scope.player_info.linked_division_id) == true && $scope.main_division_count > 0){
                     return true;

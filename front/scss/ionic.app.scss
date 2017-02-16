@@ -33,7 +33,7 @@ $button-bar-button-font-size:     $font-size-base*9;
 $button-large-font-size:          $font-size-base !default;
 $button-large-height:             $font-size-base*2 !default;
 $button-large-icon-size:          $font-size-base*2 !default;
-
+$toggle-off-bg-color:             #33cd5f !default;
 
 @import "www/lib/ionic/scss/ionic";
 
@@ -275,15 +275,6 @@ $button-large-icon-size:          $font-size-base*2 !default;
      font-size: $font-size-base;
  }
 
-.platform-android {
-    .bar {      
-      .back-button .icon:before {
-          padding-top:10px;
-          font-size: $font-size-base*2.5;
-      }
-    }
-}
-
 .platform-ios {
     .bar {
       .back-button .icon:before {
@@ -306,6 +297,15 @@ $button-large-icon-size:          $font-size-base*2 !default;
                 font-size:$font-size-base*3.5;
             }
         }
+    }
+}
+
+.platform-android {
+    .bar {      
+      .back-button .icon:before {
+          //padding-top:10px;
+          font-size: $font-size-base*2.25;
+      }
     }
 }
 
@@ -334,9 +334,7 @@ ion-side-menu {
 }
 }
 .platform-android {
-
-  .bar {
-
+  .bar {    
     .title {
       //CHANGED THIS
       //font-size: $font-size-base*2.5;

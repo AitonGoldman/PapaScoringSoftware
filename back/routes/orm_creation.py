@@ -100,7 +100,8 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discou
         'tournament_id':str(new_tournament.tournament_id),
         'team_tournament':False,
         'scoring_type':'HERB',
-        'active':True
+        'active':True,
+        'finals_num_games_per_match':3
     }    
     if use_stripe:
         new_tournament_data['use_stripe']=True        
@@ -306,7 +307,9 @@ def create_division(app,division_data):
     if 'team_tournament' in division_data and division_data['team_tournament']:    
         new_division.team_tournament = True
     else:
-        new_division.team_tournament = False    
+        new_division.team_tournament = False
+    if 'finals_num_games_per_match' in division_data:
+        new_division.finals_num_games_per_match = division_data['finals_num_games_per_match']
     new_division.scoring_type=division_data['scoring_type']
     new_division.finals_player_selection_type = "papa"
     new_division.number_of_relevant_scores = 6

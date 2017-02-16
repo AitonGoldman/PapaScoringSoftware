@@ -5,6 +5,7 @@ def generate_division_final_match_class(db_handle,relationship=None,fk=None):
         division_final_match_id = db_handle.Column(db_handle.Integer, primary_key=True)
         division_final_round_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_final_round.division_final_round_id'))
         tiebreaker_division_machine_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_machine.division_machine_id'))
+        tiebreaker_division_machine_name = db_handle.Column(db_handle.String(100))
         
         completed = db_handle.Column(db_handle.Boolean,default=False)
         has_tiebreaker = db_handle.Column(db_handle.Boolean,default=False)

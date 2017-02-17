@@ -1,0 +1,21 @@
+<ion-view view-title="">
+  <ion-content>      
+    <label class="item-input item">
+      <i class="icon ion-search placeholder-icon"></i>
+      <form>
+        <input ng-change='onPlayerIdChange()' type="tel" placeholder="Player #" ng-model="player.player_id">
+      </form>
+    </label>
+    <div class='item'>
+      <span ng-if="selected_players.length > 0">{{selected_players[0].full_name}}</span>
+      <span ng-if="selected_players.length == 0 || selected_players == undefined" style='color:lightgrey'>Player Name</span>
+      
+    </div>
+    <button ng-disabled='selected_players.length == 0 || selected_players[0].has_tokens != true || selected_players[0].on_division_machine' ui-sref='.process({player_id_to_add:selected_players[0].player_id,player_name_to_add:selected_players[0].player_name,process_step:{process:true}})' class='button button-calm button-full item-icon-right seperate_button'>
+      Select Player To Put On Machine
+      <i class="icon ion-chevron-right"></i>          
+    </button>
+    
+  </ion-content>
+</ion-view>
+

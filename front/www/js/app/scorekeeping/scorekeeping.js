@@ -1,4 +1,5 @@
 angular.module('app.scorekeeping',['app.scorekeeping.machine_select',
+    'app.scorekeeping.undo',
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping').controller(
     'app.scorekeeping',[

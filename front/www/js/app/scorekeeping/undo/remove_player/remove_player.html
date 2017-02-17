@@ -1,0 +1,13 @@
+<ion-view view-title="Select Machine">
+  <ion-content>      
+    <div class="skinny-list list">
+      <div ng-repeat='division_machine in flattened_division_machines' ng-if='division_machine.removed!=true && division_machine.player_id!=undefined'>
+        <a id="scorekeeping_machine_select_{{division_machine.division_machine_id}}_link" ui-sref=".confirm({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name,player_id:division_machine.player.player_id,player_name:division_machine.player.player_name})" class="item item-icon-right">
+          <span>{{division_machine.division_machine_name}}</span>
+          <i class="icon ion-chevron-right"></i>
+        </a>        
+      </div>      
+    </div>
+  </ion-content>
+</ion-view>
+

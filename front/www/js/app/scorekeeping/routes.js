@@ -167,7 +167,107 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
              
           }    
 
+       }).state('app.scorekeeping.undo', 
+        { 
+         cache: false,
+ 	 url: '/undo/division_id/:division_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/undo.html',
+ 	       controller: 'app.scorekeeping.undo'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.remove_player', 
+        { 
+         cache: false,
+ 	 url: '/remove_player',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/remove_player/remove_player.html',
+ 	       controller: 'app.scorekeeping.undo.remove_player'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.remove_player.confirm', 
+        { 
+         cache: false,
+ 	 url: '/confirm/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name/player_id/:player_id/player_name/:player_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/remove_player/confirm/confirm.html',
+ 	       controller: 'app.scorekeeping.undo.remove_player.confirm'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.remove_player.confirm.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/remove_player/confirm/process/process.html',
+ 	       controller: 'app.scorekeeping.undo.remove_player.confirm.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
+       }).state('app.scorekeeping.undo.remove_player.confirm.process.add_player', 
+        { 
+         cache: false,
+ 	 url: '/add_player',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/remove_player/confirm/process/add_player/add_player.html',
+ 	       controller: 'app.scorekeeping.undo.remove_player.confirm.process.add_player'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.remove_player.confirm.process.add_player.confirm', 
+        { 
+         cache: false,
+ 	 url: '/confirm/player_id_to_add/:player_id_to_add/player_name_to_add/:player_name_to_add',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/remove_player/confirm/process/add_player/confirm/confirm.html',
+ 	       controller: 'app.scorekeeping.undo.remove_player.confirm.process.add_player.confirm'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.remove_player.confirm.process.add_player.confirm.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/remove_player/confirm/process/add_player/confirm/process/process.html',
+ 	       controller: 'app.scorekeeping.undo.remove_player.confirm.process.add_player.confirm.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
+       }).state('app.scorekeeping.undo.remove_player.confirm.process.add_player.process', 
+        { 
+         cache: false,
+ 	 url: '/process/player_id_to_add/:player_id_to_add/player_name_to_add/:player_name_to_add',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/remove_player/confirm/process/add_player/process/process.html',
+ 	       controller: 'app.scorekeeping.undo.remove_player.confirm.process.add_player.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
        })//REPLACE_ME
+
+
+
+
+
+
+
+
 
 
 

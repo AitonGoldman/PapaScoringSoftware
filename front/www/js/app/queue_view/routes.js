@@ -12,7 +12,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.queue_view.queue', 
         { 
          cache: false,
- 	 url: '/queue/division_id/:division_id/start_range/:start_range/end_range/:end_range',
+ 	 url: '/queue/division_id/:division_id/game_1/:game_1/game_2/:game_2/game_3/:game_3/game_4/:game_4/game_5/:game_5/game_6/:game_6/game_7/:game_7',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/queue_view/queue/queue.html',

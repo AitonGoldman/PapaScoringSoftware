@@ -1,15 +1,18 @@
-<ion-view view-title="">
+<ion-view view-title="Queues">
   <ion-content>
     <div class='first-element'>
     </div>
-    <div style='width:100%;line-height:48px;font-size:48px;    text-overflow: ellipsis;' ng-repeat="queue_machine_index in []|range:flattened_queues.length:0:2" ng-if='queue_machine_index>=start_range && queue_machine_index <= end_range'>
+    <div style='width:100%;line-height:48px;font-size:48px;    text-overflow: ellipsis;' ng-repeat="queue_machine_index in []|range:flattened_queues.length:0:2">
       <table width=100%>
         <tr>
           <td style='width:50%' ng-repeat='column in [0,1]'>
             <table style='margin-bottom:20px;border-style:solid;border-width:1px;width:100%'>
               <tr>
                 <td>
-                  <div style='overflow:hidden;white-space: nowrap; width:100%'><u><b>{{flattened_queues[queue_machine_index+column].division_machine_name|limitTo:25}}</b></u><span style='float:right;font-size:20px'>Avg Time : {{flattened_queues[queue_machine_index+column].avg_play_time}}</span></div>
+                  <div style='overflow:hidden;white-space: nowrap; width:100%;'>
+                    <span style='float:left'><u><b>{{flattened_queues[queue_machine_index+column].division_machine_name|limitTo:25}}</b></u></span>
+                    <span style='float:right;font-size:20px'>Avg Time : {{flattened_queues[queue_machine_index+column].avg_play_time}}</span>
+                  </div>
                 </td>
               </tr>
               <tr ng-repeat="queue_index in []|range:flattened_queues[queue_machine_index+column].queues.length|limitTo:5">

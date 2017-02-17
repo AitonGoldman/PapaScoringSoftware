@@ -1,15 +1,19 @@
 <ion-view view-title="">
   <ion-content>      
     <div class="skinny-list list">
-      <div ng-if='resources.divisions.data[division.division_id].queuing == true' ng-repeat='division in resources.divisions.data'>
-        <a id="scorekeeping_division_select_{{division.division_id}}_link"  ui-sref='.queue({division_id:division.division_id,start_range:0,end_range:5})' class="item item-icon-right">
+      <div ng-repeat='(division_id,division_machines) in division_machines'>
+        <div class='item item-positive'>{{resources.divisions.data[division_id].division_name}} Division</div>
+        <div class='item item-positive item-icon-right' ng-click='go_to_queue(division_id)'>
+          Fire It Up!
+          <i class="icon ion-chevron-right"></i>                
+
+        </div>
+        <ion-checkbox ng-repeat='division_machine in division_machines' ng-model="selected_machines[division_machine.division_machine_id]">{{division_machine.division_machine_name}}</ion-checkbox>
+
+        <!--        <a id="scorekeeping_division_select_{{division.division_id}}_link"  ui-sref='.queue({division_id:division.division_id,start_range:0,end_range:5})' class="item item-icon-right">
           <span>{{division.tournament_name}} (0-6)</span>
           <i class="icon ion-chevron-right"></i>        
-        </a>
-        <a id="scorekeeping_division_select_{{division.division_id}}_link"  ui-sref='.queue({division_id:division.division_id,start_range:6,end_range:11})' class="item item-icon-right">
-          <span>{{division.tournament_name}} (6-12)</span>
-          <i class="icon ion-chevron-right"></i>        
-        </a>        
+        </a>-->
       </div>
     </div>
   </ion-content>

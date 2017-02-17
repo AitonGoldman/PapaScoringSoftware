@@ -7,6 +7,13 @@ angular.module('app.queue_view.queue').controller(
 	$scope.division_id=$state.params.division_id;
         $scope.start_range = $state.params.start_range;
         $scope.end_range = $state.params.end_range;
+        $scope.game_1 = $state.params.game_1;
+        $scope.game_2 = $state.params.game_2;
+        $scope.game_3 = $state.params.game_3;
+        $scope.game_4 = $state.params.game_4;
+        $scope.game_5 = $state.params.game_5;
+        $scope.game_6 = $state.params.game_6;
+        $scope.game_7 = $state.params.game_7;
         
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);
@@ -16,7 +23,8 @@ angular.module('app.queue_view.queue').controller(
                 // = TimeoutResources.GetEtcData();
                 queues_promise.then(function(data){            
                     $scope.resources = TimeoutResources.GetAllResources();
-                    $scope.flattened_queues = _.values($scope.resources.queues.data);
+                    $scope.flattened_queues = _.filter(_.values($scope.resources.queues.data), function(o) { return o.division_machine_id == $scope.game_1 || o.division_machine_id == $scope.game_2 || o.division_machine_id == $scope.game_3 || o.division_machine_id == $scope.game_4 || o.division_machine_id == $scope.game_5 || o.division_machine_id == $scope.game_6 || o.division_machine_id == $scope.game_7; });
+                    console.log($scope.flattened_queues);
                     Modals.loaded();
                     if($state.current.name == 'app.queue_view.queue'){                        
                         $timeout(get_queues,15000);

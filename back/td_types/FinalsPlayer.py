@@ -12,8 +12,10 @@ def generate_finals_player_class(db_handle,relationship=None,fk=None):
                 
         initial_seed = db_handle.Column(db_handle.Integer)
         overall_rank = db_handle.Column(db_handle.Integer)
-
+        player = db_handle.relationship('Player')        
         def to_dict_simple(self):
-            return to_dict(self)        
+            export_dict = to_dict(self)
+            export_dict['player']=self.player.to_dict_simple()
+            return export_dict
         
     return FinalsPlayer

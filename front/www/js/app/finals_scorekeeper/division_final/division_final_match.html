@@ -1,0 +1,28 @@
+<ion-view view-title='Round {{round_idx}}, Match {{division_final_match_idx}}'>
+  <ion-content>
+    <div ng-repeat="game_result in match.finals_match_game_results|orderBy:'finals_match_game_result_id'" class='list card'>
+      <div class='item item-divider item-icon-left'>        
+        <div class="item item-input-inset">
+          <label class="item-input-wrapper">
+            <input ng-model='game_result.division_machine_string' type="text" placeholder="Game Name">
+          </label>
+           <button class="button button-small">
+             Submit
+           </button>
+        </div>
+      </div>
+      <div ng-repeat="game_player_result in game_result.finals_match_game_player_results|orderBy:'play_order'">
+        <label class="item item-input item-select">
+          <div class="input-label">
+            <input ng-model='game_player_result.score' type="text" placeholder="Score">
+          </div>
+          <select ng-model="game_player_result.final_player.finals_player_id" ng-options="option.finals_player.finals_player_id as option.finals_player.player.full_name for option in match.finals_match_player_results">
+          </select>
+        </label>
+        <!--{{game_player_result.final_player.player.full_name}}-->
+      </div>
+      <button ng-click='setFinalsMatchGameResult(game_result)' ng-if='game_result.completed != true && game_result.ready_to_be_completed == false' class='button button-calm button-full'> Save Changes </button>
+      <button ng-click='setFinalsMatchGameResult(game_result,true)' ng-if='game_result.completed != true && game_result.ready_to_be_completed == true' class='button button-calm button-full'> Complete Game </button>      
+    </div>
+  </ion-content>
+</ion-view>

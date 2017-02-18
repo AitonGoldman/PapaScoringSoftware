@@ -59,6 +59,41 @@ def route_set_finals_match_result_game(finals_match_game_result_id,game_name):
     db.session.commit()
     return jsonify({'data':'success'})
 
+
+@admin_manage_blueprint.route('/finals/finals_match_game_result/<finals_match_game_result_id>',
+                              methods=['PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_update_finals_match_game_result(finals_match_game_result_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    input_data = json.loads(request.data)        
+    for idx,game_player_result in enumerate(input_data['finals_match_game_player_results']):
+        game_player_result_id = game_player_result['finals_match_game_player_result_id']
+        game_player_result_model = fetch_entity(tables.FinalsMatchGamePlayerResult,game_player_result_id)
+        #game_player_result_model.play_order = idx
+        if 'finals_player_id' in game_player_result['final_player']:            
+            game_player_result_model.finals_player_id = game_player_result['final_player']['finals_player_id']
+            game_player_result_model.score = game_player_result['score']
+        db.session.commit()
+    number_scores_recorded_on_game = len(tables.FinalsMatchGamePlayerResult.query.filter_by(finals_match_game_result_id=input_data['finals_match_game_result_id']).filter(tables.FinalsMatchGamePlayerResult.score != None).all())    
+    finals_match_game_result=tables.FinalsMatchGameResult.query.filter_by(finals_match_game_result_id=input_data['finals_match_game_result_id']).first()
+    if number_scores_recorded_on_game == 4:        
+        finals_match_game_result.ready_to_be_completed=True
+        db.session.commit()
+    if 'division_machine_string' in input_data:
+        finals_match_game_result.division_machine_string=input_data['division_machine_string']
+        db.session.commit()                        
+    if input_data['completed'] is True:
+        sorted_player_results = sorted(finals_match_game_result.finals_match_game_player_results, key=lambda player_result: player_result.score)
+        papa_points = [0,1,2,4]
+        for idx,finals_match_game_player_result in enumerate(sorted_player_results):
+            finals_match_game_player_result.papa_points=papa_points[idx]
+        
+        finals_match_game_result.completed=True
+        db.session.commit()                
+    return jsonify({})
+
 @admin_manage_blueprint.route('/finals/finals_match_game_player_result/<finals_match_game_player_result_id>/finals_player/<finals_player_id>/play_order/<play_order>',
                               methods=['PUT'])
 @login_required
@@ -80,8 +115,14 @@ def route_set_finals_match_game_player_result_score(finals_match_game_player_res
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     finals_match_game_player_result = fetch_entity(tables.FinalsMatchGamePlayerResult,finals_match_game_player_result_id)
+    finals_match_game_result = fetch_entity(tables.FinalsMatchGameResult,finals_match_game_player_result.finals_match_game_result_id)
+    
     finals_match_game_player_result.score = score    
     db.session.commit()
+    number_scores_recorded_on_game = len(tables.FinalsMatchGamePlayerResult.query.filter_by(finals_match_game_result_id=finals_match_game_player_result.finals_match_game_result_id).all())
+    if number_scores_recorded_on_game == 4:
+        finals_match_game_result.ready_to_be_completed=True
+        db.session.commit()        
     return jsonify({'data':'success'})
 
 @admin_manage_blueprint.route('/finals/division_final_round/<division_final_round_id>/completed',
@@ -122,10 +163,15 @@ def route_set_division_final_round_completed(division_final_round_id):
         for idx,final_match_player_result in enumerate(match.finals_match_player_results):
             final_match_player_result.finals_player_id=players_to_add[idx][0]
         db.session.commit()
-        for finals_match_game_result in match.finals_match_game_results:
-            for idx,finals_match_game_player_result in enumerate(finals_match_game_result.finals_match_game_player_results):
-                finals_match_game_player_result.finals_player_id=players_to_add[idx][0]        
+        #for finals_match_game_result in match.finals_match_game_results:
+        #    for idx,finals_match_game_player_result in enumerate(finals_match_game_result.finals_match_game_player_results):
+        #        finals_match_game_player_result.finals_player_id=players_to_add[idx][0]        
     db.session.commit()
+    # Algorithm for calculating final rank
+    # - get total number of players in finals
+    # - get rank range based on lookup hash 
+    # - rank eliminated players, add appropriate amount based on rank range  
+    #
     return jsonify({})
     
 @admin_manage_blueprint.route('/finals/finals_match_game_result/<finals_match_game_result_id>/completed',
@@ -197,7 +243,8 @@ def get_papa_points_sorted_list_of_match_players(division_final_match):
     for finals_player_result in division_final_match.finals_match_player_results:        
         papa_points_sum[finals_player_result.finals_player_id]=0        
     for finals_match_game_result in division_final_match.finals_match_game_results:
-        for finals_match_game_player_result in finals_match_game_result.finals_match_game_player_results:            
+        for finals_match_game_player_result in finals_match_game_result.finals_match_game_player_results:
+            print finals_match_game_player_result.finals_player_id
             papa_points_sum[finals_match_game_player_result.finals_player_id] = papa_points_sum[finals_match_game_player_result.finals_player_id] + finals_match_game_player_result.papa_points
     sorted_player_results = sorted(papa_points_sum, key=lambda player_result_id: papa_points_sum[player_result_id],reverse=True)
     return papa_points_sum,sorted_player_results
@@ -266,6 +313,27 @@ def route_get_finals_match_game_result(finals_match_game_result_id):
     #players = {finals_player.finals_player_id:finals_player.to_dict_simple() for finals_player in tables.FinalsPlayer.query.join(tables.FinalsMatchGamePlayerResult).filter_by(finals_match_game_result_id=finals_match_game_result_id).all()}    
     return jsonify({'data':finals_match_game_result.to_dict_simple()})
 
+@admin_manage_blueprint.route('/finals/division_final/<division_final_id>',
+                              methods=['GET'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_get_final(division_final_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    final = fetch_entity(tables.DivisionFinal,division_final_id)
+    return jsonify({'data':final.to_dict_simple()})
+
+@admin_manage_blueprint.route('/finals/division_final',
+                              methods=['GET'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_get_all_finals():
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    finals = tables.DivisionFinal.query.all()
+    return jsonify({'data':{division_final.division_final_id:division_final.to_dict_simple() for division_final in finals}})
+
+    
 @admin_manage_blueprint.route('/finals/division_finals_match/<division_finals_match_id>',
                               methods=['GET'])
 @login_required
@@ -368,15 +436,18 @@ def route_create_finals(division_id):
                 db.session.add(new_finals_match_game_results)
                 db.session.commit()
                 new_match.finals_match_game_results.append(new_finals_match_game_results)
+                play_order_idx = 0
                 for player_position_string,value in match_template.iteritems():                    
                     player_Xs = get_finals_players_with_seed(match_template[player_position_string],new_final.division_final_id)
                     if len(player_Xs) > 1:
                         raise BadRequest('oops - need code to deal with ties')
                     new_finals_match_game_player_result = tables.FinalsMatchGamePlayerResult(
                         #finals_player_id=player_Xs[0].finals_player_id
+                        play_order = play_order_idx
                     )
-                    if round['round'] == 1:
-                        new_finals_match_game_player_result.finals_player_id=player_Xs[0].finals_player_id
+                    play_order_idx = play_order_idx+1
+                    #if round['round'] == 1:
+                        #new_finals_match_game_player_result.finals_player_id=player_Xs[0].finals_player_id
                     db.session.add(new_finals_match_game_player_result)                    
                     db.session.commit()
                     new_finals_match_game_results.finals_match_game_player_results.append(new_finals_match_game_player_result)

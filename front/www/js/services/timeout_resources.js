@@ -288,10 +288,13 @@ angular.module('TD_services.timeout_resources')
                   
                   var getPlayerEntriesResource = generate_resource_definition(':site/entry/player/:player_id','GET');
                   var setScoreResource = generate_resource_definition(':site/admin/score_id/:score_id/score/:score','PUT');
+                  var setFinalsMatchGameResultResource = generate_resource_definition(':site/finals/finals_match_game_result/:finals_match_game_result_id','PUT');                  
                   var getAuditLogMissingTokensResource = generate_resource_definition(':site/admin/audit_log/where_all_my_tokens_at/player_id/:player_id','GET');
                   var getAuditLogMissingScoresResource = generate_resource_definition(':site/admin/audit_log/where_all_my_scores_at/player_id/:player_id/audit_log_id/:audit_log_id/time_delta/:time_delta','GET');
+                  var getDivisionFinalResource = generate_resource_definition(':site/finals/division_final/:division_final_id','GET');                                    
+                  var getPlayerPinResource = generate_resource_definition(':site/player/:player_id/pin','GET');
+                  var setDivisionFinalMatchCompleteResource = generate_resource_definition(':site/finals/division_final_match/:division_final_match_id/completed','PUT');                       var setDivisionFinalRoundCompleteResource = generate_resource_definition(':site/finals/division_final_round/:division_final_round_id/completed','PUT');                  
                   
-                  var getPlayerPinResource = generate_resource_definition(':site/player/:player_id/pin','GET');                  
                   
                   return {
 	              GetAllResources: function(){
@@ -311,6 +314,7 @@ angular.module('TD_services.timeout_resources')
                       GetStripePublicKey: generate_custom_http_executor(getStripePublicKeyResource,'stripe_public_key','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
                       GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
+                      GetDivisionFinals: generate_custom_http_executor(getDivisionFinalResource,'finals','get'),                      
                       GetPlayersBestScoresForDivision: generate_custom_http_executor(getPlayersBestScoresForDivisionResource,'players_best_scores','get'),                      
                       
                       GetPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),
@@ -323,7 +327,9 @@ angular.module('TD_services.timeout_resources')
                       GetFromResultsPlayer: generate_custom_http_executor(getFromResultsPlayerResource,'player','get'),                                            
                       GetJagoffs: generate_custom_http_executor(getJagoffsResource,'jagoffs','get'),                                            
                       AddUser: generate_custom_http_executor(addUserResource,'added_user','post'),
-                      AddBackglassPic: generate_custom_http_executor(addBackglassPicResource,'edited_division_machine','post'),                      
+                      AddBackglassPic: generate_custom_http_executor(addBackglassPicResource,'edited_division_machine','post'),
+                      SetDivisionFinalMatchComplete: generate_custom_http_executor(setDivisionFinalMatchCompleteResource,'division_final_match','put'),
+                      SetDivisionFinalRoundComplete: generate_custom_http_executor(setDivisionFinalRoundCompleteResource,'division_final_round','put'),
                       AddTokens: generate_custom_http_executor(addTokensResource,'added_tokens','post'),
                       AddPlayerTokens: generate_custom_http_executor(addPlayerTokensResource,'added_player_tokens','post'),                      
                       AddPlayer: generate_custom_http_executor(addPlayerResource,'added_player','post'),
@@ -367,6 +373,7 @@ angular.module('TD_services.timeout_resources')
                       AddToQueue: generate_custom_http_executor(addToQueueResource,'added_queue','put'),
                       AddOtherPlayerToQueue: generate_custom_http_executor(addOtherPlayerToQueueResource,'added_queue','put'),                      
                       SetScore: generate_custom_http_executor(setScoreResource,'score_set','put'),
+                      SetFinalsMatchGameResult: generate_custom_http_executor(setFinalsMatchGameResultResource,'finals_game_result','put'),                      
                       VoidEntry: generate_custom_http_executor(voidEntryResource,'score_set','delete'),
                       AddEntry: generate_custom_http_executor(addEntryResource,'entry_added','get'),
                       GetAuditLogMissingTokens: generate_custom_http_executor(getAuditLogMissingTokensResource,'audit_log_missing_tokens','get'),

@@ -10,11 +10,13 @@ def generate_finals_match_player_result_class(db_handle,relationship=None,fk=Non
         winner = db_handle.Column(db_handle.Boolean)
         finals_player_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('finals_player.finals_player_id'))
 
-        #finals_match_game_results = db_handle.relationship('FinalsMatchGameResults')
+        finals_player = db_handle.relationship('FinalsPlayer')
  
         
         def to_dict_simple(self):
             export_dict = to_dict(self)
+            if self.finals_player:
+                export_dict['finals_player']=self.finals_player.to_dict_simple()
             # if len(self.qualifiers) > 0:
             #     division_final_dict = []
             #     for qualifier in self.qualifiers:

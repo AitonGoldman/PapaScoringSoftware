@@ -17,7 +17,7 @@ def generate_division_final_class(db_handle,relationship=None,fk=None):
                     division_final_dict['qualifiers'].append(qualifier.to_dict_simple())
             if len(self.division_final_rounds) > 0:
                 division_final_dict['division_final_rounds'] = []
-                for round in self.division_final_rounds:
+                for round in sorted(self.division_final_rounds, key= lambda e: e.round_number):
                     division_final_dict['division_final_rounds'].append(round.to_dict_simple())                
             return division_final_dict
         

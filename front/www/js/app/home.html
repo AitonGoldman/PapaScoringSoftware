@@ -46,7 +46,7 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
-        <a ng-if='is_scorekeeping_page() != undefined' id='menu_home_link' class='item item-icon-right' ng-click='jump_to_machine_list()'>
+        <a ng-if='is_scorekeeping_page() != undefined  && state.params.division_id != undefined' id='menu_home_link' class='item item-icon-right' ng-click='jump_to_machine_list()'>
           <div>
             Machine List
           </div>
@@ -87,6 +87,13 @@
         </a>
         <a ng-if="User.logged_in() == true && User.has_role('scorekeeper')" class="item item-divider">
           &nbsp;
+        </a>                
+        <a ng-if="User.logged_in() == true && User.has_role('scorekeeper')" class="item item-icon-right" menu-close ui-sref='.finals_scorekeeper'>
+          <div>
+            Finals Scorekeeping
+          </div>
+          <i class="icon ion-chevron-right"></i>
+
         </a>        
         <a id='menu_remove_player_link' class='item item-icon-right' menu-close ui-sref='app.scorekeeping.undo({division_id:state.params.division_id})' ng-if="User.logged_in() == true && User.has_role('scorekeeper') && is_scorekeeping_page() != undefined && state.params.division_id != undefined">
           <div>

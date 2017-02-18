@@ -33,6 +33,7 @@ app = angular.module(
         'prereg.step1',
     'app.prereg_complete',
     'app.set_player_picture',
+    'app.finals_scorekeeper',
     /*REPLACEMECHILD*/
 	]
 );

@@ -50,10 +50,16 @@ angular.module('app.finals_scorekeeper.division_final.round').controller(
             }
             return false;
         };
-                
+        $scope.check_match_has_tiebreaker = function(division_machine_match){            
+            if(division_machine_match.has_tiebreaker && division_machine_match.completed == false){
+                return true;
+            } else {
+                return false;
+            }
+        };                
         $scope.check_match_ready_to_be_completed = function(division_machine_match){            
             completed_games_count =  _.filter(division_machine_match.finals_match_game_results, function(o) { return o.completed == true; }).length;            
-            if(completed_games_count == 3 && division_machine_match.completed == false){
+            if(completed_games_count == 3 && division_machine_match.completed == false && division_machine_match.has_tiebreaker == false){
                 return true;
             }
             return false;
@@ -67,7 +73,11 @@ angular.module('app.finals_scorekeeper.division_final.round').controller(
                 finals_promise.then(function(data){
                     $scope.resources = TimeoutResources.GetAllResources();
                     Modals.loaded();
-                    Modals.information("Round Completed!  Next round is ready to start!");
+                    if (division_final_round.round_number != $scope.resources.finals.data[$scope.division_final_id].division_final_rounds.length){
+                        Modals.information("Round Completed!  Next round is ready to start!");
+                    } else {
+                        Modals.information("Finals Completed!  We're all gonna get laid!");
+                    }
                 });                                                
             });
         };

@@ -13,9 +13,12 @@
       </div>
       <div ng-repeat="game_player_result in game_result.finals_match_game_player_results|orderBy:'play_order'">
         <label class="item item-input item-select">
-          <div class="input-label">
-            <input ng-model='game_player_result.score' type="text" placeholder="Score">
-          </div>
+          <!--<div class="input-label">-->
+            <span style='margin-right:15px' ng-if="game_player_result.papa_points != undefined">
+              ({{game_player_result.papa_points}}) 
+            </span>
+          <input style='width:75%' ng-model='game_player_result.score' type="text" placeholder="Score">
+            <!--</div>-->
           <select ng-model="game_player_result.final_player.finals_player_id" ng-options="option.finals_player.finals_player_id as option.finals_player.player.full_name for option in match.finals_match_player_results">
           </select>
         </label>

@@ -21,7 +21,7 @@
             </span>
           </span>
           <span ng-if="finals_match_player_result.finals_player.player == undefined">Pending</span>
-          <i class="icon ion-trophy" ng-if="finals_match_player_result.winner == true"></i>
+          <i class="icon ion-trophy" ng-if="resources.finals.data[division_final_id].division_final_rounds[round_idx].round_number != resources.finals.data[division_final_id].division_final_rounds.length && finals_match_player_result.winner == true"></i>
         </div>
         <div ng-if='check_match_ready_to_be_completed(division_final_match)' ng-click="setDivisionFinalMatchComplete(division_final_match)" class="item item-divider item-icon-right item-icon-left item-energized">
          <i class="icon"></i>          
@@ -29,6 +29,12 @@
           <span> Complete Match </span>
           <i class="icon ion-disc"></i>          
         </div>
+        <div ng-if='check_match_has_tiebreaker(division_final_match)' class="item item-divider item-icon-right item-icon-left item-energized">
+         <i class="icon"></i>          
+          <span> Play Tiebreaker </span>
+          <i class="icon ion-disc"></i>          
+        </div>
+        
       </div>
     </div>
     <br>

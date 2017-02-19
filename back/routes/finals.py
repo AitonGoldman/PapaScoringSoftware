@@ -37,8 +37,7 @@ def fill_in_player_match_results(player_string,
     if player_string in match_template:
         #player_Xs = tables.FinalsPlayer.query.filter_by(initial_seed=match_template[player_string]).all()
         player_Xs = get_finals_players_with_seed(match_template[player_string],division_final_id)
-        if len(player_Xs) > 1:                    
-            print "uh oh - found some ties"
+        if len(player_Xs) > 1:                                
             pass
         if len(player_Xs)==0:
             player_X_id = None
@@ -136,6 +135,24 @@ def route_set_division_final_round_completed(division_final_round_id):
     next_round=str(int(division_final_round.round_number)+1)
     division_final_next_round = tables.DivisionFinalRound.query.filter_by(division_final_id=division_final_round.division_final_id,round_number=next_round).first()
     division_final_round.completed=True
+
+    final_rank_lookup = {
+        4:0,
+        3:4,
+        2:8,
+        1:16 
+    }
+    offset = final_rank_lookup[int(division_final_round.round_number)]
+    num_of_rounds = len(tables.DivisionFinalRound.query.filter_by(division_final_id=division_final_round.division_final_id).all())
+    if int(division_final_round.round_number) != num_of_rounds:
+        round_losers = tables.FinalsMatchPlayerResult.query.filter_by(winner=False).join(tables.DivisionFinalMatch).filter_by(division_final_round_id=division_final_round.division_final_round_id).order_by(tables.FinalsMatchPlayerResult.papa_points_sum).all()
+    else:
+        round_losers = tables.FinalsMatchPlayerResult.query.join(tables.DivisionFinalMatch).filter_by(division_final_round_id=division_final_round.division_final_round_id).order_by(tables.FinalsMatchPlayerResult.papa_points_sum).all()
+    sorted_finals_match_player_losers_results = sorted(round_losers,key= lambda e: e.papa_points_sum,reverse=True)
+    ranked_finals_match_player_losers_results = list(Ranking(sorted_finals_match_player_losers_results, key= lambda pp: pp.papa_points_sum))    
+    for loser in ranked_finals_match_player_losers_results:
+        loser[1].finals_player.overall_rank=loser[0]+1+offset
+        db.session.commit()            
     if division_final_next_round is None:
         return jsonify({'data':'success'})    
     db.session.commit()
@@ -167,11 +184,6 @@ def route_set_division_final_round_completed(division_final_round_id):
         #    for idx,finals_match_game_player_result in enumerate(finals_match_game_result.finals_match_game_player_results):
         #        finals_match_game_player_result.finals_player_id=players_to_add[idx][0]        
     db.session.commit()
-    # Algorithm for calculating final rank
-    # - get total number of players in finals
-    # - get rank range based on lookup hash 
-    # - rank eliminated players, add appropriate amount based on rank range  
-    #
     return jsonify({})
     
 @admin_manage_blueprint.route('/finals/finals_match_game_result/<finals_match_game_result_id>/completed',
@@ -243,8 +255,7 @@ def get_papa_points_sorted_list_of_match_players(division_final_match):
     for finals_player_result in division_final_match.finals_match_player_results:        
         papa_points_sum[finals_player_result.finals_player_id]=0        
     for finals_match_game_result in division_final_match.finals_match_game_results:
-        for finals_match_game_player_result in finals_match_game_result.finals_match_game_player_results:
-            print finals_match_game_player_result.finals_player_id
+        for finals_match_game_player_result in finals_match_game_result.finals_match_game_player_results:            
             papa_points_sum[finals_match_game_player_result.finals_player_id] = papa_points_sum[finals_match_game_player_result.finals_player_id] + finals_match_game_player_result.papa_points
     sorted_player_results = sorted(papa_points_sum, key=lambda player_result_id: papa_points_sum[player_result_id],reverse=True)
     return papa_points_sum,sorted_player_results
@@ -403,8 +414,7 @@ def route_create_finals(division_id):
     for round in bracket_template_4_player_groups:
         new_round = tables.DivisionFinalRound(
             round_number=round['round']
-        )
-        print "new round is %s"%round['round']
+        )        
         db.session.add(new_round)
         new_final.division_final_rounds.append(new_round)
         db.session.commit()

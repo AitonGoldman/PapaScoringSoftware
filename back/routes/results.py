@@ -206,9 +206,9 @@ def return_player_results(player_results_dict,sorted_player_list,divisions,ranke
         return jsonify({'data':player_entry_dict})        
     if return_json:
         top_6_machines_division_only = {key: value for (key, value) in top_6_machines.iteritems() if key == int(division_id)}
-        ranked_player_list_division_only = {key: value for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}
-        #return jsonify({'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}})
-        return jsonify({'data':{'top_machines':top_6_machines_division_only,'ranked_player_list':ranked_player_list_division_only}})
+        # ranked_player_list_division_only = {key: value for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}
+        ranked_player_list_division_only = {key: value[:150] for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}                
+        return jsonify({'data':{'top_machines':top_6_machines_division_only,'ranked_player_list':ranked_player_list_division_only}})        
     else:
         return {'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}}
     

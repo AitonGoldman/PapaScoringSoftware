@@ -41,5 +41,13 @@ angular.module('app.queues.machine_select.machine_queue').controller(
             $scope.choose_queue_action = function(player_id,player_name){
                 ActionSheets.choose_queue_action(player_name,player_id, remove_from_queue_function);
             };
+            $scope.doRefresh = function() {
+                queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
+                queues_promise.then(function(data){
+                    $scope.$broadcast('scroll.refreshComplete');
+                    $scope.division_machine = $scope.resources.queues.data[$scope.division_machine_id];        
+                });
+            };                
+            
     }]
 );

@@ -1,12 +1,12 @@
 angular.module('app.results.divisions.division',[/*REPLACEMECHILD*/]);
 angular.module('app.results.divisions.division').controller(
     'app.results.divisions.division',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$timeout',
+        function($scope, $state, TimeoutResources, Utils,Modals,$timeout) {
         $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
 	$scope.division_name=$state.params.division_name;
-
+        $scope.filter_limit=120;
         $scope.utils = Utils;
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
@@ -122,15 +122,31 @@ angular.module('app.results.divisions.division').controller(
             return false;
         };
         $scope.doRefresh = function() {
+            Modals.loading();            
+        };
+        $scope.doneRefresh = function() {
             $scope.resources.division_results.data = undefined;
             results_promise = TimeoutResources.GetDivisionResults(undefined,{site:$scope.site,division_id:$scope.division_id});
             
             results_promise.then(function(data){
                 $scope.$broadcast('scroll.refreshComplete');
-                $scope.process_division_results();                            
-                //Modals.loaded();
-            });
-        };                
+                $scope.process_division_results();
+                //$scope.filter_limit=150;
+                //$scope.filter_limit=$scope.filter_limit+150;
+                Modals.loaded();                
+            });            
+        };
+            
+        $scope.loadMore = function() {
+            //$http.get('/more-items').success(function(items) {
+            //     useItems(items);            
+            $timeout(function(){
+                $scope.filter_limit=$scope.filter_limit+20;
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            },50);
+            
+           // });
+        };        
         
     }]
 );

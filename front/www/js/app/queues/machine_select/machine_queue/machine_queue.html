@@ -1,5 +1,9 @@
 <ion-view view-title="Queues">
   <ion-content>      
+    <ion-refresher
+       pulling-text="Pull to refresh..."
+       on-refresh="doRefresh()">
+    </ion-refresher>    
     <div class="skinny-list list">    
       <div class='item item-divider'>
         <b>{{division_machine_name}}</b>

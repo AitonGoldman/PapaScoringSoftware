@@ -11,14 +11,21 @@
               <!--<input id="login_username_field" type="text" ng-disabled="true" value="{{division_machine_name}}">{{division_machine_name}}-->
               <span> {{division_machine_name}} </span>
             </label>            
-            <label class='item-input item'>
-              <span class='input-label'>Player ID : </span>
-              <input id="login_username_field" ng-model='other_player.player_id' type="text" placeholder="Player ID">
+            <!--            <label class='item-input item'>
+                            <span class='input-label'>Player ID : </span>
+                            <input id="login_username_field" ng-model='other_player.player_id' type="text" placeholder="Player ID">
             </label>
             <label  class='item-input item'>
               <span class='input-label'>Player Pin : </span>
               <input id="login_password_field" ng-model='other_player.pin' type="password" placeholder="Player PIN">
+            </label>-->
+            <label class="item item-input">
+              <input type="text" ng-model='other_player.player_id' placeholder="Player ID">
             </label>
+            <label class="item item-input">
+              <input type="text" ng-model='other_player.pin' placeholder="Player PIN">
+            </label>
+            
             <button id="login_submit_button" ui-sref='.process({other_player_id:other_player.player_id,other_player_pin:other_player.pin,process_step:{process:true}})' class="button button-full button-calm item-icon-right seperate_button" style='text-align:left' ng-disabled='utils.var_empty(other_player.player_id)||utils.var_empty(other_player.pin)'>
               <i class="icon ion-chevron-right padding"></i>
               <span >Login</span>

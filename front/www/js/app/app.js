@@ -59,15 +59,18 @@ app.controller(
         $scope.state = $state;
         if(ionic.Platform.isWebView() == false && type_of_page != 'prereg'){
             $scope.type_of_page = 'user';
-            if ($location.absUrl().includes('player.html#')==true){
+            player_html_index = $location.absUrl().indexOf('player.html#');
+            www_pbchallenge_net_index = $location.absUrl().indexOf('www.pbchallenge.net');
+            results_pbchallenge_net_index = $location.absUrl().indexOf('results.pbchallenge.net');
+            if (player_html_index!=-1){
                 $scope.type_of_page = 'player';
             }
-            if ($location.absUrl().includes('www.pbchallenge.net')==true){
+            if (www_pbchallenge_net_index!=-1){
                 $scope.type_of_page = 'player';
             }
-            if ($location.absUrl().includes('results.pbchallenge.net')==true){
+            if (results_pbchallenge_net_index!=-1){
                 $scope.type_of_page = 'results';
-            }                                    
+            }                                                    
         } else {
             $scope.type_of_page = type_of_page;            
         }

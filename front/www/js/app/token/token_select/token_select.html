@@ -20,13 +20,13 @@
       </div>
       <ion-checkbox id="token_select_comped_checkbox" class='item' ng-model='token_info.comped' >Comped</ion-checkbox>
       
-      <label ng-if='division.team_tournament == false && division.meta_division_id == null && token_info.divisions[division_id] != undefined' ng-repeat='(division_id,division) in resources.divisions.data' class="item item-input item-select test-select">
+      <label ng-if='division.team_tournament == false && division.meta_division_id == null && token_info.divisions[division_id] != undefined' ng-repeat='(division_id,division) in resources.divisions.data' class="item item-input item-select">
         <div class="input-label">
           {{resources.divisions.data[division_id].tournament_name}}
         </div>
 
         <!--<select class='test' ng-change='calc_total_cost()' ng-model="token_info.divisions[division_id]" ng-options="option for option in []|range:resources.player_tokens.data.available_tokens.divisions[division_id]+1 track by option">-->        
-          <select class='test' ng-change='calc_total_cost()' ng-model="token_info.divisions[division_id]" ng-options="option[0] for option in resources.player_tokens.data.available_tokens.divisions_remaining_token_list[division_id]">
+          <select ng-change='calc_total_cost()' ng-model="token_info.divisions[division_id]" ng-options="option[0] for option in resources.player_tokens.data.available_tokens.divisions_remaining_token_list[division_id]">
         </select>
       </label>
       <label ng-repeat='(metadivision_id,metadivision) in resources.divisions.data.metadivisions' class="item item-input item-select test-select">
@@ -56,6 +56,6 @@
       </button>    
       
     </div>    
-  </ion-content>
+    </ion-content>
 </ion-view>
 

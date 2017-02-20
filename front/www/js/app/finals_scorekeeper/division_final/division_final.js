@@ -145,6 +145,9 @@ angular.module('app.finals_scorekeeper.division_final.round.match_details').cont
                 });                                
             });
         };
+        $scope.onScoreChange = function(score){
+            score.score = score.score.replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        };
         
         //Modals.loading();
         // = TimeoutResources.GetEtcData();

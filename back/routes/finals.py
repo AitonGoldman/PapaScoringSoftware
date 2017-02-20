@@ -73,7 +73,8 @@ def route_update_finals_match_game_result(finals_match_game_result_id):
         #game_player_result_model.play_order = idx
         if 'finals_player_id' in game_player_result['final_player']:            
             game_player_result_model.finals_player_id = game_player_result['final_player']['finals_player_id']
-            game_player_result_model.score = game_player_result['score']
+            if 'score' in game_player_result and game_player_result['score'] is not None:
+                game_player_result_model.score = str(game_player_result['score']).replace(",","")
         db.session.commit()
     number_scores_recorded_on_game = len(tables.FinalsMatchGamePlayerResult.query.filter_by(finals_match_game_result_id=input_data['finals_match_game_result_id']).filter(tables.FinalsMatchGamePlayerResult.score != None).all())    
     finals_match_game_result=tables.FinalsMatchGameResult.query.filter_by(finals_match_game_result_id=input_data['finals_match_game_result_id']).first()

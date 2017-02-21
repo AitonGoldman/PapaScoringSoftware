@@ -11,3 +11,4 @@ npm-debug.log
 /platforms/
 /www/css/*
 /www/js/app/config.js
+.io-config.json

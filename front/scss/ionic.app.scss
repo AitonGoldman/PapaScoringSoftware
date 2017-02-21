@@ -153,7 +153,7 @@ $toggle-off-bg-color:             #33cd5f !default;
     position:absolute;
     transform-style: preserve-3d;
     background-color: rgba(0, 0, 0, 0.5);
-    opacity:.5;
+    opacity:1;
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
             top:0px;

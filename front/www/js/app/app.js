@@ -233,23 +233,26 @@ app.controller(
     }
 );
 
-app.run(function($ionicPlatform,$rootScope,$ionicPopup) {
+app.run(function($ionicPlatform,$rootScope,$ionicPopup,$state) {
     $ionicPlatform.ready(function() {
         ionic.Platform.showStatusBar(false);        
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-      if(window.cordova && window.cordova.plugins.Keyboard) {
-  //Change this to false to return accessory bar 
-          cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);          
-      }
-    if(window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // for form inputs)
+        if(window.cordova && window.cordova.plugins.Keyboard) {
+            //Change this to false to return accessory bar 
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);          
+        }
+        if(window.StatusBar) {
+            // org.apache.cordova.statusbar required
+            StatusBar.styleDefault();
+        }
+    });
 
     $rootScope.$on('cloud:push:notification', function(event, data) {
         var msg = data.message;
+        if($state.current.name == 'app.queues.machine_select.machine_queue'){
+            $state.go('app.queues.machine_select.machine_queue',{division_id:$state.params.division_id,division_machine_id:$state.params.division_machine_id,division_machine_name:$state.params.division_machine_id},{reload:true});
+        }
         var alertPopup = $ionicPopup.alert({
             title: 'Yapss Notification',
             template: msg.text

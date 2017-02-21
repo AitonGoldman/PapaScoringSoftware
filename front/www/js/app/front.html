@@ -77,11 +77,16 @@
         <span>Help</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
-      <a ng-if='isWebView == true' ng-click='utils.native_open_in_browser("/td/static/help.html")' class="item item-icon-left item-icon-right">
+      <a ng-if="type_of_page == 'user' && !User.logged_in()" ui-sref=".login" class="item item-icon-left item-icon-right">
         <i class="icon ion-help"></i>
-        <span>Help</span>
+        <span>Login</span>
         <i class="icon ion-chevron-right"></i>                
-      </a>       
+      </a>
+      <a ng-if="type_of_page == 'player' && !User.logged_in()" ui-sref=".login_player" class="item item-icon-left item-icon-right">
+        <i class="icon ion-help"></i>
+        <span>Login</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>      
     </div>
     
     <!--

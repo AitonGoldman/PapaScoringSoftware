@@ -1,5 +1,9 @@
 <ion-view view-title="Player Info">
   <ion-content>      
+    <ion-refresher
+       pulling-text="Pull to refresh..."
+       on-refresh="doRefresh()">
+    </ion-refresher>    
     <div class="skinny-list list">
       <div class="item-divider item" id='add_user_user_info_title'>
         Player Info

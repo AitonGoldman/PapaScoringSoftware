@@ -23,12 +23,15 @@ angular.module('app.results.division_machines.machines.machine').controller(
             //$scope.resources.division_machines.data["-1"]=$scope.jump_to_division_machine.data;
             Modals.loaded();            
         });
-
         $scope.doRefresh = function() {
+            Modals.loading();            
+        };
+        $scope.doneRefresh = function() {
             results_promise = TimeoutResources.GetDivisionMachineResults(undefined,
                                                                          {site:$scope.site,division_machine_id:$scope.division_machine_id});            
             results_promise.then(function(data){                
                 $scope.resources = TimeoutResources.GetAllResources();
+                Modals.loaded();
                 $scope.$broadcast('scroll.refreshComplete');                
             });
         };                        

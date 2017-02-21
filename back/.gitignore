@@ -10,4 +10,4 @@ venv
 todo
 workflows
 scratchpad
-data_files/events.json
+events.json

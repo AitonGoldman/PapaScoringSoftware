@@ -8,10 +8,10 @@
           <div>
           </div>
         </div>
-          <button id='logout_return_home_button' class='seperate_button button button-full button-calm item-icon-right' ui-sref="app">
+          <a id='logout_return_home_button' class='seperate_button button button-full button-calm item-icon-right' ng-click='go_home()' ui-sref-opts="{reload:true}">
             <span>Return Home</span>
             <i class="icon ion-chevron-right"></i>          
-        </button>
+        </a>
     </center>
   </ion-content>
 </ion-view>

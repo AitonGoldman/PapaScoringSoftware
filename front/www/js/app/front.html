@@ -77,16 +77,22 @@
         <span>Help</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
-      <a ng-if="type_of_page == 'user' && !User.logged_in()" ui-sref=".login" class="item item-icon-left item-icon-right">
-        <i class="icon ion-help"></i>
+      <a ng-if="type_of_page == 'user' && User.logged_in() == false" ui-sref='app.login' class="item item-icon-left item-icon-right">
+        <i class="icon ion-log-in"></i>
         <span>Login</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
-      <a ng-if="type_of_page == 'player' && !User.logged_in()" ui-sref=".login_player" class="item item-icon-left item-icon-right">
-        <i class="icon ion-help"></i>
+      <a ng-if="type_of_page == 'player' && User.logged_in() == false" ui-sref='app.login_player' class="item item-icon-left item-icon-right">
+        <i class="icon ion-log-in"></i>
         <span>Login</span>
         <i class="icon ion-chevron-right"></i>                
+      </a>
+      <a ng-if="User.logged_in()==true" ui-sref=".logout" class="item item-icon-left item-icon-right">
+        <i class="icon ion-log-out"></i>
+        <span>Logout</span>
+        <i class="icon ion-chevron-right"></i>                
       </a>      
+      
     </div>
     
     <!--

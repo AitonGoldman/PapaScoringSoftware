@@ -53,7 +53,7 @@
           <i class="icon ion-chevron-right"></i>
         </a>        
         
-        <a id='menu_login_link' class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false && type_of_page == 'user'">
+        <!--<a id='menu_login_link' class='item item-icon-right' menu-close ui-sref='.login' ng-if="User.logged_in() == false && type_of_page == 'user'">
           <div>
             Login
           </div>
@@ -64,7 +64,7 @@
             Login
           </div>
           <i class="icon ion-chevron-right"></i>
-        </a>
+        </a>-->
         
         <a id='menu_manage_tournaments_link' class='item item-icon-right' menu-close ui-sref='.tournament' ng-if="User.logged_in() == true && User.has_role('admin')">
           
@@ -134,12 +134,12 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </div>        
-        <a id='menu_logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
+        <!--<a id='menu_logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
           <div>
             Logout
           </div>
           <i class="icon ion-chevron-right"></i>
-        </a>        
+        </a>-->
         
       </ion-list>
     </ion-content>

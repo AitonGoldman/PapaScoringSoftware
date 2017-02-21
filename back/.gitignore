@@ -9,3 +9,5 @@ venv
 *secret*
 todo
 workflows
+scratchpad
+data_files/events.json

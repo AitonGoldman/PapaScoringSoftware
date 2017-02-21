@@ -137,7 +137,7 @@ angular.module('TD_services.timeout_resources')
                       if(url_params.host != undefined){
                           api_url=http_prefix+'://'+url_params.host+':'+server_port+'/';
                           results_url=http_prefix+'://'+url_params.host+':'+server_port+'/';
-                          purchase_url=http_prefix+'://'+url_params.host+':'+server_port+'/';                          
+                          purchase_url=http_prefix+'://'+url_params.host+':'+purchase_port+'/';                          
                           api_host.set_api_host(api_url);
                           api_host.set_results_host(results_url);
                           api_host.set_purchase_host(purchase_url);
@@ -149,16 +149,16 @@ angular.module('TD_services.timeout_resources')
                               ip_end = $location.absUrl().indexOf('/',ip_start);
                           }                          
                           var ip = $location.absUrl().substr(ip_start,ip_end-ip_start); 
-                          var results_ip = ip;
+                          var results_ip = results_ip_address;
                           var purchase_ip = ip;
                           if(ip == undefined || ip == ""){
                               ip=server_ip_address;
                               results_ip=results_ip_address;
-                              purchase_ip=purchase_ip_address;
+                              purchase_ip=server_ip_address;
                           }
                           api_url=http_prefix+'://'+ip+':'+server_port+'/';
                           results_url=http_prefix+'://'+results_ip+':'+server_port+'/';
-                          purchase_url=http_prefix+'://'+purchase_ip+':'+server_port+'/';                          
+                          purchase_url=http_prefix+'://'+ip+':'+purchase_port+'/';                          
                           api_host.set_api_host(api_url);                          
                           api_host.set_results_host(results_url);
                           api_host.set_purchase_host(purchase_url);

@@ -233,7 +233,7 @@ app.controller(
     }
 );
 
-app.run(function($ionicPlatform,$rootScope) {
+app.run(function($ionicPlatform,$rootScope,$ionicPopup) {
     $ionicPlatform.ready(function() {
         ionic.Platform.showStatusBar(false);        
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -250,7 +250,10 @@ app.run(function($ionicPlatform,$rootScope) {
 
     $rootScope.$on('cloud:push:notification', function(event, data) {
         var msg = data.message;
-        alert(msg.title + ': ' + msg.text);
+        var alertPopup = $ionicPopup.alert({
+            title: 'Yapss Notification',
+            template: msg.text
+        });        
     });
 
 

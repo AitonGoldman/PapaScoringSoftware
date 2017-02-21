@@ -72,7 +72,7 @@ def record_ioniccloud_push_token(token,user_id=None,player_id=None):
     user.ioniccloud_push_token=token
     db.session.commit()
     
-def send_push_notification(message,user_id=None,player_id=None,postpone=None,players=None):
+def send_push_notification(message,user_id=None,player_id=None,postpone=None,players=None,title="YAPSS NOTIFICATION"):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
 

@@ -177,7 +177,6 @@
       padding-right: 2px;
       padding-left: 2px;
       font-size: $button-bar-button-icon-size;
-
       line-height: $button-bar-button-height;
     }
 
@@ -277,9 +276,7 @@
     }
 
     .title {
-      //CHANGED THIS
       font-size: 19px;
-      //font-size: $font-size-base*1.5;    
       line-height: $bar-height;
     }
   }

@@ -29,7 +29,7 @@
           <span> Complete Match </span>
           <i class="icon ion-disc"></i>          
         </div>
-        <div ng-if='check_match_has_tiebreaker(division_final_match)' class="item item-divider item-icon-right item-icon-left item-energized">
+        <div ng-if='check_match_has_tiebreaker(division_final_match)' class="item item-divider item-icon-right item-icon-left item-energized" ui-sref='app.finals_scorekeeper.division_final.round_{{round_idx}}.tiebreaker({division_final_match_id:division_final_match.division_final_match_id,division_final_match_idx:$index,round_idx:round_idx})'>
          <i class="icon"></i>          
           <span> Play Tiebreaker </span>
           <i class="icon ion-disc"></i>          

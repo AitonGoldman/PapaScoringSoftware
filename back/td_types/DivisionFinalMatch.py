@@ -13,7 +13,7 @@ def generate_division_final_match_class(db_handle,relationship=None,fk=None):
         number_of_games = db_handle.Column(db_handle.Integer)
         finals_match_player_results = db_handle.relationship('FinalsMatchPlayerResult')
         finals_match_game_results = db_handle.relationship('FinalsMatchGameResult')
- 
+        expected_num_tiebreaker_winners = db_handle.Column(db_handle.Integer)
         
         def to_dict_simple(self):
             export_dict = to_dict(self)

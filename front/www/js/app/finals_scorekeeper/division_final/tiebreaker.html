@@ -1,0 +1,26 @@
+<ion-view view-title='Tiebreaker for Round {{round_idx}}, Match {{division_final_match_idx}}'>
+  <ion-content>    
+    <div class="item item-input-inset">
+      <label class="item-input-wrapper">
+        <input ng-model='match.tiebreaker_division_machine_string' type="text" placeholder="Game Name">
+      </label>
+      <button class="button button-small">
+        Submit
+      </button>
+    </div>
+    <center>
+      Select the tiebreaker winners <br>
+      (there should be {{match.expected_num_tiebreaker_winners}})
+    </center>
+    <div ng-repeat="tiebreaker_player in tiebreaker_players">
+      <ion-checkbox ng-model='tiebreaker_player.won_tiebreaker'>
+        {{tiebreaker_player.finals_player.player.full_name}}
+      </ion-checkbox>
+    </div>
+    <button ng-click='set_tiebreaker_winners()' class='button button-calm button-full item-icon-right'>
+      Tiebreaker completed
+      <i class="icon ion-chevron-right"></i>
+    </button>
+
+  </ion-content>
+</ion-view>

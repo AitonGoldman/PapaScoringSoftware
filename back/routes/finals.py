@@ -215,23 +215,24 @@ def route_set_division_final_match_tie_breaker_machine(division_final_match_id,d
     db.session.commit()
     pass
 
-@admin_manage_blueprint.route('/finals/division_final_match/<division_final_match_id>/tie_breaker_results',
+@admin_manage_blueprint.route('/finals/tie_breaker_results/division_final_match',
                               methods=['PUT'])
 @login_required
 @Scorekeeper_permission.require(403)
-def route_set_division_final_match_tiebreaker_results(division_final_match_id):
+def route_set_division_final_match_tiebreaker_results():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    division_final_match = fetch_entity(tables.DivisionFinalMatch,division_final_match_id)
     input_data = json.loads(request.data)    
-    for finals_player in input_data:
-        finals_match_player_result = tables.FinalsMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match_id,finals_player_id=finals_player[0]).first()
+    division_final_match = fetch_entity(tables.DivisionFinalMatch,input_data['division_final_match_id'])
+    for finals_player in input_data['data']:
+        print "%s %s" % (division_final_match.division_final_match_id,finals_player[0])
+        finals_match_player_result = tables.FinalsMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match.division_final_match_id,finals_player_id=finals_player[0]).first()
         finals_match_player_result.won_tiebreaker=finals_player[1]
         db.session.commit()
     papa_points_sum,sorted_player_results = get_papa_points_sorted_list_of_match_players(division_final_match)
-    finals_match_player_results_has_tie = tables.FinalsMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match_id,needs_tiebreaker=True).all()
-    finals_match_player_results_tie_winners = tables.FinalsMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match_id,won_tiebreaker=True).all()
-    top_sorted_finals_match_player_results = tables.FinalsMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match_id,finals_player_id=sorted_player_results[0]).first()
+    finals_match_player_results_has_tie = tables.FinalsMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match.division_final_match_id,needs_tiebreaker=True).all()
+    finals_match_player_results_tie_winners = tables.FinalsMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match.division_final_match_id,won_tiebreaker=True).all()
+    top_sorted_finals_match_player_results = tables.FinalsMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match.division_final_match_id,finals_player_id=sorted_player_results[0]).first()
     finals_players_ids = [finals_result.finals_player_id for finals_result in finals_match_player_results_has_tie]    
     if len(finals_match_player_results_has_tie) == 2:
         top_sorted_finals_match_player_results.winner=True        
@@ -306,12 +307,13 @@ def mark_finals_match_player_results_that_need_tiebreaker(division_final_match):
     ranked_finals_match_player_results = list(Ranking(sorted_finals_match_player_results, key= lambda pp: pp.papa_points_sum))    
     if ranked_finals_match_player_results[1][0] == ranked_finals_match_player_results[2][0]:        
         ranked_finals_match_player_results[1][1].needs_tiebreaker=True
-        ranked_finals_match_player_results[2][1].needs_tiebreaker=True                
+        ranked_finals_match_player_results[2][1].needs_tiebreaker=True
+        division_final_match.expected_num_tiebreaker_winners=1
         if ranked_finals_match_player_results[1][0] == ranked_finals_match_player_results[0][0]:
+            division_final_match.expected_num_tiebreaker_winners=2            
             ranked_finals_match_player_results[0][1].needs_tiebreaker=True                            
         if ranked_finals_match_player_results[1][0] == ranked_finals_match_player_results[3][0]:
-            ranked_finals_match_player_results[3][1].needs_tiebreaker=True                                        
-    
+            ranked_finals_match_player_results[3][1].needs_tiebreaker=True                                            
     db.session.commit()
 
 @admin_manage_blueprint.route('/finals/finals_match_game_result/<finals_match_game_result_id>',

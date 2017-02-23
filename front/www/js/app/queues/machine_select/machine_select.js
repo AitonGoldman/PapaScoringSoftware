@@ -38,7 +38,8 @@ angular.module('app.queues.machine_select').controller(
         $scope.doRefresh = function() {
             queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise.then(function(data){
-                $scope.$broadcast('scroll.refreshComplete');                
+                $scope.$broadcast('scroll.refreshComplete');
+                $scope.resources = TimeoutResources.GetAllResources();
             });
         };                
     }]

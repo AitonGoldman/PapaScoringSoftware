@@ -39,8 +39,8 @@ angular.module('app.player.player_info').controller(
                             $scope.$broadcast('scroll.refreshComplete');
                         });
                     } else {
-                        $scope.$broadcast('scroll.refreshComplete');
                         $scope.resources = TimeoutResources.GetAllResources();                        
+                        $scope.$broadcast('scroll.refreshComplete');                        
                     }
                     
                 });

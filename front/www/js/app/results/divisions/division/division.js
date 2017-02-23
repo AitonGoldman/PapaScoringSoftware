@@ -129,6 +129,7 @@ angular.module('app.results.divisions.division').controller(
             results_promise = TimeoutResources.GetDivisionResults(undefined,{site:$scope.site,division_id:$scope.division_id});
             
             results_promise.then(function(data){
+                $scope.resources = TimeoutResources.GetAllResources();            
                 $scope.$broadcast('scroll.refreshComplete');
                 $scope.process_division_results();
                 //$scope.filter_limit=150;

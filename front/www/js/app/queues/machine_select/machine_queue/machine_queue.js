@@ -45,7 +45,8 @@ angular.module('app.queues.machine_select.machine_queue').controller(
                 queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
                 queues_promise.then(function(data){
                     $scope.$broadcast('scroll.refreshComplete');
-                    $scope.division_machine = $scope.resources.queues.data[$scope.division_machine_id];        
+                    $scope.resources = TimeoutResources.GetAllResources();
+                    $scope.division_machine = $scope.resources.queues.data[$scope.division_machine_id];
                 });
             };                
             

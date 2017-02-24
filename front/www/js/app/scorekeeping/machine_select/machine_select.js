@@ -2,6 +2,7 @@ angular.module('app.scorekeeping.machine_select',['app.scorekeeping.machine_sele
     'app.scorekeeping.machine_select.record_score',
     'app.scorekeeping.machine_select.team_select',
     'app.scorekeeping.machine_select.select_action',
+    'app.scorekeeping.machine_select.add_player_to_queue',
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select').controller(
     'app.scorekeeping.machine_select',[

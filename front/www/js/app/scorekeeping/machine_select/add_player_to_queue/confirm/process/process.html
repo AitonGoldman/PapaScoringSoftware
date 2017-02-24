@@ -1,0 +1,43 @@
+<ion-view view-title="">
+  <ion-content>      
+      <center>
+        <div class='standard_big_font'>
+          <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-fork-repo ion-icon-green review-icon'>
+            <span><u>Added To Queue!</u></span>
+          </button>
+          <table>
+            <tr>
+              <td class='padding-right' align="right">
+                Machine : 
+              </td>
+              <td class='padding-left'>
+                {{division_machine_name}}
+            </tr>
+            <tr>
+              <td class='padding-right' align="right">
+                 Player : 
+              </td>
+              <td class='padding-left'>
+                (#{{player_id}}) {{player_name}}
+            </tr>
+          </table>          
+        </div>
+        <div class='standard_big_font'>
+          <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-alert review-icon'>
+            <span><u>Reminder!</u></span>
+          </button>
+          <div>
+            When it is <span ng-if="User.has_role('player') == true"> your </span> <span ng-if="User.has_role('desk') == true"> the players </span> turn to play,<br>
+            a scorekeeper must start <span ng-if="User.has_role('player') == true"> you </span> <span ng-if="User.has_role('desk') == true"> the player </span> on the game.
+          </div>
+        </div>
+        <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref="app.scorekeeping.machine_select">
+          <span>Return To Machine List</span>
+          <i class="icon ion-chevron-right"></i>          
+        </button>        
+      </center>
+  </ion-content>
+</ion-view>
+

@@ -1,0 +1,42 @@
+<ion-view view-title="">
+  <ion-content>      
+      <center>
+        <div class='standard_big_font'>
+          <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-alert-circled ion-icon-yellow review-icon'>
+            <span><u>Review</u></span>
+          </button>
+          <table>
+            <tr>
+              <td class='padding-right' align="right">
+                Machine : 
+              </td>
+              <td class='padding-left'>
+                {{division_machine_name}}
+            </tr>
+            <tr>
+              <td class='padding-right' align="right">
+                 Player : 
+              </td>
+              <td class='padding-left'>
+                (#{{player_id}}) {{player_name}}
+            </tr>
+            <tr class='red' ng-if="num_tokens_left==0">
+              <td colspan=2>No More {{resources.divisions.data[division_id].tournament_name}} Tickets Left!</td>
+            </tr>
+            <tr ng-if='resources.player_queue.data != undefined'>
+              <td class='padding-right' style='color:red'>Already Queued On : </td><td class='padding-right'>
+                {{resources.player_queue.data.division_machine.division_machine_name}}
+              </td>
+            </tr>
+          </table>
+          <br>
+          <button ng-if="num_tokens_left > 0" id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({process_step:{process:true}})">
+            <span>Add To Queue</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
+        </div>
+      </center>
+  </ion-content>
+</ion-view>
+

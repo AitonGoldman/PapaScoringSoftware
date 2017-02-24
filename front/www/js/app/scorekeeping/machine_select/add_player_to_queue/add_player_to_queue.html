@@ -1,0 +1,30 @@
+<ion-view view-title="Select Player">
+  <ion-content>      
+    <div class="list" >
+      <!-- REMOVE ME -->
+      <div class='player-select'>
+        <label class="item-input item">
+          <i class="icon ion-search placeholder-icon"></i>
+          <form ng-submit='test_submit()'>
+            <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange()' type="tel" placeholder="Player #" ng-model="player.player_id">
+          </form>
+        </label>
+        <div class='item'>
+          <!--<div style='margin-left:68px'>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>-->
+          <div>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>
+        </div>
+      </div>
+    </div>
+    <button ng-click='test_submit()' class='button button-full button-calm item-icon-right seperate_button'>
+      Select Player
+      <i class="icon ion-chevron-right"></i>          
+    </button>
+    
+    <div class='player-info-avatar'>
+      <img src="{{http_prefix}}://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players.length == 0 && poop == true'>
+      <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">
+      <img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'>
+    </div>
+  </ion-content>
+</ion-view>
+

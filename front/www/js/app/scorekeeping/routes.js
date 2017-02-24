@@ -269,7 +269,44 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.scorekeeping.machine_select.select_action'
  	     }
  	   }
+       }).state('app.scorekeeping.machine_select.add_player_to_queue', 
+        { 
+         cache: false,
+ 	 url: '/add_player_to_queue/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/add_player_to_queue/add_player_to_queue.html',
+ 	       controller: 'app.scorekeeping.machine_select.add_player_to_queue'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.machine_select.add_player_to_queue.confirm', 
+        { 
+         cache: false,
+ 	 url: '/confirm/player_id/:player_id/player_name/:player_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/add_player_to_queue/confirm/confirm.html',
+ 	       controller: 'app.scorekeeping.machine_select.add_player_to_queue.confirm'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.machine_select.add_player_to_queue.confirm.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/add_player_to_queue/confirm/process/process.html',
+ 	       controller: 'app.scorekeeping.machine_select.add_player_to_queue.confirm.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
        })//REPLACE_ME
+
+
+
 
 
 

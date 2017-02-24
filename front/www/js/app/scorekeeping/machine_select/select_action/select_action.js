@@ -20,22 +20,23 @@ angular.module('app.scorekeeping.machine_select.select_action').controller(
             $scope.resources = TimeoutResources.GetAllResources();                
             //$scope.division_machine = $scope.resources.division_machines.data[$scope.division_machine_id];
             console.log($scope.resources);
+            $scope.division_machine = $scope.resources.queues.data[$scope.division_machine_id];
             Modals.loaded();
         });
         
         $scope.goto_next_scorekeeping_step = function(division_machine_id){
-            division_machine = $scope.resources.queues.data[division_machine_id];
+            
             if($scope.resources.queues.machine_players[division_machine_id] != undefined){
                 $state.go('.^.record_score',
-                          {division_machine_id:division_machine.division_machine_id,
-                           division_machine_name:division_machine.division_machine_name,
+                          {division_machine_id:$scope.division_machine.division_machine_id,
+                           division_machine_name:$scope.division_machine.division_machine_name,
                            player_name:$scope.resources.queues.machine_players[division_machine_id],
                            player_id:$scope.resources.queues.data[division_machine_id].player_id,
                            team_tournament:false});
             } else {
                 $state.go('.^.player_select',
-                          {division_machine_id:division_machine.division_machine_id,
-                           division_machine_name:division_machine.division_machine_name});                        
+                          {division_machine_id:$scope.division_machine.division_machine_id,
+                           division_machine_name:$scope.division_machine.division_machine_name});                        
             }
         };
         

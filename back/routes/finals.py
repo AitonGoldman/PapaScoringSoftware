@@ -405,6 +405,14 @@ def route_create_finals(division_id):
     )
     db.session.add(new_final)
     db.session.commit()
+
+    # need to add adjusted_seed to finals player
+    # set initial_seed on finals player
+    # look for finals player with adjusted_seed = initial_seed 
+    # if we don't find one, then adjusted_seed = initial seed
+    # if we do find one...
+    ## repeat the following until we find a None : if we find one, look for finals player with adjusted_seed + 1
+    ## set adjusted_seed to initial_seed + x 
     for finals_player in input_data:
         new_finals_player = tables.FinalsPlayer(
             player_id=finals_player[0],

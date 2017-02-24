@@ -28,7 +28,8 @@ angular.module('app.scorekeeping.machine_select.record_score.void').controller(
         // = TimeoutResources.GetEtcData();
         void_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
-            $scope.division_machine_queue_length = $scope.resources.queues.data[$scope.division_machine_id].queues.length;
+            $scope.division_machine_queue_length = $scope.resources.queues.data[$scope.division_machine_id].queues.length;            
+            console.log($scope.resources.queues.data[$scope.division_machine_id].queues);
             Modals.loaded();
         });
     }]

@@ -198,18 +198,18 @@ def set_token_start_time(app,player,division_machine,team_id=None,commit=True):
         if player:
             token_to_set = tables.Token.query.filter_by(player_id=player.player_id,
                                                         division_id=division_machine.division.division_id,
-                                                        used=False).first()
+                                                        paid_for=True,used=False).first()
         if team_id:
             token_to_set = tables.Token.query.filter_by(team_id=team_id,
                                                         division_id=division_machine.division.division_id,
-                                                        used=False).first()
+                                                        paid_for=True,used=False).first()
             
             
     else:
         if player:
             token_to_set = tables.Token.query.filter_by(player_id=player.player_id,
                                                         metadivision_id=division_machine.division.meta_division_id,
-                                                        used=False).first()
+                                                        paid_for=True,used=False).first()
             
     token_to_set.game_started_date=datetime.datetime.now()
     token_to_set.division_machine_id = division_machine.division_machine_id

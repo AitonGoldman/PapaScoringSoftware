@@ -94,9 +94,9 @@ def route_void_score(division_machine_id):
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
     token = None
     if division_machine.player_id:
-        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,player_id=division_machine.player_id).first()
+        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,player_id=division_machine.player_id,paid_for=True).first()
     if division_machine.team_id:
-        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,team_id=division_machine.team_id).first()        
+        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,team_id=division_machine.team_id,paid_for=True).first()        
     if token is None:
         raise BadRequest('Tried to void a ticket that does not exist')
     player_id = division_machine.player_id
@@ -154,9 +154,9 @@ def route_jagoff(division_machine_id):
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
     token = None
     if division_machine.player_id:
-        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,player_id=division_machine.player_id).first()
+        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,player_id=division_machine.player_id,paid_for=True).first()
     if division_machine.team_id:
-        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,team_id=division_machine.team_id).first()        
+        token = tables.Token.query.filter_by(division_machine_id=division_machine_id,used=False,team_id=division_machine.team_id,paid_for=True).first()        
     if token is None:
         raise BadRequest('Tried to decalre a jagoff inapropriately')
     player_id = division_machine.player_id

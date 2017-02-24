@@ -632,3 +632,9 @@ i.player-purchase-review-icon {
 }
 // submit buttons : calm
 //
+
+a.extra-tall-button {
+  font-size:$font-size-base*.7;
+  padding-top:$font-size-base/2;
+  line-height:$font-size-base;                  
+}

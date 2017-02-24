@@ -7,7 +7,9 @@ angular.module('app.scorekeeping.machine_select.player_select.process').controll
 
             $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
-	$scope.player_id=$state.params.player_id;
+	    $scope.player_id=$state.params.player_id;
+	$scope.previous_player_id=$state.params.previous_player_id;
+	$scope.previous_player_name=$state.params.previous_player_name;            
 	$scope.division_machine_id=$state.params.division_machine_id;
 
         $scope.utils = Utils;

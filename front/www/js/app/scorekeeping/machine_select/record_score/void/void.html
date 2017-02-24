@@ -20,45 +20,31 @@
           <button class='button button-clear button-dark icon-left ion-alert-circled review-icon ion-icon-yellow'>
             <span><u>Player Waiting!</u></span>
           </button>
-          <div>
+          <div>            
             {{resources.queues.data[division_machine_id].queues[0].player.player_name}} is at head of queue and needs to be started on this machine.
-            <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
+            <!-- <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:false,previous_player_id:player_id,previous_player_name:player_name})"> -->
+
+            <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select(queue_args.queue_args)">            
               Add Player Waiting On Queue
             </button>
-            <button class="button button-full button-calm seperate_button item-icon-right item-icon-left">
-              Requeue {{player_name}} on {{division_machine_name}}.
+            <button ng-if="resources.voided_score.player_token_data > 0 && show_redo == true" class="button button-full button-calm seperate_button item-icon-right item-icon-left" ng-click="re_queue_player()">
+              Requeue {{player_name}} on {{division_machine_name}}              
             </button>                        
+            <button class="button button-full seperate_button button-balanced" ng-if="requeue==true">{{player_name}} re-queued on {{division_machine_name}}!</button>
           </div>
         </div>
         <div class='standard_big_font' ng-if='division_machine_queue_length == 0'>
-            <button class="button button-full button-calm seperate_button item-icon-right item-icon-left">
-              Restart {{player_name}} on {{division_machine_name}}
-            </button>                        
-          <button class="button button-full button-calm seperate_button item-icon-right" ui-sref=".^.^">
-            Return to Machine List
-            <i class="icon ion-chevron-right"></i>          
-          </button>          
-        </div>        
-        
-        <span ng-if='team_tournament=="false"'>
-          <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
-              <i ng-if="division_machine_queue_length == 0" class="icon"></i>
-              <span ng-if="division_machine_queue_length == 0">Add new player to machine</span>
-              <i ng-if='division_machine_queue_length > 0' class="icon ion-alert-circled"></i>              
-              <span ng-if='division_machine_queue_length > 0'>Add player waiting on queue</span>
-              <i class="icon ion-chevron-right"></i>          
+          <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select(queue_args.queue_args)">
+            Add new player to {{division_machine_name}}
           </button>
-          <button ng-if='resources.divisions.data[division_id].queuing == true && resources.voided_score.player_token_data != 0' class="button button-full button-calm seperate_button item-icon-right small-text-button" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
+          <button ng-click="re_add_player()" ng-if="resources.voided_score.player_token_data > 0 && show_redo==true" class="button button-full button-calm seperate_button item-icon-right item-icon-left">
+            Restart {{player_name}} on {{division_machine_name}}
+          </button>                        
+          <button ng-if='resources.divisions.data[division_id].queuing == true && resources.voided_score.player_token_data != 0 && show_redo == true' class="button button-full button-calm seperate_button item-icon-right small-text-button" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
             Add {{player_name}} to new machine or queue
-            <i class="icon ion-chevron-right"></i>          
-          </button>    
-        </span>
-        <span ng-if='team_tournament=="true"'>
-          <button style='font-size:38px' class="button button-full button-calm seperate_button item-icon-right" ui-sref=".^.^.team_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})">
-            Add new team to machine
-            <i class="icon ion-chevron-right"></i>          
-          </button>    
-        </span>
+            <i class="icon ion-chevron-right"></i>
+          </button>
+        </div>                
       </div>
     </center>    
   </ion-content>

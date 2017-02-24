@@ -24,7 +24,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.scorekeeping.machine_select.player_select', 
         { 
          cache: false,
- 	 url: '/player_select/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name/player_name/:player_name/player_id/:player_id',
+ 	 url: '/player_select/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name/player_name/:player_name/player_id/:player_id/previous_player_id/:previous_player_id/previous_player_name/:previous_player_name',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/scorekeeping/machine_select/player_select/player_select.html',

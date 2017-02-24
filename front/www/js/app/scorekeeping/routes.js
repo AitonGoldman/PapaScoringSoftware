@@ -259,7 +259,18 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
              
           }    
 
+       }).state('app.scorekeeping.machine_select.select_action', 
+        { 
+         cache: false,
+ 	 url: '/select_action/division_machine_id/:division_machine_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/machine_select/select_action/select_action.html',
+ 	       controller: 'app.scorekeeping.machine_select.select_action'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
 
 
 

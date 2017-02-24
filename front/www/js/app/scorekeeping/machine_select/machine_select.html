@@ -2,7 +2,8 @@
   <ion-content>      
     <div class="skinny-list list">
       <div ng-repeat='division_machine in flattened_division_machines' ng-if='division_machine.removed!=true'>
-        <a id="scorekeeping_machine_select_{{division_machine.division_machine_id}}_link" ng-click="goto_next_scorekeeping_step(division_machine.division_machine_id)" class="item item-icon-right">
+        <!--        <a id="scorekeeping_machine_select_{{division_machine.division_machine_id}}_link" ng-click="goto_next_scorekeeping_step(division_machine.division_machine_id)" class="item item-icon-right">-->
+       <a id="scorekeeping_machine_select_{{division_machine.division_machine_id}}_link" ui-sref='.select_action({division_machine_id:division_machine.division_machine_id})' class="item item-icon-right">        
           <span>{{division_machine.division_machine_name}}</span>
           <i class="icon ion-chevron-right"></i>
         </a>        

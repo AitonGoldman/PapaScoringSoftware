@@ -1,0 +1,20 @@
+<ion-view view-title="Select Action">
+  <ion-content>      
+    <button class='button button-full button-calm item-icon-right' ng-click='goto_next_scorekeeping_step(division_machine_id)'>
+      <span ng-if='resources.queues.machine_players[division_machine_id] != undefined'>
+        Record score for {{resources.queues.machine_players[division_machine_id]}}
+      </span>
+      <span ng-if='resources.queues.machine_players[division_machine_id] == undefined'>
+        Start player on {{resources.queues.data[division_machine_id].division_machine_name}}
+      </span>
+      <i class="icon ion-chevron-right"></i>
+      
+    </button>    
+    <button class='button button-full button-calm item-icon-right'>
+      Add Player To Queue
+      <i class="icon ion-chevron-right"></i>
+    </button>
+    <!-- ui-sref=".select_action({division_machine_id: ,})" -->    
+  </ion-content>
+</ion-view>
+

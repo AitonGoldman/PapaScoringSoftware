@@ -1,6 +1,7 @@
 angular.module('app.scorekeeping.machine_select',['app.scorekeeping.machine_select.player_select',
     'app.scorekeeping.machine_select.record_score',
     'app.scorekeeping.machine_select.team_select',
+    'app.scorekeeping.machine_select.select_action',
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.machine_select').controller(
     'app.scorekeeping.machine_select',[

@@ -36,7 +36,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.scorekeeping.machine_select.player_select.process', 
         { 
          cache: false,
- 	 url: '/process/player_id/:player_id/from_queue/:from_queue',
+ 	 url: '/process/player_id/:player_id/from_queue/:from_queue/existing_queue_machine/:existing_queue_machine',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/scorekeeping/machine_select/player_select/process/process.html',

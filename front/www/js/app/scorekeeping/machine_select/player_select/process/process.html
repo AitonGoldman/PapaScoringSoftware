@@ -1,14 +1,41 @@
 <ion-view view-title="Player Added" hide-back-button='true'>
   <ion-content>
-      <center>
+    <center>
+      <div ng-if="existing_queue_machine != undefined && existing_queue_machine != ''">
+        <div class='standard_big_font'>
+          <!--<div class='padding'><u><i class="icon ion-ios-eye padding"></i><span>Review Score</u></span></div>-->
+          <button class='button button-clear button-dark icon-left ion-alert-circled ion-icon-yellow  review-icon'>
+            <span><u>Player is already queued!</u></span>
+          </button>
+          <div>
+            Player {{player_name}} is already queued on <br>
+            {{existing_queue_machine}}.
+            <br>
+            You MUST inform the player<br>
+            of this (including the machine name),<br>
+            and confirm the player wants<br>
+            to start playing {{division_machine_name}}.
+          </div>
+          <button id='HomeButton' class='button button-full seperate_button button-energized item item-icon-right' ng-click="add_player_to_machine_process_function()">
+            <span>Player Has Told Me This Is Okay</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
+          <button id='HomeButton' class='button button-full seperate_button button-energized item item-icon-right' ui-sref=".^">
+            <span>Go Back and Select Another Player</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>                    
+          
+        </div>
+      </div>
+      <div ng-if="existing_queue_machine == undefined || existing_queue_machine == ''">
         <div class='standard_big_font'>
           <button class='button button-clear button-dark icon-left ion-flag ion-icon-green review-icon' >            
-              <span><u>(#{{resources.machine_added_to.data.player.player_id}}) {{resources.machine_added_to.data.player.player_name}}</u></span>
+            <span><u>(#{{resources.machine_added_to.data.player.player_id}}) {{resources.machine_added_to.data.player.player_name}}</u></span>
           </button>
           <div>
           </div>
-            Is now playing {{resources.machine_added_to.data.division_machine_name}}!
-          </div>
+          Is now playing {{resources.machine_added_to.data.division_machine_name}}!
+        </div>
         <br>        
         <button id='HomeButton' class='button button-full seperate_button button-calm item item-icon-right' ui-sref=".^.^">
           <span>Return To Machine List</span>
@@ -21,10 +48,8 @@
             <i class="icon ion-chevron-right"></i>
           </button>
         </div>
-        
-</div>
-</center>
-
-</ion-content>
+      </div>
+      </center>
+  </ion-content>
 </ion-view>
 

@@ -27,7 +27,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             players_promise = TimeoutResources.GetPlayersWithTicketsForDivision($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise = TimeoutResources.GetQueues(players_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise.then(function(data){
-                $scope.resources = TimeoutResources.GetAllResources();            
+                $scope.resources = TimeoutResources.GetAllResources();                            
                 $scope.queues = $scope.resources.queues.data[$scope.division_machine_id].queues;
                 if($scope.queues.length > 0){
                     $scope.queue_player.player_id=$scope.queues[0].player.player_id;
@@ -55,7 +55,18 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 });                                                
             });
             
-        
+            $scope.find_queue_for_player = function(player_id){
+                $scope.existing_player_queue_machine_name = undefined;
+                _.forEach($scope.resources.queues.data, function(machine, machine_id) {                    
+                    _.forEach(machine.queues, function(queue, idx) {                                                
+                        if (queue.player_id == player_id){
+                            console.log(idx);
+                            $scope.existing_player_queue_machine_name = queue.division_machine.division_machine_name;
+                        } 
+                    });                    
+                });                
+                
+            };
             $scope.onPlayerIdChange = function(){                
                 $scope.player_status = "";                        
                 $scope.poop = true;
@@ -68,12 +79,11 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                         if($scope.selected_players[0].on_division_machine == true){
                             $scope.player_img_id="00";
                             $scope.player_status = "Already On Machine";
-                        } else {
+                        } else {                            
+                            $scope.find_queue_for_player($scope.selected_players[0].player_id);                            
                             $scope.player_status = "Player Has Tickets";                        
                             $scope.player_img_id=$scope.selected_players[0].player_id;
-                        }
-                        console.log($scope.selected_players[0]);
-                        
+                        }                                                
                     }                    
                 }                
             };
@@ -110,7 +120,12 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             };
             $scope.test_submit = function(){
                 if($scope.selected_players.length != 0){
-                    $state.go('.process',{process_step:{process:true},player_info:$scope.selected_players[0],from_queue:0});
+                    args = {process_step:{process:true},player_info:$scope.selected_players[0],from_queue:0};
+                    if($scope.existing_player_queue_machine_name != undefined){
+                        console.log('go');
+                        args.existing_queue_machine= $scope.existing_player_queue_machine_name;
+                    }                    
+                    $state.go('.process',args);
                     //$state.go('.process',{process_step:{process:true},player_info:$scope.selected_players[0],from_queue:0});
                 }
             };

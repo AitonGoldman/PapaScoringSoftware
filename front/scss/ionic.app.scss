@@ -598,7 +598,7 @@ user-select: text;
   color:gold;                       
 }
 button.small-text-button{
-font-size:$font-size-base*.75;     
+    font-size:$font-size-base*.75;     
 }
 
 
@@ -637,4 +637,87 @@ a.extra-tall-button,button.extra-tall-button {
   font-size:$font-size-base*.7;
   padding-top:$font-size-base/4;
   line-height:$font-size-base;                  
+}
+.item{
+    .button-medium {
+        padding: 2px $button-small-padding 1px;
+        //min-width: $button-small-height;
+        min-height: $font-size-base;
+        font-size: $font-size-base;
+        line-height: $font-size-base*1.75;
+    }
+    input.embedded-input {
+        height:$font-size-base*1.5;
+        line-height:$font-size-base;
+    }
+}
+
+.player-info-avatar-ex {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            top:0px;
+            right: $font-size-base*7;
+        }
+        @media screen and (min-device-height: 751px){
+            top:0px;
+            right: $font-size-base*5.5;
+        }
+    }
+}
+
+.player-info-avatar-ex-two {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            top:0px;
+            right: $font-size-base*7;
+        }
+        @media screen and (min-device-height: 751px){
+            top:$font-size-base*6;
+            right: $font-size-base*14;
+        }        
+    }
+    @media screen and (min-width:611px) {
+        top:$font-size-base*6;
+        right: $font-size-base*20;        
+    }
+    
+}
+
+
+.machine-info-avatar-ex {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            top:0px;
+            right: $font-size-base*7;
+        }
+        @media screen and (min-device-height: 751px){
+            top:0px;
+            right: $font-size-base*13;
+        }
+    }
+}
+
+.avatar-user-pic-ex {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            height: $font-size-base*7;
+            width: $font-size-base*7;
+            border-radius:$font-size-base*7;            
+        }
+        @media screen and (min-device-height: 751px){
+            height: $font-size-base*5.5;
+            width: $font-size-base*5.5;
+            border-radius:$font-size-base*5.5;            
+        }
+    }
+}
+
+.machine-select-action-spacer {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+        }
+        @media screen and (min-device-height: 751px){
+            padding-bottom:$font-size-base*6;
+        }
+    }    
 }

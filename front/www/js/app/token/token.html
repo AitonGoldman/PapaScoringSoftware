@@ -1,29 +1,50 @@
 <ion-view view-title="Tickets For..." hide-back-button="{{hide_back_button}}">
   <ion-content>
-    <div class="list" >
-      <!-- REMOVE ME -->
-      <div class='player-select'>
-        <label class="item-input item">
-          <i class="icon ion-search placeholder-icon"></i>
-          <form ng-submit='test_submit()'>
-            <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange()' type="tel" placeholder="Player #" ng-model="player.player_id">
-          </form>
-        </label>
-        <div class='item'>
-          <!--<div style='margin-left:68px'>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>-->
-          <div>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>
-        </div>
+    <div class="list">
+      <div class='item'>
+        Player Name : <span ng-if="selected_players.length>0">
+          (#{{selected_players[0].player_id}}) {{selected_players[0].full_name}}
+        </span>
+        <span ng-if="selected_players.length==0"> N/A </span>        
       </div>
+      <div class="item item-input-inset">
+          <label class="item-input-wrapper">
+            <span style='padding-top:5px;padding-bottom:5px' class="input-label">Player # : </span>            
+            <input class="embedded-input" ng-change='onPlayerIdChange()' type="tel" placeholder="enter player # here" ng-model="player.player_id">
+          </label>
+          <button class="button button-calm button-medium" ng-disabled='selected_players.length == 0' ng-click='test_submit()'>
+            Select
+          </button>
+      </div>                        
     </div>
-    <button ng-disabled='selected_players.length == 0' ng-click='test_submit()' class='button button-full button-calm seperate_button item-icon-right'>
-      Select Player
-      <i class="icon ion-chevron-right"></i>          
-    </button>
-    <div class='player-info-avatar'>
-      <img src="{{http_prefix}}://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players.length == 0 && poop == true'>
-      <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">
-      <img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'>
+    
+    <div class='player-info-avatar player-info-avatar-ex-two'>
+      <img  ng-if='selected_players.length > 0 ' class='avatar-frame avatar-user-pic avatar-user-pic-ex' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">
     </div>
+    <!-- <div class="list" > -->
+    <!--   <\!-- REMOVE ME -\-> -->
+    <!--   <div class='player-select'> -->
+    <!--     <label class="item-input item"> -->
+    <!--       <i class="icon ion-search placeholder-icon"></i> -->
+    <!--       <form ng-submit='test_submit()'> -->
+    <!--         <input ng-keydown='keyDown($event)' ng-change='onPlayerIdChange()' type="tel" placeholder="Player #" ng-model="player.player_id"> -->
+    <!--       </form> -->
+    <!--     </label> -->
+    <!--     <div class='item'> -->
+    <!--       <\!--<div style='margin-left:68px'>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div>-\-> -->
+    <!--       <div>&nbsp;{{selected_players[0].first_name}} {{selected_players[0].last_name}}</div> -->
+    <!--     </div> -->
+    <!--   </div> -->
+    <!-- </div> -->
+    <!-- <button ng-disabled='selected_players.length == 0' ng-click='test_submit()' class='button button-full button-calm seperate_button item-icon-right'> -->
+    <!--   Select Player -->
+    <!--   <i class="icon ion-chevron-right"></i>           -->
+    <!-- </button> -->
+    <!-- <div class='player-info-avatar'> -->
+    <!--   <img src="{{http_prefix}}://www.clker.com/cliparts/Z/Z/S/Y/S/w/red-circle-cross-transparent-background-hi.png" class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' ng-show='selected_players.length == 0 && poop == true'> -->
+    <!--   <img ng-show='selected_players.length == 1' class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg"> -->
+    <!--   <img ng-show='selected_players.length == 0 && poop == undefined' class='avatar-frame sample-show-hide sample-show-hide-front avatar-user-pic' style='background-color:white'> -->
+    <!-- </div> -->
 
     <!-- <\!-- REMOVE ME -\-> -->
     <!-- <div class="skinny-list list" > -->

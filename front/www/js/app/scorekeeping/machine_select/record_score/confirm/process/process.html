@@ -42,9 +42,10 @@
           <div>            
             {{division_machine_queue_player}} is at head of queue and needs to be started on this machine.
 
-            <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.^.player_select(queue_args.queue_args)">
+            <button class="button button-full button-calm seperate_button item-icon-right item-icon-left extra-tall-button" ui-sref=".^.^.^.player_select(queue_args.queue_args)">
               <i class="icon ion-alert-circled ion-icon-yellow"></i>
-              Add Player Waiting On Queue For This Machine
+              Add Player Waiting On Queue<br>
+              For This Machine
               <i class="icon ion-chevron-right"></i>              
             </button>
             <button ng-if="resources.added_score.player_token_data > 0 && show_redo == true" class="button button-full button-calm seperate_button item-icon-right extra-tall-button" ng-click="re_queue_player()">

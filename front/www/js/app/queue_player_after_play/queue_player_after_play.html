@@ -33,16 +33,7 @@
           Best Score : {{resources.players_best_scores.data[division_machine.division_machine_id]}}
         </span> 
         <i class="icon ion-chevron-right"></i>        
-      </a>
-      <button class="button button-full button-calm item-icon-right small_seperate_button" ui-sref='^.scorekeeping.machine_select({division_id:division_id,hide_back_button:true})'>
-        <span>Return to machine list</span>
-        <i class='icon ion-chevron-right'></i>        
-      </button>
-      <button id='HomeButton' class='button button-full button-calm item-icon-right small_seperate_button' ui-sref="app.scorekeeping.machine_select.player_select({division_machine_id:division_machine_just_played_id,division_machine_name:division_machine_just_played_name,division_id:division_id,team_tournament:false,hide_back_button:true})">
-        <span>Add New Player To {{division_machine_just_played_name}}</span>
-        <i class="icon ion-chevron-right"></i>
-      </button>          
-      
+      </a>      
     </div>
   </ion-content>
 </ion-view>

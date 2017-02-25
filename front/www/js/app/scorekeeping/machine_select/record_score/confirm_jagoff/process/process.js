@@ -13,6 +13,7 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm_jagoff.proc
 	$scope.division_machine_id=$state.params.division_machine_id;
 	$scope.division_id=$state.params.division_id;
 	$scope.player_id=$state.params.player_id;
+            $scope.queue_args={queue_args:{division_machine_id:$scope.division_machine_id,division_machine_name:$scope.division_machine_name,team_tournament:false}};
         
         $scope.utils = Utils;
         Modals.loading();
@@ -32,6 +33,9 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm_jagoff.proc
         declare_jagoff_promise.then(function(data){
         $scope.resources = TimeoutResources.GetAllResources();
             $scope.division_machine_queue_length = $scope.resources.queues.data[$scope.division_machine_id].queues.length;
+            if($scope.division_machine_queue_length > 0){
+                $scope.division_machine_queue_player = $scope.resources.queues.data[$scope.division_machine_id].queues[0].player.player_name;
+            }            
             Modals.loaded();
         });
     }]

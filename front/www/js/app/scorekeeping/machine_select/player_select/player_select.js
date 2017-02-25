@@ -55,11 +55,11 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 });                                                
             });
             
-            $scope.find_queue_for_player = function(player_id){
+            $scope.find_queue_for_player = function(player_id,cur_division_machine_id){
                 $scope.existing_player_queue_machine_name = undefined;
                 _.forEach($scope.resources.queues.data, function(machine, machine_id) {                    
                     _.forEach(machine.queues, function(queue, idx) {                                                
-                        if (queue.player_id == player_id){
+                        if (queue.player_id == player_id && machine_id != cur_division_machine_id){
                             console.log(idx);
                             $scope.existing_player_queue_machine_name = queue.division_machine.division_machine_name;
                         } 
@@ -80,7 +80,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                             $scope.player_img_id="00";
                             $scope.player_status = "Already On Machine";
                         } else {                            
-                            $scope.find_queue_for_player($scope.selected_players[0].player_id);                            
+                            $scope.find_queue_for_player($scope.selected_players[0].player_id,$scope.division_machine_id);                            
                             $scope.player_status = "Player Has Tickets";                        
                             $scope.player_img_id=$scope.selected_players[0].player_id;
                         }                                                

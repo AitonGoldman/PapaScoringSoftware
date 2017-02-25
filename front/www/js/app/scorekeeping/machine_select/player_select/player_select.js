@@ -5,6 +5,7 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
         '$scope','$state','TimeoutResources','Utils','Modals','$animate','$filter','$timeout','$ImageCacheFactory',
         function($scope, $state, TimeoutResources, Utils,Modals,$animate,$filter,$timeout,$ImageCacheFactory) {
             $animate.enabled(false);                                          
+            $scope.player_status = "N/A";                        
 
             $scope.site=$state.params.site;
 	    $scope.division_id=$state.params.division_id;
@@ -56,15 +57,19 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             
         
             $scope.onPlayerIdChange = function(){                
+                $scope.player_status = "";                        
                 $scope.poop = true;
                 $scope.selected_players = $filter('filter')($scope.flattened_players,{player_id:parseInt($scope.player.player_id)},true);
                 if($scope.selected_players!=undefined && $scope.selected_players.length!=0){
                     if($scope.selected_players[0].has_tokens != true){
-                        $scope.player_img_id=0;                        
+                        $scope.player_img_id=0;
+                        $scope.player_status = "No More Tickets";                        
                     } else {
                         if($scope.selected_players[0].on_division_machine == true){
-                            $scope.player_img_id="00";                            
+                            $scope.player_img_id="00";
+                            $scope.player_status = "Already On Machine";
                         } else {
+                            $scope.player_status = "Player Has Tickets";                        
                             $scope.player_img_id=$scope.selected_players[0].player_id;
                         }
                         console.log($scope.selected_players[0]);

@@ -21,8 +21,7 @@
       <div class='item'>
         Player Info :
         <span ng-if="queues.length == 0">
-          <span ng-if='selected_players.length==0'>N/A</span>
-          <span ng-if='selected_players.length > 0'>N/A</span>          
+          <span>{{player_status}}</span>          
         </span>
         <span ng-if="queues.length > 0">Queued Player</span>        
       </div>      

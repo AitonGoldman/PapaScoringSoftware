@@ -356,7 +356,13 @@ def route_get_division_ppo_qualifying_results_list(division_id):
                                 'rest':reranked_ppo_qualifying_list[b_end_rank:]}})
 
     if division.finals_player_selection_type == "papa":
-        return jsonify({'data':reranked_ppo_qualifying_list})
+        num_qualifiers = division.finals_num_qualifiers
+        end_rank=num_qualifiers
+        while(reranked_ppo_qualifying_list[end_rank-1][0] == reranked_ppo_qualifying_list[end_rank][0]):
+            end_rank = end_rank+1
+        
+        return jsonify({'data':{'qualified':reranked_ppo_qualifying_list[0:end_rank],
+                                'rest':reranked_ppo_qualifying_list[end_rank:]}})
         
 
 @admin_manage_blueprint.route('/results/division_machine/<division_machine_id>',methods=['GET'])

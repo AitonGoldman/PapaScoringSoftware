@@ -19,7 +19,18 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.ppo_qualifying_list.qualifiers'
  	     }
  	   }
+       }).state('app.ppo_qualifying_list.papa_qualifiers', 
+        { 
+         cache: false,
+ 	 url: '/papa_qualifiers/division_id/:division_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/ppo_qualifying_list/papa_qualifiers/papa_qualifiers.html',
+ 	       controller: 'app.ppo_qualifying_list.papa_qualifiers'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
 
 
 }]);

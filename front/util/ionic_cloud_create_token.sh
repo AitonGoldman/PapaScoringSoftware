@@ -1,0 +1,2 @@
+curl --request POST -d "{\"type\":\"ios\",\"id\":\"b1631e1a0836079a06bb7adec77be723\",\"app_id\":\"a302e6bc\",\"token\": \"28e22e9d7569c161a2a288d5cb1dbca7134b4d11d71dad194f1c52309f57e5ed\"}" --url https://api.ionic.io/push/tokens --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0Y2QzYTgxYy0wNzMxLTQ4MjctODA0MC0xYTQxMGMzNTc4ZTYifQ.t-p8ApNE4l_tf3oum9L9rv4WMtXieyggePxbm6MeIlU' --header 'Content-Type: application/json' 
+     

@@ -26,7 +26,7 @@ def generate_rank_matchup_dict(match_ups):
 def get_finals_players_with_seed(seed, division_final_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    return tables.FinalsPlayer.query.filter_by(initial_seed=seed,division_final_id=division_final_id).all()        
+    return tables.FinalsPlayer.query.filter_by(adjusted_seed=seed,division_final_id=division_final_id).all()        
     
 def fill_in_player_match_results(player_string,
                                  match_template,
@@ -162,12 +162,12 @@ def route_set_division_final_round_completed(division_final_round_id):
     next_round_finals_match_player_results = tables.FinalsMatchPlayerResult.query.filter(tables.FinalsMatchPlayerResult.finals_player_id!=None).join(tables.DivisionFinalMatch).filter_by(division_final_round_id=next_round_id).all()
     for player in next_round_finals_match_player_results:
         finals_player = tables.FinalsPlayer.query.filter_by(finals_player_id=player.finals_player_id).first()
-        list_of_winners.append([player.finals_player_id,finals_player.initial_seed])
+        list_of_winners.append([player.finals_player_id,finals_player.adjusted_seed])
         player.finals_player_id=None
     winners = tables.FinalsMatchPlayerResult.query.filter_by(winner=True).join(tables.DivisionFinalMatch).filter_by(division_final_round_id=division_final_round.division_final_round_id).all()
     for winner in winners:
         finals_player = tables.FinalsPlayer.query.filter_by(finals_player_id=winner.finals_player_id).first()
-        list_of_winners.append([winner.finals_player_id,finals_player.initial_seed])
+        list_of_winners.append([winner.finals_player_id,finals_player.adjusted_seed])
     sorted_finals_player_list = sorted(list_of_winners, key= lambda e: e[1],reverse=True)
     halfway_idx = (len(sorted_finals_player_list)/2)
     sorted_finals_player_list_a = sorted_finals_player_list[:halfway_idx]
@@ -419,6 +419,11 @@ def route_create_finals(division_id):
             initial_seed=finals_player[1],
             division_final_id=new_final.division_final_id
         )
+        existing_player_seed = tables.FinalsPlayer.query.filter_by(initial_seed=int(finals_player[1])).all()
+        if len(existing_player_seed) > 0:
+            new_finals_player.adjusted_seed=int(finals_player[1])+len(existing_player_seed)
+        else:
+            new_finals_player.adjusted_seed=int(finals_player[1])
         db.session.add(new_finals_player)
         db.session.commit()
     

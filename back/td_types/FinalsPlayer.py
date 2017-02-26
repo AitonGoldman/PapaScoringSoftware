@@ -9,7 +9,7 @@ def generate_finals_player_class(db_handle,relationship=None,fk=None):
         player_id = db_handle.Column(db_handle.Integer,
                                      db_handle.ForeignKey(
                                          'player.player_id'))
-                
+        adjusted_seed = db_handle.Column(db_handle.Integer)                
         initial_seed = db_handle.Column(db_handle.Integer)
         overall_rank = db_handle.Column(db_handle.Integer)
         player = db_handle.relationship('Player')        

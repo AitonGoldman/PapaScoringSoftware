@@ -49,8 +49,8 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
         
         orm_creation.init_papa_tournaments_divisions(self.flask_app,True,stripe_skus=stripe_skus,discount_stripe_skus=discount_stripe_skus,discount_ticket_counts=discount_ticket_counts)
         orm_creation.init_papa_tournaments_division_machines(self.flask_app)        
-        self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
-        self.player_pin = self.player.pin
+        #self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
+        #self.player_pin = self.player.pin
         orm_creation.init_papa_players(self.flask_app)
     def test_setup_before_token(self):        
         with self.flask_app.test_client() as c:

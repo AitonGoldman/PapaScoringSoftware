@@ -43,7 +43,8 @@ class CustomJSONEncoder(JSONEncoder):
 def get_generic_app(name):    
     app = Flask(name)
     app.json_encoder = CustomJSONEncoder
-    app.config['UPLOAD_FOLDER']='/var/www/html/pics'
+    #app.config['UPLOAD_FOLDER']='/var/www/html/pics'
+    app.config['UPLOAD_FOLDER']=os.getenv('UPLOAD_FOLDER',None)
     app.config['DEBUG']=True
     td_config.assign_loaded_configs_to_app(app)    
     principals = Principal(app)    

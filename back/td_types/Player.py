@@ -25,6 +25,7 @@ def generate_player_class(db_handle,Team_Player_mapping,player_id_start):
         pin = db_handle.Column(db_handle.Integer)
         has_pic = db_handle.Column(db_handle.Boolean,default=False)
         user_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('user.user_id'))
+        tshirt_size = db_handle.Column(db_handle.String(1000))
         linked_division_id = db_handle.Column(db_handle.Integer,
                                             db_handle.ForeignKey(
                                                 'division.division_id'))

@@ -13,9 +13,11 @@ angular.module('prereg.step1.step2.step3.step4.confirm.step5').controller(
         $scope.ifpa_ranking = $state.params.ifpa_ranking;
         $scope.linked_division_id = $state.params.linked_division_id;
 	$scope.linked_division_name=$state.params.linked_division_name;
-        $scope.uploaded_file_name = $state.params.uploaded_file_name;        
+        $scope.uploaded_file_name = $state.params.uploaded_file_name;
+        $scope.player_shirt_size = $state.params.player_shirt_size;                
         $scope.utils = Utils;
         $scope.player_info = {};
+        $scope.player_info['player_shirt_size']=$scope.player_shirt_size;
         $scope.player_info['first_name']=$scope.first_name;
         $scope.player_info['last_name']=$scope.last_name;
         if($scope.ifpa_ranking == ""){

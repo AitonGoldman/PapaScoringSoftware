@@ -227,13 +227,15 @@ def create_player(app,player_data):
     db.session.commit()    
     if 'ifpa_ranking' in player_data and player_data['ifpa_ranking'] != 0:
         new_player.ifpa_ranking = player_data['ifpa_ranking']
+    if 'player_tshirt_size' in player_data:
+        new_player.tshirt_size = player_data['player_tshirt_size']        
     if 'email_address' in player_data:
         new_player.email_address = player_data['email_address']
     if 'linked_division_id' in player_data and tables.Division.query.filter_by(division_id=player_data['linked_division_id']).first():
         new_player.linked_division_id = player_data['linked_division_id']
     if 'pic_file' in player_data:
         new_player.has_pic=True
-        os.system('mv %s/%s /var/www/html/pics/player_%s.jpg' % (app.config['UPLOAD_FOLDER'],player_data['pic_file'],new_player.player_id))        
+        os.system('mv %s/%s %s/player_%s.jpg' % (app.config['UPLOAD_FOLDER'],player_data['pic_file'],app.config['UPLOAD_FOLDER'],new_player.player_id))        
     db.session.commit()
     
     return new_player

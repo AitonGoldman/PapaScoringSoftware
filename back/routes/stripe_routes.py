@@ -152,7 +152,7 @@ def start_pre_reg_sale():
         player_dict = player.to_dict_simple()
         player_dict['pin']=player.pin        
         sg = sendgrid.SendGridAPIClient(apikey=current_app.td_config['SENDGRID_API_KEY'])
-        from_email = Email("test@example.com")
+        from_email = Email("prereg@papa.org")
         subject = "You have been pre-registered for PAPA 20!"
         to_email = Email(email)
         content = Content("text/plain",

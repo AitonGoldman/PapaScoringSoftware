@@ -90,7 +90,7 @@ def test_upload_file():
         file.save(save_path)
         file.close()
         #convert /var/www/html/pics/player_1.jpg  -resize 128x128  /var/www/html/pics/resize_player_1.jpg
-        subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])        
-        subprocess.call(["mv","%s_resize"%save_path,save_path])
+        #subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])        
+        #subprocess.call(["mv","%s_resize"%save_path,save_path])
     return jsonify({'poop':"%s.jpg"%(random_file_name)})
 

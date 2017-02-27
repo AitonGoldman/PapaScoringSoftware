@@ -290,7 +290,7 @@ angular.module('TD_services.timeout_resources')
                   var setScoreResource = generate_resource_definition(':site/admin/score_id/:score_id/score/:score','PUT');
                   var setFinalsMatchTiebreakerWinnersResource = generate_resource_definition(':site/finals/tie_breaker_results/division_final_match','PUT');
 
-                  var setFinalsMatchGameResultResource = generate_resource_definition(':site/finals/finals_match_game_result/:finals_match_game_result_id','PUT');                  
+                  var setFinalsMatchGameResultResource = generate_resource_definition(':site/finals/finals_match_game_result/:finals_match_game_result_id','PUT');                            var createFinalsResource = generate_resource_definition(':site/finals/division/:division_id/extra_name_info/:extra_name_info','POST');                  
                   var getAuditLogMissingTokensResource = generate_resource_definition(':site/admin/audit_log/where_all_my_tokens_at/player_id/:player_id','GET');
                   var getAuditLogMissingScoresResource = generate_resource_definition(':site/admin/audit_log/where_all_my_scores_at/player_id/:player_id/audit_log_id/:audit_log_id/time_delta/:time_delta','GET');
                   var getDivisionFinalResource = generate_resource_definition(':site/finals/division_final/:division_final_id','GET');                                    
@@ -332,6 +332,7 @@ angular.module('TD_services.timeout_resources')
                       AddBackglassPic: generate_custom_http_executor(addBackglassPicResource,'edited_division_machine','post'),
                       SetDivisionFinalMatchComplete: generate_custom_http_executor(setDivisionFinalMatchCompleteResource,'division_final_match','put'),
                       SetFinalsMatchTiebreakerWinners: generate_custom_http_executor(setFinalsMatchTiebreakerWinnersResource,'division_final_match','put'),
+                      CreateFinals: generate_custom_http_executor(createFinalsResource,'division_final','put'),
                       SetDivisionFinalRoundComplete: generate_custom_http_executor(setDivisionFinalRoundCompleteResource,'division_final_round','put'),
                       AddTokens: generate_custom_http_executor(addTokensResource,'added_tokens','post'),
                       AddPlayerTokens: generate_custom_http_executor(addPlayerTokensResource,'added_player_tokens','post'),                      

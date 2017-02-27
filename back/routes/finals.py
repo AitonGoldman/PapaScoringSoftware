@@ -359,15 +359,15 @@ def route_get_finals_match_game_result_players(division_finals_match_id):
     return jsonify({'data':division_finals_match.to_dict_simple()})
 
 
-@admin_manage_blueprint.route('/finals/division/<division_id>',methods=['POST'])
+@admin_manage_blueprint.route('/finals/division/<division_id>/extra_name_info/<extra_name_info>',methods=['POST'])
 @login_required
 @Scorekeeper_permission.require(403)
-def route_create_finals(division_id):
+def route_create_finals(division_id,extra_name_info):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     input_data = json.loads(request.data)    
     division = fetch_entity(tables.Division, division_id)         
-    bracket_template_4_player_groups = [
+    bracket_template_4_player_groups_24_players = [
         {
             'round':1,
             'matches':[
@@ -400,9 +400,37 @@ def route_create_finals(division_id):
             ]
         }
     ]
+
+    bracket_template_4_player_groups_16_players = [
+        {
+            'round':1,
+            'matches':[
+                generate_rank_matchup_dict([1,8,9,16]),
+                generate_rank_matchup_dict([2,7,10,15]),
+                generate_rank_matchup_dict([3,6,11,14]),
+                generate_rank_matchup_dict([4,5,12,13])            
+            ]
+        },
+        {
+            'round':2,
+            'matches':[
+                generate_rank_matchup_dict([None,None, None, None]),
+                generate_rank_matchup_dict([None,None, None, None]), 
+            ]
+        },
+        {
+            'round':3,
+            'matches':[
+                generate_rank_matchup_dict([None,None, None, None])                
+            ]
+        }
+    ]
+    
     new_final = tables.DivisionFinal(
         division_id=division_id
     )
+    if extra_name_info:
+        new_final.extra_name_info=extra_name_info
     db.session.add(new_final)
     db.session.commit()
 
@@ -418,16 +446,33 @@ def route_create_finals(division_id):
             player_id=finals_player[0],
             initial_seed=finals_player[1],
             division_final_id=new_final.division_final_id
-        )
-        existing_player_seed = tables.FinalsPlayer.query.filter_by(initial_seed=int(finals_player[1])).all()
+        )        
+        existing_player_seed = tables.FinalsPlayer.query.filter_by(initial_seed=int(finals_player[1]),division_final_id=new_final.division_final_id).all()
         if len(existing_player_seed) > 0:
             new_finals_player.adjusted_seed=int(finals_player[1])+len(existing_player_seed)
         else:
             new_finals_player.adjusted_seed=int(finals_player[1])
         db.session.add(new_finals_player)
         db.session.commit()
-    
-    for round in bracket_template_4_player_groups:
+
+    if division.finals_player_selection_type == 'papa':
+        if division.finals_num_qualifiers == 24:
+            bracket_template_for_division = bracket_template_4_player_groups_24_players
+        if division.finals_num_qualifiers == 16:
+            bracket_template_for_division = bracket_template_4_player_groups_16_players
+    else:
+        if extra_name_info == "A":
+            if division.finals_num_qualifiers_ppo_a == 24:
+                bracket_template_for_division = bracket_template_4_player_groups_24_players
+            if division.finals_num_qualifiers_ppo_a == 16:
+                bracket_template_for_division = bracket_template_4_player_groups_16_players
+        if extra_name_info == "B":
+            if division.finals_num_qualifiers_ppo_b == 24:
+                bracket_template_for_division = bracket_template_4_player_groups_24_players
+            if division.finals_num_qualifiers_ppo_b == 16:
+                bracket_template_for_division = bracket_template_4_player_groups_16_players
+
+    for round in bracket_template_for_division:
         new_round = tables.DivisionFinalRound(
             round_number=round['round']
         )        

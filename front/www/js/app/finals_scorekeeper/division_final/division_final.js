@@ -14,8 +14,9 @@ angular.module('app.finals_scorekeeper.division_final').controller(
         finals_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
-            
+            console.log($scope.resources);
         });
+            
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){
@@ -137,7 +138,7 @@ angular.module('app.finals_scorekeeper.division_final.round.tiebreaker').control
         $scope.set_tiebreaker_winners = function(){
             finalsmatchplayerresult_ids=[];
             _.forEach($scope.tiebreaker_players, function(value, key) {
-                console.log(value);
+                
                 finalsmatchplayerresult_ids.push([value.finals_player_id,value.won_tiebreaker]);
             });            
             Modals.loading();

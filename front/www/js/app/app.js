@@ -34,6 +34,7 @@ app = angular.module(
     'app.prereg_complete',
     'app.set_player_picture',
     'app.finals_scorekeeper',
+    'app.generate_finals',
     /*REPLACEMECHILD*/
 	]
 );

@@ -299,8 +299,15 @@ def get_ranked_qualifying_ppo_players(division_id,absent_players,tie_breaker_ran
             player = player_result[1]            
             if str(player['player_id']) in absent_players:                                
                 continue
-            if player['ifpa_ranking'] < max_ifpa_rank and idx + 1 > num_a_qualifiers:
-                continue            
+            if player['ifpa_ranking'] < max_ifpa_rank:
+                if str(player['player_id']) in tie_breaker_ranks and int(tie_breaker_ranks[str(player['player_id'])]) > num_a_qualifiers:
+                    continue
+                if idx > num_a_qualifiers :                
+                    continue
+            else:
+                if str(player['player_id']) in tie_breaker_ranks and player['player_id'] == 45 :
+                    print tie_breaker_ranks[str(player['player_id'])]
+
             if str(player['player_id']) in tie_breaker_ranks:                
                 new_rank = tie_breaker_ranks[str(player['player_id'])]                
                 player_result[1]['temp_rank']=int(new_rank)-1                

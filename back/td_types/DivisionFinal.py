@@ -8,7 +8,7 @@ def generate_division_final_class(db_handle,relationship=None,fk=None):
         qualifiers = db_handle.relationship('FinalsPlayer')
         division = db_handle.relationship('Division')
         division_final_rounds = db_handle.relationship('DivisionFinalRound')
-        
+        extra_name_info = db_handle.Column(db_handle.String(100))
         def to_dict_simple(self):
             division_final_dict = to_dict(self)
             if len(self.qualifiers) > 0:

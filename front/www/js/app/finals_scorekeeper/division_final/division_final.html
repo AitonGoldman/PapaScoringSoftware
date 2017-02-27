@@ -1,6 +1,5 @@
 <ion-nav-view name="round_tab">
 </ion-nav-view>
-
 <ion-tabs class="tabs-positive tabs-icon-top">
 
 
@@ -13,7 +12,7 @@
   <ion-tab title="Round 3" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_2({round_idx:2})'>
   </ion-tab>
 
-  <ion-tab title="Round 4" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline" ui-sref='app.finals_scorekeeper.division_final.round_3({round_idx:3})'>
+  <ion-tab ng-if='resources.finals.data[division_final_id].division_final_rounds.length==4' title="Round 4" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline" ui-sref='app.finals_scorekeeper.division_final.round_3({round_idx:3})'>
   </ion-tab>
   
 </ion-tabs>

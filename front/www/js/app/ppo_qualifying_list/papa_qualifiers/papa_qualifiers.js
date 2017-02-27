@@ -1,4 +1,5 @@
-angular.module('app.ppo_qualifying_list.papa_qualifiers',[/*REPLACEMECHILD*/]);
+angular.module('app.ppo_qualifying_list.papa_qualifiers',['app.ppo_qualifying_list.papa_qualifiers.confirm',
+    /*REPLACEMECHILD*/]);
 angular.module('app.ppo_qualifying_list.papa_qualifiers').controller(
     'app.ppo_qualifying_list.papa_qualifiers',[
     '$scope','$state','TimeoutResources','Utils','Modals',
@@ -76,7 +77,8 @@ angular.module('app.ppo_qualifying_list.papa_qualifiers').controller(
                 $scope.resources = TimeoutResources.GetAllResources();
                 $scope.set_all_players_to_present();
                 Modals.loaded();
-                $scope.selecting_players = false;
+                $state.go('.confirm',{qualifiers:$scope.resources.ppo_qualifying_list.data.qualified});
+                //$scope.selecting_players = false;
                 
             });                            
         };

@@ -1,0 +1,11 @@
+<ion-view view-title="List Of Qualifiers">
+  <ion-content>      
+    <button class='button button-full button-calm' ui-sref='app.generate_finals({process_step:{process:true},papa_qualifiers:qualifiers,division_id:division_id})'>
+      Generate Finals
+    </button>
+    <div class='list'>
+      <a class='item' ng-repeat='qualifier in qualifiers'>{{qualifier[1].player_name}}</a>
+    </div>
+  </ion-content>
+</ion-view>
+

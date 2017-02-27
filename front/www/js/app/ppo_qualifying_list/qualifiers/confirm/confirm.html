@@ -1,0 +1,21 @@
+<ion-view view-title="">
+  <ion-content>      
+    <button class='button button-full button-calm' ui-sref='app.generate_finals({ppo_a_qualifiers:a_qualifiers,ppo_b_qualifiers:b_qualifiers,division_id:division_id})'>
+      Generate A and B Finals
+    </button>
+    <div class='item item-divider'>
+      A division
+    </div>
+    <div class='list'>
+      <a class='item' ng-repeat='qualifier in a_qualifiers'>{{qualifier[1].player_name}}</a>
+    </div>
+    <div class='item item-divider'>
+      B division
+    </div>
+    <div class='list'>
+      <a class='item' ng-repeat='qualifier in b_qualifiers'>{{qualifier[1].player_name}}</a>
+    </div>
+    
+  </ion-content>
+</ion-view>
+

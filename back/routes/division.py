@@ -52,50 +52,26 @@ def route_get_division_machines_avg_playtime(division_id,division_machine_id):
                                                    or_(tables.AuditLog.action == action for action in ('Game Started',
                                                                                                        'Score Added',
                                                                                                        'Score Voided',
-                                                                                                       'Jagoff Declared')
+                                                                                                       'Jagoff Declared',
+                                                                                                       'Player Removed')
                                                    ))).order_by(asc(tables.AuditLog.audit_log_id)).all()
-    
-    start_times = {}
-    end_times = {}
-    #start_time = None
-    #end_time = None
-    #avg_times = []
+    # dict for start times, with division_machine_id as key 
+    # dict for lists of times, with division_machine_id_as_key
+    # loop through audit log entries
+    # if it's a start time, set start time dict
+    # if it's a "end time", calc time diff and add to lists of times
+    # at end of audit logs, calc avg times for each machine, and set division_machine property
+
+    start_times = {}    
     avg_times = {}
-    cur_action = None
     for audit_log in audit_logs:
-        if audit_log.action == "Game Started":
-            print "%s - starting on %s"%(audit_log.audit_log_id, audit_log.division_machine_id)
+        if audit_log.action == "Game Started":            
             start_times[audit_log.division_machine_id] = audit_log.action_date
-            end_times[audit_log.division_machine_id] = None
-        if audit_log.action == "Score Added" or audit_log.action == "Score Voided":
-            print "%s - ending on %s"%(audit_log.audit_log_id,audit_log.division_machine_id)
- 
-            end_times[audit_log.division_machine_id] = audit_log.action_date
-            if start_times[audit_log.division_machine_id] is None:
-                start_times[audit_log.division_machine_id]=None
-                end_times[audit_log.division_machine_id]=None                
-                print "%s"%audit_log.audit_log_id
-                continue
-            time_delta = end_times[audit_log.division_machine_id] - start_times[audit_log.division_machine_id]
+        if audit_log.action == "Score Added" or audit_log.action == "Score Voided" or audit_log.action == "Jagoff Declared" or audit_log.action == "Player Removed":
             if audit_log.division_machine_id not in avg_times:
                 avg_times[audit_log.division_machine_id]=[]
+            time_delta = audit_log.action_date - start_times[audit_log.division_machine_id]
             avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
-            start_times[audit_log.division_machine_id]=None
-            end_times[audit_log.division_machine_id]=None
-            
-        #if audit_log.voided_date and audit_log.action != "jagoff":
-        #    end_time = audit_log.voided_date
-        #if audit_log.division_machine_id in end_times and end_times[audit_log.division_machine_id]:
-        #    if audit_log.division_machine_id in start_times:                
-        #        #if end_times[audit_log.division_machine_id] is None or start_times[audit_log.division_machine_id] is None:
-        #        #    continue
-        #        time_delta = end_times[audit_log.division_machine_id] - start_times[audit_log.division_machine_id]
-        #        if audit_log.division_machine_id not in avg_times:
-        #            avg_times[audit_log.division_machine_id]=[]
-        #        avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
-        #        start_times[audit_log.division_machine_id]=None
-        #        end_times[audit_log.division_machine_id]=None
-                
     for avg_time_division_machine_id,machine_times in avg_times.iteritems():                
         total_time = 0
         avg_game_time = 0        
@@ -103,9 +79,62 @@ def route_get_division_machines_avg_playtime(division_id,division_machine_id):
         avg_game_time = total_time/len(machine_times)    
         division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=avg_time_division_machine_id).first()
         division_machine.avg_play_time = datetime.datetime.fromtimestamp(avg_game_time).strftime('%M min')        
-        #print datetime.datetime.fromtimestamp(avg_game_time).strftime('%M:%S')
-        #return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
     db.session.commit()        
+    return jsonify({})
+            
+    
+    
+    # start_times = {}
+    # end_times = {}
+    # #start_time = None
+    # #end_time = None
+    # #avg_times = []
+    # avg_times = {}
+    # cur_action = None
+    # for audit_log in audit_logs:
+    #     if audit_log.action == "Game Started":
+    #         print "%s - starting on %s"%(audit_log.audit_log_id, audit_log.division_machine_id)
+    #         start_times[audit_log.division_machine_id] = audit_log.action_date
+    #         end_times[audit_log.division_machine_id] = None
+    #     if audit_log.action == "Score Added" or audit_log.action == "Score Voided":
+    #         print "%s - ending on %s"%(audit_log.audit_log_id,audit_log.division_machine_id)
+ 
+    #         end_times[audit_log.division_machine_id] = audit_log.action_date
+    #         if start_times[audit_log.division_machine_id] is None:
+    #             start_times[audit_log.division_machine_id]=None
+    #             end_times[audit_log.division_machine_id]=None                
+    #             print "%s"%audit_log.audit_log_id
+    #             continue
+    #         time_delta = end_times[audit_log.division_machine_id] - start_times[audit_log.division_machine_id]
+    #         if audit_log.division_machine_id not in avg_times:
+    #             avg_times[audit_log.division_machine_id]=[]
+    #         avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
+    #         start_times[audit_log.division_machine_id]=None
+    #         end_times[audit_log.division_machine_id]=None
+            
+    #     #if audit_log.voided_date and audit_log.action != "jagoff":
+    #     #    end_time = audit_log.voided_date
+    #     #if audit_log.division_machine_id in end_times and end_times[audit_log.division_machine_id]:
+    #     #    if audit_log.division_machine_id in start_times:                
+    #     #        #if end_times[audit_log.division_machine_id] is None or start_times[audit_log.division_machine_id] is None:
+    #     #        #    continue
+    #     #        time_delta = end_times[audit_log.division_machine_id] - start_times[audit_log.division_machine_id]
+    #     #        if audit_log.division_machine_id not in avg_times:
+    #     #            avg_times[audit_log.division_machine_id]=[]
+    #     #        avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
+    #     #        start_times[audit_log.division_machine_id]=None
+    #     #        end_times[audit_log.division_machine_id]=None
+                
+    # for avg_time_division_machine_id,machine_times in avg_times.iteritems():                
+    #     total_time = 0
+    #     avg_game_time = 0        
+    #     total_time = sum(machine_times)        
+    #     avg_game_time = total_time/len(machine_times)    
+    #     division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=avg_time_division_machine_id).first()
+    #     division_machine.avg_play_time = datetime.datetime.fromtimestamp(avg_game_time).strftime('%M min')        
+    #     #print datetime.datetime.fromtimestamp(avg_game_time).strftime('%M:%S')
+    #     #return jsonify({'data': {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in division_machines}})
+    # db.session.commit()        
     return jsonify({})
 
 

@@ -35,6 +35,7 @@ app = angular.module(
     'app.set_player_picture',
     'app.finals_scorekeeper',
     'app.generate_finals',
+    'app.cycling_machine_results_view',
     /*REPLACEMECHILD*/
 	]
 );

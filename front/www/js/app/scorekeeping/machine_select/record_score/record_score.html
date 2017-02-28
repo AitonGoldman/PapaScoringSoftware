@@ -18,19 +18,23 @@
             <input class="embedded-input" ng-change='onScoreChange()' type="tel" placeholder="enter score here" ng-model="score.score">
           </label>
           <button class="button button-calm button-medium" ng-disabled='utils.var_empty(score.score)' ng-click='test_submit()'>
-            Review
+            Review            
           </button>          
       </div>            
     </div>
-     <button  class="button button-full button-assertive item-icon-right seperate_button" ng-click="choose_void_action()">
+    <br>
+    <br>
+    <center>
+     <button  class="button button-assertive item-icon-right seperate_button" ng-click="choose_void_action()">
       Void Ticket
-      <i class="icon ion-chevron-right"></i>
+      <!--<i class="icon ion-chevron-right"></i>-->
      </button>
-     <button  class="button button-full button-assertive item-icon-right seperate_button" ui-sref=".confirm_jagoff">
+     <br>
+     <button  class="button button-assertive item-icon-right seperate_button" ui-sref=".confirm_jagoff">
        <span ng-if='team_tournament=="false"'> (#{{player_id}}) </span> {{player_name}} is not here.
-            <i class="icon ion-chevron-right"></i>
+       <!--<i class="icon ion-chevron-right"></i>-->
      </button>
-    
+    </center>
     <div class='player-info-avatar player-info-avatar-ex'>
       <img class='avatar-frame avatar-user-pic avatar-user-pic-ex' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_id}}.jpg">
     </div>

@@ -5,7 +5,6 @@ angular.module('app.set_player_picture').controller(
     '$scope','$state','TimeoutResources','Utils','Modals',
     function($scope, $state, TimeoutResources, Utils,Modals) {
         $scope.site=$state.params.site;
-
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         players_promise = TimeoutResources.GetPlayersFast($scope.bootstrap_promise,{site:$scope.site});
@@ -17,6 +16,16 @@ angular.module('app.set_player_picture').controller(
             
             Modals.loaded();
         });
+        $scope.doRefresh = function() {
+            players_promise = TimeoutResources.GetPlayersFast($scope.bootstrap_promise,{site:$scope.site});
+        
+            // = TimeoutResources.GetEtcData();
+            players_promise.then(function(data){
+                $scope.resources = TimeoutResources.GetAllResources();
+                $scope.flat_players = _.filter(_.values($scope.resources.players.data), function(o) { return !o.has_pic; });
+                $scope.$broadcast('scroll.refreshComplete');                                
+            });
+        };                
              
         //Modals.loading();
         // = TimeoutResources.GetEtcData();

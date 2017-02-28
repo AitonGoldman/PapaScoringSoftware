@@ -11,7 +11,7 @@
         <i ng-if="division_machine.player_id == undefined && division_machine.queues.length == 0" class="icon ion-android-walk queue_walking"></i>
 
         
-        <b>{{division_machine.division_machine_name}}</b> <br class='mobile-show'> <span ng-if='division_machine.avg_play_time!=undefined'> Avg Time : {{division_machine.avg_play_time}}</span>
+        <b>{{division_machine.division_machine_name}}</b> <br class='mobile-show'> <span class='standard_small_font' ng-if='division_machine.avg_play_time!=undefined'> Avg Time : {{division_machine.avg_play_time}}</span>
         <i class="icon ion-chevron-right"></i>
       </a>
       <!--<a class='item queue_item_padding item-icon-left'>

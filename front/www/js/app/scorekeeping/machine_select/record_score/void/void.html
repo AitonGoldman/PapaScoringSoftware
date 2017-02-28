@@ -27,7 +27,7 @@
             <button class="button button-full button-calm seperate_button item-icon-right item-icon-left extra-tall-button" ui-sref=".^.^.player_select(queue_args.queue_args)">
               <i class="icon ion-alert-circled ion-icon-yellow"></i>
 
-              Add Player Waiting On Queue<br>
+              Start Player Waiting On Queue<br>
               for This Machine
               <i class="icon ion-chevron-right"></i>
 
@@ -42,7 +42,7 @@
         </div>
         <div class='standard_big_font' ng-if='division_machine_queue_length == 0'>
           <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select(queue_args.queue_args)">
-            Add new player to {{division_machine_name}}
+            Start new player on {{division_machine_name}}
           </button>
           <button ng-click="re_add_player()" ng-if="resources.voided_score.player_token_data > 0 && show_redo==true" class="button button-energized seperate_button item-icon-right extra-tall-button">
             Restart current player ({{player_name}})<br>

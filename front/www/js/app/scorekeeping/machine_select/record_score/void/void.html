@@ -32,7 +32,7 @@
               <i class="icon ion-chevron-right"></i>
 
             </button>
-            <button ng-if="resources.voided_score.player_token_data > 0 && show_redo == true" class="button button-full button-calm seperate_button item-icon-right extra-tall-button" ng-click="re_queue_player()">
+            <button ng-if="resources.voided_score.player_token_data > 0 && show_redo == true" class="button button-energized seperate_button item-icon-right extra-tall-button" ng-click="re_queue_player()">
               Requeue current player ({{player_name}})<br>
               on this machine ({{division_machine_name}})              
               <i class="icon ion-chevron-right"></i>
@@ -44,15 +44,14 @@
           <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select(queue_args.queue_args)">
             Add new player to {{division_machine_name}}
           </button>
-          <button ng-click="re_add_player()" ng-if="resources.voided_score.player_token_data > 0 && show_redo==true" class="button button-full button-calm seperate_button item-icon-right extra-tall-button">
+          <button ng-click="re_add_player()" ng-if="resources.voided_score.player_token_data > 0 && show_redo==true" class="button button-energized seperate_button item-icon-right extra-tall-button">
             Restart current player ({{player_name}})<br>
             on this machine ({{division_machine_name}})
-            <i class="icon ion-chevron-right"></i>
           </button>                        
-          <button ng-if='resources.divisions.data[division_id].queuing == true && resources.voided_score.player_token_data != 0 && show_redo == true' class="button button-full button-calm seperate_button item-icon-right extra-tall-button" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
+          <br>
+          <button ng-if='resources.divisions.data[division_id].queuing == true && resources.voided_score.player_token_data != 0 && show_redo == true' class="button button-energized seperate_button item-icon-right extra-tall-button" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})">
             Add current player ({{player_name}})<br>
             to new machine or queue
-            <i class="icon ion-chevron-right"></i>
           </button>
         </div>                
       </div>

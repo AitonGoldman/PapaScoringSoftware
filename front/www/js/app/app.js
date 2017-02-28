@@ -55,7 +55,7 @@ app.controller(
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
-             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory,$ionicSideMenuDelegate) {
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory,$ionicSideMenuDelegate,ActionSheets) {
         //$scope.type_of_page = type_of_page;
         $scope.utils = Utils;
         $scope.state = $state;
@@ -97,6 +97,13 @@ app.controller(
                 return false;
             }            
         };
+        $scope.check_not_in_confirm_screen = function(target){
+            if($state.current.name.indexOf('confirm')!=-1 && $state.current.name.indexOf('confirm')+7 == $state.current.name.length){
+                ActionSheets.choose_confirm_action(target);
+            } else {
+                $state.go(target);
+            }
+        };
         $scope.jump_up_results = function(){
             parent_state = $state.current.name.substring(0,$state.current.name.lastIndexOf('.'));            
             //console.log('jumping to '+new_state);
@@ -124,10 +131,16 @@ app.controller(
         
         $scope.jump_to_machine_list = function(){
             console.log($state.params.division_id);
-            $ionicHistory.nextViewOptions({disableBack:true});            
-            $state.go('app.scorekeeping.machine_select',{site:$state.params.site,division_id:$state.params.division_id});
+            if($state.current.name.indexOf('confirm')!=-1 && $state.current.name.indexOf('confirm')+7 == $state.current.name.length){
+                ActionSheets.choose_confirm_action('app.scorekeeping.machine_select');
+            } else {
+                $ionicHistory.nextViewOptions({disableBack:true});
+                $state.go('app.scorekeeping.machine_select');
+            }                        
+            //$state.go('app.scorekeeping.machine_select',{site:$state.params.site,division_id:$state.params.division_id});
             $ionicSideMenuDelegate.toggleRight();            
         };
+        
         $scope.is_scorekeeping_page = function(){
             if($state.current.name.match(/app.scorekeeping/) != undefined){                
                 return true;

@@ -42,6 +42,24 @@ angular.module('TD_services.action_sheets')
                           }
                       });
                   };
+                  var choose_confirm_action = function(target){            
+                      var hideSheet = $ionicActionSheet.show({
+                          buttons: [
+                              { text: 'Leave Confirm Page' }                              
+                          ],                    
+                          titleText: '<b style="color:red">You are leaving a confirm screen without completing the action!  Are you sure you want to do this?</b>',
+                          cancelText: 'Cancel',
+                          cancel: function() {
+                              //player_info.linked_division_id = player_info.old_linked_division_id;
+                              // add cancel code..
+                          },
+                          buttonClicked: function(index) {
+                              $state.go(target);
+                              return true;
+                          }
+                      });
+                  };                  
+                  
                   var choose_change_div = function(player_info){            
                       var hideSheet = $ionicActionSheet.show({
                           buttons: [
@@ -195,6 +213,7 @@ angular.module('TD_services.action_sheets')
                       choose_change_div:choose_change_div,
                       choose_void_action:choose_void_action,
                       choose_queue_action:choose_queue_action,
-                      queue_no_action:queue_no_action
+                      queue_no_action:queue_no_action,
+                      choose_confirm_action:choose_confirm_action
                   };
               }]);

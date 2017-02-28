@@ -156,7 +156,7 @@ def start_pre_reg_sale():
         subject = "You have been pre-registered for PAPA 20!"
         to_email = Email(email)
         content = Content("text/plain",
-                          "Your player number is : %s\n\nYour player PIN is : %s\n\n\n\nBelow is information you will need to complete the registration process.\n\n\n\nThe PAPA 20 World Championship starts on April 6th, but the PAPA facility will be open to the public on April 5th during the PAPA Circuit Final.  Starting on April 5th at 1pm you will be able to complete the registration process.  You will need to go to the front desk and fill out your legal waiver and pick up your PAPA 20 t-shirt.\n\n\n\nYou will be unable to play any games until you sign the waiver.\n\n\n\nIf you have any questions, please email sales@papa.org\n\n\n\nWe look forward to seeing you at PAPA 20!" % (player.player_id,player.pin)))
+                          "Your player number is : %s\n\nYour player PIN is : %s\n\n\n\nBelow is information you will need to complete the registration process.\n\n\n\nThe PAPA 20 World Championship starts on April 6th, but the PAPA facility will be open to the public on April 5th during the PAPA Circuit Final.  Starting on April 5th at 1pm you will be able to complete the registration process.  You will need to go to the front desk and fill out your legal waiver and pick up your PAPA 20 t-shirt.\n\n\n\nYou will be unable to play any games until you sign the waiver.\n\n\n\nIf you have any questions, please email sales@papa.org\n\n\n\nWe look forward to seeing you at PAPA 20!" % (player.player_id,player.pin))
         mail = Mail(from_email, subject, to_email, content)
         response = sg.client.mail.send.post(request_body=mail.get())
         return jsonify({'data':player_dict})

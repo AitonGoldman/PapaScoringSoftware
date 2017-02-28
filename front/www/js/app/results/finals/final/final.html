@@ -1,0 +1,19 @@
+<ion-nav-view name="round_tab">
+</ion-nav-view>
+<ion-tabs class="tabs-positive tabs-icon-top">
+
+
+  <ion-tab title="Round 1" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='.round_0({round_idx:0})'>
+  </ion-tab>
+
+  <ion-tab title="Round 2" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='.round_1({round_idx:1})'>
+  </ion-tab>
+
+  <ion-tab title="Round 3" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='.round_2({round_idx:2})'>
+  </ion-tab>
+
+  <ion-tab ng-if='rounds_length==4' title="Round 4" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline" ui-sref='.round_3({round_idx:3})'>
+  </ion-tab>
+  
+</ion-tabs>
+

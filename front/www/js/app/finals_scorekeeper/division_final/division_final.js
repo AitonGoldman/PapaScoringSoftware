@@ -14,10 +14,15 @@ angular.module('app.finals_scorekeeper.division_final').controller(
         finals_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();            
-            $scope.rounds_length = $scope.resources.finals.data[$scope.division_final_id].division_final_rounds.length;            
+            if ($scope.resources.finals.data!= undefined){
+                $scope.rounds_length = $scope.resources.finals.data[$scope.division_final_id].division_final_rounds.length;
+            } else {
+                $scope.rounds_length = 0;
+            }
+            
             console.log($scope.rounds_length);
         });
-            
+
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){
@@ -152,8 +157,9 @@ angular.module('app.finals_scorekeeper.division_final.round.tiebreaker').control
             Modals.loading();
             set_tiebreaker_promise = TimeoutResources.SetFinalsMatchTiebreakerWinners(undefined,{site:$scope.site},{division_final_match_id:$scope.match.division_final_match_id,data:finalsmatchplayerresult_ids});
             set_tiebreaker_promise.then(function(data){
-                $state.go('.^');
                 Modals.loaded();
+                $state.go('^',{division_final_id:$scope.division_final_id,round_idx:$scope.round_idx},{reload:true});
+                
             });
         };
     }]);

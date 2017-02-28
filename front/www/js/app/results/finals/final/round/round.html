@@ -1,0 +1,24 @@
+<ion-view view-title="">
+  <ion-content>      
+    <div style='padding-top:0px'>      
+      <div ng-repeat="division_final_match in resources.finals.data[division_final_id].division_final_rounds[round_idx].division_final_matches|orderBy:'division_final_match_id'" class="list card">
+        <div  ui-sref='.match_details({division_final_match_id:division_final_match.division_final_match_id,division_final_match_idx:$index,round_idx:round_idx})' class="item item-divider item-icon-left item-icon-right">
+          Match {{$index+1}} <span ng-if="division_final_match.completed == true">(COMPLETED)</span>
+          <i class="icon ion-checkmark-circled ion-icon-green" ng-if="division_final_match.completed == true"></i>
+          <i class="icon" ng-if="division_final_match.completed == false"></i>
+          <i class="icon ion-chevron-right"></i>
+      
+        </div>
+        <div ng-repeat="finals_match_player_result in division_final_match.finals_match_player_results|orderBy:'-winner'" class="item item-icon-left">
+          <span ng-if="finals_match_player_result.finals_player.player != undefined">{{finals_match_player_result.finals_player.player.full_name}}</span>
+          <span ng-if="finals_match_player_result.finals_player.overall_rank != undefined" class='standard_small_font'>Final Rank : {{finals_match_player_result.finals_player.overall_rank}}</span>
+          <span ng-if="finals_match_player_result.finals_player.player == undefined">Pending</span>
+          <i class="icon ion-trophy" ng-if="resources.finals.data[division_final_id].division_final_rounds[round_idx].round_number != resources.finals.data[division_final_id].division_final_rounds.length && finals_match_player_result.winner == true"></i>
+        </div>        
+      </div>
+    </div>
+    <br>
+    <br>
+  </ion-content>
+</ion-view>
+

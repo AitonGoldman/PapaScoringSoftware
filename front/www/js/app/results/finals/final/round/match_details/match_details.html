@@ -1,0 +1,75 @@
+<ion-view view-title="Round {{round_idx}}, Match {{division_final_match_idx}}">
+  <ion-content>      
+
+    <div ng-repeat="game_result in match.finals_match_game_results|orderBy:'finals_match_game_result_id'" class='list card'>
+      <div class='item item-divider item-icon-left' style='background-color:lightgrey'>        
+        <span ng-if='game_result.division_machine_string == undefined'>No Machine Selected</span>
+        <span ng-if='game_result.division_machine_string != undefined'>{{game_result.division_machine_string}}</span>
+
+        <i ng-if='game_result.completed==true' class='icon ion-checkmark-round'></i>
+      </div>
+      <div class='row stable-bg'>
+        <div class='col-20'>
+          <b>Points</b>
+        </div>
+        <div class='col-20'>
+          <b>Score</b>
+        </div>
+        <div class='col-20'>
+          <b>Player</b>
+        </div>
+        
+      </div>
+      <div ng-repeat="game_player_result in game_result.finals_match_game_player_results|orderBy:'play_order'" class='item row'>
+          <!--<div class="input-label">-->          
+          <div class='col-20' ng-if="game_player_result.papa_points!=undefined">
+            {{game_player_result.papa_points}} 
+          </div>
+          <div class='col-20' ng-if="game_player_result.papa_points==undefined">
+            (N/A)
+          </div>          
+          <div class='col-20' ng-if='game_player_result.score != undefined'>
+            {{game_player_result.score}}
+            <!--</div>-->
+          </div>
+          <div class='col-20' ng-if='game_player_result.score == undefined'>
+            N/A
+          </div>
+          <div class='col-20' ng-if='game_player_result.final_player.player.full_name != undefined'>
+            {{game_player_result.final_player.player.full_name}}
+          </div>
+          <div class='col-20' ng-if='game_player_result.final_player.player.full_name == undefined'>
+            No Player Started
+          </div>          
+      </div>
+    </div>
+    <div class='list card'>
+      <div class='item item-divider' style='background-color:lightgrey'>        
+        Match Summary
+      </div>
+      <div class='item row stable-bg'>
+        <div class='col-40'>
+          <b>Total Points</b>
+        </div>
+        <div class='col-40'>
+          <b>Player Name</b>
+        </div>                  
+      </div>
+      <div class='item row' ng-repeat='match_player_result in match.finals_match_player_results|orderBy:"-papa_points_sum"'>
+        <div class='col-40'>
+          {{match_player_result.papa_points_sum}}
+        </div>
+        <div class='col-40'>
+          {{match_player_result.finals_player.player.full_name}}
+        </div>        
+
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <!-- ui-sref=".match_details({division_final_match_idx: ,})" -->    
+  </ion-content>
+</ion-view>
+

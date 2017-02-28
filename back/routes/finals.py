@@ -247,7 +247,10 @@ def route_set_division_final_match_tiebreaker_results():
     if len(finals_match_player_results_has_tie) == 3 and sorted_player_results[0] in finals_players_ids:        
         finals_match_player_results_tie_winners[0].winner=True        
         finals_match_player_results_tie_winners[1].winner=True        
-        db.session.commit()        
+        db.session.commit()
+    for finals_match_player_result in finals_match_player_results_has_tie:
+        if finals_match_player_result.winner is not True:
+            finals_match_player_result.winner=False    
     division_final_match.completed=True
     db.session.commit()
     return jsonify({'data':'success'})
@@ -318,8 +321,6 @@ def mark_finals_match_player_results_that_need_tiebreaker(division_final_match):
 
 @admin_manage_blueprint.route('/finals/finals_match_game_result/<finals_match_game_result_id>',
                               methods=['GET'])
-@login_required
-@Scorekeeper_permission.require(403)
 def route_get_finals_match_game_result(finals_match_game_result_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -329,8 +330,6 @@ def route_get_finals_match_game_result(finals_match_game_result_id):
 
 @admin_manage_blueprint.route('/finals/division_final/<division_final_id>',
                               methods=['GET'])
-@login_required
-@Scorekeeper_permission.require(403)
 def route_get_final(division_final_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -339,8 +338,6 @@ def route_get_final(division_final_id):
 
 @admin_manage_blueprint.route('/finals/division_final',
                               methods=['GET'])
-@login_required
-@Scorekeeper_permission.require(403)
 def route_get_all_finals():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -350,8 +347,6 @@ def route_get_all_finals():
     
 @admin_manage_blueprint.route('/finals/division_finals_match/<division_finals_match_id>',
                               methods=['GET'])
-@login_required
-@Scorekeeper_permission.require(403)
 def route_get_finals_match_game_result_players(division_finals_match_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -429,7 +424,7 @@ def route_create_finals(division_id,extra_name_info):
     new_final = tables.DivisionFinal(
         division_id=division_id
     )
-    if extra_name_info:
+    if extra_name_info and extra_name_info != "none":
         new_final.extra_name_info=extra_name_info
     db.session.add(new_final)
     db.session.commit()

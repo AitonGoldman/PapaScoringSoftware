@@ -1,6 +1,7 @@
 angular.module('app.results',['app.results.divisions',
     'app.results.division_machines',
     'app.results.players',
+    'app.results.finals',
     /*REPLACEMECHILD*/]);
 angular.module('app.results').controller(
     'app.results',[

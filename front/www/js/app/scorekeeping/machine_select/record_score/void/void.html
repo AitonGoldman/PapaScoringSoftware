@@ -27,7 +27,7 @@
             <button class="button button-full button-calm seperate_button item-icon-right item-icon-left extra-tall-button" ui-sref=".^.^.player_select(queue_args.queue_args)">
               <i class="icon ion-alert-circled ion-icon-yellow"></i>
 
-              Start Player Waiting On Queue<br>
+              Attend to Player Waiting On Queue<br>
               for This Machine
               <i class="icon ion-chevron-right"></i>
 
@@ -35,7 +35,6 @@
             <button ng-if="resources.voided_score.player_token_data > 0 && show_redo == true" class="button button-energized seperate_button item-icon-right extra-tall-button" ng-click="re_queue_player()">
               Requeue current player ({{player_name}})<br>
               on this machine ({{division_machine_name}})              
-              <i class="icon ion-chevron-right"></i>
             </button>                        
             <button class="button button-full seperate_button button-balanced" ng-if="requeue==true">{{player_name}} re-queued on {{division_machine_name}}!</button>
           </div>

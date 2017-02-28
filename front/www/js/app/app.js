@@ -250,6 +250,32 @@ app.controller(
 
 app.run(function($ionicPlatform,$rootScope,$ionicPopup,$state) {
     $ionicPlatform.ready(function() {
+        if (ionic.Platform.isWebView()==false){
+        new SmartBanner({
+          daysHidden: 15,   // days to hide banner after close button is clicked (defaults to 15) 
+          daysReminder: 90, // days to hide banner after "VIEW" button is clicked (defaults to 90) 
+          appStoreLanguage: 'us', // language code for the App Store (defaults to user's browser language) 
+          title: 'YAPSS',
+          author: '',
+          button: 'VIEW',
+          store: {
+              ios: 'On the App Store<br>Features Include : <br>&#8226; Push Notifications<br>&#8226; Purchase Tickets',
+              android: 'In Google Play',
+              windows: 'In Windows store'
+          },
+          price: {
+              ios: 'FREE',
+              android: 'FREE',
+              windows: 'FREE'
+          }
+          // , theme: '' // put platform type ('ios', 'android', etc.) here to force single theme on all device 
+          // , icon: '' // full path to icon image if not using website icon image 
+          // , force: 'ios' // Uncomment for platform emulation 
+      });        
+            
+
+        }
+
         ionic.Platform.showStatusBar(false);        
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)

@@ -13,8 +13,9 @@ angular.module('app.finals_scorekeeper.division_final').controller(
         // = TimeoutResources.GetEtcData();
         finals_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
-            Modals.loaded();
-            console.log($scope.resources);
+            Modals.loaded();            
+            $scope.rounds_length = $scope.resources.finals.data[$scope.division_final_id].division_final_rounds.length;            
+            console.log($scope.rounds_length);
         });
             
         //Modals.loading();
@@ -41,10 +42,13 @@ angular.module('app.finals_scorekeeper.division_final.round').controller(
         $scope.round_idx = $state.params.round_idx;
         finals_promise = TimeoutResources.GetDivisionFinals(undefined,{site:$scope.site});                
         finals_promise.then(function(data){
-            $scope.resources = TimeoutResources.GetAllResources();
+            $scope.resources = TimeoutResources.GetAllResources();            
             Modals.loaded();                                        
         });                                                
-        $scope.check_round_ready_to_be_completed = function(round_idx){            
+        $scope.check_round_ready_to_be_completed = function(round_idx){
+            if($scope.resources == undefined || $scope.resources.finals.data == undefined){
+                return false;
+            }
             round = $scope.resources.finals.data[$scope.division_final_id].division_final_rounds[round_idx];
             matches = round.division_final_matches;
             completed_matches_count =  _.filter(matches, function(o) { return o.completed == true; }).length;                                    
@@ -54,6 +58,10 @@ angular.module('app.finals_scorekeeper.division_final.round').controller(
             return false;
         };
         $scope.check_match_has_tiebreaker = function(division_machine_match){            
+            if($scope.resources == undefined){
+                return false;
+            }
+
             if(division_machine_match.has_tiebreaker && division_machine_match.completed == false){
                 return true;
             } else {

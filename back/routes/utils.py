@@ -9,6 +9,57 @@ import requests
 import json
 from audit_log_utils import create_audit_log
 
+def get_discount_normal_ticket_counts(max_count,discount_count,discount_cost,increment,normal_cost):
+    cur_count = 0
+    cur_value = 0    
+    available_ticket_list = [[0,0]]
+    discount_counts = {}
+    normal_counts = {}
+    while(cur_count < max_count):    
+        cur_count = cur_count+1
+        is_discount_count = True if cur_count%discount_count == 0 and discount_count != 1 else False
+        multiplier = cur_count/discount_count
+        if is_discount_count and cur_count != 1:                        
+            ticket_cost = multiplier*discount_cost
+            available_ticket_list.append([cur_count,ticket_cost])
+            discount_counts[cur_count]=multiplier
+            normal_counts[cur_count]=0            
+            continue
+        discounts_contained_in_cur_count = cur_count/discount_count
+        keep_looping=True
+        if discounts_contained_in_cur_count > 0:
+            while keep_looping is True and discounts_contained_in_cur_count > 0:                
+                discount_amount_contained_in_cur_count=discounts_contained_in_cur_count*discount_count
+                remainder_to_check = cur_count-discount_amount_contained_in_cur_count
+                normal_increment_remainder=remainder_to_check%increment
+                if normal_increment_remainder==0 and remainder_to_check >= increment:
+                    ticket_cost = discounts_contained_in_cur_count*discount_cost                    
+                    ticket_cost = ticket_cost + ((remainder_to_check/increment)*normal_cost)
+                    
+                    available_ticket_list.append([cur_count,ticket_cost])
+                    discount_counts[cur_count]=discounts_contained_in_cur_count
+                    normal_counts[cur_count]=remainder_to_check/increment                                
+                    keep_looping=False
+                else:
+                    discounts_contained_in_cur_count=discounts_contained_in_cur_count-1
+            if discounts_contained_in_cur_count > 0:
+                continue
+        is_normal_count = True if cur_count%increment == 0 else False
+        if is_normal_count:
+            normal_amount = cur_count/increment
+            available_ticket_list.append([cur_count,normal_amount*normal_cost])
+            discount_counts[cur_count]=0
+            normal_counts[cur_count]=cur_count/increment                        
+            continue
+    list_len = len(available_ticket_list)
+    filtered_ticket_list = []
+    for idx,ticket_info in enumerate(available_ticket_list):
+        if idx<list_len-1 and available_ticket_list[idx+1][1] == available_ticket_list[idx][1]:
+            continue
+        filtered_ticket_list.append(ticket_info)
+    return [filtered_ticket_list,normal_counts,discount_counts]
+    #return available_ticket_list
+
 def check_player_is_on_device(player_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
@@ -101,7 +152,16 @@ def send_push_notification(message,user_id=None,player_id=None,postpone=None,pla
         "tokens":token_list,
         "profile":current_app.td_config['IONICCLOUD_PROFILE_TAG'],
         "notification":{
-            "message":message
+            "ios":{
+                "message":message,
+                "sound":"default",
+                "priority":10
+            },
+            "android":{
+                "message":message,
+                "sound":"default"
+            }
+            #"message":message
         }
     }
     if postpone:

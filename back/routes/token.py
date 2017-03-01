@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest,Conflict,Forbidden
 from util import db_util
 from util.permissions import Admin_permission, Desk_permission, Token_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,calc_audit_log_remaining_tokens
+from routes.utils import fetch_entity,calc_audit_log_remaining_tokens,get_discount_normal_ticket_counts
 import os
 from flask_restless.helpers import to_dict
 import datetime
@@ -133,6 +133,7 @@ def get_team_tokens_for_player(player_id):
             token_dict['teams'][token.division_id]=token_dict['teams'][token.division_id] + 1      
     return jsonify(token_dict)
 
+    
 def get_available_ticket_list(max_count,division,increment=None):        
     if increment is None:
         increment = 1
@@ -148,24 +149,28 @@ def get_available_ticket_list(max_count,division,increment=None):
     else:
         discount_count = 1
         discount_cost = 0
-    cur_count = 0
-    cur_value = 0    
-    
-    while(cur_count < max_count):
-        cur_count = cur_count+1
-        is_discount_count = True if cur_count%discount_count == 0 and discount_count != 1 else False
-        multiplier = cur_count/discount_count
-        if is_discount_count and cur_count != 1:                        
-            ticket_cost = multiplier*discount_cost
-        else:
-            ticket_cost = cur_value+normal_cost
-        if increment != 1:            
-            if cur_count%increment != 0 and cur_count%discount_count != 0:                
-                continue
-            pass
-        available_ticket_list.append([cur_count,ticket_cost])
-        cur_value = ticket_cost
-    return available_ticket_list
+    return get_discount_normal_ticket_counts(max_count,discount_count,discount_cost,increment,normal_cost)
+    # 0,0
+    # 3:10
+    # 6:20
+    # 7:20
+    # 9:30
+    # 10:30
+    # 11:X
+    # 12:40
+    # 13:40
+    # 14:40
+    # 15:50
+    # 16:50
+    # 17:50
+    # 18:60
+    # 19:60
+    # 20:60
+    # 21:60
+    # 22:70
+    # 23:70
+    # 24:70
+    # 25:80        
     
 @admin_manage_blueprint.route('/token/player_id/<player_id>',methods=['GET'])
 def get_tokens_for_player(player_id):
@@ -191,21 +196,21 @@ def get_tokens_for_player(player_id):
                 token_dict['divisions'][division.division_id]=div_count
                 remaining_tokens = max_tickets_allowed - div_count
                 remaining_tokens_dict['divisions'][division.division_id] = remaining_tokens                
-                remaining_tokens_dict['divisions_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division,division.min_num_tickets_to_purchase)
+                remaining_tokens_dict['divisions_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division,division.min_num_tickets_to_purchase)[0]
         if division.meta_division_id is not None:
             metadivision = tables.MetaDivision.query.filter_by(meta_division_id=division.meta_division_id).first()
             metadiv_count = get_existing_token_count(player_id=player_id,metadiv_id=division.meta_division_id)
             token_dict['metadivisions'][division.meta_division_id]= metadiv_count
             remaining_tokens = max_tickets_allowed - metadiv_count             
             remaining_tokens_dict['metadivisions'][division.meta_division_id] = remaining_tokens
-            remaining_tokens_dict['metadivisions_remaining_token_list'][division.meta_division_id]=get_available_ticket_list(remaining_tokens,metadivision,division.min_num_tickets_to_purchase)            
+            remaining_tokens_dict['metadivisions_remaining_token_list'][division.meta_division_id]=get_available_ticket_list(remaining_tokens,metadivision,division.min_num_tickets_to_purchase)[0]            
         if division.team_tournament is True:
             for team in team_ids:
                 team_count = get_existing_token_count(team_id=team.team_id,div_id=division.division_id)
                 remaining_tokens = max_tickets_allowed - team_count
                 token_dict['teams'][division.division_id]= team_count
                 remaining_tokens_dict['teams'][division.division_id] = remaining_tokens
-                remaining_tokens_dict['teams_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division,division.min_num_tickets_to_purchase)
+                remaining_tokens_dict['teams_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division,division.min_num_tickets_to_purchase)[0]
                 
     return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict,'player':player.to_dict_simple()}})
 

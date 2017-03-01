@@ -1,11 +1,12 @@
 from util import db_util
-from routes.utils import check_roles_exist,fetch_entity,get_valid_sku
+from routes.utils import check_roles_exist,fetch_entity,get_valid_sku,get_discount_normal_ticket_counts
 from enum import Enum
 import stripe
 import os
 import random
 import datetime
 from werkzeug.exceptions import BadRequest,Conflict
+from flask import current_app
 
 class RolesEnum(Enum):
     admin = 1
@@ -396,8 +397,20 @@ def create_ticket_purchase(app,
         db.session.commit()
         return
     if ticket_count >= discount_for:
-        discount_count = ticket_count/discount_for
-        normal_count = ticket_count%discount_for
+        #discount_count = ticket_count/discount_for
+        #normal_count = ticket_count%discount_for
+        normal_cost = division.local_price    
+        if division.discount_ticket_count:        
+            div_discount_count = division.discount_ticket_count            
+            div_discount_cost = division.discount_ticket_price
+        else:
+            div_discount_count = 1
+            div_discount_cost = 0
+        increment=division.min_num_tickets_to_purchase
+        max_count = int(current_app.td_config['MAX_TICKETS_ALLOWED_PER_DIVISION'])
+        counts = get_discount_normal_ticket_counts(max_count,div_discount_count,div_discount_cost,increment,normal_cost)
+        normal_count=counts[1][ticket_count]
+        discount_count=counts[2][ticket_count]
     else:
         discount_count = 0
         normal_count = ticket_count
@@ -409,7 +422,7 @@ def create_ticket_purchase(app,
     if normal_count > 0:        
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id,purchase_summary_id)    
         ticket_purchase.amount=normal_count
-        ticket_purchase.description="1"
+        ticket_purchase.description="%s"%increment
         db.session.add(ticket_purchase)
     if commit:        
         db.session.commit()

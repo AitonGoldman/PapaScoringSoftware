@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission,Token_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,calc_audit_log_remaining_tokens
+from routes.utils import fetch_entity,calc_audit_log_remaining_tokens,get_discount_normal_ticket_counts
 import stripe
 import datetime
 from routes.audit_log_utils import create_audit_log
@@ -108,8 +108,20 @@ def build_stripe_purchases(ticket_count,stripe_items,division_skus,discount_divi
             stripe_items.append({"quantity":ticket_count,"type":"sku","parent":division_skus[sku_division_id]})            
         return            
     if  discount_for and ticket_count >= discount_for:
-        discount_count = ticket_count/discount_for
-        normal_count = ticket_count%discount_for
+        #discount_count = ticket_count/discount_for
+        #normal_count = ticket_count%discount_for
+        normal_cost = division.local_price    
+        if division.discount_ticket_count:        
+            div_discount_count = division.discount_ticket_count            
+            div_discount_cost = division.discount_ticket_price
+        else:
+            div_discount_count = 1
+            div_discount_cost = 0
+        increment=division.min_num_tickets_to_purchase
+        max_count = int(current_app.td_config['MAX_TICKETS_ALLOWED_PER_DIVISION'])
+        counts = get_discount_normal_ticket_counts(max_count,div_discount_count,div_discount_cost,increment,normal_cost)
+        normal_count=counts[1][ticket_count]
+        discount_count=counts[2][ticket_count]         
     else:
         discount_count = 0
         normal_count = ticket_count

@@ -252,15 +252,15 @@ app.run(function($ionicPlatform,$rootScope,$ionicPopup,$state) {
     $ionicPlatform.ready(function() {
         if (ionic.Platform.isWebView()==false){
         new SmartBanner({
-          daysHidden: 15,   // days to hide banner after close button is clicked (defaults to 15) 
-          daysReminder: 90, // days to hide banner after "VIEW" button is clicked (defaults to 90) 
+          daysHidden: 999,   // days to hide banner after close button is clicked (defaults to 15) 
+          daysReminder: 999, // days to hide banner after "VIEW" button is clicked (defaults to 90) 
           appStoreLanguage: 'us', // language code for the App Store (defaults to user's browser language) 
           title: 'YAPSS',
           author: '',
           button: 'VIEW',
           store: {
               ios: 'On the App Store<br>Features Include : <br>&#8226; Push Notifications<br>&#8226; Purchase Tickets',
-              android: 'In Google Play',
+              android: 'In Google Play<br>Features Include : <br>&#8226; Push Notifications<br>&#8226; Purchase Tickets',
               windows: 'In Windows store'
           },
           price: {

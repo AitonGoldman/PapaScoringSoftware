@@ -645,11 +645,28 @@ a.extra-tall-button,button.extra-tall-button {
         min-height: $font-size-base;
         font-size: $font-size-base;
         line-height: $font-size-base*1.75;
-        width:35%;
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){
+                width:5%;
+            }
+            @media screen and (min-device-height: 751px){
+                width:35%;
+            }
+        }
+        @media screen and (min-width:611px) {
+            width:35%;
+        }
+        
+
     }
     input.embedded-input {
         height:$font-size-base*1.5;
         line-height:$font-size-base;
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){
+                width:65%;
+            }
+        }
     }
 }
 
@@ -669,8 +686,8 @@ a.extra-tall-button,button.extra-tall-button {
 .player-info-avatar-ex-two {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
-            top:0px;
-            right: $font-size-base*7;
+            top:$font-size-base*8;
+            right: $font-size-base*14;
         }
         @media screen and (min-device-height: 751px){
             top:$font-size-base*6;
@@ -688,8 +705,8 @@ a.extra-tall-button,button.extra-tall-button {
 .machine-info-avatar-ex {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
-            top:0px;
-            right: $font-size-base*7;
+            top:0;
+            right: $font-size-base*15;
         }
         @media screen and (min-device-height: 751px){
             top:0px;
@@ -716,6 +733,7 @@ a.extra-tall-button,button.extra-tall-button {
 .machine-select-action-spacer {
     @media screen and (max-width: 610px){
         @media screen and (max-device-height: 750px){
+            padding-bottom:$font-size-base*8;
         }
         @media screen and (min-device-height: 751px){
             padding-bottom:$font-size-base*6;

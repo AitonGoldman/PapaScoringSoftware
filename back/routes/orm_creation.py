@@ -407,6 +407,8 @@ def create_ticket_purchase(app,
             div_discount_count = 1
             div_discount_cost = 0
         increment=division.min_num_tickets_to_purchase
+        if increment is None:
+            increment = 1
         max_count = int(current_app.td_config['MAX_TICKETS_ALLOWED_PER_DIVISION'])
         counts = get_discount_normal_ticket_counts(max_count,div_discount_count,div_discount_cost,increment,normal_cost)
         normal_count=counts[1][ticket_count]

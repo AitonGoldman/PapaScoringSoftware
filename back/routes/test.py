@@ -8,6 +8,8 @@ from util import db_util
 from routes.utils import fetch_entity
 import datetime
 import time
+from flask_login import login_required,current_user
+from util.permissions import Admin_permission, Desk_permission
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -73,6 +75,13 @@ def test_players_with_tickets(division_id):
             player['on_division_machine']=True            
     return jsonify({'data':players})
 
+@admin_manage_blueprint.route('/test/load_machines', methods=['GET'])
+@login_required
+@Admin_permission.require(403)
+def test_load_machines():    
+    # check if the post request has the file part            
+    db_util.load_machines_from_json(current_app,False)
+    return jsonify({})
 
 @admin_manage_blueprint.route('/test/media_upload', methods=['POST'])
 def test_upload_file():    

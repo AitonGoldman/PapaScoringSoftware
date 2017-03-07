@@ -15,8 +15,13 @@ def get_discount_normal_ticket_counts(max_count,discount_count,discount_cost,inc
     available_ticket_list = [[0,0]]
     discount_counts = {}
     normal_counts = {}
+    if discount_count is None:
+        discount_count = 1
+    if discount_cost is None:
+        discount_cost=0
+        
     while(cur_count < max_count):    
-        cur_count = cur_count+1
+        cur_count = cur_count+1        
         is_discount_count = True if cur_count%discount_count == 0 and discount_count != 1 else False
         multiplier = cur_count/discount_count
         if is_discount_count and cur_count != 1:                        

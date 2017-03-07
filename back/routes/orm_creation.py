@@ -236,6 +236,10 @@ def create_player(app,player_data):
         new_player.linked_division_id = player_data['linked_division_id']
     if 'pic_file' in player_data:
         new_player.has_pic=True
+        save_path = "%s/%s"%(app.config['UPLOAD_FOLDER'],player_data['pic_file'])
+        subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])        
+        subprocess.call(["mv","%s_resize"%save_path,save_path])
+
         os.system('mv %s/%s %s/player_%s.jpg' % (app.config['UPLOAD_FOLDER'],player_data['pic_file'],app.config['UPLOAD_FOLDER'],new_player.player_id))        
     db.session.commit()
     
@@ -317,6 +321,7 @@ def create_division(app,division_data):
     new_division.scoring_type=division_data['scoring_type']
     new_division.finals_player_selection_type = "papa"
     new_division.number_of_relevant_scores = 6
+    new_division.min_num_tickets_to_purchase = 1
     db.session.add(new_division)
     db.session.commit()
     if new_division.use_stripe:
@@ -416,6 +421,7 @@ def create_ticket_purchase(app,
     else:
         discount_count = 0
         normal_count = ticket_count
+        increment=division.min_num_tickets_to_purchase        
     if discount_count > 0:        
         ticket_purchase = create_base_ticket_purchase(app,player_id,division_id,metadivision_id,user_id,purchase_summary_id)    
         ticket_purchase.amount=discount_count

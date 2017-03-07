@@ -9,6 +9,7 @@ from routes.utils import fetch_entity
 import os
 from orm_creation import create_player,create_user,RolesEnum
 import random
+import subprocess
 
 @admin_manage_blueprint.route('/player/division_id/<division_id>',methods=['GET'])
 def route_get_players_for_division_with_tickets(division_id):
@@ -61,6 +62,9 @@ def route_edit_player(player_id):
         player.linked_division_id = input_data['linked_division_id']
     if 'pic_file' in input_data:
         player.has_pic=True
+        save_path = "%s/%s"%(current_app.config['UPLOAD_FOLDER'],input_data['pic_file'])
+        subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])
+        subprocess.call(["mv","%s_resize"%save_path,save_path])        
         os.system('mv %s/%s /var/www/html/pics/player_%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],player.player_id))        
         
     db.session.commit()                        

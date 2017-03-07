@@ -67,7 +67,7 @@ def route_get_division_machines_avg_playtime(division_id,division_machine_id):
     for audit_log in audit_logs:
         if audit_log.action == "Game Started":            
             start_times[audit_log.division_machine_id] = audit_log.action_date
-        if audit_log.action == "Score Added" or audit_log.action == "Score Voided" or audit_log.action == "Jagoff Declared" or audit_log.action == "Player Removed":
+        if audit_log.action == "Score Added" or audit_log.action == "Score Voided" or audit_log.action == "Jagoff Declared":
             if audit_log.division_machine_id not in avg_times:
                 avg_times[audit_log.division_machine_id]=[]
             time_delta = audit_log.action_date - start_times[audit_log.division_machine_id]

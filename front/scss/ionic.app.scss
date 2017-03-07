@@ -740,3 +740,12 @@ a.extra-tall-button,button.extra-tall-button {
         }
     }    
 }
+
+span.big-spinner {
+ .spinner svg {
+        width: 128px;
+        height: 128px;
+        stroke: #444;
+        fill: #444;
+    }
+}

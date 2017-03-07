@@ -14,6 +14,7 @@ import os
 import sendgrid
 from sendgrid.helpers.mail import *
 import time
+import requests
 
 @admin_manage_blueprint.route('/stripe/public_key', methods=['GET'])
 def get_public_key():
@@ -223,10 +224,21 @@ def do_stripe_sale(stripe_token):
             email=email,
             items=stripe_items
         )
+        
         order_response=order.pay(
-            source=stripe_token 
+           source=stripe_token
         )
+        #https://api.stripe.com/v1/orders/{ORDER_ID}/pay
+        # headers = {'Authorization': 'Bearer %s'%stripe.api_key}
+        
+        # purchase_http_response = requests.post("https://api.stripe.com/v1/orders/%s/pay"%order.id,
+        #                                        headers=headers,
+        #                                        data={'source':stripe_token})
+        
+        # print purchase_http_response.json()
+        # print "-=----------"
         order_id_string =  "order_id %s, " % order_response.id
+        
         stripe_purchase_summary_string = order_id_string
         purchase_summary = create_purchase_summary(current_app,
                                                    current_user.player.player_id,
@@ -281,7 +293,16 @@ def do_stripe_sale(stripe_token):
                          player_id=current_user.player.player_id)       
         return jsonify({"data":"success"})
     except stripe.error.CardError as e:
-        # The card has been declined        
+        # The card has been declined
+        for charge in stripe.Charge.list(limit=20):            
+            if charge.order == order.id:
+                if charge.outcome['reason']=='highest_risk_level':
+                    raise BadRequest('Your card was rejected by the credit card processing service.  Please check to make sure you entered the number correctly, or try another card, or see the front desk for more details')
+
+                print charge.outcome
+        #print order
+        #stripe.Charge.retrieve(order_response.charge)        
+        
         return jsonify({"data":"FAILURE"})        
 
 @admin_manage_blueprint.route('/stripe/test_player_purchase/<output_file_num>', methods=['POST'])

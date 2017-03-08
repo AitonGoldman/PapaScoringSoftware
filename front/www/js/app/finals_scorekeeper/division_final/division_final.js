@@ -44,7 +44,7 @@ angular.module('app.finals_scorekeeper.division_final.round').controller(
 	$scope.division_final_id=$state.params.division_final_id;
         //$scope.utils = Utils;
         $scope.counter = $state.params.counter;
-        $scope.round_idx = $state.params.round_idx;
+        $scope.round_idx = parseInt($state.params.round_idx);
         finals_promise = TimeoutResources.GetDivisionFinals(undefined,{site:$scope.site});                
         finals_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();            
@@ -132,7 +132,7 @@ angular.module('app.finals_scorekeeper.division_final.round.tiebreaker').control
         $scope.counter = $state.params.counter;
         $scope.division_final_match_id = $state.params.division_final_match_id;
         $scope.division_final_match_idx = $state.params.division_final_match_idx;
-        $scope.round_idx = $state.params.round_idx;
+        $scope.round_idx = parseInt($state.params.round_idx);
         $scope.division_final_id = $state.params.division_final_id;        
         Modals.loading();
         finals_promise = TimeoutResources.GetDivisionFinals($scope.bootstrap_promise,{site:$scope.site});        
@@ -172,12 +172,12 @@ angular.module('app.finals_scorekeeper.division_final.round.match_details').cont
     function($scope, $state, TimeoutResources, Utils,Modals) {
         //$scope.site=$state.params.site;
 	//$scope.division_final_id=$state.params.division_final_id;
-
+        $scope.state = $state;
         //$scope.utils = Utils;
         $scope.counter = $state.params.counter;
         $scope.division_final_match_id = $state.params.division_final_match_id;
-        $scope.division_final_match_idx = $state.params.division_final_match_idx;
-        $scope.round_idx = $state.params.round_idx;
+        $scope.division_final_match_idx = parseInt($state.params.division_final_match_idx);
+        $scope.round_idx = parseInt($state.params.round_idx);
         $scope.division_final_id = $state.params.division_final_id;        
         finals_promise = TimeoutResources.GetDivisionFinals($scope.bootstrap_promise,{site:$scope.site});        
         // = TimeoutResources.GetEtcData();

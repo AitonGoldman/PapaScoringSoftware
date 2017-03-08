@@ -1,48 +1,35 @@
-<ion-nav-view name="round_tab">
-</ion-nav-view>
-<ion-tabs class="tabs-positive tabs-icon-top">
+<ion-view view-title="Finals">
+  <div style='margin-top:100px' ng-if='state.current.name != "app.finals_scorekeeper.division_final.round.match_details"'>
+    <table class='results_table_machine' width='75%' style='margin:auto'>
+      <tr>
+        <th ng-repeat="round in resources.finals.data[division_final_id].division_final_rounds" align="center" ><a ui-sref="app.finals_scorekeeper.division_final.round({round_idx:$index})">
+            <i ng-if='state.params.round_idx == $index' class='icon ion-ios-circle-filled standard_large_font'></i>
+            <i ng-if='state.params.round_idx != $index' class='icon ion-ios-circle-outline standard_large_font'></i>
+            
+        </a></th>
+      </tr>
+        <th ng-repeat="round in resources.finals.data[division_final_id].division_final_rounds" align="center" style=''>
+            <span class="standard_small_font">Round {{($index)+1}}</span>
+        </th>
+      
+    </table>
+  </div>    
+  <ion-nav-view name="round_tab" style='margin-top:0px'>
+  </ion-nav-view>
+</ion-view>
+<!-- <ion-tabs class="tabs-positive tabs-icon-top"> -->
 
 
-  <ion-tab title="Round 1" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_0({round_idx:0})'>
-  </ion-tab>
+<!--   <ion-tab title="Round 1" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_0({round_idx:0})'> -->
+<!--   </ion-tab> -->
 
-  <ion-tab title="Round 2" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_1({round_idx:1})'>
-  </ion-tab>
+<!--   <ion-tab title="Round 2" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_1({round_idx:1})'> -->
+<!--   </ion-tab> -->
 
-  <ion-tab title="Round 3" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_2({round_idx:2})'>
-  </ion-tab>
+<!--   <ion-tab title="Round 3" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_2({round_idx:2})'> -->
+<!--   </ion-tab> -->
 
-  <ion-tab ng-if='rounds_length==4' title="Round 4" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline" ui-sref='app.finals_scorekeeper.division_final.round_3({round_idx:3})'>
-  </ion-tab>
+<!--   <ion-tab ng-if='rounds_length==4' title="Round 4" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline" ui-sref='app.finals_scorekeeper.division_final.round_3({round_idx:3})'> -->
+<!--   </ion-tab> -->
   
-</ion-tabs>
-<!-- <div class="tabs tabs-icon-top"> -->
-<!--   <a class="tab-item" ui-sref='app.finals_scorekeeper.division_final.round({round_idx:0})'> -->
-<!--     <i class="icon ion-home"></i> -->
-<!--     Home -->
-<!--   </a> -->
-<!--   <a class="tab-item" ui-sref='app.finals_scorekeeper.division_final.round({round_idx:1})'> -->
-<!--     <i class="icon ion-star"></i> -->
-<!--     Favorites -->
-<!--   </a> -->
-<!--   <a class="tab-item"> -->
-<!--     <i class="icon ion-gear-a"></i> -->
-<!--     Settings -->
-<!--   </a> -->
-<!-- </div> -->
-
-<!-- <ion-tabs class="tabs-positive tabs-icon-top">       -->
-<!--   <ion-tab  title="Round 1" icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline" ui-sref='app.finals_scorekeeper.division_final.round_1'> -->
-<!--     <ion-nav-view name="round_1_tab"> -->
-<!--     </ion-nav-view> -->
-<!--   </ion-tab> -->
-<!--   <ion-tab  title="Round 2"  icon-on="ion-ios-filing" icon-off="ion-ios-filing-outline" ui-sref='app.finals_scorekeeper.division_final.round_2'> -->
-<!--     <ion-nav-view name="round_2_tab"> -->
-<!--     </ion-nav-view>     -->
-<!--   </ion-tab> -->
- 
 <!-- </ion-tabs> -->
-
-    
-
-

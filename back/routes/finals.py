@@ -91,7 +91,15 @@ def route_update_finals_match_game_result(finals_match_game_result_id):
             finals_match_game_player_result.papa_points=papa_points[idx]
         
         finals_match_game_result.completed=True
-        db.session.commit()                
+        db.session.commit()
+        for idx,finals_match_game_player_result in enumerate(sorted_player_results):            
+            finals_match_player_result = tables.FinalsMatchPlayerResult.query.filter_by(finals_player_id=finals_match_game_player_result.finals_player_id).join(tables.DivisionFinalMatch).filter_by(division_final_match_id=finals_match_game_result.division_final_match_id).first()
+            if finals_match_player_result.papa_points_sum:
+                finals_match_player_result.papa_points_sum=finals_match_player_result.papa_points_sum+papa_points[idx]            
+            else:                        
+                finals_match_player_result.papa_points_sum=papa_points[idx]
+        db.session.commit()
+        
     return jsonify({})
 
 @admin_manage_blueprint.route('/finals/finals_match_game_player_result/<finals_match_game_player_result_id>/finals_player/<finals_player_id>/play_order/<play_order>',
@@ -172,7 +180,7 @@ def route_set_division_final_round_completed(division_final_round_id):
     halfway_idx = (len(sorted_finals_player_list)/2)
     sorted_finals_player_list_a = sorted_finals_player_list[:halfway_idx]
     sorted_finals_player_list_b = sorted_finals_player_list[halfway_idx:]
-    for match in tables.DivisionFinalMatch.query.filter_by(division_final_round_id=division_final_next_round.division_final_round_id).all():
+    for match in tables.DivisionFinalMatch.query.filter_by(division_final_round_id=division_final_next_round.division_final_round_id).order_by(tables.DivisionFinalMatch.division_final_match_id).all():
         players_to_add = []
         players_to_add.append(sorted_finals_player_list_a.pop())
         players_to_add.append(sorted_finals_player_list_a.pop(0))
@@ -191,7 +199,8 @@ def route_set_division_final_round_completed(division_final_round_id):
                               methods=['PUT'])
 @login_required
 @Scorekeeper_permission.require(403)
-def route_set_finals_match_game_player_result_completed(finals_match_game_result_id):
+def route_set_finals_match_game_player_result_completed(finals_match_game_result_id):    
+    
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     finals_match_game_result = fetch_entity(tables.FinalsMatchGameResult,finals_match_game_result_id)
@@ -200,6 +209,14 @@ def route_set_finals_match_game_player_result_completed(finals_match_game_result
     papa_points = [0,1,2,4]
     for idx,finals_match_game_player_result in enumerate(sorted_player_results):
         finals_match_game_player_result.papa_points=papa_points[idx]
+    db.session.commit()    
+    for idx,finals_match_game_player_result in enumerate(sorted_player_results):
+        print "poop2"
+        finals_match_player_result = tables.FinalsMatchPlayerResult.query.filter_by(finals_player_id=finals_match_game_player_result.finals_player_id).join(tables.FinalsMatchGameResult).filter_by(division_final_match_id=finals_match_game_result.division_final_match_id).first()
+        if finals_match_player_result.papa_points_sum:
+            finals_match_player_result.papa_points_sum=finals_match_player_result.papa_points_sum+papa_points[idx]            
+        else:                        
+            finals_match_player_result.papa_points_sum=papa_points[idx]
     db.session.commit()
     return jsonify({'data':'success'})
 
@@ -282,11 +299,14 @@ def route_set_division_final_match_completed(division_final_match_id):
     #         papa_points_sum[finals_match_game_player_result.finals_player_id] = papa_points_sum[finals_match_game_player_result.finals_player_id] + finals_match_game_player_result.papa_points
     # sorted_player_results = sorted(papa_points_sum, key=lambda player_result_id: papa_points_sum[player_result_id],reverse=True)
     papa_points_sum,sorted_player_results = get_papa_points_sorted_list_of_match_players(division_final_match)
-    for idx,sum in enumerate(sorted_player_results):
-        
-        if idx > 1 and papa_points_sum[sorted_player_results[idx-1]] == papa_points_sum[sorted_player_results[idx]]:            
+    for idx,sum in enumerate(sorted_player_results):        
+        if idx == 1 and papa_points_sum[sorted_player_results[idx-1]] == papa_points_sum[sorted_player_results[idx]]:            
+            division_final_match.has_tiebreaker=True
+            db.session.commit()
+        if idx == 2 and papa_points_sum[sorted_player_results[idx-1]] == papa_points_sum[sorted_player_results[idx]]:            
             division_final_match.has_tiebreaker=True
             db.session.commit()            
+            
     for finals_player_result in division_final_match.finals_match_player_results:        
         finals_player_result.papa_points_sum = papa_points_sum[finals_player_result.finals_player_id]
     db.session.commit()

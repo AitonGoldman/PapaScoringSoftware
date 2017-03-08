@@ -104,6 +104,7 @@ def route_add_prereg_player():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     input_data = json.loads(request.data)
+    print input_data
     for key in ['first_name','last_name','ifpa_ranking']:
         if key not in input_data:
             raise BadRequest("You did not specify a first name and/or a last name and/or a ifpa ranking")        

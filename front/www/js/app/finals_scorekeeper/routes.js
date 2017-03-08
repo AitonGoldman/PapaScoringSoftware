@@ -19,7 +19,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.finals_scorekeeper.division_final'
  	     }
  	   }
-       }).state('app.finals_scorekeeper.division_final.round_0', {
+       }).state('app.finals_scorekeeper.division_final.round', {
            url: "/round/:round_idx",
            views: {
                'round_tab@app.finals_scorekeeper.division_final': {
@@ -63,7 +63,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
            data: {
                round: 0               
            }  
-       }).state('app.finals_scorekeeper.division_final.round_0.tiebreaker', {
+       }).state('app.finals_scorekeeper.division_final.round.tiebreaker', {
             url: "/tiebreaker/:division_final_match_id/:division_final_match_idx/:round_idx",
             views: {
                 'round_tab@app.finals_scorekeeper.division_final': {
@@ -99,7 +99,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
                 }               
 
             }
-       }).state('app.finals_scorekeeper.division_final.round_0.match_details', {
+       }).state('app.finals_scorekeeper.division_final.round.match_details', {
             url: "/match_details/:division_final_match_id/:division_final_match_idx/:round_idx",
             views: {
                 'round_tab@app.finals_scorekeeper.division_final': {

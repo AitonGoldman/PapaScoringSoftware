@@ -1,7 +1,7 @@
 <ion-view view-title="Score Voided" hide-back-button='true'>
   <ion-content>      
     <center>
-      <div class='standard_big_font'>
+      <div ng-class="{standard_big_font:true,warning_confirm:division_machine_queue_length > 0}">
         <div class='padding'><u><i class="icon ion-close-circled ion-icon-red padding"></i><span>Score Voided</u></span></div>
         <div>
           <table>

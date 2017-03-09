@@ -1,3 +1,4 @@
+import os 
 from Role import generate_role_class
 from User import generate_user_class
 from Tournament import generate_tournament_class
@@ -36,7 +37,7 @@ class ImportedTables():
         self.MetaDivision = generate_meta_division_class(db_handle)
         self.TeamPlayerMapping = generate_player_team_mapping(db_handle)
         self.Team = generate_team_class(db_handle,self.TeamPlayerMapping)
-        self.Player = generate_player_class(db_handle,self.TeamPlayerMapping,1)
+        self.Player = generate_player_class(db_handle,self.TeamPlayerMapping,int(os.getenv("PLAYER_ID_SEQ_START",1)))
         self.Token = generate_token_class(db_handle)
         self.Queue = generate_queue_class(db_handle)
         self.Score = generate_score_class(db_handle)

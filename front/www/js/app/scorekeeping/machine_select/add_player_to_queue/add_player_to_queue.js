@@ -7,6 +7,7 @@ angular.module('app.scorekeeping.machine_select.add_player_to_queue').controller
         $scope.site=$state.params.site;
 	    $scope.division_machine_id=$state.params.division_machine_id;
 	    $scope.division_machine_name=$state.params.division_machine_name;
+            $scope.player_status = "";                        
             
 	$scope.division_id=$state.params.division_id;
         $scope.player = {};
@@ -40,11 +41,13 @@ angular.module('app.scorekeeping.machine_select.add_player_to_queue').controller
         });
         $scope.selected_players=[];
         $scope.onPlayerIdChange = function(){                
+            $scope.player_status = "";                        
             $scope.poop = true;
             $scope.selected_players = $filter('filter')($scope.flattened_players,{player_id:parseInt($scope.player.player_id)},true);
             if($scope.selected_players!=undefined && $scope.selected_players.length!=0){
                     if($scope.selected_players[0].has_tokens != true){
-                        $scope.player_img_id=0;                        
+                        $scope.player_img_id=0;
+                        $scope.player_status = "No More Tickets";                                                
                     } else {
                         $scope.player_img_id=$scope.selected_players[0].player_id;
                     }                                    

@@ -177,8 +177,17 @@ def start_pre_reg_sale():
         return jsonify({'data':player_dict})
         
     except stripe.error.CardError as e:
-        # The card has been declined        
-        return jsonify({"data":"FAILURE"})            
+        # The card has been declined
+        for charge in stripe.Charge.list(limit=20):            
+            if charge.order == order.id:
+                if charge.outcome['reason']=='highest_risk_level' or charge.outcome['network_status']=='declined_by_network':
+                    raise BadRequest('Your card was rejected by the credit card processing service.  Please check to make sure you entered the number correctly, or try another card, or send email to sales@papa.org')
+
+                print charge.outcome
+        #print order
+        #stripe.Charge.retrieve(order_response.charge)        
+        
+        return jsonify({"data":"FAILURE"})        
     
 
 def do_stripe_sale(stripe_token):
@@ -296,7 +305,7 @@ def do_stripe_sale(stripe_token):
         # The card has been declined
         for charge in stripe.Charge.list(limit=20):            
             if charge.order == order.id:
-                if charge.outcome['reason']=='highest_risk_level':
+                if charge.outcome['reason']=='highest_risk_level' or charge.outcome['network_status']=='declined_by_network':
                     raise BadRequest('Your card was rejected by the credit card processing service.  Please check to make sure you entered the number correctly, or try another card, or see the front desk for more details')
 
                 print charge.outcome

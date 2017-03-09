@@ -10,6 +10,7 @@ from routes.utils import fetch_entity
 import os
 from orm_creation import create_player,create_user,RolesEnum
 import random
+import collections
 
 def generate_rank_matchup_dict(match_ups):
     if match_ups is None:
@@ -67,12 +68,18 @@ def route_update_finals_match_game_result(finals_match_game_result_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     input_data = json.loads(request.data)        
+    players_in_game = [game_result['finals_player_id'] for game_result in input_data['finals_match_game_player_results']]
+    dupe_list = [item for item, count in collections.Counter(players_in_game).items() if count > 1 and item is not None]
+    print dupe_list
+    if len(dupe_list) > 0:
+       raise BadRequest('poop')
+        
     for idx,game_player_result in enumerate(input_data['finals_match_game_player_results']):
         game_player_result_id = game_player_result['finals_match_game_player_result_id']
         game_player_result_model = fetch_entity(tables.FinalsMatchGamePlayerResult,game_player_result_id)
         #game_player_result_model.play_order = idx
-        if 'finals_player_id' in game_player_result['final_player']:            
-            game_player_result_model.finals_player_id = game_player_result['final_player']['finals_player_id']
+        if 'finals_player_id' in game_player_result:            
+            game_player_result_model.finals_player_id = game_player_result['finals_player_id']
             if 'score' in game_player_result and game_player_result['score'] is not None:
                 game_player_result_model.score = str(game_player_result['score']).replace(",","")
         db.session.commit()

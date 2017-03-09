@@ -168,8 +168,8 @@ angular.module('app.finals_scorekeeper.division_final.round.tiebreaker').control
 angular.module('app.finals_scorekeeper.division_final.round.match_details',[/*REPLACEMECHILD*/]);
 angular.module('app.finals_scorekeeper.division_final.round.match_details').controller(
     'app.finals_scorekeeper.division_final.round.match_details',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$filter',
+        function($scope, $state, TimeoutResources, Utils,Modals,$filter) {
         //$scope.site=$state.params.site;
 	//$scope.division_final_id=$state.params.division_final_id;
         $scope.state = $state;
@@ -185,8 +185,14 @@ angular.module('app.finals_scorekeeper.division_final.round.match_details').cont
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
             matches = $scope.resources.finals.data[$scope.division_final_id].division_final_rounds[$scope.round_idx].division_final_matches;
-            $scope.match =  _.filter(matches, function(o) { return o.division_final_match_id == $scope.division_final_match_id; })[0];
-            
+            $scope.match =  _.filter(matches, function(o) { return o.division_final_match_id == $scope.division_final_match_id; })[0];                                    
+            _.forEach($scope.match.finals_match_game_results, function(game) {
+                _.forEach(game.finals_match_game_player_results, function(game_result) {                                                                                                              
+                    game_result.score=$filter('number')(game_result.score);
+                });
+                
+            });
+
         });
         $scope.setFinalsMatchGameResult = function(finals_match_game_result,complete){
             Modals.loading();
@@ -200,7 +206,12 @@ angular.module('app.finals_scorekeeper.division_final.round.match_details').cont
                     $scope.resources = TimeoutResources.GetAllResources();
                     Modals.loaded();
                     matches = $scope.resources.finals.data[$scope.division_final_id].division_final_rounds[$scope.round_idx].division_final_matches;
-                    $scope.match =  _.filter(matches, function(o) { return o.division_final_match_id == $scope.division_final_match_id; })[0];                    
+                    $scope.match =  _.filter(matches, function(o) { return o.division_final_match_id == $scope.division_final_match_id; })[0];
+                    _.forEach($scope.match.finals_match_game_results, function(game) {
+                        _.forEach(game.finals_match_game_player_results, function(game_result) {
+                            game_result.score=$filter('number')(game_result.score);
+                        });
+                    });
                 });                                
             });
         };

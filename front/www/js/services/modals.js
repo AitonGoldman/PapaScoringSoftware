@@ -23,7 +23,13 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
                 $ionicLoading.hide();                                
             },500);            
         },
-        information:function(message){                        
+        information:function(message){
+            console.log(message);
+            if (_.isArray(message)){
+                $rootScope.isArray=true;
+            } else {
+                $rootScope.isArray=false;
+            }            
             $ionicModal.fromTemplateUrl('js/services/information_modal.html', {                
                 animation: 'slide-in-up',
                 backdropClickToClose: false,

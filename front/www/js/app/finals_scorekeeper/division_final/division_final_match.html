@@ -25,7 +25,7 @@
             </span>
           <input style='width:75%' ng-model='game_player_result.score' ng-change="onScoreChange(game_player_result)" type="text" placeholder="Score">
             <!--</div>-->
-          <select ng-model="game_player_result.final_player.finals_player_id" ng-options="option.finals_player.finals_player_id as option.finals_player.player.full_name for option in match.finals_match_player_results">
+          <select ng-model="game_player_result.finals_player_id" ng-options="option.finals_player_id as option.finals_player.player.full_name for option in match.finals_match_player_results">
           </select>
         </label>
         <!--{{game_player_result.final_player.player.full_name}}-->

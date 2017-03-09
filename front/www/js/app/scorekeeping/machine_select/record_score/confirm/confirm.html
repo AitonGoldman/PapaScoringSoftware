@@ -7,7 +7,7 @@
             <span><u>Review Score Before Submit</u></span>
           </button>
 
-          <table>
+          <table class='warning-confirm'>
             <tr>
               <td class='padding-right' align="right">
                 Player : 
@@ -31,6 +31,8 @@
             </tr>
             
           </table>
+        </div>
+       
           <button  class="button button-full button-calm item-icon-right seperate_button" ui-sref=".process({process_step:{process:true},confirmed_score:{'score':score}})">
             Submit Score
             <i class="icon ion-chevron-right"></i>          
@@ -46,8 +48,6 @@
             
 
           </button>    
-
-        </div>
       </center>
 
   </ion-content>

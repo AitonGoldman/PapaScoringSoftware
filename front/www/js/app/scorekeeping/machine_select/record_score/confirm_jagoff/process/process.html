@@ -1,7 +1,7 @@
 <ion-view view-title="Player Reported"  hide-back-button="true">
   <ion-content>      
     <center>
-      <div class='standard_big_font'>
+      <div ng-class="{standard_big_font:true,warning_confirm:division_machine_queue_length > 0}">
         <button class='button button-clear button-dark icon-left ion-icon-red ion-android-walk review-icon'>
           <span><u>Player Reported</u></span>
         </button>

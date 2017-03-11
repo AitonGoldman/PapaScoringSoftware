@@ -56,13 +56,18 @@
         <i class="icon ion-clipboard"></i>
         <span>Scorekeeping</span>
         <i class="icon ion-chevron-right"></i>        
-        
       </a>
-      <a  id="front_queues_link" ui-sref='.queues({manage:false})' class="item item-icon-left item-icon-right  ">
+      <a  ng-if='type_of_page != "kiosk"' id="front_queues_link" ui-sref='.queues({manage:false})' class="item item-icon-left item-icon-right  ">
         <i class="icon ion-pull-request"></i>
         <span>Queues</span>
         <i class="icon ion-chevron-right"></i>                
+      </a>
+      <a  ng-if='type_of_page == "kiosk"' id="front_queues_link" ui-sref='.kiosk_queues({manage:false})' class="item item-icon-left item-icon-right  ">
+        <i class="icon ion-pull-request"></i>
+        <span>I want to get on a queue</span>
+        <i class="icon ion-chevron-right"></i>                
       </a>      
+      
       <a  id="front_results_link" ui-sref='.results' class="item item-icon-left item-icon-right">
         <i class="icon ion-stats-bars"></i>
         <span>Results</span>
@@ -89,6 +94,7 @@
         <span>Help</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
+      
       <a ng-if="type_of_page == 'user' && User.logged_in() == false" ui-sref='app.login' class="item item-icon-left item-icon-right">
         <i class="icon ion-log-in"></i>
         <span>Login</span>

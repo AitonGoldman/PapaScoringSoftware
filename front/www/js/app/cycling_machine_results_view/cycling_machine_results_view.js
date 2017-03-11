@@ -53,7 +53,7 @@ angular.module('app.cycling_machine_results_view').controller(
             });
             
             $scope.get_division_machine_results = function(division_machine_id){
-                Modals.loading();                
+                //Modals.loading();                
                 results_promise = TimeoutResources.GetDivisionMachineResults(undefined,
                                                                              {site:$scope.site,division_machine_id:division_machine_id});                        
                 return results_promise.then(function(data){
@@ -62,7 +62,7 @@ angular.module('app.cycling_machine_results_view').controller(
                     //$scope.resources.division_machines.data["-1"]=$scope.jump_to_division_machine.data;
                     $scope.division_machine_name = $scope.resources.division_machine_results.data[0].machine_name;
                     
-                    Modals.loaded();            
+                    //Modals.loaded();            
                 });            
             };
         //Modals.loading();
@@ -82,7 +82,7 @@ angular.module('app.cycling_division_results_view').controller(
             $scope.site=$state.params.site;
             $scope.starting_division_id=parseInt($state.params.starting_division_id);            
             $scope.current_division_id = 1;
-            $scope.num_divisions=2;
+            $scope.num_divisions=4;
             $scope.cur_num_results_displayed = 15;
             $scope.utils = Utils;
             
@@ -118,14 +118,16 @@ angular.module('app.cycling_division_results_view').controller(
             });
             
             $scope.get_division_results = function(division_id){
-                Modals.loading();                
-                results_promise = TimeoutResources.GetDivisionResults(undefined,
-                                                                      {site:$scope.site,division_id:division_id});                        
+                //Modals.loading();                
+                results_promise = TimeoutResources.GetCyclingDivisionResults(undefined,
+                                                                             {site:$scope.site,division_id:division_id});                        
                 return results_promise.then(function(data){
-                    //$scope.resources = TimeoutResources.GetAllResources();                    
-                    $scope.process_division_results();                            
+                    if(data != undefined){
+                        $scope.process_division_results();    
+                    }                    
+                    //$scope.resources = TimeoutResources.GetAllResources();                                        
                     $scope.division_name = $scope.resources.divisions.data[division_id].tournament_name;                    
-                    Modals.loaded();            
+                    //Modals.loaded();            
                 });            
             };
         $scope.process_division_results = function(){

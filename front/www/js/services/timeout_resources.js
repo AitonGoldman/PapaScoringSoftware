@@ -5,14 +5,15 @@ angular.module('TD_services.timeout_resources')
              ['$resource','$q',
               '$injector','Modals',
               'Utils','api_host'
-              ,'$location',
+              ,'$location','$state',
               function($resource,
                        $q,
                        $injector,
                        Modals,
                        Utils,
                        api_host,
-                       $location) {
+                       $location,
+                       $state) {
                   var resource_results = {};
                   var reject_and_redirect = function(rejection,ui_route){
                       site = rejection.config.url.split('/')[3];                      
@@ -28,7 +29,17 @@ angular.module('TD_services.timeout_resources')
                               //FIXME : need error dialog to display
                               console.log('erroring out');
                               if(custom_error != undefined){
-		                  rejection.data.message=custom_error.message;                                  
+                                  if(custom_error.reload != undefined){
+                                      
+                                      $state.go('.',{},{reload:true});
+                                  }
+                                  if(custom_error.noop != undefined){
+                                      return;                                      
+                                  }
+                                  
+                                  if(custom_error.message != undefined){
+                                      rejection.data.message=custom_error.message;
+                                  }                                  
                                   var ui_route = custom_error.ui_route;
                                   console.log('feeding in ...'+ui_route);                                  
                                   return reject_and_redirect(rejection,ui_route);
@@ -276,12 +287,14 @@ angular.module('TD_services.timeout_resources')
                   var getJagoffsResource = generate_resource_definition(':site/jagoff','GET');                  
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
                   var addToQueueResource = generate_resource_definition(':site/queue','POST');
-                  var addOtherPlayerToQueueResource = generate_resource_definition(':site/queue/other_player','POST',{ui_route:'.^',message:'Incorrect player number and pin.  Please try again.'});                  
+                  var addOtherPlayerToQueueResource = generate_resource_definition(':site/queue/other_player','POST',{ui_route:'.^'});                  
                   var getDivisionQualifyingResultsPPOResource = generate_resource_definition(':site/results/division/:division_id/ppo/qualifying/list','PUT');
                   
                   var removePlayerFromMachineResource = generate_resource_definition(':site/division_machine/:division_machine_id/player/:player_id','DELETE');
                   var removePlayerFromQueueResource = generate_resource_definition(':site/queue/player/:player_id','DELETE');
                   var getDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET',undefined,api_host.results_host());
+                  var getCyclingDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET',{noop:true},api_host.results_host());
+                  
                   var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET',undefined,api_host.results_host());
                   var voidEntryResource = generate_resource_definition(':site/admin/entry_id/:entry_id/void/:void','DELETE');
                   var addEntryResource = generate_resource_definition(':site/admin/division_machine_id/:division_machine_id/score/:score/player_id/:player_id','POST');                                    
@@ -351,6 +364,7 @@ angular.module('TD_services.timeout_resources')
                       GetTournaments: generate_custom_http_executor(getTournamentResource,'tournaments','get'),
                       GetDivision: generate_custom_http_executor(getDivisionResource,'division','get'),
                       GetDivisionResults: generate_custom_http_executor(getDivisionResultsResource,'division_results','get'),
+                      GetCyclingDivisionResults: generate_custom_http_executor(getCyclingDivisionResultsResource,'division_results','get'),
                       GetDivisionMachineResults: generate_custom_http_executor(getDivisionMachineResultsResource,'division_machine_results','get'),
                       GetDivisions: generate_custom_http_executor(getDivisionsResource,'divisions','get'),                      
                       GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),

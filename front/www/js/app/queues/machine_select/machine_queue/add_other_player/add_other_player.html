@@ -3,7 +3,8 @@
       <center>
         <div class='standard_big_font'>
           <button class='button button-clear button-dark icon-left ion-person review-icon'>
-            <span><u>Add Another Player To Queue</u></span>
+            <span ng-if="type_of_page != 'kiosk'"><u>Add Another Player To Queue</u></span>
+            <span ng-if="type_of_page == 'kiosk'"><u>Add Me To Queue</u></span>
           </button>
           <div class="skinny-list list">
             <label class='item-input item'>

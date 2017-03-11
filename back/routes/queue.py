@@ -111,12 +111,11 @@ def add_player_to_queue():
             raise e
 
 @admin_manage_blueprint.route('/queue/other_player',methods=['POST'])
-@login_required
-@Queue_permission.require(403)
 def add_other_player_to_queue():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     queue_data = json.loads(request.data)
+    print queue_data
     division_machine = fetch_entity(tables.DivisionMachine, queue_data['division_machine_id'])
 
     if division_machine.division.active is False:

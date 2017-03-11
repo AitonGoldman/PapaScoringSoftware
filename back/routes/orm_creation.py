@@ -16,7 +16,8 @@ class RolesEnum(Enum):
     player = 5
     token = 6
     queue = 7
-    test = 8
+    in_line_registration = 8
+    test = 9
     
 def set_stripe_api_key(stripe_api_key):
     stripe.api_key=stripe_api_key
@@ -43,6 +44,8 @@ def create_stanard_roles_and_users(app):
     test_scorekeeper = create_user(app,'test_scorekeeper', 'test_scorekeeper',
                                    [str(RolesEnum.scorekeeper.value),str(RolesEnum.void.value),
                                    str(RolesEnum.queue.value)])            
+    test_inline_register = create_user(app,'test_inline', 'test_inline',
+                                   [str(RolesEnum.desk.value),str(RolesEnum.in_line_registration.value)])            
     
     test_desk = create_user(app,'test_desk', 'test_desk',
                             [str(RolesEnum.desk.value),str(RolesEnum.void.value),str(RolesEnum.token.value),
@@ -60,8 +63,8 @@ def init_papa_players(app):
         create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'3'})
     for player_num in range(300,400):
         create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'4'})                                           
-    for team_num in range(1,100,2):
-        create_team(app,{'team_name':'test_team_%s'%team_num,'players':[team_num,team_num+1]})
+    # for team_num in range(1,100,2):
+    #     create_team(app,{'team_name':'test_team_%s'%team_num,'players':[team_num,team_num+1]})
 
     
 def init_papa_tournaments_division_machines(app):

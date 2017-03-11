@@ -10,10 +10,10 @@
           <table class='warning-confirm'>
             <tr>
               <td class='padding-right' align="right">
-                Player : 
+                <span ng-if='team_tournament == true'>Team</span><span ng-if='team_tournament != true'>Player</span>: 
               </td>
               <td class='padding-left'>
-                (#{{player_id}}) {{player_name}}
+                <span ng-if='team_tournament==false'>(#{{player_id}})</span> {{player_name}}
             </tr>
             <tr>
               <td class='padding-right' align="right">

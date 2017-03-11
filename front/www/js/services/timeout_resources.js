@@ -206,6 +206,8 @@ angular.module('TD_services.timeout_resources')
                   
                   var getPlayersPreregFastResource = generate_resource_definition(':site/test/player_prereg_fast',
                                                                         'GET');
+                  var getPlayersInLineFastResource = generate_resource_definition(':site/test/player_in_line_fast',
+                                                                        'GET');
                   
                   var getTeamsResource = generate_resource_definition(':site/team/:player_id',
                                                                      'GET');                                                      
@@ -232,8 +234,8 @@ angular.module('TD_services.timeout_resources')
                                                                          'GET');                  
                   var getDivisionsResource = generate_resource_definition(':site/division',
                                                                           'GET');
-                  var getPlayerBestScoreForMachineResource = generate_resource_definition(':site/entry/player/:player_id/division_machine/:division_machine_id',
-                                                                                          'GET');                                                                        
+                  var getPlayerBestScoreForMachineResource = generate_resource_definition(':site/entry/player/:player_id/division_machine/:division_machine_id','GET');
+                  var getTeamBestScoreForMachineResource = generate_resource_definition(':site/entry/team/:team_id/division_machine/:division_machine_id', 'GET');                                                                        
                   var addDivisionMachineResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                                 'POST');
                   var addTokensResource = generate_resource_definition(':site/token/paid_for/1',
@@ -322,8 +324,10 @@ angular.module('TD_services.timeout_resources')
                       GetPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),
                       GetFromResultsPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),                      
                       GetPlayersPreregFast: generate_custom_http_executor(getPlayersPreregFastResource,'players','get'),
-                      GetPlayersWithTicketsForDivision: generate_custom_http_executor(getPlayersWithTicketsForDivisionResource,'players_with_tickets','get'),
+                      GetPlayersInLineFast: generate_custom_http_executor(getPlayersInLineFastResource,'players','get'),                                       GetPlayersWithTicketsForDivision: generate_custom_http_executor(getPlayersWithTicketsForDivisionResource,'players_with_tickets','get'),
                       GetPlayerBestScoreForMachine: generate_custom_http_executor(getPlayerBestScoreForMachineResource,'player_best_score_for_machine','get'),
+                      GetTeamBestScoreForMachine: generate_custom_http_executor(getTeamBestScoreForMachineResource,'team_best_score_for_machine','get'),                      
+                      
                       GetTeams: generate_custom_http_executor(getTeamsResource,'teams','get'),                      
                       GetPlayer: generate_custom_http_executor(getPlayersResource,'player','get'),
                       GetFromResultsPlayer: generate_custom_http_executor(getFromResultsPlayerResource,'player','get'),                                            

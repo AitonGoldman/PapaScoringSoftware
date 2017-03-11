@@ -4,13 +4,25 @@
       <div class='item'>
         <span>Machine : </span><span>{{division_machine_name}}</span>
       </div>
-      <div class='item'>
-        Player : <span>(#{{player_id}})</span> {{player_name}}
+      <div class='item'>        
+        <span ng-if='team_tournament != "true"'>
+          Player : (#{{player_id}}) {{player_name}}
+        </span>
+        <span ng-if='team_tournament == "true"'>
+          Team : (#{{team_id}}) {{team_name}}
+        </span> 
       </div>      
       <div class='item'>
         Previous Best Score :
-        <span ng-if='resources.player_best_score_for_machine.data!=undefined'>{{resources.player_best_score_for_machine.data|number}}</span>
-        <span ng-if='resources.player_best_score_for_machine.data==undefined'> N/A </span>
+        <span ng-if='team_tournament != "true"'>
+          <span ng-if='resources.player_best_score_for_machine.data!=undefined'>{{resources.player_best_score_for_machine.data|number}}</span>
+          <span ng-if='resources.player_best_score_for_machine.data==undefined'> N/A </span>
+        </span>
+        <span ng-if='team_tournament == "true"'>
+          <span ng-if='resources.team_best_score_for_machine.data!=undefined'>{{resources.team_best_score_for_machine.data|number}}</span>
+          <span ng-if='resources.team_best_score_for_machine.data==undefined'> N/A </span>
+        </span>
+        
       </div>      
       <div class="item item-input-inset">
           <label class="item-input-wrapper">
@@ -31,8 +43,8 @@
       <!--<i class="icon ion-chevron-right"></i>-->
      </button>
      <br>
-     <button  class="button button-assertive item-icon-right seperate_button" ui-sref=".confirm_jagoff">
-       <span ng-if='team_tournament=="false"'> (#{{player_id}}) </span> {{player_name}} is not here.
+     <button  ng-if="team_tournament==false" class="button button-assertive item-icon-right seperate_button" ui-sref=".confirm_jagoff">
+       <span> (#{{player_id}}) </span> {{player_name}} is not here.
        <!--<i class="icon ion-chevron-right"></i>-->
      </button>
     </center>

@@ -17,7 +17,10 @@
         <i class="icon ion-search"></i>
         <span >Lookup Ifpa Ranking <span id="add_player_ifpa_ranking" ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>
       </a>
-      
+      <label ng-if='player_info.ifpa_result.looked_up == true && player_info.ifpa_result.result.wppr_rank == undefined' class="item-input item">
+        <span class='input-label'>Ifpa Rank : </span>
+        <input ng-model='player_info.manual_ifpa_rank' type="text" placeholder="IFPA ranking">
+      </label>
       <div style='padding:0px' class='item row' ng-if='main_division_count > 0'>
         <div class='col-33'>
           <label class='item' style='border-width:0px'>Playing In</label>

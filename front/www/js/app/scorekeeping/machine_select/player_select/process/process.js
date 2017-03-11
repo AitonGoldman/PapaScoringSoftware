@@ -25,7 +25,21 @@ angular.module('app.scorekeeping.machine_select.player_select.process').controll
             }
             
             $scope.player_info=$state.params.player_info;
+            $scope.team_id=$scope.player_info.team_id;
             $scope.from_queue=$state.params.from_queue;
+            $scope.add_team_to_machine_process_function = function(){
+                Modals.loading();
+                add_team_to_machine_promise = TimeoutResources.AddTeamToMachine($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id,division_machine_id:$scope.division_machine_id,team_id:$scope.team_id});
+                
+                add_team_to_machine_promise.then(function(data){
+                    $scope.resources = TimeoutResources.GetAllResources();
+                    $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
+                    //console.log($scope.resources);
+                    Modals.loaded();
+        });                    
+
+            };
+
             $scope.add_player_to_machine_process_function = function(){
                 Modals.loading();
                 $scope.existing_queue_machine=undefined;                
@@ -35,6 +49,7 @@ angular.module('app.scorekeeping.machine_select.player_select.process').controll
                     //= TimeoutResources.GetEtcData();
                     add_player_to_machine_promise.then(function(data){
                         $scope.resources = TimeoutResources.GetAllResources();
+                        $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
                         console.log($scope.resources);
                         Modals.loaded();
                     });            
@@ -44,13 +59,20 @@ angular.module('app.scorekeeping.machine_select.player_select.process').controll
                     //= TimeoutResources.GetEtcData();
                     add_player_to_machine_promise.then(function(data){
                         $scope.resources = TimeoutResources.GetAllResources();
+                        $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;                        
                         console.log($scope.resources);
                         Modals.loaded();
                     });            
                 }
             };            
             if($scope.existing_queue_machine == undefined||$scope.existing_queue_machine == ""){
-                $scope.add_player_to_machine_process_function();
+                $scope.resources = TimeoutResources.GetAllResources();                
+                if($scope.resources.divisions.data[$scope.division_id].team_tournament!=true){
+                    $scope.add_player_to_machine_process_function();
+                } else {
+                    $scope.add_team_to_machine_process_function();                    
+                }
+                
             }
         }]
 );

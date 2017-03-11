@@ -301,7 +301,7 @@ def add_token(paid_for):
     if paid_for == 1:
         if player_id:
             tokens_left_string = calc_audit_log_remaining_tokens(player_id)
-        create_audit_log("Ticket Summary",datetime.datetime.now(),
+        create_audit_log("Ticket Summary(AP)",datetime.datetime.now(),
                          tokens_left_string,user_id=current_user.user_id,
                          player_id=player_id,team_id=team_id,commit=False)
     total_divisions_tokens_summary = {}

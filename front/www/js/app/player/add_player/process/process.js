@@ -16,18 +16,26 @@ angular.module('app.player.add_player.process').controller(
             return;
         }
         
-        $scope.player_info=$state.params.player_info;
-        if($scope.player_info.ifpa_result.result != undefined){
-            $scope.player_info.ifpa_ranking=$scope.player_info.ifpa_result.result.wppr_rank;
-            $scope.player_info.ifpa_result=undefined;
-        } else {
-            $scope.player_info.ifpa_ranking=999999;
-        }
-        player_add_promise = TimeoutResources.AddPlayer($scope.bootstrap_promise,{site:$scope.site},$scope.player_info);
-        // = TimeoutResources.GetEtcData();
-        player_add_promise.then(function(data){
-            $scope.resources = TimeoutResources.GetAllResources();
-            Modals.loaded();
-        });
-    }]
+            $scope.player_info=$state.params.player_info;
+            if($scope.player_info.ifpa_result.result != undefined){                
+                $scope.player_info.ifpa_ranking=$scope.player_info.ifpa_result.result.wppr_rank;
+                $scope.player_info.ifpa_result=undefined;
+            } else {
+                if($scope.player_info.manual_ifpa_rank!=undefined){
+                    $scope.player_info.ifpa_ranking=$scope.player_info.manual_ifpa_rank;
+                } else {
+                    $scope.player_info.ifpa_ranking=999999;
+                }
+                
+            }
+            if($state.current.name == 'app.player.in_line_add_player.process'){
+                $scope.player_info.active=false;
+            }
+            player_add_promise = TimeoutResources.AddPlayer($scope.bootstrap_promise,{site:$scope.site},$scope.player_info);
+            // = TimeoutResources.GetEtcData();
+            player_add_promise.then(function(data){
+                $scope.resources = TimeoutResources.GetAllResources();
+                Modals.loaded();
+            });
+        }]
 );

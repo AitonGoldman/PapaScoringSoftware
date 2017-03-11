@@ -34,6 +34,31 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
           }    
 
+       }).state('app.player.in_line_add_player', 
+        { 
+         cache: false,
+ 	 url: '/add_player',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/player/add_player/add_player.html',
+ 	       controller: 'app.player.add_player'
+ 	     }
+ 	   }
+       }).state('app.player.in_line_add_player.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/player/add_player/process/process.html',
+ 	       controller: 'app.player.add_player.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             ,player_info:{}             
+
+          }    
+
        }).state('app.player.edit_player', 
         { 
          cache: false,

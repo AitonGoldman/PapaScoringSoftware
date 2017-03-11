@@ -4,6 +4,8 @@ angular.module('app.scorekeeping.machine_select.record_score.void').controller(
         '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
         function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
             $ionicHistory.nextViewOptions({disableBack:true});            
+            $scope.team_id = $state.params.team_id;
+            $scope.team_name = $state.params.team_name;
 
             $scope.site=$state.params.site;
             $scope.requeue = false;
@@ -31,6 +33,8 @@ angular.module('app.scorekeeping.machine_select.record_score.void').controller(
         // = TimeoutResources.GetEtcData();
             void_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
+                $scope.team_tournament=$scope.resources.divisions.data[$scope.division_id].team_tournament;            
+
                 $scope.division_machine_queue_length = $scope.resources.queues.data[$scope.division_machine_id].queues.length;            
                 console.log($scope.resources.queues.data[$scope.division_machine_id].queues);
                 if ($scope.resources.voided_score.player_token_data == 0){
@@ -54,7 +58,7 @@ angular.module('app.scorekeeping.machine_select.record_score.void').controller(
             $scope.re_add_player = function(){
                 delete $scope.queue_args.queue_args.previous_player_id;
                 delete $scope.queue_args.queue_args.previous_player_name;
-                $state.go('.^.^.player_select.process',{process_step:{process:true},player_info:{player_id:$scope.player_id},from_queue:0,division_machine_id:$scope.division_machine_id,division_machine_name:$scope.division_machine_name},{inherit:true});
+                $state.go('.^.^.player_select.process',{process_step:{process:true},player_info:{player_id:$scope.player_id,team_id:$scope.team_id},from_queue:0,division_machine_id:$scope.division_machine_id,division_machine_name:$scope.division_machine_name},{inherit:true});
             };            
     }]
 );

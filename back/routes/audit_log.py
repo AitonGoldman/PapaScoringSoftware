@@ -106,25 +106,34 @@ def route_audit_log_missing_tokens(player_id):
             username = users[audit_log.user_id]['username']
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': [audit_log.action_date,audit_log.action,username,audit_log.description]
+                'contents': [audit_log.action_date,audit_log.action,username,audit_log.description],
+                'team_id': audit_log.team_id,
+                'player_id': audit_log.player_id
             })
         if audit_log.action == "Player Ticket Purchase Completed":
             playername = players[audit_log.player_id].get_full_name()            
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': [audit_log.action_date,audit_log.action,playername,audit_log.description]
+                'contents': [audit_log.action_date,audit_log.action,playername,audit_log.description],
+                'team_id': audit_log.team_id,
+                'player_id': audit_log.player_id
             })
 
         if audit_log.action == "Player Ticket Purchase Started":
             playername = players[audit_log.player_id].get_full_name()
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': [audit_log.action_date,audit_log.action,playername,audit_log.description]
+                'contents': [audit_log.action_date,audit_log.action,playername,audit_log.description],
+                'team_id': audit_log.team_id,
+                'player_id': audit_log.player_id
             })                        
-        if audit_log.action == "Ticket Summary":                        
+        if audit_log.action == "Ticket Summary" or audit_log.action == "Ticket Summary(AP)":                        
             audit_log_list.append({
                 'audit_log_id':audit_log.audit_log_id,
-                'contents': [audit_log.action_date,audit_log.action," ",audit_log.description]
+                'contents': [audit_log.action_date,audit_log.action," ",audit_log.description],
+                'team_id': audit_log.team_id,
+                'player_id': audit_log.player_id
+
             })
         if audit_log.action == "Game Started":            
             username = users[audit_log.user_id]['username']            

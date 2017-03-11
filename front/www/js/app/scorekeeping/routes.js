@@ -50,7 +50,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.scorekeeping.machine_select.record_score', 
         { 
          cache: false,
- 	 url: '/record_score/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name/player_name/:player_name/player_id/:player_id/team/:team_tournament',
+ 	 url: '/record_score/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name/player_name/:player_name/player_id/:player_id/team/:team_tournament/team_id/:team_id/team_name/:team_name',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/scorekeeping/machine_select/record_score/record_score.html',

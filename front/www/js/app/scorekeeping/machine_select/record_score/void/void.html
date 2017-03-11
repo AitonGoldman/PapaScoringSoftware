@@ -41,10 +41,13 @@
         </div>
         <div class='standard_big_font' ng-if='division_machine_queue_length == 0'>
           <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select(queue_args.queue_args)">
-            Start new player on {{division_machine_name}}
+            Start new <span ng-if='team_tournament == true'>team</span><span ng-if='team_tournament != true'>player</span> on {{division_machine_name}}
           </button>
           <button ng-click="re_add_player()" ng-if="resources.voided_score.player_token_data > 0 && show_redo==true" class="button button-energized seperate_button item-icon-right extra-tall-button">
-            Restart current player ({{player_name}})<br>
+            Restart current 
+            <span ng-if='team_tournament != true'>player ({{player_name}})</span>
+            <span ng-if='team_tournament == true'>team ({{team_name}})</span>
+            <br>
             on this machine ({{division_machine_name}})
           </button>                        
           <br>

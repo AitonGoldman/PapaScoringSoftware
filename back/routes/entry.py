@@ -209,14 +209,26 @@ def route_get_player_entries(player_id):
     return jsonify({'data':{player_entry.entry_id:player_entry.to_dict_simple() for player_entry in player_entries}})
 
 @admin_manage_blueprint.route('/entry/player/<player_id>/division_machine/<division_machine_id>',methods=['GET'])
-#@login_required
-#@Admin_permission.require(403)
 def route_get_top_player_entry(player_id,division_machine_id):        
     db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)                    
+    tables = db_util.app_db_tables(current_app)
+    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
+    
     top_player_score_for_machine = tables.Score.query.filter_by(division_machine_id=division_machine_id).join(tables.Entry).filter_by(player_id=player_id,voided=False).order_by(desc(tables.Score.score)).first()    
     if top_player_score_for_machine:
         top_score = top_player_score_for_machine.score
+    else:
+        top_score = None
+    return jsonify({'data':top_score})
+
+@admin_manage_blueprint.route('/entry/team/<team_id>/division_machine/<division_machine_id>',methods=['GET'])
+def route_get_top_team_entry(team_id,division_machine_id):        
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)    
+    
+    top_team_score_for_machine = tables.Score.query.filter_by(division_machine_id=division_machine_id).join(tables.Entry).filter_by(team_id=team_id,voided=False).order_by(desc(tables.Score.score)).first()    
+    if top_team_score_for_machine:
+        top_score = top_team_score_for_machine.score
     else:
         top_score = None
     return jsonify({'data':top_score})

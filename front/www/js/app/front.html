@@ -13,7 +13,7 @@
       </a>
     </div>
     <div class="skinny-list list" ng-if="type_of_page != 'prereg'">
-      <a id="front_purchase_tickets_link" ui-sref=".token" class="item item-icon-left item-icon-right" ng-if='User.has_role("desk")'>
+      <a id="front_purchase_tickets_link" ui-sref=".token" class="item item-icon-left item-icon-right" ng-if='User.has_role("desk")  && !User.has_role("in_line_registration")'>
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
         <i class="icon ion-chevron-right"></i>                
@@ -27,8 +27,14 @@
         <i class="icon ion-information-circled"></i>
         <span>Player Info</span>
         <i class="icon ion-chevron-right"></i>                
-      </a>            
-      <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk")'>
+      </a>
+      <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.player.in_line_add_player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("in_line_registration")'>
+        <i class="icon ion-person"></i>
+        <span>In Line Registration</span>
+        <i class="icon ion-chevron-right"></i>        
+        
+      </a>      
+      <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk") && !User.has_role("in_line_registration")'>
         <i class="icon ion-person"></i>
         <span>Manage Players</span>
         <i class="icon ion-chevron-right"></i>        
@@ -40,7 +46,7 @@
         <i class="icon ion-chevron-right"></i>                
       </a>
       
-      <a  id="front_manage_teams_link" ui-sref='.teams' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk")'>
+      <a  id="front_manage_teams_link" ui-sref='.teams' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk") && !User.has_role("in_line_registration")'>
         <i class="icon ion-person-stalker"></i>
         <span>Manage Teams</span>
         <i class="icon ion-chevron-right"></i>        
@@ -67,11 +73,17 @@
         My Results
         <i class="icon ion-chevron-right"></i>        
       </a>
-      <a  ng-if='User.has_role("desk")' id="front_results_link" ui-sref='.prereg_complete' class="item item-icon-left item-icon-right">
+      <a  ng-if='User.has_role("desk")  && !User.has_role("in_line_registration")' id="front_results_link" ui-sref='.prereg_complete' class="item item-icon-left item-icon-right">
         <i class="icon ion-ios-compose-outline"></i>
         <span>Complete Registration for Pre-Registered</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
+      <a  ng-if='User.has_role("desk") && !User.has_role("in_line_registration")' id="front_results_link" ui-sref='.in_line_complete' class="item item-icon-left item-icon-right">
+        <i class="icon ion-ios-compose-outline"></i>
+        <span>Complete In Line Registration</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>
+      
       <a ng-if='isWebView == false' href="static/help.html" target="_new_window" class="item item-icon-left item-icon-right">
         <i class="icon ion-help"></i>
         <span>Help</span>

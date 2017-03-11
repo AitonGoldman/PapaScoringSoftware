@@ -12,11 +12,14 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm').controlle
 	$scope.player_name=$state.params.player_name;
 	$scope.score=$state.params.score;
             $scope.choose_void_action = ActionSheets.choose_void_action;
-	$scope.team_tournament=$state.params.team_tournament;            
+	//$scope.team_tournament=$state.params.team_tournament;            
 
-        $scope.utils = Utils;
-        $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-             
+            $scope.utils = Utils;
+            $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+            $scope.bootstrap_promise.then(function(data){
+                $scope.resources = TimeoutResources.GetAllResources();
+                $scope.team_tournament=$scope.resources.divisions.data[$scope.division_id].team_tournament;            
+            });     
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){

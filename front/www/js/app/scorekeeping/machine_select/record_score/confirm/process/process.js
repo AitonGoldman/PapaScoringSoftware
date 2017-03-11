@@ -10,9 +10,12 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm.process').c
 	$scope.division_id=$state.params.division_id;
 	$scope.division_machine_name=$state.params.division_machine_name;
 	$scope.division_machine_id=$state.params.division_machine_id;
-        $scope.player_id = $state.params.player_id;
+            $scope.player_id = $state.params.player_id;
+            $scope.team_id = $state.params.team_id;
+            $scope.team_name = $state.params.team_name;
+            
         $scope.player_name = $state.params.player_name;
-	$scope.team_tournament=$state.params.team_tournament;            
+	    //$scope.team_tournament=$state.params.team_tournament;            
             $scope.requeue = false;
             $scope.restarted = false;            
             $scope.show_redo=true;
@@ -38,6 +41,8 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm.process').c
         // = TimeoutResources.GetEtcData();
         add_score_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();            
+            $scope.team_tournament=$scope.resources.divisions.data[$scope.division_id].team_tournament;            
+
             $scope.division_machine_queue_length = $scope.resources.queues.data[$scope.division_machine_id].queues.length;
             if($scope.division_machine_queue_length>0){                
                 $scope.division_machine_queue_player = $scope.resources.queues.data[$scope.division_machine_id].queues[0].player.player_name;
@@ -66,7 +71,8 @@ angular.module('app.scorekeeping.machine_select.record_score.confirm.process').c
             $scope.re_add_player = function(){
                 delete $scope.queue_args.queue_args.previous_player_id;
                 delete $scope.queue_args.queue_args.previous_player_name;
-                $state.go('.^.^.^.player_select.process',{process_step:{process:true},player_info:{player_id:$scope.player_id},from_queue:0,division_machine_id:$scope.division_machine_id,division_machine_name:$scope.division_machine_name},{inherit:true});
+                
+                $state.go('.^.^.^.player_select.process',{process_step:{process:true},player_info:{player_id:$scope.player_id,team_id:$scope.team_id},from_queue:0,division_machine_id:$scope.division_machine_id,division_machine_name:$scope.division_machine_name},{inherit:true});
             };                       
     }]
 );

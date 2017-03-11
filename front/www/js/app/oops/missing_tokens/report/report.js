@@ -14,6 +14,15 @@ angular.module('app.oops.missing_tokens.report').controller(
         audit_log_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
+            console.log($scope.resources);
         });
+        $scope.show_audit_log_entry_if_not_teammate_purchase = function(audit_log_entry){
+            if(audit_log_entry.player_id!=$scope.player_id && audit_log_entry.team_id != undefined){
+                if(audit_log_entry.contents[1] == "Ticket Purchase" || audit_log_entry.contents[1] == "Ticket Summary(AP)"){
+                    return false;
+                }                
+            }
+            return true;
+        };
     }]
 );

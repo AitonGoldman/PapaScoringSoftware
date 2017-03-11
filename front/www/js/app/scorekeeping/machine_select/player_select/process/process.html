@@ -30,7 +30,13 @@
       <div ng-if="existing_queue_machine == undefined || existing_queue_machine == ''">
         <div class='standard_big_font'>
           <button class='button button-clear button-dark icon-left ion-flag ion-icon-green review-icon' >            
-            <span><u>(#{{resources.machine_added_to.data.player.player_id}}) {{resources.machine_added_to.data.player.player_name}}</u></span>
+            <span ng-if='team_tournament != true'>
+              <span><u>(#{{resources.machine_added_to.data.player.player_id}}) {{resources.machine_added_to.data.player.player_name}}</u></span>
+            </span>
+            <span ng-if='team_tournament == true'>
+              <span><u>(#{{resources.machine_added_to.data.player.team_id}}) {{resources.machine_added_to.data.team.team_name}}</u></span>
+            </span>
+            
           </button>
           <div>
           </div>

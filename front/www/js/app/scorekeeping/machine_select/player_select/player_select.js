@@ -28,6 +28,8 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             queues_promise = TimeoutResources.GetQueues(players_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();                            
+                $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
+
                 $scope.queues = $scope.resources.queues.data[$scope.division_machine_id].queues;
                 if($scope.queues.length > 0){
                     $scope.queue_player.player_id=$scope.queues[0].player.player_id;
@@ -74,14 +76,30 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 if($scope.selected_players!=undefined && $scope.selected_players.length!=0){
                     if($scope.selected_players[0].has_tokens != true){
                         $scope.player_img_id=0;
-                        $scope.player_status = "No More Tickets";                        
+                        if($scope.team_tournament != true ){
+                            $scope.player_status = "No More Tickets";
+                        } else {
+                            if($scope.selected_players[0].team_id == "" || $scope.selected_players[0].team_id == undefined){
+                                $scope.player_status = "Not on a team";                                
+                            } else {
+                                $scope.player_status = "No More Tickets";
+                            }
+                            //$scope.player_status = $scope.selected_players[0].team_id;
+                        }
+                        
                     } else {
                         if($scope.selected_players[0].on_division_machine == true){
                             $scope.player_img_id="00";
                             $scope.player_status = "Already On Machine";
                         } else {                            
-                            $scope.find_queue_for_player($scope.selected_players[0].player_id,$scope.division_machine_id);                            
-                            $scope.player_status = "Player Has Tickets";                        
+                            $scope.find_queue_for_player($scope.selected_players[0].player_id,$scope.division_machine_id);
+                            if($scope.team_tournament != true ){
+                                $scope.player_status = "Player Has Tickets";
+                            } else {
+                                $scope.player_status = "Team Has Tickets";
+                            }
+                                
+                                
                             $scope.player_img_id=$scope.selected_players[0].player_id;
                         }                                                
                     }                    

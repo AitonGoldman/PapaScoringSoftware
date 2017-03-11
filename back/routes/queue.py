@@ -37,13 +37,19 @@ def get_queues(division_id):
             'removed':division_machine.removed,
             'division_id':division_machine.division_id,
             'player_id':division_machine.player_id,
+            'team_id':division_machine.team_id,
             'avg_play_time':division_machine.avg_play_time,
             'queues':get_queue_from_division_machine(division_machine,json_output=True)
         }
-        if division_machine.player:            
-            machine_players[division_machine.division_machine_id]="%s %s" %(division_machine.player.first_name,division_machine.player.last_name)
-        else:
+        if division_machine.player is None and division_machine.division.team_tournament is not True:
             machine_players[division_machine.division_machine_id]=None
+        if division_machine.player is not None and division_machine.division.team_tournament is not True:
+            machine_players[division_machine.division_machine_id]="%s %s" %(division_machine.player.first_name,division_machine.player.last_name)
+        if division_machine.team and division_machine.team and division_machine.division.team_tournament is True:
+            machine_players[division_machine.division_machine_id]=None
+        if division_machine.team and division_machine.team and division_machine.division.team_tournament is True:
+            machine_players[division_machine.division_machine_id]=division_machine.team.team_name
+        
     return jsonify({'data':queues,'machine_players':machine_players})
 
 

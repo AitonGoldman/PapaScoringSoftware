@@ -287,15 +287,14 @@ def do_stripe_sale(stripe_token):
             token = tables.Token.query.filter_by(token_id=json_token['token_id']).first()            
             token.paid_for=True
             db.session.commit()
-
-        create_audit_log("Player Ticket Purchase Completed",datetime.datetime.now(),
-                         stripe_purchase_summary_string,user_id=current_user.user_id,
-                         player_id=current_user.player.player_id)    
-        
         if len(current_user.player.teams) > 0:
             team_id = current_user.player.teams[0].team_id
         else:
             team_id = None
+        create_audit_log("Player Ticket Purchase Completed",datetime.datetime.now(),
+                         stripe_purchase_summary_string,user_id=current_user.user_id,
+                         player_id=current_user.player.player_id, team_id=team_id)    
+        
         tokens_left_string = calc_audit_log_remaining_tokens(current_user.player.player_id,team_id)        
         create_audit_log("Ticket Summary",datetime.datetime.now(),
                          tokens_left_string,

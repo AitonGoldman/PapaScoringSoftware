@@ -11,7 +11,11 @@ angular.module('app.prereg_complete').controller(
              
         Modals.loading();
         // = TimeoutResources.GetEtcData();
-        prereg_players_promise = TimeoutResources.GetPlayersPreregFast($scope.bootstrap_promise,{site:$scope.site});
+        if($state.current.name == 'app.prereg_complete'){
+            prereg_players_promise = TimeoutResources.GetPlayersPreregFast($scope.bootstrap_promise,{site:$scope.site});            
+        } else {
+            prereg_players_promise = TimeoutResources.GetPlayersInLineFast($scope.bootstrap_promise,{site:$scope.site});
+        }        
         prereg_players_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.flat_players = _.values($scope.resources.players.data);

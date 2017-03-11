@@ -48,15 +48,26 @@ def test_prereg_players_fast():
     players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.filter_by(pre_reg_paid=True,active=False).all()}
     return jsonify({'data':players})
     # check if the post request has the file part            
+
+@admin_manage_blueprint.route('/test/player_in_line_fast', methods=['GET'])
+def test_in_line_players_fast():    
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.filter_by(pre_reg_paid=False,active=False).all()}
+    return jsonify({'data':players})
+    # check if the post request has the file part            
     
 @admin_manage_blueprint.route('/test/players_with_tickets/<division_id>', methods=['GET'])
 def test_players_with_tickets(division_id):    
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.all()}
+    division = fetch_entity(tables.Division,division_id)
     players_on_machines = {player.player_id:None for player in tables.DivisionMachine.query.filter(tables.Player.player_id is not None).all()}
-
-    division = fetch_entity(tables.Division,division_id)         
+    if division.team_tournament is True:
+        teams_on_machines = {team.team_id:None for team in tables.DivisionMachine.query.filter(tables.Team.team_id is not None).all()}
+    
+    
     if division.meta_division_id:
         players_with_tickets = tables.Player.query.filter_by(active=True).join(tables.Token).filter_by(used=False,
                                                                                 paid_for=True,
@@ -67,12 +78,26 @@ def test_players_with_tickets(division_id):
                                                                                 paid_for=True,
                                                                                 voided=False,
                                                                                 division_id=division_id).all()
+        if division.team_tournament is True:
+            teams_with_tickets = tables.Team.query.join(tables.Token).filter_by(used=False,
+                                                                                paid_for=True,
+                                                                                voided=False,
+                                                                                division_id=division_id).all()
+            
     players_with_tickets_dict = {player.player_id:None for player in players_with_tickets}
+    if division.team_tournament is True:
+        teams_with_tickets_dict = {team.team_id:None for team in teams_with_tickets}
+        
     for player_id,player in players.iteritems():
         if player['player_id'] in players_with_tickets_dict:
             player['has_tokens']=True
         if player['player_id'] in players_on_machines:
-            player['on_division_machine']=True            
+            player['on_division_machine']=True
+        if division.team_tournament is True and 'team_id' in player and player['team_id'] in teams_with_tickets_dict:
+            player['has_tokens']=True
+        if division.team_tournament is True and 'team_id' in player and player['team_id'] in teams_on_machines:
+            player['on_division_machine']=True
+        
     return jsonify({'data':players})
 
 @admin_manage_blueprint.route('/test/load_machines', methods=['GET'])

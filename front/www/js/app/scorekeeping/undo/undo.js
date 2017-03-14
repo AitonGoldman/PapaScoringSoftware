@@ -1,4 +1,5 @@
 angular.module('app.scorekeeping.undo',['app.scorekeeping.undo.remove_player',
+    'app.scorekeeping.undo.undo_bump_player',
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.undo').controller(
     'app.scorekeeping.undo',[

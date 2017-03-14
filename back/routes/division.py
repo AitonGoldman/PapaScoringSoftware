@@ -184,8 +184,14 @@ def route_add_division_machine(division_id):
         
     else:        
         BadRequest('no machine_id specified')
-    new_division_machine = create_division_machine(current_app,machine,division)
-    return jsonify({'data':new_division_machine.to_dict_simple()})
+    existing_division_machine = tables.DivisionMachine.query.filter_by(division_id=division_id,machine_id=machine.machine_id).first()
+    if existing_division_machine is None:    
+        new_division_machine = create_division_machine(current_app,machine,division)
+        return jsonify({'data':new_division_machine.to_dict_simple()})
+    if existing_division_machine:    
+        existing_division_machine.removed = False
+        db.session.commit()        
+        return jsonify({'data':existing_division_machine.to_dict_simple()})
 
 @admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>',methods=['DELETE'])
 @login_required
@@ -317,7 +323,7 @@ def route_edit_division(division_id):
             division.active = True
         else:
             division.active = False    
-    if 'finals_num_qualifiers' in division_data:
+    if 'finals_num_qualifiers' in division_data and division_data['finals_num_qualifiers'] is not None:
         division.finals_num_qualifiers = division_data['finals_num_qualifiers']    
     if 'team_tournament' in division_data:
         division.team_tournament = division_data['team_tournament']
@@ -345,23 +351,26 @@ def route_edit_division(division_id):
         division.finals_num_qualifiers_ppo_a=division_data['finals_num_qualifiers_ppo_a']
     if 'finals_num_qualifiers_ppo_b' in division_data:
         division.finals_num_qualifiers_ppo_b=division_data['finals_num_qualifiers_ppo_b']
-    if 'ifpa_range_start' in division_data:
+    if 'ifpa_range_start' in division_data and division_data['ifpa_range_start'] is not None  and division_data['ifpa_range_start'] != '':
         division.ifpa_range_start=division_data['ifpa_range_start']
+    else:
+        division.ifpa_range_start = None
     if 'ifpa_range_end' in division_data:
         division.ifpa_range_end=division_data['ifpa_range_end']
     if 'ppo_a_ifpa_range_end' in division_data:
         division.ppo_a_ifpa_range_end=division_data['ppo_a_ifpa_range_end']
     if 'discount_ticket_count' in division_data:
         division.discount_ticket_count=division_data['discount_ticket_count']
-    if 'discount_ticket_price' in division_data:
+    if 'discount_ticket_price' in division_data and division_data['discount_ticket_count'] is not None:
         division.discount_ticket_price=division_data['discount_ticket_price']
-    if 'discount_stripe_sku' in division_data:        
+    if 'discount_stripe_sku' in division_data and division_data['discount_ticket_price'] is not None:
+        print "discount strip sku is %s" % division_data['discount_stripe_sku']
         if get_valid_sku(division_data['discount_stripe_sku'],current_app.td_config['STRIPE_API_KEY'])['sku'] is None:
             raise BadRequest('Invalid sku specified')
         division.discount_stripe_sku = division_data['discount_stripe_sku']
         fetch_stripe_price(current_app,division)
         
-    if 'number_of_relevant_scores' in division_data:
+    if 'number_of_relevant_scores' in division_data and division_data['number_of_relevant_scores'] is not None:
         division.number_of_relevant_scores=division_data['number_of_relevant_scores']
     if 'min_num_tickets_to_purchase' in division_data:
         division.min_num_tickets_to_purchase=division_data['min_num_tickets_to_purchase']

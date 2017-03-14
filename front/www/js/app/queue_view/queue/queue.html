@@ -2,44 +2,62 @@
   <ion-content>
     <div class='first-element'>
     </div>
-    <div style='width:100%;line-height:48px;font-size:48px;    text-overflow: ellipsis;' ng-repeat="queue_machine_index in []|range:flattened_queues.length:0:2">
-      <table width=100%>
-        <tr>
-          <td style='width:50%' ng-repeat='column in [0,1]'>
-            <table style='margin-bottom:20px;border-style:solid;border-width:1px;width:100%'>
-              <tr>
-                <td>
-                  <div style='overflow:hidden;white-space: nowrap; width:100%;'>
-                    <span style='float:left'><u><b>{{flattened_queues[queue_machine_index+column].division_machine_name|limitTo:25}}</b></u></span>
-                    <span style='float:right;font-size:20px'>Avg Time : {{flattened_queues[queue_machine_index+column].avg_play_time}}</span>
-                  </div>
-                </td>
-              </tr>
-              <tr ng-repeat="queue_index in []|range:flattened_queues[queue_machine_index+column].queues.length|limitTo:5">
-                <td>
-                 <div style='overflow:hidden;text-overflow: ellipsis;white-space: nowrap; width:430px; height: 58px;'> {{queue_index}} : {{flattened_queues[queue_machine_index+column].queues[queue_index].player.player_name}} </div>
-                </td>
-              </tr>
-              <tr ng-if="flattened_queues[queue_machine_index+column].queues.length>5">
-                <td>
-                  {{flattened_queues[queue_machine_index+column].queues.length - 5}} more on queue
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+    <table width='100%'>
+      <tr ng-repeat="queue_machine_index in []|range:row_size">
+        <td style='padding-bottom:15px;padding-right:15px;text-align:center;align:center' ng-repeat="queue in flattened_queues_concat" width="{{100/columns}}%" ng-if='queue[queue_machine_index]'>
+          <div class='list'>
+            <div class='item item-stable'>
+              <span style="float:left">{{queue[queue_machine_index].division_machine_name|limitTo:15}}<span ng-if='queue[queue_machine_index].division_machine_name.length>15'>...</span>
+
+              </span>
+              <span ng-if='queue[queue_machine_index].avg_play_time' style="float:right" class='standard_med_font'>Avg Time : {{queue[queue_machine_index].avg_play_time}} Mins</span>
+            </div>
+            <div class='item' ng-if='machine_players[queue[queue_machine_index].division_machine_id]'>
+              {{machine_players[queue[queue_machine_index].division_machine_id]}}
+            </div>
+            <div class='item' ng-repeat="queue_item in queue[queue_machine_index].queues|limitTo:3" ng-if='queue[queue_machine_index].queues.length > 0 '>
+              {{queue_item.player.player_name}}
+            </div>
+            <div class='item' ng-if='queue[queue_machine_index].queues.length > 3 '>
+             ...
+            </div>
+            
+            <div class='item' ng-if='queue[queue_machine_index].queues.length == 0 '>
+              No one playing 
+            </div>
+            
+          </div>
+        </td>
+      </tr>
     </table>
-    </div>
-    <!-- <div class="skinny-list list">     -->
-    <!--   <div ng-repeat="queue in division_machine.queues"> -->
-    <!--     <a ng-if="manage=='true' || queue.player_id==logged_in_player_id" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item item-icon-left" ng-click="choose_queue_action(queue.player_id,queue.player.player_name)"> -->
-    <!--       <i class="icon ion-stop" style='color:red'></i> -->
-    <!--       <span>{{queue.player.player_name}}</span> -->
-    <!--     </a> -->
-    <!--     <a ng-if="manage=='false' && queue.player_id!=logged_in_player_id" id="tournament_edit_tournament_{{tournament.tournament_name}}_link" class="item"> -->
-    <!--       <span>{{queue.player.player_name}}</span> -->
-    <!--     </a>         -->
-    <!--   </div> -->
+    <!-- <div style='width:100%;line-height:48px;font-size:48px;    text-overflow: ellipsis;' ng-repeat="queue_machine_index in []|range:flattened_queues.length:0:2"> -->
+    <!--   <table width=100%> -->
+    <!--     <tr> -->
+    <!--       <td style='width:50%' ng-repeat='column in [0,1]'> -->
+    <!--         <table style='margin-bottom:20px;border-style:solid;border-width:1px;width:100%'> -->
+    <!--           <tr> -->
+    <!--             <td> -->
+    <!--               <div style='overflow:hidden;white-space: nowrap; width:100%;'> -->
+    <!--                 <span style='float:left'><u><b>{{flattened_queues[queue_machine_index+column].division_machine_name|limitTo:25}}</b></u></span> -->
+    <!--                 <span style='float:right;font-size:20px'>Avg Time : {{flattened_queues[queue_machine_index+column].avg_play_time}}</span> -->
+    <!--               </div> -->
+    <!--             </td> -->
+    <!--           </tr> -->
+    <!--           <tr ng-repeat="queue_index in []|range:flattened_queues[queue_machine_index+column].queues.length|limitTo:5"> -->
+    <!--             <td> -->
+    <!--               <div style='overflow:hidden;text-overflow: ellipsis;white-space: nowrap; width:430px; height: 58px;'> {{queue_index}} : {{flattened_queues[queue_machine_index+column].queues[queue_index].player.player_name}} </div> -->
+    <!--             </td> -->
+    <!--           </tr> -->
+    <!--           <tr ng-if="flattened_queues[queue_machine_index+column].queues.length>5"> -->
+    <!--             <td> -->
+    <!--               {{flattened_queues[queue_machine_index+column].queues.length - 5}} more on queue -->
+    <!--             </td> -->
+    <!--           </tr> -->
+    <!--         </table> -->
+    <!--       </td> -->
+    <!--     </tr> -->
+    <!--   </table> -->
+    <!-- </div> -->
   </ion-content>
 </ion-view>
 

@@ -1,0 +1,14 @@
+<ion-view view-title="Select Machine">
+  <ion-content>      
+    <div class="skinny-list list">
+      <div ng-repeat='division_machine in flattened_division_machines' ng-if='division_machine.removed!=true'>
+        <a id="scorekeeping_machine_select_{{division_machine.division_machine_id}}_link" ui-sref=".machine.confirm({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})" class="item item-icon-right">
+          <span>Confirm player to be "un-skipped" in queue on {{division_machine.division_machine_name}}</span>
+          <i class="icon ion-chevron-right"></i>
+        </a>        
+      </div>      
+    </div>
+  </ion-content>
+</ion-view>
+
+

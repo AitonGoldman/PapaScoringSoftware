@@ -61,7 +61,7 @@ def test_in_line_players_fast():
 def test_players_with_tickets(division_id):    
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.all()}
+    players = {player.player_id:player.to_dict_fast() for player in tables.Player.query.filter_by(active=True).all()}
     division = fetch_entity(tables.Division,division_id)
     players_on_machines = {player.player_id:None for player in tables.DivisionMachine.query.filter(tables.Player.player_id is not None).all()}
     if division.team_tournament is True:

@@ -1,6 +1,11 @@
 <ion-view view-title="">
   <ion-content>      
     <div class="skinny-list list">
+    <label class="item-input item">
+      <span class='input-label'>Last Name : </span>
+      <input class="myinput" ng-model='columns_obj.columns' type="text" placeholder="Columns" />
+    </label>    
+
       <div ng-repeat='(division_id,division_machines) in division_machines'>
         <div class='item item-positive'>{{resources.divisions.data[division_id].division_name}} Division</div>
         <div class='item item-positive item-icon-right' ng-click='go_to_queue(division_id)'>

@@ -303,7 +303,55 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
              
           }    
 
+       }).state('app.scorekeeping.undo.undo_bump_player', 
+        { 
+         cache: false,
+ 	 url: '/undo_bump_player',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/undo_bump_player/undo_bump_player.html',
+ 	       controller: 'app.scorekeeping.undo.undo_bump_player'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.undo_bump_player.machine', 
+        { 
+         cache: false,
+ 	 url: '/machine/division_id/:division_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/undo_bump_player/machine/machine.html',
+ 	       controller: 'app.scorekeeping.undo.undo_bump_player.machine'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.undo_bump_player.machine.confirm', 
+        { 
+         cache: false,
+ 	 url: '/confirm/division_machine_id/:division_machine_id/division_machine_name/:division_machine_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/undo_bump_player/machine/confirm/confirm.html',
+ 	       controller: 'app.scorekeeping.undo.undo_bump_player.machine.confirm'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.undo_bump_player.machine.confirm.process', 
+        { 
+         cache: false,
+ 	 url: '/process/player_id/:player_id/player_name/:player_name',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/undo_bump_player/machine/confirm/process/process.html',
+ 	       controller: 'app.scorekeeping.undo.undo_bump_player.machine.confirm.process'
+ 	     }
+ 	   }, params: {
+             process_step:{}
+             
+          }    
+
        })//REPLACE_ME
+
+
+
+
 
 
 

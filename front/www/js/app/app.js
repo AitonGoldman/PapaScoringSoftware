@@ -149,7 +149,7 @@ app.controller(
         };
         
         $scope.is_scorekeeping_page = function(){
-            if($state.current.name.match(/app.scorekeeping/) != undefined){                
+            if($state.current.name.match(/app.scorekeeping/) != undefined || $state.current.name.match(/app.queue_player_after_play/) != undefined){                
                 return true;
             } else {
                 return undefined;

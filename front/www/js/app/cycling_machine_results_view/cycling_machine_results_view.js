@@ -4,9 +4,8 @@ angular.module('app.cycling_machine_results_view').controller(
         '$scope','$state','TimeoutResources','Utils','Modals','$timeout','$ionicScrollDelegate',
         function($scope, $state, TimeoutResources, Utils,Modals,$timeout,$ionicScrollDelegate) {
             $scope.site=$state.params.site;
-            $scope.starting_division_machine_id=parseInt($state.params.starting_division_machine_id);
-            $scope.division_id=$state.params.division_id;
             $scope.current_division_machine_idx = 0;
+            $scope.current_division_idx = 0;            
             $scope.current_division_machine_id = undefined;
             
             $scope.cur_num_results_displayed = 15;
@@ -20,11 +19,19 @@ angular.module('app.cycling_machine_results_view').controller(
                         $scope.cur_num_results_displayed = 15;
                         $scope.current_division_machine_idx=$scope.current_division_machine_idx+1;
                         if($scope.current_division_machine_idx > $scope.num_machines_in_division-1){
+                            $scope.current_division_idx=$scope.current_division_idx+1;
+                            existing_divisions = _.filter(_.keys($scope.resources.divisions.data),function(o){return o != "metadivisions";});
+                            if($scope.current_division_idx > existing_divisions.length - 1){
+                                console.log('here wwe go');
+                                $scope.current_division_idx = 0;
+                            }
+                            $scope.division_id=_.keys($scope.resources.divisions.data)[$scope.current_division_idx];                                            
+                            $scope.current_division_division_machines = _.filter($scope.resources.all_division_machines.data, function(o) { return o.division_id==$scope.division_id; });
                             $scope.current_division_machine_idx=0;
+                            
                         }
-                        division_machine_key = _.keys($scope.resources.division_machines.data)[$scope.current_division_machine_idx];
-                        $scope.current_division_machine_id=$scope.resources.division_machines.data[division_machine_key].division_machine_id;
-
+                        //division_machine_key = _.keys($scope.resources.division_machines.data)[$scope.current_division_machine_idx];
+                        $scope.current_division_machine_id=$scope.current_division_division_machines[$scope.current_division_machine_idx].division_machine_id;
                         $scope.get_division_machine_results($scope.current_division_machine_id).then(function(data){
                             $scope.display_next_result();
                         });                        
@@ -37,12 +44,16 @@ angular.module('app.cycling_machine_results_view').controller(
                 
             };
             $scope.bootstrap_promise.then(function(data){
+                $scope.resources=TimeoutResources.GetAllResources();
+                //$scope.starting_division_machine_id=1;
+                $scope.division_id=_.keys($scope.resources.divisions.data)[$scope.current_division_idx];                
                 $ionicScrollDelegate.getScrollView().options.animationDuration = 1000;
-                TimeoutResources.GetDivisionMachines(undefined,{site:$scope.site,division_id:$scope.division_id}).then(function(data){
-                    $scope.resources=TimeoutResources.GetAllResources();
-                    $scope.num_machines_in_division=_.keys($scope.resources.division_machines.data).length;
-                    division_machine_key = _.keys($scope.resources.division_machines.data)[$scope.current_division_machine_idx];
-                    $scope.current_division_machine_id=$scope.resources.division_machines.data[division_machine_key].division_machine_id;                    
+                TimeoutResources.GetCyclingAllDivisionMachines(undefined,{site:$scope.site}).then(function(data){                    
+                    $scope.resources=TimeoutResources.GetAllResources();                    
+                    $scope.current_division_division_machines = _.filter($scope.resources.all_division_machines.data, function(o) { return o.division_id==$scope.division_id; });
+                    $scope.num_machines_in_division=$scope.current_division_division_machines.length;
+                    division_machine = $scope.current_division_division_machines[$scope.current_division_machine_idx];                    
+                    $scope.current_division_machine_id=division_machine.division_machine_id;                    
                     $scope.get_division_machine_results($scope.current_division_machine_id).then(function(data){
                         $scope.display_next_result();
                     });
@@ -54,14 +65,14 @@ angular.module('app.cycling_machine_results_view').controller(
             
             $scope.get_division_machine_results = function(division_machine_id){
                 //Modals.loading();                
-                results_promise = TimeoutResources.GetDivisionMachineResults(undefined,
+                results_promise = TimeoutResources.GetCyclingDivisionMachineResults(undefined,
                                                                              {site:$scope.site,division_machine_id:division_machine_id});                        
                 return results_promise.then(function(data){
                     $scope.resources = TimeoutResources.GetAllResources();
                     $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
                     //$scope.resources.division_machines.data["-1"]=$scope.jump_to_division_machine.data;
-                    $scope.division_machine_name = $scope.resources.division_machine_results.data[0].machine_name;
-                    
+                    $scope.division_machine_name = $scope.current_division_division_machines[$scope.current_division_machine_idx].division_machine_name;
+                    ////$scope.division_machine_name = $scope.resources.division_machine_results.data[0].machine_name;                    
                     //Modals.loaded();            
                 });            
             };
@@ -85,6 +96,7 @@ angular.module('app.cycling_division_results_view').controller(
             $scope.num_divisions=4;
             $scope.cur_num_results_displayed = 15;
             $scope.utils = Utils;
+            $scope.current_division_idx = 0;            
             
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);
             $scope.display_next_result = function(){                
@@ -95,12 +107,21 @@ angular.module('app.cycling_division_results_view').controller(
                         console.log('moving to next division...');
                         $ionicScrollDelegate.scrollTo(0,0);                        
                         $scope.cur_num_results_displayed = 15;
-                        $scope.current_division_id=parseInt($scope.current_division_id)+1;
-                        if($scope.current_division_id > $scope.num_divisions){
-                            $scope.current_division_id=1;
+                        //$scope.current_division_id=parseInt($scope.current_division_id)+1;
+                        //if($scope.current_division_id > $scope.num_divisions){
+                        //    $scope.current_division_id=1;
+                        //}
+                        $scope.current_division_idx=$scope.current_division_idx+1;
+                        existing_divisions = _.filter(_.keys($scope.resources.divisions.data),function(o){return o != "metadivisions";});
+                        if($scope.current_division_idx > existing_divisions.length - 1){
+                            console.log('here wwe go');
+                            $scope.current_division_idx = 0;
                         }
+                        $scope.current_division_id=_.keys($scope.resources.divisions.data)[$scope.current_division_idx];                                            
+                        $scope.team_division = $scope.resources.divisions.data[$scope.current_division_id].team_tournament;                                
+
                         $scope.get_division_results($scope.current_division_id).then(function(data){
-                            $scope.display_next_result();
+                            $scope.display_next_result();                            
                         });                        
                     } else {                        
                         $scope.cur_num_results_displayed = $scope.cur_num_results_displayed +10;                        
@@ -108,10 +129,13 @@ angular.module('app.cycling_division_results_view').controller(
                         $ionicScrollDelegate.scrollBy(0,500,true);                        
                         $scope.display_next_result();                        
                     }
-                }, 6000);
+                }, 1000);
             };
             $scope.bootstrap_promise.then(function(data){
                 $ionicScrollDelegate.getScrollView().options.animationDuration = 1000;
+                $scope.resources = TimeoutResources.GetAllResources();
+                $scope.current_division_id=_.keys($scope.resources.divisions.data)[$scope.current_division_idx];
+                $scope.team_division = $scope.resources.divisions.data[$scope.current_division_id].team_tournament;                                
                 $scope.get_division_results($scope.current_division_id).then(function(data){
                     $scope.display_next_result();
                 });                                
@@ -124,7 +148,8 @@ angular.module('app.cycling_division_results_view').controller(
                 return results_promise.then(function(data){
                     if(data != undefined){
                         $scope.process_division_results();    
-                    }                    
+                    }
+                    console.log(data);
                     //$scope.resources = TimeoutResources.GetAllResources();                                        
                     $scope.division_name = $scope.resources.divisions.data[division_id].tournament_name;                    
                     //Modals.loaded();            
@@ -136,8 +161,11 @@ angular.module('app.cycling_division_results_view').controller(
             division = $scope.resources.divisions.data[$scope.current_division_id];            
 	    
             //$scope.team_division = division.team_tournament;
-            $scope.team_division = false;
-            raw_results = $scope.resources.division_results.data.ranked_player_list[$scope.current_division_id];
+            if($scope.team_division != true){                
+                raw_results = $scope.resources.division_results.data.ranked_player_list[$scope.current_division_id];
+            } else {
+                raw_results = $scope.resources.division_results.data.ranked_team_list[$scope.current_division_id];                
+            }            
             top_machines = $scope.resources.division_results.data.top_machines[division.division_id];
             results = _.remove(raw_results,function(n) {
                 if($scope.team_division==false){
@@ -147,6 +175,7 @@ angular.module('app.cycling_division_results_view').controller(
                         return false;
                     }
                 } else {
+                    console.log(n[1]);
                     if(top_machines[n[1].team_id].length != 0){
                         return true;
                     } else {
@@ -178,10 +207,15 @@ angular.module('app.cycling_division_results_view').controller(
                     $scope.concat_results = _.concat($scope.results_a,$scope.divider_a);          
                 }
             }
-            if(division.finals_player_selection_type == "papa"){               
-                $scope.div_cutoff=division.finals_num_qualifiers;                                                
+            if(division.finals_player_selection_type == "papa"){
+                console.log('figuring out cutoff..');
+                $scope.div_cutoff=division.finals_num_qualifiers;
+                console.log('cutoff is ..'+$scope.div_cutoff);
                 //results = $scope.resources.division_results.data.ranked_player_list[$scope.division_id];
                 div_index = $scope.find_last_div_player_ppo_idx($scope.div_cutoff,results,division);
+                console.log('div_index is '+div_index);
+                console.log('passing in results...');
+                console.log(results);
                 $scope.qualifying_results = _.slice(results,0,div_index+1);                
                 $scope.rest_results = _.slice(results,div_index+1);
                 $scope.divider = [[0,{divider:'QUALIFYING CUTOFF'}]];                
@@ -192,6 +226,7 @@ angular.module('app.cycling_division_results_view').controller(
         $scope.find_last_div_player_ppo_idx = function(cutoff,results,division){
             if(results.length <= cutoff ){                                                
                 idx = results.length-1;
+                console.log('returning idx..'+idx);
                 return idx;
             }
             idx = cutoff-1;

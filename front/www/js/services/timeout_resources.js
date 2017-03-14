@@ -257,11 +257,17 @@ angular.module('TD_services.timeout_resources')
                                                                                   'POST',undefined,api_host.purchase_host());                                     
                   var getDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                                  'GET');
+                  var getCyclingDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
+                                                                                 'GET',{noop:true});
+                  
                   var getFromResultsDivisionMachinesResource = generate_resource_definition(':site/division/:division_id/division_machine',
                                                                                             'GET',undefined,api_host.results_host());
                   
                   var getAllDivisionMachinesResource = generate_resource_definition(':site/division_machine',
-                                                                                 'GET');                  
+                                                                                    'GET');
+                  var getCyclingAllDivisionMachinesResource = generate_resource_definition(':site/division_machine',
+                                                                                           'GET',{noop:true});                  
+                  
                   var getMachinesResource = generate_resource_definition(':site/machine',
                                                                          'GET');
                   var getPlayerTokensResource = generate_resource_definition(':site/token/player_id/:player_id',
@@ -274,6 +280,8 @@ angular.module('TD_services.timeout_resources')
                                                                                    'DELETE');
                   var getQueuesResource = generate_resource_definition(':site/queue/division/:division_id',
                                                                        'GET');
+                  var getCyclingQueuesResource = generate_resource_definition(':site/queue/division/:division_id',
+                                                                              'GET',{noop:true});                  
                   var getPlayerQueueResource = generate_resource_definition(':site/queue/player_id/:player_id',
                                                                            'GET');                                                      
                   var bumpQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id/bump',
@@ -296,6 +304,7 @@ angular.module('TD_services.timeout_resources')
                   var getCyclingDivisionResultsResource = generate_resource_definition(':site/results/division/:division_id','GET',{noop:true},api_host.results_host());
                   
                   var getDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET',undefined,api_host.results_host());
+                  var getCyclingDivisionMachineResultsResource = generate_resource_definition(':site/results/division_machine/:division_machine_id','GET',{noop:true},api_host.results_host());                  
                   var voidEntryResource = generate_resource_definition(':site/admin/entry_id/:entry_id/void/:void','DELETE');
                   var addEntryResource = generate_resource_definition(':site/admin/division_machine_id/:division_machine_id/score/:score/player_id/:player_id','POST');                                    
                   var getPlayerResultsResource = generate_resource_definition(':site/results/player/:player_id','GET',undefined,api_host.results_host());
@@ -366,19 +375,25 @@ angular.module('TD_services.timeout_resources')
                       GetDivisionResults: generate_custom_http_executor(getDivisionResultsResource,'division_results','get'),
                       GetCyclingDivisionResults: generate_custom_http_executor(getCyclingDivisionResultsResource,'division_results','get'),
                       GetDivisionMachineResults: generate_custom_http_executor(getDivisionMachineResultsResource,'division_machine_results','get'),
+                      GetCyclingDivisionMachineResults: generate_custom_http_executor(getCyclingDivisionMachineResultsResource,'division_machine_results','get'),
+                      
                       GetDivisions: generate_custom_http_executor(getDivisionsResource,'divisions','get'),                      
                       GetTournamentDivisions: generate_custom_http_executor(getTournamentDivisionsResource,'tournament_divisions','get'),
                       AddDivisionMachine: generate_custom_http_executor(addDivisionMachineResource,'added_division_machine','post'),
                       AddPlayerToMachineFromQueue: generate_custom_http_executor(addPlayerToMachineFromQueueResource,'machine_added_to','post'),
                       DeleteDivisionMachine: generate_custom_http_executor(deleteDivisionMachineResource,'deleted_division_machine','get'),
                       GetDivisionMachines: generate_custom_http_executor(getDivisionMachinesResource,'division_machines','get'),
+                      GetCyclingDivisionMachines: generate_custom_http_executor(getCyclingDivisionMachinesResource,'division_machines','get'),                      
                       GetFromResultsDivisionMachines: generate_custom_http_executor(getFromResultsDivisionMachinesResource,'division_machines','get'),                      
-                      GetAllDivisionMachines: generate_custom_http_executor(getAllDivisionMachinesResource,'all_division_machines','get'), 
+                      GetAllDivisionMachines: generate_custom_http_executor(getAllDivisionMachinesResource,'all_division_machines','get'),
+                      GetCyclingAllDivisionMachines: generate_custom_http_executor(getCyclingAllDivisionMachinesResource,'all_division_machines','get'),                       
                       UpdateDivision: generate_custom_http_executor(updateDivisionResource,'updated_division','post'),
                       GetIfpaRanking: generate_custom_http_executor(getIfpaRankingResource,'ifpa_rankings','get'),                      
                       GetMachines: generate_custom_http_executor(getMachinesResource,'machines','get'),
                       GetPlayerTokens: generate_custom_http_executor(getPlayerTokensResource,'player_tokens','get'),
                       GetQueues: generate_custom_http_executor(getQueuesResource,'queues','get'),
+                      GetCyclingQueues: generate_custom_http_executor(getCyclingQueuesResource,'queues','get'),
+                      
                       GetPlayerQueue: generate_custom_http_executor(getPlayerQueueResource,'player_queue','get'),                      
                       BumpQueue: generate_custom_http_executor(bumpQueueResource,'queues','put'),
                       AddPlayerToMachine: generate_custom_http_executor(addPlayerToMachineResource,'machine_added_to','put'),

@@ -18,28 +18,31 @@ angular.module('app.scorekeeping.machine_select.record_score').controller(
             $scope.team_name = $state.params.team_name;
             
             $scope.choose_void_action = ActionSheets.choose_void_action;
-	    $scope.team_tournament=$state.params.team_tournament;            
             $scope.score={score:undefined};
             $scope.utils = Utils;
             Modals.loading();
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-            if($scope.team_tournament==false){
-                best_score_promise = TimeoutResources.GetPlayerBestScoreForMachine($scope.bootstrap_promise,
-                                                                                   {site:$scope.site,
-                                                                                    player_id:$scope.player_id,
-                                                                                    division_machine_id:$scope.division_machine_id});
-            } else {
-                best_score_promise = TimeoutResources.GetTeamBestScoreForMachine($scope.bootstrap_promise,
-                                                                                 {site:$scope.site,
-                                                                                  team_id:$scope.team_id,
-                                                                                  division_machine_id:$scope.division_machine_id});
-            }
-
-            best_score_promise.then(function(data){                
-
+            $scope.bootstrap_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();
-                //$scope.team_tournament=$scope.resources.divisions.data[$scope.division_id].team_tournament;
-                Modals.loaded();
+                $scope.team_tournament=$scope.resources.divisions.data[$scope.division_id].team_tournament;            
+
+                if($scope.team_tournament!=true){
+                    best_score_promise = TimeoutResources.GetPlayerBestScoreForMachine($scope.bootstrap_promise,
+                                                                                       {site:$scope.site,
+                                                                                        player_id:$scope.player_id,
+                                                                                        division_machine_id:$scope.division_machine_id});
+                } else {
+                    best_score_promise = TimeoutResources.GetTeamBestScoreForMachine($scope.bootstrap_promise,
+                                                                                     {site:$scope.site,
+                                                                                      team_id:$scope.team_id,
+                                                                                      division_machine_id:$scope.division_machine_id});
+                }
+                best_score_promise.then(function(data){                
+                    
+                    $scope.resources = TimeoutResources.GetAllResources();
+                    //$scope.team_tournament=$scope.resources.divisions.data[$scope.division_id].team_tournament;
+                    Modals.loaded();
+                });                
             });
             $scope.keyDown = function(event){
                 if(event.keyCode == 9 || event.keyCode==13){                    

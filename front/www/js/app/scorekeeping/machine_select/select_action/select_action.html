@@ -14,7 +14,7 @@
       </span>
       <i class="icon ion-chevron-right"></i>      
     </button>    
-    <button ng-if='resources.queues.data[division_machine_id].queues.length > 0 || resources.queues.machine_players[division_machine_id] != undefined' class='button button-full button-calm item-icon-right' ui-sref='.^.add_player_to_queue({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})'>
+    <button ng-if='resources.divisions.data[division_id].queuing == true && (resources.queues.data[division_machine_id].queues.length > 0 || resources.queues.machine_players[division_machine_id] != undefined)' class='button button-full button-calm item-icon-right' ui-sref='.^.add_player_to_queue({division_machine_id:division_machine.division_machine_id,division_machine_name:division_machine.division_machine_name})'>
       Add Player To Queue
       <i class="icon ion-chevron-right"></i>
     </button>

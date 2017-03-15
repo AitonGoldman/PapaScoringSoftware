@@ -20,6 +20,14 @@ angular.module('app.scorekeeping.machine_select').controller(
         division_machines_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.flattened_division_machines = _.values($scope.resources.division_machines.data);
+            _.forEach($scope.flattened_division_machines, function(value) {                    
+                ImgCache.isCached(http_prefix+"://"+server_ip_address+"/pics/machine_"+value.division_machine_id+'.jpg',function(path,success){
+                    if(!success){
+                        ImgCache.cacheFile(http_prefix+"://"+server_ip_address+"/pics/machine_"+value.division_machine_id+'.jpg');
+                    }                        
+                });
+            });
+
             console.log($scope.flattened_division_machines);
             $scope.flattened_division_machines.sort(function (a, b) {
                 //return (a.division_machine_id > b.division_machine_id ? 1 : -1);

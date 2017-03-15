@@ -39,22 +39,14 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 }                
                 $scope.flattened_players = _.values($scope.resources.players_with_tickets.data);
                 $animate.enabled(true);
-                image_cache_list = [];
-                for(x=0;x<$scope.flattened_players.length;x++){
-                    if($scope.flattened_players[x].has_tokens == true && $scope.flattened_players[x].on_division_machine!=true){
-                        image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
-                    }
-                }
-                //Modals.loaded();
-                $ImageCacheFactory.Cache(
-                     image_cache_list
-                 ).then(function(){
-                     console.log("Images done loading!");
-                     Modals.loaded();
-                 },function(failed){
-                     console.log("An image failed: "+failed);
-                     Modals.loaded();
-                });                                                
+                _.forEach($scope.flattened_players, function(value) {                    
+                    ImgCache.isCached(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg',function(path,success){
+                        if(!success){
+                            ImgCache.cacheFile(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg');
+                        }                        
+                    });
+                });
+                Modals.loaded();
             });
             
             $scope.find_queue_for_player = function(player_id,cur_division_machine_id){

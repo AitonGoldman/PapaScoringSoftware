@@ -29,14 +29,22 @@ angular.module('app.scorekeeping.machine_select.add_player_to_queue').controller
         players_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.flattened_players = _.values($scope.resources.players_with_tickets.data);
-            $animate.enabled(true);                              
+            $animate.enabled(true);
+            _.forEach($scope.flattened_players, function(value) {                    
+                ImgCache.isCached(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg',function(path,success){
+                    if(!success){
+                        ImgCache.cacheFile(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg');
+                    }                        
+                });                    
+            });
+            
             //Modals.loaded();
-            image_cache_list = [];
-            for(x=0;x<$scope.flattened_players.length;x++){
-                if($scope.flattened_players[x].has_tokens == true){
-                    image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
-                }
-            }
+            //image_cache_list = [];
+            // for(x=0;x<$scope.flattened_players.length;x++){
+            //     if($scope.flattened_players[x].has_tokens == true){
+            //         image_cache_list[x]=$scope.http_prefix+"://"+$scope.server_ip_address+"/pics/player_"+$scope.flattened_players[x].player_id+".jpg";
+            //     }
+            // }
             Modals.loaded();            
         });
         $scope.selected_players=[];

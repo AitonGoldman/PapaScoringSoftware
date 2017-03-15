@@ -17,7 +17,8 @@ class RolesEnum(Enum):
     token = 6
     queue = 7
     in_line_registration = 8
-    test = 9
+    page = 9
+    test = 10
     
 def set_stripe_api_key(stripe_api_key):
     stripe.api_key=stripe_api_key
@@ -43,13 +44,13 @@ def create_stanard_roles_and_users(app):
                               str(RolesEnum.token.value), str(RolesEnum.queue.value)])
     test_scorekeeper = create_user(app,'test_scorekeeper', 'test_scorekeeper',
                                    [str(RolesEnum.scorekeeper.value),str(RolesEnum.void.value),
-                                   str(RolesEnum.queue.value)])            
+                                    str(RolesEnum.queue.value),str(RolesEnum.page.value)])            
     test_inline_register = create_user(app,'test_inline', 'test_inline',
                                    [str(RolesEnum.desk.value),str(RolesEnum.in_line_registration.value)])            
     
     test_desk = create_user(app,'test_desk', 'test_desk',
                             [str(RolesEnum.desk.value),str(RolesEnum.void.value),str(RolesEnum.token.value),
-                            str(RolesEnum.queue.value)])            
+                             str(RolesEnum.queue.value),str(RolesEnum.page.value)])            
     return test_admin,test_scorekeeper,test_desk
 
 def init_papa_players(app):
@@ -240,7 +241,7 @@ def create_player(app,player_data):
     if 'pic_file' in player_data:
         new_player.has_pic=True
         save_path = "%s/%s"%(app.config['UPLOAD_FOLDER'],player_data['pic_file'])
-        subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])        
+        subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])
         subprocess.call(["mv","%s_resize"%save_path,save_path])
 
         os.system('mv %s/%s %s/player_%s.jpg' % (app.config['UPLOAD_FOLDER'],player_data['pic_file'],app.config['UPLOAD_FOLDER'],new_player.player_id))        

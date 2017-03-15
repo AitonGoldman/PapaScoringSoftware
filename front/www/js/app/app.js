@@ -37,7 +37,8 @@ app = angular.module(
     'app.generate_finals',
         'app.cycling_machine_results_view',
         'app.cycling_division_results_view',
-        'ionicImgCache'
+        'ionicImgCache',
+        'app.i_need_an_adult',
     /*REPLACEMECHILD*/
 	]
 );

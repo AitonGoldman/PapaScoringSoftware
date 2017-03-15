@@ -1,0 +1,25 @@
+<ion-view view-title="I Need Help">
+  <ion-content>      
+      <center>
+        <div class='standard_big_font'>
+          <button class='button button-clear button-dark icon-left ion-alert-circled ion-icon-yellow review-icon' >            
+            <span><u>PLEASE SEND HELP!</u></span>
+          </button>
+          <div class='warning_confirm'>
+            If you require help, and you can not leave the tournament bank area, please click the button below and someone will come to help.
+          </div>
+          <select ng-model="page_info.division" ng-options="option.tournament_name for option in tournaments">
+          </select>
+          
+          <br>
+          <br>
+        </div>
+        
+        <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({division_id:page_info.division.division_id,process_step:{process:true}})">
+          <span>Please Send Help</span>
+          <i class="icon ion-chevron-right"></i>          
+        </button>
+      </center>
+  </ion-content>
+</ion-view>
+

@@ -114,6 +114,16 @@
           </div>
           <i class="icon ion-chevron-right"></i>
         </a>
+        <a ng-if="User.logged_in() == true" class="item item-divider">
+          &nbsp;
+        </a>        
+        <a id='menu_jagoffs_link' class='item item-icon-right' menu-close ui-sref='.i_need_an_adult' ng-if="User.logged_in() == true && User.has_role('page')">          
+          <div>
+            Please Send Help
+          </div>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        
         <a id='menu_finals_link' class='item item-icon-right' menu-close ui-sref='.ppo_qualifying_list' ng-if="User.logged_in() == true && User.has_role('admin')">
           <div>
             Finals
@@ -123,18 +133,19 @@
         <a ng-if="User.logged_in() == true" class="item item-divider">
           &nbsp;
         </a>
-        <a class='item item-icon-right' menu-close href='static/help.html' ng-if="isWebView != true" target="_new_window">
-          <div>
-            Help
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>
-        <div class='item item-icon-right' ng-click="utils.native_open_in_browser('/static/help.html')" ng-if="isWebView == true">
-          <div>
-            Help
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </div>        
+        <!-- <a class='item item-icon-right' menu-close href='static/help.html' ng-if="isWebView != true" target="_new_window"> -->
+        <!--   <div> -->
+        <!--     Help -->
+        <!--   </div> -->
+        <!--   <i class="icon ion-chevron-right"></i> -->
+        <!-- </a> -->
+        
+        <!-- <div class='item item-icon-right' ng-click="utils.native_open_in_browser('/static/help.html')" ng-if="isWebView == true"> -->
+        <!--   <div> -->
+        <!--     Help -->
+        <!--   </div> -->
+        <!--   <i class="icon ion-chevron-right"></i> -->
+        <!-- </div>         -->
         <!--<a id='menu_logout_link' class='item item-icon-right' menu-close ui-sref='.logout' ng-if="User.logged_in() == true">
           <div>
             Logout

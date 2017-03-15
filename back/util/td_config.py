@@ -18,6 +18,8 @@ def get_config_values_from_env():
     config_dict['UPLOAD_FOLDER']='/var/www/html/pics'
     config_dict['EVENT_FILE_PATH']=None
     config_dict['SENDGRID_API_KEY']=None
+    
+    
     #PAY ATTENTION - THIS VALUE IS HERE TO REMIND YOU TO SET IT
     #                WHEN IT GETS USED, IT GETS PULLED STRAIGHT FROM ENV VAR
     config_dict['PLAYER_ID_SEQ_START']=None

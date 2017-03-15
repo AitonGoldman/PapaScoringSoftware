@@ -31,6 +31,20 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
 
             }
         }
+    ).state(
+        'use_the_native_app', {
+            url: '/use_the_native_app',
+            views: {
+                '@': {
+                    templateUrl: 'js/app/use_the_native_app.html',
+                    controller: 'NativeAppInstructionsController'
+                    
+                },
+                'native_app_instructions@use_the_native_app':{
+                    templateUrl: 'js/app/native_app_instructions.html'
+                }
+            }
+        }
     );
 }]);
 

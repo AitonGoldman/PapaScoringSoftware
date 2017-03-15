@@ -18,6 +18,10 @@
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
+  <preference name="iosPersistentFileLocation" value="Library" />
+  <access origin="cdvfile://*"/>
+  <allow-intent href="cdvfile://*"/>
+  <preference name="AndroidPersistentFileLocation" value="Compatibility" />  
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>

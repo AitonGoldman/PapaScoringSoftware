@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 import json
 import os
 import datetime
+import subprocess
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -23,6 +24,18 @@ def upload_file(pic_type):
         filename = secure_filename(file.filename)
         random_file_name = datetime.datetime.now().strftime("%s")        
         save_path=os.path.join(current_app.config['UPLOAD_FOLDER'], "%s.jpg"%random_file_name)
-        file.save(save_path)
+        file.save(save_path)        
+        orientation = subprocess.check_output(["identify", "-format", r"'%[orientation]'",save_path])[1:-1]        
+        if orientation == "RightTop":            
+            subprocess.call(["convert", save_path,"-rotate", "90", "%s_rotate"%save_path])
+            subprocess.call(["mv","%s_rotate"%save_path,save_path])
+        #else:
+        #    print "android..."
+        subprocess.call(["convert", save_path,"-crop","200x100+0+0!", "%s_crop"%save_path])
+        subprocess.call(["mv","%s_crop"%save_path,save_path])
+        
+        
+        
+        
     return jsonify({'data':"%s.jpg"%random_file_name})
 

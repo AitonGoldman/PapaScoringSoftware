@@ -1,0 +1,14 @@
+<ion-view view-title="Use the native App">
+  <ion-content>
+    The link below will download the <span ng-if="platform.isIOS()">iOS app</span> <span ng-if="platform.isAndroid()">Android app</span>.<br><br>  This app will allow you to ...
+    <ul>
+      <li>  - Queue yourself
+      <li>  - Buy tickets
+      <li>  - Be notified when queues change
+      <li>  - View results
+    </ul>
+    <br>
+    <a ng-if="platform.isIOS()" href="http://itunes.apple.com/us/app/yapss/id1207975236"> iOS App Link </a>
+    <a ng-if="platform.isAndroid()" href='https://play.google.com/store/apps/details?id=com.pbchallenge.yapss'> Android App Link </a>    
+  </ion-content>
+</ion-view>

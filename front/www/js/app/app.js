@@ -36,7 +36,8 @@ app = angular.module(
     'app.finals_scorekeeper',
     'app.generate_finals',
         'app.cycling_machine_results_view',
-        'app.cycling_division_results_view',        
+        'app.cycling_division_results_view',
+        'ionicImgCache'
     /*REPLACEMECHILD*/
 	]
 );
@@ -51,6 +52,13 @@ app.controller(
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
         });
+    }
+);
+app.controller(
+    'NativeAppInstructionsController',    
+    function($scope, $location, $http, 
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {        
+        $scope.platform = ionic.Platform;
     }
 );
 app.controller(
@@ -157,20 +165,25 @@ app.controller(
         };
         
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
+            if(ionic.Platform.isWebView() == false && $scope.type_of_page != 'user' && $scope.type_of_page != 'results'){                
+                if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()){
+                    $state.go('use_the_native_app');
+                }
+            } 
             $scope.site=state.params.site;            
             // if($state.current.name.length - $state.current.name.indexOf('confirm') == 7){
             //     Modals.information('It is important to read directions.  For example, this is the review page - you still need to click Purchase button');
             // }
             User.set_user_site($scope.site);
             if (User.logged_in() == true) {
-                if($scope.is_login_age_old(User.login_time) || TimeoutResources.GetAllResources().divisions==undefined){
+                if($scope.is_login_age_old(User.login_time) || TimeoutResources.GetAllResources().divisions==undefined){                    
                     return TimeoutResources.GetDivisions(undefined,{site:$scope.site});                    
                 } else {
                     return Utils.resolved_promise();
                 }
             }             
             if(do_not_check_current_user == undefined && User.logged_in() == false){                                
-                if(TimeoutResources.GetAllResources().divisions==undefined){
+                if(TimeoutResources.GetAllResources().divisions==undefined){                    
                     prom = TimeoutResources.GetDivisions(undefined,{site:$scope.site});                    
                 } else {
                     prom = Utils.resolved_promise();
@@ -257,31 +270,6 @@ app.controller(
 
 app.run(function($ionicPlatform,$rootScope,$ionicPopup,$state) {
     $ionicPlatform.ready(function() {
-        if (ionic.Platform.isWebView()==false){
-        new SmartBanner({
-          daysHidden: 999,   // days to hide banner after close button is clicked (defaults to 15) 
-          daysReminder: 999, // days to hide banner after "VIEW" button is clicked (defaults to 90) 
-          appStoreLanguage: 'us', // language code for the App Store (defaults to user's browser language) 
-          title: 'YAPSS',
-          author: '',
-          button: 'VIEW',
-          store: {
-              ios: 'On the App Store<br>Features Include : <br>&#8226; Push Notifications<br>&#8226; Purchase Tickets',
-              android: 'In Google Play<br>Features Include : <br>&#8226; Push Notifications<br>&#8226; Purchase Tickets',
-              windows: 'In Windows store'
-          },
-          price: {
-              ios: 'FREE',
-              android: 'FREE',
-              windows: 'FREE'
-          }
-          // , theme: '' // put platform type ('ios', 'android', etc.) here to force single theme on all device 
-          // , icon: '' // full path to icon image if not using website icon image 
-          // , force: 'ios' // Uncomment for platform emulation 
-      });        
-            
-
-        }
 
         ionic.Platform.showStatusBar(false);        
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -320,14 +308,14 @@ app.run(function($ionicPlatform,$rootScope,$ionicPopup,$state) {
 });
   
 
-app.config(function($httpProvider,$ionicConfigProvider,$ionicCloudProvider) {
+app.config(function($httpProvider,$ionicConfigProvider,$ionicCloudProvider,ionicImgCacheProvider) {
     $httpProvider.defaults.useXDomain = true;
     $httpProvider.defaults.withCredentials = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
     $ionicConfigProvider.backButton.previousTitleText(false);
     $ionicConfigProvider.backButton.text(" ");        
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
-
+    ionicImgCacheProvider.debug(true);
     $ionicCloudProvider.init({
     "core": {
       "app_id": "a302e6bc"

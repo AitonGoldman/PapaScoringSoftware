@@ -15,8 +15,11 @@ def get_discount_normal_ticket_counts(max_count,discount_count,discount_cost,inc
     available_ticket_list = [[0,0]]
     discount_counts = {}
     normal_counts = {}
-    if discount_count is None:
-        discount_count = 1
+    if discount_count is None or discount_count == 1:                
+        while(cur_count < max_count):    
+            cur_count = cur_count+1        
+            available_ticket_list.append([cur_count,cur_count*normal_cost])
+        return [available_ticket_list,normal_counts,discount_counts]
     if discount_cost is None:
         discount_cost=0
         
@@ -57,7 +60,9 @@ def get_discount_normal_ticket_counts(max_count,discount_count,discount_cost,inc
             normal_counts[cur_count]=cur_count/increment                        
             continue
     list_len = len(available_ticket_list)
-    filtered_ticket_list = []
+    filtered_ticket_list = []        
+    if discount_count == 1:
+        return [available_ticket_list,normal_counts,discount_counts]
     for idx,ticket_info in enumerate(available_ticket_list):
         if idx<list_len-1 and available_ticket_list[idx+1][1] == available_ticket_list[idx][1]:
             continue

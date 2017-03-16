@@ -6,7 +6,7 @@
             <span><u>Review Before Purchase</u></span>
           </button>
           <table class='warning_confirm'>
-            <tr ng-repeat='(division_id,token_count) in token_info.divisions'>
+            <tr ng-if='token_count[0] != 0' ng-repeat='(division_id,token_count) in token_info.divisions'>
               <td class='padding-right' align="right">
                 {{token_info.divisions_names[division_id]}} : 
               </td>
@@ -14,7 +14,7 @@
                 {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
             </tr>
-            <tr ng-repeat='(division_id,token_count) in token_info.teams'>
+            <tr ng-if='token_count[0] != 0' ng-repeat='(division_id,token_count) in token_info.teams'>
               <td class='padding-right' align="right">
                 {{token_info.divisions_names[division_id]}} : 
               </td>
@@ -22,7 +22,7 @@
                 {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
             </tr>
-            <tr ng-repeat='(metadivision_id,token_count) in token_info.metadivisions'>
+            <tr ng-if='token_count[0] != 0' ng-repeat='(metadivision_id,token_count) in token_info.metadivisions'>
               <td class='padding-right' align="right">
                 {{token_info.metadivisions_names[metadivision_id]}} : 
               </td>

@@ -1,7 +1,7 @@
-angular.module('app.scorekeeping.undo.undo_bump_player.machine.confirm',['app.scorekeeping.undo.undo_bump_player.machine.confirm.process',
+angular.module('app.scorekeeping.undo.undo_bump_player.confirm',['app.scorekeeping.undo.undo_bump_player.confirm.process',
     /*REPLACEMECHILD*/]);
-angular.module('app.scorekeeping.undo.undo_bump_player.machine.confirm').controller(
-    'app.scorekeeping.undo.undo_bump_player.machine.confirm',[
+angular.module('app.scorekeeping.undo.undo_bump_player.confirm').controller(
+    'app.scorekeeping.undo.undo_bump_player.confirm',[
     '$scope','$state','TimeoutResources','Utils','Modals',
     function($scope, $state, TimeoutResources, Utils,Modals) {
         $scope.site=$state.params.site;
@@ -16,6 +16,10 @@ angular.module('app.scorekeeping.undo.undo_bump_player.machine.confirm').control
         queues_promise = TimeoutResources.GetQueues($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
         queues_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
+            if($scope.resources.queues.data[$scope.division_machine_id].queues.length < 2){
+                Modals.loaded();
+                return;
+            }
             $scope.player_id=$scope.resources.queues.data[$scope.division_machine_id].queues[1].player.player_id;
             $scope.player_name=$scope.resources.queues.data[$scope.division_machine_id].queues[1].player.player_name;
             console.log($scope.resources.queues.data[$scope.division_machine_id].queues[1].player);

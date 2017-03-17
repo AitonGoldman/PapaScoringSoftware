@@ -1,4 +1,4 @@
-angular.module('app.scorekeeping.undo.undo_bump_player',['app.scorekeeping.undo.undo_bump_player.machine',
+angular.module('app.scorekeeping.undo.undo_bump_player',['app.scorekeeping.undo.undo_bump_player.confirm',
     /*REPLACEMECHILD*/]);
 angular.module('app.scorekeeping.undo.undo_bump_player').controller(
     'app.scorekeeping.undo.undo_bump_player',[

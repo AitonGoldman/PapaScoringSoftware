@@ -1,6 +1,6 @@
-angular.module('app.scorekeeping.undo.undo_bump_player.machine.confirm.process',[/*REPLACEMECHILD*/]);
-angular.module('app.scorekeeping.undo.undo_bump_player.machine.confirm.process').controller(
-    'app.scorekeeping.undo.undo_bump_player.machine.confirm.process',[
+angular.module('app.scorekeeping.undo.undo_bump_player.confirm.process',[/*REPLACEMECHILD*/]);
+angular.module('app.scorekeeping.undo.undo_bump_player.confirm.process').controller(
+    'app.scorekeeping.undo.undo_bump_player.confirm.process',[
     '$scope','$state','TimeoutResources','Utils','Modals',
     function($scope, $state, TimeoutResources, Utils,Modals) {
         $scope.site=$state.params.site;

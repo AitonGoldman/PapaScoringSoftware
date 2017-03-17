@@ -13,6 +13,11 @@
         <span class='input-label'>Last Name : </span>
         <input class="myinput" ng-model='player_info.last_name' type="text" placeholder="Last Name" />
       </label>
+      <label class="item-input item">
+        <span class='input-label'>Email Address : </span>
+        <input class="myinput" ng-model='player_info.email_address' type="text" placeholder="Email Address" />
+      </label>
+      
       <a id='add_player_get_ifpa_ranking' class="item item-icon-right item-calm" style='text-align:left;maring-top:0px' ng-click='get_ifpa_ranking()' ng-disabled='player_info.first_name==undefined && player_info.last_name==undefined'>
         <i class="icon ion-search"></i>
         <span >Lookup Ifpa Ranking <span id="add_player_ifpa_ranking" ng-if='player_info.ifpa_result.result.wppr_rank' != undefined'>({{player_info.ifpa_result.result.wppr_rank}})</span></span>

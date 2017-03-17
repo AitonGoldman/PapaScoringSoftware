@@ -29,7 +29,8 @@
             
             <button id="login_submit_button" ui-sref='.process({other_player_id:other_player.player_id,other_player_pin:other_player.pin,process_step:{process:true}})' class="button button-full button-calm item-icon-right seperate_button" style='text-align:left' ng-disabled='utils.var_empty(other_player.player_id)||utils.var_empty(other_player.pin)'>
               <i class="icon ion-chevron-right padding"></i>
-              <span >Login</span>
+              <span ng-if="type_of_page == 'kiosk'">Add Me To Queue</span>
+              <span ng-if="type_of_page != 'kiosk'">Add Player To Queue</span>              
             </button>
           </div>
         </div>

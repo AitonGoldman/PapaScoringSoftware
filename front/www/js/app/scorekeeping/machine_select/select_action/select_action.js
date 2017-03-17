@@ -19,7 +19,7 @@ angular.module('app.scorekeeping.machine_select.select_action').controller(
         queues_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();                
             //$scope.division_machine = $scope.resources.division_machines.data[$scope.division_machine_id];
-            console.log($scope.resources);
+            console.log($scope.resources);            
             $scope.division_machine = $scope.resources.queues.data[$scope.division_machine_id];
             Modals.loaded();            
         });

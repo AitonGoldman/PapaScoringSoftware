@@ -1,39 +1,38 @@
-
 <ion-view view-title="Score Recorded" hide-back-button='true'>
   <ion-content>      
-      <center>
-        <div class='standard_big_font'>
-          <!--<div class='padding'><u><i class="icon ion-clipboard padding"></i><span>Score Added</u></span></div>-->
-          <button class='button button-clear button-dark icon-left ion-clipboard review-icon ion-icon-green'>
-            <span><u>Score Added</u></span>
-          </button>
-          
-          <table>
-            <tr>
-              <td class='padding-right' align="right">
-                Machine : 
-              </td>
-              <td class='padding-left'>
-                {{division_machine_name}}
-              </td>
-            </tr>
-            <tr>
-              <td class='padding-right' align="right">
-                Score : 
-              </td>
-              <td class='padding-left'>
-                {{confirmed_score.score_with_commas}}
-              </td>
-            </tr>
-            <tr>
-              <td class='padding-right' align="right">
-                {{resources.divisions.data[division_id].tournament_name}} Tickets: 
-              </td>
-              <td class='padding-left'>
-                {{resources.added_score.player_token_data}}
-              </td>
-            </tr>            
-          </table>
+    <center>
+      <div class='standard_big_font'>
+        <!--<div class='padding'><u><i class="icon ion-clipboard padding"></i><span>Score Added</u></span></div>-->
+        <button class='button button-clear button-dark icon-left ion-clipboard review-icon ion-icon-green'>
+          <span><u>Score Added</u></span>
+        </button>
+        
+        <table>
+          <tr>
+            <td class='padding-right' align="right">
+              Machine : 
+            </td>
+            <td class='padding-left'>
+              {{division_machine_name}}
+            </td>
+          </tr>
+          <tr>
+            <td class='padding-right' align="right">
+              Score : 
+            </td>
+            <td class='padding-left'>
+              {{confirmed_score.score_with_commas}}
+            </td>
+          </tr>
+          <tr>
+            <td class='padding-right' align="right">
+              {{resources.divisions.data[division_id].tournament_name}} Tickets: 
+            </td>
+            <td class='padding-left'>
+              {{resources.added_score.player_token_data}}
+            </td>
+          </tr>            
+        </table>
 
         <div class='standard_big_font' ng-if='division_machine_queue_length > 0'>
           <!--<div><u><i class="icon ion-ios-eye padding"></i><span>Review</u></span></div>-->
@@ -74,33 +73,9 @@
             Add current player ({{player_name}}) <br>
             to new queue or machine
           </button>
-        </div>                
-          
-          
-          <!-- <span ng-if="team_tournament=='false'"> -->
-          <!--   <button  class="seperate_button button button-full button-calm item-icon-right item-icon-left" ui-sref=".^.^.^.player_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})"> -->
-          <!--     <i ng-if="division_machine_queue_length == 0" class="icon"></i> -->
-          <!--     <span ng-if="division_machine_queue_length == 0">Add new player to machine</span> -->
-          <!--     <i ng-if='division_machine_queue_length > 0' class="icon ion-alert-circled"></i>               -->
-          <!--     <span ng-if='division_machine_queue_length > 0'>Add player waiting on queue</span> -->
-          <!--     <i class="icon ion-chevron-right"></i>           -->
-
-          <!--   </button> -->
-          <!--   <button ng-if='resources.divisions.data[division_id].queuing == true && resources.added_score.player_token_data > 0'  class="button button-full button-calm seperate_button item-icon-right small-text-button" ui-sref="app.queue_player_after_play({division_id:division_id,player_id:player_id,player_name:player_name,division_machine_just_played_id:division_machine_id,division_machine_just_played_name:division_machine_name})"> -->
-          <!--     Add {{player_name}} to new machine or queue -->
-          <!--     <i class="icon ion-chevron-right"></i>           -->
-          <!--   </button>     -->
-          <!-- </span> -->
-          <!-- <span ng-if="team_tournament=='true'"> -->
-          <!--   <button class="button button-full button-calm seperate_button item-icon-right" ui-sref=".^.^.^.team_select({division_machine_id:division_machine_id,division_machine_name:division_machine_name,team_tournament:team_tournament})"> -->
-          <!--     Add new team to machine -->
-          <!--     <i class="icon ion-chevron-right"></i>           -->
-
-          <!--   </button>     -->
-          <!-- </span>     -->
-          
-        </div>
-      </center>
+        </div>                                              
+      </div>
+    </center>
   </ion-content>
 </ion-view>
 

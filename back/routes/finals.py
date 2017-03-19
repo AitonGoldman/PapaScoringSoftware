@@ -219,7 +219,7 @@ def route_set_finals_match_game_player_result_completed(finals_match_game_result
     db.session.commit()    
     for idx,finals_match_game_player_result in enumerate(sorted_player_results):
         print "poop2"
-        finals_match_player_result = tables.FinalsMatchPlayerResult.query.filter_by(finals_player_id=finals_match_game_player_result.finals_player_id).join(tables.FinalsMatchGameResult).filter_by(division_final_match_id=finals_match_game_result.division_final_match_id).first()
+        finals_match_player_result = tables.FinalsMatchPlayerResult.query.filter_by(finals_player_id=finals_match_game_player_result.finals_player_id).join(tables.DivisionFinalMatch).join(tables.FinalsMatchGameResult).filter_by(division_final_match_id=finals_match_game_result.division_final_match_id).first()
         if finals_match_player_result.papa_points_sum:
             finals_match_player_result.papa_points_sum=finals_match_player_result.papa_points_sum+papa_points[idx]            
         else:                        

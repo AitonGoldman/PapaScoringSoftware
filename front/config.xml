@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.pbchallenge.yapss" version="1.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>PAPA Scoring Software</name>
+<widget id="com.pbchallenge.yapss" version="2.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>PAPAScoringSoftware</name>
   <description>
         Yet Another Pinball Scoring Software
     </description>
   <author email="yanetut@gmai.com" href="http://www.pbchallenge.net/">
-      Aiton GOldman
+      Aiton Goldman
     </author>
   <content src="index.html"/>
   <access origin="*"/>

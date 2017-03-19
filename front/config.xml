@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.pbchallenge.yapss" version="1.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>YAPSS</name>
+  <name>PAPA Scoring Software</name>
   <description>
         Yet Another Pinball Scoring Software
     </description>
@@ -9,6 +9,7 @@
     </author>
   <content src="index.html"/>
   <access origin="*"/>
+  <access origin="cdvfile://*"/>
   <preference name="EnableViewportScale" value="true"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
@@ -18,10 +19,9 @@
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
-  <preference name="iosPersistentFileLocation" value="Library" />
-  <access origin="cdvfile://*"/>
+  <preference name="iosPersistentFileLocation" value="Library"/>
+  <preference name="AndroidPersistentFileLocation" value="Compatibility"/>
   <allow-intent href="cdvfile://*"/>
-  <preference name="AndroidPersistentFileLocation" value="Compatibility" />  
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>

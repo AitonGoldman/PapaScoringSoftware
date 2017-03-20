@@ -38,7 +38,8 @@ angular.module('app.scorekeeping.machine_select.select_action').controller(
             } else {
                 $state.go('.^.player_select',
                           {division_machine_id:$scope.division_machine.division_machine_id,
-                           division_machine_name:$scope.division_machine.division_machine_name});                        
+                           division_machine_name:$scope.division_machine.division_machine_name,
+                           team_tournament:team_tournament});                        
             }
         };
         

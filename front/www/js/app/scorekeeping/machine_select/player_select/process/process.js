@@ -12,6 +12,16 @@ angular.module('app.scorekeeping.machine_select.player_select.process').controll
 	    $scope.previous_player_name=$state.params.previous_player_name;            
 	    $scope.division_machine_id=$state.params.division_machine_id;
 	    $scope.division_machine_name=$state.params.division_machine_name;
+            $scope.team_tournament=$state.params.team_tournament;
+            $scope.team_tournament= $scope.team_tournament == "true";
+
+            
+            if( $scope.team_tournament != true ){
+                $scope.title_text='Player Started';
+            } else {
+                $scope.title_text='Team Started';
+            }                
+
             
             $scope.existing_queue_machine=$state.params.existing_queue_machine;
             
@@ -33,7 +43,7 @@ angular.module('app.scorekeeping.machine_select.player_select.process').controll
                 
                 add_team_to_machine_promise.then(function(data){
                     $scope.resources = TimeoutResources.GetAllResources();
-                    $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
+                    //$scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
                     //console.log($scope.resources);
                     Modals.loaded();
         });                    

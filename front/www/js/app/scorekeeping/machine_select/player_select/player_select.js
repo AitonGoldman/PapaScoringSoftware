@@ -16,20 +16,27 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             $scope.player_id = $state.params.player_id;
             $scope.player_name = $state.params.player_name;
 	    $scope.hide_back_button=$state.params.hide_back_button;
-
+            $scope.team_tournament=$state.params.team_tournament;
+            $scope.team_tournament= $scope.team_tournament == "true";
             $scope.utils = Utils;
             $scope.queues = [];
             Modals.loading();
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
+            //$scope.resources.divisions.data[$scope.division_id].team_tournament;                        
             
+            if( $scope.team_tournament != true ){
+                $scope.title_text='Select Player';
+            } else {
+                $scope.title_text='Select Team';
+            }                
+
             $scope.selected_players=[];
             //players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
             players_promise = TimeoutResources.GetPlayersWithTicketsForDivision($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise = TimeoutResources.GetQueues(players_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise.then(function(data){
                 $scope.resources = TimeoutResources.GetAllResources();                            
-                $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament;
-
+                
                 $scope.queues = $scope.resources.queues.data[$scope.division_machine_id].queues;
                 if($scope.queues.length > 0){
                     $scope.queue_player.player_id=$scope.queues[0].player.player_id;

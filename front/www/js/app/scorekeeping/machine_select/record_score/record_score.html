@@ -48,56 +48,9 @@
        <!--<i class="icon ion-chevron-right"></i>-->
      </button>
     </center>
-    <div class='player-info-avatar player-info-avatar-ex'>
+    <div class='player-info-avatar player-info-avatar-ex' ng-if="team_tournament==false">
       <img class='avatar-frame avatar-user-pic avatar-user-pic-ex' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_id}}.jpg">
     </div>
-    <!--
-    <div style='z-index:4' class='machine-info-avatar'>
-      <img class='avatar-frame avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg">
-    </div>-->
-    
-    <!-- <div class="list" > -->
-    <!--   <\!-- REMOVE ME -\-> -->
-    <!--   <div class='player-select'> -->
-    <!--     <label class="item-input item"> -->
-    <!--       <i class="icon ion-edit placeholder-icon"></i> -->
-    <!--       <form ng-submit='test_submit()'> -->
-    <!--         <input ng-keydown='keyDown($event)' ng-change='onScoreChange()' type="tel" placeholder="Score" ng-model="score.score">  -->
-    <!--       </form> -->
-    <!--     </label> -->
-    <!--     <div class='item'> -->
-    <!--       (#{{player_id}})</span>{{player_name}} -->
-    <!--     </div> -->
-    <!--   </div> -->
-    <!--   <div style='text-align:center' class='item'> -->
-    <!--     {{division_machine_name}} -->
-    <!--   </div> -->
-    <!--   <div ng-if='resources.player_best_score_for_machine.data != undefined' style='text-align:center' class='item'> -->
-    <!--     Previous Best Score : {{resources.player_best_score_for_machine.data|number}} -->
-    <!--   </div>       -->
-    <!--  </div> -->
-    <!--   <button style='width:40%;float:right' ng-disabled='utils.var_empty(score.score)' ng-click='test_submit()' class='button button-full item-icon-right button-calm seperate_button'> -->
-    <!--     Review Score -->
-    <!--     <i class="icon ion-chevron-right"></i>           -->
-    <!--   </button>  -->
-    <!--  <button  style='width:40%;float:left' class="button button-full button-assertive item-icon-right seperate_button" ng-click="choose_void_action()"> -->
-    <!--   Void Ticket -->
-    <!--   <i class="icon ion-chevron-right"></i>           -->
-    <!--  </button> -->
-    <!--  <button  class="button button-full button-assertive item-icon-right seperate_button" ui-sref=".confirm_jagoff">  -->
-    <!--    <span ng-if='team_tournament=="false"'> (#{{player_id}}) </span> {{player_name}} is not here. -->
-    <!--         <i class="icon ion-chevron-right"></i>           -->
-    <!--  </button>  -->
-
-    
-    <!-- <div class='player-info-avatar'> -->
-    <!--   <img class='avatar-frame avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_id}}.jpg">  -->
-    <!-- </div> -->
-    <!-- <div style='z-index:4' class='machine-info-avatar'> -->
-    <!--   <img class='avatar-frame avatar-user-pic' src="{{http_prefix}}://{{server_ip_address}}/pics/machine_{{division_machine_id}}.jpg"> -->
-    <!-- </div> -->
-
-
   </ion-content>
 </ion-view>
 

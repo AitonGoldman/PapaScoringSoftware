@@ -10,7 +10,10 @@
         Record score for {{resources.queues.machine_players[division_machine_id]}}
       </span>
       <span ng-if='resources.queues.machine_players[division_machine_id] == undefined'>
-        Start player on {{resources.queues.data[division_machine_id].division_machine_name}}
+        Start
+        <span ng-if='resources.divisions.data[division_id].team_tournament != true'>player</span>
+        <span ng-if='resources.divisions.data[division_id].team_tournament == true'>team</span>
+        on {{resources.queues.data[division_machine_id].division_machine_name}}
       </span>
       <i class="icon ion-chevron-right"></i>      
     </button>    

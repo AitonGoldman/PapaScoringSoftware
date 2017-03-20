@@ -6,7 +6,7 @@
           <button class='button button-clear button-dark icon-left ion-alert-circled ion-icon-yellow review-icon'>
             <span><u>Review</u></span>
           </button>
-          <table class="warning-confirm">
+          <table class="warning_confirm warning_confirm_three_row_table">
             <tr>
               <td class='padding-right' align="right">
                 Machine : 
@@ -30,12 +30,12 @@
               </td>
             </tr>
           </table>
-          <br>
-          <button ng-if="num_tokens_left > 0" id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({process_step:{process:true}})">
-            <span>Add To Queue</span>
-            <i class="icon ion-chevron-right"></i>          
-          </button>
         </div>
+        <br>
+        <button ng-if="num_tokens_left > 0" id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({process_step:{process:true}})">
+          <span>Add To Queue</span>
+          <i class="icon ion-chevron-right"></i>          
+        </button>        
       </center>
   </ion-content>
 </ion-view>

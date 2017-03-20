@@ -7,7 +7,7 @@
             <span><u>Review Score Before Submit</u></span>
           </button>
 
-          <table class='warning-confirm'>
+          <table class='warning_confirm warning_confirm_three_row_table'>
             <tr>
               <td class='padding-right' align="right">
                 <span ng-if='team_tournament == true'>Team</span><span ng-if='team_tournament != true'>Player</span>: 
@@ -21,6 +21,7 @@
               </td>
               <td class='padding-left'>
                 {{division_machine_name}}
+              </td>
             </tr>
             <tr>
               <td class='padding-right' align="right">
@@ -28,6 +29,7 @@
               </td>
               <td class='padding-left'>
                 {{score}}
+              </td>
             </tr>
             
           </table>

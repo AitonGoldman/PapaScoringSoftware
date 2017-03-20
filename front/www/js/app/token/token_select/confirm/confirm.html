@@ -1,11 +1,11 @@
 <ion-view view-title="Review Tickets">
   <ion-content>      
-      <center>
-        <div class='standard_big_font'>
+    <center>
+      <div class="standard_big_font warning_confirm warning_confirm_two_row_table">
           <button class='button button-clear button-dark icon-left ion-alert-circled ion-icon-yellow review-icon' >            
             <span><u>Review Before Purchase</u></span>
           </button>
-          <table class='warning_confirm'>
+          <table>
             <tr ng-if='token_count[0] != 0' ng-repeat='(division_id,token_count) in token_info.divisions'>
               <td class='padding-right' align="right">
                 {{token_info.divisions_names[division_id]}} : 
@@ -40,7 +40,6 @@
               </td>
             </tr>
           </table>
-          <br>
         </div>
         
         <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ng-click="create_tickets()">

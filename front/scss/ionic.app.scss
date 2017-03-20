@@ -770,6 +770,10 @@ span.big-spinner {
   background-size: contain;
 }
 
+.warning_confirm {
+    padding-top:$font-size-base;
+}
+
 .warning_confirm:before {
     content: ' ';
     display: block;
@@ -783,11 +787,36 @@ span.big-spinner {
     background-image: url('http://www.pbchallenge.net/pics/attention.jpg');
     background-repeat: no-repeat;
     background-position: 50% 0;
-    -ms-background-size: cover;
-    -o-background-size: cover;
-    -moz-background-size: cover;
-    -webkit-background-size: cover;
     background-size: contain;
+    -moz-background-size: contain;
+    -webkit-background-size: contain;
+
+}
+
+.platform-android {
+    .warning_confirm_three_row_table:before{
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){            
+                height:40%;
+            }
+            @media screen and (min-device-height: 751px){
+                height:45%;                
+            }
+        }
+
+    }
+    .warning_confirm_two_row_table:before{
+        @media screen and (max-width: 610px){
+            @media screen and (max-device-height: 750px){            
+                height:35%;
+            }
+            @media screen and (min-device-height: 751px){
+                height:40%;                
+            }
+        }
+
+    }    
+    
 }
 
 .normal_ul {

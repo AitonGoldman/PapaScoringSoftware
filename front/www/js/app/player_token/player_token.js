@@ -59,41 +59,5 @@ angular.module('app.player_token').controller(
                  });
                 $scope.token_info.total_cost = divisions_total;
             };
-            $scope.show_ticket_prices = function(){
-                $scope.$broadcast('scroll.refreshComplete');
-                division_prices_string = [];
-                _.forEach($scope.resources.divisions.data, function(value, key) {                    
-                    division=value;
-                    division_string = "";
-                    if (key!="metadivisions" && division.meta_division_id==undefined){
-                        division_string = division_string + division.tournament_name +" - "+division.min_num_tickets_to_purchase+" for "+ division.local_price;
-                        if(division.discount_ticket_count>0){
-                            division_string = division_string + ","+division.discount_ticket_count+" for "+division.discount_ticket_price;
-                        } 
-                        division_prices_string.push(division_string);
-                    }
-                    
-                });
-                _.forEach($scope.resources.divisions.data.metadivisions, function(value, key) {                    
-                    division=value;
-                    division_string = "";
-                    division_string = division_string + division.meta_division_name +" - "+division.min_num_tickets_to_purchase+" for "+ division.local_price;
-                    if(division.discount_ticket_count>0){
-                        division_string = division_string + ","+division.discount_ticket_count+" for "+division.discount_ticket_price;
-                    } 
-                    division_prices_string.push(division_string);                    
-                });                
-                
-                //$scope.popover = $ionicPopover.fromTemplate(division_prices_string, {
-                //    scope: $scope
-                //});
-                //$scope.popover.show();
-                // var alertPopup = $ionicPopup.alert({
-                //    title: 'Ticket Price List',
-                //    template: division_prices_string                    
-                // });
-                Modals.information(division_prices_string);
-                //division.tournament_name division.min_num_tickets_to_purchase division.local_price  division.discount_ticket_count division.discount_ticket_price 
-            };
     }]
 );

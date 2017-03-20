@@ -39,6 +39,7 @@ app = angular.module(
         'app.cycling_division_results_view',
         'ionicImgCache',
         'app.i_need_an_adult',
+    'app.ticket_prices',
     /*REPLACEMECHILD*/
 	]
 );

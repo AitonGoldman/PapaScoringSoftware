@@ -1,0 +1,23 @@
+<ion-view view-title=" Ticket Prices ">
+  <ion-content>      
+    <center>
+        <div ng-repeat='division in division_prices'>
+          <u>{{division.tournament_name}}</u>
+          <br>
+          <span class='standard_med_font'>{{division.min_num_tickets_to_purchase}} for ${{division.local_price}}</span>
+          <span class='standard_big_font' ng-if='division.discount_ticket_count > 0'>
+            | 
+          </span>
+          <span class='standard_med_font' ng-if='division.discount_ticket_count > 0'>
+            {{division.discount_ticket_count}} for ${{division.discount_ticket_price}}               
+          </span>
+        </div>
+        <br>
+      <button class='button button-calm' ui-sref='app'>
+        Return Home
+      </button>
+    </center>
+    
+  </ion-content>
+</ion-view>
+

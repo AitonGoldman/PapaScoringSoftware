@@ -12,7 +12,15 @@
         <i class="icon ion-chevron-right"></i>                
       </a>
     </div>
-    <div class="skinny-list list" ng-if="type_of_page != 'prereg'">
+    <div class="skinny-list list" ng-if="type_of_page == 'kiosk'">
+
+      <a  ng-if='type_of_page == "kiosk"' id="front_queues_link" ui-sref='.kiosk_queues({manage:false})' class="item item-icon-left item-icon-right  ">
+        <i class="icon ion-pull-request"></i>
+        <span>I want to get on a queue</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>      
+    </div>    
+    <div class="skinny-list list" ng-if="type_of_page != 'prereg' && type_of_page != 'kiosk'">
       <a id="front_purchase_tickets_link" ui-sref=".token" class="item item-icon-left item-icon-right" ng-if='User.has_role("desk")  && !User.has_role("in_line_registration")'>
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>
@@ -23,6 +31,11 @@
         <span>Purchase Tickets</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
+      <a id="front_player_purchase_tickets_link" ui-sref=".ticket_prices" class="item item-icon-left item-icon-right  " ng-if='User.has_role("player")'>
+        <i class="icon ion-ios-cart"></i>
+        <span>Ticket Prices</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>      
       <a id="front_player_info_link" ui-sref=".player_info({player_id:User.logged_in_user().player.player_id})" class="item item-icon-left item-icon-right  " ng-if='User.has_role("player")'>
         <i class="icon ion-information-circled"></i>
         <span>Player Info</span>
@@ -61,13 +74,7 @@
         <i class="icon ion-pull-request"></i>
         <span>Queues</span>
         <i class="icon ion-chevron-right"></i>                
-      </a>
-      <a  ng-if='type_of_page == "kiosk"' id="front_queues_link" ui-sref='.kiosk_queues({manage:false})' class="item item-icon-left item-icon-right  ">
-        <i class="icon ion-pull-request"></i>
-        <span>I want to get on a queue</span>
-        <i class="icon ion-chevron-right"></i>                
       </a>      
-      
       <a  id="front_results_link" ui-sref='.results' class="item item-icon-left item-icon-right">
         <i class="icon ion-stats-bars"></i>
         <span>Results</span>

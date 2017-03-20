@@ -18,29 +18,32 @@
     ImgCache.options.chromeQuota = ionicImgCache.quota * 1024 * 1024;
 
     $ionicPlatform.ready(function() {
-      ImgCache.init(function() {
-        var message = 'ionicImgCache initialized';
+        if(ionic.Platform.isWebView()==true){
+            ImgCache.init(function() {
+                var message = 'ionicImgCache initialized';
+                
+                if (ionicImgCache.debug) {
+                    if (console.info) {
+                        console.info(message);
+                    }
+                    else {
+                        console.log(message);
+                    }
+                }
+            }, function() {
+                var message = 'Failed to init ionicImgCache.';
+                
+                if (ionicImgCache.debug) {
+                    if (console.error) {
+                        console.error(message);
+                    }
+                    else {
+                        console.log(message);
+                    }
+                }
+            });
 
-        if (ionicImgCache.debug) {
-          if (console.info) {
-            console.info(message);
-          }
-          else {
-            console.log(message);
-          }
         }
-      }, function() {
-        var message = 'Failed to init ionicImgCache.';
-
-        if (ionicImgCache.debug) {
-          if (console.error) {
-            console.error(message);
-          }
-          else {
-            console.log(message);
-          }
-        }
-      });
     });
   }
 

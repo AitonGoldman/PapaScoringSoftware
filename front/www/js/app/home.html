@@ -3,7 +3,7 @@
   <ion-side-menu-content>
     <ion-nav-bar  class="bar-calm">
       <ion-nav-buttons side="right">
-        <button id="ion-navicon-id" class="button button-icon ion-navicon" menu-toggle="right">
+        <button ng-if='type_of_page != "kiosk"'id="ion-navicon-id" class="button button-icon ion-navicon" menu-toggle="right">
         </button>
       </ion-nav-buttons>
       <ion-nav-back-button ng-click="customBackButtonNav()">

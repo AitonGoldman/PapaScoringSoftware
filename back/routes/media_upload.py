@@ -31,8 +31,9 @@ def upload_file(pic_type):
             subprocess.call(["mv","%s_rotate"%save_path,save_path])
         #else:
         #    print "android..."
-        subprocess.call(["convert", save_path,"-crop","200x100+0+0!", "%s_crop"%save_path])
-        subprocess.call(["mv","%s_crop"%save_path,save_path])
+        #subprocess.call(["convert", save_path,"-crop","200x100+0+0!", "%s_crop"%save_path])
+        subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])        
+        subprocess.call(["mv","%s_resize"%save_path,save_path])
         
         
         

@@ -4,4 +4,5 @@ server_ip_address="";
 results_ip_address="";
 purchase_ip_address="";
 server_port="8000";
+purchase_port="8000";
 http_prefix="http";

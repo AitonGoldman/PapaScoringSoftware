@@ -1,5 +1,5 @@
 <ion-view view-title="">
-  <ion-content>      
+  <ion-content padding="false">
     <div style='padding-top:0px'>      
       <div ng-repeat="division_final_match in resources.finals.data[division_final_id].division_final_rounds[round_idx].division_final_matches|orderBy:'division_final_match_id'" class="list card">
         <div  ui-sref='.match_details({division_final_match_id:division_final_match.division_final_match_id,division_final_match_idx:$index,round_idx:round_idx})' class="item item-divider item-icon-left item-icon-right">

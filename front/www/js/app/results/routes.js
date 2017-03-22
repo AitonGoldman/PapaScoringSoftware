@@ -109,7 +109,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.results.finals.final'
  	     }
  	   }
-       }).state('app.results.finals.final.round_0', 
+       }).state('app.results.finals.final.round', 
         { 
          cache: false,
  	 url: '/round/count/:count/round_idx/:round_idx',
@@ -119,67 +119,17 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.results.finals.final.round'
  	     }
  	   }
-       }).state('app.results.finals.final.round_1', 
+       }).state('app.results.finals.final.intro', 
         { 
          cache: false,
- 	 url: '/round/count/:count/round_idx/:round_idx',
+ 	 url: '/round/count/:count/intro',
  	 views: {
  	     'round_tab@app.results.finals.final': {
- 	       templateUrl: 'js/app/results/finals/final/round/round.html',
- 	       controller: 'app.results.finals.final.round'
+ 	       templateUrl: 'js/app/results/finals/final/intro.html'
+ 	       //controller: 'app.results.finals.final.round'
  	     }
  	   }
-       }).state('app.results.finals.final.round_2', 
-        { 
-         cache: false,
- 	 url: '/round/count/:count/round_idx/:round_idx',
- 	 views: {
- 	     'round_tab@app.results.finals.final': {
- 	       templateUrl: 'js/app/results/finals/final/round/round.html',
- 	       controller: 'app.results.finals.final.round'
- 	     }
- 	   }
-       }).state('app.results.finals.final.round_3', 
-        { 
-         cache: false,
- 	 url: '/round/count/:count/round_idx/:round_idx',
- 	 views: {
- 	     'round_tab@app.results.finals.final': {
- 	       templateUrl: 'js/app/results/finals/final/round/round.html',
- 	       controller: 'app.results.finals.final.round'
- 	     }
- 	   }
-       }).state('app.results.finals.final.round_0.match_details', 
-        { 
-         cache: false,
- 	 url: '/match_details/division_final_match_idx/:division_final_match_idx/division_final_match_id/:division_final_match_id',
- 	 views: {
- 	     'round_tab@app.results.finals.final': {
- 	       templateUrl: 'js/app/results/finals/final/round/match_details/match_details.html',
- 	       controller: 'app.results.finals.final.round.match_details'
- 	     }
- 	   }
-       }).state('app.results.finals.final.round_1.match_details', 
-        { 
-         cache: false,
- 	 url: '/match_details/division_final_match_idx/:division_final_match_idx/division_final_match_id/:division_final_match_id',
- 	 views: {
- 	     'round_tab@app.results.finals.final': {
- 	       templateUrl: 'js/app/results/finals/final/round/match_details/match_details.html',
- 	       controller: 'app.results.finals.final.round.match_details'
- 	     }
- 	   }
-       }).state('app.results.finals.final.round_2.match_details', 
-        { 
-         cache: false,
- 	 url: '/match_details/division_final_match_idx/:division_final_match_idx/division_final_match_id/:division_final_match_id',
- 	 views: {
- 	     'round_tab@app.results.finals.final': {
- 	       templateUrl: 'js/app/results/finals/final/round/match_details/match_details.html',
- 	       controller: 'app.results.finals.final.round.match_details'
- 	     }
- 	   }
-       }).state('app.results.finals.final.round_3.match_details', 
+       }).state('app.results.finals.final.round.match_details', 
         { 
          cache: false,
  	 url: '/match_details/division_final_match_idx/:division_final_match_idx/division_final_match_id/:division_final_match_id',

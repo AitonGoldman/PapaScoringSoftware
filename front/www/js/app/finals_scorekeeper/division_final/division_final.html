@@ -1,21 +1,20 @@
 <ion-view view-title="Finals">
-  <div style='margin-top:100px' ng-if='state.current.name != "app.finals_scorekeeper.division_final.round.match_details"'>
-    <table class='results_table_machine' width='75%' style='margin:auto'>
+    <ion-footer-bar class="bar-calm">
+    <table width='75%' style='margin:auto'>
       <tr>
-        <th ng-repeat="round in resources.finals.data[division_final_id].division_final_rounds" align="center" ><a ui-sref="app.finals_scorekeeper.division_final.round({round_idx:$index})">
+        <th style='line-height:1px' ng-repeat="round in resources.finals.data[division_final_id].division_final_rounds" align="center" ><a ui-sref="app.finals_scorekeeper.division_final.round({round_idx:$index})">
             <i ng-if='state.params.round_idx == $index' class='icon ion-ios-circle-filled standard_large_font'></i>
             <i ng-if='state.params.round_idx != $index' class='icon ion-ios-circle-outline standard_large_font'></i>
             
-        </a></th>
-      </tr>
-        <th ng-repeat="round in resources.finals.data[division_final_id].division_final_rounds" align="center" style=''>
-            <span class="standard_small_font">Round {{($index)+1}}</span>
+          </a>
+          <br>
+          <span class="standard_small_font">Round {{($index)+1}}</span>
         </th>
-      
     </table>
-  </div>    
-  <ion-nav-view name="round_tab" style='margin-top:0px'>
-  </ion-nav-view>
+    </ion-footer-bar>
+
+    <ion-nav-view name="round_tab" style='margin-top:0px'>
+    </ion-nav-view>
 </ion-view>
 <!-- <ion-tabs class="tabs-positive tabs-icon-top"> -->
 

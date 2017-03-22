@@ -1,3 +1,4 @@
+<!--
 <ion-nav-view name="round_tab">
 </ion-nav-view>
 <ion-tabs class="tabs-positive tabs-icon-top">
@@ -16,4 +17,23 @@
   </ion-tab>
   
 </ion-tabs>
+-->
+<ion-view view-title="Finals">
+<ion-nav-view name="round_tab">
+</ion-nav-view>
+<ion-footer-bar class="bar-calm">
+  <table width='75%' style='margin:auto'>
+    <tr>
+      <th style='line-height:1px' ng-repeat="round in resources.finals.data[division_final_id].division_final_rounds" align="center" ><a ui-sref="app.results.finals.final.round({round_idx:$index})">
+          <i ng-if='state.params.round_idx == $index' class='icon ion-ios-circle-filled standard_large_font'></i>
+          <i ng-if='state.params.round_idx != $index' class='icon ion-ios-circle-outline standard_large_font'></i>
+        </a>
+        <br>
+        <span class="standard_small_font">Round {{($index)+1}}</span>
+      </th>
+    </tr>
+    </table>
+
+</ion-footer-bar>
+</ion-view>
 

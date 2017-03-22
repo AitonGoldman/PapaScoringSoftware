@@ -10,7 +10,7 @@ angular.module('app.finals_scorekeeper.division_final').controller(
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                                
         finals_promise = TimeoutResources.GetDivisionFinals($scope.bootstrap_promise,{site:$scope.site});        
-        // = TimeoutResources.GetEtcData();
+            // = TimeoutResources.GetEtcData();                        
         finals_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();            
@@ -43,8 +43,11 @@ angular.module('app.finals_scorekeeper.division_final.round').controller(
         //$scope.site=$state.params.site;
 	$scope.division_final_id=$state.params.division_final_id;
         //$scope.utils = Utils;
-        $scope.counter = $state.params.counter;
-        $scope.round_idx = parseInt($state.params.round_idx);
+        $scope.counter = $state.params.counter;        
+        if($state.params.round_idx != undefined){
+            $scope.round_idx = parseInt($state.params.round_idx);
+        }
+        
         finals_promise = TimeoutResources.GetDivisionFinals(undefined,{site:$scope.site});                
         finals_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();            

@@ -26,9 +26,14 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
                    templateUrl: "js/app/finals_scorekeeper/division_final/test.html",
                    controller: 'app.finals_scorekeeper.division_final.round'
                }                             
-           },
-           data: {
-               round: 0               
+           }  
+       }).state('app.finals_scorekeeper.division_final.round.intro', {
+           url: "/intro",
+           views: {
+               'round_tab@app.finals_scorekeeper.division_final': {
+                   templateUrl: "js/app/finals_scorekeeper/division_final/intro.html",
+                   //controller: 'app.finals_scorekeeper.division_final.round'
+               }                             
            }  
        }).state('app.finals_scorekeeper.division_final.round_1', {
            url: "/round/:round_idx",

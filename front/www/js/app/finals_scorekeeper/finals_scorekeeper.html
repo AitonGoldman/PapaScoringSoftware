@@ -1,7 +1,7 @@
 <ion-view view-title="Finals">
   <ion-content>      
     <div class="skinny-list list">    
-      <a id="scorekeeping_division_select_{{division.division_id}}_link" ng-repeat='division_final in resources.finals.data' ui-sref='.division_final({division_final_id:division_final.division_final_id})' class="item item-icon-right">
+      <a id="scorekeeping_division_select_{{division.division_id}}_link" ng-repeat='division_final in resources.finals.data' ui-sref='.division_final.round.intro({division_final_id:division_final.division_final_id,round_idx:-1})' class="item item-icon-right">
         <span>{{resources.divisions.data[division_final.division_id].tournament_name}} {{division_final.extra_name_info}}</span>
         <i class="icon ion-chevron-right"></i>        
       </a>          

@@ -73,13 +73,13 @@ $toggle-off-bg-color:             #33cd5f !default;
         }
     }
     @media screen and (max-width: 970px) and (min-width:611px) {
-        height: $font-size-base*6;
+        height: $font-size-base*6*1.5;
         width: $font-size-base*6;
         border-radius:$font-size-base*6;
         
     }
     @media screen and (min-width: 971px) {
-        height: $font-size-base*6;
+        height: $font-size-base*6*1.5;
         width: $font-size-base*6;
         border-radius:$font-size-base*6;
         
@@ -98,18 +98,18 @@ $toggle-off-bg-color:             #33cd5f !default;
         @media screen and (min-device-height: 751px){
             height: $font-size-base*6;
             width: $font-size-base*6;
-            border-radius:$font-size-base*6;
+            //border-radius:$font-size-base*6;
             
         }
     }
     @media screen and (max-width: 970px) and (min-width:611px) {
-        height: $font-size-base*6;
+        height: $font-size-base*6*1.5;
         width: $font-size-base*6;
         border-radius:$font-size-base*6;
         
     }
     @media screen and (min-width: 971px) {
-        height: $font-size-base*6;
+        height: $font-size-base*6*1.5;
         width: $font-size-base*6;
         border-radius:$font-size-base*6;
         
@@ -724,12 +724,34 @@ a.extra-tall-button,button.extra-tall-button {
             border-radius:$font-size-base*7;            
         }
         @media screen and (min-device-height: 751px){
-            height: $font-size-base*5.5;
+            height: $font-size-base*5.5*1.5;
             width: $font-size-base*5.5;
             border-radius:$font-size-base*5.5;            
         }
     }
 }
+
+.machine-pic-ex {
+    @media screen and (max-width: 610px){
+        @media screen and (max-device-height: 750px){
+            //height: $font-size-base*7;
+            height: $font-size-base*7;
+            width: $font-size-base*7;
+            border-radius:$font-size-base*7;            
+        }
+        @media screen and (min-device-height: 751px){
+            height: $font-size-base*5.5;
+            width: $font-size-base*5.5;
+            border-radius:$font-size-base*5.5;            
+        }
+    }
+    @media screen and (min-width: 610px){
+        height: $font-size-base*8.5;
+        width: $font-size-base*8.5;
+        border-radius:$font-size-base*8.5;            
+    }    
+}
+
 
 .machine-select-action-spacer {
     @media screen and (max-width: 610px){
@@ -823,4 +845,8 @@ span.big-spinner {
 .normal_ul {
     list-style: disc;
     list-style-type: disc;
+}
+
+.team_add_button {
+    margin-top:$font-size-base*3;
 }

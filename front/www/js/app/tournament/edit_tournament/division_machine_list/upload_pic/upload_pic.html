@@ -22,7 +22,7 @@
           <br>
         </form>-->
         <div ng-if='uploaded_pic_name != undefined' class='player-info-avatar' style='height:250px'>
-          <img class='avatar-frame avatar-user-pic' src="http://{{server_ip_address}}/pics/{{uploaded_pic_name}}">
+          <img class='avatar-frame machine-pic-ex' src="http://{{server_ip_address}}/pics/{{uploaded_pic_name}}">
         </div>
         <br>
         <button ng-if='uploaded_pic_name != undefined' ng-click='renameUploadedFile()'>

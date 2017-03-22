@@ -29,6 +29,8 @@ def upload_file(pic_type):
         if orientation == "RightTop":            
             subprocess.call(["convert", save_path,"-rotate", "90", "%s_rotate"%save_path])
             subprocess.call(["mv","%s_rotate"%save_path,save_path])
+            subprocess.call(["convert", save_path,"-strip", "%s_strip"%save_path])
+            subprocess.call(["mv","%s_strip"%save_path,save_path])
         #else:
         #    print "android..."
         #subprocess.call(["convert", save_path,"-crop","200x100+0+0!", "%s_crop"%save_path])

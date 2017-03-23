@@ -25,7 +25,7 @@
       </tr>
       <tr ng-repeat='result in resources.division_machine_results.data' ng-class='{lightgrey:$even}'>
         <td style='padding-top:10px;vertical-align:middle' align='center'>{{result.rank}}</td>
-        <td style='padding-left:5px;padding-top:10px;vertical-align:middle' align='center'>          
+        <td style='padding-left:5px;padding-top:10px;vertical-align:middle' align='center'>
           <span ng-if='team_tournament==false'>
           <a ui-sref='.^.^.^.players.player({player_id:result.player_id,player_name:result.player_name})'>
             {{result.player_name}}
@@ -34,10 +34,10 @@
           </span>
           <span ng-if='team_tournament==true'>
             {{result.team_name}}
-          </span>          
+          </span>
         </td>
         <td align='center' style='padding-left:5px;padding-top:10px;vertical-align:middle'>{{result.points}}</td>
-        <td align='center' style='padding-left:5px;padding-top:10px;vertical-align:middle'>{{result.score|number}}</td>        
+        <td align='center' style='padding-left:5px;padding-top:10px;vertical-align:middle'>{{result.score|number}}</td>
       </tr>
     </table>
   </ion-content>

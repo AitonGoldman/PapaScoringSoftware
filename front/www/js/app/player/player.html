@@ -10,7 +10,7 @@
         <span>Add Player...</span>
         <i class="icon ion-chevron-right"></i>        
       </a>
-      <div ng-repeat="player in flat_players|filter:searchText">
+      <div collection-repeat="player in flat_players|filter:searchText">
         <a id="manage_players_edit_player_{{player.player_id}}_link" ng-click='ActionSheets.choose_player_action(player.player_id)' class="item item-icon-left item-icon-right">
           <i class="icon ion-person"></i>
           <span>{{player.first_name+" "+player.last_name}}</span>

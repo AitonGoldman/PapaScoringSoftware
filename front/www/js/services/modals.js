@@ -88,6 +88,12 @@ angular.module('TD_services.modals').factory('Modals', ['$state','$timeout','$io
                 template: '<div class="col"><div><ion-spinner></ion-spinner></div><div><br>Loading...<br>{{loading_message}}</div></div>'
             });            
         },
+        loading_no_spinner: function(){
+            $ionicLoading.show({
+                hideOnStateChange: true,
+                template: '<div><br>Loading...<br>{{loading_message}}</div>'
+            });            
+        },        
         set_status_modal_message: function(message){
             $rootScope.loading_message=message;
         }

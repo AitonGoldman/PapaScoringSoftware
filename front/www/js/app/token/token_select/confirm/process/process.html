@@ -15,8 +15,10 @@
               <td class='padding-left'>
                 {{token_count}}
                 <span ng-if='token_info.comped!=true'>
-                  <span ng-if="resources.divisions.data[division_id].discount_count!=undefined">({{resources.added_tokens.data.divisions_count[division_id].discount_count}} discount,
-                  {{resources.added_tokens.data.divisions_count[division_id].normal_count}} normal)</span>
+                  <span ng-if="resources.added_tokens.data.divisions_count[division_id].discount_count!=undefined">({{resources.added_tokens.data.divisions_count[division_id].discount_count}}
+                    ${{resources.divisions.data[division_id].discount_ticket_price}},
+                    {{resources.added_tokens.data.divisions_count[division_id].normal_count}}
+                    ${{resources.divisions.data[division_id].local_price}})</span>
                 </span>
               </td>
             </tr>

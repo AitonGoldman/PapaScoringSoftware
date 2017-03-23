@@ -8,7 +8,7 @@
         <i class="icon ion-camera"></i>
         <span >Take Picture</span>
       </a>      
-      <button ng-disabled="player_info.pic_file == undefined" id='edit_player_edit_button' ui-sref='.process({process_step:{process:true}, player_id:player_id,pic_file:player_info.pic_file})' class="item-icon-right button button-full button-calm input-list-button seperate_button" style='text-align:left'>
+      <button ng-disabled="player_info.pic_file == undefined" id='edit_player_edit_button' ng-click='update_player()' class="item-icon-right button button-full button-calm input-list-button seperate_button" style='text-align:left'>
         <i class="icon ion-chevron-right"></i>
         <span >Apply Changes</span>
       </button>

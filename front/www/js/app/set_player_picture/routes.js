@@ -12,7 +12,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.set_player_picture.take_picture', 
         { 
          cache: false,
- 	 url: '/take_picture/player_id/:player_id',
+ 	 url: '/take_picture/player_id/:player_id/player_name/:player_name',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/set_player_picture/take_picture/take_picture.html',

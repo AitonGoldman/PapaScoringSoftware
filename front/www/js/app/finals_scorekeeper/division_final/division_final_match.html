@@ -1,12 +1,12 @@
 <ion-view view-title='Round {{round_idx+1}}, Match {{division_final_match_idx+1}}'>
   <ion-content>
-    <div ng-repeat="player_result in match.finals_match_player_results|orderBy:'finals_player.initial_seed'">
+    <div ng-repeat="player_result in match.finals_match_player_results|orderBy:'-finals_player.initial_seed'">
       <center>
         {{player_result.finals_player.player.full_name}} (seed : {{player_result.finals_player.initial_seed}}) (points : {{player_result.papa_points_sum}})
       </center>        
     </div>
 
-    <div ng-repeat="game_result in match.finals_match_game_results|orderBy:'finals_match_game_result_id'" class='list card'>
+    <div ng-repeat="game_result in match.finals_match_game_results|orderBy:'-finals_match_game_result_id'" class='list card'>
       <div class='item item-divider item-icon-left'>        
         <div class="item item-input-inset">
           <label class="item-input-wrapper">

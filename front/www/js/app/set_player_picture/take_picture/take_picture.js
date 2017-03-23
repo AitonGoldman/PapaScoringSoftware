@@ -9,7 +9,7 @@ angular.module('app.set_player_picture.take_picture').controller(
         $scope.player_info = {};
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-             
+        $scope.player_name = $state.params.player_name;
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){

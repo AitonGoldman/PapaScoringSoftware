@@ -24,7 +24,7 @@
       </tr>
 
       <!--<tr ng-if='team_division==true' ng-repeat='result in resources.division_results.data.ranked_team_list[division_id]' >-->
-      <tr ng-if='team_division==true' ng-repeat='result in concat_results' >
+      <tr ng-if='team_division==true' ng-repeat='result in concat_results' ng-class='{lightgrey:$even}'>
       <!--<tr ng-class='{red:check_player_is_ifpa_limited(result[1])}' ng-repeat='result in results_a' >-->
          
       <td ng-if='result[1].divider == undefined' style='padding-top:10px;' align='center'>{{result[0]+1}}</td>
@@ -48,7 +48,7 @@
       </td>
       </tr>
       <!--<tr ng-if='team_division==false' ng-class='{red:check_player_is_ifpa_limited(result[1])}' ng-repeat='result in resources.division_results.data.ranked_player_list[division_id]' >-->        
-      <tr ng-if='team_division==false' ng-class='{red:check_player_is_ifpa_limited(result[1])}' ng-repeat='result in concat_results|limitTo:filter_limit' >        
+      <tr ng-if='team_division==false' ng-class='{red:check_player_is_ifpa_limited(result[1]),lightgrey:$even}' ng-repeat='result in concat_results|limitTo:filter_limit' >        
         <td ng-if='result[1].divider == undefined'   style='padding-top:10px;' align='center'>{{result[0]+1}}</td>        
         <td  ng-if='result[1].divider == undefined' style='padding-left:50px;padding-top:10px;'  align='center'>
           <a  ui-sref='.^.^.players.player({player_id:result[1].player_id,player_name:result[1].player_name})'>

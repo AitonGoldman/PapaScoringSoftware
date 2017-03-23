@@ -307,9 +307,9 @@ def route_set_division_final_match_completed(division_final_match_id):
     # sorted_player_results = sorted(papa_points_sum, key=lambda player_result_id: papa_points_sum[player_result_id],reverse=True)
     papa_points_sum,sorted_player_results = get_papa_points_sorted_list_of_match_players(division_final_match)
     for idx,sum in enumerate(sorted_player_results):        
-        if idx == 1 and papa_points_sum[sorted_player_results[idx-1]] == papa_points_sum[sorted_player_results[idx]]:            
-            division_final_match.has_tiebreaker=True
-            db.session.commit()
+        # if idx == 1 and papa_points_sum[sorted_player_results[idx-1]] == papa_points_sum[sorted_player_results[idx]]:            
+        #     division_final_match.has_tiebreaker=True
+        #     db.session.commit()
         if idx == 2 and papa_points_sum[sorted_player_results[idx-1]] == papa_points_sum[sorted_player_results[idx]]:            
             division_final_match.has_tiebreaker=True
             db.session.commit()            

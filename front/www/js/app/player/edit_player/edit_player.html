@@ -24,7 +24,8 @@
           <ion-radio  ng-disabled='disable_division_radio(division.division_id)' ng-change='on_div_change()' id="add_player_linked_division_{{division.division_name}}" class='item item-radio-float' style='border-width:0px' ng-model="player_info.linked_division_id" ng-repeat='division in main_divisions' ng-value="division.division_id"> {{division.division_name}}</ion-radio>          
         </div>
       </div>
-      <a class="item item-icon-right item-calm" style='text-align:left' ng-click='take_pic_and_upload("player",player_info,site,player_info.player_id)'>
+      <ion-checkbox id="token_select_comped_checkbox" class='item' ng-model='player_info.active' >Active</ion-checkbox>      
+      <a ng-if='is_native == true' class="item item-icon-right item-calm" style='text-align:left' ng-click='take_pic_and_upload("player",player_info,site,player_info.player_id)'>
         <i class="icon ion-camera"></i>
         <span >Take Picture</span>
       </a>      

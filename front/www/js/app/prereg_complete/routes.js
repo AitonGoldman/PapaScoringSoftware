@@ -46,7 +46,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.in_line_complete.confirm', 
         { 
          cache: false,
- 	 url: '/confirm/player_id/:player_id/player_name/:player_name',
+ 	 url: '/confirm/player_id/:player_id/player_name/:player_name/player_has_pic/:player_has_pic',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/prereg_complete/confirm/confirm.html',

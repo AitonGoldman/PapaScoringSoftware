@@ -1,21 +1,27 @@
 <ion-view view-title="Players">
-  <ion-content>      
+  <ion-content>
     <div class="skinny-list list">
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
         <input type="text" placeholder="Search" ng-model="searchText">
       </label>
-      <a id="manage_players_add_player_button" ui-sref='.add_player' class="item item-icon-left item-icon-right">
+      <a ng-if="in_line_manage==false" id="manage_players_add_player_button" ui-sref='.add_player' class="item item-icon-left item-icon-right">
         <i class="icon ion-plus-circled"></i>
         <span>Add Player...</span>
-        <i class="icon ion-chevron-right"></i>        
+        <i class="icon ion-chevron-right"></i>
       </a>
       <div collection-repeat="player in flat_players|filter:searchText">
-        <a id="manage_players_edit_player_{{player.player_id}}_link" ng-click='ActionSheets.choose_player_action(player.player_id)' class="item item-icon-left item-icon-right">
+        <a ng-if="in_line_manage==false" id="manage_players_edit_player_{{player.player_id}}_link" ng-click='ActionSheets.choose_player_action(player.player_id)' class="item item-icon-left item-icon-right">
           <i class="icon ion-person"></i>
           <span>{{player.first_name+" "+player.last_name}}</span>
           <i class="icon ion-chevron-right"></i>
         </a>
+        <a ng-if="in_line_manage==true" id="manage_players_edit_player_{{player.player_id}}_link" ui-sref='.edit_player({player_id:player.player_id})' class="item item-icon-left item-icon-right">
+          <i class="icon ion-person"></i>
+          <span>{{player.first_name+" "+player.last_name}}</span>
+          <i class="icon ion-chevron-right"></i>
+        </a>
+        
       </div>
     </div>
   </ion-content>

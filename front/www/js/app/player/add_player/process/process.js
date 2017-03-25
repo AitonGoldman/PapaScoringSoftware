@@ -1,11 +1,12 @@
-angular.module('app.player.add_player.process',[/*REPLACEMECHILD*/]);
+angular.module('app.player.add_player.process',['app.player.add_player.process.door_fee_process',
+    /*REPLACEMECHILD*/]);
 angular.module('app.player.add_player.process').controller(
     'app.player.add_player.process',[
-        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
-        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
-        $scope.site=$state.params.site;
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory','ActionSheets',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory,ActionSheets) {
+            $scope.site=$state.params.site;
             $ionicHistory.nextViewOptions({disableBack:true});            
-
+            $scope.confirm_dialog = ActionSheets.player_paid_in_line_registration_confirm;
         $scope.utils = Utils;
         Modals.loading();        
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
@@ -29,6 +30,7 @@ angular.module('app.player.add_player.process').controller(
                 
             }
             if($state.current.name == 'app.player.in_line_add_player.process'){
+                $scope.in_line_registration = true;
                 $scope.player_info.active=false;
             }
             player_add_promise = TimeoutResources.AddPlayer($scope.bootstrap_promise,{site:$scope.site},$scope.player_info);

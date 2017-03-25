@@ -168,8 +168,25 @@ angular.module('TD_services.action_sheets')
                               return true;
                           }
                       });
-                  };                  
-                  
+                  };
+                  var player_paid_in_line_registration_confirm = function(){
+                      var hideSheet = $ionicActionSheet.show({
+                          buttons: [
+                              { text: 'Player Paid' }
+                          ],
+                          titleText: '<b style="color:red">Confirm Player Paid Door Fee</b>',
+                          cancelText: 'Cancel',
+                          cancel: function() {
+                              //player_info.linked_division_id = player_info.old_linked_division_id;
+                              // add cancel code..
+                          },
+                          buttonClicked: function(index) {
+                              $state.go('.door_fee_process',{process_step:{process:true}});
+                              return true;
+                          }
+                      });
+                      
+                  }
                   var choose_ifpa_lookup_action = function(ifpa_search_results,result,limit_divisions_based_on_ranking){            
                       result.looked_up = true;
                       buttons = [];
@@ -214,6 +231,7 @@ angular.module('TD_services.action_sheets')
                       choose_void_action:choose_void_action,
                       choose_queue_action:choose_queue_action,
                       queue_no_action:queue_no_action,
-                      choose_confirm_action:choose_confirm_action
+                      choose_confirm_action:choose_confirm_action,
+                      player_paid_in_line_registration_confirm:player_paid_in_line_registration_confirm
                   };
               }]);

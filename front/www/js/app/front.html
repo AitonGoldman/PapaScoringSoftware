@@ -47,12 +47,19 @@
         <i class="icon ion-chevron-right"></i>        
         
       </a>      
-      <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk") && !User.has_role("in_line_registration")'>
+      <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk") &&  !User.has_role("in_line_registration")'>
         <i class="icon ion-person"></i>
         <span>Manage Players</span>
         <i class="icon ion-chevron-right"></i>        
         
       </a>
+      <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.in_line_player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("in_line_registration")'>
+        <i class="icon ion-person"></i>
+        <span>Edit Players</span>
+        <i class="icon ion-chevron-right"></i>        
+        
+      </a>
+      
       <a id="front_manage_users_link" id='home_manage_players_link' ui-sref='.set_player_picture' class="item item-icon-left item-icon-right" ng-if='User.has_role("desk") && isWebView==true'>
         <i class="icon ion-person"></i>
         <span>Set Player Picture</span>

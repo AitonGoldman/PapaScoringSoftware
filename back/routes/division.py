@@ -363,7 +363,8 @@ def route_edit_division(division_id):
         division.discount_ticket_count=division_data['discount_ticket_count']
     if 'discount_ticket_price' in division_data and division_data['discount_ticket_count'] is not None:
         division.discount_ticket_price=division_data['discount_ticket_price']
-    if 'discount_stripe_sku' in division_data and division_data['discount_ticket_price'] is not None:
+    #if 'discount_stripe_sku' in division_data and division_data['discount_ticket_price'] is not None:
+    if 'discount_stripe_sku' in division_data and division_data['discount_stripe_sku']:
         print "discount strip sku is %s" % division_data['discount_stripe_sku']
         if get_valid_sku(division_data['discount_stripe_sku'],current_app.td_config['STRIPE_API_KEY'])['sku'] is None:
             raise BadRequest('Invalid sku specified')

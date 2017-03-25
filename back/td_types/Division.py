@@ -21,7 +21,7 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         discount_stripe_sku = db_handle.Column(db_handle.String(100))
         
         local_price = db_handle.Column(db_handle.Integer)
-        ifpa_range_start = db_handle.Column(db_handle.Integer)
+        ifpa_range_start = db_handle.Column(db_handle.Integer,default=0)
         ifpa_range_end = db_handle.Column(db_handle.Integer)
         ppo_a_ifpa_range_end = db_handle.Column(db_handle.Integer)                
         
@@ -37,7 +37,7 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         queuing = db_handle.Column(db_handle.Boolean,default=False)
         discount_ticket_count = db_handle.Column(db_handle.Integer)
         discount_ticket_price = db_handle.Column(db_handle.Integer)
-        min_num_tickets_to_purchase = db_handle.Column(db_handle.Integer)
+        min_num_tickets_to_purchase = db_handle.Column(db_handle.Integer,default=1)
         
         meta_division_id = db_handle.Column(db_handle.Integer,
                                          db_handle.ForeignKey(

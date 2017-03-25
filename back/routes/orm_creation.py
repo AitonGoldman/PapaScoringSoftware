@@ -270,21 +270,20 @@ def create_meta_division(app,meta_division_data):
                 raise BadRequest('invalid SKU specified')        
             new_meta_division.discount_stripe_sku=meta_division_data['discount_stripe_sku']
             new_meta_division.discount_ticket_count=meta_division_data['discount_ticket_count']
+        set_stripe_api_key(app.td_config['STRIPE_API_KEY'])
+        fetch_stripe_price(app,new_meta_division)
         
     else:
         new_meta_division.use_stripe = False
     if 'local_price' in meta_division_data and meta_division_data['use_stripe'] == False: 
-        new_meta_division.local_price=meta_division_data['local_price']
-            
+        new_meta_division.local_price=meta_division_data['local_price']            
     tables.db_handle.session.add(new_meta_division)
     tables.db_handle.session.commit()
-    if new_meta_division.use_stripe:
-        set_stripe_api_key(app.td_config['STRIPE_API_KEY'])
-        fetch_stripe_price(app,new_meta_division)
     
     return new_meta_division
 
 def create_division(app,division_data):
+    print "creating %s" % division_data['division_name']
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
 
@@ -337,6 +336,9 @@ def create_tournament(app,tournament_data):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
 
+    if 'use_stripe' in tournament_data and tournament_data['use_stripe'] and tournament_data['single_division'] is True:
+        if get_valid_sku(tournament_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
+            raise BadRequest('invalid SKU specified')
     new_tournament = tables.Tournament(
         tournament_name=tournament_data['tournament_name']                        
     )

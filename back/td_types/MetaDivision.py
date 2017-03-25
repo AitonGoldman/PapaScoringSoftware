@@ -12,7 +12,7 @@ def generate_meta_division_class(db_handle):
         stripe_sku = db_handle.Column(db_handle.String(100))
         discount_stripe_sku = db_handle.Column(db_handle.String(100))
         local_price = db_handle.Column(db_handle.Integer)
-        min_num_tickets_to_purchase = db_handle.Column(db_handle.Integer)
+        min_num_tickets_to_purchase = db_handle.Column(db_handle.Integer,default=1)
         divisions = db_handle.relationship("Division")
         
         def to_dict_simple(self):

@@ -35,13 +35,23 @@ angular.module('app.queue_view.queue').controller(
                     $scope.machine_players=$scope.resources.queues.machine_players;
                     $scope.flattened_queues_concat=[];
                     $scope.row_size = Math.ceil($scope.flattened_queues.length/$scope.columns);
-                    $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,0,$scope.row_size));
-                    if($scope.columns == 2){                        
-                        $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,$scope.row_size));
-                    } else {                        
-                        $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,$scope.row_size,$scope.row_size+$scope.row_size));
-                        $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,$scope.row_size+$scope.row_size));                        
+                    
+                    rows_left = Math.ceil($scope.flattened_queues.length/$scope.row_size);
+                    row_start = 0;
+                    row_end = $scope.row_size;
+                    for(x=rows_left;x>=0;x=x-1){                        
+                        $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,row_start,row_end));
+                        row_start=row_start+$scope.row_size;
+                        row_end=row_start+$scope.row_size;
                     }
+                    // $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,0,$scope.row_size));
+                    // if($scope.columns == 2){                        
+                    //     $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,$scope.row_size));
+                    // } else {
+                        
+                    //     $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,$scope.row_size,$scope.row_size+$scope.row_size));
+                    //     $scope.flattened_queues_concat.push(_.slice($scope.flattened_queues,$scope.row_size+$scope.row_size));                        
+                    // }
                     
                     Modals.loaded();
                     

@@ -7,22 +7,23 @@
         <td style='padding-bottom:15px;padding-right:15px;text-align:center;align:center' ng-repeat="queue in flattened_queues_concat" width="{{100/columns}}%" ng-if='queue[queue_machine_index]'>
           <div class='list'>
             <div class='item item-stable'>
-              <span style="float:left">{{queue[queue_machine_index].division_machine_name|limitTo:15}}<span ng-if='queue[queue_machine_index].division_machine_name.length>15'>...</span>
+              <span style="float:left"><b class='standard_large_font'>{{queue[queue_machine_index].division_machine_name|limitTo:15}}</b><span ng-if='queue[queue_machine_index].division_machine_name.length>15'>...</span>
 
               </span>
               <span ng-if='queue[queue_machine_index].avg_play_time' style="float:right" class='standard_med_font'>Avg Time : {{queue[queue_machine_index].avg_play_time}} Mins</span>
             </div>
-            <div class='item' ng-if='machine_players[queue[queue_machine_index].division_machine_id]'>
+            <div class='item item-icon-left' ng-if='machine_players[queue[queue_machine_index].division_machine_id]'>
               {{machine_players[queue[queue_machine_index].division_machine_id]}}
+              <i class='icon ion-play' style='color:green'></i>
             </div>
-            <div class='item' ng-repeat="queue_item in queue[queue_machine_index].queues|limitTo:3" ng-if='queue[queue_machine_index].queues.length > 0 '>
+            <div class='item' ng-repeat="queue_item in queue[queue_machine_index].queues|limitTo:4" ng-if='queue[queue_machine_index].queues.length > 0 '>
               {{queue_item.player.player_name}}
             </div>
-            <div class='item' ng-if='queue[queue_machine_index].queues.length > 3 '>
+            <div class='item' ng-if='queue[queue_machine_index].queues.length > 4 '>
              ...
             </div>
             
-            <div class='item' ng-if='queue[queue_machine_index].queues.length == 0 '>
+            <div class='item' ng-if='queue[queue_machine_index].queues.length == 0 && machine_players[queue[queue_machine_index].division_machine_id] == undefined'>
               No one playing 
             </div>
             

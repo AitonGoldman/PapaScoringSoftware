@@ -42,8 +42,8 @@ def route_login():
     user_dict['roles'] = [r.name for r in user.roles]    
     if "ioniccloud_push_token" in input_data:
         record_ioniccloud_push_token(input_data['ioniccloud_push_token'],user_id=user.user_id)
-        send_push_notification('you are logged in - good job!',user_id=user.user_id)
-        send_push_notification('okay - push notifications work!',user_id=user.user_id,postpone=120)
+        #send_push_notification('you are logged in - good job!',user_id=user.user_id)
+        #send_push_notification('okay - push notifications work!',user_id=user.user_id,postpone=120)
         
     return jsonify({'data':user.to_dict_simple()})
 

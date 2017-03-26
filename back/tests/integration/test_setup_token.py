@@ -51,7 +51,11 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
         orm_creation.init_papa_tournaments_division_machines(self.flask_app)        
         #self.player = orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player','ifpa_ranking':'123','linked_division_id':'1'})
         #self.player_pin = self.player.pin
-        orm_creation.init_papa_players(self.flask_app)
+        orm_creation.init_papa_players(self.flask_app)        
+        orm_creation.create_team(self.flask_app,{'team_name':'test_team_1','players':[1,2]})
+        orm_creation.create_team(self.flask_app,{'team_name':'test_team_2','players':[3,4]})
+        orm_creation.create_team(self.flask_app,{'team_name':'test_team_3','players':[5,6]})
+        
     def test_setup_before_token(self):        
         with self.flask_app.test_client() as c:
             rv = c.put('/auth/login',
@@ -66,7 +70,7 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
             division_machines[7] = self.flask_app.tables.DivisionMachine.query.filter_by(division_id=7).order_by(self.flask_app.tables.DivisionMachine.division_id.desc()).all()                
             division_machines[8] = self.flask_app.tables.DivisionMachine.query.filter_by(division_id=8).order_by(self.flask_app.tables.DivisionMachine.division_id.desc()).all()                
             
-            for player_num in range(1,400):
+            for player_num in range(1,100):
                 print "Starting on player %s"% player_num
                 num_entries=1
                 tokens = {"player_id":player_num,                                        
@@ -74,9 +78,9 @@ class SetupTokenTD(td_integration_test_base.TdIntegrationSetupTestBase):
                                        2:[0,1],
                                        3:[0,1],
                                        4:[0,1]},                          
-                          "metadivisions":{1:[0,1]}}
-                if player_num < 100:
-                    tokens["teams"]={5:[0,1]}
+                          "metadivisions":{1:[5,1]}}
+                if player_num in[1,3,5]:
+                    tokens["teams"]={5:[5,1]}
                 else:
                     tokens["teams"]={5:[0,0]}
                 rv = c.post('/token/paid_for/1',

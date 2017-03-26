@@ -5,11 +5,11 @@ import json
 import os
 import subprocess
 from util import db_util
-from routes.utils import fetch_entity
+from routes.utils import fetch_entity, send_push_notification
 import datetime
 import time
 from flask_login import login_required,current_user
-from util.permissions import Admin_permission, Desk_permission
+from util.permissions import Admin_permission, Desk_permission, Scorekeeper_permission
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -99,6 +99,35 @@ def test_players_with_tickets(division_id):
             player['on_division_machine']=True
         
     return jsonify({'data':players})
+
+
+@admin_manage_blueprint.route('/test/player/<player_id>/word_of_god',methods=['PUT'])
+@login_required
+@Admin_permission.require(403)
+def route_word_of_god_to_player(player_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    player = fetch_entity(tables.Player,player_id)            
+    if player.user.ioniccloud_push_token is None:
+        return jsonify({'result':'player does not have app'})
+    input_data = json.loads(request.data)
+    if 'message' in input_data:
+        send_push_notification(input_data['message'], player_id=player.player_id, title="From The Powers That Be")
+        return jsonify({})
+    else:
+        return jsonify({'result':'no message given'})
+
+@admin_manage_blueprint.route('/test/i_need_an_adult/<division_id>',methods=['GET'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_get_help(division_id):            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    division = fetch_entity(tables.Division,division_id)    
+    pageable_users = tables.User.query.filter(tables.User.roles.any(name='page')).all()
+    for pageable_user in pageable_users:
+        send_push_notification("HELP IS NEEDED IN %s." % division.division_name, user_id=pageable_user.user_id, title="SEND IN THE CAVALRY")
+    return jsonify({})
 
 @admin_manage_blueprint.route('/test/load_machines', methods=['GET'])
 @login_required

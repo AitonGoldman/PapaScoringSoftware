@@ -74,9 +74,9 @@ app.controller(
             $scope.type_of_page = 'user';
             player_html_index = $location.absUrl().indexOf('player.html#');
             kiosk_html_index = $location.absUrl().indexOf('kiosk.html#');
-            www_pbchallenge_net_index = $location.absUrl().indexOf('www.pbchallenge.net');
-            results_pbchallenge_net_index = $location.absUrl().indexOf('results.pbchallenge.net');
-            kiosk_pbchallenge_net_index = $location.absUrl().indexOf('kiosk.pbchallenge.net');
+            player_papa_org_index = $location.absUrl().indexOf('player.papa.org');
+            results_papa_org_index = $location.absUrl().indexOf('results.papa.org');
+            kiosk_papa_org_index = $location.absUrl().indexOf('kiosk.papa.org');
             
             if (player_html_index!=-1){
                 $scope.type_of_page = 'player';
@@ -84,10 +84,10 @@ app.controller(
             if (kiosk_html_index!=-1){
                 $scope.type_of_page = 'kiosk';
             }
-            if (www_pbchallenge_net_index!=-1){
+            if (player_papa_org_index!=-1){
                 $scope.type_of_page = 'player';
             }
-            if (results_pbchallenge_net_index!=-1){
+            if (results_papa_org_index!=-1){
                 $scope.type_of_page = 'results';
             }                                                    
         } else {
@@ -145,7 +145,6 @@ app.controller(
                 return undefined;
             }
         };
-        
         $scope.jump_to_machine_list = function(){
             console.log($state.params.division_id);
             if($state.current.name.indexOf('confirm')!=-1 && $state.current.name.indexOf('confirm')+7 == $state.current.name.length){
@@ -165,27 +164,45 @@ app.controller(
                 return undefined;
             }
         };
+        $scope.is_player_login_page = function(){
+            if($state.current.name.match(/app.login_player/) != undefined){                
+                return true;
+            } else {
+                return undefined;
+            }
+        };
+        
         
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             if(ionic.Platform.isWebView() == false && $scope.type_of_page != 'user' && $scope.type_of_page != 'results'){                
                 if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()){
                     $state.go('use_the_native_app');
                 }
-            } 
-            $scope.site=state.params.site;            
+            }
+            version_check_promise = Utils.resolved_promise();
+            $scope.site=state.params.site;
+            User.set_user_site($scope.site);
+
+            if(ionic.Platform.isWebView() == true && $scope.type_of_page == 'player'){                
+                 if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()){
+                     version_check_promise = TimeoutResources.VersionCheck(undefined,{site:$scope.site,version_string:"v1"});
+                 } 
+             }
+
             // if($state.current.name.length - $state.current.name.indexOf('confirm') == 7){
             //     Modals.information('It is important to read directions.  For example, this is the review page - you still need to click Purchase button');
             // }
-            User.set_user_site($scope.site);
+            
             if (User.logged_in() == true) {
                 if($scope.is_login_age_old(User.login_time) || TimeoutResources.GetAllResources().divisions==undefined){                    
-                    return TimeoutResources.GetDivisions(undefined,{site:$scope.site});                    
+                    return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+                    
                 } else {
                     return Utils.resolved_promise();
                 }
             }             
             if(do_not_check_current_user == undefined && User.logged_in() == false){                                
-                if(TimeoutResources.GetAllResources().divisions==undefined){                    
+                if(TimeoutResources.GetAllResources().divisions==undefined){                                                            
                     prom = TimeoutResources.GetDivisions(undefined,{site:$scope.site});                    
                 } else {
                     prom = Utils.resolved_promise();

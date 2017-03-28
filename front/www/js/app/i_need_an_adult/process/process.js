@@ -15,12 +15,12 @@ angular.module('app.i_need_an_adult.process').controller(
             return;
         }
         
-     
-        //Modals.loading();
+        adult_promise = TimeoutResources.INeedAnAdult(undefined,{site:$scope.site,division_id:$scope.division_id});
+        Modals.loading();
         // = TimeoutResources.GetEtcData();
-        //.then(function(data){
-        // $scope.resources = TimeoutResources.GetAllResources();
-        //  Modals.loaded();
-        //})
+        adult_promise.then(function(data){
+            $scope.resources = TimeoutResources.GetAllResources();
+            Modals.loaded();
+        });
     }]
 );

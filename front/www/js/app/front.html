@@ -19,8 +19,8 @@
         <span>I want to get on a queue</span>
         <i class="icon ion-chevron-right"></i>                
       </a>      
-    </div>    
-    <div class="skinny-list list" ng-if="type_of_page != 'prereg' && type_of_page != 'kiosk'">
+    </div>
+    <div class="skinny-list list" ng-if="type_of_page != 'prereg' && type_of_page != 'kiosk'">      
       <a id="front_purchase_tickets_link" ui-sref=".token" class="item item-icon-left item-icon-right" ng-if='User.has_role("desk")  && !User.has_role("in_line_registration")'>
         <i class="icon ion-ios-cart"></i>
         <span>Purchase Tickets</span>

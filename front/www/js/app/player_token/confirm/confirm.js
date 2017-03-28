@@ -50,7 +50,7 @@ angular.module('app.player_token.confirm').controller(
                 $scope.display_confirm=false;
                 var handler = StripeCheckout.configure({
                     key: $scope.stripe_public_key,
-                    image: 'https://www.pbchallenge.net/pics/resize_pinball.png',
+                    image: 'https://player.papa.org/pics/resize_pinball.png',
                     locale: 'auto',
                     token: function(token) {                        
                         $scope.ticket_purchase_in_progress = true;

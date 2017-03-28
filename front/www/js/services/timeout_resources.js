@@ -189,7 +189,9 @@ angular.module('TD_services.timeout_resources')
                   var getRolesResource = generate_resource_definition(':site/role',
                                                                       'GET');
                   var getUserResource = generate_resource_definition(':site/user/:user_id',
-                                                                     'GET');                                    
+                                                                     'GET');
+                  var versionCheckResource = generate_resource_definition(':site/version/:version_string',
+                                                                          'GET');                                                      
                   var addUserResource = generate_resource_definition(':site/user',
                                                                      'POST');
                   var addBackglassPicResource = generate_resource_definition(':site/division_machine/:division_machine_id',
@@ -291,7 +293,8 @@ angular.module('TD_services.timeout_resources')
                   var addPlayerToMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id/player/:player_id','PUT');
                   var addTeamToMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id/team/:team_id','PUT');
 
-                  var addPlayerToMachineFromQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id','PUT');                  
+                  var addPlayerToMachineFromQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id','PUT');
+                  var iNeedAnAdultResource = generate_resource_definition(':site/test/i_need_an_adult/:division_id','GET');                  
                   var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');
                   var declareJagoffResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/jagoff','PUT');
                   var getJagoffsResource = generate_resource_definition(':site/jagoff','GET');                  
@@ -338,7 +341,9 @@ angular.module('TD_services.timeout_resources')
                       Logout: generate_custom_http_executor(logoutResource,'logout_result','get'),        
                       CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get'),
                       GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
+                      VersionCheck: generate_custom_http_executor(versionCheckResource,'version_check_result','get'),
                       GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
+                      INeedAnAdult: generate_custom_http_executor(iNeedAnAdultResource,'need_adult_result','get'),
                       GetEvents: generate_custom_http_executor(getEventsResource,'events','get'),
                       GetStripePublicKey: generate_custom_http_executor(getStripePublicKeyResource,'stripe_public_key','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),

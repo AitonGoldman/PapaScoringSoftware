@@ -24,11 +24,11 @@
             </tr>
           </table>
           
-          <button ng-if='player_has_pic=="true"' id='player_add_player_process_purchase_tickets_button' class='button button-full seperate_button button-calm item-icon-right' ui-sref='.process({process_step:{process:true}})'>
+          <button ng-if='player_has_pic==true' id='player_add_player_process_purchase_tickets_button' class='button button-full seperate_button button-calm item-icon-right' ui-sref='.process({process_step:{process:true}})'>
             <span>Complete Registration</span>
             <i class="icon ion-chevron-right"></i>          
           </button>
-          <button ng-if='player_has_pic!="true"' id='player_add_player_process_purchase_tickets_button' class='button button-full seperate_button button-calm item-icon-right' ui-sref='.picture'>
+          <button ng-if='player_has_pic!=true' id='player_add_player_process_purchase_tickets_button' class='button button-full seperate_button button-calm item-icon-right' ui-sref='.picture'>
             <span>Picture</span>
             <i class="icon ion-chevron-right"></i>          
           </button>          

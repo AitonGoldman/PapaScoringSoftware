@@ -92,6 +92,8 @@ def generate_player_class(db_handle,Team_Player_mapping,player_id_start):
                 player_dict['teams']=[team.to_dict_simple() for team in self.teams]
                 if len(self.teams)>0 and self.teams[0].division_machine:
                     player_dict['team_division_machine']={'division_machine_id':self.teams[0].division_machine.division_machine_id,'division_machine_name':self.teams[0].division_machine.machine.machine_name}
+            if self.asshole_count:
+                player_dict['jagoff_count']=self.asshole_count
             return player_dict
             
     return Player

@@ -714,6 +714,11 @@ a.extra-tall-button,button.extra-tall-button {
             right: $font-size-base*13;
         }
     }
+    @media screen and (min-width: 611px){
+            top:0;
+            right: 55%;        
+    }
+    
 }
 
 .avatar-user-pic-ex {
@@ -747,9 +752,12 @@ a.extra-tall-button,button.extra-tall-button {
         }
     }
     @media screen and (min-width: 610px){
-        height: $font-size-base*8.5;
-        width: $font-size-base*8.5;
-        border-radius:$font-size-base*8.5;            
+            height: $font-size-base*5.5;
+            width: $font-size-base*5.5;
+            border-radius:$font-size-base*5.5;            
+//        height: $font-size-base*8.5;
+//        width: $font-size-base*8.5;
+//        border-radius:$font-size-base*8.5;            
     }    
 }
 
@@ -762,7 +770,11 @@ a.extra-tall-button,button.extra-tall-button {
         @media screen and (min-device-height: 751px){
             padding-bottom:$font-size-base*6;
         }
-    }    
+    }
+    @media screen and (min-width: 611px){
+            padding-bottom:$font-size-base*6;        
+    }
+    
 }
 
 span.big-spinner {

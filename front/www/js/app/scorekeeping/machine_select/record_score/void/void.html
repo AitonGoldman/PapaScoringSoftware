@@ -39,7 +39,12 @@
             <button class="button button-full seperate_button button-balanced" ng-if="requeue==true">{{player_name}} re-queued on {{division_machine_name}}!</button>
           </div>
         </div>
-        <div class='standard_big_font' ng-if='division_machine_queue_length == 0'>
+        <button ng-if="resources.divisions.data[division_id].queuing != true" id='HomeButton' class='button button-full seperate_button button-calm item item-icon-right' ui-sref="app.scorekeeping">
+          <span>Return To Division List</span>
+          <i class="icon ion-chevron-right"></i>          
+        </button>
+
+        <div class='standard_big_font' ng-if='division_machine_queue_length == 0 && resources.divisions.data[division_id].queuing == true'>
           <button class="button button-full button-calm seperate_button item-icon-right item-icon-left" ui-sref=".^.^.player_select(queue_args.queue_args)">
             Start new <span ng-if='team_tournament == true'>team</span><span ng-if='team_tournament != true'>player</span> on {{division_machine_name}}
           </button>

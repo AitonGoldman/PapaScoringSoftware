@@ -16,10 +16,9 @@ angular.module('app.token.token_select.confirm.process').controller(
             Modals.error('Tried to reload a page that submits data.',$scope.site,'app');
             return;
         }
-        
+            
         $scope.token_info=$state.params.token_info;
         $scope.total_cost=$state.params.total_cost;
-        console.log($scope.token_info);
         divisions_promise = TimeoutResources.GetDivisions($scope.bootstrap_promise,{site:$scope.site});
         token_add_promise = TimeoutResources.AddTokens(divisions_promise,{site:$scope.site},$scope.token_info);
         
@@ -27,6 +26,7 @@ angular.module('app.token.token_select.confirm.process').controller(
         //$scope.token_summary = {divisions:{},metadivisions:{}};
         token_add_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
+            console.log($scope.resources);            
             Modals.loaded();
         });
     }]

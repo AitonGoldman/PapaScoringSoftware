@@ -11,7 +11,7 @@
                 {{token_info.divisions_names[division_id]}} : 
               </td>
               <td class='padding-left'>
-                {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+                {{token_count[0]}} Ticket<span ng-if="token_count[0] > 0">s</span> <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
             </tr>
             <tr ng-if='token_count[0] != 0' ng-repeat='(division_id,token_count) in token_info.teams'>
@@ -19,7 +19,7 @@
                 {{token_info.divisions_names[division_id]}} : 
               </td>
               <td class='padding-left'> 
-                {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+                {{token_count[0]}} Ticket<span ng-if="token_count[0] > 0">s</span> <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
             </tr>
             <tr ng-if='token_count[0] != 0' ng-repeat='(metadivision_id,token_count) in token_info.metadivisions'>
@@ -27,7 +27,7 @@
                 {{token_info.metadivisions_names[metadivision_id]}} : 
               </td>
               <td class='padding-left'>
-                {{token_count[0]}} <span ng-if='token_info.comped==true'> (COMPED) </span>
+                {{token_count[0]}} Ticket<span ng-if="token_count[0] > 0">s</span> <span ng-if='token_info.comped==true'> (COMPED) </span>
               </td>
             </tr>
             <tr style='border-style:solid;border-width:0;border-top-width:1px;'>

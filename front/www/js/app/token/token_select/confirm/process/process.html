@@ -13,12 +13,17 @@
                 {{resources.divisions.data[division_id].tournament_name}} : 
               </td>
               <td class='padding-left'>
-                {{token_count}}
+                {{token_count}} Ticket<span ng-if="token_count > 0">s</span> 
                 <span ng-if='token_info.comped!=true'>
-                  <span ng-if="resources.added_tokens.data.divisions_count[division_id].discount_count!=undefined">({{resources.added_tokens.data.divisions_count[division_id].discount_count}}
-                    ${{resources.divisions.data[division_id].discount_ticket_price}},
-                    {{resources.added_tokens.data.divisions_count[division_id].normal_count}}
-                    ${{resources.divisions.data[division_id].local_price}})</span>
+                  <span ng-if="resources.added_tokens.data.divisions_count[division_id].discount_count!=undefined">({{resources.added_tokens.data.divisions_count[division_id].discount_count}} x 
+                    ${{resources.divisions.data[division_id].discount_ticket_price}}, 
+                    {{resources.added_tokens.data.divisions_count[division_id].normal_count}} x 
+                    ${{resources.divisions.data[division_id].local_price}})
+                  </span>
+                  <span ng-if="resources.added_tokens.data.divisions_count[division_id].discount_count==undefined">
+                    ({{token_count}} x 
+                    ${{resources.divisions.data[division_id].local_price}})
+                  </span>
                 </span>
               </td>
             </tr>
@@ -27,7 +32,16 @@
                 {{resources.divisions.data[division_id].tournament_name}} : 
               </td>
               <td class='padding-left'>
-                {{token_count}}
+                {{token_count}} Ticket<span ng-if="token_count > 0">s</span> 
+                  <span ng-if="resources.added_tokens.data.divisions_count[division_id].discount_count!=undefined">({{resources.added_tokens.data.divisions_count[division_id].discount_count}} x 
+                    ${{resources.divisions.data[division_id].discount_ticket_price}},
+                    {{resources.added_tokens.data.divisions_count[division_id].normal_count}} x 
+                    ${{resources.divisions.data[division_id].local_price}})
+                  </span>
+                  <span ng-if="resources.added_tokens.data.divisions_count[division_id].discount_count==undefined">
+                    ({{token_count}} x 
+                    ${{resources.divisions.data[division_id].local_price}})
+                  </span>
               </td>
             </tr>
             <tr ng-if='token_count > 0' ng-repeat='(metadivision_id,token_count) in resources.added_tokens.data.metadivisions'>
@@ -35,8 +49,16 @@
                 {{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : 
               </td>
               <td class='padding-left'>
-                {{token_count}}
-                <span ng-if='token_info.comped!=true'>({{resources.added_tokens.data.metadivisions_count[metadivision_id].discount_count}} discount, {{resources.added_tokens.data.metadivisions_count[metadivision_id].normal_count}} normal)</span>
+                {{token_count}} Ticket<span ng-if="token_count > 0">s</span> 
+                  <span ng-if="resources.added_tokens.data.metadivisions_count[metadivision_id].discount_count!=undefined">({{resources.added_tokens.data.metadivisions_count[metadivision_id].discount_count}} x 
+                    ${{resources.divisions.data.metadivisions[metadivision_id].discount_ticket_price}}, 
+                    {{resources.added_tokens.data.metadivisions_count[metadivision_id].normal_count}} x 
+                    ${{resources.divisions.data.metadivisions[metadivision_id].local_price}})
+                  </span>
+                  <span ng-if="resources.added_tokens.data.metadivisions_count[metadivision_id].discount_count==undefined">
+                    ({{token_count}} x 
+                    ${{resources.divisions.data.metadivision[metadivision_id].local_price}})
+                  </span>
               </td>
             </tr>
             <tr style='border-style:solid;border-width:0;border-top-width:1px;'>

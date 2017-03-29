@@ -11,7 +11,7 @@
                 {{resources.divisions.data[division_id].tournament_name}} : 
               </td>
               <td class='padding-left'>
-                {{token_count[0]}}
+                {{token_count[0]}} Ticket<span ng-if="token_count[0] > 0">s</span>
               </td>
             </tr>
             <tr ng-repeat='(division_id,token_count) in token_info.addedTokens.teams'>
@@ -19,7 +19,7 @@
                 {{resources.divisions.data[division_id].tournament_name}} : 
               </td>
               <td class='padding-left'>
-                {{token_count[0]}}
+                {{token_count[0]}} Ticket<span ng-if="token_count[0] > 0">s</span>
               </td>
             </tr>
             <tr ng-repeat='(metadivision_id,token_count) in token_info.addedTokens.metadivisions'>
@@ -27,7 +27,7 @@
                 {{resources.divisions.data.metadivisions[metadivision_id].meta_division_name}} : 
               </td>
               <td class='padding-left'>
-                {{token_count[0]}}
+                {{token_count[0]}} Ticket<span ng-if="token_count[0] > 0">s</span>
               </td>
             </tr>
             <tr style='border-style:solid;border-width:0;border-top-width:1px;'>

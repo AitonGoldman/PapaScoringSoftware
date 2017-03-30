@@ -14,9 +14,16 @@ angular.module('app.generate_finals').controller(
         
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                        
+        $scope.resources = TimeoutResources.GetAllResources();
+        $scope.team_tournament = $scope.resources.divisions.data[$scope.division_id].team_tournament == true;
         if(_.isEmpty($scope.ppo_a_qualifiers)){
             _.forEach($scope.papa_qualifiers, function(value) {
-                $scope.formated_papa_division_qualifiers.push([value[1].player_id,value[0]+1]);                
+                if($scope.team_tournament){
+                    $scope.formated_papa_division_qualifiers.push([value[1].team_id,value[0]+1]);
+                } else {
+                    $scope.formated_papa_division_qualifiers.push([value[1].player_id,value[0]+1]);
+                }
+                
                 //$scope.players_present.data[value[1].player_id]=value[1];                
             });
             Modals.loading();

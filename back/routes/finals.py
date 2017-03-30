@@ -465,10 +465,14 @@ def route_create_finals(division_id,extra_name_info):
     ## set adjusted_seed to initial_seed + x 
     for finals_player in input_data:
         new_finals_player = tables.FinalsPlayer(
-            player_id=finals_player[0],
+            #player_id=finals_player[0],
             initial_seed=finals_player[1],
             division_final_id=new_final.division_final_id
-        )        
+        )
+        if division.team_tournament:
+            new_finals_player.team_id=finals_player[0]
+        else:
+            new_finals_player.player_id=finals_player[0]
         existing_player_seed = tables.FinalsPlayer.query.filter_by(initial_seed=int(finals_player[1]),division_final_id=new_final.division_final_id).all()
         if len(existing_player_seed) > 0:
             new_finals_player.adjusted_seed=int(finals_player[1])+len(existing_player_seed)

@@ -8,7 +8,7 @@ angular.module('app.ppo_qualifying_list.papa_qualifiers.confirm').controller(
         $scope.qualifiers = $state.params.qualifiers;
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
-             
+        $scope.resources = TimeoutResources.GetAllResources();     
         //Modals.loading();
         // = TimeoutResources.GetEtcData();
         //.then(function(data){

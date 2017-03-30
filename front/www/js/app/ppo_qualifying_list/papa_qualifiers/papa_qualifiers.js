@@ -28,11 +28,20 @@ angular.module('app.ppo_qualifying_list.papa_qualifiers').controller(
         $scope.set_all_players_to_present = function(){
             _.forEach($scope.resources.ppo_qualifying_list.data.qualified, function(value) {
                 value[1].present=true;
-                $scope.players_present.data[value[1].player_id]=value[1];                
+                if($scope.resources.divisions.data[$scope.division_id].team_tournament != true){
+                    $scope.players_present.data[value[1].player_id]=value[1];
+                } else {
+                    $scope.players_present.data[value[1].team_id]=value[1];                    
+                }
+                
             });
             _.forEach($scope.resources.ppo_qualifying_list.data.rest, function(value) {
                 value[1].present=true;
-                $scope.players_present.data[value[1].player_id]=value[1];                
+                if($scope.resources.divisions.data[$scope.division_id].team_tournament != true){
+                    $scope.players_present.data[value[1].player_id]=value[1];
+                } else {
+                    $scope.players_present.data[value[1].team_id]=value[1];                    
+                }
             });            
             
             $scope.get_num_ties_ex();            
@@ -85,9 +94,8 @@ angular.module('app.ppo_qualifying_list.papa_qualifiers').controller(
         
         $scope.get_num_ties_ex = function(){
             last_div_idx = $scope.resources.ppo_qualifying_list.data.qualified.length - 1;
-            for(x=0;x<=last_div_idx;x++){
-                
-                cur_rank=$scope.resources.ppo_qualifying_list.data.qualified[x][0];
+            for(x=0;x<=last_div_idx;x++){                
+                cur_rank=$scope.resources.ppo_qualifying_list.data.qualified[x][0];                
                 start_idx=x;
                 end_idx=x;
                 new_idx=end_idx+1;                
@@ -102,6 +110,7 @@ angular.module('app.ppo_qualifying_list.papa_qualifiers').controller(
                         return_array.push(new_start_rank+y+1);
                     }
                     for(y=start_idx;y<=end_idx;y++){
+                        console.log(cur_rank);
                         $scope.resources.ppo_qualifying_list.data.qualified[y][1].select_options=return_array;
                         $scope.resources.ppo_qualifying_list.data.qualified[y][1].selected_option=return_array[0];                        
                         

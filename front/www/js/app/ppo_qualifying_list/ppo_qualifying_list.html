@@ -2,7 +2,7 @@
   <ion-content>
     <div class='list'>
       <a ng-if="division.finals_player_selection_type == 'ppo'" ng-repeat="division in resources.divisions.data" class='item' ui-sref='.qualifiers({division_id:division.division_id})'> {{division.tournament_name}} </a>
-      <a ng-if="division.finals_player_selection_type == 'papa'" ng-repeat="division in resources.divisions.data" class='item' ui-sref='.papa_qualifiers({division_id:division.division_id})'> {{division.tournament_name}} </a>      
+      <a ng-if="division.finals_player_selection_type == 'papa'" ng-repeat="division in resources.divisions.data" class='item' ui-sref='.papa_qualifiers({division_id:division.division_id})'> {{division.tournament_name}}</a>       
   </ion-content>
 </ion-view>
 

@@ -3,16 +3,24 @@
     <div class='list' ng-if='selecting_players == true'>
       <!--<div class='item'>-->
       <div ng-if='display_removed_players' class='item item-divider'>Removed Players</div>
-      <label style='padding:0px;' class="item item-input item-select" ng-repeat='player in removed_players.data'>
+      <label ng-if="resources.divisions.data[division_id].team_tournament != true" style='padding:0px;' class="item item-input item-select" ng-repeat='player in removed_players.data'>
         <div style='padding:0px' class="input-label">
           <ion-checkbox ng-change='on_change()' ng-model='players_present.data[player.player_id].present' style='border-width:0px'><span></span> <span>{{player.player_name}} (id #{{player[1].player_id}}) (ifpa ranking {{player[1].ifpa_ranking}})</span>
             {{}}
           </ion-checkbox>
         </div>
       </label>
+      <label ng-if="resources.divisions.data[division_id].team_tournament == true" style='padding:0px;' class="item item-input item-select" ng-repeat='team in removed_players.data'>
+        <div style='padding:0px' class="input-label">
+          <ion-checkbox ng-change='on_change()' ng-model='players_present.data[team.team_id].present' style='border-width:0px'><span></span> <span>{{team.team_name}} (id #{{team[1].team_id}})</span>
+            {{}}
+          </ion-checkbox>
+        </div>
+      </label>
+      
       <!--</div>-->
       <div class='item item-divider'>Players</div>      
-      <label style='padding:0px;' class="item item-input item-select" ng-repeat='player in resources.ppo_qualifying_list.data.qualified'>
+      <label ng-if="resources.divisions.data[division_id].team_tournament != true" style='padding:0px;' class="item item-input item-select" ng-repeat='player in resources.ppo_qualifying_list.data.qualified'>
         <div style='padding:0px' class="input-label">
           <ion-checkbox ng-change='on_change()' ng-model='players_present.data[player[1].player_id].present' style='border-width:0px'><span>RANK : {{player[0]+1}}</span> <span>{{player[1].player_name}} (id #{{player[1].player_id}}) (ifpa ranking {{player[1].ifpa_ranking}})</span>
             {{}}
@@ -23,16 +31,39 @@
                       <option ng-repeat='option in player[1].select_options'>{{option}}</option>
         </select>-->
       </label>
+
+
+      <label ng-if="resources.divisions.data[division_id].team_tournament == true" style='padding:0px;' class="item item-input item-select" ng-repeat='team in resources.ppo_qualifying_list.data.qualified'>
+        <div style='padding:0px' class="input-label">
+          <ion-checkbox ng-change='on_change()' ng-model='players_present.data[team[1].team_id].present' style='border-width:0px'><span>RANK : {{team[0]+1}}</span> <span>{{team[1].team_name}} (id #{{team[1].team_id}})</span>
+            {{}}
+          </ion-checkbox>
+        </div>
+        <select ng-if='team[1].select_options != undefined' ng-options="item for item in team[1].select_options" ng-model="team[1].selected_option"></select>          
+        <!--          <select ng-model='player[1].selected_option' ng-if='player[1].select_options!=undefined'>
+                      <option ng-repeat='option in player[1].select_options'>{{option}}</option>
+        </select>-->
+      </label>      
+      
       <!--</div>-->
       <!--</div>-->
       <div class='item item-divider'>Losers</div>
-      <label style='padding:0px;' class="item item-input item-select" ng-repeat='player in resources.ppo_qualifying_list.data.rest|limitTo:5'>
+      <label ng-if="resources.divisions.data[division_id].team_tournament != true" style='padding:0px;' class="item item-input item-select" ng-repeat='player in resources.ppo_qualifying_list.data.rest|limitTo:5'>
         <div style='padding:0px' class="input-label">
           <ion-checkbox ng-change='on_change()' ng-model='players_present.data[player[1].player_id].present' style='border-width:0px'><span>RANK : {{player[0]+1}}</span> <span>{{player[1].player_name}} (#{{player[1].player_id}})</span>
             {{}}
           </ion-checkbox>
         </div>
       </label>
+
+      <label ng-if="resources.divisions.data[division_id].team_tournament == true" style='padding:0px;' class="item item-input item-select" ng-repeat='team in resources.ppo_qualifying_list.data.rest|limitTo:5'>
+        <div style='padding:0px' class="input-label">
+          <ion-checkbox ng-change='on_change()' ng-model='players_present.data[team[1].team_id].present' style='border-width:0px'><span>RANK : {{team[0]+1}}</span> <span>{{team[1].team_name}} (#{{team[1].team_id}})</span>
+            {{}}
+          </ion-checkbox>
+        </div>
+      </label>
+      
       <a class='seperate_button item item-calm item-icon-right' ng-click='on_submit()'>
         Generate Finals List
         <i class="icon ion-chevron-right"></i>                    

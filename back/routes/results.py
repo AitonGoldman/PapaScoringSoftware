@@ -188,7 +188,7 @@ def return_team_results(team_results_dict,sorted_team_list,divisions,ranked_team
             for ranked_result in ranked_results:                                
                 if ranked_result[1]['team_id']==int(team_id_external):                    
                     team_entry_dict[ranked_division_id]['rank']=ranked_result[0]
-        return jsonify({'data':team_entry_dict})        
+        return jsonify({'data':team_entry_dict})                
     return jsonify({'data':{'top_machines':top_6_machines,'ranked_team_list':ranked_team_list}})        
 
 def return_player_results(player_results_dict,sorted_player_list,divisions,ranked_player_list,player_id_external,player_entry_dict,top_6_machines, return_json, division_id):
@@ -266,7 +266,7 @@ def get_division_results(division_id=None,division_machine_id_external=None,play
                                          entry_div_id, result, player_results_dict, team_results_dict)
     if division_machine_id_external:
         return jsonify({'data': division_machine_results})
-    if team:
+    if team:        
         return return_team_results(team_results_dict,sorted_team_list,divisions,ranked_team_list,team_id_external,team_entry_dict,top_6_machines)        
     else:
         return return_player_results(player_results_dict,sorted_player_list,divisions,ranked_player_list,player_id_external,player_entry_dict,top_6_machines,return_json,division_id)
@@ -289,27 +289,31 @@ def get_ranked_qualifying_ppo_players(division_id,absent_players,tie_breaker_ran
     division = fetch_entity(tables.Division,division_id)         
     max_ifpa_rank = division.ppo_a_ifpa_range_end
     num_a_qualifiers = division.finals_num_qualifiers_ppo_a
-    ppo_results = get_division_results(division_id=division_id,return_json=False)
+    type_of_ranked_list=None
+    if division.team_tournament:
+        ppo_results = json.loads(get_division_results(division_id=division_id,return_json=False).data)
+        type_of_ranked_list="ranked_team_list"
+        type_of_competitor_id="team_id"        
+    else:
+        ppo_results = get_division_results(division_id=division_id,return_json=False)
+        type_of_ranked_list="ranked_player_list"
+        type_of_competitor_id="player_id"        
     ppo_qualifying_list = []
-    #match_absent_player = lambda x: str(x[1]['player_id']) in absent_players    
-    for div_id,div_results in ppo_results['data']['ranked_player_list'].iteritems():        
-        if div_id != division.division_id:
-            continue
+    #match_absent_player = lambda x: str(x[1]['player_id']) in absent_players                
+    for div_id,div_results in ppo_results['data'][type_of_ranked_list].iteritems():                
+        if int(div_id) != division.division_id:            
+            continue        
         for idx,player_result in enumerate(div_results):                        
-            player = player_result[1]            
-            if str(player['player_id']) in absent_players:                                
+            player = player_result[1]                        
+            if str(player[type_of_competitor_id]) in absent_players:                                
                 continue
-            if player['ifpa_ranking'] < max_ifpa_rank:
-                if str(player['player_id']) in tie_breaker_ranks and int(tie_breaker_ranks[str(player['player_id'])]) > num_a_qualifiers:
+            if type_of_competitor_id=='player_id' and player['ifpa_ranking'] < max_ifpa_rank:
+                if str(player[type_of_competitor_id]) in tie_breaker_ranks and int(tie_breaker_ranks[str(player[type_of_competitor_id])]) > num_a_qualifiers:
                     continue
                 if idx > num_a_qualifiers :                
                     continue
-            else:
-                if str(player['player_id']) in tie_breaker_ranks and player['player_id'] == 45 :
-                    print tie_breaker_ranks[str(player['player_id'])]
-
-            if str(player['player_id']) in tie_breaker_ranks:                
-                new_rank = tie_breaker_ranks[str(player['player_id'])]                
+            if str(player[type_of_competitor_id]) in tie_breaker_ranks:                
+                new_rank = tie_breaker_ranks[str(player[type_of_competitor_id])]                
                 player_result[1]['temp_rank']=int(new_rank)-1                
                 ppo_qualifying_list.append(player_result[1])
             else:
@@ -363,8 +367,9 @@ def route_get_division_ppo_qualifying_results_list(division_id):
                                 'rest':reranked_ppo_qualifying_list[b_end_rank:]}})
 
     if division.finals_player_selection_type == "papa":
-        num_qualifiers = division.finals_num_qualifiers
+        num_qualifiers = division.finals_num_qualifiers        
         end_rank=num_qualifiers
+ 
         while(reranked_ppo_qualifying_list[end_rank-1][0] == reranked_ppo_qualifying_list[end_rank][0]):
             end_rank = end_rank+1
         

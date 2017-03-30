@@ -4,7 +4,8 @@
       Generate Finals
     </button>
     <div class='list'>
-      <a class='item' ng-repeat='qualifier in qualifiers'>{{qualifier[1].player_name}}</a>
+      <a ng-if="resources.divisions.data[division_id].team_tournament != true" class='item' ng-repeat='qualifier in qualifiers'>{{qualifier[1].player_name}}</a>
+      <a ng-if="resources.divisions.data[division_id].team_tournament == true" class='item' ng-repeat='qualifier in qualifiers'>{{qualifier[1].team_name}}</a>      
     </div>
   </ion-content>
 </ion-view>

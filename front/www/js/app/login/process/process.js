@@ -37,7 +37,11 @@ angular.module('app.login.process').controller(
                 $scope.resources = TimeoutResources.GetAllResources();
                 User.set_logged_in_user($scope.resources.logged_in_user.data,"user");
                 Modals.loaded();
-            });                     
+            });
+            $scope.go_home = function(){
+                $state.go('app',{},{reload:true});
+            };
+            
         }
     ]
 );

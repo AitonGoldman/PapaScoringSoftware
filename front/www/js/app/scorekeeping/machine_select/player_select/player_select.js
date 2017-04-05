@@ -31,6 +31,19 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
             }                
 
             $scope.selected_players=[];
+            $scope.disable_review_button = function(){
+                if ($scope.selected_players.length == 0){
+                    return true;
+                }
+                if ($scope.selected_players[0].has_tokens != true){
+                    return true;
+                }
+                if ($scope.selected_players[0].has_tokens == true && $scope.selected_players[0].linked_division_id != $scope.division_id){
+                    return true;
+                }
+                return false;
+            };
+            
             //players_promise = TimeoutResources.GetPlayers($scope.bootstrap_promise,{site:$scope.site});
             players_promise = TimeoutResources.GetPlayersWithTicketsForDivision($scope.bootstrap_promise,{site:$scope.site,division_id:$scope.division_id});
             queues_promise = TimeoutResources.GetQueues(players_promise,{site:$scope.site,division_id:$scope.division_id});
@@ -47,11 +60,13 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 $scope.flattened_players = _.values($scope.resources.players_with_tickets.data);
                 $animate.enabled(true);
                 _.forEach($scope.flattened_players, function(value) {                    
-                    ImgCache.isCached(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg',function(path,success){
-                        if(!success){
-                            ImgCache.cacheFile(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg');
-                        }                        
-                    });
+                    if(value.has_tokens == true){
+                        ImgCache.isCached(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg',function(path,success){
+                            if(!success){
+                                ImgCache.cacheFile(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg');
+                            }                        
+                        });
+                    }
                 });
                 Modals.loaded();
             });
@@ -75,13 +90,13 @@ angular.module('app.scorekeeping.machine_select.player_select').controller(
                 if($scope.selected_players!=undefined && $scope.selected_players.length!=0){
                     if($scope.selected_players[0].has_tokens != true){
                         $scope.player_img_id=0;
-                        if($scope.team_tournament != true ){
-                            $scope.player_status = "No More Tickets";
+                        if($scope.team_tournament != true ){                            
+                            $scope.player_status = "No Tickets In Division";
                         } else {
                             if($scope.selected_players[0].team_id == "" || $scope.selected_players[0].team_id == undefined){
                                 $scope.player_status = "Not on a team";                                
                             } else {
-                                $scope.player_status = "No More Tickets";
+                                $scope.player_status = "No Tickets In Division";
                             }
                             //$scope.player_status = $scope.selected_players[0].team_id;
                         }

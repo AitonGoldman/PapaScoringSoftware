@@ -11,7 +11,7 @@
             <span style='padding-top:5px;padding-bottom:5px' class="input-label">Player # : </span>            
             <input class="embedded-input" ng-change='onPlayerIdChange()' type="tel" placeholder="enter player # here" ng-model="player.player_id">
           </label>
-          <button class="button button-calm button-medium" ng-disabled='selected_players.length == 0' ng-click='test_submit()'>
+          <button class="button button-calm button-medium" ng-disabled="disable_review_button()" ng-click='test_submit()'>
             Review
           </button>
       </div>                        

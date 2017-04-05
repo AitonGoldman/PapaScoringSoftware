@@ -14,7 +14,7 @@ angular.module('app.logout').controller(
                 Modals.loaded();                
             });
             $scope.go_home = function(){
-                $state.go('app');
+                $state.go('app',{},{reload:true});
             };
     }]
 );

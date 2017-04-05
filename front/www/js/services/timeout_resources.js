@@ -294,7 +294,9 @@ angular.module('TD_services.timeout_resources')
                   var addTeamToMachineResource = generate_resource_definition(':site/division/:division_id/division_machine/:division_machine_id/team/:team_id','PUT');
 
                   var addPlayerToMachineFromQueueResource = generate_resource_definition(':site/queue/division_machine/:division_machine_id','PUT');
-                  var iNeedAnAdultResource = generate_resource_definition(':site/test/i_need_an_adult/:division_id','GET');                  
+                  var iNeedAnAdultResource = generate_resource_definition(':site/test/i_need_an_adult/:division_id','GET');
+                  var iNeedAnAdultAtDeskResource = generate_resource_definition(':site/test/i_need_an_adult','GET');                  
+                  
                   var voidScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/void','PUT');
                   var declareJagoffResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/jagoff','PUT');
                   var getJagoffsResource = generate_resource_definition(':site/jagoff','GET');                  
@@ -344,6 +346,7 @@ angular.module('TD_services.timeout_resources')
                       VersionCheck: generate_custom_http_executor(versionCheckResource,'version_check_result','get'),
                       GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
                       INeedAnAdult: generate_custom_http_executor(iNeedAnAdultResource,'need_adult_result','get'),
+                      INeedAnAdultAtDesk: generate_custom_http_executor(iNeedAnAdultAtDeskResource,'need_adult_result','get'),                      
                       GetEvents: generate_custom_http_executor(getEventsResource,'events','get'),
                       GetStripePublicKey: generate_custom_http_executor(getStripePublicKeyResource,'stripe_public_key','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),

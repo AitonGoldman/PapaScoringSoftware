@@ -12,7 +12,7 @@ angular.module('app.i_need_an_adult').controller(
         // = TimeoutResources.GetEtcData();
         $scope.bootstrap_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
-            $scope.tournaments = _.filter($scope.resources.divisions.data, function(o) { return o.division_id; });
+            $scope.tournaments = _.filter($scope.resources.divisions.data, function(o) { return o.division_id; });            
             Modals.loaded();
         });
     }]

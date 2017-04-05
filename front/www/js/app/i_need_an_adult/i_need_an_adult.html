@@ -5,20 +5,35 @@
           <button class='button button-clear button-dark icon-left ion-alert-circled ion-icon-yellow review-icon' >            
             <span><u>PLEASE SEND HELP!</u></span>
           </button>
-          <div class='warning_confirm'>
-            If you require help, and you can not leave the tournament bank area, please click the button below and someone will come to help.
-          </div>
-          <select ng-model="page_info.division" ng-options="option.tournament_name for option in tournaments">
-          </select>
+          <div ng-if="User.has_role('scorekeeper')">
+            <div class='warning_confirm'>
+              If you require help, and you can not leave the tournament bank area, please select your tournament area and click the button below and someone will come to help.
+            </div>
+            <select ng-model="page_info.division" ng-options="option.tournament_name for option in tournaments">
+            </select>
           
-          <br>
-          <br>
-        </div>
-        
+            <br>
+            <br>
         <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({division_id:page_info.division.division_id,process_step:{process:true}})">
           <span>Please Send Help</span>
           <i class="icon ion-chevron-right"></i>          
         </button>
+            
+          </div>
+          <div ng-if="User.has_role('desk')">
+            <div class='warning_confirm'>
+              If you require help, and you can not leave the desk area, please click the button below and someone will come to help.
+            </div>
+            <br>
+            <br>
+            <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ui-sref=".process({division_id:-1,process_step:{process:true}})">
+              <span>Please Send Help</span>
+              <i class="icon ion-chevron-right"></i>          
+        </button>
+            
+          </div>
+          
+        </div>        
       </center>
   </ion-content>
 </ion-view>

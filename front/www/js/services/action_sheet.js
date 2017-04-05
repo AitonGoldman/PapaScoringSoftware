@@ -188,11 +188,13 @@ angular.module('TD_services.action_sheets')
                       
                   }
                   var choose_ifpa_lookup_action = function(ifpa_search_results,result,limit_divisions_based_on_ranking){            
+                      cancel_text='Cancel';
                       result.looked_up = true;
                       buttons = [];
                       console.log(ifpa_search_results);
                       if(ifpa_search_results == "No players found"){
                           title_text = "No results returned!";
+                          cancel_text='Ok';
                           ifpa_search_results=[];
                       }
                       if(ifpa_search_results.length > 4){
@@ -208,7 +210,7 @@ angular.module('TD_services.action_sheets')
                       var hideSheet = $ionicActionSheet.show({
                           buttons: buttons,                    
                           titleText: title_text,
-                          cancelText: 'Cancel',
+                          cancelText: cancel_text,
                           cancel: function() {
                               // add cancel code..
                           },

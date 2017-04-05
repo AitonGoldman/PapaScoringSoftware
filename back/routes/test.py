@@ -117,6 +117,17 @@ def route_word_of_god_to_player(player_id):
     else:
         return jsonify({'result':'no message given'})
 
+@admin_manage_blueprint.route('/test/i_need_an_adult',methods=['GET'])
+@login_required
+@Desk_permission.require(403)
+def route_get_help_for_desk():            
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)    
+    pageable_users = tables.User.query.filter(tables.User.roles.any(name='page')).all()
+    for pageable_user in pageable_users:
+        send_push_notification("HELP IS NEEDED AT THE DESK.",user_id=pageable_user.user_id, title="SEND IN THE CAVALRY")
+    return jsonify({})
+    
 @admin_manage_blueprint.route('/test/i_need_an_adult/<division_id>',methods=['GET'])
 @login_required
 @Scorekeeper_permission.require(403)

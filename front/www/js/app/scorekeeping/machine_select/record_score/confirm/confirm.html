@@ -34,7 +34,7 @@
             
           </table>
         </div>
-       
+        <div style='padding-top:125px' >
           <button  class="button button-full button-calm item-icon-right seperate_button" ui-sref=".process({process_step:{process:true},confirmed_score:{'score':score}})">
             Submit Score
             <i class="icon ion-chevron-right"></i>          
@@ -45,13 +45,16 @@
             <i class="icon ion-chevron-right"></i>          
 
           </button>    
-          <button  class="button button-assertive seperate_button item-icon-right" ng-click="choose_void_action(division_machine_id,'.^')">
-            Void Ticket
+          <!-- <button  class="button button-assertive seperate_button item-icon-right" ng-click="choose_void_action(division_machine_id,'.^')"> -->
+          <!--   Void Ticket -->
             
 
-          </button>    
+          <!-- </button> -->
+        </div>
       </center>
-
+      <div class='player-info-avatar' ng-if='team_tournament != true'>
+        <img  ion-img-cache class='avatar-frame avatar-user-pic' ng-src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_id}}.jpg" style="right:50px;top:225px;width:100px;height:125px">
+      </div>
   </ion-content>
 </ion-view>
 

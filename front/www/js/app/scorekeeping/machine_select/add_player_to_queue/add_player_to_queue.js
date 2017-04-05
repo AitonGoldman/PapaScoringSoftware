@@ -30,12 +30,14 @@ angular.module('app.scorekeeping.machine_select.add_player_to_queue').controller
             $scope.resources = TimeoutResources.GetAllResources();
             $scope.flattened_players = _.values($scope.resources.players_with_tickets.data);
             $animate.enabled(true);
-            _.forEach($scope.flattened_players, function(value) {                    
-                ImgCache.isCached(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg',function(path,success){
-                    if(!success){
-                        ImgCache.cacheFile(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg');
-                    }                        
-                });                    
+            _.forEach($scope.flattened_players, function(value) {
+                if(value.has_tokens == true){
+                    ImgCache.isCached(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg',function(path,success){
+                        if(!success){
+                            ImgCache.cacheFile(http_prefix+"://"+server_ip_address+"/pics/player_"+value.player_id+'.jpg');
+                        }                        
+                    });
+                }                   
             });
             
             //Modals.loaded();
@@ -47,18 +49,28 @@ angular.module('app.scorekeeping.machine_select.add_player_to_queue').controller
             // }
             Modals.loaded();            
         });
-        $scope.selected_players=[];
+            $scope.selected_players=[];
+            $scope.disable_review_button = function(){
+                if ($scope.selected_players.length == 0){
+                    return true;
+                }
+                if ($scope.selected_players[0].has_tokens != true){
+                    return true;
+                }                
+                return false;
+            };
         $scope.onPlayerIdChange = function(){                
             $scope.player_status = "";                        
             $scope.poop = true;
             $scope.selected_players = $filter('filter')($scope.flattened_players,{player_id:parseInt($scope.player.player_id)},true);
+            console.log($scope.selected_players);
             if($scope.selected_players!=undefined && $scope.selected_players.length!=0){
-                    if($scope.selected_players[0].has_tokens != true){
-                        $scope.player_img_id=0;
-                        $scope.player_status = "No More Tickets";                                                
-                    } else {
-                        $scope.player_img_id=$scope.selected_players[0].player_id;
-                    }                                    
+                if($scope.selected_players[0].has_tokens != true){
+                    $scope.player_img_id=0;
+                    $scope.player_status = "No Tickets In Division";                                                
+                } else {
+                    $scope.player_img_id=$scope.selected_players[0].player_id;
+                }                                    
             }                
         };
         

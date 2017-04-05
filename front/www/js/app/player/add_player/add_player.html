@@ -45,6 +45,9 @@
         <i class="icon ion-chevron-right"></i>
         <span >Add Player</span>
       </button>
+    <div ng-if='player_info.pic_file != undefined' class='player-info-avatar player-info-avatar-ex'>
+      <img class='avatar-frame avatar-user-pic avatar-user-pic-ex' src="http://{{server_ip_address}}/pics/{{player_info.pic_file}}">
+    </div>
     
   </ion-content>
 </ion-view>

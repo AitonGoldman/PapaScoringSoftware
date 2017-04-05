@@ -8,7 +8,7 @@ angular.module('app.prereg_complete.confirm').controller(
         $scope.site=$state.params.site;
 	$scope.player_id=$state.params.player_id;
 	$scope.player_name=$state.params.player_name;
-        $scope.player_has_pic = $state.params.player_has_pic;        
+        $scope.player_has_pic = $state.params.player_has_pic == "true";        
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
              

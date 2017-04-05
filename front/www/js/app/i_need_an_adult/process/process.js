@@ -14,8 +14,12 @@ angular.module('app.i_need_an_adult.process').controller(
             Modals.error('Tried to reload a page that submits data.',$scope.site,'app');
             return;
         }
+        if($scope.division_id==-1){
+            adult_promise = TimeoutResources.INeedAnAdultAtDesk(undefined,{site:$scope.site});
+        } else {
+            adult_promise = TimeoutResources.INeedAnAdult(undefined,{site:$scope.site,division_id:$scope.division_id});
+        }
         
-        adult_promise = TimeoutResources.INeedAnAdult(undefined,{site:$scope.site,division_id:$scope.division_id});
         Modals.loading();
         // = TimeoutResources.GetEtcData();
         adult_promise.then(function(data){

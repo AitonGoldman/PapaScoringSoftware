@@ -308,6 +308,9 @@ def add_player_to_machine_from_queue(division_machine_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)    
     division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
+    division = fetch_entity(tables.Division,division_machine.division_id)
+    if division.active is False:
+        raise BadRequest('Division is not active')        
     if len(division_machine.queue) == 0:
         raise BadRequest('Trying to add player from an empty queue')
     if division_machine.player_id is not None:

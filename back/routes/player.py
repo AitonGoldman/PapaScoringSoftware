@@ -67,8 +67,10 @@ def route_edit_player(player_id):
         subprocess.call(["mv","%s_resize"%save_path,save_path])        
         os.system('mv %s/%s /var/www/html/pics/player_%s.jpg' % (current_app.config['UPLOAD_FOLDER'],input_data['pic_file'],player.player_id))        
         
-    db.session.commit()                        
-    return jsonify({'data':player.to_dict_simple()})        
+    db.session.commit()
+    player_info = player.to_dict_simple()
+    player_info['pin'] = player.pin    
+    return jsonify({'data':player_info})    
 
 @admin_manage_blueprint.route('/player/<player_id>/pin',methods=['GET'])
 @login_required

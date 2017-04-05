@@ -3,10 +3,14 @@ angular.module('app.queue_view.queue').controller(
     'app.queue_view.queue',[
         '$scope','$state','TimeoutResources','Utils','Modals','$timeout',
         function($scope, $state, TimeoutResources, Utils,Modals,$timeout) {
-        $scope.site=$state.params.site;
-	$scope.division_id=$state.params.division_id;
-        $scope.start_range = $state.params.start_range;
-        $scope.end_range = $state.params.end_range;
+            $scope.site=$state.params.site;
+	    $scope.division_id=$state.params.division_id;
+            $scope.start_range = $state.params.start_range;
+            $scope.end_range = $state.params.end_range;
+            $scope.num_players_to_show = $state.params.num_players_to_show;
+            if($scope.num_players_to_show == undefined || $scope.num_players_to_show == ""){
+                $scope.num_players_to_show = 6;
+            }
         $scope.game_1 = $state.params.game_1;
         $scope.game_2 = $state.params.game_2;
         $scope.game_3 = $state.params.game_3;

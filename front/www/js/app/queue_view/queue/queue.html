@@ -16,10 +16,10 @@
               {{machine_players[queue[queue_machine_index].division_machine_id]}}
               <i class='icon ion-play' style='color:green'></i>
             </div>
-            <div class='item' ng-repeat="queue_item in queue[queue_machine_index].queues|limitTo:4" ng-if='queue[queue_machine_index].queues.length > 0 '>
+            <div class='item' ng-repeat="queue_item in queue[queue_machine_index].queues|limitTo:num_players_to_show" ng-if='queue[queue_machine_index].queues.length > 0 '>
               {{queue_item.player.player_name}}
             </div>
-            <div class='item' ng-if='queue[queue_machine_index].queues.length > 4 '>
+            <div class='item' ng-if='queue[queue_machine_index].queues.length > num_players_to_show '>
              ...
             </div>
             

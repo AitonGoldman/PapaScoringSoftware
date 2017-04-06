@@ -135,8 +135,9 @@ def route_get_help(division_id):
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
     division = fetch_entity(tables.Division,division_id)    
-    pageable_users = tables.User.query.filter(tables.User.roles.any(name='page')).all()
+    pageable_users = tables.User.query.filter(tables.User.roles.any(name='pageable')).all()
     for pageable_user in pageable_users:
+        print "pushing"
         send_push_notification("HELP IS NEEDED IN %s." % division.division_name, user_id=pageable_user.user_id, title="SEND IN THE CAVALRY")
     return jsonify({})
 

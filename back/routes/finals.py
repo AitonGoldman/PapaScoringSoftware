@@ -448,6 +448,22 @@ def route_create_finals(division_id,extra_name_info):
         }
     ]
     
+    bracket_template_4_player_groups_8_players = [
+        {
+            'round':1,
+            'matches':[
+                generate_rank_matchup_dict([1,8,4,5]),                                
+                generate_rank_matchup_dict([2,7,3,6])            
+            ]
+        },
+        {
+            'round':2,
+            'matches':[
+                generate_rank_matchup_dict([None,None, None, None]),                
+            ]
+        }
+    ]    
+    
     new_final = tables.DivisionFinal(
         division_id=division_id
     )
@@ -486,6 +502,8 @@ def route_create_finals(division_id,extra_name_info):
             bracket_template_for_division = bracket_template_4_player_groups_24_players
         if division.finals_num_qualifiers == 16:
             bracket_template_for_division = bracket_template_4_player_groups_16_players
+        if division.finals_num_qualifiers == 8:
+            bracket_template_for_division = bracket_template_4_player_groups_8_players            
     else:
         if extra_name_info == "A":
             if division.finals_num_qualifiers_ppo_a == 24:

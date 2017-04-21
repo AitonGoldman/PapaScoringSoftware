@@ -137,6 +137,65 @@ def route_get_division_machines_avg_playtime(division_id,division_machine_id):
     # db.session.commit()        
     return jsonify({})
 
+@admin_manage_blueprint.route('/division/<division_id>/division_machine/<division_machine_id>/play_time_longest',methods=['GET'])
+def route_get_division_machines_longest_playtime(division_id,division_machine_id):
+    f = open('/tmp/workfile%s'%division_id, 'w')    
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    if division_machine_id == "0":
+        if division_id == "0":
+            division_machines = tables.DivisionMachine.query.all()        
+        else:            
+            division_machines = tables.DivisionMachine.query.filter_by(division_id=division_id).all()        
+    else:            
+        division_machines = [fetch_entity(tables.DivisionMachine,division_machine_id)]    
+    division_machine_names = {division_machine.division_machine_id:division_machine.machine.machine_name for division_machine in tables.DivisionMachine.query.all()}
+    print division_machine_names
+    division_machine_ids = [division_machine.division_machine_id for division_machine in division_machines]
+    
+    audit_logs = tables.AuditLog.query.filter(and_(tables.AuditLog.division_machine_id.in_(division_machine_ids),
+                                                   or_(tables.AuditLog.action == action for action in ('Game Started',
+                                                                                                       'Score Added',
+                                                                                                       'Score Voided',
+                                                                                                       'Jagoff Declared',
+                                                                                                       'Player Removed')
+                                                   ))).order_by(asc(tables.AuditLog.audit_log_id)).all()
+
+    start_times = {}    
+    avg_times = {}
+    for audit_log in audit_logs:
+        if audit_log.action == "Game Started":            
+            start_times[audit_log.division_machine_id] = audit_log.action_date
+        if audit_log.action == "Score Added" or audit_log.action == "Score Voided" or audit_log.action == "Jagoff Declared":
+            if audit_log.division_machine_id not in avg_times:
+                avg_times[audit_log.division_machine_id]=[]
+            epoch = datetime.datetime.fromtimestamp(0)
+            start_time=(start_times[audit_log.division_machine_id]-epoch).total_seconds()
+            end_time = (audit_log.action_date - epoch).total_seconds()
+            #f.write(str(datetime.datetime.fromtimestamp(start_time))+" "+str(datetime.datetime.fromtimestamp(end_time))+" "+str(start_time)+" "+str(end_time)+"\n")
+            json_string = "{\"start_time\":\"%s\",\"end_time\":\"%s\",\"machine\":\"%s\",\"player\":\"%s\"},\n"%(str(start_time),
+                                                                                                                 str(end_time),
+                                                                                                                 division_machine_names[audit_log.division_machine_id],
+                                                                                                                 audit_log.player_id
+            )
+            f.write(json_string)
+            time_delta = audit_log.action_date - start_times[audit_log.division_machine_id]
+            division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=audit_log.division_machine_id).first()
+            
+            #f.write(str(time_delta.total_seconds()/60)+" ("+str(time_delta.total_seconds())+") on "+ division_machine.machine.machine_name +" ("+str(audit_log.audit_log_id)+")\n")
+            avg_times[audit_log.division_machine_id].append(time_delta.total_seconds())
+    for avg_time_division_machine_id,machine_times in avg_times.iteritems():                
+        total_time = 0
+        avg_game_time = 0        
+        total_time = sum(machine_times)        
+        avg_game_time = total_time/len(machine_times)    
+        division_machine = tables.DivisionMachine.query.filter_by(division_machine_id=avg_time_division_machine_id).first()
+        division_machine.avg_play_time = datetime.datetime.fromtimestamp(avg_game_time).strftime('%M min')        
+    db.session.commit()    
+    f.close()
+    return jsonify({})
+
+
 
 @admin_manage_blueprint.route('/division_machine',methods=['GET'])
 def route_get_all_division_machines():

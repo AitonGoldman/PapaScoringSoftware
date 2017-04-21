@@ -66,7 +66,7 @@ def add_player_to_queue():
     if division_machine.removed is True:
         raise BadRequest('Machine has been removed - you have been very naughty')            
     if division_machine.player_id is None and len(division_machine.queue) == 0:        
-        raise BadRequest('No player is on machine - just jump on it')    
+        raise BadRequest('Oops - player finished playing this game while you were queuing.  See a scorekeeper to start game')
     player = fetch_entity(tables.Player,queue_data['player_id'])
     print "okay - starting with  %s"%player.player_id    
     if player.active is False:
@@ -123,7 +123,7 @@ def add_other_player_to_queue():
     if division_machine.removed is True:
         raise BadRequest('Machine has been removed - you have been very naughty')            
     if division_machine.player_id is None and len(division_machine.queue) == 0:        
-        raise BadRequest('No player is on machine - just jump on it')    
+        raise BadRequest('Oops - player finished playing this game while you were queuing.  See a scorekeeper to start game')        
     #player = fetch_entity(tables.Player,queue_data['player_id'])
     player = fetch_entity(tables.Player,queue_data['other_player_id'])
     print "okay - starting with  %s"%player.player_id    

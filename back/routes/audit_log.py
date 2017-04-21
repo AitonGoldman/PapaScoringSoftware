@@ -91,7 +91,13 @@ def route_audit_log_missing_tokens(player_id):
         audit_logs = tables.AuditLog.query.filter_by(player_id=player_id).order_by(tables.AuditLog.action_date.desc()).all()
         #audit_logs = tables.AuditLog.query.filter_by(player_id=player_id).all()
     audit_log_list = []
-    users = {user.user_id:user.to_dict_simple() for user in tables.User.query.all()}
+    users = {}
+    for user in tables.User.query.all():
+        print user.user_id
+        if user.player:
+            users[user.user_id]=user.to_dict_simple()
+        else:
+            users[user.user_id]={"username":user.username}    
     players = {player.player_id:player for player in tables.Player.query.all()}
     divisions = {division.division_id:division.to_dict_simple() for division in tables.Division.query.all()}
     metadivisions = {meta_division.meta_division_id:meta_division.to_dict_simple() for meta_division in tables.MetaDivision.query.all()}

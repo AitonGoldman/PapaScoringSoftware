@@ -1,0 +1,21 @@
+./utils/performance_test_add_token_desk.sh 401;
+./utils/performance_test_add_token_desk.sh 403;
+./utils/performance_test_add_token_desk.sh 404;
+./utils/performance_test_add_token_desk.sh 405;
+./utils/performance_test_add_token_desk.sh 406;
+./utils/performance_test_add_token_desk.sh 407;
+./utils/performance_test_add_token_desk.sh 408;
+./utils/performance_test_add_token_desk.sh 409;
+./utils/performance_test_add_token_desk.sh 410;
+./utils/performance_test_add_token_desk.sh 411;
+./utils/performance_test_add_token_desk.sh 412;
+./utils/performance_test_add_to_machine.sh 8 403;
+./utils/performance_test_add_to_machine.sh 9 405;
+./utils/performance_test_add_to_queue.sh 407 8;
+./utils/performance_test_add_to_queue.sh 408 8 ;
+./utils/performance_test_add_token_desk.sh 400;
+./utils/performance_test_add_to_machine.sh 1 400;
+./utils/performance_test_add_to_queue.sh 409 1;
+./utils/performance_test_add_to_queue.sh 410 1;
+./utils/performance_test_record_score.sh 1;
+./utils/performance_test_bump_queue.sh 1

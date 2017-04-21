@@ -18,22 +18,22 @@ curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:80
 
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/1/score/4
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/2/score/2
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/3/score/1
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/4/score/0
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/3/score/0
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/4/score/1
 
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_result/1/completed
 
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/5/score/2
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/6/score/0
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/7/score/4
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/8/score/1
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/5/score/4
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/6/score/1
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/7/score/2
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/8/score/0
 
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_result/2/completed
 
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/9/score/0
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/10/score/4
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/11/score/1
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/12/score/2
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/9/score/4
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/10/score/2
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/11/score/0
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/12/score/1
 
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_result/3/completed
 
@@ -56,23 +56,23 @@ curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:80
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/23/finals_player/18/play_order/3
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/24/finals_player/23/play_order/4
 
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/13/score/2
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/14/score/1
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/15/score/0
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/16/score/4
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/13/score/4
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/14/score/0
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/15/score/2
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/16/score/1
 
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_result/4/completed
 
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/17/score/2
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/18/score/1
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/19/score/0
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/20/score/4
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/18/score/4
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/19/score/1
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/20/score/0
 
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_result/5/completed
 
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/21/score/2
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/22/score/1
-curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/23/score/0
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/21/score/0
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/22/score/2
+curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/23/score/1
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_player_result/24/score/4
 
 curl -X PUT -H "Content-Type: application/json" -b /tmp/cookie http://0.0.0.0:8000/elizabeth/finals/finals_match_game_result/6/completed

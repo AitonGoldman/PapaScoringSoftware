@@ -12,3 +12,4 @@ workflows
 scratchpad
 events.json
 ignore
+*env_vars

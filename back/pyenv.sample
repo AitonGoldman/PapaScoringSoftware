@@ -1,3 +1,0 @@
-export DATABASE_URL=postgresql://tom:tomPassword@localhost/tom_server
-pyenv activate tom
-

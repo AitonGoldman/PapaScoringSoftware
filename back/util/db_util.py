@@ -2,8 +2,8 @@ from sqlalchemy_utils import create_database, database_exists
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
 from td_types import ImportedTables
-from machine_list import machines
-from machine_list_test import test_machines
+from data_files.machine_list import machines
+from data_files.machine_list_test import test_machines
 
 def load_machines_from_json(app,test=False):    
     machines_to_load = machines

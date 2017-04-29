@@ -1,4 +1,4 @@
-from sqlalchemy_utils import create_database, database_exists
+from sqlalchemy_utils import create_database, database_exists, drop_database as sql_utils_drop_database
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
 from td_types import ImportedTables
@@ -20,6 +20,10 @@ def load_machines_from_json(app,test=False):
         app.tables.db_handle.session.commit()
         pass
         
+    
+def drop_database(db_name,db_info):
+    db_url = generate_db_url(db_name, db_info)
+    sql_utils_drop_database(db_url)
     
 def create_db_and_tables(app, db_name, db_info, drop_tables=False):    
     db_url = generate_db_url(db_name, db_info)

@@ -334,24 +334,24 @@ app.config(function($httpProvider,$ionicConfigProvider,$ionicCloudProvider,ionic
     $ionicConfigProvider.backButton.previousTitleText(false);
     $ionicConfigProvider.backButton.text(" ");        
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
-    ionicImgCacheProvider.debug(true);
+    ionicImgCacheProvider.debug(true);    
     $ionicCloudProvider.init({
-    "core": {
-      "app_id": "a302e6bc"
-    },
-    "push": {
-      "sender_id": "566222718762",
-      "pluginConfig": {
-        "ios": {
-          "badge": true,
-          "sound": true
+        "core": {
+            "app_id": secret_info_app_id
         },
-        "android": {
-          "iconColor": "#343434"
+        "push": {
+            "sender_id": "566222718762",
+            "pluginConfig": {
+                "ios": {
+                    "badge": true,
+                    "sound": true
+                },
+                "android": {
+                    "iconColor": "#343434"
+                }
+            }
         }
-      }
-    }
-  });    
+    });    
 });
 
 app.filter('orderObjectBy', function() {

@@ -12,3 +12,4 @@ npm-debug.log
 /www/css/*
 /www/js/app/config.js
 .io-config.json
+*secret_info.js

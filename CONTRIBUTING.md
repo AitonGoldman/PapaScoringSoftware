@@ -1,5 +1,5 @@
 # How to help with TD development
-Read through all the quickstarts/tutorials listed below ( you can read the optional ones if you want, but they are not neccessary to get started ).  Once you have read the quickstarts/tutorials, you can read the use case.  This will highlight all the things you need to do (on the backend and frontend) when you want to add a new feature/fix a bug/refactor code, and will give some overview of all the individual components of TD.  At that point, you can jump in and start submiting pull requests!
+Work through this tutorial and read the appropriate tutorials (if you need to).  These use cases will highlight all the things you need to do (on the backend and frontend) when you want to add a new feature/fix a bug/refactor code, and will give some overview of all the individual components of TD.  At that point, you can jump in and start submiting pull requests!
 
 
 Do not hesitate to ask questions - this will become a reference to our slack instance once we have one.
@@ -7,16 +7,6 @@ Do not hesitate to ask questions - this will become a reference to our slack ins
 
 # Overview of TD
 TD is made up of two parts : the backend and the frontend.  The backend is a [Flask](http://flask.pocoo.org/) application that offers a REST api and interfaces with databases using [SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.1/).  The frontend is an [Ionic](http://ionicframework.com/) application.
-
-
-# Prerequisite Quickstarts/Turotials 
-The following list might look daunting, but it should only take a you a single weekend to make it through most of them.  When you are done, you should have a good grasp on all the frameworks/librarys that TD uses.
-
-
-## Git 
-* Git is AWESOME - but the learning curve can be a steeper than other source control systems - the good news you can get started with it without having to wrap your brain around the complex stuff :
-  * https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control ( this is the begining of the introduction chapter )
-  * https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository ( this is the begining of the Basics chapter)
 
 
 ## Frameworks/Libraries used by the backend
@@ -42,7 +32,7 @@ In the course of running our tournament, we'd like to be able to add players to 
 
 
 ## Step 0 : Checkout the Tutorial branch
-Before you do anything, make sure you have checked out the Tutorial branch.  All the following steps assume you have checked out the Tutorial branch.  This branch is has all the core TD code, but only has a minimal number of REST endpoints and SQLAlchmey models defined.  It's main purpose is to provide a starting point for new people to dive into the code. 
+Before you do anything, make sure you have checked out the TUTORIAL branch.  If you have never used git, see [link here](#git_link) for a git tutorial.  All the following steps assume you have checked out the TUTORIAL branch.  This branch is has all the core TD code, but only has a minimal number of REST endpoints and SQLAlchmey models defined.  It's main purpose is to provide a starting point for new people to dive into the code. 
 
 
 ## Step 1 : Add a SQLAlchemy model
@@ -639,6 +629,14 @@ Some things to note about the User endpoints:
 ## Next steps in understanding the Flask app instances (advanced)
 If you are feeling adventerous, you can look at the code in `back/util` (which is used by the flask application for things like initialization and talking with the database), but it's not neccessary to be able to jump in. 
 
+# Quickstarts/Turotials 
+The following list might look daunting, but it should only take a you a single weekend to make it through most of them.  When you are done, you should have a good grasp on all the frameworks/librarys that TD uses.
+
+<a name='git_link'></a>
+## Git 
+* Git is AWESOME - but the learning curve can be a steeper than other source control systems - the good news you can get started with it without having to wrap your brain around the complex stuff :
+  * https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control ( this is the begining of the introduction chapter )
+  * https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository ( this is the begining of the Basics chapter)
 
 
 

@@ -1,0 +1,13 @@
+export QUEUE_BUMP_AMOUNT=1
+export MAX_TICKETS_ALLOWED_PER_DIVISION=25
+#export FLASK_SECRET_KEY=
+#export IONICCLOUD_PROFILE_TAG=
+#export IONICCLOUD_API_KEY=
+#export EVENT_FILE_PATH=
+export DB_TYPE=postgres;
+#export DB_USERNAME=
+#export DB_PASSWORD=
+#export STRIPE_PUBLIC_KEY=
+#export STRIPE_API_KEY=
+export UPLOAD_FOLDER=/var/www/html/pics
+export PLAYER_ID_SEQ_START=100

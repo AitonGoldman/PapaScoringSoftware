@@ -282,8 +282,7 @@ def create_meta_division(app,meta_division_data):
     
     return new_meta_division
 
-def create_division(app,division_data):
-    print "creating %s" % division_data['division_name']
+def create_division(app,division_data):    
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
 

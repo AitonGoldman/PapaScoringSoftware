@@ -3,6 +3,39 @@ from td_types import ImportedTables
 from util import db_util
 
 class TdUnitTestBase(unittest.TestCase):    
+    def __init__(self,*args, **kwargs):
+        super(TdUnitTestBase, self).__init__(*args, **kwargs)
+        self.db_handle = db_util.create_db_handle_no_app()        
+        self.tables = ImportedTables(self.db_handle)        
+
+    def create_division_final_players(self,num_final_players=2):
+        players=[]
+        division_final_players = []
+        for num in range(1,num_final_players+1):
+            players.append(self.create_player(player_id=num))
+            division_final_players.append(self.tables.DivisionFinalPlayer(
+                final_player_id=num,
+                division_final_id=1,
+                player_id=num,
+                adjusted_seed=num,
+                initial_seed=num,
+                overall_rank=num            
+            ))
+            division_final_players[num-1].player=players[num-1]
+        return division_final_players
+        
+    def create_division_final(self,use_division_final_players=True):
+        tournament = self.create_single_division_tournament()
+        division_final = self.tables.DivisionFinal(
+            division_final_id=1,
+            division_id=1,            
+        )
+        division_final.division=tournament.divisions[0]
+        
+        if use_division_final_players:
+            division_final.qualifiers=self.create_division_final_players()
+        return division_final
+    
     def create_entry(self):
         self.db_handle = db_util.create_db_handle_no_app()        
         self.tables = ImportedTables(self.db_handle)
@@ -176,6 +209,7 @@ class TdUnitTestBase(unittest.TestCase):
             active=True
         )
         self.tournament.divisions=[self.division]
+        return self.tournament
     def create_multi_division_tournament(self, tournament_name=None):
         self.db_handle = db_util.create_db_handle_no_app()        
         self.tables = ImportedTables(self.db_handle)

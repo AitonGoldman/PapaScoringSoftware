@@ -27,7 +27,7 @@ def get_empty_config_dict():
 def get_missing_params(config_dict):
     missing_params = []
     for key,value in config_dict.iteritems():
-        env_value = os.getenv(key)                
+        env_value = os.getenv(key)
         if env_value is None and value is None:            
             missing_params.append(key)            
     return missing_params
@@ -74,7 +74,7 @@ def assign_loaded_configs_to_app(app,
                          db_config_filename=None):    
     config_dict = get_config_values_from_env()
     missing_params = get_missing_params(config_dict)
-    if len(missing_params) > 0:
+    if len(missing_params) > 0 and os.getenv('SQUELCH_MISSING_PARAM_WARNINGS') is None:
         print "\n\n\n----WARNING----\n\n\nThe following parameters were not set : \n"
         for missing_val in missing_params:
             print missing_val            

@@ -15,23 +15,22 @@ from Score import generate_score_class
 from Entry import generate_entry_class
 from AuditLog import generate_audit_log_class
 from DivisionFinal import generate_division_final_class
-from FinalsPlayer import generate_finals_player_class
+from DivisionFinalPlayer import generate_division_final_player_class
+from DivisionFinalQualifierTiebreaker import generate_division_final_qualifier_tiebreaker_class
 from TicketPurchase import generate_ticket_purchase_class
 from PurchaseSummary import generate_purchase_summary_class
-from DivisionFinalRound import generate_division_final_round_class
-from DivisionFinalMatch import generate_division_final_match_class
-from FinalsMatchGameResult import generate_finals_match_game_result_class
-from FinalsMatchPlayerResult import generate_finals_match_player_result_class
-from FinalsMatchGamePlayerResult import generate_finals_match_game_player_result_class
+#from DivisionFinalRound import generate_division_final_round_class
+#from DivisionFinalMatch import generate_division_final_match_class
+#from FinalsMatchGameResult import generate_finals_match_game_result_class
+#from FinalsMatchPlayerResult import generate_finals_match_player_result_class
+#from FinalsMatchGamePlayerResult import generate_finals_match_game_player_result_class
 
 class ImportedTables():
     def __init__(self,db_handle):
         self.Role = generate_role_class(db_handle)        
         self.User = generate_user_class(db_handle)        
         self.Tournament = generate_tournament_class(db_handle)
-        self.Division = generate_division_class(db_handle)
-        #self.DivisionFinal = generate_division_final_class(db_handle)                
-        #self.FinalsPlayer = generate_finals_player_class(db_handle)
+        self.Division = generate_division_class(db_handle)        
         self.Machine = generate_machine_class(db_handle)
         self.DivisionMachine = generate_division_machine_class(db_handle)
         self.MetaDivision = generate_meta_division_class(db_handle)
@@ -46,12 +45,13 @@ class ImportedTables():
         self.TicketPurchase = generate_ticket_purchase_class(db_handle)
         self.PurchaseSummary = generate_purchase_summary_class(db_handle)
         self.DivisionFinal = generate_division_final_class(db_handle)
-        self.FinalsPlayer = generate_finals_player_class(db_handle)
-        self.DivisionFinalRound = generate_division_final_round_class(db_handle)
-        self.DivisionFinalMatch = generate_division_final_match_class(db_handle)
-        self.FinalsMatchGameResult = generate_finals_match_game_result_class(db_handle)
-        self.FinalsMatchPlayerResult = generate_finals_match_player_result_class(db_handle)
-        self.FinalsMatchGamePlayerResult = generate_finals_match_game_player_result_class(db_handle)
+        self.DivisionFinalPlayer = generate_division_final_player_class(db_handle)
+        self.DivisionFinalQualifierTiebreaker = generate_division_final_qualifier_tiebreaker_class
+        #self.DivisionFinalRound = generate_division_final_round_class(db_handle)
+        #self.DivisionFinalMatch = generate_division_final_match_class(db_handle)
+        #self.FinalsMatchGameResult = generate_finals_match_game_result_class(db_handle)
+        #self.FinalsMatchPlayerResult = generate_finals_match_player_result_class(db_handle)
+        #self.FinalsMatchGamePlayerResult = generate_finals_match_game_player_result_class(db_handle)
 
         self.db_handle = db_handle
         

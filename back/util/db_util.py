@@ -40,11 +40,10 @@ def create_db_handle(db_url,flask_app):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_url    
     db_handle = SQLAlchemy(flask_app)
     return db_handle
-
+    
 def create_db_handle_no_app():
     db_handle = SQLAlchemy()
     return db_handle
-
 
 def create_TD_tables(db_handle,drop_tables=False):
     db_handle.reflect()
@@ -75,7 +74,7 @@ def generate_db_url(db_name, db_info):
         return "postgresql://%s:%s@localhost/%s" % (db_info.db_username,db_info.db_password,db_name)
         
             
-def app_db_handle(app):
+def app_db_handle(app):    
     return app.tables.db_handle
 
 def app_db_tables(app):

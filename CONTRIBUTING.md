@@ -1,5 +1,5 @@
 # How to help with TD development
-Work through this tutorial and read the appropriate tutorials (if you need to).  These use cases will highlight all the things you need to do (on the backend and frontend) when you want to add a new feature/fix a bug/refactor code, and will give some overview of all the individual components of TD.  At that point, you can jump in and start submiting pull requests!
+Work through this tutorial.  The tutorial consists of use cases which will highlight all the things you need to do (on the backend and frontend) when you want to add a new feature/fix a bug/refactor code, and will give some overview of all the individual components of TD.  There will be links to quickstarts for external libraries/frameworks - follow the links if you need to.  Once you have reached the end of the tutorial, you should be able to jump in and start submiting pull requests!
 
 
 Do not hesitate to ask questions - this will become a reference to our slack instance once we have one.
@@ -9,34 +9,44 @@ Do not hesitate to ask questions - this will become a reference to our slack ins
 TD is made up of two parts : the backend and the frontend.  The backend is a [Flask](http://flask.pocoo.org/) application that offers a REST api and interfaces with databases using [SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.1/).  The frontend is an [Ionic](http://ionicframework.com/) application.
 
 
-## Frameworks/Libraries used by the backend
-* Flask : A python framework we use for building the REST API : http://flask.pocoo.org/docs/0.11/quickstart/
-* SQLAlchemy : A python ORM library that lets TD talk to any supported database : http://docs.sqlalchemy.org/en/latest/orm/tutorial.html
-* Flask-SQLAlchemy : An extension for Flask that adds support for SQLAlchemy to TD : http://flask-sqlalchemy.pocoo.org/2.1/quickstart/
-* Optional Reading : You do not need to have read the following docs tp contribute, but if you want to get deeper into TD development then you should know about these Flask extensions that TD uses
-  * Flask-Principal : Allows us to define different roles, and use those roles to control who can do what with TD : http://pythonhosted.org/Flask-Principal/
-  * Flask-Login : Provides user session management for Flask : https://flask-login.readthedocs.io/en/latest/
-  * Stripe : Credit Card payment processing service : https://stripe.com/docs/api
-
-
-## Frameworks/Libraries used by the backend
-* AngularJs 1.x : Javascript framework that the frontend uses
-  * https://docs.angularjs.org/tutorial 
-  * https://docs.angularjs.org/guide
-* angular-ui-router : An AngularJs extension that allows us to do client-side Single Page Application routing : https://github.com/angular-ui/ui-router/wiki (read the "In depth guide" links)
-* Ionic : A framework built ontop of AngularJS that provides UI elements and allows us to package the AngularJS code into native mobile apps : http://ionicframework.com/docs/guide/
-
-
 # Use Case : Adding a player
 In the course of running our tournament, we'd like to be able to add players to the system.  In this use case, we will walk though all the steps that are required to do this.  In the course of walking through the steps, general explanations will be given of the code that the changes touch.
 
 
-## Step 0 : Checkout the Tutorial branch
+## Step 0 : Checkout the Tutorial branch and install pre-requisites
 Before you do anything, make sure you have checked out the TUTORIAL branch.  If you have never used git, see [link here](#git_link) for a git tutorial.  All the following steps assume you have checked out the TUTORIAL branch.  This branch is has all the core TD code, but only has a minimal number of REST endpoints and SQLAlchmey models defined.  It's main purpose is to provide a starting point for new people to dive into the code. 
+
+Next, you'll need to install the pre-requisites.  These instructions assume you running on Ubuntu (these instructions have been tested on Ubunutu 16.04).  Asssuming you are in the root directory of the repo, run the following commands to install everything needed for the backend : 
+
+```
+./back/utils/install_packages.sh
+./back/utils/initialize_pyenv_environment.sh
+python ./back/utils/setup.pyenv.py
+```
+
+
+Next, you'll need to create a user in the database - run the following command (putting in a username for the database user), and then enter a password for the database user when it prompts you.
+
+```
+sudo -u postgres createuser -s -P <database_username>
+```
+
+
+Next you'll need to install everything needed for the frontend : 
+
+```
+cd front
+npm install
+sudo npm install -g gulp-util
+sudo npm install -g gulp-cli
+sudo npm install -g cordova
+sudo npm install -g ionic
+node_modules/bower/bin/bower install
+```
 
 
 ## Step 1 : Add a SQLAlchemy model
-The first step is to define the database tables which will store information about players.  We do this using SQLAlchemy - specifically, we define a SQLAlchemy model.  All SQLAlchemy models are kept in `back/td_types/`.  We'll need to create the file `back/td_types/Player.py` add the following SQLAlchemy model for the player db table :
+The first step is to define the database tables which will store information about players.  We do this using SQLAlchemy - specifically, we define a SQLAlchemy model.  (see [link here](#flask_sqlalchemy_link) for Flask-SQLalchemy quickstart link, and see [link here](#sqlalchemy_link) for SQLalchemy quickstart link)  All SQLAlchemy models are kept in `back/td_types/`.  We'll need to create the file `back/td_types/Player.py` add the following SQLAlchemy model for the player db table :
 
 
 ```
@@ -93,11 +103,11 @@ class ImportedTables():
 ```
 
 
-So what code instatiates ImportedTables()?  A full explanation of this is beyond the scope of this document - if you are interested in the full explanation, please look at `back/util/dispatch.py`.  The short answer is this : we have some fancy code (in `back/util/dispatch.py`) that routes a request to the appropriate flask applciation, and handles instatiating the flask application if has not yet been instantiated.  This fancy code also handles instatiating the ImportedTables correctly and associating it with the appropriate flask application instance.  Note that this fancy code will also take care of creating the database and tables if they have not already been created. 
+So what code instatiates ImportedTables()?  A full explanation of this is beyond the scope of this document - if you are interested in the full explanation, please look at `back/util/dispatch.py`.  WARNING : if the following doesn't make any sense, don't worry - it will later on.  The short answer is this : we have some fancy code (in `back/util/dispatch.py`) that routes a request to the appropriate flask applciation, and handles instatiating the flask application if has not yet been instantiated.  This fancy code also handles instatiating the ImportedTables correctly and associating it with the appropriate flask application instance.  Note that this fancy code will also take care of creating the database and tables if they have not already been created. 
 
 
 ## Step 2 : Add REST endpoints
-Now that we have defined our table, we need to give users a way to access and change that data.  We do this by defining REST endpoints, which are just urls that TD will respond to.  For example, let's say our service will be running at the following url : http://localhost:8000/, then the REST endpoint to get all existing users will be http://localhost:8000/user (definied in `back/routes/user.py`).  When we hit this url/endpoint with a browser, a list of all existing users will be returned in JSON format.  Note that all REST endpoints in TD MUST return json.
+Now that we have defined our table, we need to give users a way to access and change that data.  We do this by defining REST endpoints, which are just urls that TD will respond to.  For example, let's say our service will be running at the following url : http://localhost:8000/, then the REST endpoint to get all existing users will be http://localhost:8000/user (definied in `back/routes/user.py`).  When we hit this url/endpoint with a browser, a list of all existing users will be returned in JSON format.  Note that all REST endpoints in TD MUST return json.  If you are not familiar with Flask, see [link here](#flask_link) for Flask quickstart link. 
 
 
 We want to define two endpoints to let people interact with the Player db table - an endpoint to add players, and an endpoint to retrieve player info.  Let's start with the "add players" endpoint.
@@ -148,10 +158,10 @@ Let's look at this line by line, and start at `@admin_manage_blueprint.route('/p
 
 
 
-Note that this looks a little different than what you saw in the Flask quickstart - this is because TD uses Flask blueprints.  Explaining blueprints is outside the scope of this document (although if you want to know more, look here : http://flask.pocoo.org/docs/0.10/blueprints/).  All you need to know is that if you want to define a endpoint in TD, you need to use the `@admin_manage_blueprint.route()` decorator.  The function that is wrapped by this decorator will define what the endpoint does.
+Note that this looks a little different than what you saw in the Flask quickstart - this is because TD uses Flask blueprints.  Explaining blueprints is outside the scope of this document (although if you want to know more, look here : http://flask.pocoo.org/docs/0.10/blueprints/).  All you need to know is that if you want to define a endpoint in TD, you can use the `@admin_manage_blueprint.route()` decorator.  The function that is wrapped by this decorator will define what the endpoint does.
 
 
-Let's look at the next two lines : `@login_required` and `@Desk_permission.require(403)`.  These control who can access this endpoint - the first line checks that whatever is trying to access this endpoint is logged in to TD, and the second line checks that the logged in user has permission to access this endpoint.  It's not important at this point to understand how these work - you just need to know that a `@login_required` decorator will make sure only logged in users can use this endpoint, and `@Desk_permission.require(403)` will make sure that only users with the `desk` permission can use this endpoint.  If you want to see the other permissions you can control on, see `back/util/permissions.py`.  You'll notice that there is no way in this branch to set user permissions through the UI.  This is implemented in the main branch, but for this branch there is a util which will allow you to bootstrap the database with an admin user with all permissions.  
+Let's look at the next two lines : `@login_required` and `@Desk_permission.require(403)`.  These control who can access this endpoint - the first line checks that whatever is trying to access this endpoint is logged in to TD, and the second line checks that the logged in user has permission to access this endpoint.  It's not important at this point to understand how these work (although if you are interested, you can look [link here](#flask_login_link) for info on Flask-Login and [link here](#flask_principal_link) for info on Flask-Principal ).   You just need to know that a `@login_required` decorator will make sure only logged in users can use this endpoint, and `@Desk_permission.require(403)` will make sure that only users with the `desk` permission can use this endpoint.  If you want to see the other permissions you can control on, see `back/util/permissions.py`.  You'll notice that there is no way in this branch to set user permissions through the UI.  This is implemented in the main branch, but for this branch there is a util which will allow you to bootstrap the database with an admin user with all permissions (we'll get to this at the end of this section).  
 
 
 Now lets start looking at the actual function that will define what the enddpoint does : 
@@ -214,7 +224,91 @@ Finally, we want to actually create a new player and commit that info to the db.
 Once again, we use `tables` to create the Player object, and we use the values we got from the HTTP body to set the first and last name.  We use the `db` variable to actually add it to the database and then commit the changes.  Finally, we create a python dict of the `new_player` object, and then we return a jsonified version of the dict.  Note that TD assumes all endpoints will return json (even if it's an empty JSON object)
 
 
-You can now add players to the database through the REST API.  But it would be nice if we could use the REST api to actually SEE the players we have added.
+Finally, edit the `back/routes/__init__.py` - add `import player` to the __init__.py file.
+
+
+### See the Add Player REST endpoint in action!  
+
+First, we need to set all the environment variables that the backend require.  To make this easier, there is a file `back/utils/env_vars.template`.  Copy the file to `back/utils/env_vars` and edit this new file.   Uncomment and set the FLASK_SECRET_KEY, DB_USERNAME, and DB_PASSWORD.  Set DB_USERNAME an DB_PASSWORD to the database username and password you set earlier.  For right now it doesn't matter what you set FLASK_SECRET_KEY to, as long as you set it to something(see the flask quickstart for information about what it's used for)
+
+
+Now run the following commands (assuming you are starting in the repo root) to startup the backend : 
+
+```
+cd back
+source ./utils/env_vars
+PYTHONPATH=. ./utils/gunicorn.cmd 1
+```
+
+You should see something like this as the output...
+
+```
+[2017-05-06 10:42:53 -0400] [36826] [INFO] Starting gunicorn 19.3.0
+[2017-05-06 10:42:53 -0400] [36826] [INFO] Listening at: http://0.0.0.0:8000 (36826)
+[2017-05-06 10:42:53 -0400] [36826] [INFO] Using worker: sync
+[2017-05-06 10:42:53 -0400] [36859] [INFO] Booting worker with pid: 36859
+```
+
+You now have a running backend!  But, there is no database for the backend to connect to - so we need to create the database.  The backend has a endpoint which will create a test database for us.  In another terminal, run the following command to hit that endpoint: 
+
+```
+curl -X POST http://0.0.0.0:8000/meta_admin/db
+```
+
+The output of that curl command (which is what the REST endpoint returns) should look like this : 
+
+```
+{
+  "data": "test"
+}
+```
+
+Yay!  You now have a database called "test" created.  Now we can try and create a player.  First, we have to authenticate to the backend.  Run the following command to authenticate : 
+
+```
+./back/utils/login_via_curl.sh
+```
+
+You should see output that looks like this :
+
+```
+{
+  "data": {
+    "roles": [
+      "admin",
+      "desk",
+      "scorekeeper",
+      "void"
+    ],
+    "user_id": 1,
+    "username": "test_admin"
+  }
+}
+```
+
+The `login_via_curl.sh` runs a curl command to hit the login endpoint on the backend, and then store the returned credentials in a cookie file (/tmp/cookie). 
+
+
+Now you can hit the create player endpoint that we created above.  Use the following command (note that it uses the /tmp/cookie file we generated previously - the cookie file contains the credentials we got after running the login_via_curl.sh script):
+
+```
+curl -X POST -b /tmp/cookie -H "Content-Type: application/json" -d '{"first_name":"alton","last_name":"coldman"}' http://0.0.0.0:8000/test/player 
+```
+
+
+You should see the following output : 
+
+```
+{
+  "data": {
+    "first_name": "alton",
+    "last_name": "coldman",
+    "player_id": 1
+  }
+}
+```
+
+Congratulations!  You have added your first player to the system.   But it would be nice if we could use the REST api to actually SEE the players we have added.
 
 
 ### Get Player Endpoint
@@ -238,61 +332,12 @@ def route_get_player(player_id):
 This should all now be looking familiar.  We specify a player_id (which was generated by the database when the player was adde to the db) in the url, and this endpoint will lookup the appropriate player and return a JSON object with the player info.  Note the `<player_id>` part of the endpoint definition - this tells flask that it should expect something in that part of the url, and that it should pass the wrapped function that value.  If you look at the `route_get_player()` function, you see that it's expecting a single argument - this will contain the value that flask found in the <player_id> part of the url.
 
 
-Finally, we need to tell TD about this new file with the new endpoints - we add the following to `back/routes/__init__.py`
+### See the Get Players REST endpoint in action!  
 
-
-```
-import player
-```
-
-
-## Step 3 : Trying out the new endpoint
-Let's take this baby out for a spin!  Before we actually start things up, we need to change the followings line in `back/routes.player.py` 
-
+The following command will hit the REST endpoint we just added
 
 ```
-@admin_manage_blueprint.route('/player',methods=['POST'])
-@login_required
-@Desk_permission.require(403)
-def route_add_player():
-```
-
-
-to
-
-
-```
-@admin_manage_blueprint.route('/player',methods=['POST'])
-#@login_required
-#@Desk_permission.require(403)
-def route_add_player():
-```
-
-
-This is because we want to make demonstrating the two endpoints as easy as possible - commenting these lines out means we don't have to login to use these endpoints
-
-
-Now, follow the quickstart steps in the README.md to try this out (i.e. only the "Starting up backend" steps).  Once you have started up the docker container, try the following command in a terminal on your computer (this will hit the Add User endpoint and create a user named "mister sister") 
-
-
-```
-curl -H "Content-Type: application/json" -X POST -d '{"first_name":"mister","last_name":"sister"}' http://localhost:8000/test/player
-```
-
-
-and you will get the following back
-
-
-```
-{'data':{'first_name':'mister','last_name':'sister','player_id':1}}
-```
-
-
-Next, run the following command (which will request the player info for the player with player_id 1)
-
-
-```
-curl http://localhost:8000/test/player
+curl http://localhost:8000/test/player/1
 ```
 
 
@@ -300,14 +345,13 @@ And you will get the following output
 
 
 ```
-{'data':{'first_name':'mister','last_name':'sister','player_id':1}}
+{'data':{'first_name':'alton','last_name':'coldman','player_id':1}}
 ```
 
+You might have noticed the urls we have beeing using to hit the "/player" endpoint has "test" in it before the "/player".  Why is that "test" there?  As we discussed in Step 1, we need to be able to have seperate flask app instances for seperate events(i.e. PAPA20 vs PAPA19).  You'll also remember we discussed the fancy code that handles routing requests to the appropriate app.  Well, the way that fancy code does the routing is it looks at the first part of the url after the host name.  It uses that to decide which flask app instance to route to, and then it removes that part of the url before passing the request onto the flask app instance.  The docker container you spun up bootstraps a flask app instance that handles all request for the "test" event.  So in the case of the url http://localhost:8000/test/player, the fancy code found "test", removed test from the url (so it was now "http://localhost:8000/player") and routed the request to the appropriate flask app instance.  As far as the flask app instance is concerned, it just got a request for the GET "/player" endpoint.
 
-You might have noticed the url has "test" in it before the "/player".  Why is that "test" there?  As we discussed in Step 1, we need to be able to have seperate flask app instances for seperate events(i.e. PAPA20 vs PAPA19).  You'll also remember we discussed the fancy code that handles routing requests to the appropriate app.  Well, the way that fancy code does the routing is it looks at the first part of the url after the host name.  It uses that to decide which flask app instance to route to, and then it removes that part of the url before passing the request onto the flask app instance.  The docker container you spun up bootstraps a flask app instance that handles all request for the "test" event.  So in the case of the url http://localhost:8000/test/player, the fancy code found "test", removed test from the url (so it was now "http://localhost:8000/player") and routed the request to the appropriate flask app instance.  As far as the flask app instance is concerned, it just got a request for the GET "/player" endpoint.
 
-
-If you have a decent grasp on what was just covered, you should be able to look at any of the enpoints on the main branch and understand what is going on.  If weird stuff neeed to happen in the endpoint, it will be well documented.
+If you have a decent grasp on what was just covered, you should be able to look at any of the enpoints on the main branch and understand what is going on.  If weird stuff neeed to happen in the endpoint, it should be well documented.
 
 
 ## Step 4 : Implement "Add Player" in Fronted 
@@ -317,6 +361,7 @@ We need to do several things in order to implement an "Add Player" page in the f
 * Create the "Process Add Player" page and controller - this will be responsible for submitting the info to the backend
 * Create links to the "Add Player" page
 
+If you are not familiar with angular, see [link here](#angular_link) for a link to the angular quickstart. 
 
 ### Create the "Add Player" page and controller
 There is a utility that takes care of a lot of this step.  Run the following commands (assuming you start in the top level dir of your checked out repo): 
@@ -587,11 +632,15 @@ NOTE : The User service prevents unauthorized users from viewing pages they are 
 
 
 ## Step 6 : Trying out the additions to the frontend
-Before we try this out, uncomment the lines we commented out in `back/routes/player.py` in Step 2, and rebuild and restart the backend docker container 
 
+We use the ionic framework which provides a number of utilities.  One of those utilities acts as a webserver that allows you to immediately see any changes you make to your javascript code.  To run this utility, use the following command : 
 
-Now, follow the quickstart steps in the README.md to try this out (i.e. the "Starting up frontend" steps).  Once you have started up the docker container, go to the following url in a browser : http://localhost:8100/
+```
+cd front
+ionic serve -a
+```
 
+This will startup a simple webserver at http://0.0.0.0:8100 and it will try and launch a browser window pointed at http://0.0.0.0:8100.  If a browser is not launched, launch one on your own and goto http://0.0.0.0:8100
 
 This will bring up the home page (which will be blank because you are not yet logged in).  Click on the menu icon (in the top right), and select the "Login" link.  Login with the following information : 
 
@@ -635,9 +684,34 @@ The following list might look daunting, but it should only take a you a single w
 <a name='git_link'></a>
 ## Git 
 * Git is AWESOME - but the learning curve can be a steeper than other source control systems - the good news you can get started with it without having to wrap your brain around the complex stuff :
-  * https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control ( this is the begining of the introduction chapter )
-  * https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository ( this is the begining of the Basics chapter)
+  * http://rogerdudler.github.io/git-guide/ (get started with git in about 5 minutes)
+  * https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control (official git documentation - in depth, but not quick)
 
+## Frameworks/Libraries used by the backend
+<a name='flask_link'></a>
+* Flask : A python framework we use for building the REST API : http://flask.pocoo.org/docs/0.11/quickstart/
+<a name='sqlalchemy_link'></a>
+* SQLAlchemy : A python ORM library that lets TD talk to any supported database : http://docs.sqlalchemy.org/en/latest/orm/tutorial.html
+<a name='flask_sqlalchemy_link'></a>
+* Flask-SQLAlchemy : An extension for Flask that adds support for SQLAlchemy to TD : http://flask-sqlalchemy.pocoo.org/2.1/quickstart/
+* Optional Reading : You do not need to have read the following docs tp contribute, but if you want to get deeper into TD development then you should know about these Flask extensions that TD uses
+  <a name='flask_principal_link'></a>
+  * Flask-Principal : Allows us to define different roles, and use those roles to control who can do what with TD : http://pythonhosted.org/Flask-Principal/
+  <a name='flask_login_link'></a>
+  * Flask-Login : Provides user session management for Flask : https://flask-login.readthedocs.io/en/latest/
+  <a name='stripe_link'></a>
+  * Stripe : Credit Card payment processing service : https://stripe.com/docs/api
+
+
+## Frameworks/Libraries used by the backend
+<a name='angular_link'></a>
+* AngularJs 1.x : Javascript framework that the frontend uses
+  * https://docs.angularjs.org/tutorial 
+  * https://docs.angularjs.org/guide
+<a name='angular_ui_link'></a>
+* angular-ui-router : An AngularJs extension that allows us to do client-side Single Page Application routing : https://github.com/angular-ui/ui-router/wiki (read the "In depth guide" links)
+<a name='ionic_link'></a>
+* Ionic : A framework built ontop of AngularJS that provides UI elements and allows us to package the AngularJS code into native mobile apps : http://ionicframework.com/docs/guide/
 
 
 

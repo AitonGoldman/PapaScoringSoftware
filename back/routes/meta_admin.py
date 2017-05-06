@@ -20,23 +20,20 @@ def generate_test_user(username,dummy_app,db_handle,roles=[]):
         user.roles.append(role)
         db_handle.session.commit()
 
-#FIXME : needs protection
-#FIXME : need to pull db creation out into seperate function
+
+@meta_admin_blueprint.route('/meta_admin/db',methods=['PUT'])
+def route_meta_admin_wipe_db():    
+    db_config = td_config.get_db_config()    
+    db_info = DbInfo(db_config)            
+    db_util.drop_database('test',db_info)
+    return jsonify({'data':'test'})    
+        
 @meta_admin_blueprint.route('/meta_admin/db',methods=['POST'])
 def route_meta_admin_create_db():    
-    dummy_app = Flask('dummy_app')
-    input_data = json.loads(request.data)
-    db_config = td_config.get_db_config()    
-    db_util.create_db_and_tables(dummy_app, input_data['db_name'], DbInfo(db_config))
-    del dummy_app
-    return jsonify({'data':input_data['db_name']})    
-
-@meta_admin_blueprint.route('/meta_admin/test_db',methods=['POST'])
-def route_meta_admin_wipe_test_db():    
     dummy_app = Flask('dummy_app')    
-    db_info = DbInfo({'DB_TYPE':'sqlite'})
-    db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)
-    db_url = db_util.generate_db_url('test', db_info)
+    db_config = td_config.get_db_config()    
+    db_info = DbInfo(db_config)            
+    db_util.create_db_and_tables(dummy_app, 'test', db_info , drop_tables=True)        
     db_handle = dummy_app.tables.db_handle
     for role in ['admin','desk','scorekeeper','void']:
         db_handle.session.add(dummy_app.tables.Role(name=role))

@@ -83,13 +83,13 @@ class RouteFinalsTD(unittest.TestCase):
         ]
 
         self.final_players = [
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 0, 'team_id': None, 'player_id': 1, 'removed': None, 'division_final_id': None},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 1, 'team_id': None, 'player_id': 223, 'removed': None, 'division_final_id': None},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 2, 'team_id': None, 'player_id': 517, 'removed': None, 'division_final_id': None},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 3, 'team_id': None, 'player_id': 121, 'removed': None, 'division_final_id': None},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 3, 'team_id': None, 'player_id': 298, 'removed': None, 'division_final_id': None},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 5, 'team_id': None, 'player_id': 300, 'removed': None, 'division_final_id': None},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 6, 'team_id': None, 'player_id': 178, 'removed': None, 'division_final_id': None}
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 0, 'team_id': None, 'player_id': 1, 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 1, 'team_id': None, 'player_id': 223, 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 2, 'team_id': None, 'player_id': 517, 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 3, 'team_id': None, 'player_id': 121, 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 3, 'team_id': None, 'player_id': 298, 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 5, 'team_id': None, 'player_id': 300, 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 6, 'team_id': None, 'player_id': 178, 'removed': None, 'division_final_id': None, 'type':'result'}
         ]
         self.tiebreaker_results = [
             {
@@ -115,6 +115,16 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(pruned_final_player_list[0]['player_id'],1)
         self.assertEquals(pruned_final_player_list[0]['removed'],True)
         self.assertEquals(pruned_final_player_list[1]['removed'],None)
+
+    def test_remove_missing_final_player_with_simplified_list(self):                        
+        self.final_players[0]['removed']=True
+        simplified_results = create_simplified_division_results(self.final_players,3,self.mock_app)
+        pruned_final_player_list = remove_missing_final_player(simplified_results,self.mock_app)
+        self.assertEquals(len(pruned_final_player_list),7)        
+        self.assertEquals(pruned_final_player_list[3]['type'],'result')
+        self.assertEquals(pruned_final_player_list[0]['player_id'],1)
+        self.assertEquals(pruned_final_player_list[0]['removed'],True)
+        self.assertEquals(pruned_final_player_list[1]['removed'],None)
         
     def test_initialize_division_final(self):                
         self.tables.DivisionFinal.query.filter_by.return_value.all.return_value=None
@@ -128,7 +138,7 @@ class RouteFinalsTD(unittest.TestCase):
         self.tables.DivisionFinal.query.filter_by.return_value.all.return_value=existing_division_final
         division_final = initialize_division_final(1,"test_division",self.division_results,self.mock_app)
         self.assertEquals(division_final,existing_division_final)
-        
+
     def test_create_division_final_players(self):
         division_final = self.tables.DivisionFinal()
         division_final.qualifiers=[]

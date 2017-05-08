@@ -12,6 +12,7 @@ import os
 from orm_creation import create_player,create_user,RolesEnum
 import random
 import collections
+from flask_restless.helpers import to_dict
 
 # def generate_rank_matchup_dict(match_ups):
 #     if match_ups is None:
@@ -590,7 +591,32 @@ def route_initialize_division_final(division_id):
 @login_required
 @Scorekeeper_permission.require(403)
 def route_record_tiebreaker_results(division_final_id):
-    return jsonify({'data':None})
+    tiebreaker_results = json.loads(request.data)        
+    division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_id)
+    record_tiebreaker_results(division_final.qualifiers,tiebreaker_results,current_app)
+    return jsonify({'data':'score recorded'})
+
+@admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>/qualifiers',
+                              methods=['GET','PUT'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_get_or_change_division_final_qualifiers(division_final_id):
+    division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_id)
+    division = fetch_entity(current_app.tables.Division,division_final.division_id)
+    if request.data:
+        rollcall_list = json.loads(request.data)['data']
+    else:
+        sorted_player_list = sorted([division_final_player.to_dict_simple() for division_final_player in division_final.qualifiers],
+                                    key= lambda e: e['initial_seed'])
+        for index,player in enumerate(sorted_player_list):
+            sorted_player_list[index]['removed']=False
+        rollcall_list = create_simplified_division_results(sorted_player_list,
+                                                           division.finals_num_qualifiers,
+                                                           current_app)            
+    
+    modified_rollcall_list = remove_missing_final_player(rollcall_list, current_app)    
+    divided_rollcall_list = create_simplified_division_results(modified_rollcall_list,division.finals_num_qualifiers, current_app)
+    return jsonify({'data':divided_rollcall_list})
 
 @admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>/tiebreakers',
                               methods=['GET'])
@@ -605,7 +631,7 @@ def route_get_tiebreakers(division_final_id):
 def get_tiebreakers_for_division(division_final_players,num_qualifiers):
     num_players = len(division_final_players)
     tiebreakers = []
-    for potential_tiebreaker_rank in range(1,num_qualifiers+1):
+    for potential_tiebreaker_rank in range(0,num_qualifiers):
         tiebreaker = [{'final_player_id':final_player.final_player_id,
                        'initial_seed':final_player.initial_seed,
                        'player_name':final_player.player_name,
@@ -655,12 +681,12 @@ def create_division_final_players(division_final,
     return division_final_players
         
 def remove_missing_final_player(final_player_list, app):
-    pruned_final_players = []
-    for final_player in final_player_list:        
-        if final_player['removed'] is not True:                
+    pruned_final_players = []        
+    final_player_list = [final_player for final_player in final_player_list if final_player['type'] == 'result']    
+    for final_player in final_player_list:                        
+        if 'removed' in final_player and final_player['removed'] is not True:                
+            final_player['removed ']=False
             pruned_final_players.append(final_player)                
-        else:
-            final_player['removed']=True
                 
     sorted_final_players = sorted(pruned_final_players, key= lambda e: e['initial_seed'])    
     reranked_pruned_final_players_list = list(Ranking(sorted_final_players,
@@ -669,9 +695,9 @@ def remove_missing_final_player(final_player_list, app):
     # NOTE : reranked ranks start at 0, not 1
     reranked_pruned_final_players_hash = {final_player[1]["player_id"]:final_player[0] for final_player in reranked_pruned_final_players_list}
     for index,final_player in enumerate(final_player_list):
-        if final_player['removed']:
+        if 'removed' in final_player and final_player['removed']:
             final_player['initial_seed']=None
-        else:
+        if 'removed' in final_player and final_player['removed'] is False:        
             final_player['initial_seed']=reranked_pruned_final_players_hash[final_player['player_id']]
     return final_player_list
         
@@ -692,7 +718,7 @@ def create_simplified_division_results(final_players, division_cutoff, app):
         simplified_result = {
             "type":"result",
             "player_id":final_player['player_id'],
-            "rank":final_player['initial_seed'],
+            "initial_seed":final_player['initial_seed'],
             "removed":final_player['removed']
         }        
         simplified_results.append(simplified_result)

@@ -5,6 +5,7 @@ There are four goals for this release
 2. Fix finals scorekeeping and results reporting 
 3. Implement limited HERB tournament type
 4. Be ready for ReplayFX 
+5. Begin working on fixing/expanding automated tests
 
 ## Bugs/Features to fix
 - Refactor queues representation in database.  

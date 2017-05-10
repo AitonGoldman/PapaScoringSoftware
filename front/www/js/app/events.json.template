@@ -1,0 +1,2 @@
+//This file is a list of events (i.e. "papa 20" vs "ppo 6").  It contains an array of strings - each string is the name of a event database (i.e. if you used the meta_admin endpoint to create a test database, then the database name is "test") 
+["test"]

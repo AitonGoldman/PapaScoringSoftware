@@ -1,8 +1,14 @@
-//type_of_page is either "user" or "player"
+//type_of_page is either "user" or "player".  It determines which view you will get when you login (i.e. player view or scorekeeper/admin view) if you are using a native app.  If you are using a web browser to access the app, this does not need to be set
 type_of_page="";
+
+//while developing you can set all the *_ip_address values to your ip address
 server_ip_address="";
 results_ip_address="";
 purchase_ip_address="";
+
+//set the *_port values to the port you are running the backend on
 server_port="8000";
 purchase_port="8000";
+
+//change this to https if your backend is serving over https
 http_prefix="http";

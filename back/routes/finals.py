@@ -1,3 +1,4 @@
+from random import shuffle
 from ranking import Ranking
 from blueprints import admin_login_blueprint,admin_manage_blueprint
 from flask import jsonify,current_app,request
@@ -14,17 +15,17 @@ import random
 import collections
 from flask_restless.helpers import to_dict
 
-# def generate_rank_matchup_dict(match_ups):
-#     if match_ups is None:
-#         return {}
-#     return_dict = {
-#         'player_one':match_ups[0],
-#         'player_two':match_ups[1]
-#     }
-#     if len(match_ups) > 2:        
-#         return_dict['player_three']=match_ups[2]
-#         return_dict['player_four']=match_ups[3]
-#     return return_dict
+def generate_rank_matchup_dict(match_ups):
+    if match_ups is None:
+        return {}
+    return_dict = {
+        'player_one':match_ups[0],
+        'player_two':match_ups[1]
+    }
+    if len(match_ups) > 2:        
+        return_dict['player_three']=match_ups[2]
+        return_dict['player_four']=match_ups[3]
+    return return_dict
 
 # def get_finals_players_with_seed(seed, division_final_id):
 #     db = db_util.app_db_handle(current_app)
@@ -572,7 +573,117 @@ from flask_restless.helpers import to_dict
                     
 #             #     pass
 #     return jsonify(new_final.to_dict_simple())        
-        
+
+
+bracket_template_4_player_groups_24_players = [
+    {
+        'round':1,
+        'matches':[
+            generate_rank_matchup_dict([9,16,17,24]),
+            generate_rank_matchup_dict([10,15,18,23]),
+            generate_rank_matchup_dict([11,14,19,22]),
+            generate_rank_matchup_dict([12,13,20,21])            
+        ]
+    },
+    {
+        'round':2,
+        'matches':[
+            generate_rank_matchup_dict([1,8, None, None]),
+            generate_rank_matchup_dict([2,7, None, None]),
+            generate_rank_matchup_dict([3,6, None, None]),
+            generate_rank_matchup_dict([4,5, None, None])                            
+        ]
+    },
+    {
+        'round':3,
+        'matches':[
+            generate_rank_matchup_dict([None,None, None, None]),
+            generate_rank_matchup_dict([None,None, None, None])                            
+        ]
+    },
+    {
+        'round':4,
+        'matches':[
+            generate_rank_matchup_dict([None,None, None, None])                                            
+        ]
+    }
+]
+
+bracket_template_4_player_groups_16_players = [
+    {
+        'round':1,
+        'matches':[
+            generate_rank_matchup_dict([1,8,9,16]),
+            generate_rank_matchup_dict([2,7,10,15]),
+            generate_rank_matchup_dict([3,6,11,14]),
+            generate_rank_matchup_dict([4,5,12,13])            
+        ]
+    },
+    {
+        'round':2,
+        'matches':[
+            generate_rank_matchup_dict([None,None, None, None]),
+            generate_rank_matchup_dict([None,None, None, None]), 
+        ]
+    },
+    {
+        'round':3,
+        'matches':[
+            generate_rank_matchup_dict([None,None, None, None])                
+        ]
+    }
+]
+
+bracket_template_4_player_groups_8_players = [
+    {
+        'round':1,
+        'matches':[
+            generate_rank_matchup_dict([1,8,4,5]),                                
+            generate_rank_matchup_dict([2,7,3,6])            
+        ]
+    },
+    {
+        'round':2,
+        'matches':[
+            generate_rank_matchup_dict([None,None, None, None]),                
+        ]
+    }
+]    
+
+
+@admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>',
+                              methods=['DELETE'])
+@login_required
+@Admin_permission.require(403)
+def route_delete_division_final_rounds(division_final_id):
+    division_final = current_app.tables.DivisionFinal.query.filter_by(division_final_id=division_final_id).first()
+    if division_final:
+        current_app.tables.db_handle.session.delete(division_final)        
+        current_app.tables.db_handle.session.commit()
+        return jsonify({'data':None})
+    else:
+        return jsonify({'data':None})
+
+@admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>/round_count',
+                              methods=['GET'])
+def route_get_division_final_round_count(division_final_id):
+    division_final_rounds = current_app.tables.DivisionFinalRound.query.filter_by(division_final_id=division_final_id).all()
+    if len(division_final_rounds) > 0:                
+        return jsonify({'data':len([division_final_round.to_dict_simple() for division_final_round in division_final_rounds])})
+    else:
+        return jsonify({'data':None})
+    
+
+@admin_manage_blueprint.route('/finals/division_final/division_id/<division_id>',
+                              methods=['GET'])
+def route_get_division_final(division_id):
+    division_final = current_app.tables.DivisionFinal.query.filter_by(division_id=division_id).first()
+    if division_final:
+        return jsonify({'data':division_final.to_dict_simple()})
+    else:
+        return jsonify({'data':None})
+ 
+
 @admin_manage_blueprint.route('/finals/division_final/division_id/<division_id>',
                               methods=['POST'])
 @login_required
@@ -583,7 +694,7 @@ def route_initialize_division_final(division_id):
     division_results = get_division_results(division_id,return_json=False)
     division_results =  division_results['data']['ranked_player_list'][division_id]
     division_final = initialize_division_final(division_id, division.division_name, division_results, current_app)            
-    return jsonify({'data':{'division_final_id':division_final.division_final_id}})    
+    return jsonify({'data':division_final.to_dict_simple()})    
     
 
 @admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>/tiebreakers',
@@ -593,8 +704,22 @@ def route_initialize_division_final(division_id):
 def route_record_tiebreaker_results(division_final_id):
     tiebreaker_results = json.loads(request.data)        
     division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_id)
-    record_tiebreaker_results(division_final.qualifiers,tiebreaker_results,current_app)
-    return jsonify({'data':'score recorded'})
+    tiebreaker_results_with_new_ranks = record_tiebreaker_results(division_final.qualifiers,tiebreaker_results,current_app)
+    return jsonify({'data':tiebreaker_results_with_new_ranks})
+
+
+@admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>/rounds',
+                              methods=['POST'])
+@login_required
+@Scorekeeper_permission.require(403)
+def route_generate_brackets(division_final_id):
+    division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_id)
+    division = fetch_entity(current_app.tables.Division,division_final.division_id)    
+    rollcall_list = json.loads(request.data)#['data']    
+    final_rounds = generate_brackets(current_app,division_final_id, rollcall_list,division.finals_num_qualifiers)    
+    final_rounds_dicts = [final_round.to_dict_simple() for final_round in final_rounds]
+    return jsonify({'data':to_dict(final_rounds_dicts)})
+
 
 @admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>/qualifiers',
                               methods=['GET','PUT'])
@@ -604,12 +729,13 @@ def route_get_or_change_division_final_qualifiers(division_final_id):
     division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_id)
     division = fetch_entity(current_app.tables.Division,division_final.division_id)
     if request.data:
-        rollcall_list = json.loads(request.data)['data']
+        rollcall_list = json.loads(request.data)#['data']
     else:
         sorted_player_list = sorted([division_final_player.to_dict_simple() for division_final_player in division_final.qualifiers],
                                     key= lambda e: e['initial_seed'])
         for index,player in enumerate(sorted_player_list):
             sorted_player_list[index]['removed']=False
+            sorted_player_list[index]['reranked_seed']=sorted_player_list[index]['initial_seed']
         rollcall_list = create_simplified_division_results(sorted_player_list,
                                                            division.finals_num_qualifiers,
                                                            current_app)            
@@ -627,6 +753,166 @@ def route_get_tiebreakers(division_final_id):
     tiebreakers = get_tiebreakers_for_division(division_final.qualifiers,division.finals_num_qualifiers)
     return jsonify({'data':{'tiebreakers':tiebreakers}})
 
+@admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>/tiebreakers/important',
+                              methods=['GET'])
+@login_required
+def route_get_important_tiebreakers(division_final_id):
+    division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_id)
+    division = fetch_entity(current_app.tables.Division,division_final.division_id)    
+    important_tiebreakers = get_important_tiebreakers_for_division(division_final.qualifiers,
+                                                         division.finals_num_qualifiers,
+                                                         get_important_ranks_for_tiebreakers(division.finals_num_qualifiers))
+    return jsonify({'data':{'important_tiebreakers':important_tiebreakers}})
+
+
+def resolve_unimportant_ties(division_final_player_list,num_qualifiers):
+    tiebreaker_counts = {}    
+    division_final_player_list = [player for player in division_final_player_list if player['type']=='result']
+    for potential_tiebreaker_rank in range(0,num_qualifiers):
+        tie_breaker_count = len(
+            [final_player for final_player in division_final_player_list if final_player['reranked_seed'] == potential_tiebreaker_rank]
+        )
+        tiebreaker_counts[potential_tiebreaker_rank]=tie_breaker_count    
+    shuffle(division_final_player_list)
+    for player in division_final_player_list:
+        if player['reranked_seed'] < num_qualifiers and tiebreaker_counts[player['reranked_seed']] > 1:
+            tiebreaker_counts[player['reranked_seed']]=tiebreaker_counts[player['reranked_seed']]-1
+            player['reranked_seed']=player['reranked_seed']+tiebreaker_counts[player['reranked_seed']]            
+    return sorted(division_final_player_list, key= lambda e: e['reranked_seed'],reverse=False)
+
+def generate_division_final_match_game_result(app,number_of_games=3,number_of_players=4,commit=False):
+    division_final_match_game_results=[]    
+    for game_index in range(number_of_games):
+        division_final_match_game_player_results=[]        
+        for player_index in range(number_of_players):        
+            division_final_match_game_player_result=app.tables.DivisionFinalMatchGamePlayerResult()        
+            division_final_match_game_player_results.append(division_final_match_game_player_result)        
+        division_final_match_game_result=app.tables.DivisionFinalMatchGameResult()
+        division_final_match_game_result.division_final_match_game_player_results=division_final_match_game_player_results
+        division_final_match_game_results.append(division_final_match_game_result)        
+        if commit:
+            app.tables.db_handle.session.add(division_final_match_game_result)
+    if commit:
+        app.tables.db_handle.session.commit()
+    return division_final_match_game_results
+
+def generate_division_final_match_player_results(app,number_of_players=4,commit=False):
+    division_final_match_player_results=[]
+    for index in range(number_of_players):        
+        division_final_match_player_result=app.tables.DivisionFinalMatchPlayerResult()        
+        division_final_match_player_results.append(division_final_match_player_result)
+        if commit:
+            app.tables.db_handle.session.add(division_final_match_player_result)        
+    if commit:
+        app.tables.db_handle.session.commit()
+    return division_final_match_player_results
+
+def generate_division_final_matches(app,number_of_matches, commit=False):
+    division_final_matches=[]
+    for index in range(number_of_matches):        
+        division_final_match=app.tables.DivisionFinalMatch()        
+        division_final_match.final_match_game_results=generate_division_final_match_game_result(app)
+        division_final_match.final_match_player_results=generate_division_final_match_player_results(app)
+        division_final_matches.append(division_final_match)
+        if commit:
+            app.tables.db_handle.session.add(division_final_match)            
+    if commit:
+        app.tables.db_handle.session.commit()
+    return division_final_matches
+
+def generate_division_final_rounds(app,finals_template,division_final_id, division_final_player_list, commit=False):
+    division_final_rounds=[]
+    division_final_player_dict = {
+        division_final_player.adjusted_seed:division_final_player for division_final_player in division_final_player_list        
+    }    
+    for round_info in finals_template:
+        division_final_round=app.tables.DivisionFinalRound(
+            division_final_id=division_final_id,
+            round_number=round_info['round']
+        )
+        for match_index in range(len(round_info['matches'])):
+            division_final_matches = generate_division_final_matches(app,len(round_info['matches']))
+            division_final_round.division_final_matches=division_final_matches
+        for index_1,division_final_match in enumerate(division_final_round.division_final_matches):
+            p1_seed = finals_template[round_info['round']-1]['matches'][index_1]['player_one']
+            p2_seed = finals_template[round_info['round']-1]['matches'][index_1]['player_two']
+            p3_seed = finals_template[round_info['round']-1]['matches'][index_1]['player_three']
+            p4_seed = finals_template[round_info['round']-1]['matches'][index_1]['player_four']
+
+            for index_2,division_final_match_game_result in enumerate(division_final_match.final_match_game_results):
+                game_player_result = division_final_match_game_result.division_final_match_game_player_results
+                if p1_seed:
+                    game_player_result[0].final_player_id = division_final_player_dict[p1_seed].final_player_id                     
+                if p2_seed:
+                    game_player_result[1].final_player_id = division_final_player_dict[p2_seed].final_player_id                                         
+                if p3_seed:
+                    game_player_result[2].final_player_id = division_final_player_dict[p3_seed].final_player_id                                         
+                if p4_seed:                    
+                    game_player_result[3].final_player_id = division_final_player_dict[p4_seed].final_player_id                                         
+            match_player_results = division_final_match.final_match_player_results
+            if p1_seed:
+                match_player_results[0].final_player_id=division_final_player_dict[p1_seed].final_player_id
+            if p2_seed:
+                match_player_results[1].final_player_id=division_final_player_dict[p2_seed].final_player_id                
+            if p3_seed:
+                match_player_results[2].final_player_id=division_final_player_dict[p3_seed].final_player_id                
+            if p4_seed:
+                match_player_results[3].final_player_id=division_final_player_dict[p4_seed].final_player_id
+        if commit:
+            app.tables.db_handle.session.add(division_final_round)
+        division_final_rounds.append(division_final_round)        
+    if commit:
+        app.tables.db_handle.session.commit()
+    return division_final_rounds
+
+
+
+def generate_brackets(app,division_final_id, division_final_player_list,num_qualifiers):    
+    # fill in rounds and matches
+    division_final_player_dict = {division_final_player['final_player_id']:division_final_player for division_final_player in resolve_unimportant_ties(division_final_player_list,num_qualifiers)}
+    division_final_players_from_db = app.tables.DivisionFinalPlayer.query.filter_by(division_final_id=division_final_id).all()
+    for division_final_player in division_final_players_from_db:        
+        if division_final_player.final_player_id in division_final_player_dict:
+            division_final_player.adjusted_seed=division_final_player_dict[division_final_player.final_player_id]['reranked_seed']
+        else:
+            print "uh oh !"
+    final_rounds = generate_division_final_rounds(app,bracket_template_4_player_groups_24_players,division_final_id,division_final_players_from_db,commit=True)
+    
+    app.tables.db_handle.session.commit()
+    return final_rounds
+
+def get_important_ranks_for_tiebreakers(num_qualifiers):
+    important_ranks_for_tiebreakers = {}
+    important_ranks_for_tiebreakers['qualifying']=num_qualifiers-1
+    if num_qualifiers == 24:
+        important_ranks_for_tiebreakers['bye']=7        
+    if num_qualifiers == 12:
+        important_ranks_for_tiebreakers['bye']=3                
+    return important_ranks_for_tiebreakers
+        
+def get_important_tiebreakers_for_division(division_final_players,num_qualifiers,important_seeds):
+    num_players = len(division_final_players)
+    tiebreakers_counts = {}
+    important_tiebreaker_ranks = {}
+    for potential_tiebreaker_rank in range(0,num_qualifiers+1):
+        tie_breaker_count = len(
+            [final_player for final_player in division_final_players if final_player.initial_seed == potential_tiebreaker_rank]
+        )
+        tiebreakers_counts[potential_tiebreaker_rank]=tie_breaker_count    
+    for type,seed in important_seeds.iteritems():        
+        if seed >= len(tiebreakers_counts)-1:
+            continue
+        if tiebreakers_counts[seed] > 1:
+            important_tiebreaker_ranks[type]=seed        
+        if tiebreakers_counts[seed] == 0 and tiebreakers_counts[seed+1] == 0:
+            new_important_seed = seed-1
+            while new_important_seed >= 0 :            
+                if new_important_seed in tiebreakers_counts and tiebreakers_counts[new_important_seed] > 1:
+                    important_tiebreaker_ranks[type]=new_important_seed        
+                    break        
+                new_important_seed = new_important_seed-1
+
+    return important_tiebreaker_ranks
 
 def get_tiebreakers_for_division(division_final_players,num_qualifiers):
     num_players = len(division_final_players)
@@ -641,16 +927,19 @@ def get_tiebreakers_for_division(division_final_players,num_qualifiers):
     return tiebreakers
 
 def record_tiebreaker_results(division_final_players,tiebreaker_scores,app):
-    sorted_tiebreaker_scores = sorted(tiebreaker_scores, key= lambda e: e['player_score'],reverse=True)    
+    sorted_tiebreaker_scores = sorted(tiebreaker_scores, key= lambda e: e['player_score'],reverse=True)
     initial_seed = sorted_tiebreaker_scores[0]['initial_seed']    
+    tiebreaker_results_with_new_ranks = []
     for index,tiebreaker in enumerate(sorted_tiebreaker_scores):
         tiebreaker['initial_seed']=tiebreaker['initial_seed']+index    
     for final_player in division_final_players:
         for tiebreaker_result in tiebreaker_scores:
             if tiebreaker_result['final_player_id'] == final_player.final_player_id:
                 final_player.initial_seed=tiebreaker_result['initial_seed']
+                tiebreaker_results_with_new_ranks.append(final_player.to_dict_simple())
     app.tables.db_handle.session.commit()
-                
+    return tiebreaker_results_with_new_ranks
+
 def initialize_division_final(division_id, division_name, division_results, app):
     existing_division_final = app.tables.DivisionFinal.query.filter_by(division_id=division_id).all()
     if existing_division_final:
@@ -659,25 +948,27 @@ def initialize_division_final(division_id, division_name, division_results, app)
         division_id=division_id,
         name=division_name,        
     )    
-    create_division_final_players(division_final,division_results,app)
+    create_division_final_players(division_final,division_results,app,commit=False)
     app.tables.db_handle.session.add(division_final)
     app.tables.db_handle.session.commit()
     return division_final
 
 def create_division_final_players(division_final,
-                                  division_results, app):
+                                  division_results, app, commit=True):
     #NOTE : assume ranks in division_results start at 0, not 1
     division_final_players=[]
-    for result in division_results:
+    for result in division_results:        
         division_final_player = app.tables.DivisionFinalPlayer(
             player_id=result[1]['player_id'],
             #FIXME : handle team stuff here
-            initial_seed=result[0]            
+            initial_seed=result[0],
+            player_name=result[1]['player_name']            
         )
         #division_final.qualifiers.append(division_final_player)
         division_final_players.append(division_final_player)        
     division_final.qualifiers=division_final_players
-    app.tables.db_handle.session.commit()        
+    if commit:
+        app.tables.db_handle.session.commit()        
     return division_final_players
         
 def remove_missing_final_player(final_player_list, app):
@@ -686,19 +977,20 @@ def remove_missing_final_player(final_player_list, app):
     for final_player in final_player_list:                        
         if 'removed' in final_player and final_player['removed'] is not True:                
             final_player['removed ']=False
+            final_player['reranked_seed']=final_player['initial_seed']
             pruned_final_players.append(final_player)                
                 
-    sorted_final_players = sorted(pruned_final_players, key= lambda e: e['initial_seed'])    
+    sorted_final_players = sorted(pruned_final_players, key= lambda e: e['reranked_seed'])    
     reranked_pruned_final_players_list = list(Ranking(sorted_final_players,
-                                                      key=lambda pp: pp['initial_seed'],
+                                                      key=lambda pp: pp['reranked_seed'],
                                                       reverse=True))
     # NOTE : reranked ranks start at 0, not 1
     reranked_pruned_final_players_hash = {final_player[1]["player_id"]:final_player[0] for final_player in reranked_pruned_final_players_list}
     for index,final_player in enumerate(final_player_list):
-        if 'removed' in final_player and final_player['removed']:
-            final_player['initial_seed']=None
+        #if 'removed' in final_player and final_player['removed']:
+        #    final_player['initial_seed']=None
         if 'removed' in final_player and final_player['removed'] is False:        
-            final_player['initial_seed']=reranked_pruned_final_players_hash[final_player['player_id']]
+            final_player['reranked_seed']=reranked_pruned_final_players_hash[final_player['player_id']]
     return final_player_list
         
 def create_simplified_division_results(final_players, division_cutoff, app):    
@@ -709,7 +1001,7 @@ def create_simplified_division_results(final_players, division_cutoff, app):
     division_cutoff = division_cutoff - 1
     
     for index,final_player in enumerate(final_players):        
-        if final_player['initial_seed'] > division_cutoff and placed_divider is False:            
+        if final_player['reranked_seed'] > division_cutoff and placed_divider is False:            
             simplified_results.append({
                 "type":"divider",
                 "text":"Cutoff"            
@@ -718,9 +1010,13 @@ def create_simplified_division_results(final_players, division_cutoff, app):
         simplified_result = {
             "type":"result",
             "player_id":final_player['player_id'],
-            "initial_seed":final_player['initial_seed'],
+            "final_player_id":final_player['final_player_id'],
+            "player_name":final_player['player_name'],
+            "initial_seed":final_player['initial_seed'],            
+            "reranked_seed":final_player['reranked_seed'],
             "removed":final_player['removed']
-        }        
+        }
+
         simplified_results.append(simplified_result)
     if placed_divider is False:
         simplified_results.append({

@@ -94,10 +94,28 @@ angular.module('TD_services.timeout_resources')
                       resource_results[scope_name] = new_res(url_args, post_args);        
 	              return resource_results[scope_name].$promise;	
                   };
+
+                  var generate_resource_definition_ex = function(url,http_method,resource_name,custom_interceptor_error,other_server){
+                      var res = generate_resource_definition(url,http_method,custom_interceptor_error,other_server);
+                      return function(get_args,post_args,callback){                          
+                          if(post_args == undefined){                              
+                              console.log(http_method);
+                              var res_promise = res['custom_http'](get_args).$promise;
+                          } else {
+                              res_promise = res['custom_http'](get_args,post_args).$promise;
+                          }
+                          res_promise.then(function(data){                              
+                              data.resource_name = resource_name;
+                              callback(null,data);                              
+                          }, function(err){                              
+                              callback('bailing',null);
+                          });                          
+                      };                     
+                  };
                   
                   var generate_resource_definition = function(url,http_method,custom_interceptor_error,other_server){                                                    
-                      url_chunks = url.split("/");
-                      gen_post_args = {};
+                      var url_chunks = url.split("/");
+                      var gen_post_args = {};
                       for(url_chunk_index in url_chunks){
                           url_chunk = url_chunks[url_chunk_index];
                           if(url_chunk.indexOf(':')>=0){
@@ -105,25 +123,22 @@ angular.module('TD_services.timeout_resources')
                               gen_post_args[arg_name]='@'+arg_name;
                           };
                       }
-                      response_interceptor_to_use = undefined;
+                      var response_interceptor_to_use = undefined;
                       if(custom_interceptor_error == undefined){
-                          //response_interceptor_to_use = response_interceptor;
                           response_interceptor_to_use = generate_response_interceptor();
                       } else {
                           response_interceptor_to_use = generate_response_interceptor(custom_interceptor_error);
-                          //response_interceptor_to_use = custom_interceptor;
                       }
                       if (other_server == undefined){
-                          target_api_host = api_host.api_host();
+                          var target_api_host = api_host.api_host();
                       } else {
-                          target_api_host = other_server;
+                          var target_api_host = other_server;
                       }
-                      
-                      
-                      resource_to_return= $resource(target_api_host+url,gen_post_args,
-                                                    {                             
-                                                        'custom_http':{method:http_method, timeout:global_timeout,interceptor:response_interceptor_to_use}
-                                                    }
+                                            
+                      var resource_to_return= $resource(target_api_host+url,gen_post_args,
+                                                        {                             
+                                                            'custom_http':{method:http_method, timeout:global_timeout,interceptor:response_interceptor_to_use}
+                                                        }
                                                    );
                       return resource_to_return;
                   };
@@ -427,9 +442,19 @@ angular.module('TD_services.timeout_resources')
                       GetAuditLogMissingTokens: generate_custom_http_executor(getAuditLogMissingTokensResource,'audit_log_missing_tokens','get'),
                       GetAuditLogMissingScores: generate_custom_http_executor(getAuditLogMissingScoresResource,'audit_log_missing_scores','get'),
                       
-                      GetPlayerPin: generate_custom_http_executor(getPlayerPinResource,'player_pin','get')                      
-
-                      
+                      GetPlayerPin: generate_custom_http_executor(getPlayerPinResource,'player_pin','get'),                      
+                      CheckDivisionFinalExist: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_id','GET','division_final'),
+                      CheckDivisionFinalExistTest: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_id','GET','division_final_test'),
+                      InitializeDivisionFinal: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_id','POST','division_final'),
+                      GetDivisionFinalTiebreakers: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/tiebreakers','GET','division_final_tiebreakers'),
+                      GetDivisionFinalImportantTiebreakerRanks: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/tiebreakers/important','GET','division_final_important_tiebreaker_ranks'),                      
+                      SubmitDivisionFinalTiebreakerResults: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/tiebreakers','POST','division_final_tiebreaker_submit_results'),
+                      GetDivisionFinalPlayers: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/qualifiers','GET','division_final_players'),
+                      UpdateDivisionFinalPlayersRollcall: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/qualifiers','PUT','division_final_players'),
+                      GenerateDivisionFinalRounds: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/rounds','POST','division_final_rounds'),
+                      DeleteDivisionFinal: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id','DELETE','division_final_round_delete_result'),
+                      GetDivisionsEx: generate_resource_definition_ex(':site/division','GET','divisions'),
+                      GetDivisionFinalRoundCount: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/round_count','GET','division_final_round_count')                      
                   };
               }]);
 

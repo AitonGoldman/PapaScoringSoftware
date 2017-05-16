@@ -12,14 +12,14 @@ def generate_division_final_player_class(db_handle,relationship=None,fk=None):
         team_id = db_handle.Column(db_handle.Integer,
                                      db_handle.ForeignKey(
                                          'team.team_id'))        
-        adjusted_seed = db_handle.Column(db_handle.Integer)                
+        adjusted_seed = db_handle.Column(db_handle.Integer)
         initial_seed = db_handle.Column(db_handle.Integer)
         overall_rank = db_handle.Column(db_handle.Integer)
         player_name = db_handle.Column(db_handle.String(100))
         removed = db_handle.Column(db_handle.Boolean)
+        division_final = db_handle.relationship('DivisionFinal')
         player = db_handle.relationship('Player')
-        team = db_handle.relationship('Team')        
-        
+        team = db_handle.relationship('Team')                
         def to_dict_simple(self):
             export_dict = to_dict(self)
             if self.player:

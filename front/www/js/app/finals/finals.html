@@ -1,0 +1,8 @@
+<ion-view view-title="Select Division">
+  <ion-content>      
+    <div class='list'>
+      <a ng-if="division.division_id!=undefined" ng-repeat="division in resources.divisions.data" class='item' ui-sref='.manage({division_id:division.division_id})'> Manage {{division.tournament_name}} Finals</a>
+    </div>
+  </ion-content>
+</ion-view>
+

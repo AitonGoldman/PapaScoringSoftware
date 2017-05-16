@@ -7,7 +7,7 @@ def generate_division_final_round_class(db_handle,relationship=None,fk=None):
         round_number = db_handle.Column(db_handle.String(5))
         number_of_matches = db_handle.Column(db_handle.Integer)
         completed = db_handle.Column(db_handle.Boolean,default=False)
-        division_final_matches = db_handle.relationship('DivisionFinalMatch')
+        division_final_matches = db_handle.relationship('DivisionFinalMatch',cascade="all, delete, delete-orphan")
         
         def to_dict_simple(self):
             division_final_round_dict = to_dict(self)

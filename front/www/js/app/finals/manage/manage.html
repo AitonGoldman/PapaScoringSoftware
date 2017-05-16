@@ -1,0 +1,40 @@
+<ion-view view-title="Manage Finals">
+  <ion-content>      
+    <b></b>
+    <div ng-if='division_final_id==undefined'>
+      <center>
+        <button class='padding button button-calm' ng-click='initialize_division_final()'>
+          Calculate rankings
+        </button>
+      </center>
+    </div>
+    
+    <div ng-if='division_final_id != undefined'>
+      <div class='list'>
+        <a class='padding item item-divider'>
+          <center>
+            {{resources.divisions.data[division_id].tournament_name}}
+          </center>
+        </a>
+        <a ng-if='resources.division_final_tiebreakers.data.tiebreakers.length > 0 ' class='padding item item-icon-right' ui-sref='.tiebreakers({division_final_id:division_final_id})'>
+        <i class="icon ion-chevron-right"></i>
+          Resolve tiebreakers <span class='standard_small_font'>({{number_important_tiebreakers}} important tiebreakers)</span>
+        </a>
+        
+        <a  ng-if='number_important_tiebreakers==0' class='item padding item-icon-right' ui-sref='.rollcall({division_final_id:resources.division_final.data.division_final_id})'>          
+        <i class="icon ion-chevron-right"></i>
+
+          Rollcall
+        </a>
+      </div>
+      <center>
+        <button class='button button-assertive' ng-click='choose_undo_action()'>
+          Undo Finals
+        </button>
+      </center>      
+    </div>
+    
+    <!-- ui-sref=".manage({division_id: ,})" -->    
+  </ion-content>
+</ion-view>
+

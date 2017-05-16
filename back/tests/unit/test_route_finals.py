@@ -1,7 +1,7 @@
 import unittest
 from routes.utils import fetch_entity
 from mock import MagicMock
-from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,record_tiebreaker_results
+from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties
 from util import db_util
 from td_types import ImportedTables
 
@@ -11,6 +11,8 @@ class RouteFinalsTD(unittest.TestCase):
         self.db_handle = db_util.create_db_handle_no_app()        
         self.tables = ImportedTables(self.db_handle)        
         self.tables.DivisionFinal.query = MagicMock()
+        self.tables.DivisionFinalPlayer.query = MagicMock()
+                
         #self.tables.DivisionFinal.query.filter_by.return_value.all.return_value.qualifiers.__getitem__.return_value=99
         
         
@@ -83,13 +85,13 @@ class RouteFinalsTD(unittest.TestCase):
         ]
 
         self.final_players = [
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 0, 'team_id': None, 'player_id': 1, 'removed': None, 'division_final_id': None, 'type':'result'},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 1, 'team_id': None, 'player_id': 223, 'removed': None, 'division_final_id': None, 'type':'result'},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 2, 'team_id': None, 'player_id': 517, 'removed': None, 'division_final_id': None, 'type':'result'},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 3, 'team_id': None, 'player_id': 121, 'removed': None, 'division_final_id': None, 'type':'result'},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 3, 'team_id': None, 'player_id': 298, 'removed': None, 'division_final_id': None, 'type':'result'},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 5, 'team_id': None, 'player_id': 300, 'removed': None, 'division_final_id': None, 'type':'result'},
-            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': None, 'initial_seed': 6, 'team_id': None, 'player_id': 178, 'removed': None, 'division_final_id': None, 'type':'result'}
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': 1, 'initial_seed': 0, 'team_id': None, 'player_name': 'player 1', 'player_id': 1, 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': 2, 'initial_seed': 1, 'team_id': None, 'player_id': 223, 'player_name': 'player 223', 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': 3, 'initial_seed': 2, 'team_id': None, 'player_id': 517, 'player_name': 'player 517', 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': 4, 'initial_seed': 3, 'team_id': None, 'player_id': 121, 'player_name': 'player 121', 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': 5, 'initial_seed': 3, 'team_id': None, 'player_id': 298, 'player_name': 'player 298', 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': 6, 'initial_seed': 5, 'team_id': None, 'player_id': 300, 'player_name': 'player 300', 'removed': None, 'division_final_id': None, 'type':'result'},
+            {'adjusted_seed': None, 'overall_rank': None, 'final_player_id': 7, 'initial_seed': 6, 'team_id': None, 'player_id': 178, 'player_name': 'player 178', 'removed': None, 'division_final_id': None, 'type':'result'}
         ]
         self.tiebreaker_results = [
             {
@@ -106,6 +108,37 @@ class RouteFinalsTD(unittest.TestCase):
             }                
         ]
 
+    def generate_results(self,number_of_players):
+        results = []
+        for index in range(number_of_players):
+            result = []            
+            result.append(index)
+            result.append({
+                'ifpa_ranking':index,
+                'player_id':index+1,
+                'player_name':'player %s'%(index+1),
+                'sum':100-index
+            })
+            results.append(result)            
+        return results
+    
+    def generate_final_players(self,number_of_players):
+        final_players = []        
+        for index in range(number_of_players):
+            final_player = {}
+            final_player['adjusted_seed']=None
+            final_player['overall_rank']=None
+            final_player['final_player_id']=index+1
+            final_player['initial_seed']=index
+            final_player['team_id']=None
+            final_player['player_name']="player %s"%(index+1)
+            final_player['player_id']=index+1
+            final_player['removed']=None
+            final_player['division_final_id']=None
+            final_player['type']='result'
+            final_players.append(final_player)
+        return final_players
+    
     def test_remove_missing_final_player(self):        
         pruned_final_player_list = remove_missing_final_player(self.final_players,self.mock_app)
         self.assertEquals(len(pruned_final_player_list),7)
@@ -116,7 +149,39 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(pruned_final_player_list[0]['removed'],True)
         self.assertEquals(pruned_final_player_list[1]['removed'],None)
 
+    def test_generate_brackets(self):                                
+        division_final = self.tables.DivisionFinal()
+        final_results = self.generate_results(30)
+        final_players = self.generate_final_players(30)
+        
+        create_division_final_players(division_final,final_results,self.mock_app)
+        for index,final_player in enumerate(division_final.qualifiers):
+            division_final.qualifiers[index].final_player_id=index+1
+            division_final.qualifiers[index].player_name="test player"+str(index+1)
+        
+        self.mock_app.tables.DivisionFinalPlayer.query.filter_by.return_value.all.return_value=division_final.qualifiers
+        #final_players_from_db = self.generate_final_players(30)
+
+        for player in final_players:
+            player['reranked_seed']=player['initial_seed']            
+        final_players[0]['reranked_seed']=4
+        simplified_results = create_simplified_division_results(final_players,7,self.mock_app)        
+        results = generate_brackets(self.mock_app,1,simplified_results,7)        
+        #self.assertTrue(results[3]['reranked_seed']!=results[4]['reranked_seed'])                
+        #self.assertTrue(results[3]['reranked_seed']==3 or results[3]['reranked_seed']==4)        
+        
+    def test_resolve_unimportant_ties(self):                        
+        for player in self.final_players:
+            player['reranked_seed']=player['initial_seed']            
+        #self.final_players[0]['removed']=True
+        simplified_results = create_simplified_division_results(self.final_players,7,self.mock_app)
+        results = resolve_unimportant_ties(simplified_results,7)        
+        self.assertTrue(results[3]['reranked_seed']!=results[4]['reranked_seed'])                
+        self.assertTrue(results[3]['reranked_seed']==3 or results[3]['reranked_seed']==4)        
+        
     def test_remove_missing_final_player_with_simplified_list(self):                        
+        for player in self.final_players:
+            player['reranked_seed']=player['initial_seed']            
         self.final_players[0]['removed']=True
         simplified_results = create_simplified_division_results(self.final_players,3,self.mock_app)
         pruned_final_player_list = remove_missing_final_player(simplified_results,self.mock_app)
@@ -147,11 +212,14 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(len(division_final.qualifiers),7)
 
     def test_create_simplified_division_results(self):                    
+        for player in self.final_players:
+            player['reranked_seed']=player['initial_seed']            
         simplified_division_results = create_simplified_division_results(self.final_players, 4, self.mock_app)
         self.assertEquals(len(simplified_division_results),8)        
         self.assertEquals(simplified_division_results[5]['type'],"divider")
         self.final_players[5]['removed']=True
         self.final_players[6]['initial_seed']=self.final_players[6]['initial_seed']-1        
+        self.final_players[6]['reranked_seed']=self.final_players[6]['initial_seed']-1         
         simplified_division_results = create_simplified_division_results(self.final_players, 6, self.mock_app)          
         self.assertEquals(len(simplified_division_results),8)        
         self.assertEquals(simplified_division_results[7]['type'],"divider")
@@ -162,6 +230,31 @@ class RouteFinalsTD(unittest.TestCase):
         create_division_final_players(division_final,self.division_results,self.mock_app)
         self.assertEquals(len(division_final.qualifiers),7)        
         self.assertEquals(division_final.qualifiers[0].initial_seed,0)
+
+    def test_get_important_tiebreakers_for_division(self):
+        division_final = self.tables.DivisionFinal()
+        division_final.division_final_id=1
+        division_final_players = create_division_final_players(division_final,self.division_results,self.mock_app)        
+        for index,final_player in enumerate(division_final_players):
+            division_final_players[index].final_player_id=index+1
+            division_final_players[index].player_name="test player"+str(index+1)
+        division_final_players[6].initial_seed=5
+        important_tiebreaker_ranks = get_important_tiebreakers_for_division(division_final_players,6,{'qualifying':3})
+        self.assertEquals(important_tiebreaker_ranks['qualifying'],3)                
+        important_tiebreaker_ranks = get_important_tiebreakers_for_division(division_final_players,6,{'qualifying':4})        
+        self.assertTrue('qualifying' not in important_tiebreaker_ranks)                
+        important_tiebreaker_ranks = get_important_tiebreakers_for_division(division_final_players,6,{'bye':3})
+        self.assertEquals(important_tiebreaker_ranks['bye'],3)                
+        important_tiebreaker_ranks = get_important_tiebreakers_for_division(division_final_players,6,{'bye':4})
+        self.assertTrue('bye' not in important_tiebreaker_ranks)                
+        
+        important_tiebreaker_ranks = get_important_tiebreakers_for_division(division_final_players,7,{'qualifying':5,'bye':3})
+        self.assertEquals(important_tiebreaker_ranks['bye'],3)
+        self.assertEquals(important_tiebreaker_ranks['qualifying'],5)                        
+        important_tiebreaker_ranks = get_important_tiebreakers_for_division(division_final_players,7,{'qualifying':6,'bye':4})
+
+        self.assertTrue('bye' not in important_tiebreaker_ranks)                        
+        self.assertEquals(important_tiebreaker_ranks['qualifying'],5)                        
         
     def test_get_tiebreakers_for_division(self):
         division_final = self.tables.DivisionFinal()
@@ -185,7 +278,8 @@ class RouteFinalsTD(unittest.TestCase):
             division_final_players[index].final_player_id=index+1
             division_final_players[index].player_name="test player"+str(index+1)                            
         
-        record_tiebreaker_results(division_final_players,self.tiebreaker_results,self.mock_app)        
+        results = record_tiebreaker_results(division_final_players,self.tiebreaker_results,self.mock_app)        
         self.assertEquals(division_final.qualifiers[4].initial_seed,3)        
         self.assertEquals(division_final.qualifiers[3].initial_seed,4)        
+        self.assertEquals(results[0]['initial_seed'],4)        
         

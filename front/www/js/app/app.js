@@ -40,6 +40,7 @@ app = angular.module(
         'ionicImgCache',
         'app.i_need_an_adult',
     'app.ticket_prices',
+    'app.finals',
     /*REPLACEMECHILD*/
 	]
 );

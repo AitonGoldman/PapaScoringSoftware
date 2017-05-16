@@ -15,7 +15,7 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         #FIXME : password/username should be passed in to create_roles_and_users()
         self.score_user_name_password='test_scorekeeper'
         self.admin_user_name_password='test_admin'        
-        db_util.load_machines_from_json(self.flask_app,True)
+        db_util.load_machines_from_json(self.flask_app,True)        
         orm_creation.init_papa_tournaments_divisions(self.flask_app)        
 
         self.machine = self.flask_app.tables.Machine.query.filter_by(machine_id=1).first()
@@ -25,9 +25,9 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.players = []
         self.teams = []
         self.flask_app.tables.db_handle.session.commit()
-        for i in range(20):
+        for i in range(100,140):
             self.players.append(orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player%s'%i,'ifpa_ranking':'123','linked_division_id':'1'}))
-        for i in range(10):
+        for i in range(100,110):
             for division in self.flask_app.tables.Division.query.filter_by(team_tournament=False).all():
                 self.division_machines.append(orm_creation.create_division_machine(self.flask_app,self.machine,division))
             for division in self.flask_app.tables.Division.query.filter_by(team_tournament=True).all():
@@ -36,24 +36,28 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.division = self.flask_app.tables.Division.query.filter_by(team_tournament=False).all()[0]
         self.team_division = self.flask_app.tables.Division.query.filter_by(team_tournament=True).all()[0]
         
-        for i in range(1,10,2):            
+        for i in range(100,110,2):            
             self.teams.append(orm_creation.create_team(self.flask_app,{
                 'team_name':'test_team_%s'%i,
                 'players':['%s'%i,'%s'%(i+1)]
             }))
 
     
-    def populate_scores_for_finals_testing(self,with_ties=True):
+    def populate_scores_for_finals_testing(self,with_ties=True,max_players=20,tie_increment=2):
         for division_machine in self.flask_app.tables.DivisionMachine.query.filter_by(division_id=self.division.division_id).all():            
-            score=3
+            score=100+tie_increment
+            player_id=100
             if with_ties:
-                increment=2
+                increment=tie_increment
             else:
                 increment=1
-            while score <= 20:
-                orm_creation.create_entry(self.flask_app,division_machine.division_machine_id,self.division.division_id,score,score-2)            
-                if with_ties:
-                    orm_creation.create_entry(self.flask_app,division_machine.division_machine_id,self.division.division_id,score,score-1)
+            while score <= 100+max_players:                
+                orm_creation.create_entry(self.flask_app,division_machine.division_machine_id,self.division.division_id,score,player_id)                
+                player_id=player_id+1
+                if with_ties:                    
+                    for index in range(tie_increment-1):
+                        orm_creation.create_entry(self.flask_app,division_machine.division_machine_id,self.division.division_id,score,player_id)                        
+                        player_id=player_id+1
                 score=score+increment
                 
     def test_division_final_initialize(self):        
@@ -72,6 +76,58 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             division_final_returned = json.loads(rv.data)['data']
             self.assertEquals(division_final_returned['division_final_id'],1)
 
+    def test_division_final_get_important_tiebreakers_with_ties(self):        
+        self.division.finals_num_qualifiers = 12
+        self.flask_app.tables.db_handle.session.commit()
+        self.populate_scores_for_finals_testing(tie_increment=5)
+        
+        with self.flask_app.test_client() as c:
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_admin','password':'test_admin'}))
+            rv = c.post('/finals/division_final/division_id/%s'%self.division.division_id)
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            
+            division_final_returned = json.loads(rv.data)['data']
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))            
+            rv = c.get('/finals/division_final/division_id/%s/tiebreakers/important'%division_final_returned['division_final_id'])
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            
+            important_tiebreakers_returned = json.loads(rv.data)['data']                        
+            self.assertEquals(important_tiebreakers_returned['important_tiebreakers']['qualifying'],10)            
+            self.assertEquals(important_tiebreakers_returned['important_tiebreakers']['bye'],0)
+
+    def test_division_final_get_important_tiebreakers_without_ties(self):        
+        self.division.finals_num_qualifiers = 12
+        self.flask_app.tables.db_handle.session.commit()
+        self.populate_scores_for_finals_testing(with_ties=False)
+        
+        with self.flask_app.test_client() as c:
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_admin','password':'test_admin'}))
+            rv = c.post('/finals/division_final/division_id/%s'%self.division.division_id)
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            
+            division_final_returned = json.loads(rv.data)['data']
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))            
+            rv = c.get('/finals/division_final/division_id/%s/tiebreakers/important'%division_final_returned['division_final_id'])
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            
+            important_tiebreakers_returned = json.loads(rv.data)['data']                        
+            self.assertFalse('qualifying' in important_tiebreakers_returned['important_tiebreakers'])
+            self.assertFalse('bye' in important_tiebreakers_returned['important_tiebreakers'])
+ 
+            
+            
     def test_division_final_get_tiebreakers_with_ties(self):        
         self.division.finals_num_qualifiers = 8
         self.flask_app.tables.db_handle.session.commit()
@@ -180,7 +236,7 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               200,
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
             qualifiers_returned = json.loads(rv.data)['data']
-            self.assertEquals(len(qualifiers_returned), 21)            
+            self.assertEquals(len(qualifiers_returned), 41)            
 
     def test_division_final_remove_qualifier_with_ties(self):        
         self.division.finals_num_qualifiers = 8
@@ -202,19 +258,69 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
-            qualifiers_returned = json.loads(rv.data)['data']            
+            qualifiers_returned = json.loads(rv.data)['data']                        
             self.assertEquals(qualifiers_returned[8]['type'],'divider')
             qualifiers_returned[0]['removed']=True            
             rv = c.put('/finals/division_final/division_id/%s/qualifiers'%division_final_returned['division_final_id'],
-                       data=json.dumps({'data':qualifiers_returned}))
+                       data=json.dumps(qualifiers_returned))
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
             qualifiers_returned = json.loads(rv.data)['data']            
             rv = c.get('/finals/division_final/division_id/%s/qualifiers'%division_final_returned['division_final_id'],
-                       data=json.dumps({'data':qualifiers_returned}))
+                       data=json.dumps(qualifiers_returned))
             qualifiers_returned = json.loads(rv.data)['data']
             self.assertEquals(qualifiers_returned[10]['type'],'divider')
+            self.assertEquals(qualifiers_returned[9]['reranked_seed'],7)
+
+    def test_division_final_generate_brackets(self):        
+        self.division.finals_num_qualifiers = 24
+        self.flask_app.tables.db_handle.session.commit()
+        for i in range(120,140):
+            self.players.append(orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player%s'%i,'ifpa_ranking':'123','linked_division_id':'1'}))
+        self.populate_scores_for_finals_testing(max_players=30,with_ties=False)
+        
+        with self.flask_app.test_client() as c:
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_admin','password':'test_admin'}))
+            rv = c.post('/finals/division_final/division_id/%s'%self.division.division_id)
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
             
+            division_final_returned = json.loads(rv.data)['data']
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))            
+            rv = c.get('/finals/division_final/division_id/%s/qualifiers'%division_final_returned['division_final_id'])
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
+            qualifiers_returned = json.loads(rv.data)['data']                        
+            rv = c.post('/finals/division_final/division_id/%s/rounds'%division_final_returned['division_final_id'],
+                        data=json.dumps(qualifiers_returned))
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
+            brackets_returned = json.loads(rv.data)['data']                                
+        
+        round = brackets_returned[0]
+        self.assertEquals(round['round_number'],"1")        
+        self.assertEquals(len(round['division_final_matches']),4)
+        match = round['division_final_matches'][0]
+        self.assertEquals(len(match['final_match_game_results']),3)
+        self.assertEquals(len(match['final_match_player_results']),4)                
+        final_match_game_result = match['final_match_game_results'][0]
+        final_match_player_result = match['final_match_player_results'][0]        
+        self.assertTrue(final_match_player_result['final_player_id'] in [10,17,18,25])
+        self.assertEquals(len(final_match_game_result['division_final_match_game_player_results']),4)                
+        final_match_game_player_result = final_match_game_result['division_final_match_game_player_results'][0]
+        self.assertTrue(final_match_game_player_result['final_player_id'] in [10,17,18,25])         
+        self.assertEquals(len(self.flask_app.tables.DivisionFinalMatchGameResult.query.all()),11*3)
+        self.assertEquals(len(self.flask_app.tables.DivisionFinalMatchGamePlayerResult.query.all()),11*3*4)
+        self.assertEquals(len(self.flask_app.tables.DivisionFinalMatch.query.all()),11)
+        self.assertEquals(len(self.flask_app.tables.DivisionFinalRound.query.all()),4)        
+        self.assertEquals(len(self.flask_app.tables.DivisionFinalMatchPlayerResult.query.all()),11*4)        
+ 
+    
             
             

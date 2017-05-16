@@ -1,0 +1,38 @@
+<ion-view view-title="Rollcall">
+  <ion-content>      
+    <div ng-if='resources.division_final_rounds!=undefined'>
+      <center>
+        {{resources.divisions.data[division_id].tournament_name}} finals brackets have been created!
+        <br>
+        <button ui-sref='app' class='item button item-calm'>
+          Return Home
+        </button>              
+      </center>
+    </div>
+    <div ng-if='resources.division_final_rounds==undefined'>
+      <a class='padding item item-divider'>
+        <center>
+          {{resources.divisions.data[division_id].tournament_name}}
+        </center>
+      </a>      
+      <center>
+        <button ng-disabled='scoreReviewed.checked==true' ng-class='{button:true,"button-calm":scoreReviewed.checked==false,"button-stable":scoreReviewed.checked==true}' style='margin:15px' ng-click='generate_rounds()'>
+          Generate Brackets
+        </button>
+      </center>
+      <ion-toggle ng-disabled='scoreReviewed.checked==false' class='item item-toggle' ng-model="scoreReviewed.checked" toggle-class="toggle-stable">I have reviewed the list of players</ion-toggle>      
+
+      <div class="list">
+        <div class='item item-divider'>Qualifiers</div>
+        <span ng-repeat='player in resources.division_final_players.data'>
+          <div class='item item-divider' ng-if='player.text!=undefined'>{{player.text}}</div>
+          <ion-checkbox ng-change='update_rollcall()' ng-false-value='true' ng-true-value='false' ng-if='player.text==undefined' class='item' ng-model="player.removed">
+            <span ng-if='player.removed!=true'>(Rank : {{player.reranked_seed+1}} ) </span>
+            {{player.player_name}}</ion-checkbox>
+        </span>      
+      </div>
+      <!-- ui-sref=".rollcall({division_final_id: ,})" -->
+    </div>
+  </ion-content>
+</ion-view>
+

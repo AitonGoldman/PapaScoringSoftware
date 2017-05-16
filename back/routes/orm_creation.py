@@ -53,11 +53,13 @@ def create_stanard_roles_and_users(app):
                              str(RolesEnum.queue.value),str(RolesEnum.page.value)])            
     return test_admin,test_scorekeeper,test_desk
 
-def init_papa_players(app):
+def init_papa_players(app,short=False):
     from data_files import first_names,last_names    
     for player_num in range(100):
         name_index = random.randrange(0,len(first_names.first_names)-1)        
         create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s%s'%(last_names.last_names[name_index],player_num+1),'ifpa_ranking':random.randrange(999),'linked_division_id':'1'})
+    if short:
+        return
     for player_num in range(100,200):
         create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
     for player_num in range(200,300):
@@ -214,9 +216,9 @@ def create_player(app,player_data):
     allowed_values = pin_range - existing_player_pins        
     random_value = random.choice(list(allowed_values))  
     new_player.pin = random_value
-    if app.td_config['DB_TYPE']=='sqlite':        
-        new_player.pin= random.randrange(1234,9999999)
-        db.session.commit()        
+    #if app.td_config['DB_TYPE']=='sqlite':        
+    #    new_player.pin= random.randrange(1234,9999999)
+    #    db.session.commit()        
     
     db.session.add(new_player)
     db.session.commit()

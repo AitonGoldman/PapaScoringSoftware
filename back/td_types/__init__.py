@@ -19,11 +19,12 @@ from DivisionFinalPlayer import generate_division_final_player_class
 from DivisionFinalQualifierTiebreaker import generate_division_final_qualifier_tiebreaker_class
 from TicketPurchase import generate_ticket_purchase_class
 from PurchaseSummary import generate_purchase_summary_class
-#from DivisionFinalRound import generate_division_final_round_class
-#from DivisionFinalMatch import generate_division_final_match_class
-#from FinalsMatchGameResult import generate_finals_match_game_result_class
-#from FinalsMatchPlayerResult import generate_finals_match_player_result_class
-#from FinalsMatchGamePlayerResult import generate_finals_match_game_player_result_class
+from DivisionFinalRound import generate_division_final_round_class
+from DivisionFinalMatch import generate_division_final_match_class
+from DivisionFinalMatchGameResult import generate_division_final_match_game_result_class
+from DivisionFinalMatchGamePlayerResult import generate_division_final_match_game_player_result_class
+from DivisionFinalMatchPlayerResult import generate_division_final_match_player_result_class
+
 
 class ImportedTables():
     def __init__(self,db_handle):
@@ -47,12 +48,13 @@ class ImportedTables():
         self.DivisionFinal = generate_division_final_class(db_handle)
         self.DivisionFinalPlayer = generate_division_final_player_class(db_handle)
         self.DivisionFinalQualifierTiebreaker = generate_division_final_qualifier_tiebreaker_class
-        #self.DivisionFinalRound = generate_division_final_round_class(db_handle)
-        #self.DivisionFinalMatch = generate_division_final_match_class(db_handle)
-        #self.FinalsMatchGameResult = generate_finals_match_game_result_class(db_handle)
-        #self.FinalsMatchPlayerResult = generate_finals_match_player_result_class(db_handle)
-        #self.FinalsMatchGamePlayerResult = generate_finals_match_game_player_result_class(db_handle)
+        self.DivisionFinalRound = generate_division_final_round_class(db_handle)
+        self.DivisionFinalMatch = generate_division_final_match_class(db_handle)        
+        self.DivisionFinalMatchPlayerResult = generate_division_final_match_player_result_class(db_handle)
 
+        self.DivisionFinalMatchGameResult = generate_division_final_match_game_result_class(db_handle)
+        self.DivisionFinalMatchGamePlayerResult = generate_division_final_match_game_player_result_class(db_handle)
+        
         self.db_handle = db_handle
         
  

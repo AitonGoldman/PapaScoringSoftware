@@ -1,5 +1,25 @@
 angular.module('TD_services.utils', []);
-angular.module('TD_services.utils').factory('Utils', ['$q','$cordovaInAppBrowser',function($q,$cordovaInAppBrowser) {                
+angular.module('TD_services.utils').factory('Utils', ['$q','$cordovaInAppBrowser',function($q,$cordovaInAppBrowser) {
+
+    var check_tiebreaker_is_important = function(important_bye_rank,important_qualifying_rank,rank_to_test){
+        //important_bye_rank = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.bye;
+        //important_qualifying_rank = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.qualifying;
+        console.log('hi');
+        if (important_bye_rank==rank_to_test){
+            return true;
+        }
+        if (important_qualifying_rank==rank_to_test){
+            return true;
+        }
+        return false;
+    };
+    
+    
+    var extract_results_from_response = function(my_resource){
+        return _.keyBy(my_resource, function(o) {
+            return o.resource_name;
+        });
+    };
     var resolved_promise = function(value){
 	var defer = $q.defer();
 	defer.resolve(value);
@@ -28,6 +48,8 @@ angular.module('TD_services.utils').factory('Utils', ['$q','$cordovaInAppBrowser
         },
         native_open_in_browser:native_open_in_browser,
         resolved_promise:resolved_promise,
-        rejected_promise:rejected_promise                
+        rejected_promise:rejected_promise,
+        extract_results_from_response,
+        check_tiebreaker_is_important
     };
 }]);

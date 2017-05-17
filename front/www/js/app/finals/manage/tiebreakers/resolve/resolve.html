@@ -1,0 +1,34 @@
+<ion-view view-title="Resolve tiebreaker" hide-back-button="hideBackButton">
+  <ion-content>      
+    <div ng-if="tiebreaker[0].initial_seed==rank_to_resolve" ng-repeat='tiebreaker in resources.division_final_tiebreakers.data.tiebreakers' class="card list list-inset">
+      <div class="item item-divider">
+        Tiebreaker for Rank {{tiebreaker[0].initial_seed+1}}
+      </div>
+      <div class="item" ng-repeat='tiebreaker_player in tiebreaker'>
+        <label class="item-input">
+          <span class="input-label">{{tiebreaker_player.player_name}} : </span>
+          <input ng-model="tiebreaker_player.player_score" type="text" placeholder="Enter score here">
+        </label>
+      </div>
+      <ion-toggle ng-disabled='scoreReviewed.checked==false' class='item' ng-if='check_tiebreaker_scores_entered(tiebreaker)' ng-model="scoreReviewed.checked" toggle-class="toggle-stable">I have reviewed the scores</ion-toggle>
+      <center>
+      <button ng-click='submit_tiebreaker_results(tiebreaker)' ng-if='scoreReviewed.checked==false' class='item button-full item-calm'>
+        Submit Results
+      </button>
+      </center>
+    </div>
+    <div ng-if='resources.division_final_tiebreaker_submit_results != undefined' class="card list list-inset">
+      <div class="item item-divider">
+        Tiebreaker results saved!
+      </div>
+      <div ng-repeat='tiebreaker in resources.division_final_tiebreaker_submit_results.data' class="item">
+        {{tiebreaker.player_name}} : rank is now {{tiebreaker.initial_seed+1}}
+      </div>
+      <button ui-sref='.^' class='item button-full item-calm'>
+        Return to list of tiebreakers
+      </button>      
+    </div>
+    <!-- ui-sref=".resolve({rank_to_resolve: ,})" -->    
+  </ion-content>
+</ion-view>
+

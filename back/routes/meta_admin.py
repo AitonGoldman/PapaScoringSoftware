@@ -34,6 +34,9 @@ def route_meta_admin_create_db_and_tournaments():
     create_stanard_roles_and_users(dummy_app)
     db_util.load_machines_from_json(dummy_app)
     orm_creation.init_papa_tournaments_divisions(dummy_app)
+    orm_creation.init_papa_tournaments_division_machines(dummy_app)        
+    orm_creation.init_papa_players(dummy_app,short=True)
+    
     db_handle.engine.dispose()
     del dummy_app
     return jsonify({'data':'test'})    

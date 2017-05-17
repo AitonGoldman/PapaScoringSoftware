@@ -11,20 +11,20 @@ def generate_division_final_match_class(db_handle,relationship=None,fk=None):
         has_tiebreaker = db_handle.Column(db_handle.Boolean,default=False)
         
         number_of_games = db_handle.Column(db_handle.Integer)
-        finals_match_player_results = db_handle.relationship('FinalsMatchPlayerResult')
-        finals_match_game_results = db_handle.relationship('FinalsMatchGameResult')
+        final_match_player_results = db_handle.relationship('DivisionFinalMatchPlayerResult',cascade="all, delete, delete-orphan")
+        final_match_game_results = db_handle.relationship('DivisionFinalMatchGameResult',cascade="all, delete, delete-orphan")
         expected_num_tiebreaker_winners = db_handle.Column(db_handle.Integer)
         
         def to_dict_simple(self):
             export_dict = to_dict(self)
-            if len(self.finals_match_player_results) > 0:
-                export_dict['finals_match_player_results'] = []
-                for result in self.finals_match_player_results:
-                    export_dict['finals_match_player_results'].append(result.to_dict_simple())
-            if len(self.finals_match_game_results) > 0:
-                export_dict['finals_match_game_results'] = []
-                for result in self.finals_match_game_results:
-                    export_dict['finals_match_game_results'].append(result.to_dict_simple())                    
+            if len(self.final_match_player_results) > 0:
+                export_dict['final_match_player_results'] = []
+                for result in self.final_match_player_results:
+                    export_dict['final_match_player_results'].append(result.to_dict_simple())
+            if len(self.final_match_game_results) > 0:
+                export_dict['final_match_game_results'] = []
+                for result in self.final_match_game_results:
+                    export_dict['final_match_game_results'].append(result.to_dict_simple())                    
             return export_dict
         
     return DivisionFinalMatch

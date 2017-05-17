@@ -15,6 +15,7 @@ $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
 $testwidth: 971;
+$stable:                          gray !default;
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
@@ -251,6 +252,10 @@ $toggle-off-bg-color:             #33cd5f !default;
 
 .green {
     background-color:green;
+}
+
+.yellow {
+    background-color:yellow;
 }
 
 .grey {
@@ -603,8 +608,6 @@ button.small-text-button{
 }
 
 
-
-
 li.item-toggle {
     .toggle {
         
@@ -624,6 +627,26 @@ li.item-toggle {
         }
     }
 }
+
+.item-toggle {
+    .toggle {        
+        padding-top:$font-size-base*.55;
+        .handle {
+            @media screen and (max-width: 610px){
+                @media screen and (max-device-height: 750px){
+                    margin-top:$font-size-base*.20;
+                }
+                @media screen and (min-device-height: 751px){
+                    margin-top:$font-size-base*.35;
+                }
+            }
+            @media screen and (min-width:611px) {
+                margin-top:$font-size-base*.35;
+            }
+        }
+    }
+}
+
 
 i.player-purchase-review-icon {
   font-size:$font-size-base*2;                             

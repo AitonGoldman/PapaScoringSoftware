@@ -1075,12 +1075,51 @@ def calculate_tiebreakers(division_final_match_dict):
     if sorted_scores[1]['papa_points_sum'] == sorted_scores[2]['papa_points_sum']:
         tiebreaker_final_player_ids.append(sorted_scores[1]['final_player_id'])
         tiebreaker_final_player_ids.append(sorted_scores[2]['final_player_id'])
+        division_final_match_dict['expected_num_tiebreaker_winners']=1
     if sorted_scores[1]['papa_points_sum'] == sorted_scores[2]['papa_points_sum'] and sorted_scores[1]['papa_points_sum'] == sorted_scores[0]['papa_points_sum']:
         tiebreaker_final_player_ids.append(sorted_scores[0]['final_player_id'])
+        division_final_match_dict['expected_num_tiebreaker_winners']=2        
     if sorted_scores[1]['papa_points_sum'] == sorted_scores[2]['papa_points_sum'] and sorted_scores[1]['papa_points_sum'] == sorted_scores[3]['papa_points_sum']:
         tiebreaker_final_player_ids.append(sorted_scores[3]['final_player_id'])
-    
+        division_final_match_dict['expected_num_tiebreaker_winners']=1
+
     for match_player_result in division_final_match_dict['final_match_player_results']:
         if match_player_result['final_player_id'] in tiebreaker_final_player_ids:            
             match_player_result['needs_tiebreaker']=True
     return tiebreaker_final_player_ids
+
+def resolve_tiebreakers(tiebreaker_scores_dict,app):
+    sorted_scores = sorted(tiebreaker_scores_dict['scores'], key= lambda e: e['score'])                
+    final_match_game_result = app.tables.DivisionFinalMatch.query.filter_by(division_final_match_id=tiebreaker_scores_dict['division_final_match_id']).first()
+    final_match_game_result.completed=True
+    final_match_player_results = {match_player_result.final_player_id:match_player_result for match_player_result in  app.tables.DivisionFinalMatchPlayerResult.query.filter_by(division_final_match_id=tiebreaker_scores_dict['division_final_match_id']).all()}
+    if len(sorted_scores)==2:
+        final_match_player_results[sorted_scores[1]['final_player_id']].won_tiebreaker=True
+        final_match_player_results[sorted_scores[0]['final_player_id']].won_tiebreaker=False        
+    if len(sorted_scores)==3:
+        if tiebreaker_scores_dict['expected_num_tiebreaker_winners']==2:
+            final_match_player_results[sorted_scores[0]['final_player_id']].won_tiebreaker=False
+            final_match_player_results[sorted_scores[1]['final_player_id']].won_tiebreaker=True
+            final_match_player_results[sorted_scores[2]['final_player_id']].won_tiebreaker=True                        
+        if tiebreaker_scores_dict['expected_num_tiebreaker_winners']==1:
+            final_match_player_results[sorted_scores[0]['final_player_id']].won_tiebreaker=False
+            final_match_player_results[sorted_scores[1]['final_player_id']].won_tiebreaker=False
+            final_match_player_results[sorted_scores[2]['final_player_id']].won_tiebreaker=True
+            
+    app.tables.db_handle.session.commit()
+
+def record_scores(match_game_result_dict,match_game_result_from_db,app):
+    match_game_player_results_scores = {}
+    for match_game_player_result in match_game_result_dict['division_final_match_game_player_results']:
+        match_game_player_result_id = match_game_player_result['division_final_match_game_player_result_id']        
+        match_game_player_results_scores[match_game_player_result_id] = match_game_player_result['score']
+        
+    if match_game_result_dict['division_machine_string']:
+        match_game_result_from_db.division_machine_string=match_game_result_dict['division_machine_string']
+
+    for match_game_player_result in match_game_result_from_db.division_final_match_game_player_results:        
+        game_player_result_id = match_game_player_result.division_final_match_game_player_result_id                
+        if  match_game_player_results_scores[game_player_result_id] is not None:
+            match_game_player_result.score=match_game_player_results_scores[game_player_result_id]
+    app.tables.db_handle.session.commit()
+    

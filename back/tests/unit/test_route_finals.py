@@ -1,9 +1,200 @@
 import unittest
 from routes.utils import fetch_entity
 from mock import MagicMock
-from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties
+from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties,calculate_points_for_game,calculate_points_for_match,calculate_tiebreakers
 from util import db_util
 from td_types import ImportedTables
+import json
+
+def generate_test_match(with_ties=False,with_scores=True,without_players=False,half_completed=False):
+    final_player_ids=[None,None,None,None]
+    if without_players:
+        final_player_ids[0]=None        
+        final_player_ids[1]=None        
+        final_player_ids[2]=None        
+        final_player_ids[3]=None        
+    else:
+        final_player_ids[0]=9        
+        final_player_ids[1]=17
+        final_player_ids[2]=18
+        final_player_ids[3]=24
+
+    test_match_dict = {
+        "completed":False,
+        "expected_num_tiebreaker_winners": None,
+        "final_match_game_results":[],
+        "final_match_player_results": [
+            {
+                'final_player_id':final_player_ids[0],
+                'needs_tiebreaker':False,
+                'papa_points_sum':None,
+                'winner':None,
+                'won_tiebreaker':None
+            },
+            {
+                'final_player_id': final_player_ids[1],
+                'needs_tiebreaker':False,
+                'papa_points_sum':None,
+                'winner':None,
+                'won_tiebreaker':None
+            },
+            {
+                'final_player_id':final_player_ids[2],
+                'needs_tiebreaker':False,
+                'papa_points_sum':None,
+                'winner':None,
+                'won_tiebreaker':None
+            },
+            {
+                'final_player_id':final_player_ids[3],
+                'needs_tiebreaker':False,
+                'papa_points_sum':None,
+                'winner':None,
+                'won_tiebreaker':None
+            }
+
+
+                
+            ]
+    }
+    if with_ties:
+        test_match_dict['final_match_game_results']=[
+            generate_test_game_result(fill_in_scores_and_points=True,scores=[4,1,2,0]),                
+            generate_test_game_result(fill_in_scores_and_points=True,scores=[4,0,1,2]),
+            generate_test_game_result(fill_in_scores_and_points=True,scores=[0,4,2,1])
+    ]
+    else:        
+        test_match_dict['final_match_game_results']=[
+            generate_test_game_result(fill_in_scores_and_points=with_scores),                
+            generate_test_game_result(fill_in_scores_and_points=with_scores)
+        ]
+        if half_completed is False:
+            test_match_dict['final_match_game_results'].append(generate_test_game_result(fill_in_scores_and_points=with_scores))
+
+    return test_match_dict
+
+def generate_test_game_result(fill_in_scores_and_points=False,scores=None,without_players=False):
+    final_player_ids=[None,None,None,None]    
+    if without_players:
+        final_player_ids[0]=None        
+        final_player_ids[1]=None        
+        final_player_ids[2]=None        
+        final_player_ids[3]=None        
+    else:
+        final_player_ids[0]=9        
+        final_player_ids[1]=17
+        final_player_ids[2]=18
+        final_player_ids[3]=24
+        
+    game_result = {
+        "completed": False, 
+        "division_final_match_game_player_results": [
+            {
+                "division_final_match_game_player_result_id": 1, 
+                "division_final_match_game_result_id": 1, 
+                "final_player": {
+                    "adjusted_seed": 9, 
+                    "division_final_id": 1, 
+                    "final_player_id": 9, 
+                    "initial_seed": 8, 
+                    "overall_rank": None, 
+                    "player_id": 108, 
+                    "player_name": "Una Beddard9", 
+                    "removed": None, 
+                    "team_id": None
+                }, 
+                "final_player_id": final_player_ids[0],
+                "papa_points": None, 
+                "play_order": None, 
+                "score": None
+            }, 
+            {
+                "division_final_match_game_player_result_id": 2, 
+                "division_final_match_game_result_id": 1, 
+                "final_player": {
+                    "adjusted_seed": 16, 
+                    "division_final_id": 1, 
+                    "final_player_id": 17, 
+                    "initial_seed": 16, 
+                    "overall_rank": None, 
+                    "player_id": 116, 
+                    "player_name": "Brad Agtarap17", 
+                    "removed": None, 
+                    "team_id": None
+                }, 
+                "final_player_id":final_player_ids[1], 
+                "papa_points": None, 
+                "play_order": None, 
+                "score": None
+            }, 
+            {
+                "division_final_match_game_player_result_id": 3, 
+                "division_final_match_game_result_id": 1, 
+                "final_player": {
+                    "adjusted_seed": 17, 
+                    "division_final_id": 1, 
+                    "final_player_id": 18, 
+                    "initial_seed": 16, 
+                    "overall_rank": None, 
+                    "player_id": 117, 
+                    "player_name": "Dorothea Alvidrez18", 
+                    "removed": None, 
+                    "team_id": None
+                }, 
+                "final_player_id":final_player_ids[2],
+                "papa_points": None, 
+                "play_order": None, 
+                "score": None
+            }, 
+            {
+                "division_final_match_game_player_result_id": 4, 
+                "division_final_match_game_result_id": 1, 
+                "final_player": {
+                    "adjusted_seed": 24, 
+                    "division_final_id": 1, 
+                    "final_player_id": 24, 
+                    "initial_seed": 24, 
+                    "overall_rank": None, 
+                    "player_id": 123, 
+                    "player_name": "Nathanael Balsiger24", 
+                    "removed": None, 
+                    "team_id": None
+                }, 
+                "final_player_id":final_player_ids[3],
+                "papa_points": None, 
+                "play_order": None, 
+                "score": None
+            }
+        ], 
+        "division_final_match_game_result_id": 1, 
+        "division_final_match_id": 1, 
+        "division_machine_id": None, 
+        "division_machine_string": None, 
+        "ready_to_be_completed": False
+    }
+    if without_players:
+        return game_result        
+    if fill_in_scores_and_points and scores is None:
+        game_result['division_final_match_game_player_results'][0]['score']=0
+        game_result['division_final_match_game_player_results'][0]['papa_points']=0
+        game_result['division_final_match_game_player_results'][1]['score']=1
+        game_result['division_final_match_game_player_results'][1]['papa_points']=1
+        game_result['division_final_match_game_player_results'][2]['score']=2
+        game_result['division_final_match_game_player_results'][2]['papa_points']=2
+        game_result['division_final_match_game_player_results'][3]['score']=4
+        game_result['division_final_match_game_player_results'][3]['papa_points']=4
+    if fill_in_scores_and_points and scores:
+        game_result['division_final_match_game_player_results'][0]['score']=scores[0]        
+        game_result['division_final_match_game_player_results'][1]['score']=scores[1]        
+        game_result['division_final_match_game_player_results'][2]['score']=scores[2]        
+        game_result['division_final_match_game_player_results'][3]['score']=scores[3]
+        sorted_game_results = sorted(game_result['division_final_match_game_player_results'], key= lambda e: e['score'])    
+        sorted_game_results[0]['papa_points']=0
+        sorted_game_results[1]['papa_points']=1
+        sorted_game_results[2]['papa_points']=2
+        sorted_game_results[3]['papa_points']=4
+        game_result['division_final_match_game_player_results']=sorted_game_results
+    return game_result
 
 class RouteFinalsTD(unittest.TestCase):    
     def setUp(self):
@@ -18,6 +209,8 @@ class RouteFinalsTD(unittest.TestCase):
         
         self.mock_app.tables = self.tables
         self.mock_app.tables.db_handle = MagicMock()
+        self.generated_brackets_match_game_dict = generate_test_game_result()                           
+        
         self.division_results = [
             [
                 0, 
@@ -282,4 +475,79 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(division_final.qualifiers[4].initial_seed,3)        
         self.assertEquals(division_final.qualifiers[3].initial_seed,4)        
         self.assertEquals(results[0]['initial_seed'],4)        
+        
+    def test_calculate_points_for_game_without_enough_scores(self):        
+        calculate_points_for_game(self.generated_brackets_match_game_dict)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][0]['papa_points'],None)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['papa_points'],None)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['papa_points'],None)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['papa_points'],None)
+        self.assertEquals(self.generated_brackets_match_game_dict['completed'],False)                        
+
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][0]['score']=126
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['score']=125
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['score']=124        
+        calculate_points_for_game(self.generated_brackets_match_game_dict)        
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][0]['papa_points'],None)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['papa_points'],None)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['papa_points'],None)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['papa_points'],None)
+        self.assertEquals(self.generated_brackets_match_game_dict['completed'],False)                        
+
+    def test_calculate_points_for_game_with_enough_scores(self):                
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][0]['score']=126
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['score']=125
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['score']=124        
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['score']=123        
+        calculate_points_for_game(self.generated_brackets_match_game_dict)        
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][0]['final_player_id'],24)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][0]['papa_points'],0)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['final_player_id'],18)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['papa_points'],1)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['final_player_id'],17)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['papa_points'],2)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['winner'],True)        
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['final_player_id'],9)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['papa_points'],4)
+        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['winner'],True)
+
+        self.assertEquals(self.generated_brackets_match_game_dict['completed'],True)                        
+        
+    def test_calculate_points_for_match_uncompleted(self):                
+        test_match_dict = generate_test_match(half_completed=True)        
+        calculate_points_for_match(test_match_dict)                        
+        self.assertEquals(test_match_dict['completed'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][0]['papa_points_sum'],0)
+        self.assertEquals(test_match_dict['final_match_player_results'][1]['papa_points_sum'],2)
+        self.assertEquals(test_match_dict['final_match_player_results'][2]['papa_points_sum'],4)
+        self.assertEquals(test_match_dict['final_match_player_results'][3]['papa_points_sum'],8)
+
+    def test_calculate_points_for_match_with_enough_scores(self):                
+        test_match_dict = generate_test_match()        
+        calculate_points_for_match(test_match_dict)                        
+        self.assertEquals(test_match_dict['completed'],True)
+        self.assertEquals(test_match_dict['final_match_player_results'][0]['papa_points_sum'],0)
+        self.assertEquals(test_match_dict['final_match_player_results'][1]['papa_points_sum'],3)
+        self.assertEquals(test_match_dict['final_match_player_results'][2]['papa_points_sum'],6)
+        self.assertEquals(test_match_dict['final_match_player_results'][3]['papa_points_sum'],12)
+        
+
+    def test_calculate_points_for_match_with_ties(self):                
+        test_match_dict = generate_test_match(with_ties=True)        
+        calculate_points_for_match(test_match_dict)                        
+        self.assertEquals(test_match_dict['completed'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][0]['papa_points_sum'],8)
+        self.assertEquals(test_match_dict['final_match_player_results'][1]['papa_points_sum'],5)
+        self.assertEquals(test_match_dict['final_match_player_results'][2]['papa_points_sum'],5)
+        self.assertEquals(test_match_dict['final_match_player_results'][3]['papa_points_sum'],3)
+
+    def test_calculate_points_for_match_without_players(self):                
+        test_match_dict = generate_test_match(without_players=True)        
+        calculate_points_for_match(test_match_dict)                        
+        self.assertEquals(test_match_dict['completed'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][0]['papa_points_sum'],None)
+        self.assertEquals(test_match_dict['final_match_player_results'][1]['papa_points_sum'],None)
+        self.assertEquals(test_match_dict['final_match_player_results'][2]['papa_points_sum'],None)
+        self.assertEquals(test_match_dict['final_match_player_results'][3]['papa_points_sum'],None)
+        
         

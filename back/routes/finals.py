@@ -1024,3 +1024,63 @@ def create_simplified_division_results(final_players, division_cutoff, app):
             "text":"Cutoff"            
         })
     return simplified_results
+    
+def calculate_points_for_game(division_final_match_game_dict):
+    player_scores = [division_final_match_game_player_result for division_final_match_game_player_result in division_final_match_game_dict['division_final_match_game_player_results'] if division_final_match_game_player_result['score'] is not None]
+    
+    if len(player_scores)<4:
+        return    
+    sorted_scores = sorted(player_scores, key= lambda e: e['score'])
+    
+    sorted_scores[0]['papa_points']=0
+    sorted_scores[1]['papa_points']=1
+    sorted_scores[2]['papa_points']=2
+    sorted_scores[2]['winner']=True    
+    sorted_scores[3]['papa_points']=4
+    sorted_scores[3]['winner']=True    
+    
+    division_final_match_game_dict['division_final_match_game_player_results']=sorted_scores        
+    division_final_match_game_dict['completed']=True
+    
+def calculate_points_for_match(division_final_match):
+    for game_result in division_final_match['final_match_game_results']:
+        calculate_points_for_game(game_result)        
+    players_score={}    
+    games_completed=0
+    for game_result in division_final_match['final_match_game_results']:
+        if game_result['completed'] is not True:
+            continue
+        games_completed=games_completed+1
+        for division_final_match_game_player_result in game_result['division_final_match_game_player_results']:
+            final_player_id = division_final_match_game_player_result['final_player_id']
+            if final_player_id not in players_score:
+                players_score[final_player_id]=0
+            players_score[final_player_id]=players_score[final_player_id]+division_final_match_game_player_result['papa_points']
+    for match_player_result in division_final_match['final_match_player_results']:
+        if match_player_result['final_player_id'] in players_score:
+            match_player_result['papa_points_sum']=players_score[match_player_result['final_player_id']]
+    if games_completed == 3:
+        tiebreaker_final_player_ids = calculate_tiebreakers(division_final_match)
+    else:
+        tiebreaker_final_player_ids = []        
+    if len(tiebreaker_final_player_ids) > 0:        
+        
+        return    
+    if games_completed==3:
+        division_final_match['completed']=True
+    
+def calculate_tiebreakers(division_final_match_dict):
+    sorted_scores = sorted(division_final_match_dict['final_match_player_results'], key= lambda e: e['papa_points_sum'])
+    tiebreaker_final_player_ids=[]
+    if sorted_scores[1]['papa_points_sum'] == sorted_scores[2]['papa_points_sum']:
+        tiebreaker_final_player_ids.append(sorted_scores[1]['final_player_id'])
+        tiebreaker_final_player_ids.append(sorted_scores[2]['final_player_id'])
+    if sorted_scores[1]['papa_points_sum'] == sorted_scores[2]['papa_points_sum'] and sorted_scores[1]['papa_points_sum'] == sorted_scores[0]['papa_points_sum']:
+        tiebreaker_final_player_ids.append(sorted_scores[0]['final_player_id'])
+    if sorted_scores[1]['papa_points_sum'] == sorted_scores[2]['papa_points_sum'] and sorted_scores[1]['papa_points_sum'] == sorted_scores[3]['papa_points_sum']:
+        tiebreaker_final_player_ids.append(sorted_scores[3]['final_player_id'])
+    
+    for match_player_result in division_final_match_dict['final_match_player_results']:
+        if match_player_result['final_player_id'] in tiebreaker_final_player_ids:            
+            match_player_result['needs_tiebreaker']=True
+    return tiebreaker_final_player_ids

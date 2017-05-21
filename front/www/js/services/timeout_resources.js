@@ -366,7 +366,7 @@ angular.module('TD_services.timeout_resources')
                       GetStripePublicKey: generate_custom_http_executor(getStripePublicKeyResource,'stripe_public_key','get'),
                       GetUser: generate_custom_http_executor(getUserResource,'user','get'),
                       GetPlayers: generate_custom_http_executor(getPlayersResource,'players','get'),
-                      GetDivisionFinals: generate_custom_http_executor(getDivisionFinalResource,'finals','get'),                      
+                      //GetDivisionFinals: generate_custom_http_executor(getDivisionFinalResource,'finals','get'),                      
                       GetPlayersBestScoresForDivision: generate_custom_http_executor(getPlayersBestScoresForDivisionResource,'players_best_scores','get'),                      
                       
                       GetPlayersFast: generate_custom_http_executor(getPlayersFastResource,'players','get'),
@@ -454,7 +454,11 @@ angular.module('TD_services.timeout_resources')
                       GenerateDivisionFinalRounds: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/rounds','POST','division_final_rounds'),
                       DeleteDivisionFinal: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id','DELETE','division_final_round_delete_result'),
                       GetDivisionsEx: generate_resource_definition_ex(':site/division','GET','divisions'),
-                      GetDivisionFinalRoundCount: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/round_count','GET','division_final_round_count')                      
+                      GetDivisionFinalRoundCount: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/round_count','GET','division_final_round_count'),
+                      GetDivisionFinals: generate_resource_definition_ex(':site/finals/division_final','GET','division_finals'),
+                      GetScorekeeperDivisionFinal: generate_resource_definition_ex(':site/finals/scorekeeping/division_final/:division_final_id','GET','scorekeeping_division_final'),
+                      ScorekeeperRecordGameResult: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_match_game_result/:division_final_match_game_result_id','PUT','scorekeeping_division_final')                  
+
                   };
               }]);
 

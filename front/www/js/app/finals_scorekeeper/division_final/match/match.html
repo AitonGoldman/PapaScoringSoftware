@@ -1,0 +1,31 @@
+<ion-view view-title="Match Details">
+  <ion-content>      
+    <div ng-init='game_index = $index' ng-repeat="game in resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_game_results|orderBy:'division_final_match_game_result_id'" class="card list">
+      <div  class="item item-divider row">
+        <div class='col' ng-if='game.division_machine_string==undefined'>Game Not Selected</div>
+        <div class='col' ng-if='game.division_machine_string!=undefined'>{{(game.division_machine_string | limitTo: 20) + (game.division_machine_string.length > 20 ? '...' : '')}}</div>
+        <div class='col icon-right'>
+          <span ui-sref='.play_order({game_index:$index})' ng-if='check_if_machine_player_order_set(game)==false' class='icon ion-compose'> (machine/order)</span>
+        </div>
+      </div>
+      <div ng-repeat="player in game.division_final_match_game_player_results|orderBy:'final_player.initial_seed'" class='item item-input-inset row'>
+        <span class="input-label col-50">
+          {{player.final_player.player_name}} 
+        </span>
+        <label ng-if="check_if_machine_player_order_set(game)==false" class="item-input-wrapper col-50">
+          <input ng-model='player.score' type="text" placeholder="Score" ng-change='onScoreChange(player)'>
+        </label>
+      </div>
+      <ion-toggle ng-if="check_if_machine_player_order_set(game)==false" ng-disabled='game.reviewed==false' class='item item-toggle' ng-model="game.reviewed" toggle-class="toggle-stable">I have reviewed the scores</ion-toggle>          
+      <a ng-if="check_if_machine_player_order_set(game)" class='item item-icon-right item-calm' ui-sref='.play_order({game_index:$index})'>
+        <i class="icon ion-chevron-right"></i>
+        Set Player Order/Machine
+      </a>
+      <button ng-disabled='game.reviewed==true' ng-if="check_if_machine_player_order_set(game)==false" class='button button-full item-icon-right button-calm' ng-click='on_submit(game)'>
+        <i class="icon ion-chevron-right"></i>
+        Record Scores
+      </button>
+    </div>
+  </ion-content>
+</ion-view>
+

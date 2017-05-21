@@ -5,7 +5,7 @@ def generate_division_final_match_game_player_result_class(db_handle,relationshi
         division_final_match_game_player_result_id = db_handle.Column(db_handle.Integer, primary_key=True)
         division_final_match_game_result_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_final_match_game_result.division_final_match_game_result_id'))
         papa_points = db_handle.Column(db_handle.Integer)
-        score = db_handle.Column(db_handle.BIGINT)
+        score = db_handle.Column(db_handle.BIGINT,nullable=True)
         play_order = db_handle.Column(db_handle.Integer)
         final_player_id = db_handle.Column(db_handle.Integer,db_handle.ForeignKey('division_final_player.final_player_id'))
 

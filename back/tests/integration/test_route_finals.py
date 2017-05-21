@@ -322,5 +322,17 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.assertEquals(len(self.flask_app.tables.DivisionFinalMatchPlayerResult.query.all()),11*4)        
  
     
-            
-            
+    def test_route_scorekeeping_get_division_final(self):        
+        pass
+
+    def test_route_get_division_final(self):        
+        pass
+    
+    def test_route_scorekeeping_record_game(self):        
+        pass
+
+    def test_route_delete_division_final_rounds(self):
+        pass
+
+    def test_route_get_division_final_round_count(self):
+        pass

@@ -21,10 +21,14 @@ angular.module('app.finals_scorekeeper.division_final.match').controller(
             async.waterfall([
                 function(callback){                    
                     TimeoutResources.ScorekeeperRecordGameResult({site:$scope.site,division_final_match_game_result_id:game.division_final_match_game_result_id},game,callback);                    
+                },function(result,callback){
+                    $scope.resources[result.resource_name] = result;                                            
+                    TimeoutResources.GetScorekeeperDivisionFinal({site:$scope.site,division_final_id:$scope.division_final_id},undefined,callback);                    
                 }],function(err,result){
                     Modals.loaded();
                     if (err == null){
-                        $scope.resources[result.resource_name] = result;                        
+                        $scope.resources[result.resource_name] = result;
+                        $scope.reset_game_reviewed_add_scores_commas();                        
                         console.log($scope.resources);
                         //$scope.resources = Utils.extract_results_from_response(result);
                     } else {
@@ -55,6 +59,18 @@ angular.module('app.finals_scorekeeper.division_final.match').controller(
             }
             
         };
+        $scope.reset_game_reviewed_add_scores_commas = function(){
+            games = $scope.resources.scorekeeping_division_final.data.division_final_rounds[$scope.round_id-1].division_final_matches[$scope.match_id].final_match_game_results;
+            _.forEach(games, function(game) {
+                game.reviewed=true;
+                _.forEach(game.division_final_match_game_player_results, function(player) {
+                    if(player.score != null){
+                        player.score=""+player.score;
+                        $scope.onScoreChange(player);
+                    }                            
+                });                                 
+            });
+        };
         Modals.loading();
         async.waterfall([
             function(callback){                    
@@ -67,16 +83,17 @@ angular.module('app.finals_scorekeeper.division_final.match').controller(
                 Modals.loaded();
                 if (err == null){
                     $scope.resources[result.resource_name] = result;
-                    games = $scope.resources.scorekeeping_division_final.data.division_final_rounds[$scope.round_id-1].division_final_matches[$scope.match_id].final_match_game_results;
-                    _.forEach(games, function(game) {
-                        game.reviewed=true;
-                        _.forEach(game.division_final_match_game_player_results, function(player) {
-                            if(player.score != null){
-                                player.score=""+player.score;
-                                $scope.onScoreChange(player);
-                            }                            
-                        });                                 
-                    });
+                    // games = $scope.resources.scorekeeping_division_final.data.division_final_rounds[$scope.round_id-1].division_final_matches[$scope.match_id].final_match_game_results;
+                    // _.forEach(games, function(game) {
+                    //     game.reviewed=true;
+                    //     _.forEach(game.division_final_match_game_player_results, function(player) {
+                    //         if(player.score != null){
+                    //             player.score=""+player.score;
+                    //             $scope.onScoreChange(player);
+                    //         }                            
+                    //     });                                 
+                    // });
+                    $scope.reset_game_reviewed_add_scores_commas();                    
                     console.log($scope.resources);
                     //$scope.resources = Utils.extract_results_from_response(result);
                 } else {

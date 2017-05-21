@@ -1,5 +1,9 @@
 <ion-view view-title="Match Details">
-  <ion-content>      
+  <ion-content>
+    <center>      
+      <button ng-if='resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].expected_num_tiebreaker_winners!=null' class='button button-energized'> Resolve Tiebreaker   </button>
+    </center>
+
     <div ng-init='game_index = $index' ng-repeat="game in resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_game_results|orderBy:'division_final_match_game_result_id'" class="card list">
       <div  class="item item-divider row">
         <div class='col' ng-if='game.division_machine_string==undefined'>Game Not Selected</div>
@@ -8,7 +12,7 @@
           <span ui-sref='.play_order({game_index:$index})' ng-if='check_if_machine_player_order_set(game)==false' class='icon ion-compose'> (machine/order)</span>
         </div>
       </div>
-      <div ng-repeat="player in game.division_final_match_game_player_results|orderBy:'final_player.initial_seed'" class='item item-input-inset row'>
+      <div ng-repeat="player in game.division_final_match_game_player_results|orderBy:'play_order'" class='item item-input-inset row'>
         <span class="input-label col-50">
           {{player.final_player.player_name}} 
         </span>

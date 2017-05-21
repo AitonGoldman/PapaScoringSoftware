@@ -114,8 +114,18 @@ def route_record_game(division_final_match_game_result_id):
     match_from_db = fetch_entity(current_app.tables.DivisionFinalMatch,game_result_from_db.division_final_match_id)
     round_from_db = fetch_entity(current_app.tables.DivisionFinalRound,match_from_db.division_final_round_id)
     division_final_from_db = fetch_entity(current_app.tables.DivisionFinal,round_from_db.division_final_id)
+
+    match_dict = match_from_db.to_dict_simple()
+    pre_record_tiebreakers = calculate_tiebreakers(match_dict,report_only=True)
     record_scores(game_result,game_result_from_db,current_app)
-    return jsonify({'data':division_final_from_db.to_dict_simple()})
+
+    match_dict = match_from_db.to_dict_simple()
+    post_record_tiebreakers = calculate_tiebreakers(match_dict,report_only=True)        
+    if len(pre_record_tiebreakers)==0 or len(set(pre_record_tiebreakers) & set(post_record_tiebreakers)) == len(pre_record_tiebreakers):
+        return jsonify({'data':division_final_from_db.to_dict_simple()})    
+    reset_tiebreaker_info_on_score_change(match,current_app) 
+
+    return jsonify({'data':None})
 
 @admin_manage_blueprint.route('/finals/division_final',
                               methods=['GET'])
@@ -611,6 +621,7 @@ def resolve_tiebreakers(tiebreaker_scores_dict,app):
             
     app.tables.db_handle.session.commit()
 
+
 def record_scores(match_game_result_dict,match_game_result_from_db,app):
     match_game_player_results_scores = {}
     for match_game_player_result in match_game_result_dict['division_final_match_game_player_results']:
@@ -626,5 +637,12 @@ def record_scores(match_game_result_dict,match_game_result_from_db,app):
             match_game_player_result.score=match_game_player_results_scores[game_player_result_id]['score']
         if  match_game_player_results_scores[game_player_result_id]['play_order'] is not None:
             match_game_player_result.play_order=match_game_player_results_scores[game_player_result_id]['play_order']            
+    app.tables.db_handle.session.commit()
+    
+def reset_tiebreaker_info_on_score_change(match,app):
+    for match_player_result in match.division_final_match_player_results:
+        match_player_result.needs_tiebreaker=False
+        match_player_result.won_tiebreaker=None
+    match.expected_num_tiebreaker_winners=None
     app.tables.db_handle.session.commit()
     

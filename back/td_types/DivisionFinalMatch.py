@@ -21,10 +21,15 @@ def generate_division_final_match_class(db_handle,relationship=None,fk=None):
                 export_dict['final_match_player_results'] = []
                 for result in self.final_match_player_results:
                     export_dict['final_match_player_results'].append(result.to_dict_simple())
+                sorted_list = sorted(export_dict['final_match_player_results'], key= lambda e: e['final_match_player_result_id'])
+                export_dict['final_match_player_results']=sorted_list
+                    
             if len(self.final_match_game_results) > 0:
                 export_dict['final_match_game_results'] = []
                 for result in self.final_match_game_results:
-                    export_dict['final_match_game_results'].append(result.to_dict_simple())                    
+                    export_dict['final_match_game_results'].append(result.to_dict_simple())
+                sorted_list = sorted(export_dict['final_match_game_results'], key= lambda e: e['division_final_match_game_result_id'])
+                export_dict['final_match_game_results']=sorted_list                    
             return export_dict
         
     return DivisionFinalMatch

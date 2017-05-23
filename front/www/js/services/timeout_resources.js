@@ -457,7 +457,9 @@ angular.module('TD_services.timeout_resources')
                       GetDivisionFinalRoundCount: generate_resource_definition_ex(':site/finals/division_final/division_id/:division_final_id/round_count','GET','division_final_round_count'),
                       GetDivisionFinals: generate_resource_definition_ex(':site/finals/division_final','GET','division_finals'),
                       GetScorekeeperDivisionFinal: generate_resource_definition_ex(':site/finals/scorekeeping/division_final/:division_final_id','GET','scorekeeping_division_final'),
-                      ScorekeeperRecordGameResult: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_match_game_result/:division_final_match_game_result_id','PUT','scorekeeping_score_record_results')                  
+                      ScorekeeperRecordGameResult: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_match_game_result/:division_final_match_game_result_id','PUT','scorekeeping_score_record_results'),
+                      ScorekeeperResolveTiebreaker: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_match_result/:division_final_match_result_id/tiebreaker','PUT','scorekeeping_resolve_tiebreaker_results'),
+                      ScorekeeperCompleteRound: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_round/:division_final_match_round_id/complete','PUT','scorekeeping_complete_round_results')                                        
 
                   };
               }]);

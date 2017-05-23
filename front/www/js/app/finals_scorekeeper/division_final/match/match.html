@@ -1,10 +1,28 @@
 <ion-view view-title="Match Details">
   <ion-content>
-    <center>      
-      <button ng-if='resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].expected_num_tiebreaker_winners!=null' class='button button-energized'> Resolve Tiebreaker   </button>
+    <div>
+      <center ng-if='resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_game_results[0].division_final_match_game_player_results[0].final_player_id==undefined'>
+        Match has not started yet!
+      </center>
+    </div>
+    <div ng-if='resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_game_results[0].division_final_match_game_player_results[0].final_player_id!=undefined'>
+    <center>
+      <table class='table'>
+        <tr class='grey'>
+          <th class='padding'><b>Player</b></th>
+          <th class='padding'><b>Seed</b></th>
+          <th class='padding'><b>Points</b></th>
+        </tr>
+        <tr ng-class='{lightgrey:$even}' ng-repeat="final_match_player_result in resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_player_results|orderBy:'final_player.initial_seed'">
+          <td class='padding'><center>{{final_match_player_result.final_player.player_name}}</center></td>
+          <td class='padding'><center>{{final_match_player_result.final_player.initial_seed}}</center></td>
+          <td class='padding'><center>{{final_match_player_result.papa_points_sum}}</center></td>          
+        </tr>
+      </table>
+      <button ui-sref=".resolve_tiebreaker" ng-if='resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].expected_num_tiebreaker_winners!=null' class='button button-energized'> Resolve Tiebreaker   </button>
     </center>
-
-    <div ng-init='game_index = $index' ng-repeat="game in resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_game_results|orderBy:'division_final_match_game_result_id'" class="card list">
+    <br>
+    <div ng-init='game_index = $index' ng-repeat="game in resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_game_results" class="card list">
       <div  class="item item-divider row">
         <div class='col' ng-if='game.division_machine_string==undefined'>Game Not Selected</div>
         <div class='col' ng-if='game.division_machine_string!=undefined'>{{(game.division_machine_string | limitTo: 20) + (game.division_machine_string.length > 20 ? '...' : '')}}</div>
@@ -29,6 +47,7 @@
         <i class="icon ion-chevron-right"></i>
         Record Scores
       </button>
+    </div>
     </div>
   </ion-content>
 </ion-view>

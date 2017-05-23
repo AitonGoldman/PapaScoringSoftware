@@ -1,4 +1,5 @@
 angular.module('app.finals_scorekeeper.division_final.match',['app.finals_scorekeeper.division_final.match.play_order',
+    'app.finals_scorekeeper.division_final.match.resolve_tiebreaker',
     /*REPLACEMECHILD*/]);
 angular.module('app.finals_scorekeeper.division_final.match').controller(
     'app.finals_scorekeeper.division_final.match',[

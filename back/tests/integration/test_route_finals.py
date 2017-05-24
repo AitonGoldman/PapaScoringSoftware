@@ -200,8 +200,8 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
             
             tiebreakers_returned = json.loads(rv.data)['data']            
-            tiebreakers_returned['tiebreakers'][0][0]['player_score']=1
-            tiebreakers_returned['tiebreakers'][0][1]['player_score']=2
+            tiebreakers_returned['tiebreakers'][0][0]['player_score']="1"
+            tiebreakers_returned['tiebreakers'][0][1]['player_score']="2"
             rv = c.post('/finals/division_final/division_id/%s/tiebreakers' % division_final_returned['division_final_id'],
                        data=json.dumps(tiebreakers_returned['tiebreakers'][0]))
             self.assertEquals(rv.status_code,
@@ -310,11 +310,11 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.assertEquals(len(match['final_match_game_results']),3)
         self.assertEquals(len(match['final_match_player_results']),4)                
         final_match_game_result = match['final_match_game_results'][0]
-        final_match_player_result = match['final_match_player_results'][0]        
-        self.assertTrue(final_match_player_result['final_player_id'] in [10,17,18,25])
+        final_match_player_result = match['final_match_player_results'][0]                
+        self.assertTrue(final_match_player_result['final_player_id'] in [9,16,17,24])
         self.assertEquals(len(final_match_game_result['division_final_match_game_player_results']),4)                
         final_match_game_player_result = final_match_game_result['division_final_match_game_player_results'][0]
-        self.assertTrue(final_match_game_player_result['final_player_id'] in [10,17,18,25])         
+        self.assertTrue(final_match_game_player_result['final_player_id'] in [9,16,17,24])         
         self.assertEquals(len(self.flask_app.tables.DivisionFinalMatchGameResult.query.all()),11*3)
         self.assertEquals(len(self.flask_app.tables.DivisionFinalMatchGamePlayerResult.query.all()),11*3*4)
         self.assertEquals(len(self.flask_app.tables.DivisionFinalMatch.query.all()),11)

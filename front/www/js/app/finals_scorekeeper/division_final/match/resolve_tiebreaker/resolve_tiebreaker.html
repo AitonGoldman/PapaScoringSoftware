@@ -19,7 +19,7 @@
       <div class="item" ng-repeat='match_player_result in match_result.final_match_player_results' ng-if='match_player_result.needs_tiebreaker==true'>
         <label class="item-input">
           <span class="input-label"> {{match_player_result.final_player.player_name}} : </span>
-          <input ng-model="match_player_result.tiebreaker_score" type="text" placeholder="Enter score here">
+          <input ng-change='onScoreChange(match_player_result)' ng-model="match_player_result.tiebreaker_score" type="tel" placeholder="Enter score here">
         </label>
       </div>    
       <ion-toggle ng-disabled='scoreReviewed.checked==false' class='item' ng-model="scoreReviewed.checked" toggle-class="toggle-stable">I have reviewed the scores</ion-toggle>

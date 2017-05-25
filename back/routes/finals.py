@@ -722,19 +722,21 @@ def complete_round(division_final, division_final_round,app):
     for division_final_match in division_final_round_dict['division_final_matches']:            
         calculate_points_for_match(division_final_match)    
     
+    
     for division_final_match in division_final_round_dict['division_final_matches']:            
-        for division_final_match_player in division_final_match['final_match_player_results']:                
+        for division_final_match_player in division_final_match['final_match_player_results']:                            
             if division_final_match_player['winner']:
                 division_final_match_winners.append(division_final_match_player)
+    
     if next_division_final_round and division_final_round.round_number == "1":
         for division_final_match in next_division_final_round.division_final_matches:
             for division_final_match_player in division_final_match.final_match_player_results:                
                 if division_final_match_player.final_player_id:                    
                     division_final_match_winners.append(division_final_match_player.to_dict_simple())
-                    
-    sorted_winners = sorted(division_final_match_winners, key= lambda e: e['final_player']['adjusted_seed'])
     
-    if next_division_final_round is None:
+    sorted_winners = sorted(division_final_match_winners, key= lambda e: e['final_player']['adjusted_seed'])        
+    print sorted_winners[1]
+    if next_division_final_round is None:        
         return sorted_winners    
     winner_groups = []
     while len(sorted_winners) > 0:

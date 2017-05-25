@@ -1,7 +1,7 @@
 import unittest
 from routes.utils import fetch_entity
 from mock import MagicMock
-from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties,calculate_points_for_game,calculate_points_for_match,calculate_tiebreakers,resolve_tiebreakers,record_scores
+from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties,calculate_points_for_game,calculate_points_for_match,calculate_tiebreakers,resolve_tiebreakers,record_scores,generate_division_final_match_game_result,generate_division_final_match_player_results,generate_division_final_matches,bracket_template_4_player_groups_24_players,generate_division_final_rounds,reset_tiebreaker_info_on_score_change,generate_match_players_groupings,complete_round
 from util import db_util
 from td_types import ImportedTables
 import json
@@ -205,6 +205,7 @@ class RouteFinalsTD(unittest.TestCase):
         self.tables = ImportedTables(self.db_handle)        
         self.tables.DivisionFinal.query = MagicMock()
         self.tables.DivisionFinalPlayer.query = MagicMock()
+        self.tables.DivisionFinalRound.query = MagicMock()        
         self.tables.DivisionFinalMatchPlayerResult.query = MagicMock()
         self.tables.DivisionFinalMatch.query = MagicMock()
         
@@ -347,6 +348,61 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(pruned_final_player_list[0]['removed'],True)
         self.assertEquals(pruned_final_player_list[1]['removed'],None)
 
+    def test_generate_division_final_match_game_results(self):        
+        division_final_match_game_results = generate_division_final_match_game_result(self.mock_app)
+        self.assertEquals(len(division_final_match_game_results),3)
+        self.assertEquals(len(division_final_match_game_results[0].division_final_match_game_player_results),4)
+        self.assertEquals(len(division_final_match_game_results[1].division_final_match_game_player_results),4)
+        self.assertEquals(len(division_final_match_game_results[2].division_final_match_game_player_results),4)        
+
+    def test_generate_division_final_match_player_results(self):        
+        division_final_match_player_results = generate_division_final_match_player_results(self.mock_app)
+        self.assertEquals(len(division_final_match_player_results),4)                        
+
+    def test_generate_division_final_rounds(self):        
+        final_players = []
+        for final_player_id in range(30):
+            final_players.append(self.mock_app.tables.DivisionFinalPlayer(
+                final_player_id=final_player_id,
+                adjusted_seed=final_player_id-1
+            ))
+        division_final_rounds = generate_division_final_rounds(self.mock_app,bracket_template_4_player_groups_24_players,1,final_players)
+        self.assertEquals(division_final_rounds[0].round_number,1)                        
+        self.assertEquals(division_final_rounds[1].round_number,2)                        
+        self.assertEquals(division_final_rounds[2].round_number,3)                        
+        self.assertEquals(division_final_rounds[3].round_number,4)                                
+        self.assertEquals(division_final_rounds[0].division_final_matches[0].final_match_player_results[0].final_player_id,9)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[0].final_match_player_results[1].final_player_id,16)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[0].final_match_player_results[2].final_player_id,17)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[0].final_match_player_results[3].final_player_id,24)
+        
+        self.assertEquals(division_final_rounds[0].division_final_matches[1].final_match_player_results[0].final_player_id,10)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[1].final_match_player_results[1].final_player_id,15)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[1].final_match_player_results[2].final_player_id,18)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[1].final_match_player_results[3].final_player_id,23)                        
+        
+        self.assertEquals(division_final_rounds[0].division_final_matches[2].final_match_player_results[0].final_player_id,11)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[2].final_match_player_results[1].final_player_id,14)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[2].final_match_player_results[2].final_player_id,19)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[2].final_match_player_results[3].final_player_id,22)                        
+        
+        self.assertEquals(division_final_rounds[0].division_final_matches[3].final_match_player_results[0].final_player_id,12)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[3].final_match_player_results[1].final_player_id,13)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[3].final_match_player_results[2].final_player_id,20)                        
+        self.assertEquals(division_final_rounds[0].division_final_matches[3].final_match_player_results[3].final_player_id,21)                        
+        
+    def test_generate_division_final_matches(self):        
+        division_final_matches = generate_division_final_matches(self.mock_app,4)
+        self.assertEquals(len(division_final_matches),4)                        
+        self.assertEquals(len(division_final_matches[0].final_match_game_results),3)                        
+        self.assertEquals(len(division_final_matches[0].final_match_player_results),4)                        
+        self.assertEquals(len(division_final_matches[1].final_match_game_results),3)                        
+        self.assertEquals(len(division_final_matches[1].final_match_player_results),4)                        
+        self.assertEquals(len(division_final_matches[2].final_match_game_results),3)                        
+        self.assertEquals(len(division_final_matches[2].final_match_player_results),4)                        
+        self.assertEquals(len(division_final_matches[3].final_match_game_results),3)                        
+        self.assertEquals(len(division_final_matches[3].final_match_player_results),4)                        
+        
     def test_generate_brackets(self):                                
         #FIXME : need test for generate_division_final_rounds
         division_final = self.tables.DivisionFinal()
@@ -769,4 +825,196 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(game_player_results[2].score,124)
         self.assertEquals(game_player_results[3].score,123)
         
+    def test_reset_tiebreaker_info_on_score_change(self):
+        match = self.mock_app.tables.DivisionFinalMatch(
+            expected_num_tiebreaker_winners=1
+        )
+        for match_player_result_id in range(4):
+            match.final_match_player_results.append(self.mock_app.tables.DivisionFinalMatchPlayerResult(
+                needs_tiebreaker=True,
+                won_tiebreaker=True
+            ))
+        reset_tiebreaker_info_on_score_change(match,self.mock_app)
+        for final_match_player_index in range(4):
+            self.assertFalse(match.final_match_player_results[final_match_player_index].needs_tiebreaker)
+        for final_match_player_index in range(4):        
+            self.assertEquals(match.final_match_player_results[final_match_player_index].won_tiebreaker,None)
+        self.assertEquals(match.expected_num_tiebreaker_winners,None)
+
+    def test_generate_match_players_groupings(self):    
+        bobo_results = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+        pruned_bobo_results = generate_match_players_groupings(bobo_results)
+        self.assertEquals(pruned_bobo_results,[16,9,8,1])
+        pruned_bobo_results = generate_match_players_groupings(bobo_results)
+        self.assertEquals(pruned_bobo_results,[15,10,7,2])
+
+
+    def generate_division_final_round_db_obj(self,round_number,with_ties=False):
+        division_final_round=self.mock_app.tables.DivisionFinalRound(
+            division_final_round_id=1,
+            round_number="%s"%round_number
+        )
+        division_final_matches = []
+        for division_final_match_id in range(4):
+            division_final_matches.append(self.mock_app.tables.DivisionFinalMatch())
+        division_final_round.division_final_matches=division_final_matches
+        division_final_match_player_results = []
+        for division_final_match_player_id in range(4):
+            division_final_match_player_results.append(self.mock_app.tables.DivisionFinalMatchPlayerResult(
+                final_player_id=division_final_match_player_id+1,
+                final_player = self.mock_app.tables.DivisionFinalPlayer(
+                    adjusted_seed=division_final_match_player_id,
+                    final_player_id=division_final_match_player_id+1
+                )
+            ))
+
         
+        division_final_matches[0].final_match_player_results=division_final_match_player_results
+        division_final_matches[1].final_match_player_results=division_final_match_player_results
+        division_final_matches[2].final_match_player_results=division_final_match_player_results
+        division_final_matches[3].final_match_player_results=division_final_match_player_results
+            
+        division_final_match_game_results = []
+        for division_final_match_game_id in range(3):
+            division_final_match_game_results.append(self.mock_app.tables.DivisionFinalMatchGameResult())
+
+        division_final_matches[0].final_match_game_results=division_final_match_game_results
+        division_final_matches[1].final_match_game_results=division_final_match_game_results
+        division_final_matches[2].final_match_game_results=division_final_match_game_results
+        division_final_matches[3].final_match_game_results=division_final_match_game_results
+                 
+        division_final_match_game_player_results = []
+        division_final_match_game_player_results_2 = []
+        division_final_match_game_player_results_3 = []
+        division_final_match_game_player_results_4 = []
+        
+        for division_final_match_game_player_id in range(4):
+            division_final_match_game_player_results.append(self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                final_player_id=division_final_match_game_player_id+1
+            ))
+            division_final_match_game_player_results_2.append(self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                final_player_id=division_final_match_game_player_id+1
+            ))
+            division_final_match_game_player_results_3.append(self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                final_player_id=division_final_match_game_player_id+1
+            ))
+            division_final_match_game_player_results_4.append(self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                final_player_id=division_final_match_game_player_id+1
+            ))
+
+        
+        for division_final_match_game_player_id in range(4):
+            division_final_match_game_player_results_2.append(self.mock_app.tables.DivisionFinalMatchGamePlayerResult())
+            
+        division_final_match_game_player_results[0].final_player_id=1
+        division_final_match_game_player_results[1].final_player_id=2
+        division_final_match_game_player_results[2].final_player_id=3
+        division_final_match_game_player_results[3].final_player_id=4
+        division_final_match_game_player_results[0].score=1
+        division_final_match_game_player_results[1].score=2
+        division_final_match_game_player_results[2].score=3
+        division_final_match_game_player_results[3].score=4
+
+        
+        division_final_match_game_player_results_2[0].final_player_id=1
+        division_final_match_game_player_results_2[1].final_player_id=2
+        division_final_match_game_player_results_2[2].final_player_id=3
+        division_final_match_game_player_results_2[3].final_player_id=4
+        division_final_match_game_player_results_2[0].score=1
+        division_final_match_game_player_results_2[1].score=2
+        division_final_match_game_player_results_2[2].score=3
+        division_final_match_game_player_results_2[3].score=4
+        
+        division_final_match_game_player_results_3[0].final_player_id=1
+        division_final_match_game_player_results_3[1].final_player_id=2
+        division_final_match_game_player_results_3[2].final_player_id=3
+        division_final_match_game_player_results_3[3].final_player_id=4
+        division_final_match_game_player_results_3[0].score=4
+        division_final_match_game_player_results_3[1].score=2
+        division_final_match_game_player_results_3[2].score=1
+        division_final_match_game_player_results_3[3].score=3
+
+        division_final_match_game_player_results_4[0].final_player_id=1
+        division_final_match_game_player_results_4[1].final_player_id=2
+        division_final_match_game_player_results_4[2].final_player_id=3
+        division_final_match_game_player_results_4[3].final_player_id=4
+        division_final_match_game_player_results_4[0].score=0
+        division_final_match_game_player_results_4[1].score=1
+        division_final_match_game_player_results_4[2].score=2
+        division_final_match_game_player_results_4[3].score=4
+
+        
+        if with_ties is False:
+            for division_final_match_game_id in range(3):                    
+                division_final_match_game_results[division_final_match_game_id].division_final_match_game_player_results=division_final_match_game_player_results
+        else:            
+            division_final_match_game_results[0].division_final_match_game_player_results=division_final_match_game_player_results_2
+            division_final_match_game_results[1].division_final_match_game_player_results=division_final_match_game_player_results_3
+            division_final_match_game_results[2].division_final_match_game_player_results=division_final_match_game_player_results_4
+            
+                
+                
+        return division_final_round
+        
+    def test_complete_round(self):
+        division_final=self.mock_app.tables.DivisionFinal()
+        # division_final_round=self.mock_app.tables.DivisionFinalRound(
+        #     division_final_round_id=1,
+        #     round_number="1"
+        # )
+        # division_final_matches = []
+        # for division_final_match_id in range(4):
+        #     division_final_matches.append(self.mock_app.tables.DivisionFinalMatch())
+        # division_final_round.division_final_matches=division_final_matches
+        # division_final_match_player_results = []
+        # for division_final_match_player_id in range(4):
+        #     division_final_match_player_results.append(self.mock_app.tables.DivisionFinalMatchPlayerResult(
+        #         final_player_id=division_final_match_player_id+1,
+        #         final_player = self.mock_app.tables.DivisionFinalPlayer(
+        #             adjusted_seed=division_final_match_player_id+1
+        #         )
+        #     ))
+
+        
+        # division_final_matches[0].final_match_player_results=division_final_match_player_results
+        # division_final_matches[1].final_match_player_results=division_final_match_player_results
+        # division_final_matches[2].final_match_player_results=division_final_match_player_results
+        # division_final_matches[3].final_match_player_results=division_final_match_player_results
+            
+        # division_final_match_game_results = []
+        # for division_final_match_game_id in range(3):
+        #     division_final_match_game_results.append(self.mock_app.tables.DivisionFinalMatchGameResult())
+
+        # division_final_matches[0].final_match_game_results=division_final_match_game_results
+        # division_final_matches[1].final_match_game_results=division_final_match_game_results
+        # division_final_matches[2].final_match_game_results=division_final_match_game_results
+        # division_final_matches[3].final_match_game_results=division_final_match_game_results
+                 
+        # division_final_match_game_player_results = []
+        # for division_final_match_game_player_id in range(4):
+        #     division_final_match_game_player_results.append(self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+        #         final_player_id=division_final_match_game_player_id+1
+        #     ))
+
+        # division_final_match_game_player_results[0].division_final_player_id=1
+        # division_final_match_game_player_results[0].score=1
+        # division_final_match_game_player_results[1].division_final_player_id=2
+        # division_final_match_game_player_results[1].score=2
+        # division_final_match_game_player_results[2].division_final_player_id=3
+        # division_final_match_game_player_results[2].score=3
+        # division_final_match_game_player_results[3].division_final_player_id=4
+        # division_final_match_game_player_results[3].score=4
+
+        # for division_final_match_game_id in range(3):                    
+        #     division_final_match_game_results[division_final_match_game_id].division_final_match_game_player_results=division_final_match_game_player_results
+        division_final_round = self.generate_division_final_round_db_obj("1",with_ties=False)
+        self.assertFalse(division_final_round.completed)
+        
+        next_division_final_round = self.generate_division_final_round_db_obj("2")
+            
+        #next_division_final_round=self.mock_app.tables.DivisionFinalRound(
+        #    division_final_round_id=2
+        #)
+        self.mock_app.tables.DivisionFinalRound.query.filter_by.return_value.first.return_value=next_division_final_round
+        complete_round(division_final,division_final_round,self.mock_app)
+        self.assertTrue(division_final_round.completed)

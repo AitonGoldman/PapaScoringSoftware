@@ -1,7 +1,7 @@
 import unittest
 from routes.utils import fetch_entity
 from mock import MagicMock
-from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties,calculate_points_for_game,calculate_points_for_match,calculate_tiebreakers
+from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties,calculate_points_for_game,calculate_points_for_match,calculate_tiebreakers,resolve_tiebreakers,record_scores
 from util import db_util
 from td_types import ImportedTables
 import json
@@ -203,6 +203,9 @@ class RouteFinalsTD(unittest.TestCase):
         self.tables = ImportedTables(self.db_handle)        
         self.tables.DivisionFinal.query = MagicMock()
         self.tables.DivisionFinalPlayer.query = MagicMock()
+        self.tables.DivisionFinalMatchPlayerResult.query = MagicMock()
+        self.tables.DivisionFinalMatch.query = MagicMock()
+        
                 
         #self.tables.DivisionFinal.query.filter_by.return_value.all.return_value.qualifiers.__getitem__.return_value=99
         
@@ -549,5 +552,155 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(test_match_dict['final_match_player_results'][1]['papa_points_sum'],None)
         self.assertEquals(test_match_dict['final_match_player_results'][2]['papa_points_sum'],None)
         self.assertEquals(test_match_dict['final_match_player_results'][3]['papa_points_sum'],None)
+
+    def test_resolve_tiebreakers(self):
+        tiebreaker_scores_dict={
+            "expected_num_tiebreaker_winners":2,
+            "division_final_match_id":1,
+            "scores":[
+                {
+                    "final_player_id":9,
+                    "score":1
+                },
+                {
+                    "final_player_id":24,
+                    "score":2                    
+                }
+            ]
+        }
+        self.tables.DivisionFinalMatchPlayerResult.query.filter_by.return_value = MagicMock()
+        division_final_match_player_results = [
+            self.tables.DivisionFinalMatchPlayerResult(
+                final_player_id=9
+            ),
+            self.tables.DivisionFinalMatchPlayerResult(
+                final_player_id=24
+            )            
+        ]
+        self.tables.DivisionFinalMatchPlayerResult.query.filter_by.return_value.all.return_value = division_final_match_player_results
+        division_final_match = self.tables.DivisionFinalMatch()
+        self.tables.DivisionFinalMatch.query.filter_by.return_value.first.return_value = division_final_match
+        
+        resolve_tiebreakers(tiebreaker_scores_dict,self.mock_app)
+        
+        self.assertEquals(division_final_match_player_results[1].won_tiebreaker,True)
+        self.assertEquals(division_final_match_player_results[0].won_tiebreaker,False)
+        self.assertEquals(division_final_match.completed,True)
+
+    def test_resolve_tiebreakers_with_3_ties(self):
+        tiebreaker_scores_dict={
+            "expected_num_tiebreaker_winners":2,
+            "division_final_match_id":1,
+            "scores":[
+                {
+                    "final_player_id":9,
+                    "score":1
+                },
+                {
+                    "final_player_id":24,
+                    "score":2                    
+                },
+                {
+                    "final_player_id":17,
+                    "score":3                    
+                }                
+            ]
+        }
+        self.tables.DivisionFinalMatchPlayerResult.query.filter_by.return_value = MagicMock()
+        division_final_match_player_results = [
+            self.tables.DivisionFinalMatchPlayerResult(
+                final_player_id=9
+            ),
+            self.tables.DivisionFinalMatchPlayerResult(
+                final_player_id=24
+            ),
+            self.tables.DivisionFinalMatchPlayerResult(
+                final_player_id=17
+            )            
+        ]
+        self.tables.DivisionFinalMatchPlayerResult.query.filter_by.return_value.all.return_value = division_final_match_player_results
+
+        division_final_match = self.tables.DivisionFinalMatch()
+        self.tables.DivisionFinalMatch.query.filter_by.return_value.first.return_value = division_final_match        
+        resolve_tiebreakers(tiebreaker_scores_dict,self.mock_app)
+        
+        self.assertEquals(division_final_match_player_results[0].won_tiebreaker,False)
+        self.assertEquals(division_final_match_player_results[1].won_tiebreaker,True)
+        self.assertEquals(division_final_match_player_results[2].won_tiebreaker,True)
+        self.assertEquals(division_final_match.completed,True)
+
+        division_final_match = self.tables.DivisionFinalMatch()
+        self.tables.DivisionFinalMatch.query.filter_by.return_value.first.return_value = division_final_match        
+        tiebreaker_scores_dict["expected_num_tiebreaker_winners"]=1
+        resolve_tiebreakers(tiebreaker_scores_dict,self.mock_app)
+        self.assertEquals(division_final_match_player_results[0].won_tiebreaker,False)
+        self.assertEquals(division_final_match_player_results[1].won_tiebreaker,False)
+        self.assertEquals(division_final_match_player_results[2].won_tiebreaker,True)
+        self.assertEquals(division_final_match.completed,True)
+        
+    def test_record_scores_half_completed(self):        
+        game_player_results = [
+            self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                division_final_match_game_player_result_id=1
+            ),
+            self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                division_final_match_game_player_result_id=2
+            ),
+            self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                division_final_match_game_player_result_id=3
+            ),
+            self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                division_final_match_game_player_result_id=4
+            )
+        ]
+        
+        game_result = self.mock_app.tables.DivisionFinalMatchGameResult(
+            division_final_match_game_player_results=game_player_results
+        )
+
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][0]['score']=126
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['score']=125
+        self.generated_brackets_match_game_dict['division_machine_string']="new machine"
+        
+        record_scores(self.generated_brackets_match_game_dict,game_result,self.mock_app)
+        self.assertEquals(game_result.division_machine_string,'new machine')        
+        self.assertEquals(game_player_results[0].score,126)
+        self.assertEquals(game_player_results[1].score,125)
+        self.assertEquals(game_player_results[2].score,None)
+        self.assertEquals(game_player_results[3].score,None)
+
+    def test_record_scores_completed(self):        
+        game_player_results = [
+            self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                division_final_match_game_player_result_id=1
+            ),
+            self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                division_final_match_game_player_result_id=2
+            ),
+            self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                division_final_match_game_player_result_id=3
+            ),
+            self.mock_app.tables.DivisionFinalMatchGamePlayerResult(
+                division_final_match_game_player_result_id=4
+            )
+        ]
+        
+        game_result = self.mock_app.tables.DivisionFinalMatchGameResult(
+            division_final_match_game_player_results=game_player_results
+        )
+
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][0]['score']=126
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['score']=125
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['score']=124
+        self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['score']=123
+        
+        self.generated_brackets_match_game_dict['division_machine_string']="new machine"
+        
+        record_scores(self.generated_brackets_match_game_dict,game_result,self.mock_app)
+        self.assertEquals(game_result.division_machine_string,'new machine')        
+        self.assertEquals(game_player_results[0].score,126)
+        self.assertEquals(game_player_results[1].score,125)
+        self.assertEquals(game_player_results[2].score,124)
+        self.assertEquals(game_player_results[3].score,123)
         
         

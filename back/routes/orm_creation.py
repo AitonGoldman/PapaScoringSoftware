@@ -135,7 +135,10 @@ def init_papa_tournaments_divisions(app,use_stripe=False,stripe_skus=None,discou
         'use_stripe':use_stripe        
     }
     if use_stripe:
-        metadivision_data['stripe_sku'] = stripe_skus['Classics Meta']        
+        metadivision_data['stripe_sku'] = stripe_skus['Classics Meta']
+    else:        
+        metadivision_data['local_price']=5
+         
     if discount_stripe_skus and "Classics Meta" in discount_stripe_skus:
         metadivision_data['discount_stripe_sku'] = discount_stripe_skus['Classics Meta']
         metadivision_data['discount_ticket_count'] = discount_ticket_counts['Classics Meta']

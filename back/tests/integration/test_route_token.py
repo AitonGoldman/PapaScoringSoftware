@@ -23,7 +23,49 @@ class RouteTokenTD(td_integration_test_base.TdIntegrationDispatchTestBase):
 
         self.team = orm_creation.create_team(self.flask_app,{'team_name':'test_team','players':[str(self.player.player_id),str(self.player_two.player_id)]})
         self.team_id = self.team.team_id
-        
+
+    def test_get_token_total(self):        
+        with self.flask_app.test_client() as c:                    
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_desk','password':'test_desk'}))
+            rv = c.post('/token/paid_for/1',
+                       data=json.dumps({"player_id":str(self.player_id),
+                                        "team_id":str(self.team_id),
+                                        "divisions":{'1':['5','0']},
+                                        "teams":{'5':['5','0']},
+                                        "metadivisions":{'1':['5','0']}}))
+            for token in self.flask_app.tables.Token.query.all():                
+                token.used=True
+            self.flask_app.tables.db_handle.session.commit()
+            rv = c.get('/token/player_id/%s/total'%self.player_id)            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            token_counts = json.loads(rv.data)['data']
+            self.assertEquals(token_counts['metadivisions']['1'],5)
+            self.assertEquals(token_counts['divisions']['1'],5)
+            self.assertEquals(token_counts['divisions']['2'],0)
+            self.assertEquals(token_counts['divisions']['3'],0)
+            self.assertEquals(token_counts['divisions']['4'],0)
+            self.assertEquals(token_counts['divisions']['5'],5)
+
+            for token in self.flask_app.tables.Token.query.all():                
+                token.used=False
+                token.voided=True
+            self.flask_app.tables.db_handle.session.commit()
+            rv = c.get('/token/player_id/%s/total'%self.player_id)            
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            token_counts = json.loads(rv.data)['data']            
+            self.assertEquals(token_counts['metadivisions']['1'],5)
+            self.assertEquals(token_counts['divisions']['1'],5)
+            self.assertEquals(token_counts['divisions']['2'],0)
+            self.assertEquals(token_counts['divisions']['3'],0)
+            self.assertEquals(token_counts['divisions']['4'],0)
+            self.assertEquals(token_counts['divisions']['5'],5)
+            
+            
     def test_add_token(self):        
         with self.flask_app.test_client() as c:                    
             rv = c.put('/auth/login',

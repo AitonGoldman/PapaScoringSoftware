@@ -181,26 +181,17 @@ def get_available_ticket_list(max_count,division,increment=None):
     # 24:70
     # 25:80        
 
-@admin_manage_blueprint.route('/token/player_id/<player_id>/total',methods=['GET'])
-@login_required
-@Desk_permission.require(403)
-def get_total_tokens_for_player(player_id):
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app) 
-    tokens = tables.Token.query.filter_by(player_id=player_id, paid_for=True).all()
-    team = tables.Team.query.filter(tables.Team.players.any(player_id=player_id)).first()
-    divisions = tables.Division.query.all()
+def get_total_tokens_for_player(app, tokens, divisions, team_tokens=[]):
+    #tokens = app.tables.Token.query.filter_by(player_id=player_id, paid_for=True).all()
+    #team = app.tables.Team.query.filter(app.tables.Team.players.any(player_id=player_id)).first()
+    #divisions = app.tables.Division.query.all()
     total_tokens = {'divisions':{},'metadivisions':{}}
-    if team:
-        team_tokens =  tables.Token.query.filter_by(team_id=team.team_id, paid_for=True).all()
-    else:
-        team_tokens = []
     for division in divisions:
         if division.meta_division_id:
             total_tokens['metadivisions'][division.meta_division_id]=0
         else:            
             total_tokens['divisions'][division.division_id]=0            
-    for token in tokens:
+    for token in tokens:        
         if token.division_id:            
             total_tokens['divisions'][token.division_id]=total_tokens['divisions'][token.division_id]+1
         if token.metadivision_id:            
@@ -208,6 +199,22 @@ def get_total_tokens_for_player(player_id):
     for token in team_tokens:        
         total_tokens['divisions'][token.division_id]=total_tokens['divisions'][token.division_id]+1
 
+    return total_tokens
+    
+
+@admin_manage_blueprint.route('/token/player_id/<player_id>/total',methods=['GET'])
+@login_required
+@Desk_permission.require(403)
+def route_get_total_tokens_for_player(player_id):
+    tokens = current_app.tables.Token.query.filter_by(player_id=player_id, paid_for=True).all()
+    team = current_app.tables.Team.query.filter(current_app.tables.Team.players.any(player_id=player_id)).first()
+    divisions = current_app.tables.Division.query.all()
+    if team:
+        team_tokens =  current_app.tables.Token.query.filter_by(team_id=team.team_id, paid_for=True).all()
+    else:
+        team_tokens=[]
+    #get_total_tokens_for_player(app, player_id, tokens, divisions, team_tokens=[]):
+    total_tokens = get_total_tokens_for_player(current_app,tokens,divisions,team_tokens)
     return jsonify({'data':total_tokens})
  
 @admin_manage_blueprint.route('/token/player_id/<player_id>',methods=['GET'])

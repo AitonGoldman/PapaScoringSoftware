@@ -509,10 +509,8 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][1]['papa_points'],1)
         self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['final_player_id'],17)
         self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['papa_points'],2)
-        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][2]['winner'],True)        
         self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['final_player_id'],9)
         self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['papa_points'],4)
-        self.assertEquals(self.generated_brackets_match_game_dict['division_final_match_game_player_results'][3]['winner'],True)
 
         self.assertEquals(self.generated_brackets_match_game_dict['completed'],True)                        
         
@@ -533,8 +531,40 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(test_match_dict['final_match_player_results'][1]['papa_points_sum'],3)
         self.assertEquals(test_match_dict['final_match_player_results'][2]['papa_points_sum'],6)
         self.assertEquals(test_match_dict['final_match_player_results'][3]['papa_points_sum'],12)
+        self.assertEquals(test_match_dict['final_match_player_results'][0]['winner'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][1]['winner'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][2]['winner'],True)
+        self.assertEquals(test_match_dict['final_match_player_results'][3]['winner'],True)
         
+    def test_calculate_tiebreakers(self):                
+        test_match_dict = generate_test_match(with_ties=True)        
+        calculate_points_for_match(test_match_dict)
+        tiebreaker_final_player_ids=calculate_tiebreakers(test_match_dict)
+        #print tiebreaker_final_player_ids
+        self.assertEquals(test_match_dict['completed'],False)
+        self.assertEquals(test_match_dict['expected_num_tiebreaker_winners'],1)
+        self.assertEquals(test_match_dict['final_match_player_results'][0]['needs_tiebreaker'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][1]['needs_tiebreaker'],True)
+        self.assertEquals(test_match_dict['final_match_player_results'][2]['needs_tiebreaker'],True)
+        self.assertEquals(test_match_dict['final_match_player_results'][3]['needs_tiebreaker'],False)
 
+    def test_calculate_tiebreakers_report_only(self):                
+        test_match_dict = generate_test_match(with_ties=True)                
+        test_match_dict['final_match_player_results'][0]['papa_points_sum']=8
+        test_match_dict['final_match_player_results'][1]['papa_points_sum']=5
+        test_match_dict['final_match_player_results'][2]['papa_points_sum']=5
+        test_match_dict['final_match_player_results'][3]['papa_points_sum']=4
+        tiebreaker_final_player_ids=calculate_tiebreakers(test_match_dict,report_only=True)        
+        self.assertEquals(len(tiebreaker_final_player_ids),2)
+        self.assertEquals(tiebreaker_final_player_ids[0],17)
+        self.assertEquals(tiebreaker_final_player_ids[1],18)
+        self.assertEquals(test_match_dict['completed'],False)
+        self.assertEquals(test_match_dict['expected_num_tiebreaker_winners'],None)
+        self.assertEquals(test_match_dict['final_match_player_results'][0]['needs_tiebreaker'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][1]['needs_tiebreaker'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][2]['needs_tiebreaker'],False)
+        self.assertEquals(test_match_dict['final_match_player_results'][3]['needs_tiebreaker'],False)
+        
     def test_calculate_points_for_match_with_ties(self):                
         test_match_dict = generate_test_match(with_ties=True)        
         calculate_points_for_match(test_match_dict)                        
@@ -543,7 +573,11 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(test_match_dict['final_match_player_results'][1]['papa_points_sum'],5)
         self.assertEquals(test_match_dict['final_match_player_results'][2]['papa_points_sum'],5)
         self.assertEquals(test_match_dict['final_match_player_results'][3]['papa_points_sum'],3)
-
+        self.assertEquals(test_match_dict['final_match_player_results'][0]['winner'],None)
+        self.assertEquals(test_match_dict['final_match_player_results'][1]['winner'],None)
+        self.assertEquals(test_match_dict['final_match_player_results'][2]['winner'],None)
+        self.assertEquals(test_match_dict['final_match_player_results'][3]['winner'],None)
+ 
     def test_calculate_points_for_match_without_players(self):                
         test_match_dict = generate_test_match(without_players=True)        
         calculate_points_for_match(test_match_dict)                        
@@ -552,6 +586,7 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(test_match_dict['final_match_player_results'][1]['papa_points_sum'],None)
         self.assertEquals(test_match_dict['final_match_player_results'][2]['papa_points_sum'],None)
         self.assertEquals(test_match_dict['final_match_player_results'][3]['papa_points_sum'],None)
+ 
 
     def test_resolve_tiebreakers(self):
         tiebreaker_scores_dict={

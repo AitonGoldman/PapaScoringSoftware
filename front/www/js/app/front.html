@@ -101,7 +101,12 @@
         <i class="icon ion-ios-compose-outline"></i>
         <span>Complete In Line Registration</span>
         <i class="icon ion-chevron-right"></i>                
-      </a>      
+      </a>
+      <a  ng-if='User.has_role("desk") && !User.has_role("in_line_registration")' id="front_results_link" ui-sref='.token_comp' class="item item-icon-left item-icon-right">
+        <i class="icon ion-ios-compose-outline"></i>
+        <span>Comp Tickets</span>
+        <i class="icon ion-chevron-right"></i>                
+      </a>            
       <a ng-if='isWebView == false && User.has_role("player")' href="static/help.html" target="_new_window" class="item item-icon-left item-icon-right">
         <i class="icon ion-help"></i>
         <span>Help</span>

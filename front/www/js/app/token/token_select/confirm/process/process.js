@@ -3,9 +3,15 @@ angular.module('app.token.token_select.confirm.process').controller(
     'app.token.token_select.confirm.process',[
         '$scope','$state','TimeoutResources','Utils','Modals','$ionicHistory',
         function($scope, $state, TimeoutResources, Utils,Modals,$ionicHistory) {
-        $scope.site=$state.params.site;
-	$scope.player_id=$state.params.player_id;
+            $scope.state=$state.current.name;
+            $scope.site=$state.params.site;
+	    $scope.player_id=$state.params.player_id;
             $ionicHistory.nextViewOptions({disableBack:true});            
+            if($state.current.name=='app.token_comp.token_select_comp.confirm.process'){
+                $scope.comp_or_purchase_title="Tickets Comped";                
+            } else {
+                $scope.comp_or_purchase_title="Tickets Purchased";
+            }
 
         $scope.utils = Utils;
         Modals.loading();

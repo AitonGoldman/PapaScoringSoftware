@@ -3,7 +3,14 @@
     <center>
       <div class="standard_big_font warning_confirm warning_confirm_two_row_table">
           <button class='button button-clear button-dark icon-left ion-alert-circled ion-icon-yellow review-icon' >            
-            <span><u>Review Before Purchase</u></span>
+            <span><u>Review Before
+                <span ng-if='state!="app.token_comp.token_select_comp.confirm"'>
+                  Purchase
+                </span>
+                <span ng-if='state=="app.token_comp.token_select_comp.confirm"'>
+                  Comp
+                </span>
+            </u></span>
           </button>
           <table>
             <tr ng-if='token_count[0] != 0' ng-repeat='(division_id,token_count) in token_info.divisions'>
@@ -43,7 +50,14 @@
         </div>
         
         <button id='HomeButton' class='button button-full button-calm item-icon-right seperate_button' ng-click="create_tickets()">
-          <span>Purchase Tickets</span>
+          <span>
+            <span ng-if='state!="app.token_comp.token_select_comp.confirm"'>
+              Purchase
+            </span>
+            <span ng-if='state=="app.token_comp.token_select_comp.confirm"'>
+              Comp
+            </span>
+            Tickets</span>
           <i class="icon ion-chevron-right"></i>          
         </button>
       </center>

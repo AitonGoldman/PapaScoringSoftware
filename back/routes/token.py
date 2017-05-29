@@ -42,7 +42,7 @@ def check_add_token_for_max_tokens(num_tokens,div_id=None,metadiv_id=None,player
     if metadiv_id:
         existing_token_count = get_existing_token_count(metadiv_id=metadiv_id,player_id=player_id)
         #FIXME : we assume metadivisions are not also team divisions
-    if int(num_tokens) + int(existing_token_count) > int(current_app.td_config['MAX_TICKETS_ALLOWED_PER_DIVISION']):
+    if int(num_tokens) + int(existing_token_count) > int(current_app.td_config['MAX_TICKETS_ALLOWED_PER_DIVISION']):        
         raise Conflict('Token add requested will push you over the max tokens for this division')
 
 # retrieving player
@@ -57,7 +57,7 @@ def check_add_token_request_is_valid(tokens_data, tables):
     player = fetch_entity(tables.Player,tokens_data['player_id'])
     if tokens_data.has_key('team_id'):
         team_id = tokens_data['team_id']
-        team = fetch_entity(tables.Player,team_id)
+        team = fetch_entity(tables.Team,team_id)
     elif len(player.teams) > 0:
         team_id=player.teams[0].team_id
     else:
@@ -69,19 +69,28 @@ def check_add_token_request_is_valid(tokens_data, tables):
             raise BadRequest('Tried to add a token for a single player in a team tournament')
         if division.meta_division_id is not None:
             raise BadRequest('Tried to add a division token to a metadivision')                    
-        num_tokens = tokens_data['divisions'][div_id][0]        
+        if div_id in tokens_data['divisions'] and len(tokens_data['divisions'][div_id]) > 0:
+            num_tokens = tokens_data['divisions'][div_id][0]
+        else:
+            num_tokens = 0            
         if int(num_tokens) > 0: 
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,player_id=player_id)        
     for div_id in tokens_data['teams']:
         division=fetch_entity(tables.Division,div_id)
         if division.team_tournament is False:
             raise BadRequest('Tried to add a token for a team in a non-team tournament')
-        num_tokens = tokens_data['teams'][div_id][0]
+        if div_id in tokens_data['teams'] and len(tokens_data['teams'][div_id]) > 0:
+            num_tokens = tokens_data['teams'][div_id][0]
+        else:
+            num_tokens = 0
         if int(num_tokens) > 0:
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)        
     for metadiv_id in tokens_data['metadivisions']:
         meta_division=fetch_entity(tables.MetaDivision,metadiv_id)
-        num_tokens = tokens_data['metadivisions'][metadiv_id][0]
+        if metadiv_id in tokens_data['metadivisions'] and len(tokens_data['metadivisions'][metadiv_id]) > 0:
+            num_tokens = tokens_data['metadivisions'][metadiv_id][0]
+        else:
+            num_tokens = 0
         if int(num_tokens) > 0:
             check_add_token_for_max_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id)                     
     
@@ -171,7 +180,43 @@ def get_available_ticket_list(max_count,division,increment=None):
     # 23:70
     # 24:70
     # 25:80        
+
+def get_total_tokens_for_player(app, tokens, divisions, team_tokens=[]):
+    #tokens = app.tables.Token.query.filter_by(player_id=player_id, paid_for=True).all()
+    #team = app.tables.Team.query.filter(app.tables.Team.players.any(player_id=player_id)).first()
+    #divisions = app.tables.Division.query.all()
+    total_tokens = {'divisions':{},'metadivisions':{}}
+    for division in divisions:
+        if division.meta_division_id:
+            total_tokens['metadivisions'][division.meta_division_id]=0
+        else:            
+            total_tokens['divisions'][division.division_id]=0            
+    for token in tokens:        
+        if token.division_id:            
+            total_tokens['divisions'][token.division_id]=total_tokens['divisions'][token.division_id]+1
+        if token.metadivision_id:            
+            total_tokens['metadivisions'][token.metadivision_id]=total_tokens['metadivisions'][token.metadivision_id]+1
+    for token in team_tokens:        
+        total_tokens['divisions'][token.division_id]=total_tokens['divisions'][token.division_id]+1
+
+    return total_tokens
     
+
+@admin_manage_blueprint.route('/token/player_id/<player_id>/total',methods=['GET'])
+@login_required
+@Desk_permission.require(403)
+def route_get_total_tokens_for_player(player_id):
+    tokens = current_app.tables.Token.query.filter_by(player_id=player_id, paid_for=True).all()
+    team = current_app.tables.Team.query.filter(current_app.tables.Team.players.any(player_id=player_id)).first()
+    divisions = current_app.tables.Division.query.all()
+    if team:
+        team_tokens =  current_app.tables.Token.query.filter_by(team_id=team.team_id, paid_for=True).all()
+    else:
+        team_tokens=[]
+    #get_total_tokens_for_player(app, player_id, tokens, divisions, team_tokens=[]):
+    total_tokens = get_total_tokens_for_player(current_app,tokens,divisions,team_tokens)
+    return jsonify({'data':total_tokens})
+ 
 @admin_manage_blueprint.route('/token/player_id/<player_id>',methods=['GET'])
 def get_tokens_for_player(player_id):
     #FIXME : needs more protection?
@@ -250,11 +295,12 @@ def add_token(paid_for):
     if 'comped' in tokens_data:
         comped = tokens_data['comped']
     else:
-        comped = False
+        comped = False    
     player = fetch_entity(tables.Player,tokens_data['player_id'])
+    
     if tokens_data.has_key('team_id'):        
         team_id = tokens_data['team_id']
-        team = fetch_entity(tables.Player,team_id)
+        team = fetch_entity(tables.Team,team_id)
     #else:
     elif len(player.teams) > 0:
         team_id=player.teams[0].team_id
@@ -266,21 +312,31 @@ def add_token(paid_for):
 
     for div_id in tokens_data['divisions']:
         #num_tokens = tokens_data['divisions'][div_id]
-        num_tokens = int(tokens_data['divisions'][div_id][0])
+        if div_id in tokens_data['divisions'] and len(tokens_data['divisions'][div_id]) > 0:
+            num_tokens = int(tokens_data['divisions'][div_id][0])
+        else:
+            num_tokens = 0
         if num_tokens > 0:
             division_token_summary[tables.Division.query.filter_by(division_id=div_id).first().get_self_tournament_name()]=num_tokens
             ## back 
             tokens = create_division_tokens(num_tokens,div_id=div_id,player_id=player_id, paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens
     for metadiv_id in tokens_data['metadivisions']:
-        num_tokens = tokens_data['metadivisions'][metadiv_id][0]        
+        if metadiv_id in tokens_data['metadivisions'] and len(tokens_data['metadivisions'][metadiv_id]) > 0:
+            num_tokens = tokens_data['metadivisions'][metadiv_id][0]
+        else:
+            num_tokens = 0
         if num_tokens > 0:
             metadivision_token_summary[tables.Division.query.filter_by(meta_division_id=metadiv_id).first().get_self_tournament_name()]=num_tokens
 
             tokens = create_division_tokens(num_tokens,metadiv_id=metadiv_id,player_id=player_id, paid_for=paid_for,comped=comped)
             total_tokens = total_tokens + tokens
+
     for div_id in tokens_data['teams']:
-        num_tokens = tokens_data['teams'][div_id][0]
+        if div_id in tokens_data['teams'] and len(tokens_data['teams'][div_id]) > 0:
+            num_tokens = tokens_data['teams'][div_id][0]
+        else:
+            num_tokens = 0
         if int(num_tokens) > 0:
             division_token_summary[tables.Division.query.filter_by(division_id=div_id).first().get_self_tournament_name()]=num_tokens
             check_add_token_for_max_tokens(num_tokens,div_id=div_id,team_id=team_id)

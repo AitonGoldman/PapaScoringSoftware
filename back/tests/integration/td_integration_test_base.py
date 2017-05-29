@@ -17,11 +17,11 @@ import random
 from sqlalchemy_utils import drop_database
 
 class TdIntegrationTestBase(unittest.TestCase):    
-    def checkWrongPermissions(self,c,http_method,url,user_name=None,pin=None):        
+    def checkWrongPermissions(self,c,http_method,url,user_name=None,pin=None,player_id=None):        
         expected_status_code=401
         if pin:
             rv = c.put('/auth/player_login',
-                       data=json.dumps({'player_pin':pin}))
+                       data=json.dumps({'player_pin':pin,'player_id':player_id}))
             expected_status_code = 403
         if user_name:
             rv = c.put('/auth/login',

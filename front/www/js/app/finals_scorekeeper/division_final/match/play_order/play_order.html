@@ -1,0 +1,37 @@
+<ion-view view-title="Select Order">
+  <ion-content>
+    <div class='item' style="border-width:0px" >
+      <center>
+        Select the machine and each players order.
+      </center>
+    </div>
+    <div class="list">
+      <div class="item item-input-inset">
+        <span class="input-label">
+          Machine Name
+        </span>
+        <label class="item-input-wrapper">
+          <input ng-model='resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_game_results[game_index].division_machine_string' type="text" placeholder="Machine Name">
+        </label>
+      </div>
+    </div>
+    
+    <div ng-repeat="player in resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_game_results[game_index].division_final_match_game_player_results|orderBy:'final_player.initial_seed'" class="list card">
+      <div class='item item-divider'>{{player.final_player.player_name}}</div>
+      <div class='item'>
+
+        <ion-radio name="{{player.final_player_id}}" ng-model="player.play_order" ng-repeat="play_order in play_order_list" ng-value='play_order'><i style='color:red' class='icon ion-android-hand' ng-if='disabled_play_orders(player,play_order)==true'></i> <span>{{play_order}}</span></ion-radio>
+      </div>
+    </div>
+    <center>
+
+      <button ng-click='on_submit()' class='button button-calm'>
+        Set Player Order
+      </button>
+    </center>
+
+
+    <!-- ui-sref=".play_order({})" -->    
+  </ion-content>
+</ion-view>
+

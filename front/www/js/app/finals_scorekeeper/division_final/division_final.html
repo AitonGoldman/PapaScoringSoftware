@@ -1,34 +1,39 @@
 <ion-view view-title="Finals">
-    <ion-footer-bar class="bar-calm">
-    <table width='75%' style='margin:auto'>
-      <tr>
-        <th style='line-height:1px' ng-repeat="round in resources.finals.data[division_final_id].division_final_rounds" align="center" ><a ui-sref="app.finals_scorekeeper.division_final.round({round_idx:$index})">
-            <i ng-if='state.params.round_idx == $index' class='icon ion-ios-circle-filled standard_large_font'></i>
-            <i ng-if='state.params.round_idx != $index' class='icon ion-ios-circle-outline standard_large_font'></i>
-            
-          </a>
-          <br>
-          <span class="standard_small_font">Round {{($index)+1}}</span>
-        </th>
-    </table>
-    </ion-footer-bar>
-
-    <ion-nav-view name="round_tab" style='margin-top:0px'>
-    </ion-nav-view>
+  <ion-content>
+    <a class='padding item item-divider'>
+      <center>
+        {{resources.division_finals.data[division_final_id]}} : {{resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].round_progress}}
+      </center>
+    </a>
+    
+    <div ng-if='round_id==""'>
+      Select Round
+    </div>
+    <div ui-sref='.match({match_id:$index})' ng-if='round_id!=""' ng-repeat="match in resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches" class="card list">
+      <div  class="item item-divider row">
+        <div class='col'>
+          Match {{match.division_final_match_id}} Players
+        </div>
+        <div class='col-10'>
+          Points
+        </div>
+        
+      </div>
+      <div ng-class='{yellow:match_player.needs_tiebreaker==true}' class="item row" ng-repeat="match_player in match.final_match_player_results|orderBy:'player.initial_seed'">
+        <div class='col'>
+          <i class='icon ion-trophy' ng-if="match_player.winner==true"></i> &nbsp;{{match_player.final_player.player_name}}
+        </div>
+        <div class='col-10'>
+          {{match_player.papa_points_sum}}
+        </div>        
+      </div>      
+    </div>
+  </ion-content>
+    <div class="tabs tabs-icon-top">
+      <a ui-sref=".({round_id:round.round_number,division_final_id:division_final_id})" class="tab-item" ng-repeat="round in resources.scorekeeping_division_final.data.division_final_rounds">
+        <i ng-if="round.round_number!=round_id" class="icon ion-ios-circle-outline"></i>
+        <i ng-if="round.round_number==round_id" class="icon ion-ios-circle-filled"></i>        
+        {{round.round_number}}
+      </a>
+    </div>  
 </ion-view>
-<!-- <ion-tabs class="tabs-positive tabs-icon-top"> -->
-
-
-<!--   <ion-tab title="Round 1" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_0({round_idx:0})'> -->
-<!--   </ion-tab> -->
-
-<!--   <ion-tab title="Round 2" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_1({round_idx:1})'> -->
-<!--   </ion-tab> -->
-
-<!--   <ion-tab title="Round 3" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline"  ui-sref='app.finals_scorekeeper.division_final.round_2({round_idx:2})'> -->
-<!--   </ion-tab> -->
-
-<!--   <ion-tab ng-if='rounds_length==4' title="Round 4" icon-on="ion-ios-circle-filled" icon-off="ion-ios-circle-outline" ui-sref='app.finals_scorekeeper.division_final.round_3({round_idx:3})'> -->
-<!--   </ion-tab> -->
-  
-<!-- </ion-tabs> -->

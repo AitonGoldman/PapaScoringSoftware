@@ -12,136 +12,34 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
        }).state('app.finals_scorekeeper.division_final', 
         { 
          cache: false,
- 	 url: '/division_final/division_final_id/:division_final_id',
+ 	 url: '/division_final/division_final_id/:division_final_id/round/:round_id',
  	 views: {
  	     'menuContent@app': {
  	       templateUrl: 'js/app/finals_scorekeeper/division_final/division_final.html',
  	       controller: 'app.finals_scorekeeper.division_final'
  	     }
  	   }
-       }).state('app.finals_scorekeeper.division_final.round', {
-           url: "/round/:round_idx",
-           views: {
-               'round_tab@app.finals_scorekeeper.division_final': {
-                   templateUrl: "js/app/finals_scorekeeper/division_final/test.html",
-                   controller: 'app.finals_scorekeeper.division_final.round'
-               }                             
-           }  
-       }).state('app.finals_scorekeeper.division_final.round.intro', {
-           url: "/intro",
-           views: {
-               'round_tab@app.finals_scorekeeper.division_final': {
-                   templateUrl: "js/app/finals_scorekeeper/division_final/intro.html",
-                   //controller: 'app.finals_scorekeeper.division_final.round'
-               }                             
-           }  
-       }).state('app.finals_scorekeeper.division_final.round_1', {
-           url: "/round/:round_idx",
-           views: {
-               'round_tab@app.finals_scorekeeper.division_final': {
-                   templateUrl: "js/app/finals_scorekeeper/division_final/test.html",
-                   controller: 'app.finals_scorekeeper.division_final.round'
-               }                             
-           },
-           data: {
-               round: 0               
-           }  
-       }).state('app.finals_scorekeeper.division_final.round_2', {
-           url: "/round/:round_idx",
-           views: {
-               'round_tab@app.finals_scorekeeper.division_final': {
-                   templateUrl: "js/app/finals_scorekeeper/division_final/test.html",
-                   controller: 'app.finals_scorekeeper.division_final.round'
-               }                             
-           },
-           data: {
-               round: 0               
-           }  
-       }).state('app.finals_scorekeeper.division_final.round_3', {
-           url: "/round/:round_idx",
-           views: {
-               'round_tab@app.finals_scorekeeper.division_final': {
-                   templateUrl: "js/app/finals_scorekeeper/division_final/test.html",
-                   controller: 'app.finals_scorekeeper.division_final.round'
-               }                             
-           },
-           data: {
-               round: 0               
-           }  
-       }).state('app.finals_scorekeeper.division_final.round.tiebreaker', {
-            url: "/tiebreaker/:division_final_match_id/:division_final_match_idx/:round_idx",
-            views: {
-                'round_tab@app.finals_scorekeeper.division_final': {
-                    templateUrl: "js/app/finals_scorekeeper/division_final/tiebreaker.html",
-                    controller: 'app.finals_scorekeeper.division_final.round.tiebreaker'                    
-                }               
-
-            }
-       }).state('app.finals_scorekeeper.division_final.round_1.tiebreaker', {
-            url: "/tiebreaker/:division_final_match_id/:division_final_match_idx/:round_idx",
-            views: {
-                'round_tab@app.finals_scorekeeper.division_final': {
-                    templateUrl: "js/app/finals_scorekeeper/division_final/tiebreaker.html",
-                    controller: 'app.finals_scorekeeper.division_final.round.tiebreaker'                    
-                }               
-
-            }
-       }).state('app.finals_scorekeeper.division_final.round_2.tiebreaker', {
-            url: "/tiebreaker/:division_final_match_id/:division_final_match_idx/:round_idx",
-            views: {
-                'round_tab@app.finals_scorekeeper.division_final': {
-                    templateUrl: "js/app/finals_scorekeeper/division_final/tiebreaker.html",
-                    controller: 'app.finals_scorekeeper.division_final.round.tiebreaker'                    
-                }               
-
-            }
-       }).state('app.finals_scorekeeper.division_final.round_3.tiebreaker', {
-            url: "/tiebreaker/:division_final_match_id/:division_final_match_idx/:round_idx",
-            views: {
-                'round_tab@app.finals_scorekeeper.division_final': {
-                    templateUrl: "js/app/finals_scorekeeper/division_final/tiebreaker.html",
-                    controller: 'app.finals_scorekeeper.division_final.round.tiebreaker'                    
-                }               
-
-            }
-       }).state('app.finals_scorekeeper.division_final.round.match_details', {
-            url: "/match_details/:division_final_match_id/:division_final_match_idx/:round_idx",
-            views: {
-                'round_tab@app.finals_scorekeeper.division_final': {
-                    templateUrl: "js/app/finals_scorekeeper/division_final/division_final_match.html",
-                    controller: 'app.finals_scorekeeper.division_final.round.match_details'                    
-                }               
-
-            }
-       }).state('app.finals_scorekeeper.division_final.round_1.match_details', {
-            url: "/match_details/:division_final_match_id/:division_final_match_idx/:round_idx",
-            views: {
-                'round_tab@app.finals_scorekeeper.division_final': {
-                    templateUrl: "js/app/finals_scorekeeper/division_final/division_final_match.html",
-                    controller: 'app.finals_scorekeeper.division_final.round.match_details'                    
-                }               
-
-            }
-       }).state('app.finals_scorekeeper.division_final.round_2.match_details', {
-            url: "/match_details/:division_final_match_id/:division_final_match_idx/:round_idx",
-            views: {
-                'round_tab@app.finals_scorekeeper.division_final': {
-                    templateUrl: "js/app/finals_scorekeeper/division_final/division_final_match.html",
-                    controller: 'app.finals_scorekeeper.division_final.round.match_details'                    
-                }               
-
-            }
-       }).state('app.finals_scorekeeper.division_final.round_3.match_details', {
-            url: "/match_details/:division_final_match_id/:division_final_match_idx/:round_idx",
-            views: {
-                'round_tab@app.finals_scorekeeper.division_final': {
-                    templateUrl: "js/app/finals_scorekeeper/division_final/division_final_match.html",
-                    controller: 'app.finals_scorekeeper.division_final.round.match_details'                    
-                }               
-
-            }
+        }).state('app.finals_scorekeeper.division_final.match', 
+        { 
+         cache: false,
+ 	 url: '/match/match_id/:match_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/finals_scorekeeper/division_final/match/match.html',
+ 	       controller: 'app.finals_scorekeeper.division_final.match'
+ 	     }
+ 	   }
+       }).state('app.finals_scorekeeper.division_final.match.play_order', 
+        { 
+         cache: false,
+ 	 url: '/play_order/:game_index',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/finals_scorekeeper/division_final/match/play_order/play_order.html',
+ 	       controller: 'app.finals_scorekeeper.division_final.match.play_order'
+ 	     }
+ 	   }
        })//REPLACE_ME
-    
 
 
 }]);

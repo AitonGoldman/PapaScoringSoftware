@@ -4,6 +4,7 @@ angular.module('app.token.token_select').controller(
     'app.token.token_select',[
         '$scope','$state','TimeoutResources','Utils','Modals',
         function($scope, $state, TimeoutResources, Utils,Modals) {        
+            $scope.state=$state.current.name;
             $scope.site=$state.params.site;
             $scope.token_info = {
                 divisions:{},
@@ -14,6 +15,14 @@ angular.module('app.token.token_select').controller(
                 total_cost:0,
                 comped:false
             };
+            
+            if($state.current.name=='app.token_comp.token_select_comp'){
+                $scope.comp_or_purchase_title="Comp Tickets";
+                $scope.token_info.comped=true;
+            } else {
+                $scope.comp_or_purchase_title="Purchase Tickets";
+            }
+            
             $scope.utils = Utils;
             $scope.hide_back_button=$state.params.hide_back_button;
             Modals.loading();
@@ -37,7 +46,6 @@ angular.module('app.token.token_select').controller(
                 });
             });
             $scope.calc_total_cost = function(){
-                console.log($scope.token_info.divisions[1])
                 divisions_total=0;
                 _.forEach($scope.token_info.divisions, function(value, key) {
                     divisions_total = divisions_total + value[1];
@@ -52,7 +60,11 @@ angular.module('app.token.token_select').controller(
                        divisions_total = divisions_total + value[1];//($scope.token_info.teams[key]*parseInt(division_price));
                      $scope.token_info.metadivisions_names[key]=$scope.resources.divisions.data.metadivisions[key].meta_division_name;
                  });
-                $scope.token_info.total_cost = divisions_total;
+                if($state.current.name=='app.token_comp.token_select_comp'){                    
+                    $scope.token_info.total_cost = "COMPED";                    
+                } else {
+                    $scope.token_info.total_cost = divisions_total;
+                }                                 
             };
         }
     ]

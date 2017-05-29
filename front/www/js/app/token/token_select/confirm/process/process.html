@@ -1,9 +1,17 @@
-<ion-view view-title="Tickets Purchased" hide-back-button="true">
+<ion-view view-title="{{comp_or_purchase_title}}" hide-back-button="true">
   <ion-content>      
       <center>
         <div class='standard_big_font'>
           <button class='button button-clear button-dark icon-left ion-cash ion-icon-green review-icon' >            
-              <span><u>Tickets Purchased</u></span>
+            <span><u>
+                Tickets 
+                <span ng-if='state!="app.token_comp.token_select_comp.confirm.process"'>
+                  Purchased
+                </span>
+                <span ng-if='state=="app.token_comp.token_select_comp.confirm.process"'>
+                  Comped
+                </span>
+                </u></span>
           </button>
 
           <!--<div class='padding'><u><i class="icon ion-cash padding"></i><span>Tickets Purchased</u></span></div>-->
@@ -50,6 +58,8 @@
               </td>
               <td class='padding-left'>
                 {{token_count}} Ticket<span ng-if="token_count > 0">s</span> 
+                <span ng-if='token_info.comped!=true'>
+
                   <span ng-if="resources.added_tokens.data.metadivisions_count[metadivision_id].discount_count!=undefined">({{resources.added_tokens.data.metadivisions_count[metadivision_id].discount_count}} x 
                     ${{resources.divisions.data.metadivisions[metadivision_id].discount_ticket_price}}, 
                     {{resources.added_tokens.data.metadivisions_count[metadivision_id].normal_count}} x 
@@ -59,6 +69,7 @@
                     ({{token_count}} x 
                     ${{resources.divisions.data.metadivision[metadivision_id].local_price}})
                   </span>
+                </span>
               </td>
             </tr>
             <tr style='border-style:solid;border-width:0;border-top-width:1px;'>
@@ -72,10 +83,17 @@
             </tr>            
           </table>
           <br>
-          <button id='HomeButton' class='button button-full button-calm seperate_button item-icon-right' ui-sref='.^.^.^({site:site})'>
-            <span>Purchase More Tickets</span>
+          <button ng-if='state!="app.token_comp.token_select_comp.confirm.process"' id='HomeButton' class='button button-full button-calm seperate_button item-icon-right' ui-sref='.^.^.^({site:site})'>
+            <span>              
+              Purchase More Tickets</span>
             <i class="icon ion-chevron-right"></i>          
           </button>
+          <button ng-if='state=="app.token_comp.token_select_comp.confirm.process"' id='HomeButton' class='button button-full button-calm seperate_button item-icon-right' ui-sref='.^.^.^({site:site})'>
+            <span>              
+              Comp More Tickets</span>
+            <i class="icon ion-chevron-right"></i>          
+          </button>
+
           <button id='HomeButton' class='button button-full button-calm seperate_button item-icon-right' ui-sref='app({site:site,hide_back_button:true})'>
             <span>Home</span>
             <i class="icon ion-chevron-right"></i>          

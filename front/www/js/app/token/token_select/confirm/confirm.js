@@ -4,6 +4,7 @@ angular.module('app.token.token_select.confirm').controller(
     'app.token.token_select.confirm',[
         '$scope','$state','TimeoutResources','Utils','Modals','User',
         function($scope, $state, TimeoutResources, Utils,Modals,User) {
+            $scope.state=$state.current.name;
             $scope.site=$state.params.site;
             $scope.player_id=$state.params.player_id;                        
             $scope.utils = Utils;

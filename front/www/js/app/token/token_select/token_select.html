@@ -1,4 +1,4 @@
-<ion-view view-title="Purchase Tickets" hide-back-button="{{hide_back_button}}">
+<ion-view view-title="{{comp_or_purchase_title}}" hide-back-button="{{hide_back_button}}">
   <ion-content>
     <div class='avatar-label'>
       <table style='width:100%;font-size:20px'>
@@ -18,9 +18,15 @@
     </div>
     <div class="skinny-list list" style='margin-left:0;margin-right:0'>
       <div class="item-divider item" id='add_user_user_info_title'>
-        Purchase Tickets
+        <span ng-if='state!="app.token_comp.token_select_comp"'>
+          Purchase
+        </span>
+        <span ng-if='state=="app.token_comp.token_select_comp"'>
+          Comp
+        </span>
+        Tickets
       </div>
-      <ion-checkbox id="token_select_comped_checkbox" class='item' ng-model='token_info.comped' >Comped</ion-checkbox>
+      <!--<ion-checkbox id="token_select_comped_checkbox" class='item' ng-model='token_info.comped' >Comped</ion-checkbox>-->
       
       <label ng-if='division.team_tournament == false && division.meta_division_id == null && token_info.divisions[division_id] != undefined' ng-repeat='(division_id,division) in resources.divisions.data' class="item item-input item-select">
         <div class="input-label">
@@ -51,10 +57,16 @@
         </select>
       </label>
       <div class="item-divider item" id='add_user_user_info_title'>
-        Total Cost : ${{token_info.total_cost}}
+        Total Cost : <span ng-if='token_info.comped==false'>$</span>{{token_info.total_cost}}
       </div>
       <button ng-disabled='token_info.total_cost == 0' class="button button-full button-calm icon-right ion-chevron-right" ui-sref=".confirm({token_info:token_info})">
-        Review Purchase
+        Review
+        <span ng-if='state!="app.token_comp.token_select_comp"'>
+          Purchase
+        </span>
+        <span ng-if='state=="app.token_comp.token_select_comp"'>
+          Comp
+        </span>
       </button>    
       
     </div>    

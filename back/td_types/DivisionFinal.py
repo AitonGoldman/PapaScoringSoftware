@@ -12,10 +12,10 @@ def generate_division_final_class(db_handle,relationship=None,fk=None):
 
         def to_dict_simple(self):
             division_final_dict = to_dict(self)
-            if len(self.qualifiers) > 0:
-                division_final_dict['qualifiers'] = []
-                for qualifier in self.qualifiers:
-                    division_final_dict['qualifiers'].append(qualifier.to_dict_simple())
+            # if len(self.qualifiers) > 0:
+            #     division_final_dict['qualifiers'] = []
+            #     for qualifier in self.qualifiers:
+            #         division_final_dict['qualifiers'].append(qualifier.to_dict_simple())
             if len(self.division_final_rounds) > 0:
                 division_final_dict['division_final_rounds'] = []
                 for round in sorted(self.division_final_rounds, key= lambda e: e.round_number):

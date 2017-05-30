@@ -11,11 +11,15 @@ angular.module('app.finals_scorekeeper.division_final.match.resolve_tiebreaker')
         $scope.utils = Utils;        
         $scope.resources={};
         $scope.scoreReviewed={checked:true};
+        $scope.onScoreChange = function(match_player){
+            match_player.tiebreaker_score = match_player.tiebreaker_score.replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        };
+        
         $scope.submit_tiebreaker_results = function(){
             Modals.loading();
-            _.forEach($scope.match_result.final_match_player_results, function(player_result) {
-                player_result.tiebreaker_score=parseInt(player_result.tiebreaker_score);
-            });
+            //_.forEach($scope.match_result.final_match_player_results, function(player_result) {
+            //    player_result.tiebreaker_score=parseInt(player_result.tiebreaker_score);
+            //});
                 
 
             async.waterfall([

@@ -11,6 +11,10 @@ angular.module('app.finals.manage.tiebreakers.resolve').controller(
         $scope.utils = Utils;
         $scope.scoreReviewed={checked:true};
         $scope.hideBackButton=false;
+        $scope.onScoreChange = function(player){
+            player.player_score = player.player_score.replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        };
+
         $scope.check_tiebreaker_scores_entered = function(tiebreaker_players){            
             return _.filter(tiebreaker_players,
                             function(tiebreaker_player) { return tiebreaker_player.player_score!=undefined; }).length == tiebreaker_players.length;

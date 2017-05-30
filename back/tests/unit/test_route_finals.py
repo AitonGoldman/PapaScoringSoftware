@@ -296,13 +296,13 @@ class RouteFinalsTD(unittest.TestCase):
                 'final_player_id':4,
                 'initial_seed':3,
                 'player_name':'player_test4',
-                'player_score':1
+                'player_score':"1"
             },
             {
                 'final_player_id':5,
                 'initial_seed':3,
                 'player_name':'player_test5',
-                'player_score':2
+                'player_score':"2"
             }                
         ]
 
@@ -348,6 +348,7 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(pruned_final_player_list[1]['removed'],None)
 
     def test_generate_brackets(self):                                
+        #FIXME : need test for generate_division_final_rounds
         division_final = self.tables.DivisionFinal()
         final_results = self.generate_results(30)
         final_players = self.generate_final_players(30)
@@ -363,9 +364,11 @@ class RouteFinalsTD(unittest.TestCase):
         for player in final_players:
             player['reranked_seed']=player['initial_seed']            
         final_players[0]['reranked_seed']=4
-        simplified_results = create_simplified_division_results(final_players,7,self.mock_app)        
-        results = generate_brackets(self.mock_app,1,simplified_results,7)        
-        #self.assertTrue(results[3]['reranked_seed']!=results[4]['reranked_seed'])                
+        final_players[4]['reranked_seed']=0        
+        simplified_results = create_simplified_division_results(final_players,7,self.mock_app)                
+        final_rounds = generate_brackets(self.mock_app,1,simplified_results,7)                
+        self.assertTrue(division_final.qualifiers[3].adjusted_seed!=division_final.qualifiers[4].adjusted_seed)
+        self.assertTrue(division_final.qualifiers[3].adjusted_seed==3 or division_final.qualifiers[3].adjusted_seed==4 )
         #self.assertTrue(results[3]['reranked_seed']==3 or results[3]['reranked_seed']==4)        
         
     def test_resolve_unimportant_ties(self):                        
@@ -597,7 +600,7 @@ class RouteFinalsTD(unittest.TestCase):
             "final_match_player_results":[
                 {
                     "final_player_id":9,
-                    "tiebreaker_score":1,
+                    "tiebreaker_score":"1",
                     "needs_tiebreaker":True,
                     "final_player":{
                         "player_name":"poopinstein"
@@ -605,7 +608,7 @@ class RouteFinalsTD(unittest.TestCase):
                 },
                 {
                     "final_player_id":24,
-                    "tiebreaker_score":2,
+                    "tiebreaker_score":"2",
                     "needs_tiebreaker":True,
                     "final_player":{
                         "player_name":"poopinstein2"
@@ -641,7 +644,7 @@ class RouteFinalsTD(unittest.TestCase):
             "final_match_player_results":[
                 {
                     "final_player_id":9,
-                    "tiebreaker_score":1,
+                    "tiebreaker_score":"1",
                     "needs_tiebreaker":True,
                     "final_player":{
                         "player_name":"poopinstein"
@@ -649,7 +652,7 @@ class RouteFinalsTD(unittest.TestCase):
                 },
                 {
                     "final_player_id":24,
-                    "tiebreaker_score":2,
+                    "tiebreaker_score":"2",
                     "needs_tiebreaker":True,
                     "final_player":{
                         "player_name":"poopinstein2"
@@ -657,7 +660,7 @@ class RouteFinalsTD(unittest.TestCase):
                 },
                 {
                     "final_player_id":17,
-                    "tiebreaker_score":3,
+                    "tiebreaker_score":"3",
                     "needs_tiebreaker":True,
                     "final_player":{
                         "player_name":"poopinstein3"
@@ -687,6 +690,10 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(division_final_match_player_results[1].won_tiebreaker,True)
         self.assertEquals(division_final_match_player_results[2].won_tiebreaker,True)
         self.assertEquals(division_final_match.completed,True)
+
+        tiebreaker_scores_dict['final_match_player_results'][0]['tiebreaker_score']="1"
+        tiebreaker_scores_dict['final_match_player_results'][1]['tiebreaker_score']="2"
+        tiebreaker_scores_dict['final_match_player_results'][2]['tiebreaker_score']="3"
 
         division_final_match = self.tables.DivisionFinalMatch()
         self.tables.DivisionFinalMatch.query.filter_by.return_value.first.return_value = division_final_match        

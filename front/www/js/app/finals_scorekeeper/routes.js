@@ -39,7 +39,18 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.finals_scorekeeper.division_final.match.play_order'
  	     }
  	   }
+       }).state('app.finals_scorekeeper.division_final.match.resolve_tiebreaker', 
+        { 
+         cache: false,
+ 	 url: '/resolve_tiebreaker',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/finals_scorekeeper/division_final/match/resolve_tiebreaker/resolve_tiebreaker.html',
+ 	       controller: 'app.finals_scorekeeper.division_final.match.resolve_tiebreaker'
+ 	     }
+ 	   }
        })//REPLACE_ME
+
 
 
 }]);

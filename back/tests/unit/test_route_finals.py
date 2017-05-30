@@ -57,6 +57,8 @@ def generate_test_match(with_ties=False,with_scores=True,without_players=False,h
                 
             ]
     }
+    if without_players:
+        return test_match_dict
     if with_ties:
         test_match_dict['final_match_game_results']=[
             generate_test_game_result(fill_in_scores_and_points=True,scores=[4,1,2,0]),                
@@ -592,17 +594,27 @@ class RouteFinalsTD(unittest.TestCase):
         tiebreaker_scores_dict={
             "expected_num_tiebreaker_winners":2,
             "division_final_match_id":1,
-            "scores":[
+            "final_match_player_results":[
                 {
                     "final_player_id":9,
-                    "score":1
+                    "tiebreaker_score":1,
+                    "needs_tiebreaker":True,
+                    "final_player":{
+                        "player_name":"poopinstein"
+                    }
                 },
                 {
                     "final_player_id":24,
-                    "score":2                    
+                    "tiebreaker_score":2,
+                    "needs_tiebreaker":True,
+                    "final_player":{
+                        "player_name":"poopinstein2"
+                    }                    
                 }
             ]
         }
+                
+        
         self.tables.DivisionFinalMatchPlayerResult.query.filter_by.return_value = MagicMock()
         division_final_match_player_results = [
             self.tables.DivisionFinalMatchPlayerResult(
@@ -626,18 +638,30 @@ class RouteFinalsTD(unittest.TestCase):
         tiebreaker_scores_dict={
             "expected_num_tiebreaker_winners":2,
             "division_final_match_id":1,
-            "scores":[
+            "final_match_player_results":[
                 {
                     "final_player_id":9,
-                    "score":1
+                    "tiebreaker_score":1,
+                    "needs_tiebreaker":True,
+                    "final_player":{
+                        "player_name":"poopinstein"
+                    }
                 },
                 {
                     "final_player_id":24,
-                    "score":2                    
+                    "tiebreaker_score":2,
+                    "needs_tiebreaker":True,
+                    "final_player":{
+                        "player_name":"poopinstein2"
+                    }
                 },
                 {
                     "final_player_id":17,
-                    "score":3                    
+                    "tiebreaker_score":3,
+                    "needs_tiebreaker":True,
+                    "final_player":{
+                        "player_name":"poopinstein3"
+                    }
                 }                
             ]
         }

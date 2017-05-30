@@ -15,6 +15,9 @@ def generate_division_final_round_class(db_handle,relationship=None,fk=None):
                 division_final_round_dict['division_final_matches'] = []
                 for match in self.division_final_matches:
                     division_final_round_dict['division_final_matches'].append(match.to_dict_simple())
+                sorted_list = sorted(division_final_round_dict['division_final_matches'], key= lambda e: e['division_final_match_id'])
+                division_final_round_dict['division_final_matches']=sorted_list
+                
             return division_final_round_dict
         
     return DivisionFinalRound

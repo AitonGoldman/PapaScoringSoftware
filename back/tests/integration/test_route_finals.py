@@ -336,3 +336,10 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
 
     def test_route_get_division_final_round_count(self):
         pass
+
+    def test_route_get_division_final_round_count(self):
+        pass
+
+    def test_route_complete_division_final_round(self):
+        pass
+    

@@ -716,25 +716,28 @@ def generate_match_players_groupings(match_player_results):
 def complete_round(division_final, division_final_round,app):
     division_final_round_id=division_final_round.division_final_round_id
     division_final_round_dict = division_final_round.to_dict_simple()                    
-    next_division_final_round = app.tables.DivisionFinalRound.query.filter_by(division_final_round_id=division_final_round_id+1).first()
+    next_division_final_round = app.tables.DivisionFinalRound.query.filter_by(division_final_id=division_final.division_final_id, division_final_round_id=division_final_round_id+1).first()
     division_final_match_winners=[]
+
+    division_final_round.completed=True
     
     for division_final_match in division_final_round_dict['division_final_matches']:            
         calculate_points_for_match(division_final_match)    
     
+    
     for division_final_match in division_final_round_dict['division_final_matches']:            
-        for division_final_match_player in division_final_match['final_match_player_results']:                
+        for division_final_match_player in division_final_match['final_match_player_results']:                            
             if division_final_match_player['winner']:
                 division_final_match_winners.append(division_final_match_player)
-    if next_division_final_round and division_final_round.round_number == "1":
+    
+    if next_division_final_round and int(division_final_round.round_number) == 1:        
         for division_final_match in next_division_final_round.division_final_matches:
             for division_final_match_player in division_final_match.final_match_player_results:                
-                if division_final_match_player.final_player_id:                    
+                if division_final_match_player.final_player_id:                                        
                     division_final_match_winners.append(division_final_match_player.to_dict_simple())
-                    
-    sorted_winners = sorted(division_final_match_winners, key= lambda e: e['final_player']['adjusted_seed'])
     
-    if next_division_final_round is None:
+    sorted_winners = sorted(division_final_match_winners, key= lambda e: e['final_player']['adjusted_seed'])            
+    if next_division_final_round is None:                
         return sorted_winners    
     winner_groups = []
     while len(sorted_winners) > 0:
@@ -746,31 +749,36 @@ def complete_round(division_final, division_final_round,app):
             match.final_match_player_results[player_index].final_player_id=match_player_result['final_player_id']
             for game_index,match_game in enumerate(match.final_match_game_results):
                 match_game.division_final_match_game_player_results[player_index].final_player_id=match_player_result['final_player_id']
-    division_final_round.completed=True
     app.tables.db_handle.session.commit()
     return division_final_match_winners
     
-def calculate_final_rankings(round_dicts):
+def calculate_final_rankings(round_dicts,total_players=24):
     number_matches = 0
-    previous_number_matches = 0
-    for round in round_dicts:
-        number_matches = number_matches + len(round['division_final_matches'])
-    for round in round_dicts:
+    previous_number_matches = 0            
+    for index,round in enumerate(round_dicts):
+        number_matches = number_matches + len(round['division_final_matches'])        
         if round['completed'] is not True:
             continue
         unranked_match_players = []
         matches_in_current_round = len(round['division_final_matches'])
         for match in round['division_final_matches']:
             for match_player in match['final_match_player_results']:
-                unranked_match_players.append(match_player)
+                if match_player['winner'] is not True or index == len(round_dicts)-1:                                        
+                    unranked_match_players.append(match_player)
+                    
         sorted_player_list = sorted(unranked_match_players, key= lambda e: e['papa_points_sum'],reverse=True)
         ranked_player_list = list(Ranking(sorted_player_list,key=lambda pp: pp['papa_points_sum']))                
-        ranked_player_dict = {ranked_player[1]['final_player_id']:ranked_player for ranked_player in ranked_player_list}
-        base_rank = (number_matches*4) - previous_number_matches
+        ranked_player_dict = {ranked_player[1]['final_player_id']:ranked_player for ranked_player in ranked_player_list}        
+        base_rank = total_players - (number_matches*4)/2
+        if index == len(round_dicts)-1:
+            base_rank = 0
         for ranked_final_player_id,ranked_final_player in ranked_player_dict.iteritems():
-            if ranked_final_player[1]['winner'] is not True:
-                ranked_final_player[1]['final_rank']=base_rank-(matches_in_current_round*4)-ranked_final_player[0]+1
-        previous_number_matches=previous_number_matches + len(round['division_final_matches'])*4
-        
-    pass
+            if ranked_final_player[1]['winner'] is not True  or index == len(round_dicts)-1:
+                ranked_final_player[1]['final_rank']=base_rank+ranked_final_player[0]+1                                
     
+
+
+# loop through each round
+#  get total players in round
+#   subtract from total players
+#    subtract rank(in round)

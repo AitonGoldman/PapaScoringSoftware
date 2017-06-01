@@ -344,6 +344,7 @@ def create_tournament(app,tournament_data):
         tournament_data['use_stripe'] = False        
         tournament_data['local_price'] = 99        
 
+
     if 'use_stripe' in tournament_data and tournament_data['use_stripe'] and tournament_data['single_division'] is True:
         if get_valid_sku(tournament_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
             raise BadRequest('invalid SKU specified')

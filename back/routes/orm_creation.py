@@ -301,7 +301,6 @@ def create_division(app,division_data):
     if division_data['scoring_type'] == "HERB":
         new_division.number_of_scores_per_entry=1
         new_division.number_of_relevant_scores=6
-        
     if 'use_stripe' in division_data and division_data['use_stripe']:
         new_division.use_stripe = True
         if get_valid_sku(division_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:
@@ -319,6 +318,8 @@ def create_division(app,division_data):
         new_division.use_stripe = False
     if 'local_price' in division_data and division_data['use_stripe'] == False: 
         new_division.local_price=division_data['local_price']
+    if 'division_is_limited_herb' in division_data and division_data['division_is_limited_herb']:    
+        new_division.division_is_limited_herb = True
     if 'team_tournament' in division_data and division_data['team_tournament']:    
         new_division.team_tournament = True
     else:
@@ -339,6 +340,8 @@ def create_division(app,division_data):
 def create_tournament(app,tournament_data):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
+    if 'division_is_limited_herb' in tournament_data and tournament_data['division_is_limited_herb']:        
+        tournament_data['use_stripe'] = False        
 
     if 'use_stripe' in tournament_data and tournament_data['use_stripe'] and tournament_data['single_division'] is True:
         if get_valid_sku(tournament_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:

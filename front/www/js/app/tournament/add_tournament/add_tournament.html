@@ -13,20 +13,23 @@
           <span ># of Qualifiers: </span>
           <input ng-model='tournament.finals_num_qualifiers' type="text" placeholder="# of Qualifiers">
         </label>
-        <ion-checkbox  id="add_tournament_team_tournament_checkbox"  ng-model='tournament.team_tournament'>Team Tournament</ion-checkbox>     
-        <ion-checkbox ng-if='tournament.single_division == true' id="add_tournament_use_stripe_checkbox" ng-model='tournament.use_stripe'>Use Stripe</ion-checkbox>
-      <label ng-if="tournament.use_stripe == true && tournament.single_division == true" class="item-input item">
-        <span >Stripe SKU: </span>
-        <input ng-model='tournament.stripe_sku' type="text" placeholder="Stripe SKU">
-      </label>
-      <label ng-if="tournament.use_stripe == false && tournament.single_division == true" class="item-input item">
-        <span >Ticket Price: </span>
-        <input ng-model='tournament.local_price' type="text" placeholder="Ticket Price">
-      </label>
-      <button id="add_tournament_add_button" ui-sref='.process({process_step:{process:true}, tournament_info:tournament})' class="item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
-        <i class="icon ion-chevron-right"></i>
-        <span >Add Tournament</span>
-      </button>
+        <ion-checkbox  id="add_tournament_team_tournament_checkbox"  ng-model='tournament.team_tournament'>Team Tournament</ion-checkbox>
+        <ion-checkbox  ng-if='tournament.single_division == true' id="add_tournament_team_tournament_checkbox"  ng-model='tournament.division_is_limited_herb'>Limited Herb</ion-checkbox>     
+        <span ng-if='tournament.division_is_limited_herb != true'>
+          <ion-checkbox ng-if='tournament.single_division == true' id="add_tournament_use_stripe_checkbox" ng-model='tournament.use_stripe'>Use Stripe</ion-checkbox>
+          <label ng-if="tournament.use_stripe == true && tournament.single_division == true" class="item-input item">
+            <span >Stripe SKU: </span>
+            <input ng-model='tournament.stripe_sku' type="text" placeholder="Stripe SKU">
+          </label>
+          <label ng-if="tournament.use_stripe == false && tournament.single_division == true" class="item-input item">
+            <span >Ticket Price: </span>
+            <input ng-model='tournament.local_price' type="text" placeholder="Ticket Price">
+          </label>
+        </span>
+        <button id="add_tournament_add_button" ui-sref='.process({process_step:{process:true}, tournament_info:tournament})' class="item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
+          <i class="icon ion-chevron-right"></i>
+          <span >Add Tournament</span>
+        </button>
     </div>
   </ion-content>
 </ion-view>

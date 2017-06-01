@@ -18,21 +18,26 @@
         <input ng-model='division.number_of_relevant_scores' type="text" placeholder="# of Relevant Scores">
       </label>      
       <label class="item-input item">
-        <span># Tickets to Offer Discount on : </span>
-        <input ng-model='division.discount_ticket_count' type="text" placeholder="# of tickets">
-      </label>
-      <label class="item-input item">
         <span>IFPA rank restriction : </span>
         <input ng-model='division.ifpa_range_start' type="text" placeholder="No One Under This Rank Allowed">
       </label>                  
-      
        <button id="edit_tournament_add_machines_button" ui-sref='.division_machine_list' class="item item-icon-right button-full item-calm input-list-button" style='text-align:left'>
         <i class="icon ion-chevron-right"></i>
         <span >Manage Machines</span>
       </button>      
+
+      <ion-checkbox id="add_tournament_enable_queuing_checkbox"  class='item' ng-model='division.queuing'>Enable Queueing</ion-checkbox>      
       <ion-checkbox  id="add_tournament_team_tournament_checkbox" class='item'  ng-model='division.team_tournament'>Team Tournament</ion-checkbox>      
-      <ion-checkbox id="add_tournament_enable_queuing_checkbox"  class='item' ng-model='division.queuing'>Enable Queueing</ion-checkbox>
+      <ion-checkbox  ng-if='tournament.single_division == true' id="add_tournament_team_tournament_checkbox"  ng-model='tournament.division_is_limited_herb'>Limited Herb</ion-checkbox>     
+
+      <span ng-if='tournament.division_is_limited_herb != true'>
       <ion-checkbox id="add_tournament_use_stripe_checkbox"  class='item' ng-model='division.use_stripe'>Use Stripe</ion-checkbox>
+       
+       
+      <label class="item-input item">
+        <span># Tickets to Offer Discount on : </span>
+        <input ng-model='division.discount_ticket_count' type="text" placeholder="# of tickets">
+      </label>
 
       
       <label ng-if="division.use_stripe == true" class="item-input  item">
@@ -51,7 +56,7 @@
         <span >Discount Ticket Price : </span>
         <input ng-model='division.discount_ticket_price' type="text" placeholder="Discount Ticket Price">
       </label>      
-      
+      </span>
        <button id='add_tournament_add_button' ui-sref='.process({process_step:{process:true}, division_info:division})' class="item item-icon-right button button-full button-calm input-list-button" style='text-align:left' ng-disabled='disable_form_submit()'>
         <i class="icon ion-chevron-right"></i>
         <span >Apply Changes</span>

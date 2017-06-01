@@ -38,6 +38,8 @@ def generate_division_class(db_handle,relationship=None,fk=None):
         discount_ticket_count = db_handle.Column(db_handle.Integer)
         discount_ticket_price = db_handle.Column(db_handle.Integer)
         min_num_tickets_to_purchase = db_handle.Column(db_handle.Integer,default=1)
+
+        division_is_limited_herb = db_handle.Column(db_handle.Boolean,default=False)
         
         meta_division_id = db_handle.Column(db_handle.Integer,
                                          db_handle.ForeignKey(

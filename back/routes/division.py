@@ -389,7 +389,9 @@ def route_edit_division(division_id):
     if 'queuing' in division_data:
         division.queuing=division_data['queuing']
     if 'division_is_limited_herb' in division_data and division_data['division_is_limited_herb']:        
-        division_data['use_stripe'] = False        
+        division_data['use_stripe'] = False
+        division_data['local_price'] = 99        
+        
         division.division_is_limited_herb=True        
     if 'use_stripe' in division_data:
         if division_data['use_stripe'] is True:            

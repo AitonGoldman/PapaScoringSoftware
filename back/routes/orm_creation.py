@@ -342,6 +342,8 @@ def create_tournament(app,tournament_data):
     tables = db_util.app_db_tables(app)
     if 'division_is_limited_herb' in tournament_data and tournament_data['division_is_limited_herb']:        
         tournament_data['use_stripe'] = False        
+        tournament_data['local_price'] = 99        
+
 
     if 'use_stripe' in tournament_data and tournament_data['use_stripe'] and tournament_data['single_division'] is True:
         if get_valid_sku(tournament_data['stripe_sku'],app.td_config['STRIPE_API_KEY'])['sku'] is None:

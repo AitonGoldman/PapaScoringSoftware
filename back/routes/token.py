@@ -149,7 +149,10 @@ def get_available_ticket_list(max_count,division,increment=None):
     available_ticket_list = [[0,0]]
     
     #normal_cost = 5
-    normal_cost = division.local_price    
+    if division.local_price:
+        normal_cost = division.local_price 
+    else:
+        normal_cost = 0        
     if division.discount_ticket_count:
         #discount_count = 3
         discount_count = division.discount_ticket_count

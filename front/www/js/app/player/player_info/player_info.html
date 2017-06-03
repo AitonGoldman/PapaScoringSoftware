@@ -83,8 +83,15 @@
             <span ng-if='type_of_div == "metadivisions"'>{{resources.divisions.data.metadivisions[div_id.toString()].meta_division_name}} : </span>  
           </div>
           <div class='col padding-vertical' style='text-align:left'>
-            {{div_tokens}}
-          </div>        
+            <span ng-if='resources.divisions.data[div_id].division_is_limited_herb != true || resources.player_tokens.data.total_tokens[type_of_div] == undefined'>
+              {{div_tokens}}
+            </span>
+            <span ng-if='resources.divisions.data[div_id].division_is_limited_herb == true && resources.player_tokens.data.total_tokens[type_of_div] != undefined'>
+              {{div_tokens}}
+
+              (Total : {{resources.player_tokens.data.total_tokens[type_of_div][div_id]}})
+            </span>
+          </div>
         </div>
       </div>
       <!-- <div class='item row padding-vertical'> -->

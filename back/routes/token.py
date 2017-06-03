@@ -225,16 +225,25 @@ def get_tokens_for_player(player_id):
     #FIXME : needs more protection?
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
+    divisions = tables.Division.query.all()    
     player = fetch_entity(tables.Player,player_id)
     team_ids = tables.Team.query.filter(tables.Team.players.any(player_id=player.player_id)).all()
+    team_id=tables.Team.query.filter(tables.Team.players.any(player_id=player.player_id)).first()
+    if team_id:
+        team_tokens=current_app.tables.Token.query.filter_by(team_id=team.team_id, paid_for=True).all()
+    else:
+        team_tokens=[]            
     tokens = tables.Token.query.filter_by(player_id=player.player_id, paid_for=True).all()
+    if current_user.is_player:
+        total_tokens={}
+    else:
+        total_tokens = get_total_tokens_for_player(current_app,tokens,divisions,team_tokens)
     token_dict = {'divisions':{},'metadivisions':{},'teams':{}}
     remaining_tokens_dict={'divisions':{},'metadivisions':{},'teams':{},
                            'divisions_remaining_token_list':{},
                            'teams_remaining_token_list':{},
                            'metadivisions_remaining_token_list':{}}
     #FIXME : need only active divisions
-    divisions = tables.Division.query.all()    
     metadivisions = tables.MetaDivision.query.all()
     max_tickets_allowed = int(current_app.td_config['MAX_TICKETS_ALLOWED_PER_DIVISION'])
     for division in divisions:
@@ -260,7 +269,7 @@ def get_tokens_for_player(player_id):
                 remaining_tokens_dict['teams'][division.division_id] = remaining_tokens
                 remaining_tokens_dict['teams_remaining_token_list'][division.division_id]=get_available_ticket_list(remaining_tokens,division,division.min_num_tickets_to_purchase)[0]
                 
-    return jsonify({'data':{'tokens':token_dict,'available_tokens':remaining_tokens_dict,'player':player.to_dict_simple()}})
+    return jsonify({'data':{'total_tokens':total_tokens,'tokens':token_dict,'available_tokens':remaining_tokens_dict,'player':player.to_dict_simple()}})
 
 @admin_manage_blueprint.route('/token/confirm_paid_for', methods=['PUT'])
 @login_required

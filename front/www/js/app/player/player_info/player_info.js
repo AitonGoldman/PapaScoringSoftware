@@ -18,6 +18,7 @@ angular.module('app.player.player_info').controller(
                 player_pin_promise = TimeoutResources.GetPlayerPin(undefined,{site:$scope.site,player_id:$scope.player_id});
                 player_pin_promise.then(function(data){
                     $scope.resources = TimeoutResources.GetAllResources();
+                    console.log($scope.resources);
                     Modals.loaded();
                 });
             } else {

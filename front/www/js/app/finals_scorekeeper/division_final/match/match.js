@@ -5,6 +5,7 @@ angular.module('app.finals_scorekeeper.division_final.match').controller(
     'app.finals_scorekeeper.division_final.match',[
     '$scope','$state','TimeoutResources','Utils','Modals',
     function($scope, $state, TimeoutResources, Utils,Modals) {
+        $scope.current_state = $state.current.name;
         $scope.site=$state.params.site;
 	$scope.round_id=$state.params.round_id;
 	$scope.match_id=$state.params.match_id;

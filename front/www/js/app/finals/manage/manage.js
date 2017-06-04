@@ -23,6 +23,24 @@ angular.module('app.finals.manage').controller(
                     }
                 });
             };                  
+
+            $scope.choose_reopen_final_round_action = function(division_final_round_id){            
+                var hideSheet = $ionicActionSheet.show({
+                    buttons: [
+                        { text: 'Reopen Final Round' }                              
+                    ],                    
+                    titleText: '<b style="color:red">You are about to reopen this final round!  This will delete all scores and information for subsequent rounds.  Are you sure you want to do this?</b>',
+                    cancelText: 'Cancel',
+                    cancel: function() {
+                        //player_info.linked_division_id = player_info.old_linked_division_id;
+                        // add cancel code..
+                    },
+                    buttonClicked: function(index) {
+                        $scope.reopen_division_final_round(division_final_round_id);                     
+                        return true;
+                    }
+                });
+            };                  
             
             $scope.delete_division_final = function(){
                 Modals.loading();                
@@ -36,6 +54,27 @@ angular.module('app.finals.manage').controller(
                             $scope.division_final_id=undefined;                                                    
                         } else {                            
                             console.log(err);                            
+                        }
+                    }
+                );
+            };
+
+            $scope.reopen_division_final_round = function(division_final_round_id){
+                Modals.loading();                
+                async.waterfall([
+                    function(callback){
+                        TimeoutResources.ReopenDivisionFinalRound({site:$scope.site,division_final_round_id:division_final_round_id},undefined,callback);
+                    },
+                    function(result,callback){                    
+                        TimeoutResources.CheckDivisionFinalExist({site:$scope.site,division_id:$scope.division_id},undefined,callback);                        
+                    }
+                ],function(err,result){
+                        Modals.loaded();
+                        if (err == null){                            
+                            $scope.resources[result.resource_name] = result;
+                        } else {
+                            Modals.loaded();
+                            console.log(err);
                         }
                     }
                 );
@@ -119,6 +158,7 @@ angular.module('app.finals.manage').controller(
                     $scope.resources[result.resource_name] = result;
                     $scope.number_important_tiebreakers = Object.keys($scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers).length;
                     //$scope.resources = Utils.extract_results_from_response(result);
+                    console.log($scope.resources);
                 } else {
                     console.log(err);                                
                 }

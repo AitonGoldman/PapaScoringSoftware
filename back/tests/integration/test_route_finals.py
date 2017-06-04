@@ -363,20 +363,23 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
                               200,
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
             brackets_returned = json.loads(rv.data)['data']
-            division_final_round_id=brackets_returned[0]['division_final_round_id']
+            round_one_division_final_round_id=brackets_returned[0]['division_final_round_id']
             round_two_division_final_round_id=brackets_returned[1]['division_final_round_id']
             self.fill_in_final_bracket_scores(division_final_returned['division_final_id'],['1'])
             
-            rv = c.put('/finals/scorekeeping/division_final_round/%s/complete'%division_final_round_id)
+            rv = c.put('/finals/scorekeeping/division_final_round/%s/complete'%round_one_division_final_round_id)
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
             self.fill_in_final_bracket_scores(division_final_returned['division_final_id'],['2'])
-            rv = c.put('/finals/scorekeeping/division_final_round/%s/reopen'%division_final_round_id)
+            rv = c.put('/finals/scorekeeping/division_final_round/%s/reopen'%round_one_division_final_round_id)
             self.assertEquals(rv.status_code,
                               200,
                               'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
             round_two_division_final_round = self.flask_app.tables.DivisionFinalRound.query.filter_by(division_final_round_id=round_two_division_final_round_id).first()
+            round_one_division_final_round = self.flask_app.tables.DivisionFinalRound.query.filter_by(division_final_round_id=round_one_division_final_round_id).first()
+            
+            self.assertEquals(round_one_division_final_round.completed,False)
             for match in round_two_division_final_round.division_final_matches:
                 for player_result in match.final_match_player_results:
                     self.assertEquals(player_result.needs_tiebreaker,False)

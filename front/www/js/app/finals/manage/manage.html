@@ -27,13 +27,14 @@
           Rollcall
         </a>
       </div>
-      <div class='item item-assertive item-icon-right'>
+
+      <div ng-click='choose_reopen_final_round_action(round.division_final_round_id)' ng-if='round.completed==true' ng-repeat='round in resources["division_final"].data.division_final_rounds' class='item item-assertive item-icon-right'>
         <i class="icon ion-chevron-right"></i>
-        Undo Round 1
+        Reopen Round {{round.round_number}}
       </div>
       <center>
-        <button class='button button-assertive' ng-click='choose_undo_action()' style='margin-top:15px'>
-          Undo Finals                    
+        <button class='button button-assertive' ng-click='choose_undo()' style='margin-top:15px'>
+          Undo Bracket Generation
         </button>
       </center>      
     </div>

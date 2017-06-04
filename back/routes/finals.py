@@ -108,6 +108,7 @@ def route_scorekeeping_round_reopen(division_final_round_id):
     division_final_round_to_reopen = fetch_entity(current_app.tables.DivisionFinalRound,division_final_round_id)
     division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_round_to_reopen.division_final_id)
     division_final_rounds = [division_final_round for division_final_round in division_final.division_final_rounds if division_final_round.round_number > division_final_round_to_reopen.round_number]
+    division_final_round_to_reopen.completed=False    
     undo_final_round(division_final_rounds,current_app)
     return jsonify({'data':None})
 

@@ -95,6 +95,25 @@ angular.module('TD_services.timeout_resources')
 	              return resource_results[scope_name].$promise;	
                   };
 
+                  var generate_resource_definition_ex_promise = function(url,http_method,resource_name,custom_interceptor_error,other_server){
+                      var res = generate_resource_definition(url,http_method,custom_interceptor_error,other_server);
+                      return function(get_args,post_args,resource_object){                          
+                          if(post_args == undefined){                              
+                              console.log(http_method);
+                              var res_promise = res['custom_http'](get_args).$promise;
+                          } else {
+                              res_promise = res['custom_http'](get_args,post_args).$promise;
+                          }
+                          return res_promise.then(function(data){                                                                                          
+                              resource_object[resource_name] = data;
+                              //callback(null,data);                              
+                          }, function(err){                              
+                              //callback('bailing',null);
+                          });                          
+                      };                     
+                  };
+
+                  
                   var generate_resource_definition_ex = function(url,http_method,resource_name,custom_interceptor_error,other_server){
                       var res = generate_resource_definition(url,http_method,custom_interceptor_error,other_server);
                       return function(get_args,post_args,callback){                          
@@ -358,6 +377,7 @@ angular.module('TD_services.timeout_resources')
                       Logout: generate_custom_http_executor(logoutResource,'logout_result','get'),        
                       CurrentUser: generate_custom_http_executor(currentUserResource,'current_user','get'),
                       GetRoles: generate_custom_http_executor(getRolesResource,'roles','get'),
+                      
                       VersionCheck: generate_custom_http_executor(versionCheckResource,'version_check_result','get'),
                       GetUsers: generate_custom_http_executor(getUserResource,'users','get'),
                       INeedAnAdult: generate_custom_http_executor(iNeedAnAdultResource,'need_adult_result','get'),
@@ -459,7 +479,10 @@ angular.module('TD_services.timeout_resources')
                       GetScorekeeperDivisionFinal: generate_resource_definition_ex(':site/finals/scorekeeping/division_final/:division_final_id','GET','scorekeeping_division_final'),
                       ScorekeeperRecordGameResult: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_match_game_result/:division_final_match_game_result_id','PUT','scorekeeping_score_record_results'),
                       ScorekeeperResolveTiebreaker: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_match_result/:division_final_match_result_id/tiebreaker','PUT','scorekeeping_resolve_tiebreaker_results'),
-                      ScorekeeperCompleteRound: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_round/:division_final_match_round_id/complete','PUT','scorekeeping_complete_round_results')                                        
+                      ScorekeeperCompleteRound: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_round/:division_final_match_round_id/complete','PUT','scorekeeping_complete_round_results'),                                        
+                      VersionCheckEx: generate_resource_definition_ex_promise(':site/version/:version_string','GET','version_check'),
+                      ReopenDivisionFinalRound: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_round/:division_final_round_id/reopen','PUT','division_final_round_reopened')                                        
+                      
 
                   };
               }]);

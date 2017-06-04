@@ -787,17 +787,20 @@ def calculate_final_rankings(round_dicts,total_players=24):
     
 
 def undo_final_round(rounds_to_undo,app):    
+    bye_seeds=[0,1,2,3,4,5,6,7]
     for round in rounds_to_undo:        
         round.completed=False
         for match in round.division_final_matches:
             for player_result in match.final_match_player_results:
                 player_result.needs_tiebreaker=False
                 player_result.won_tiebreaker=None
-                player_result.final_player_id=None
+                if player_result.final_player and player_result.final_player.initial_seed not in bye_seeds:
+                    player_result.final_player_id=None
             for game in match.final_match_game_results:                    
+                game.division_machine_string=None
                 for score in game.division_final_match_game_player_results:                    
                     score.score=None
                     score.final_player_id=None
     app.tables.db_handle.session.commit()
-    pass
+    
 

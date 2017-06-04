@@ -102,6 +102,14 @@ bracket_template_4_player_groups_8_players = [
     }
 ]    
 
+@admin_manage_blueprint.route('/finals/scorekeeping/division_final_round/<division_final_round_id>/reopen',
+                              methods=['PUT'])
+def route_scorekeeping_round_reopen(division_final_round_id):
+    division_final_round_to_reopen = fetch_entity(current_app.tables.DivisionFinalRound,division_final_round_id)
+    division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_round_to_reopen.division_final_id)
+    division_final_rounds = [division_final_round for division_final_round in division_final.division_final_rounds if division_final_round.round_number > division_final_round_to_reopen.round_number]
+    undo_final_round(division_final_rounds,current_app)
+    return jsonify({'data':None})
 
 @admin_manage_blueprint.route('/finals/scorekeeping/division_final_match_result/<division_final_match_result_id>/tiebreaker',
                               methods=['PUT'])
@@ -777,8 +785,18 @@ def calculate_final_rankings(round_dicts,total_players=24):
                 ranked_final_player[1]['final_rank']=base_rank+ranked_final_player[0]+1                                
     
 
+def undo_final_round(rounds_to_undo,app):    
+    for round in rounds_to_undo:        
+        round.completed=False
+        for match in round.division_final_matches:
+            for player_result in match.final_match_player_results:
+                player_result.needs_tiebreaker=False
+                player_result.won_tiebreaker=None
+                player_result.final_player_id=None
+            for game in match.final_match_game_results:                    
+                for score in game.division_final_match_game_player_results:                    
+                    score.score=None
+                    score.final_player_id=None
+    app.tables.db_handle.session.commit()
+    pass
 
-# loop through each round
-#  get total players in round
-#   subtract from total players
-#    subtract rank(in round)

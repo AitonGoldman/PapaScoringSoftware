@@ -1,7 +1,7 @@
 import unittest
 from routes.utils import fetch_entity
 from mock import MagicMock
-from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties,calculate_points_for_game,calculate_points_for_match,calculate_tiebreakers,resolve_tiebreakers,record_scores,generate_division_final_match_game_result,generate_division_final_match_player_results,generate_division_final_matches,bracket_template_4_player_groups_24_players,generate_division_final_rounds,reset_tiebreaker_info_on_score_change,generate_match_players_groupings,complete_round,calculate_final_rankings
+from routes.finals import initialize_division_final,create_simplified_division_results,remove_missing_final_player,create_division_final_players,get_tiebreakers_for_division,get_important_tiebreakers_for_division,record_tiebreaker_results,generate_brackets,resolve_unimportant_ties,calculate_points_for_game,calculate_points_for_match,calculate_tiebreakers,resolve_tiebreakers,record_scores,generate_division_final_match_game_result,generate_division_final_match_player_results,generate_division_final_matches,bracket_template_4_player_groups_24_players,generate_division_final_rounds,reset_tiebreaker_info_on_score_change,generate_match_players_groupings,complete_round,calculate_final_rankings,undo_final_round
 from util import db_util
 from td_types import ImportedTables
 import json
@@ -1091,5 +1091,44 @@ class RouteFinalsTD(unittest.TestCase):
         self.assertEquals(round_dicts[0]['division_final_matches'][0]['final_match_player_results'][0]['final_rank'],1)
         self.assertEquals(round_dicts[0]['division_final_matches'][0]['final_match_player_results'][1]['final_rank'],2)
         self.assertEquals(round_dicts[0]['division_final_matches'][0]['final_match_player_results'][2]['final_rank'],3)
-        self.assertEquals(round_dicts[0]['division_final_matches'][0]['final_match_player_results'][3]['final_rank'],4)                 
+        self.assertEquals(round_dicts[0]['division_final_matches'][0]['final_match_player_results'][3]['final_rank'],4)
+
+
+    # score
+    # tiebreakers
+    # round completed
+    
+    
+    def test_undo_final_round(self):
+        division_final=self.mock_app.tables.DivisionFinal()
+        division_final_round = self.generate_division_final_round_db_obj(1,num_matches=4)        
+        next_division_final_round = self.generate_division_final_round_db_obj(2,num_matches=4)
+        division_final_round.completed=True
+        next_division_final_round.completed=True
+        self.fill_in_bobo_rounds(division_final_round,None,num_matches=4)
+        self.fill_in_bobo_rounds(next_division_final_round,None,num_matches=4)
+                
+        for round in [division_final_round,next_division_final_round]:
+            for match in round.division_final_matches:
+                for player_result in match.final_match_player_results:
+                    player_result.needs_tiebreaker=True
+                    player_result.won_tiebreaker=True                
+                for game in match.final_match_game_results:
+                    fake_score = 1
+                    for score in game.division_final_match_game_player_results:
+                        score.score=fake_score
+                        fake_score=fake_score+1
+        undo_final_round([division_final_round,next_division_final_round],self.mock_app)
+        for round in [division_final_round,next_division_final_round]:
+            self.assertEquals(round.completed,False)
+            for match in round.division_final_matches:
+                for player_result in match.final_match_player_results:
+                    self.assertEquals(player_result.needs_tiebreaker,False)
+                    self.assertEquals(player_result.won_tiebreaker,None)
+                    self.assertEquals(player_result.final_player_id,None)                    
+                for game in match.final_match_game_results:                    
+                    for score in game.division_final_match_game_player_results:
+                        self.assertEquals(score.score,None)                        
+                        self.assertEquals(score.final_player_id,None)                        
+
         

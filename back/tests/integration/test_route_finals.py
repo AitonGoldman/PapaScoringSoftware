@@ -321,7 +321,72 @@ class RouteFinalsTD(td_integration_test_base.TdIntegrationDispatchTestBase):
         self.assertEquals(len(self.flask_app.tables.DivisionFinalRound.query.all()),4)        
         self.assertEquals(len(self.flask_app.tables.DivisionFinalMatchPlayerResult.query.all()),11*4)        
  
+    def fill_in_final_bracket_scores(self,division_final_id,rounds_to_fill_in):
+        division_final = self.flask_app.tables.DivisionFinal.query.filter_by(division_final_id=division_final_id).first()
+        for division_final_round in division_final.division_final_rounds:
+            if division_final_round.round_number not in rounds_to_fill_in:
+                continue
+            for match in division_final_round.division_final_matches:
+                for game_result in match.final_match_game_results:
+                    temp_score = 1
+                    for game_player_result in game_result.division_final_match_game_player_results:                        
+                        game_player_result.score=temp_score
+                        temp_score=temp_score+1
+        self.flask_app.tables.db_handle.session.commit()                                
     
+    def test_division_final_round_reopen(self):        
+        self.division.finals_num_qualifiers = 24
+        self.flask_app.tables.db_handle.session.commit()
+        for i in range(120,140):
+            self.players.append(orm_creation.create_player(self.flask_app,{'first_name':'test','last_name':'player%s'%i,'ifpa_ranking':'123','linked_division_id':'1'}))
+        self.populate_scores_for_finals_testing(max_players=30,with_ties=False)
+        
+        with self.flask_app.test_client() as c:
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_admin','password':'test_admin'}))
+            rv = c.post('/finals/division_final/division_id/%s'%self.division.division_id)
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))
+            
+            division_final_returned = json.loads(rv.data)['data']
+            rv = c.put('/auth/login',
+                       data=json.dumps({'username':'test_scorekeeper','password':'test_scorekeeper'}))            
+            rv = c.get('/finals/division_final/division_id/%s/qualifiers'%division_final_returned['division_final_id'])
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
+            qualifiers_returned = json.loads(rv.data)['data']                        
+            rv = c.post('/finals/division_final/division_id/%s/rounds'%division_final_returned['division_final_id'],
+                        data=json.dumps(qualifiers_returned))
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
+            brackets_returned = json.loads(rv.data)['data']
+            division_final_round_id=brackets_returned[0]['division_final_round_id']
+            round_two_division_final_round_id=brackets_returned[1]['division_final_round_id']
+            self.fill_in_final_bracket_scores(division_final_returned['division_final_id'],['1'])
+            
+            rv = c.put('/finals/scorekeeping/division_final_round/%s/complete'%division_final_round_id)
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
+            self.fill_in_final_bracket_scores(division_final_returned['division_final_id'],['2'])
+            rv = c.put('/finals/scorekeeping/division_final_round/%s/reopen'%division_final_round_id)
+            self.assertEquals(rv.status_code,
+                              200,
+                              'Was expecting status code 200, but it was %s : %s' % (rv.status_code,rv.data))            
+            round_two_division_final_round = self.flask_app.tables.DivisionFinalRound.query.filter_by(division_final_round_id=round_two_division_final_round_id).first()
+            for match in round_two_division_final_round.division_final_matches:
+                for player_result in match.final_match_player_results:
+                    self.assertEquals(player_result.needs_tiebreaker,False)
+                    self.assertEquals(player_result.won_tiebreaker,None)
+                    self.assertEquals(player_result.final_player_id,None)
+                for game in match.final_match_game_results:                    
+                    for score in game.division_final_match_game_player_results:
+                        self.assertEquals(score.score,None)                        
+                        self.assertEquals(score.final_player_id,None)                        
+
     def test_route_scorekeeping_get_division_final(self):        
         pass
 

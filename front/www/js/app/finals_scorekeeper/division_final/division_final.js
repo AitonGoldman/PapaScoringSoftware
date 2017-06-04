@@ -7,7 +7,7 @@ angular.module('app.finals_scorekeeper.division_final').controller(
             $scope.site=$state.params.site;
 	    $scope.division_final_id=$state.params.division_final_id;
 	    $scope.round_id=$state.params.round_id;
-            
+            $scope.current_state = $state.current.name;
             $scope.utils = Utils;
             $scope.resources={};
 

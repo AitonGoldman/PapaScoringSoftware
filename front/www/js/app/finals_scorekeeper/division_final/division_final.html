@@ -17,7 +17,7 @@
     </div>
     <div ng-if='round_id!="" && resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].ready_to_be_completed==true && resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].completed!=true'>
       <center>
-        <button ng-click='complete_round()' class='button button-calm'>
+        <button ng-if='current_state=="app.finals_scorekeeper.division_final"' ng-click='complete_round()' class='button button-calm'>
           Complete round
         </button>
       </center>

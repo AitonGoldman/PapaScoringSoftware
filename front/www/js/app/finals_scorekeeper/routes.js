@@ -49,6 +49,36 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.finals_scorekeeper.division_final.match.resolve_tiebreaker'
  	     }
  	   }
+       }).state('app.finals_results', 
+        { 
+         cache: false,
+ 	 url: '/finals_results',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/finals_scorekeeper/finals_scorekeeper.html',
+ 	       controller: 'app.finals_scorekeeper'
+ 	     }
+ 	   }
+       }).state('app.finals_results.division_final', 
+        { 
+         cache: false,
+ 	 url: '/division_final/division_final_id/:division_final_id/round/:round_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/finals_scorekeeper/division_final/division_final.html',
+ 	       controller: 'app.finals_scorekeeper.division_final'
+ 	     }
+ 	   }
+        }).state('app.finals_results.division_final.match', 
+        { 
+         cache: false,
+ 	 url: '/match/match_id/:match_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/finals_scorekeeper/division_final/match/match.html',
+ 	       controller: 'app.finals_scorekeeper.division_final.match'
+ 	     }
+ 	   }
        })//REPLACE_ME
 
 

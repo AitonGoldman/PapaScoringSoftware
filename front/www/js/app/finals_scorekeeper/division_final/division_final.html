@@ -1,8 +1,8 @@
-<ion-view view-title="Finals">
+<ion-view view-title="{{resources.division_finals.data[division_final_id]}} Finals">
   <ion-content>
     <a class='padding item item-divider'>
       <center>
-        {{resources.division_finals.data[division_final_id]}} : {{resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].round_progress}}
+        Round {{resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].round_number}} : {{resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].round_progress}}
       </center>
     </a>
     

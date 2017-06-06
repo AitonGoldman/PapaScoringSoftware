@@ -15,7 +15,7 @@
           </tr>
           <tr ng-class='{lightgrey:$even}' ng-repeat="final_match_player_result in resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].division_final_matches[match_id].final_match_player_results|orderBy:'final_player.initial_seed'">
             <td class='padding'><center>{{final_match_player_result.final_player.player_name}}</center></td>
-            <td class='padding'><center>{{final_match_player_result.final_player.initial_seed}}</center></td>
+            <td class='padding'><center>{{final_match_player_result.final_player.initial_seed+1}}</center></td>
             <td class='padding'><center>{{final_match_player_result.papa_points_sum}}</center></td>          
           </tr>
         </table>
@@ -33,23 +33,30 @@
           </div>
         </div>
         <div ng-repeat="player in game.division_final_match_game_player_results|orderBy:'play_order'" class='item item-input-inset row'>
-          <span class="input-label col-50">
-            {{player.final_player.player_name}} 
-          </span>
+          <div class="col-50" >
+            <span class="input-label">
+              {{player.final_player.player_name}} 
+            </span>
+          </div>
           <label ng-if="check_if_machine_player_order_set(game)==false && current_state=='app.finals_scorekeeper.division_final.match' && resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].completed != true" class="item-input-wrapper col-50">
             <input ng-model='player.score' type="tel" placeholder="Score" ng-change='onScoreChange(player)'>
           </label>
           <label ng-if="current_state!='app.finals_scorekeeper.division_final.match' || resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].completed == true" class="col-50">
-            {{player.score}}
+            <div>
+              <center>
+                {{player.score}}
+              </center>
+            </div>
           </label>
+
           
         </div>
-        <ion-toggle ng-if="check_if_machine_player_order_set(game)==false" ng-disabled='game.reviewed==false' class='item item-toggle' ng-model="game.reviewed" toggle-class="toggle-stable">I have reviewed the scores</ion-toggle>          
+        <ion-toggle ng-if="check_if_machine_player_order_set(game)==false && current_state=='app.finals_scorekeeper.division_final.match'" ng-disabled='game.reviewed==false' class='item item-toggle' ng-model="game.reviewed" toggle-class="toggle-stable">I have reviewed the scores</ion-toggle>          
         <a ng-if="check_if_machine_player_order_set(game) && current_state=='app.finals_scorekeeper.division_final.match'" class='item item-icon-right item-calm' ui-sref='.play_order({game_index:$index})'>
           <i class="icon ion-chevron-right"></i>
           Set Player Order/Machine
         </a>
-        <button ng-disabled='game.reviewed==true' ng-if="check_if_machine_player_order_set(game)==false && resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].completed != true" class='button button-full item-icon-right button-calm' ng-click='on_submit(game)'>
+        <button ng-disabled='game.reviewed==true' ng-if="check_if_machine_player_order_set(game)==false && resources.scorekeeping_division_final.data.division_final_rounds[round_id-1].completed != true && current_state=='app.finals_scorekeeper.division_final.match'" class='button button-full item-icon-right button-calm' ng-click='on_submit(game)'>
           <i class="icon ion-chevron-right"></i>
           Record Scores
         </button>

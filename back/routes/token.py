@@ -228,9 +228,12 @@ def get_tokens_for_player(player_id):
     divisions = tables.Division.query.all()    
     player = fetch_entity(tables.Player,player_id)
     team_ids = tables.Team.query.filter(tables.Team.players.any(player_id=player.player_id)).all()
-    team_id=tables.Team.query.filter(tables.Team.players.any(player_id=player.player_id)).first()
+    if team_ids:
+        team_id=tables.Team.query.filter(tables.Team.players.any(player_id=player.player_id)).first().team_id
+    else:
+        team_id=None
     if team_id:
-        team_tokens=current_app.tables.Token.query.filter_by(team_id=team.team_id, paid_for=True).all()
+        team_tokens=current_app.tables.Token.query.filter_by(team_id=team_id, paid_for=True).all()
     else:
         team_tokens=[]            
     tokens = tables.Token.query.filter_by(player_id=player.player_id, paid_for=True).all()

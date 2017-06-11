@@ -8,7 +8,7 @@ from flask_login import login_required,current_user
 from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,calc_audit_log_remaining_tokens
 from orm_creation import create_entry
 import datetime
-from routes.audit_log_utils import create_audit_log
+from routes.audit_log_utils import create_audit_log,create_audit_log_ex
 from flask_restless.helpers import to_dict
 from sqlalchemy import desc,asc
 
@@ -47,17 +47,33 @@ def route_add_score(division_machine_id, score):
     team_id=division_machine.team_id
     division_machine.player_id=None
     division_machine.team_id=None
+    team_players=None
     create_audit_log("Score Added",datetime.datetime.now(),
                      "",user_id=current_user.user_id,
                      player_id=player_id,team_id=team_id,
                      division_machine_id=division_machine.division_machine_id,
                      entry_id=entry.entry_id,token_id=token.token_id,
                      commit=False)    
+    if team_id:
+        team = tables.Team.query.filter_by(team_id=team_id).first()        
+        team_players=team.players
+        for player in team_players:
+            create_audit_log_ex(current_app, "Score Recorded",
+                                user_id=current_user.user_id,
+                                player_id=player.player_id,team_id=team_id,
+                                division_machine_id=division_machine.division_machine_id,                        
+                                commit=False,generic_json_data={"score":score})
+    else:        
+        create_audit_log_ex(current_app, "Score Recorded",
+                            user_id=current_user.user_id,
+                            player_id=player_id,team_id=team_id,
+                            division_machine_id=division_machine.division_machine_id,                        
+                            commit=False,generic_json_data={"score":score})
 
     if player_id:
         tokens_left_info = calc_audit_log_remaining_tokens(player_id,return_string=False)
         tokens_left_string = tokens_left_info['tokens_left_string']
-        #tokens_left_string = calc_audit_log_remaining_tokens(player_id)
+        #tokens_left_string = calc_audit_log_remaining_tokens(player_id)            
     if team_id:
         tokens_left_info = calc_audit_log_remaining_tokens(None,team_id,return_string=False)        
         team = tables.Team.query.filter_by(team_id=team_id).first()
@@ -110,7 +126,22 @@ def route_void_score(division_machine_id):
                      "",user_id=current_user.user_id,
                      player_id=player_id,team_id=team_id,
                      division_machine_id=division_machine.division_machine_id,
-                     token_id=token.token_id)    
+                     token_id=token.token_id)
+    if team_id:
+        team = tables.Team.query.filter_by(team_id=team_id).first()        
+        team_players=team.players
+        for player in team_players:
+            create_audit_log_ex(current_app, "Score Voided",
+                                user_id=current_user.user_id,
+                                player_id=player.player_id,team_id=team_id,
+                                division_machine_id=division_machine.division_machine_id,                        
+                                commit=False)
+    else:        
+        create_audit_log_ex(current_app, "Score Voided",
+                            user_id=current_user.user_id,
+                            player_id=player_id,team_id=team_id,
+                            division_machine_id=division_machine.division_machine_id,                        
+                            commit=False)
 
     if division_machine.player_id:
         tokens_left_info = calc_audit_log_remaining_tokens(division_machine.player_id,return_string=False)
@@ -188,6 +219,22 @@ def route_jagoff(division_machine_id):
                      division_machine_id=division_machine.division_machine_id,
                      token_id=token.token_id)    
 
+    if team_id:
+        team = tables.Team.query.filter_by(team_id=team_id).first()        
+        team_players=team.players
+        for player in team_players:
+            create_audit_log_ex(current_app, "Player is jagoff",
+                                user_id=current_user.user_id,
+                                player_id=player.player_id,team_id=team_id,
+                                division_machine_id=division_machine.division_machine_id,                        
+                                commit=False)
+    else:        
+        create_audit_log_ex(current_app, "Player is jagoff",
+                            user_id=current_user.user_id,
+                            player_id=player_id,team_id=team_id,
+                            division_machine_id=division_machine.division_machine_id,                        
+                            commit=False)
+    
     if player_id:
         tokens_left_string = calc_audit_log_remaining_tokens(player_id)
     if team_id:

@@ -76,6 +76,33 @@ def route_audit_log_missing_scores(player_id,audit_log_id,minutes):
         
     return jsonify({'data':audit_log_list})
 
+@admin_manage_blueprint.route('/admin/audit_log/where_all_my_tokens_at_ex/player_id/<player_id>',methods=['GET'])
+#@login_required
+#@Admin_permission.require(403)
+def route_audit_log_missing_tokens_ex(player_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)                
+    user_names = {}
+    for user in tables.User.query.all():        
+        if user.is_player:
+            user_names[user.user_id]=""
+        else:
+            user_names[user.user_id]=user.username    
+    player_names = {player.player_id:player.first_name+" "+player.last_name for player in tables.Player.query.all()}
+    division_machines = {division_machine.division_machine_id:division_machine.to_dict_simple() for division_machine in tables.DivisionMachine.query.all()}
+    audit_logs = tables.AuditLogEx.query.filter_by(player_id=player_id).order_by(tables.AuditLogEx.action_date.desc()).all()
+    audit_log_list=[]    
+    for audit_log in audit_logs:        
+        audit_log_dict = audit_log.to_dict_simple()        
+        if audit_log.user_id:
+            audit_log_dict['user_name']=user_names[audit_log.user_id]
+        audit_log_dict['player_name']=player_names[audit_log.player_id]
+        
+        if audit_log.division_machine_id:
+            audit_log_dict['division_machine_name']=division_machines[audit_log.division_machine_id]['division_machine_name']            
+        audit_log_list.append(audit_log_dict)
+    return jsonify({'data':audit_log_list})    
+
 @admin_manage_blueprint.route('/admin/audit_log/where_all_my_tokens_at/player_id/<player_id>',methods=['GET'])
 #@login_required
 #@Admin_permission.require(403)

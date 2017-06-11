@@ -14,6 +14,7 @@ from Queue import generate_queue_class
 from Score import generate_score_class
 from Entry import generate_entry_class
 from AuditLog import generate_audit_log_class
+from AuditLogEx import generate_audit_log_ex_class
 from DivisionFinal import generate_division_final_class
 from DivisionFinalPlayer import generate_division_final_player_class
 from DivisionFinalQualifierTiebreaker import generate_division_final_qualifier_tiebreaker_class
@@ -43,6 +44,8 @@ class ImportedTables():
         self.Score = generate_score_class(db_handle)
         self.Entry = generate_entry_class(db_handle)
         self.AuditLog = generate_audit_log_class(db_handle)
+        self.AuditLogEx = generate_audit_log_ex_class(db_handle)
+        
         self.TicketPurchase = generate_ticket_purchase_class(db_handle)
         self.PurchaseSummary = generate_purchase_summary_class(db_handle)
         self.DivisionFinal = generate_division_final_class(db_handle)

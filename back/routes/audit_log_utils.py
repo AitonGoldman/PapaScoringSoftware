@@ -5,7 +5,7 @@ import json
 import routes.utils
 
 def create_audit_log_ex(app, action,user_id, player_id=None,division_machine_id=None,team_id=None,generic_json_data=None,commit=True):
-    actions_to_add_ticket_summary_to = ["Score Recorded"]
+    actions_to_add_ticket_summary_to = ["Score Recorded","Ticket Purchase"]
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)                
     audit_log_ex = tables.AuditLogEx()

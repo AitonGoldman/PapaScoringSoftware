@@ -9,7 +9,7 @@ from routes.utils import fetch_entity,calc_audit_log_remaining_tokens,get_discou
 import os
 from flask_restless.helpers import to_dict
 import datetime
-from routes.audit_log_utils import create_audit_log
+from routes.audit_log_utils import create_audit_log,create_audit_log_ex
 from orm_creation import create_ticket_purchase,create_purchase_summary
 
 # gets_all_available tokens for a given division or metadiv for a given player or team
@@ -367,8 +367,7 @@ def add_token(paid_for):
         division_ticket_summary = division_ticket_summary + " (COMPED)"
     create_audit_log(action,datetime.datetime.now(),
                      division_ticket_summary,user_id=current_user.user_id,
-                     player_id=player_id,team_id=team_id,commit=False)    
-    
+                     player_id=player_id,team_id=team_id,commit=False)        
     if paid_for == 1:
         if player_id:
             tokens_left_string = calc_audit_log_remaining_tokens(player_id)
@@ -419,6 +418,22 @@ def add_token(paid_for):
                                                                      purchase_summary.purchase_summary_id,                                   
                                                                      metadivision_id=metadiv_id,commit=False)
     db.session.commit()
+    create_audit_log_ex(current_app, action,
+                        user_id=current_user.user_id,
+                        player_id=player.player_id,team_id=team_id,                        
+                        commit=False,generic_json_data={"division_ticket_summary":division_ticket_summary})
+    if 'teams' in tokens_data and team_id:    
+        teamate_purchased_tickets = len([div_id for div_id in tokens_data['teams'] if tokens_data['teams'][div_id][0] > 0]) > 0
+        if teamate_purchased_tickets:            
+            team = tables.Team.query.filter_by(team_id=team_id).first()        
+            team_players=team.players
+            for team_player in [team_player for team_player in team_players if team_player.player_id != player.player_id]:
+                create_audit_log_ex(current_app, "Teammate purchased tickets",
+                                    user_id=current_user.user_id,
+                                    player_id=team_player.player_id,team_id=team_id,                        
+                                    commit=False,generic_json_data={"Teammate purchased tickets":"Teammate purchased tickets"})
+    db.session.commit()
+    
     ##return jsonify({})
     for idx,tok in enumerate(total_tokens):
         total_tokens[idx] = to_dict(tok)            

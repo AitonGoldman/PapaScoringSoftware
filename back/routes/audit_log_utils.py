@@ -4,8 +4,8 @@ import datetime
 import json
 import routes.utils
 
-def create_audit_log_ex(app, action,user_id, player_id=None,division_machine_id=None,team_id=None,generic_json_data=None,commit=True):
-    actions_to_add_ticket_summary_to = ["Score Recorded","Ticket Purchase"]
+def create_audit_log_ex(app, action,user_id, player_id=None,division_machine_id=None,team_id=None,generic_json_data=None,commit=True,summary=False,description=None):
+    actions_to_add_ticket_summary_to = ["Score Recorded","Ticket Purchase","Player Ticket Purchase Complete"]
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)                
     audit_log_ex = tables.AuditLogEx()
@@ -22,6 +22,10 @@ def create_audit_log_ex(app, action,user_id, player_id=None,division_machine_id=
     if generic_json_data:                
         generic_string = ",".join(["%s : %s"%(key,value) for key,value in generic_json_data.iteritems()])
         audit_log_ex.generic_json_data=generic_string        
+    if summary:
+        audit_log_ex.summary=True
+    if description:
+        audit_log_ex.description=description
     db.session.add(audit_log_ex)
     if commit is True:
         db.session.commit()

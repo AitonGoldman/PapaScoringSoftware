@@ -87,6 +87,19 @@ def check_player_in_queue(player_id,division_machine):
             queue_item_for_player = thing
     return queue_item_for_player
 
+def get_players_in_queue_after_player(player_id):
+    db = db_util.app_db_handle(current_app)
+    tables = db_util.app_db_tables(current_app)
+    queue = tables.Queue.query.filter_by(player_id=player_id).first()
+    players = []
+    while queue:
+        if len(queue.queue_child) > 0:
+            queue = queue.queue_child[0]
+            players.append(queue.to_dict_simple())
+        else:
+            queue = None
+    return [player for player in players]
+
 def get_player_list_to_notify(player_id,division_machine):    
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
@@ -290,12 +303,6 @@ def set_token_start_time(app,player,division_machine,team_id=None,commit=True):
     else:
         player_id=None        
     
-    create_audit_log("Game Started",datetime.datetime.now(),
-                     "",user_id=current_user.user_id,
-                     player_id=player_id,team_id=team_id,
-                     division_machine_id=division_machine.division_machine_id,
-                     token_id=token_to_set.token_id,
-                     commit=commit)        
     #if player:
     #    tokens_left_string = calc_audit_log_remaining_tokens(player.player_id)
     #else:

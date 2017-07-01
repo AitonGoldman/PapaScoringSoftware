@@ -131,7 +131,7 @@ def build_team_player_results(team_results_dict,player_results_dict, top_6_machi
             filter_score = get_papa_points_from_rank(result['filter_rank'])
             team_results_dict[result['team_team_id']][result['entry_division_id']]['points'].append(filter_score)        
             team_results_dict[result['team_team_id']][result['entry_division_id']]['sum'] = sum(team_results_dict[result['team_team_id']][result['entry_division_id']]['points'])
-            if(result['filter_rank'] < 150):
+            if(result['filter_rank'] < 900):
                 top_6_machines[entry_div_id][team_id].append({'machine_name':result['machine_machine_name'],
                                                               'machine_abbreviation':result['machine_abbreviation'],
                                                               'division_machine_id':result['score_division_machine_id'],
@@ -142,7 +142,7 @@ def build_team_player_results(team_results_dict,player_results_dict, top_6_machi
             filter_score = get_papa_points_from_rank(result['filter_rank'])
             player_results_dict[result['player_player_id']][result['entry_division_id']]['points'].append(filter_score)        
             player_results_dict[result['player_player_id']][result['entry_division_id']]['sum'] = sum(player_results_dict[result['player_player_id']][result['entry_division_id']]['points'])
-            if(result['filter_rank'] < 150):
+            if(result['filter_rank'] < 900):
                 top_6_machines[entry_div_id][player_id].append({'machine_name':result['machine_machine_name'],
                                                                 'machine_abbreviation':result['machine_abbreviation'],
                                                                 'division_machine_id':result['score_division_machine_id'],
@@ -207,7 +207,7 @@ def return_player_results(player_results_dict,sorted_player_list,divisions,ranke
     if return_json:
         top_6_machines_division_only = {key: value for (key, value) in top_6_machines.iteritems() if key == int(division_id)}
         # ranked_player_list_division_only = {key: value for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}
-        ranked_player_list_division_only = {key: value[:150] for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}                
+        ranked_player_list_division_only = {key: value[:900] for (key, value) in ranked_player_list.iteritems() if key == int(division_id)}                
         return jsonify({'data':{'top_machines':top_6_machines_division_only,'ranked_player_list':ranked_player_list_division_only}})        
     else:
         return {'data':{'top_machines':top_6_machines,'ranked_player_list':ranked_player_list}}

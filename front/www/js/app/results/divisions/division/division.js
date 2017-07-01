@@ -1,12 +1,12 @@
 angular.module('app.results.divisions.division',[/*REPLACEMECHILD*/]);
 angular.module('app.results.divisions.division').controller(
     'app.results.divisions.division',[
-        '$scope','$state','TimeoutResources','Utils','Modals','$timeout',
-        function($scope, $state, TimeoutResources, Utils,Modals,$timeout) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$timeout','$ionicScrollDelegate',
+        function($scope, $state, TimeoutResources, Utils,Modals,$timeout,$ionicScrollDelegate) {
         $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
 	$scope.division_name=$state.params.division_name;
-        $scope.filter_limit=120;
+        $scope.filter_limit=75;
         $scope.utils = Utils;
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
@@ -132,11 +132,15 @@ angular.module('app.results.divisions.division').controller(
                 $scope.resources = TimeoutResources.GetAllResources();            
                 $scope.$broadcast('scroll.refreshComplete');
                 $scope.process_division_results();
-                //$scope.filter_limit=150;
+                $scope.filter_limit=75;
                 //$scope.filter_limit=$scope.filter_limit+150;
                 Modals.loaded();                
             });            
         };
+            $scope.increase_display_window = function(){
+                $scope.filter_limit=$scope.filter_limit+50;
+                $ionicScrollDelegate.scrollBottom(true);
+            };
             
         $scope.loadMore = function() {
             //$http.get('/more-items').success(function(items) {

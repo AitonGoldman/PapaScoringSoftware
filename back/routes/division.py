@@ -310,7 +310,7 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
                             commit=False)
 
     for player_in_other_que in players_in_other_queue:
-        create_audit_log_ex(current_app, "Player removed from queue",
+        create_audit_log_ex(current_app, "Other player removed from queue",
                             user_id=current_user.user_id,
                             player_id=player_in_other_que['player_id'],
                             division_machine_id=player_in_other_que['division_machine_id'],

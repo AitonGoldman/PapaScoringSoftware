@@ -12,7 +12,10 @@ def create_audit_log_ex(app, action,user_id, player_id=None,division_machine_id=
     audit_log_ex.action=action
     audit_log_ex.action_date=datetime.datetime.now()    
     if user_id:
-        audit_log_ex.user_id=user_id            
+        audit_log_ex.user_id=user_id
+        user = routes.utils.fetch_entity(tables.User,user_id)
+        if user.is_player:
+            audit_log_ex.player_initiated=True
     if player_id:
         audit_log_ex.player_id=player_id
     if team_id:

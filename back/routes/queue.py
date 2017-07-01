@@ -5,11 +5,11 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission, Desk_permission, Token_permission, Queue_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time, remove_player_from_queue,get_queue_from_division_machine,send_push_notification,get_player_list_to_notify,check_player_in_queue
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time, remove_player_from_queue,get_queue_from_division_machine,send_push_notification,get_player_list_to_notify,check_player_in_queue,get_username_or_player_name
 import os
 from flask_restless.helpers import to_dict
 from orm_creation import create_queue
-from audit_log_utils import create_audit_log
+from audit_log_utils import create_audit_log,create_audit_log_ex
 import datetime
 
 @admin_manage_blueprint.route('/queue/player_id/<player_id>',methods=['GET'])
@@ -100,7 +100,17 @@ def add_player_to_queue():
             if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
                 push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
                 send_push_notification(push_notification_message, players=players_to_alert)
-            new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])                                    
+            new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])
+            queuer = get_username_or_player_name(current_user.user_id)
+            create_audit_log_ex(current_app,
+                                "Player added to queue",
+                                user_id=current_user.user_id,
+                                player_id=player.player_id,
+                                division_machine_id=division_machine.division_machine_id,
+                                description="Player added to queue for %s by %s" % (division_machine.machine.machine_name,
+                                                                                    queuer),
+                                commit=False)
+            
             db.session.commit()
             
             return jsonify({'data':new_queue.to_dict_simple()})
@@ -114,8 +124,7 @@ def add_player_to_queue():
 def add_other_player_to_queue():
     db = db_util.app_db_handle(current_app)
     tables = db_util.app_db_tables(current_app)
-    queue_data = json.loads(request.data)
-    print queue_data
+    queue_data = json.loads(request.data)    
     division_machine = fetch_entity(tables.DivisionMachine, queue_data['division_machine_id'])
 
     if division_machine.division.active is False:
@@ -125,8 +134,7 @@ def add_other_player_to_queue():
     if division_machine.player_id is None and len(division_machine.queue) == 0:        
         raise BadRequest('Oops - player finished playing this game while you were queuing.  See a scorekeeper to start game')        
     #player = fetch_entity(tables.Player,queue_data['player_id'])
-    player = fetch_entity(tables.Player,queue_data['other_player_id'])
-    print "okay - starting with  %s"%player.player_id    
+    player = fetch_entity(tables.Player,queue_data['other_player_id'])    
     if player.active is False:
         raise BadRequest("Player is not active - please see front desk")
     if 'other_player_pin' not in queue_data or player.pin != int(queue_data['other_player_pin']):
@@ -156,6 +164,15 @@ def add_other_player_to_queue():
                 push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
                 send_push_notification(push_notification_message, players=players_to_alert)
             new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['other_player_id'])                                    
+            queuer = get_username_or_player_name(current_user.user_id)
+            create_audit_log_ex(current_app,
+                                "Player added other player to queue",
+                                user_id=current_user.user_id,
+                                player_id=player.player_id,
+                                division_machine_id=division_machine.division_machine_id,
+                                description="Player added to queue for %s by %s" % (division_machine.machine.machine_name,
+                                                                                    queuer),
+                                commit=False)
             db.session.commit()
             
             return jsonify({'data':new_queue.to_dict_simple()})
@@ -242,7 +259,16 @@ def bump_player_down_queue(division_machine_id):
                 child_queue.queue_child.append(new_queue)
                 if grand_child:
                     new_queue.queue_child.append(grand_child)
-                db.session.delete(queue)                    
+                db.session.delete(queue)            
+                create_audit_log_ex(current_app,
+                                    "Player bumped down queue",
+                                    user_id=current_user.user_id,
+                                    player_id=player.player_id,
+                                    division_machine_id=division_machine.division_machine_id,
+                                    description="Player bumped down queue for %s by %s" % (division_machine.machine.machine_name,
+                                                                                           current_user.username),
+                                    commit=False)
+                
                 create_audit_log("Player Bumped",datetime.datetime.now(),
                                  "",user_id=current_user.user_id,
                                  player_id=player_id,
@@ -252,7 +278,16 @@ def bump_player_down_queue(division_machine_id):
                 if queue:
                     players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)
                 else:
-                    players_to_alert = []                                        
+                    players_to_alert = []                
+                create_audit_log_ex(current_app,
+                                    "Player removed from queue due to bumping",
+                                    user_id=current_user.user_id,
+                                    player_id=player.player_id,
+                                    division_machine_id=division_machine.division_machine_id,
+                                    description="Player removed from queue for %s by %s" % (division_machine.machine.machine_name,
+                                                                                            current_user.username),
+                                    commit=False)
+                    
                 remove_player_from_queue(current_app,player,commit=False)
                 
                 if len(players_to_alert) > 0:        
@@ -294,6 +329,16 @@ def route_remove_player_from_queue(player_id):
             The queue for %s has changed! Check the queue to see your new position.
             """ % division_machine.machine.machine_name
             send_push_notification(push_notification_message, players=players_to_alert)
+        queuer = get_username_or_player_name(current_user.user_id)
+        create_audit_log_ex(current_app,
+                            "Player removed from queue",
+                            user_id=current_user.user_id,
+                            player_id=player.player_id,
+                            division_machine_id=division_machine.division_machine_id,
+                            description="Player removed from queue for %s by %s" % (division_machine.machine.machine_name,
+                                                                                    queuer),
+                            commit=False)
+            
         db.session.commit()
     except Exception as e:
         db.session.commit()
@@ -329,6 +374,15 @@ def add_player_to_machine_from_queue(division_machine_id):
             if len(root_queue.queue_child) > 0:
                 root_queue.queue_child.remove(root_queue.queue_child[0])
             db.session.delete(root_queue)
+            create_audit_log_ex(current_app,
+                                "Player added to machine from queue",
+                                user_id=current_user.user_id,
+                                player_id=player.player_id,
+                                division_machine_id=division_machine.division_machine_id,
+                                description="Player added to machine %s queue by %s" % (division_machine.machine.machine_name,
+                                                                                        current_user.username),
+                                commit=False)
+            
             db.session.commit()    
             return_dict = {'division_machine':division_machine.to_dict_simple()}
             if len(players_to_alert) > 0:        

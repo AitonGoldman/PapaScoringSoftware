@@ -9,6 +9,15 @@ import requests
 import json
 from audit_log_utils import create_audit_log
 
+def get_username_or_player_name(user_id):
+    tables = db_util.app_db_tables(current_app)    
+    user = fetch_entity(tables.User,user_id)
+    if user.is_player:
+        player = user.player
+        return player.first_name+" "+player.last_name
+    else:
+        return user.username
+
 def get_discount_normal_ticket_counts(max_count,discount_count,discount_cost,increment,normal_cost):
     cur_count = 0
     cur_value = 0    

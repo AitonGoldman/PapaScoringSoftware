@@ -53,18 +53,18 @@ def create_stanard_roles_and_users(app):
                              str(RolesEnum.queue.value),str(RolesEnum.page.value)])            
     return test_admin,test_scorekeeper,test_desk
 
-def init_papa_players(app,short=False):
+def init_papa_players(app,short=False,number_of_a_players=100):
     from data_files import first_names,last_names    
-    for player_num in range(100):
+    for player_num in range(100,100+number_of_a_players):
         name_index = random.randrange(0,len(first_names.first_names)-1)        
         create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s%s'%(last_names.last_names[name_index],player_num+1),'ifpa_ranking':random.randrange(999),'linked_division_id':'1'})
     if short:
         return
-    for player_num in range(100,200):
+    for player_num in range(number_of_a_players+100,number_of_a_players+200):
         create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'2'})
-    for player_num in range(200,300):
+    for player_num in range(number_of_a_players+200,number_of_a_players+300):
         create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'3'})
-    for player_num in range(300,400):
+    for player_num in range(number_of_a_players+300,number_of_a_players+400):
         create_player(app,{'first_name':'%s'%first_names.first_names[name_index],'last_name':'%s'%last_names.last_names[name_index],'ifpa_ranking':random.randrange(999),'linked_division_id':'4'})                                           
     # for team_num in range(1,100,2):
     #     create_team(app,{'team_name':'test_team_%s'%team_num,'players':[team_num,team_num+1]})

@@ -35,7 +35,7 @@ def route_meta_admin_create_db_and_tournaments():
     db_util.load_machines_from_json(dummy_app)
     orm_creation.init_papa_tournaments_divisions(dummy_app)
     orm_creation.init_papa_tournaments_division_machines(dummy_app)        
-    orm_creation.init_papa_players(dummy_app,short=True)
+    orm_creation.init_papa_players(dummy_app,short=True,number_of_a_players=200)
     
     db_handle.engine.dispose()
     del dummy_app

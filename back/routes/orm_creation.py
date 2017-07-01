@@ -226,7 +226,7 @@ def create_player(app,player_data):
     db.session.add(new_player)
     db.session.commit()
     new_user = tables.User(
-        username="player%s" % (new_player.pin),
+        username="%s%s%s" % (new_player.first_name,new_player.last_name,new_player.pin),
         pin=new_player.pin,
         is_player=True,
         roles=[player_role,queue_role,token_role]

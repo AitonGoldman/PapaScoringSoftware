@@ -364,7 +364,7 @@ def add_token(paid_for):
     if paid_for == 0:
         action="Player Ticket Purchase Started"
     if comped:
-        division_ticket_summary = division_ticket_summary + " (COMPED)"
+        division_ticket_summary = "(COMPED) " + division_ticket_summary
     create_audit_log(action,datetime.datetime.now(),
                      division_ticket_summary,user_id=current_user.user_id,
                      player_id=player_id,team_id=team_id,commit=False)        
@@ -422,16 +422,21 @@ def add_token(paid_for):
                         user_id=current_user.user_id,
                         player_id=player.player_id,team_id=team_id,                        
                         commit=False,generic_json_data={"division_ticket_summary":division_ticket_summary})
-    if 'teams' in tokens_data and team_id:    
+    if 'teams' in tokens_data and team_id:
+        if current_user.is_player:            
+            action="Teamate began ticket purchase"
+        else:
+            action="Teammate purchased tickets"
         teamate_purchased_tickets = len([div_id for div_id in tokens_data['teams'] if tokens_data['teams'][div_id][0] > 0]) > 0
         if teamate_purchased_tickets:            
             team = tables.Team.query.filter_by(team_id=team_id).first()        
             team_players=team.players
             for team_player in [team_player for team_player in team_players if team_player.player_id != player.player_id]:
-                create_audit_log_ex(current_app, "Teammate purchased tickets",
+                create_audit_log_ex(current_app, action,
                                     user_id=current_user.user_id,
-                                    player_id=team_player.player_id,team_id=team_id,                        
-                                    commit=False,generic_json_data={"Teammate purchased tickets":"Teammate purchased tickets"})
+                                    player_id=team_player.player_id,team_id=team_id,
+                                    summary=True,
+                                    commit=False,description=action)
     db.session.commit()
     
     ##return jsonify({})

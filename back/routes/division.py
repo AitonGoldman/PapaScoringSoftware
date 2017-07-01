@@ -5,14 +5,14 @@ from werkzeug.exceptions import BadRequest,Conflict
 from util import db_util
 from util.permissions import Admin_permission,Scorekeeper_permission
 from flask_login import login_required,current_user
-from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue,get_valid_sku,get_queue_from_division_machine,send_push_notification,get_player_list_to_notify
+from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time,remove_player_from_queue,get_valid_sku,get_queue_from_division_machine,send_push_notification,get_player_list_to_notify,get_players_in_queue_after_player
 from orm_creation import create_division, create_division_machine, fetch_stripe_price
 import datetime
 from sqlalchemy import and_,or_
 import random
 import os
 from sqlalchemy.sql.expression import desc, asc
-from routes.audit_log_utils import create_audit_log
+from routes.audit_log_utils import create_audit_log,create_audit_log_ex
 
 @admin_manage_blueprint.route('/division',methods=['GET'])
 def route_get_divisions():
@@ -286,15 +286,38 @@ def route_add_division_machine_player(division_id,division_machine_id,player_id)
         if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():            
             raise BadRequest('Player can not start game - his team is playing on another machine')        
     set_token_start_time(current_app,player,division_machine,commit=False)    
+    create_audit_log_ex(current_app, "Game Started",
+                        user_id=current_user.user_id,
+                        player_id=player.player_id,
+                        division_machine_id=division_machine.division_machine_id,                        
+                        commit=False)
+
     division_machine.player_id=player.player_id
     ##db.session.commit()
     queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
     players_to_alert = []
+    players_in_other_queue = []
     if queue:
-        players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)            
+        players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)
+        players_in_other_queue = get_players_in_queue_after_player(player.player_id)
     removed_queue = remove_player_from_queue(current_app,player,commit=True)
-    
-    if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:                
+    if removed_queue and removed_queue is not False:
+        create_audit_log_ex(current_app, "Player removed from queue",
+                            user_id=current_user.user_id,
+                            player_id=player.player_id,
+                            division_machine_id=removed_queue.division_machine_id,
+                            description="Player removed from queue %s by getting started on %s" % (removed_queue.division_machine.machine.machine_name,division_machine.machine.machine_name),
+                            commit=False)
+
+    for player_in_other_que in players_in_other_queue:
+        create_audit_log_ex(current_app, "Other player removed from queue",
+                            user_id=current_user.user_id,
+                            player_id=player_in_other_que['player_id'],
+                            division_machine_id=player_in_other_que['division_machine_id'],
+                            description="Player moved up on queue %s due to removal of player %s" % (player_in_other_que['division_machine']['division_machine_name'],player.first_name+" "+player.last_name),
+                            commit=False)
+        
+    if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
         push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
         send_push_notification(push_notification_message, players=players_to_alert)
     db.session.commit()
@@ -330,7 +353,11 @@ def route_remove_division_machine_player(division_machine_id,player_id):
         raise BadRequest('No player playing on this machine!')
     if division_machine.player_id != int(player_id):
         raise BadRequest('Player is not playing on this machine!')
-
+    create_audit_log_ex(current_app, "Player removed from machine",
+                        user_id=current_user.user_id,
+                        player_id=division_machine.player.player_id,
+                        division_machine_id=division_machine.division_machine_id,                        
+                        commit=False)
     division_machine.player_id=None
     create_audit_log("Player Removed",datetime.datetime.now(),
                      "Removed from %s"%division_machine.machine.machine_name,user_id=current_user.user_id,

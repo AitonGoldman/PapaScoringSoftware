@@ -19,6 +19,7 @@ def generate_audit_log_ex_class(db_handle):
         action=db_handle.Column(db_handle.String(255))
         generic_json_data = db_handle.Column(db_handle.String(1000))
         summary=db_handle.Column(db_handle.Boolean,default=False)
+        player_initiated=db_handle.Column(db_handle.Boolean,default=False)
         def to_dict_simple(self):
             return to_dict(self)        
     return AuditLogEx

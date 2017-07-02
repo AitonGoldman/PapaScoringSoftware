@@ -12,7 +12,7 @@
       </b>
     </div>
     <div class="mobile-show-vertical-only">
-      <center>Rotate to see best scores</center>
+      <center>Rotate phone to see best scores</center>
     </div>
     <table style='margin-left:auto;margin-right:auto;' class='results_table'>
       <tr>
@@ -56,7 +56,7 @@
           </a>
         </td>
         <td  ng-if='result[1].divider == undefined' style='padding-left:50px;padding-top:10px;'  align='center'>{{result[1].sum}}</td>
-        <td  ng-if='result[1].divider == undefined'  style='padding-left:50px;padding-top:10px;' class='mobile-hide'  align='center'>
+        <td  ng-if='result[1].divider == undefined'  style='padding-left:30px;padding-top:10px;' class='mobile-hide'  align='center'>
           <span ng-if='team_division==false' ng-repeat='top_player_machine in resources.division_results.data.top_machines[division_id][result[1].player_id]|limitTo:3'>
             <a ng-if='team_division==false' ui-sref='app.results.division_machines.machines.machine({division_machine_name:top_player_machine.machine_name,division_id:division_id,division_machine_id:top_player_machine.division_machine_id})'>{{top_player_machine.machine_abbreviation}}({{top_player_machine.rank}})</a>          
             <span ng-if='$last == false'> | </span>             

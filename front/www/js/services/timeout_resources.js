@@ -337,7 +337,9 @@ angular.module('TD_services.timeout_resources')
                   
                   var addScoreResource = generate_resource_definition(':site/entry/division_machine/:division_machine_id/score/:score','POST');
                   var addToQueueResource = generate_resource_definition(':site/queue','POST');
-                  var addOtherPlayerToQueueResource = generate_resource_definition(':site/queue/other_player','POST',{ui_route:'.^'});                  
+                  
+                  //var addOtherPlayerToQueueResource = generate_resource_definition(':site/queue/other_player','POST',{ui_route:'.^'});
+                  var addOtherPlayerToQueueResource = generate_resource_definition(':site/queue/other_player','POST');                  
                   var getDivisionQualifyingResultsPPOResource = generate_resource_definition(':site/results/division/:division_id/ppo/qualifying/list','PUT');
                   
                   var removePlayerFromMachineResource = generate_resource_definition(':site/division_machine/:division_machine_id/player/:player_id','DELETE');
@@ -481,6 +483,7 @@ angular.module('TD_services.timeout_resources')
                       ScorekeeperResolveTiebreaker: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_match_result/:division_final_match_result_id/tiebreaker','PUT','scorekeeping_resolve_tiebreaker_results'),
                       ScorekeeperCompleteRound: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_round/:division_final_match_round_id/complete','PUT','scorekeeping_complete_round_results'),                                        
                       VersionCheckEx: generate_resource_definition_ex_promise(':site/version/:version_string','GET','version_check'),
+                      GetAuditLogMissingTokensEx: generate_resource_definition_ex_promise(':site/admin/audit_log/where_all_my_tokens_at_ex/player_id/:player_id','GET','audit_log_missing_tokens'),
                       ReopenDivisionFinalRound: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_round/:division_final_round_id/reopen','PUT','division_final_round_reopened')                                        
                       
 

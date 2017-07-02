@@ -62,13 +62,13 @@ def route_add_score(division_machine_id, score):
                                 user_id=current_user.user_id,
                                 player_id=player.player_id,team_id=team_id,
                                 division_machine_id=division_machine.division_machine_id,                        
-                                commit=False,generic_json_data={"score":score})
+                                commit=False,description="score : %s" % (score))
     else:        
         create_audit_log_ex(current_app, "Score Recorded",
                             user_id=current_user.user_id,
                             player_id=player_id,team_id=team_id,
                             division_machine_id=division_machine.division_machine_id,                        
-                            commit=False,generic_json_data={"score":score})
+                            commit=False,description="score : %s" % (score))
 
     if player_id:
         tokens_left_info = calc_audit_log_remaining_tokens(player_id,return_string=False)

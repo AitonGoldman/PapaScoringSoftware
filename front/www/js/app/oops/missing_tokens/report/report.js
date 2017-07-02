@@ -9,10 +9,14 @@ angular.module('app.oops.missing_tokens.report').controller(
         $scope.utils = Utils;
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
         Modals.loading();
-        audit_log_promise = TimeoutResources.GetAuditLogMissingTokens($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});        
+        $scope.resources = {};                     
+        //audit_log_promise = TimeoutResources.VersionCheckEx({site:$scope.site,version_string:"v1"},{},test_resource);
+        audit_log_promise = TimeoutResources.GetAuditLogMissingTokensEx({site:$scope.site,player_id:$scope.player_id},{},$scope.resources);                     
+
+        //audit_log_promise = TimeoutResources.GetAuditLogMissingTokens($scope.bootstrap_promise,{site:$scope.site,player_id:$scope.player_id});        
         // = TimeoutResources.GetEtcData();
         audit_log_promise.then(function(data){
-            $scope.resources = TimeoutResources.GetAllResources();
+            //$scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
             console.log($scope.resources);
         });

@@ -6,10 +6,27 @@
       <table data-tap-disabled="true" class="selectable-text small-text-table">
         <th>Date</th>        <th>Action</th>        <th>Responsible</th>        <th>Description</th>
        
-        <tr ng-class='{grey: audit_log_entry.contents[1]=="Ticket Summary"}' ng-repeat="audit_log_entry in resources.audit_log_missing_tokens.data" ng-if="show_audit_log_entry_if_not_teammate_purchase(audit_log_entry)">
-          <td class='padding-right selectable-text' ng-repeat='audit_log_field in audit_log_entry.contents'>
-            <u>{{audit_log_field}}</u>
-          </td>          
+        <!--        <tr ng-class='{grey: audit_log_entry.contents[1]=="Ticket Summary"}' ng-repeat="audit_log_entry in resources.audit_log_missing_tokens.data" ng-if="show_audit_log_entry_if_not_teammate_purchase(audit_log_entry)">
+                    <td class='padding-right selectable-text' ng-repeat='audit_log_field in audit_log_entry.contents'>
+                      <u>{{audit_log_field}}</u>
+                    </td>          
+        </tr>-->
+        <tr ng-class='{grey: audit_log_entry.summary}' class='standard_small_font' ng-repeat="audit_log_entry in resources.audit_log_missing_tokens.data">
+          <td class='padding-right selectable-text'>
+            {{audit_log_entry.action_date}}
+          </td>
+          <td class='padding-right selectable-text'>
+            {{audit_log_entry.action}}
+          </td>
+          <td class='padding-right selectable-text'>
+            {{audit_log_entry.user_name}}
+          </td>
+          <td class='padding-right selectable-text'>
+            <center>
+              {{audit_log_entry.description}}
+            </center>
+          </td>
+          
         </tr>
       </table>
     </center>

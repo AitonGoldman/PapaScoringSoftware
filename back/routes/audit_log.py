@@ -99,7 +99,8 @@ def route_audit_log_missing_tokens_ex(player_id):
         audit_log_dict['player_name']=player_names[audit_log.player_id]
         
         if audit_log.division_machine_id:
-            audit_log_dict['division_machine_name']=division_machines[audit_log.division_machine_id]['division_machine_name']            
+            audit_log_dict['division_machine_name']=division_machines[audit_log.division_machine_id]['division_machine_name']
+        audit_log_dict['action_date']=audit_log.action_date.strftime("%y-%m-%d/%H:%M:%S")
         audit_log_list.append(audit_log_dict)
     return jsonify({'data':audit_log_list})    
 

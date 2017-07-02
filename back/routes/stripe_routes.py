@@ -293,7 +293,7 @@ def do_stripe_sale(stripe_token):
         create_audit_log_ex(current_app, "Player Ticket Purchase Complete",
                             user_id=current_user.user_id,
                             player_id=current_user.player.player_id,
-                            commit=False,generic_json_data={"player_ticket_purchase_summary":stripe_purchase_summary_string})        
+                            commit=False,description="player_ticket_purchase_summary : %s"%stripe_purchase_summary_string)        
         if len([token for token in tokens if token['team_id']]) > 0:
             team_id = current_user.player.teams[0].team_id
             team = tables.Team.query.filter_by(team_id=team_id).first()        
@@ -333,7 +333,8 @@ def do_stripe_sale(stripe_token):
         create_audit_log_ex(current_app, "Credit Card Purchase Error",
                             user_id=current_user.user_id,
                             player_id=current_user.player.player_id,                                    
-                            commit=True,generic_json_data=e.json_body['error'])        
+                            commit=True,generic_json_data=e.json_body['error'],
+                            description=e.json_body['error']['message'])        
         raise BadRequest('Your card was rejected by the credit card processing service.  Please check to make sure you entered the number correctly, or try another card, or see the front desk for more details')
  
 

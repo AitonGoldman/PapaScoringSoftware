@@ -31,9 +31,9 @@ def create_audit_log_ex(app, action,user_id, player_id=None,division_machine_id=
         audit_log_ex.description=description
     db.session.add(audit_log_ex)
     if commit is True:
-        db.session.commit()
+        db.session.commit()    
     if action not in actions_to_add_ticket_summary_to:
-        return
+        return    
     if player_id:
         tokens_left_info = routes.utils.calc_audit_log_remaining_tokens(player_id,return_string=False)
         tokens_left_string = tokens_left_info['tokens_left_string']        
@@ -44,8 +44,8 @@ def create_audit_log_ex(app, action,user_id, player_id=None,division_machine_id=
     if user_id:
         audit_log_ex.user_id=user_id            
     if player_id:
-        audit_log_ticket_summary_ex.player_id=player_id    
-    audit_log_ticket_summary_ex.generic_json_data=tokens_left_string
+        audit_log_ticket_summary_ex.player_id=player_id        
+    audit_log_ticket_summary_ex.description=tokens_left_string    
     audit_log_ticket_summary_ex.summary=True
     db.session.add(audit_log_ticket_summary_ex)
     if commit is True:

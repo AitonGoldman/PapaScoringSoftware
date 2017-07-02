@@ -421,7 +421,7 @@ def add_token(paid_for):
     create_audit_log_ex(current_app, action,
                         user_id=current_user.user_id,
                         player_id=player.player_id,team_id=team_id,                        
-                        commit=False,generic_json_data={"division_ticket_summary":division_ticket_summary})
+                        commit=False,description="division_ticket_summary : %s " % division_ticket_summary)
     if 'teams' in tokens_data and team_id:
         if current_user.is_player:            
             action="Teamate began ticket purchase"

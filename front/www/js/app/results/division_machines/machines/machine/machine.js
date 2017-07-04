@@ -1,8 +1,8 @@
 angular.module('app.results.division_machines.machines.machine',[/*REPLACEMECHILD*/]);
 angular.module('app.results.division_machines.machines.machine').controller(
     'app.results.division_machines.machines.machine',[
-    '$scope','$state','TimeoutResources','Utils','Modals',
-    function($scope, $state, TimeoutResources, Utils,Modals) {
+        '$scope','$state','TimeoutResources','Utils','Modals','$ionicScrollDelegate',
+        function($scope, $state, TimeoutResources, Utils,Modals,$ionicScrollDelegate) {
         $scope.site=$state.params.site;
         $scope.division_machine_id=$state.params.division_machine_id;
 	$scope.division_machine_name=$state.params.division_machine_name;        
@@ -11,6 +11,7 @@ angular.module('app.results.division_machines.machines.machine').controller(
         $scope.utils = Utils;        
         Modals.loading_no_spinner();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                                
+        $scope.filter_limit=75;
         
         results_promise = TimeoutResources.GetDivisionMachineResults($scope.bootstrap_promise,
                                                                      {site:$scope.site,division_machine_id:$scope.division_machine_id});
@@ -37,6 +38,10 @@ angular.module('app.results.division_machines.machines.machine').controller(
             });
         };                        
 
+        $scope.increase_display_window = function(){
+            $scope.filter_limit=$scope.filter_limit+50;
+            $ionicScrollDelegate.scrollBottom(true);
+        };
         
         $scope.jump_to_machine_results = function(){                        
             if($scope.jump_to_division_machine.data == undefined || $scope.jump_to_division_machine.data.division_machine_id == undefined){

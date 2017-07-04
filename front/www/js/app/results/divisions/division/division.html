@@ -69,11 +69,16 @@
         </td>
       </tr>
       <td align=center colspan=4 ng-if='filter_limit<concat_results.length'>
-          <center>
-            <button ng-click='increase_display_window()' class='button icon-left ion-ios-cloud-download-outline' style='margin-top:10px'>
-              Load More Results
-            </button>
-          </center>
+          
+            <div ng-click='increase_display_window()' class='item item-icon-right item-icon-left' style='margin-top:0px'>
+              <i class="icon"></i>
+              <u>Show More Results</u>
+              <i class="icon  ion-chevron-down"></i>
+
+
+
+            </div>
+
       </td>
     </table>
     <!-- <ion-infinite-scroll -->

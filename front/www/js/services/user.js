@@ -32,6 +32,7 @@ angular.module('TD_services.user').factory('User', ['Modals','TimeoutResources',
             $current_user_promise = TimeoutResources.CurrentUser(undefined,{site:user_site});
             return $current_user_promise.then(function(data){                                
                 if(data.data!=null){
+                    console.log(data);
                     if(data.data.player_id!=undefined){
                         set_logged_in_user_func(data.data,'player');
                     } else {

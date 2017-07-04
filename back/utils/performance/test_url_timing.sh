@@ -4,4 +4,4 @@
 #export URL="http://0.0.0.0:8000/elizabeth/results/division/1"
 #export URL="0.0.0.0"
 sleep .1
-curl -b /tmp/cookie -s -o /tmp/test_out_$1.out -w "\npeekaboo - $1 - %{time_total}" -H "Content-Type: application/json" $URL/$1 > /tmp/time_$1.out 2>&1 &
+curl -b /tmp/cookie -s -o /tmp/test_out_$1.out -w "\npeekaboo - $1 - %{time_total}" -H "Content-Type: application/json" $URL > /tmp/time_$1.out 2>&1 &

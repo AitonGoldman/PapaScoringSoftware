@@ -177,7 +177,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
  	       controller: 'app.scorekeeping.undo'
  	     }
  	   }
-       }).state('app.scorekeeping.undo.remove_player', 
+        }).state('app.scorekeeping.undo.remove_player', 
         { 
          cache: false,
  	 url: '/remove_player',
@@ -337,7 +337,44 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
              
           }    
 
+       }).state('app.scorekeeping.undo.insert_into_queue', 
+        { 
+         cache: false,
+ 	 url: '/insert_into_queue',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/insert_into_queue/insert_into_queue.html',
+ 	       controller: 'app.scorekeeping.undo.insert_into_queue'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.insert_into_queue.player_select', 
+        { 
+         cache: false,
+ 	 url: '/player_select/:division_machine_id',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/insert_into_queue/player_select/player_select.html',
+ 	       controller: 'app.scorekeeping.undo.insert_into_queue.player_select'
+ 	     }
+ 	   }
+       }).state('app.scorekeeping.undo.insert_into_queue.player_select.process', 
+        { 
+         cache: false,
+ 	 url: '/process',
+ 	 views: {
+ 	     'menuContent@app': {
+ 	       templateUrl: 'js/app/scorekeeping/undo/insert_into_queue/player_select/process/process.html',
+ 	       controller: 'app.scorekeeping.undo.insert_into_queue.player_select.process'
+ 	     }
+ 	   }, params: {
+               process_step:{},
+               player_id_to_add:{}
+          }    
+
        })//REPLACE_ME
+
+
+
 
 
 

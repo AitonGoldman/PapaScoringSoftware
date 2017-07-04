@@ -303,5 +303,9 @@ class RouteDivisionTD(td_integration_test_base.TdIntegrationDispatchTestBase):
     def test_edit_division_with_player_auth(self):        
         with self.flask_app.test_client() as c:
             self.checkWrongPermissions(c,'put','/division/1', pin=self.new_player.pin)            
-
             
+    def test_add_division_with_division_is_limited_herb_flag_set(self):
+        pass
+    def test_edit_division_with_division_is_limited_herb_flag_set(self):
+        pass
+    

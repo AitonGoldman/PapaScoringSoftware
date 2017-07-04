@@ -10,7 +10,7 @@ from routes.utils import record_ioniccloud_push_token,send_push_notification
 @admin_login_blueprint.route('/auth/logout',methods=['GET'])
 def route_logout():
     if current_user.is_anonymous() is False:
-        logout_user()
+        logout_user()        
     return jsonify({'data':'all done'})
 
 @admin_login_blueprint.route('/auth/current_user',methods=['GET'])

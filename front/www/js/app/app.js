@@ -188,8 +188,6 @@ app.controller(
                  if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()){
                      version_check_promise = TimeoutResources.VersionCheck(undefined,{site:$scope.site,version_string:"v1"});
                  } 
-             }
-
             // if($state.current.name.length - $state.current.name.indexOf('confirm') == 7){
             //     Modals.information('It is important to read directions.  For example, this is the review page - you still need to click Purchase button');
             // }

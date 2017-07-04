@@ -2,8 +2,12 @@
   <ion-content>      
     <div class="skinny-list list">
     <label class="item-input item">
-      <span class='input-label'>Last Name : </span>
-      <input class="myinput" ng-model='columns_obj.columns' type="text" placeholder="Columns" />
+      <span class='input-label'>Num Columns : </span>
+      <input class="myinput" ng-model='columns_obj.columns' type="text" placeholder="# Columns" />
+    </label>    
+    <label class="item-input item">
+      <span class='input-label'>Num Players To Display Per Queue : </span>
+      <input class="myinput" ng-model='num_players_to_display_obj.num_players_to_display' type="text" placeholder="# players to display" />
     </label>    
 
       <div ng-repeat='(division_id,division_machines) in division_machines'>

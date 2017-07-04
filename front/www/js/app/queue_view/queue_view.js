@@ -7,6 +7,7 @@ angular.module('app.queue_view').controller(
         $scope.site=$state.params.site;
         $scope.selected_machines={};
         $scope.columns_obj = {columns:undefined};
+        $scope.num_players_to_display_obj = {num_players_to_display:undefined};        
         $scope.utils = Utils;
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                      
@@ -21,8 +22,10 @@ angular.module('app.queue_view').controller(
             $scope.go_to_queue = function(division_id){
                 flattened_machines = _.toPairs($scope.selected_machines);
                 filtered_machines = _.filter(flattened_machines, function(o) { return o[1] == true; });                
-                machine_info = {division_id:division_id,columns:$scope.columns_obj.columns};
-                machine_fields = ['game_1','game_2','game_3','game_4','game_5','game_6','game_7','game_8','game_9','game_10','game_11','game_12'];
+                machine_info = {division_id:division_id,
+                                columns:$scope.columns_obj.columns,
+                                num_players_to_show:$scope.num_players_to_display_obj.num_players_to_display};
+                machine_fields = ['game_1','game_2','game_3','game_4','game_5','game_6','game_7','game_8','game_9','game_10','game_11','game_12','game_13','game_14','game_15','game_16'];
                 _.forEach(machine_fields, function(value,key) {                    
                     idx = parseInt(key);
                     if (filtered_machines[idx]){

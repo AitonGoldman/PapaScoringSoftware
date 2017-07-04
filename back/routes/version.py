@@ -6,6 +6,8 @@ import os
 
 @admin_manage_blueprint.route('/version/<version>',methods=['GET'])
 def route_check_version(version):                
-    return jsonify({'data':True})
-
+    if version == "v2":
+        return jsonify({'data':True})
+    else:
+        raise BadRequest('You are using an old version of the app.  Please upgrade and try again')
 

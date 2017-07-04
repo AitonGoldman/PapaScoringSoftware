@@ -178,44 +178,46 @@ app.controller(
             if(ionic.Platform.isWebView() == false && $scope.type_of_page != 'user' && $scope.type_of_page != 'results'){                
                 if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()){
                     $state.go('use_the_native_app');
+                    return;
                 }
             }
             version_check_promise = Utils.resolved_promise();
             $scope.site=state.params.site;
             User.set_user_site($scope.site);
-
             if(ionic.Platform.isWebView() == true && $scope.type_of_page == 'player'){                
                  if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()){
-                     version_check_promise = TimeoutResources.VersionCheck(undefined,{site:$scope.site,version_string:"v1"});
+                     //version_check_promise = TimeoutResources.VersionCheck(undefined,{site:$scope.site,version_string:"v1"});
+                     var test_resource = {};                     
+                     version_check_promise = TimeoutResources.VersionCheckEx({site:$scope.site,version_string:"v2"},{},test_resource);
                  } 
-             }
-
+            }            
+            return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
             // if($state.current.name.length - $state.current.name.indexOf('confirm') == 7){
             //     Modals.information('It is important to read directions.  For example, this is the review page - you still need to click Purchase button');
             // }
             
-            if (User.logged_in() == true) {
-                if($scope.is_login_age_old(User.login_time) || TimeoutResources.GetAllResources().divisions==undefined){                    
-                    return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
+            // if (User.logged_in() == true) {
+            //     if($scope.is_login_age_old(User.login_time) || TimeoutResources.GetAllResources().divisions==undefined){                    
+            // return TimeoutResources.GetDivisions(undefined,{site:$scope.site});
                     
-                } else {
-                    return Utils.resolved_promise();
-                }
-            }             
-            if(do_not_check_current_user == undefined && User.logged_in() == false){                                
-                if(TimeoutResources.GetAllResources().divisions==undefined){                                                            
-                    prom = TimeoutResources.GetDivisions(undefined,{site:$scope.site});                    
-                } else {
-                    prom = Utils.resolved_promise();
-                }
-                return prom.then(function(data){
-                    if($scope.type_of_page != "results"){
-                        return check_user_promise = User.check_current_user();
-                    } else {
-                        return Utils.resolved_promise();
-                    }                    
-                });                
-            }                                 
+            //     } else {
+            //         return Utils.resolved_promise();
+            //     }
+            // }             
+            // if(do_not_check_current_user == undefined && User.logged_in() == false){                                
+            //     if(TimeoutResources.GetAllResources().divisions==undefined){                                                            
+            //         prom = TimeoutResources.GetDivisions(undefined,{site:$scope.site});                    
+            //     } else {
+            //         prom = Utils.resolved_promise();
+            //     }
+            //     return prom.then(function(data){
+            //         if($scope.type_of_page != "results"){
+            //             return check_user_promise = User.check_current_user();
+            //         } else {
+            //             return Utils.resolved_promise();
+            //         }                    
+            //     });                
+            // }                                 
         };
         $scope.customBackButtonNav = function(){
             if($state.current.name.match(/app.results/) != undefined){                
@@ -336,6 +338,9 @@ app.config(function($httpProvider,$ionicConfigProvider,$ionicCloudProvider,ionic
     $ionicConfigProvider.backButton.text(" ");        
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
     ionicImgCacheProvider.debug(true);    
+    if (!ionic.Platform.isIOS()) {
+        $ionicConfigProvider.scrolling.jsScrolling(false);
+    }
     $ionicCloudProvider.init({
         "core": {
             "app_id": secret_info_app_id

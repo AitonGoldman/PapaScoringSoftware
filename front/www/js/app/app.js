@@ -336,6 +336,9 @@ app.config(function($httpProvider,$ionicConfigProvider,$ionicCloudProvider,ionic
     $ionicConfigProvider.backButton.text(" ");        
     $ionicConfigProvider.backButton.icon('ion-arrow-left-a');
     ionicImgCacheProvider.debug(true);    
+    if (!ionic.Platform.isIOS()) {
+        $ionicConfigProvider.scrolling.jsScrolling(false);
+    }
     $ionicCloudProvider.init({
         "core": {
             "app_id": secret_info_app_id

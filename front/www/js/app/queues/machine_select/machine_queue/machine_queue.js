@@ -34,7 +34,8 @@ angular.module('app.queues.machine_select.machine_queue').controller(
                     $scope.resources=TimeoutResources.GetAllResources();
                     console.log($scope.resources.modified_queue.data);
                     $scope.division_machine = $scope.resources.modified_queue.data[$scope.division_machine_id];                    
-                    Modals.loaded();
+                    //Modals.loaded();
+                    $state.go('.',{},{reload:true})
                 });
             };
             

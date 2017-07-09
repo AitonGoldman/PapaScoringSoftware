@@ -24,8 +24,8 @@ def route_get_list_of_events():
     return jsonify({'data':input_data})    
     #return jsonify({})
 
-@meta_admin_blueprint.route('/meta_admin/test_db_with_tournaments',methods=['POST'])
-def route_meta_admin_create_db_and_tournaments():    
+@meta_admin_blueprint.route('/meta_admin/test_db_with_tournaments/players/<int:init_players>',methods=['POST'])
+def route_meta_admin_create_db_and_tournaments(init_players):    
     dummy_app = Flask('dummy_app')    
     db_config = td_config.get_db_config()    
     db_info = DbInfo(db_config)            
@@ -35,7 +35,8 @@ def route_meta_admin_create_db_and_tournaments():
     db_util.load_machines_from_json(dummy_app)
     orm_creation.init_papa_tournaments_divisions(dummy_app)
     orm_creation.init_papa_tournaments_division_machines(dummy_app)        
-    orm_creation.init_papa_players(dummy_app,short=True,number_of_a_players=200)
+    if init_players == 1:
+        orm_creation.init_papa_players(dummy_app,short=True,number_of_a_players=200)
     
     db_handle.engine.dispose()
     del dummy_app

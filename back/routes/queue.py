@@ -64,7 +64,16 @@ def insert_player_into_queue(player_id,division_machine_id):
     with db.session.no_autoflush:
         try:
             queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=division_machine.division_machine_id).all()
-            head_of_queue = division_machine.queue[0]
+            queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
+            head_of_queue = tables.Queue.query.filter_by(division_machine_id=division_machine_id,parent_id=None).first()
+            if queue:
+                if queue.division_machine_id==division_machine.division_machine_id:
+                    raise BadRequest('Player is already on this queue.')
+                else:
+                    raise BadRequest('Player is currently on another queue.  Remove the player and try again.')
+            if head_of_queue is None:
+                raise BadRequest('Tried to insert into a machine with no one on the queue')                    
+            #head_of_queue = division_machine.queue[0]
             new_queue = tables.Queue(
                 player=player,
                 division_machine=division_machine                

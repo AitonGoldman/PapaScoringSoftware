@@ -197,7 +197,7 @@ def create_team(app,team_data):
     db.session.commit()
     return team
 
-def create_player(app,player_data):
+def create_player(app,player_data,player_id=None):
     db = db_util.app_db_handle(app)
     tables = db_util.app_db_tables(app)
 
@@ -210,6 +210,8 @@ def create_player(app,player_data):
         last_name=player_data['last_name'],
         asshole_count=0        
     )
+    if player_id:
+        new_player.player_id=player_id        
     if 'active' in player_data and player_data['active'] is False:
         new_player.active=False
     else:

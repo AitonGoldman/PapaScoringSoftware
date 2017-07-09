@@ -14,6 +14,9 @@ from orm_creation import create_player,create_user,RolesEnum
 import random
 import collections
 from flask_restless.helpers import to_dict
+from werkzeug.utils import secure_filename
+import datetime
+import csv
 
 def generate_rank_matchup_dict(match_ups):
     if match_ups is None:
@@ -228,7 +231,6 @@ def route_get_division_final(division_id):
     else:
         return jsonify({'data':None})
  
-
 @admin_manage_blueprint.route('/finals/division_final/division_id/<division_id>',
                               methods=['POST'])
 @login_required
@@ -236,11 +238,25 @@ def route_get_division_final(division_id):
 def route_initialize_division_final(division_id):
     division_id=int(division_id)
     division = fetch_entity(current_app.tables.Division,division_id)
-    division_results = get_division_results(division_id,return_json=False)
-    division_results =  division_results['data']['ranked_player_list'][division_id]
+    if 'file' in request.files:                                        
+        file = request.files['file']                            
+        filename = secure_filename(file.filename)                                
+        random_file_name = datetime.datetime.now().strftime("%s")
+        save_path=os.path.join(current_app.config['UPLOAD_FOLDER'],"%s.csv"%random_file_name)
+        file.save(save_path)
+        file.close()                        
+        division_results=[]
+        with open(save_path, 'rb') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            for row in reader:
+                new_player = create_player(current_app,{'first_name':row[0],'last_name':''})
+                division_results.append((int(row[1])-1,{'player_id':new_player.player_id,'sum':0,'ifpa_ranking':'0','player_name':row[0]}))
+    else:
+        division_results = get_division_results(division_id,return_json=False)
+        division_results =  division_results['data']['ranked_player_list'][division_id]    
     division_final = initialize_division_final(division_id, division.division_name, division_results, current_app)            
     return jsonify({'data':division_final.to_dict_simple()})    
-    
+
 
 @admin_manage_blueprint.route('/finals/division_final/division_id/<division_final_id>/tiebreakers',
                               methods=['POST'])
@@ -747,6 +763,8 @@ def complete_round(division_final, division_final_round,app):
     
     sorted_winners = sorted(division_final_match_winners, key= lambda e: e['final_player']['adjusted_seed'])            
     if next_division_final_round is None:                
+        print "in finals round..."
+        app.tables.db_handle.session.commit()
         return sorted_winners    
     winner_groups = []
     while len(sorted_winners) > 0:

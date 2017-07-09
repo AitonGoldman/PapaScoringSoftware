@@ -334,28 +334,27 @@ def remove_player_from_queue(app,player=None,division_machine=None,commit=True):
     if queue is None:        
         return False
     division_machine = queue.division_machine
-    
-    if len(queue.queue_child) > 0:        
-        if queue.parent_id is None:            
-            division_machine.queue.append(queue.queue_child[0])            
-        else:            
-            parent_queue = tables.Queue.query.filter_by(queue_id=queue.parent_id).first()
-            parent_queue.queue_child.append(queue.queue_child[0])            
-            #queue.queue_child[0].parent_id=queue.parent_id            
-    else:        
-        if queue.parent_id is None:            
-            print "removing division machine queue id"
-            #division_machine.queue_id=None
-            #queue.division_machine = None
-            division_machine.queue.remove(queue)
-            #tables.DivisionMachine.query.filter_by(division_machine_id=division_machine.division_machine_id).first().queue_id=None
-            #tables.DivisionMachine.query.filter_by(division_machine_id=division_machine.division_machine_id).first().queue=None
-            
-    #db.session.commit()
-    db.session.delete(queue)    
-    if commit:
-        db.session.commit()    
-    return queue
+
+    with db.session.no_autoflush:
+        try:        
+            if len(queue.queue_child) > 0:        
+                if queue.parent_id is None:            
+                    division_machine.queue.append(queue.queue_child[0])            
+                else:            
+                    parent_queue = tables.Queue.query.filter_by(queue_id=queue.parent_id).first()
+                    parent_queue.queue_child.append(queue.queue_child[0])                        
+            else:        
+                if queue.parent_id is None:            
+                    print "removing division machine queue id"                        
+                    division_machine.queue.remove(queue)                                        
+            db.session.delete(queue)    
+            if commit:
+                db.session.commit()    
+            return queue
+        except Exception as e:
+            db.session.commit()
+            print "poop %s"%e
+            raise e
 
 def get_queue_from_division_machine(division_machine,json_output=False):
     db = db_util.app_db_handle(current_app)

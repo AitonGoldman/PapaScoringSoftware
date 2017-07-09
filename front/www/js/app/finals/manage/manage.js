@@ -146,7 +146,9 @@ angular.module('app.finals.manage').controller(
                 function(result,callback){                    
                     $scope.resources[result.resource_name] = result;
                     if($scope.resources[result.resource_name].data.tiebreakers.length == 0){
+                        $scope.number_important_tiebreakers=0;
                         callback('no tiebreakers to load',null);
+
                         return;
                     }                    
                     TimeoutResources.GetDivisionFinalImportantTiebreakerRanks({site:$scope.site,division_final_id:$scope.division_final_id},undefined,callback);

@@ -5,7 +5,8 @@ angular.module('app.finals.manage').controller(
     'app.finals.manage',[
         '$scope','$state','TimeoutResources','Utils','Modals','$ionicActionSheet',
         function($scope, $state, TimeoutResources, Utils,Modals,$ionicActionSheet) {
-
+            $scope.number_important_tiebreakers=0;
+            $scope.number_tiebreakers=0;            
             $scope.choose_undo_action = function(target){            
                 var hideSheet = $ionicActionSheet.show({
                     buttons: [
@@ -99,8 +100,13 @@ angular.module('app.finals.manage').controller(
                     Modals.loaded();
                     if (err == null){
                         $scope.resources[result.resource_name] = result;
-                        $scope.number_important_tiebreakers = Object.keys($scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers).length;
-                        
+                        important_tiebreakers_lists=$scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers;
+                        _.forEach(Object.keys(important_tiebreakers_lists), function(value) {
+                            if(important_tiebreakers_lists[value].length > 0){
+                                $scope.number_important_tiebreakers=$scope.number_important_tiebreakers+important_tiebreakers_lists[value].length;
+                            }
+                            
+                        });                                                       
                     } else {
                         console.log(err);                                
                     }
@@ -150,7 +156,9 @@ angular.module('app.finals.manage').controller(
                         callback('no tiebreakers to load',null);
 
                         return;
-                    }                    
+                    } else{
+                        $scope.number_tiebreakers = $scope.resources[result.resource_name].data.tiebreakers.length;
+                    }                   
                     TimeoutResources.GetDivisionFinalImportantTiebreakerRanks({site:$scope.site,division_final_id:$scope.division_final_id},undefined,callback);
                     //callback(null,result);
                 }                                
@@ -158,7 +166,17 @@ angular.module('app.finals.manage').controller(
                 Modals.loaded();
                 if (err == null){
                     $scope.resources[result.resource_name] = result;
-                    $scope.number_important_tiebreakers = Object.keys($scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers).length;
+                    important_tiebreakers_lists=$scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers;
+                    _.forEach(Object.keys(important_tiebreakers_lists), function(value) {
+                        if(important_tiebreakers_lists[value].length > 0){
+                            console.log("vaalue is "+value);
+                            console.log(important_tiebreakers_lists[value]);
+                            $scope.number_important_tiebreakers=$scope.number_important_tiebreakers+important_tiebreakers_lists[value].length;
+                        }
+                        
+                    });                                                       
+
+                    //$scope.number_important_tiebreakers = Object.keys($scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers).length;
                     //$scope.resources = Utils.extract_results_from_response(result);
                     console.log($scope.resources);
                 } else {

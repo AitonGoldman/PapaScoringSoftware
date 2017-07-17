@@ -64,6 +64,56 @@ bracket_template_4_player_groups_24_players = [
     }
 ]
 
+bracket_template_4_player_groups_40_players = [
+    {
+        'round':1,
+        'matches':[
+            generate_rank_matchup_dict([16,27,28,39]),
+            generate_rank_matchup_dict([17,26,29,38]),
+            generate_rank_matchup_dict([18,25,30,37]),
+            generate_rank_matchup_dict([19,24,31,36]),
+            generate_rank_matchup_dict([20,23,32,35]),            
+            generate_rank_matchup_dict([21,22,33,34])            
+        ]
+    },
+    {
+        'round':2,
+        'matches':[
+            generate_rank_matchup_dict([4,15, None, None]),
+            generate_rank_matchup_dict([5,14, None, None]),
+            generate_rank_matchup_dict([6,13, None, None]),
+            generate_rank_matchup_dict([7,12, None, None]),
+            generate_rank_matchup_dict([8,11, None, None]),                            
+            generate_rank_matchup_dict([9,10, None, None])                            
+            
+        ]
+    },
+    {
+        'round':3,
+        'matches':[
+            generate_rank_matchup_dict([0,None, None, None]),
+            generate_rank_matchup_dict([1,None, None, None]),
+            generate_rank_matchup_dict([2,None, None, None]),
+            generate_rank_matchup_dict([3,None, None, None]),                            
+        ]
+    },
+    {
+        'round':4,
+        'matches':[
+            generate_rank_matchup_dict([None,None, None, None]),
+            generate_rank_matchup_dict([None,None, None, None])                                                                    
+        ]
+    },
+    {
+        'round':5,
+        'matches':[
+            generate_rank_matchup_dict([None,None, None, None])            
+        ]
+    }
+    
+]
+
+
 bracket_template_4_player_groups_16_players = [
     {
         'round':1,
@@ -110,7 +160,8 @@ bracket_template_4_player_groups_8_players = [
 def route_scorekeeping_round_reopen(division_final_round_id):
     division_final_round_to_reopen = fetch_entity(current_app.tables.DivisionFinalRound,division_final_round_id)
     division_final = fetch_entity(current_app.tables.DivisionFinal,division_final_round_to_reopen.division_final_id)
-    division_final_rounds = [division_final_round for division_final_round in division_final.division_final_rounds if division_final_round.round_number > division_final_round_to_reopen.round_number]
+    division_final_rounds = [division_final_round for division_final_round in division_final.division_final_rounds if int(division_final_round.round_number) > int(division_final_round_to_reopen.round_number)]
+    
     division_final_round_to_reopen.completed=False    
     undo_final_round(division_final_rounds,current_app)
     return jsonify({'data':None})
@@ -132,19 +183,16 @@ def route_record_game(division_final_match_game_result_id):
     game_result_from_db = fetch_entity(current_app.tables.DivisionFinalMatchGameResult,division_final_match_game_result_id)
     match_from_db = fetch_entity(current_app.tables.DivisionFinalMatch,game_result_from_db.division_final_match_id)
     round_from_db = fetch_entity(current_app.tables.DivisionFinalRound,match_from_db.division_final_round_id)
-    division_final_from_db = fetch_entity(current_app.tables.DivisionFinal,round_from_db.division_final_id)
-
+    division_final_from_db = fetch_entity(current_app.tables.DivisionFinal,round_from_db.division_final_id)    
     match_dict = match_from_db.to_dict_simple()
     calculate_points_for_match(match_dict)    
     pre_record_tiebreakers = calculate_tiebreakers(match_dict,report_only=True,ignore_won_tiebreaker=True)
     record_scores(game_result,game_result_from_db,current_app)    
     match_dict = match_from_db.to_dict_simple()
     calculate_points_for_match(match_dict)    
-    post_record_tiebreakers = calculate_tiebreakers(match_dict,report_only=True,ignore_won_tiebreaker=True)        
-    
+    post_record_tiebreakers = calculate_tiebreakers(match_dict,report_only=True,ignore_won_tiebreaker=True)            
     if len(pre_record_tiebreakers)==0 or len(set(pre_record_tiebreakers) & set(post_record_tiebreakers)) == len(pre_record_tiebreakers):
         return jsonify({'data':division_final_from_db.to_dict_simple()})    
-    
     reset_tiebreaker_info_on_score_change(match_from_db,current_app) 
 
     return jsonify({'data':None})
@@ -322,7 +370,8 @@ def route_get_important_tiebreakers(division_final_id):
     division = fetch_entity(current_app.tables.Division,division_final.division_id)    
     important_tiebreakers = get_important_tiebreakers_for_division(division_final.qualifiers,
                                                          division.finals_num_qualifiers,
-                                                         get_important_ranks_for_tiebreakers(division.finals_num_qualifiers))
+                                                         #get_important_ranks_for_tiebreakers(division.finals_num_qualifiers))
+                                                         get_important_ranks_list_for_tiebreakers(division.finals_num_qualifiers))    
     return jsonify({'data':{'important_tiebreakers':important_tiebreakers}})
 
 
@@ -341,7 +390,7 @@ def resolve_unimportant_ties(division_final_player_list,num_qualifiers):
             player['reranked_seed']=player['reranked_seed']+tiebreaker_counts[player['reranked_seed']]            
     return sorted(division_final_player_list, key= lambda e: e['reranked_seed'],reverse=False)
 
-def generate_division_final_match_game_result(app,number_of_games=3,number_of_players=4,commit=False):
+def generate_division_final_match_game_result(app,number_of_games=4,number_of_players=4,commit=False):
     division_final_match_game_results=[]    
     for game_index in range(number_of_games):
         division_final_match_game_player_results=[]        
@@ -437,42 +486,78 @@ def generate_brackets(app,division_final_id, division_final_player_list,num_qual
             division_final_player.adjusted_seed=division_final_player_dict[division_final_player.final_player_id]['reranked_seed']
         else:
             print "uh oh !"
-    final_rounds = generate_division_final_rounds(app,bracket_template_4_player_groups_24_players,division_final_id,division_final_players_from_db,commit=True)
+    final_rounds = generate_division_final_rounds(app,bracket_template_4_player_groups_40_players,division_final_id,division_final_players_from_db,commit=True)
     
     app.tables.db_handle.session.commit()
     return final_rounds
 
+def get_important_ranks_list_for_tiebreakers(num_qualifiers):
+    important_ranks_for_tiebreakers = {}
+    important_ranks_for_tiebreakers['qualifying']=[num_qualifiers-1]
+    if num_qualifiers == 40:
+        print "hi there - 40 is important"
+        important_ranks_for_tiebreakers['bye']=[15,3]
+    if num_qualifiers == 24:
+        print "hi there - 24 is important"
+        important_ranks_for_tiebreakers['bye']=[7]        
+    if num_qualifiers == 12:
+        important_ranks_for_tiebreakers['bye']=[3]                
+    return important_ranks_for_tiebreakers
+
 def get_important_ranks_for_tiebreakers(num_qualifiers):
     important_ranks_for_tiebreakers = {}
     important_ranks_for_tiebreakers['qualifying']=num_qualifiers-1
+    if num_qualifiers == 40:
+        important_ranks_for_tiebreakers['bye']=15        
     if num_qualifiers == 24:
         important_ranks_for_tiebreakers['bye']=7        
     if num_qualifiers == 12:
         important_ranks_for_tiebreakers['bye']=3                
     return important_ranks_for_tiebreakers
         
-def get_important_tiebreakers_for_division(division_final_players,num_qualifiers,important_seeds):
+def get_important_tiebreakers_for_division(division_final_players,num_qualifiers,important_seeds):    
+    print important_seeds    
     num_players = len(division_final_players)
     tiebreakers_counts = {}
     important_tiebreaker_ranks = {}
+    for type,seed in important_seeds.iteritems():
+        important_tiebreaker_ranks[type]=[]
+    print "num quals is %s"%num_qualifiers
     for potential_tiebreaker_rank in range(0,num_qualifiers+1):
         tie_breaker_count = len(
             [final_player for final_player in division_final_players if final_player.initial_seed == potential_tiebreaker_rank]
-        )
-        tiebreakers_counts[potential_tiebreaker_rank]=tie_breaker_count    
-    for type,seed in important_seeds.iteritems():        
-        if seed >= len(tiebreakers_counts)-1:
-            continue
-        if tiebreakers_counts[seed] > 1:
-            important_tiebreaker_ranks[type]=seed        
-        if tiebreakers_counts[seed] == 0 and tiebreakers_counts[seed+1] == 0:
-            new_important_seed = seed-1
-            while new_important_seed >= 0 :            
-                if new_important_seed in tiebreakers_counts and tiebreakers_counts[new_important_seed] > 1:
-                    important_tiebreaker_ranks[type]=new_important_seed        
-                    break        
-                new_important_seed = new_important_seed-1
-
+        )        
+        tiebreakers_counts[potential_tiebreaker_rank]=tie_breaker_count
+    for tiebreaker_index in range(num_players,0,-1):
+        for type,seed in important_seeds.iteritems():
+            if len(tiebreakers_counts)>tiebreaker_index:
+                print "index : %s, type : %s, seed :%s, count:%s " %(tiebreaker_index, type,seed[0],tiebreakers_counts[tiebreaker_index])
+            if tiebreaker_index >= num_qualifiers +1 or tiebreakers_counts[tiebreaker_index] == 0:
+                continue
+            for seed_to_check in seed:
+                if seed_to_check==tiebreaker_index and tiebreakers_counts[tiebreaker_index] > 1:
+                    print "on the nose..."
+                    important_tiebreaker_ranks[type].append(tiebreaker_index)
+            for seed_to_check in seed:
+                if seed_to_check > tiebreaker_index and tiebreakers_counts[tiebreaker_index] > 1 and tiebreakers_counts[tiebreaker_index]+tiebreaker_index >=seed_to_check:
+                    print "other!"
+                    important_tiebreaker_ranks[type].append(tiebreaker_index)
+    # for type,seed in important_seeds.iteritems():        
+    #     if seed >= len(tiebreakers_counts)-1:
+    #         continue
+    #     if tiebreakers_counts[seed] > 1:
+    #         print "fuck 1"
+    #         important_tiebreaker_ranks[type]=seed        
+    #     if tiebreakers_counts[seed] == 0 and tiebreakers_counts[seed+1] == 0:
+    #         new_important_seed = seed-1
+    #         print "fuck 1111111111111 %s" % new_important_seed
+    #         while new_important_seed >= 0 :            
+    #             if new_important_seed in tiebreakers_counts and tiebreakers_counts[new_important_seed] > 1:
+    #                 print "fuck 2"
+    #                 important_tiebreaker_ranks[type]=new_important_seed        
+    #                 break        
+    #             new_important_seed = new_important_seed-1
+    #             print "fuck 22222 %s"%new_important_seed
     return important_tiebreaker_ranks
 
 def get_tiebreakers_for_division(division_final_players,num_qualifiers):
@@ -598,7 +683,7 @@ def calculate_points_for_game(division_final_match_game_dict):
     sorted_scores[0]['papa_points']=0
     sorted_scores[1]['papa_points']=1
     sorted_scores[2]['papa_points']=2    
-    sorted_scores[3]['papa_points']=4    
+    sorted_scores[3]['papa_points']=3    
     
     division_final_match_game_dict['division_final_match_game_player_results']=sorted_scores        
     division_final_match_game_dict['completed']=True
@@ -620,13 +705,13 @@ def calculate_points_for_match(division_final_match):
     for match_player_result in division_final_match['final_match_player_results']:
         if match_player_result['final_player_id'] in players_score:
             match_player_result['papa_points_sum']=players_score[match_player_result['final_player_id']]
-    if games_completed == 3:        
+    if games_completed == 4:        
         tiebreaker_final_player_ids = calculate_tiebreakers(division_final_match)        
     else:
         tiebreaker_final_player_ids = []        
     if len(tiebreaker_final_player_ids) > 0:                
         return    
-    if games_completed==3:
+    if games_completed == 4:
         division_final_match['completed']=True
         sorted_match_player_results=sorted(division_final_match['final_match_player_results'], key= lambda e: e['papa_points_sum'])
 
@@ -648,6 +733,12 @@ def calculate_points_for_match(division_final_match):
             sorted_match_player_results[3]['winner']=False                    
         
 def calculate_tiebreakers(division_final_match_dict,report_only=False, ignore_won_tiebreaker=False):
+    round = fetch_entity(current_app.tables.DivisionFinalRound,division_final_match_dict['division_final_round_id'])
+    if round.round_number == "5":
+        last_round=True
+    else:
+        last_round=False
+    
     sorted_scores = sorted(division_final_match_dict['final_match_player_results'], key= lambda e: e['papa_points_sum'],reverse=True)
     completed_tiebreakers = len([division_final_match_player for division_final_match_player in division_final_match_dict["final_match_player_results"] if division_final_match_player['won_tiebreaker']!=None]) > 0
     if ignore_won_tiebreaker:
@@ -672,38 +763,84 @@ def calculate_tiebreakers(division_final_match_dict,report_only=False, ignore_wo
             tiebreaker_final_player_ids.append(sorted_scores[3]['final_player_id'])
             if report_only is False:
                 division_final_match_dict['expected_num_tiebreaker_winners']=1
-
+        
+    if sorted_scores[0]['papa_points_sum'] == sorted_scores[1]['papa_points_sum'] and sorted_scores[1]['papa_points_sum'] != sorted_scores[2]['papa_points_sum'] and last_round:
+       if sorted_scores[0]['papa_points_sum'] is not None:            
+            tiebreaker_final_player_ids.append(sorted_scores[0]['final_player_id'])
+            tiebreaker_final_player_ids.append(sorted_scores[1]['final_player_id'])
+            if report_only is False:
+                division_final_match_dict['expected_num_tiebreaker_winners']=1                        
+        #print "found a high tie"
+    if sorted_scores[2]['papa_points_sum'] == sorted_scores[3]['papa_points_sum'] and sorted_scores[3]['papa_points_sum'] != sorted_scores[1]['papa_points_sum'] and last_round:        
+        if sorted_scores[2]['papa_points_sum'] is not None:            
+            tiebreaker_final_player_ids.append(sorted_scores[3]['final_player_id'])
+            tiebreaker_final_player_ids.append(sorted_scores[2]['final_player_id'])
+            if report_only is False:
+                division_final_match_dict['expected_num_tiebreaker_winners']=1                
 
     for match_player_result in division_final_match_dict['final_match_player_results']:
-        if match_player_result['final_player_id'] in tiebreaker_final_player_ids and report_only is False:            
-            match_player_result['needs_tiebreaker']=True
+        #print "%s %s %s" % (match_player_result['final_player_id'],tiebreaker_final_player_ids,report_only)
+        if match_player_result['final_player_id'] in tiebreaker_final_player_ids and report_only is False:
+            match_player_result['needs_tiebreaker']=True    
     return tiebreaker_final_player_ids
 
 def resolve_tiebreakers(division_final_match_dict,app):    
+    print "FUCK1"    
     for match_player_result in division_final_match_dict['final_match_player_results']:
         if match_player_result['needs_tiebreaker'] is True:
             match_player_result['tiebreaker_score']=int(match_player_result['tiebreaker_score'].replace(',',''))
     sorted_scores = sorted([match_player_result for match_player_result in division_final_match_dict['final_match_player_results'] if match_player_result['needs_tiebreaker'] is True], key= lambda e: e['tiebreaker_score'])    
     final_match_game_result = app.tables.DivisionFinalMatch.query.filter_by(division_final_match_id=division_final_match_dict['division_final_match_id']).first()
+    final_round = app.tables.DivisionFinalRound.query.filter_by(division_final_round_id=division_final_match_dict['division_final_round_id']).first()    
     final_match_game_result.completed=True
     final_match_player_results = {match_player_result.final_player_id:match_player_result for match_player_result in  app.tables.DivisionFinalMatchPlayerResult.query.filter_by(division_final_match_id=division_final_match_dict['division_final_match_id']).all()}
-    tiebreaker_winners=[]
+    tiebreaker_winners=[]    
     if len(sorted_scores)==2:
+        print "FUCK2"
         final_match_player_results[sorted_scores[1]['final_player_id']].won_tiebreaker=True
-        final_match_player_results[sorted_scores[0]['final_player_id']].won_tiebreaker=False
+        final_match_player_results[sorted_scores[0]['final_player_id']].won_tiebreaker=False        
+        if final_round.round_number == "5":            
+            print "FUCK3"
+            final_match_player_results[sorted_scores[1]['final_player_id']].final_player.initial_seed=-1
+            final_match_player_results[sorted_scores[0]['final_player_id']].final_player.initial_seed=-2            
         tiebreaker_winners.append({"final_player_id":sorted_scores[1]['final_player_id'],"final_player_name":sorted_scores[1]['final_player']['player_name']})
     if len(sorted_scores)==3:
+        print "FUCK4"
         if division_final_match_dict['expected_num_tiebreaker_winners']==2:
             final_match_player_results[sorted_scores[0]['final_player_id']].won_tiebreaker=False
             final_match_player_results[sorted_scores[1]['final_player_id']].won_tiebreaker=True
-            final_match_player_results[sorted_scores[2]['final_player_id']].won_tiebreaker=True
+            final_match_player_results[sorted_scores[2]['final_player_id']].won_tiebreaker=True                        
+            if final_round.round_number == "5":
+                print "FUCK5"
+                final_match_player_results[sorted_scores[0]['final_player_id']].final_player.initial_seed=-3
+                final_match_player_results[sorted_scores[1]['final_player_id']].final_player.initial_seed=-2
+                final_match_player_results[sorted_scores[2]['final_player_id']].final_player.initial_seed=-1            
             tiebreaker_winners.append({"final_player_id":sorted_scores[1]['final_player_id'],"final_player_name":sorted_scores[1]['final_player']['player_name']})
             tiebreaker_winners.append({"final_player_id":sorted_scores[2]['final_player_id'],"final_player_name":sorted_scores[2]['final_player']['player_name']})
         if division_final_match_dict['expected_num_tiebreaker_winners']==1:
             final_match_player_results[sorted_scores[0]['final_player_id']].won_tiebreaker=False
             final_match_player_results[sorted_scores[1]['final_player_id']].won_tiebreaker=False
             final_match_player_results[sorted_scores[2]['final_player_id']].won_tiebreaker=True
-            tiebreaker_winners.append({"final_player_id":sorted_scores[2]['final_player_id'],"final_player_name":sorted_scores[2]['final_player']['player_name']})                        
+            if final_round.round_number == "5":
+                print "FUCK5"
+                final_match_player_results[sorted_scores[0]['final_player_id']].final_player.initial_seed=-3
+                final_match_player_results[sorted_scores[1]['final_player_id']].final_player.initial_seed=-2
+                final_match_player_results[sorted_scores[2]['final_player_id']].final_player.initial_seed=-1                        
+            tiebreaker_winners.append({"final_player_id":sorted_scores[2]['final_player_id'],"final_player_name":sorted_scores[2]['final_player']['player_name']})
+    if len(sorted_scores)==4:
+            final_match_player_results[sorted_scores[0]['final_player_id']].won_tiebreaker=False
+            final_match_player_results[sorted_scores[1]['final_player_id']].won_tiebreaker=False
+            final_match_player_results[sorted_scores[2]['final_player_id']].won_tiebreaker=True
+            final_match_player_results[sorted_scores[3]['final_player_id']].won_tiebreaker=True
+            if final_round.round_number == "5":
+                final_match_player_results[sorted_scores[0]['final_player_id']].final_player.initial_seed=-4
+                final_match_player_results[sorted_scores[1]['final_player_id']].final_player.initial_seed=-3
+                final_match_player_results[sorted_scores[2]['final_player_id']].final_player.initial_seed=-2            
+                final_match_player_results[sorted_scores[3]['final_player_id']].final_player.initial_seed=-1           
+            
+            tiebreaker_winners.append({"final_player_id":sorted_scores[2]['final_player_id'],"final_player_name":sorted_scores[2]['final_player']['player_name']})
+            tiebreaker_winners.append({"final_player_id":sorted_scores[3]['final_player_id'],"final_player_name":sorted_scores[3]['final_player']['player_name']})
+    
     app.tables.db_handle.session.commit()
     return tiebreaker_winners
 
@@ -724,7 +861,7 @@ def record_scores(match_game_result_dict,match_game_result_from_db,app):
             match_game_player_result.play_order=match_game_player_results_scores[game_player_result_id]['play_order']            
     app.tables.db_handle.session.commit()
     
-def reset_tiebreaker_info_on_score_change(match,app):
+def reset_tiebreaker_info_on_score_change(match,app):    
     for match_player_result in match.final_match_player_results:
         match_player_result.needs_tiebreaker=False
         match_player_result.won_tiebreaker=None
@@ -745,7 +882,6 @@ def complete_round(division_final, division_final_round,app):
     division_final_match_winners=[]
 
     division_final_round.completed=True
-    
     for division_final_match in division_final_round_dict['division_final_matches']:            
         calculate_points_for_match(division_final_match)    
     
@@ -755,7 +891,7 @@ def complete_round(division_final, division_final_round,app):
             if division_final_match_player['winner']:
                 division_final_match_winners.append(division_final_match_player)
     
-    if next_division_final_round and int(division_final_round.round_number) == 1:        
+    if next_division_final_round and int(division_final_round.round_number) < 3:        
         for division_final_match in next_division_final_round.division_final_matches:
             for division_final_match_player in division_final_match.final_match_player_results:                
                 if division_final_match_player.final_player_id:                                        
@@ -779,7 +915,7 @@ def complete_round(division_final, division_final_round,app):
     app.tables.db_handle.session.commit()
     return division_final_match_winners
     
-def calculate_final_rankings(round_dicts,total_players=24):
+def calculate_final_rankings(round_dicts,total_players=40,last_round=False):
     number_matches = 0
     previous_number_matches = 0            
     for index,round in enumerate(round_dicts):
@@ -792,7 +928,6 @@ def calculate_final_rankings(round_dicts,total_players=24):
             for match_player in match['final_match_player_results']:
                 if match_player['winner'] is not True or index == len(round_dicts)-1:                                        
                     unranked_match_players.append(match_player)
-                    
         sorted_player_list = sorted(unranked_match_players, key= lambda e: e['papa_points_sum'],reverse=True)
         ranked_player_list = list(Ranking(sorted_player_list,key=lambda pp: pp['papa_points_sum']))                
         ranked_player_dict = {ranked_player[1]['final_player_id']:ranked_player for ranked_player in ranked_player_list}        
@@ -802,18 +937,33 @@ def calculate_final_rankings(round_dicts,total_players=24):
         for ranked_final_player_id,ranked_final_player in ranked_player_dict.iteritems():
             if ranked_final_player[1]['winner'] is not True  or index == len(round_dicts)-1:
                 ranked_final_player[1]['final_rank']=base_rank+ranked_final_player[0]+1                                
-    
+        if index == len(round_dicts)-1:
+            for ranked_final_player_id,ranked_final_player in ranked_player_dict.iteritems():
+                print ranked_final_player[1]
+                if ranked_final_player[1]['final_player']['initial_seed'] < 0:                    
+                    delta = (ranked_final_player[1]['final_player']['initial_seed']*-1)-1
+                    ranked_final_player[1]['final_rank']=base_rank+ranked_final_player[0]+1+delta                                                
+                    pass
+            pass
+            
 
 def undo_final_round(rounds_to_undo,app):    
-    bye_seeds=[0,1,2,3,4,5,6,7]
+    round_2_byes=[4,5,6,7,8,9,10,11,12,13,14,15]
+    round_3_byes=[0,1,2,3]
     for round in rounds_to_undo:        
         round.completed=False
         for match in round.division_final_matches:
             for player_result in match.final_match_player_results:
                 player_result.needs_tiebreaker=False
-                player_result.won_tiebreaker=None
-                if player_result.final_player and player_result.final_player.initial_seed not in bye_seeds:
-                    player_result.final_player_id=None
+                player_result.won_tiebreaker=None                
+                if player_result.final_player:
+                    if int(round.round_number) > 3:                        
+                        player_result.final_player_id=None                    
+                    if player_result.final_player.adjusted_seed not in round_2_byes and int(round.round_number) == 2:                        
+                        player_result.final_player_id=None
+                    if player_result.final_player.adjusted_seed not in round_3_byes and int(round.round_number) == 3:                        
+                        player_result.final_player_id=None
+                        
             for game in match.final_match_game_results:                    
                 game.division_machine_string=None
                 for score in game.division_final_match_game_player_results:                    

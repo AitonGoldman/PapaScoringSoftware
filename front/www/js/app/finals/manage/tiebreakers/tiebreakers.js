@@ -29,7 +29,10 @@ angular.module('app.finals.manage.tiebreakers').controller(
             Modals.loaded();
             if (err == null){
                 $scope.resources[result.resource_name] = result;
-                $scope.important_bye_rank = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.bye;
+                //$scope.important_bye_rank = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.bye;
+                $scope.important_bye_ranks = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.bye;                
+                console.log('poooooop');
+                console.log($scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers);
                 $scope.important_qualifying_rank = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.qualifying;
                 
                 console.log($scope.resources);

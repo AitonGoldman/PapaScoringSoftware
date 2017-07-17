@@ -1,14 +1,17 @@
 angular.module('TD_services.utils', []);
 angular.module('TD_services.utils').factory('Utils', ['$q','$cordovaInAppBrowser',function($q,$cordovaInAppBrowser) {
 
-    var check_tiebreaker_is_important = function(important_bye_rank,important_qualifying_rank,rank_to_test){
+    var check_tiebreaker_is_important = function(important_bye_ranks,important_qualifying_rank,rank_to_test){
         //important_bye_rank = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.bye;
-        //important_qualifying_rank = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.qualifying;
-        console.log('hi');
-        if (important_bye_rank==rank_to_test){
+        //important_qualifying_rank = $scope.resources.division_final_important_tiebreaker_ranks.data.important_tiebreakers.qualifying;        
+        console.log(important_bye_ranks,important_qualifying_rank,rank_to_test);
+        if (_.indexOf(important_bye_ranks,rank_to_test) != -1){
+            console.log('poop');
             return true;
         }
         if (important_qualifying_rank==rank_to_test){
+            console.log(important_qualifying_rank+ " "+rank_to_test);
+
             return true;
         }
         return false;

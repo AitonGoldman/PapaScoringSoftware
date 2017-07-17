@@ -16,7 +16,7 @@
             {{resources.divisions.data[division_id].tournament_name}}
           </center>
         </a>
-        <a ng-if='resources.division_final_tiebreakers.data.tiebreakers.length > 0 ' class='padding item item-icon-right' ui-sref='.tiebreakers({division_final_id:division_final_id})'>
+        <a ng-if='number_tiebreakers > 0 ' class='padding item item-icon-right' ui-sref='.tiebreakers({division_final_id:division_final_id})'>
         <i class="icon ion-chevron-right"></i>
           Resolve tiebreakers <span class='standard_small_font'>({{number_important_tiebreakers}} important tiebreakers)</span>
         </a>

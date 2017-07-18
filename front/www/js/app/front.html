@@ -5,13 +5,6 @@
         <span><u>{{User.logged_in_user().player.full_name}}</u></span>
       </button>
     </center>
-    <div class="skinny-list list" ng-if="type_of_page == 'prereg'">      
-      <a  ng-if='!User.logged_in()' id="front_results_link" ui-sref='prereg({site:site})' class="item item-icon-left item-icon-right">
-        <i class="icon ion-stats-bars"></i>
-        <span>PreReg</span>
-        <i class="icon ion-chevron-right"></i>                
-      </a>
-    </div>
     <div class="skinny-list list" ng-if="type_of_page == 'kiosk'">
 
       <a  ng-if='type_of_page == "kiosk"' id="front_queues_link" ui-sref='.kiosk_queues({manage:false})' class="item item-icon-left item-icon-right  ">
@@ -21,32 +14,11 @@
       </a>      
     </div>
     <div class="skinny-list list" ng-if="type_of_page != 'prereg' && type_of_page != 'kiosk'">      
-      <a id="front_purchase_tickets_link" ui-sref=".token" class="item item-icon-left item-icon-right" ng-if='User.has_role("desk")  && !User.has_role("in_line_registration")'>
-        <i class="icon ion-ios-cart"></i>
-        <span>Purchase Tickets</span>
-        <i class="icon ion-chevron-right"></i>                
-      </a>
-      <a id="front_player_purchase_tickets_link" ui-sref=".player_token" class="item item-icon-left item-icon-right  " ng-if='User.has_role("player")'>
-        <i class="icon ion-ios-cart"></i>
-        <span>Purchase Tickets</span>
-        <i class="icon ion-chevron-right"></i>                
-      </a>
-      <a id="front_player_purchase_tickets_link" ui-sref=".ticket_prices" class="item item-icon-left item-icon-right  " ng-if='User.has_role("player")'>
-        <i class="icon ion-ios-cart"></i>
-        <span>Ticket Prices</span>
-        <i class="icon ion-chevron-right"></i>                
-      </a>      
       <a id="front_player_info_link" ui-sref=".player_info({player_id:User.logged_in_user().player.player_id})" class="item item-icon-left item-icon-right  " ng-if='User.has_role("player")'>
         <i class="icon ion-information-circled"></i>
         <span>Player Info</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
-      <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.player.in_line_add_player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("in_line_registration")'>
-        <i class="icon ion-person"></i>
-        <span>In Line Registration</span>
-        <i class="icon ion-chevron-right"></i>        
-        
-      </a>      
       <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk") &&  !User.has_role("in_line_registration")'>
         <i class="icon ion-person"></i>
         <span>Manage Players</span>
@@ -56,19 +28,6 @@
       <a  id="front_manage_users_link" id='home_manage_players_link' ui-sref='.in_line_player' class="item item-icon-left item-icon-right  " ng-if='User.has_role("in_line_registration")'>
         <i class="icon ion-person"></i>
         <span>Edit Players</span>
-        <i class="icon ion-chevron-right"></i>        
-        
-      </a>
-      
-      <a id="front_manage_users_link" id='home_manage_players_link' ui-sref='.set_player_picture' class="item item-icon-left item-icon-right" ng-if='User.has_role("desk") && isWebView==true'>
-        <i class="icon ion-person"></i>
-        <span>Set Player Picture</span>
-        <i class="icon ion-chevron-right"></i>                
-      </a>
-      
-      <a  id="front_manage_teams_link" ui-sref='.teams' class="item item-icon-left item-icon-right  " ng-if='User.has_role("desk") && !User.has_role("in_line_registration")'>
-        <i class="icon ion-person-stalker"></i>
-        <span>Manage Teams</span>
         <i class="icon ion-chevron-right"></i>        
         
       </a>      
@@ -87,37 +46,16 @@
         <span>Results</span>
         <i class="icon ion-chevron-right"></i>                
       </a>
-      <a ng-if='User.has_role("player")' class='item item-icon-left item-icon-right' ui-sref='.results.players.player({player_id:User.logged_in_user().player.player_id,player_name:User.logged_in_user().player.full_name})'>
+      <a ng-if='User.has_role("player") && site!="pinburgh_2017"' class='item item-icon-left item-icon-right' ui-sref='.results.players.player({player_id:User.logged_in_user().player.player_id,player_name:User.logged_in_user().player.full_name})'>
         <i class="icon ion-stats-bars"></i>
         My Results
         <i class="icon ion-chevron-right"></i>        
-      </a>
-      <a  ng-if='User.has_role("desk")  && !User.has_role("in_line_registration")' id="front_results_link" ui-sref='.prereg_complete' class="item item-icon-left item-icon-right">
-        <i class="icon ion-ios-compose-outline"></i>
-        <span>Complete Registration for Pre-Registered</span>
-        <i class="icon ion-chevron-right"></i>                
-      </a>
-      <a  ng-if='User.has_role("desk") && !User.has_role("in_line_registration")' id="front_results_link" ui-sref='.in_line_complete' class="item item-icon-left item-icon-right">
-        <i class="icon ion-ios-compose-outline"></i>
-        <span>Complete In Line Registration</span>
-        <i class="icon ion-chevron-right"></i>                
       </a>
       <a  ng-if='User.has_role("desk") && !User.has_role("in_line_registration")' id="front_results_link" ui-sref='.token_comp' class="item item-icon-left item-icon-right">
         <i class="icon ion-ios-compose-outline"></i>
         <span>Comp Tickets</span>
         <i class="icon ion-chevron-right"></i>                
-      </a>            
-      <a ng-if='isWebView == false && User.has_role("player")' href="static/help.html" target="_new_window" class="item item-icon-left item-icon-right">
-        <i class="icon ion-help"></i>
-        <span>Help</span>
-        <i class="icon ion-chevron-right"></i>                
-      </a>
-      <a ng-if='isWebView == true  && User.has_role("player")' ng-click="utils.native_open_in_browser('/static/help.html')" class="item item-icon-left item-icon-right">
-        <i class="icon ion-help"></i>
-        <span>Help</span>
-        <i class="icon ion-chevron-right"></i>                
-      </a>
-      
+      </a>                  
       <a ng-if="type_of_page == 'user' && User.logged_in() == false" ui-sref='app.login' class="item item-icon-left item-icon-right">
         <i class="icon ion-log-in"></i>
         <span>Login</span>
@@ -136,14 +74,5 @@
       
     </div>
     
-    <!--
-    <form name="upload" class="form" data-ng-submit="addFile()">
-      <input type="file" name="file" multiple 
-             onchange="angular.element(this).scope().uploadedFile(this)" />
-      <button type="submit">Upload </button>
-    </form>
-    <div ng-if='uploaded_pic_name != undefined' class='player-info-avatar'>
-      <img class='avatar-frame sample-show-hide sample-show-hide-back avatar-user-pic' src="http://{{server_ip_address}}/pics/{{uploaded_pic_name}}">
-    </div>-->
   </ion-content>
 </ion-view>

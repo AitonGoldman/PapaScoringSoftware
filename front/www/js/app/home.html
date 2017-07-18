@@ -117,12 +117,6 @@
         <a ng-if="User.logged_in() == true" class="item item-divider">
           &nbsp;
         </a>        
-        <a id='menu_jagoffs_link' class='item item-icon-right' menu-close ui-sref='.i_need_an_adult' ng-if="User.logged_in() == true && (User.has_role('scorekeeper') || User.has_role('desk'))">          
-          <div>
-            Please Send Help
-          </div>
-          <i class="icon ion-chevron-right"></i>
-        </a>
         
         <a id='menu_finals_link' class='item item-icon-right' menu-close ui-sref='.finals' ng-if="User.logged_in() == true && User.has_role('admin')">
           <div>

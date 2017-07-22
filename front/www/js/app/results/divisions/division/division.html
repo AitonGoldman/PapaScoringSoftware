@@ -6,13 +6,13 @@
        on-refresh="doneRefresh()"
        spinner="none">
     </ion-refresher>    
-    <div style='text-align:center;' class='standard_large_font padding-top padding-bottom'>
-      <b>
-        {{resources.divisions.data[division_id].tournament_name}}
-      </b>
+    <div style='text-align:center;' class='padding-top padding-bottom'>
+
+        <b>{{resources.divisions.data[division_id].tournament_name}}</b>
+
     </div>
     <div class="mobile-show-vertical-only">
-      <center>Rotate phone to see best scores</center>
+      <center>Swipe down to reload results</center>
     </div>
     <table style='margin-left:auto;margin-right:auto;' class='results_table'>
       <tr>

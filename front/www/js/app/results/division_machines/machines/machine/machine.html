@@ -7,8 +7,7 @@
        spinner="none">
     </ion-refresher>    
 
-    <div style='text-align:center;' class='standard_large_font padding-top padding-bottom'>
-
+    <div style='width:100%;text-align:center;white-space: nowrap;overflow: hidden; text-overflow: ellipsis;' class='standard_large_font padding-top padding-bottom'>
 <!--      <select ng-change="jump_to_machine_results()" ng-model='jump_to_division_machine.data' ng-options='machine as machine.division_machine_name for machine in resources.division_machines.data'>
         
           </select>-->
@@ -16,6 +15,10 @@
         {{division_machine_name}}
       </b>
     </div>
+      <div class="mobile-show-vertical-only">
+        <center>Swipe down to reload results</center>
+      </div>
+    
     <table class='results_table_machine' style='margin-left:auto;margin-right:auto;'>
       <tr>
         <th><b>Rank</b></th>

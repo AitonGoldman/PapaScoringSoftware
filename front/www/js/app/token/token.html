@@ -19,9 +19,7 @@
     </div>
     
     <div class='player-info-avatar player-info-avatar-ex-two'>
-      <!--<img  ng-if='selected_players.length > 0 ' class='avatar-frame avatar-user-pic avatar-user-pic-ex' src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">-->
       <img  ion-img-cache ng-if='selected_players.length > 0 ' class='avatar-frame avatar-user-pic avatar-user-pic-ex' ng-src="{{http_prefix}}://{{server_ip_address}}/pics/player_{{player_img_id}}.jpg">
-      <!-- <img  ion-img-cache ng-if='selected_players.length > 0 ' class='avatar-frame avatar-user-pic avatar-user-pic-ex' ng-src="https://www.pbchallenge.net/pics/player_{{player_img_id}}.jpg"> -->     
     </div>
   </ion-content>
 </ion-view>

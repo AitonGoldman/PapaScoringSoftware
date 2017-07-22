@@ -5,6 +5,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
     
     $stateProvider.state(
         'event_select', {
+            cache:false,
             url: '/event_select',
             views: {
                 '@': {
@@ -19,6 +20,7 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
         }
     ).state(
         'app', {
+            cache:false,
             url: '/:site/app',
             views: {
                 '@': {
@@ -26,7 +28,8 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
                     controller: 'IndexController'
                 },
                 'menuContent@app': {
-                    templateUrl: 'js/app/front.html'                    
+                    templateUrl: 'js/app/front.html',
+                    controller: 'FrontController'
                 }
 
             }

@@ -6,7 +6,7 @@ angular.module('app.results.divisions.division').controller(
         $scope.site=$state.params.site;
 	$scope.division_id=$state.params.division_id;
 	$scope.division_name=$state.params.division_name;
-        $scope.filter_limit=25;
+        $scope.filter_limit=75;
         $scope.utils = Utils;
         Modals.loading();
         $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);                
@@ -146,7 +146,7 @@ angular.module('app.results.divisions.division').controller(
             //$http.get('/more-items').success(function(items) {
             //     useItems(items);            
             $timeout(function(){
-                $scope.filter_limit=$scope.filter_limit+20;
+                $scope.filter_limit=$scope.filter_limit+50;
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             },50);
             

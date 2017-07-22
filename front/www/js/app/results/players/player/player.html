@@ -11,11 +11,15 @@
       <div ng-if="team_id != ''" style='padding:10px;'>
         <a class='standard_big_font' ui-sref='.team({team_id:team_id})'>Team Results</a>
       </div>
-      
+      <div class="mobile-show-vertical-only">
+        <center>Swipe down to reload results</center>
+      </div>      
       <div ng-if='player_division_results.entries.length > 0' ng-repeat='(division_id,player_division_results) in resources.player_results.data' style='padding-bottom:10px;'>
        <div style='background-color:tan;padding-top:15px;padding-bottom:15px'>
-          <a class='standard_large_font' ui-sref='.^.^.divisions.division({division_id:division_id,division_name:player_division_results.tournament_name})'>
-            {{player_division_results.tournament_name}}
+         <a class='standard_big_font' ui-sref='.^.^.divisions.division({division_id:division_id,division_name:player_division_results.tournament_name})'>
+           <b>
+             {{player_division_results.tournament_name}}
+           </b>
           </a>
           <div style='margin-top:10px'>Rank : {{player_division_results.rank+1}}</div>
         </div>
@@ -25,7 +29,7 @@
             <tr>
               <th><b>Rank</b></th>
               <th align='center' style='padding-left:0px'><b>Machine</b></th>
-              <th align='center' style='padding-left:0px'><b>Points</b></th>
+              <th align='center' style='padding-left:0px;padding-right:10px'><b>Points</b></th>
               <th align='center' style='padding-left:0px'><b>Score</b></th>            
             </tr>
             <tr ng-repeat='machine_score in player_division_results.entries|limitTo:resources.divisions.data[division_id].number_of_relevant_scores'>
@@ -33,7 +37,7 @@
               <td align='center' style='vertical-align:middle;padding-top:10px;'>
                 <a ui-sref='app.results.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name,division_id:division_id})'>
                   {{machine_score.machine_name}}
-                </a>
+                </a>                
               </td>
               <td align='center' style='padding-top:10px;vertical-align:middle;'>{{machine_score.points}}</td>
               <td align='center' style='padding-top:10px;vertical-align:middle;'>{{machine_score.score|number}}</td>            
@@ -53,26 +57,26 @@
           </table>
           <!--<div ng-if='player_division_results.entries.length > resources.divisions.data[division_id].number_of_relevant_scores'>-->
           <hr>
-            <b>Non-Contributing Scores</b><br>
-            <table style='margin-left:auto;margin-right:auto;'>
+            <b ng-if='player_division_results.entries.length > resources.divisions.data[division_id].number_of_relevant_scores'>Non-Contributing Scores</b><br>
+            <table style='margin-left:auto;margin-right:auto;' ng-if='player_division_results.entries.length > resources.divisions.data[division_id].number_of_relevant_scores'>
               <tr>
                 <th><b>Rank</b></th>
-                <th align='center' style='padding-left:0px'><b>Machine {{resources.divisions.data[division_id].number_of_relevant_scores}}</b></th>
-                <th align='center'  style='padding-left:0px'><b>Points</b></th>
-                <th align='center'  style='padding-left:10px'><b>Score</b></th>            
+                <th align='center' style='padding-left:0px'><b>Machine</b></th>
+                <th align='center'  style='padding-left:0px;padding-right:10px'><b>Points</b></th>
+                <th align='center'  style='padding-left:0px'><b>Score</b></th>            
               </tr>
               <tr ng-repeat='machine_score in player_division_results.entries' ng-if='$index + 1  > resources.divisions.data[division_id].number_of_relevant_scores'>
                 <td align='center' style='vertical-align:middle;padding-top:10px;' >{{machine_score.rank}}</td>
                 <td align='center' style='vertical-align:middle;padding-left:0px;padding-top:10px;'>
                   <a ui-sref='app.results.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name,division_id:division_id})'>
-                    {{machine_score.machine_name}}
+                  {{machine_score.machine_name}}
                   </a>
                   <!-- <a ui-sref='.^.^.division_machines.machines.machine({division_machine_id:machine_score.division_machine_id,division_machine_name:machine_score.machine_name})'> -->
                   <!--               {{machine_score.machine_name}} -->
                   <!--             </a> -->
                 </td>
                 <td align='center' style='vertical-align:middle;padding-left:0px;padding-top:10px;'>{{machine_score.points}}</td>
-                <td align='center' style='vertical-align:middle;padding-left:0px;padding-top:10px;'>{{machine_score.score|number}}</td>            
+                <td align='center' style='vertical-align:middle;padding-left:10px;padding-top:10px;'>{{machine_score.score|number}}</td>            
               </tr>
             </table>
 

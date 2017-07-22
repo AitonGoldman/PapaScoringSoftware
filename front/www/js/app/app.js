@@ -50,6 +50,7 @@ app.controller(
     function($scope, $location, $http, 
              $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {
         Modals.loading();
+        $scope.random=Math.random();
         events_promise = TimeoutResources.GetEvents();
         events_promise.then(function(data){
             $scope.resources = TimeoutResources.GetAllResources();
@@ -64,13 +65,27 @@ app.controller(
         $scope.platform = ionic.Platform;
     }
 );
+
+app.controller(
+    'FrontController',    
+    function($scope, $location, $http, 
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {                
+    }
+);
+
 app.controller(
     'IndexController',    
     function($scope, $location, $http, 
              $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory,$ionicSideMenuDelegate,ActionSheets) {
-        //$scope.type_of_page = type_of_page;
+        //$scope.type_of_page = type_of_page;        
         $scope.utils = Utils;
-        $scope.state = $state;
+        $scope.state = $state;        
+        $scope.go_home = function(site){
+            $state.go('app',{site:site,reload:true, inherit:true, notify:true});            
+            $scope.force_reload();
+        };
+
+        
         if(ionic.Platform.isWebView() == false && type_of_page != 'prereg'){
             $scope.type_of_page = 'user';
             player_html_index = $location.absUrl().indexOf('player.html#');
@@ -127,7 +142,8 @@ app.controller(
             //console.log('jumping to '+new_state);
             //$ionicHistory.nextViewOptions({historyRoot:true});
             $ionicHistory.nextViewOptions({disableBack:true});            
-            $state.go('app.results.divisions');            
+            //$state.go('app.results.divisions');
+            $state.go(parent_state);            
             $ionicSideMenuDelegate.toggleRight();            
         };
         $scope.is_results_page = function(){
@@ -172,21 +188,20 @@ app.controller(
                 return undefined;
             }
         };
-        
-        
+                
         $scope.controller_bootstrap = function(scope, state, do_not_check_current_user){                        
             if(ionic.Platform.isWebView() == false && $scope.type_of_page != 'user' && $scope.type_of_page != 'results'){                
                 if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()){
                     $state.go('use_the_native_app');
                 }
             }
-            version_check_promise = Utils.resolved_promise();
-            $scope.site=state.params.site;
+            version_check_promise = Utils.resolved_promise();            
+            $scope.site=state.params.site;            
             User.set_user_site($scope.site);
-
+            
             if(ionic.Platform.isWebView() == true && $scope.type_of_page == 'player'){                
                  if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()){
-                     version_check_promise = TimeoutResources.VersionCheck(undefined,{site:$scope.site,version_string:"v1"});
+                     version_check_promise = TimeoutResources.VersionCheck(undefined,{site:$scope.site,version_string:"v2"});
                  }
             }
                 
@@ -216,7 +231,7 @@ app.controller(
         };
         $scope.randomNumber = $rootScope.randomNumber;        
         if($state.current.name == "app"){
-            $scope.controller_bootstrap($scope,$state);
+            $scope.controller_bootstrap($scope,$state);            
         }        
         $scope.User = User;
         $scope.isIOS = ionic.Platform.isIOS();
@@ -297,7 +312,7 @@ app.run(function($ionicPlatform,$rootScope,$ionicPopup,$state) {
             $state.go('app.queues.machine_select.machine_queue',{division_id:$state.params.division_id,division_machine_id:$state.params.division_machine_id,division_machine_name:$state.params.division_machine_id},{reload:true});
         }
         var alertPopup = $ionicPopup.alert({
-            title: 'Yapss Notification',
+            title: 'Papa Scoring Notification',
             template: msg.text
         });        
     });

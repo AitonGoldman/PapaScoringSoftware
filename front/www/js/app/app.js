@@ -73,6 +73,8 @@ app.controller(
         $scope.url = $state.params.url;
         $scope.isWebView = ionic.Platform.isWebView();
         $scope.utils = Utils;
+        
+        $scope.site_display_name = $scope.site.replace(/_/g, " ");
     }
 );
 

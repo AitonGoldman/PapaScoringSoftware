@@ -1,0 +1,19 @@
+<ion-view view-title="Qualifying Results">
+  <ion-content>     
+    <center>
+      <h3>Pinburgh 2017 Qualifying Results</h3>
+
+      <div ng-if='resources.external_url.data.disabled==false'>
+      Pinburgh 2017 qualifying results are available
+
+        <a href='{{resources.external_url.data.url}}' ng-if="isWebView != true" target="_new_window"> here </a>        
+        <a ng-click="utils.native_open_full_url_in_browser(resources.external_url.data.url)" ng-if="isWebView == true"> here </a>
+        <br>
+        <span ng-if="isWebView == true">(This will open in an external browser)</span>
+      </div>
+      <div>
+        Qualifying has not yet started.  Patience!
+      </div>
+    </center>
+  </ion-content>
+</ion-view>

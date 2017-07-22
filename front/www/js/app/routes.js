@@ -35,6 +35,30 @@ angular.module('TDApp').config(['$stateProvider', '$urlRouterProvider',function(
             }
         }
     ).state(
+        'app.redirect', {
+            cache:false,
+            url: '/redirect',
+            views: {
+                'menuContent@app': {
+                    templateUrl: 'js/app/redirect.html',
+                    controller: 'RedirectController'
+                }
+
+            }
+        }
+    ).state(
+        'app.redirect_finals', {
+            cache:false,
+            url: '/redirect_finals',
+            views: {
+                'menuContent@app': {
+                    templateUrl: 'js/app/redirect_finals.html',
+                    controller: 'RedirectController'
+                }
+
+            }
+        }
+    ).state(
         'use_the_native_app', {
             url: '/use_the_native_app',
             views: {

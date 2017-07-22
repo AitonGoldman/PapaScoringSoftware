@@ -8,6 +8,7 @@ angular.module('app.results').controller(
     '$scope','$state','TimeoutResources','Utils','Modals',
     function($scope, $state, TimeoutResources, Utils,Modals) {
         $scope.site=$state.params.site;
+        $scope.url=$state.params.url;
 
         $scope.utils = Utils;
         Modals.loading();

@@ -69,7 +69,28 @@ app.controller(
 app.controller(
     'FrontController',    
     function($scope, $location, $http, 
-             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {                
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {        
+        $scope.url = $state.params.url;
+        $scope.isWebView = ionic.Platform.isWebView();
+        $scope.utils = Utils;
+    }
+);
+
+app.controller(
+    'RedirectController',    
+    function($scope, $location, $http, 
+             $state,Modals, User, Utils,$ionicPlatform, TimeoutResources, $rootScope, Camera,$ionicHistory) {        
+        $scope.url = $state.params.url;
+        $scope.isWebView = ionic.Platform.isWebView();
+        $scope.utils = Utils;
+        $scope.site=$state.params.site;
+        $scope.resources = {};
+        //        insert_promise  = TimeoutResources.InsertPlayerIntoQueueEx({site:$scope.site,player_id:$scope.player_id_to_add,division_machine_id:$scope.division_machine_id},{},$scope.resources);
+        Modals.loading();
+        redirect_promise = TimeoutResources.GetExternalUrlEx({site:$scope.site,event_name:$scope.site},{},$scope.resources);
+        redirect_promise.then(function(data){
+            Modals.loaded();
+        });
     }
 );
 

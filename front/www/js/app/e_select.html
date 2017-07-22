@@ -2,8 +2,9 @@
   <ion-content>
     <center>
     <h3>Select Event</h3>
-    <div style='margin-bottom:25px' class='standard_big_font' ng-repeat='event in resources.events.data'>
-      <a class='standard_big_font button button-calm' ui-sref='app({site:event})' ui-sref-opts='{reload:true}'> {{event}} </a>
+    <div style='margin-bottom:25px' class='standard_big_font' ng-repeat='event in resources.events.data'>      
+     <!-- <a ng-if='event.redirect != undefined' class='standard_big_font button button-calm' ui-sref='app.redirect({site:event.name})' ui-sref-opts='{reload:true}'> {{event.name}} </a>-->
+      <a class='standard_big_font button button-calm' ui-sref='app({site:event.name})' ui-sref-opts='{reload:true}'> {{event.name}} </a>      
     </div>
   </ion-content>
 </ion-view>

@@ -484,7 +484,7 @@ angular.module('TD_services.timeout_resources')
                       ScorekeeperCompleteRound: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_round/:division_final_match_round_id/complete','PUT','scorekeeping_complete_round_results'),                                        
                       VersionCheckEx: generate_resource_definition_ex_promise(':site/version/:version_string','GET','version_check'),
                       GetAuditLogMissingTokensEx: generate_resource_definition_ex_promise(':site/admin/audit_log/where_all_my_tokens_at_ex/player_id/:player_id','GET','audit_log_missing_tokens'),
-                      InsertPlayerIntoQueueEx: generate_resource_definition_ex_promise(':site/queue/insert/:player_id/:division_machine_id','POST','insertedd_into_queue'),                      
+                      InsertPlayerIntoQueueEx: generate_resource_definition_ex_promise(':site/queue/insert/:player_id/:division_machine_id','POST','insertedd_into_queue'),                              GetExternalUrlEx: generate_resource_definition_ex_promise('meta_admin/external_url/:event_name','GET','external_url'),
                       ReopenDivisionFinalRound: generate_resource_definition_ex(':site/finals/scorekeeping/division_final_round/:division_final_round_id/reopen','PUT','division_final_round_reopened')                                        
                       
 

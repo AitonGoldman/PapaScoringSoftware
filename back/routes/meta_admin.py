@@ -12,6 +12,17 @@ from orm_creation import create_stanard_roles_and_users,create_queue
 import os
 import random
 
+@meta_admin_blueprint.route('/meta_admin/external_url/<event_name>',methods=['GET'])
+def route_get_external_url(event_name):        
+    event_file = open('/var/www/html/replay_2017/'+event_name+'.json') 
+    event_file_contents = event_file.read()
+    event_file.close()
+    
+    input_data = json.loads(event_file_contents)
+    #print input_data
+    return jsonify({'data':input_data})    
+    #return jsonify({})
+
 
 @meta_admin_blueprint.route('/meta_admin/events',methods=['GET'])
 def route_get_list_of_events():        

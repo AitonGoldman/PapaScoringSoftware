@@ -38,6 +38,10 @@ angular.module('TD_services.utils').factory('Utils', ['$q','$cordovaInAppBrowser
         $cordovaInAppBrowser.open(http_prefix + '://'+server_ip_address+url, '_system');
     };            
 
+    var native_open_full_url_in_browser = function(url){        
+        $cordovaInAppBrowser.open(url, '_system');
+    };            
+    
     
     return {        
         stop_post_reload : function(){
@@ -50,6 +54,7 @@ angular.module('TD_services.utils').factory('Utils', ['$q','$cordovaInAppBrowser
             return false;
         },
         native_open_in_browser:native_open_in_browser,
+        native_open_full_url_in_browser:native_open_full_url_in_browser,        
         resolved_promise:resolved_promise,
         rejected_promise:rejected_promise,
         extract_results_from_response,

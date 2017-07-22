@@ -56,6 +56,11 @@ app.controller(
             $scope.resources = TimeoutResources.GetAllResources();
             Modals.loaded();
         });
+        $scope.replace_underscore = function(string){
+            return string.replace(/_/g, " ");
+        };
+        
+
     }
 );
 app.controller(

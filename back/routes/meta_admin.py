@@ -28,11 +28,13 @@ def route_get_external_url(event_name):
 def route_get_list_of_events():        
     event_file = open(current_app.td_config['EVENT_FILE_PATH']) 
     event_file_contents = event_file.read()
-    event_file.close()
-    
+    event_file.close()    
     input_data = json.loads(event_file_contents)
     #print input_data
-    return jsonify({'data':input_data})    
+    pretty_event_info = []
+    for event in input_data:
+        pretty_event_info.append({'name':event,'display_name':event})        
+    return jsonify({'data':input_data,'pretty':pretty_event_info})    
     #return jsonify({})
 
 @meta_admin_blueprint.route('/meta_admin/test_db_with_tournaments/players/<int:init_players>',methods=['POST'])

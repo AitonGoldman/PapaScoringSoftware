@@ -187,11 +187,13 @@ def send_push_notification(message,user_id=None,player_id=None,postpone=None,pla
             "ios":{
                 "message":message,
                 "sound":"default",
-                "priority":10
+                "priority":10,
+                "title":"PSS Update"
             },
             "android":{
                 "message":message,
-                "sound":"default"
+                "sound":"default",
+                "title":"PSS Update"
             }
             #"message":message
         }

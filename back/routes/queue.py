@@ -132,7 +132,7 @@ def add_player_to_queue():
                 return jsonify({'data':queue.to_dict_simple()})
             if queue:
                 queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=queue.division_machine.division_machine_id).all()
-                players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)
+                players_to_alert = get_player_list_to_notify(player.player_id,division_machine)
             else:
                 players_to_alert = []            
             removed_queue = remove_player_from_queue(current_app,player,commit=False)

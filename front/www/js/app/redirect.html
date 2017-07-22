@@ -11,7 +11,7 @@
         <br>
         <span ng-if="isWebView == true">(This will open in an external browser)</span>
       </div>
-      <div>
+      <div ng-if='resources.external_url.data.disabled==true'>
         Qualifying has not yet started.  Patience!
       </div>
     </center>

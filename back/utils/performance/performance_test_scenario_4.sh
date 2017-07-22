@@ -7,7 +7,7 @@ while [  1 -eq 1 ]; do
     seq 100 300 | xargs -n1 -Izzz ./utils/performance/performance_test_add_token_desk.sh zzz;
     for i in {100..300}
     do
-        for j in {1..4}
+        for j in {1..12}
         do
             echo "Adding player $i to machine $j"
             ./utils/performance/performance_test_add_to_machine.sh $j $i;

@@ -32,8 +32,11 @@ def route_get_list_of_events():
     input_data = json.loads(event_file_contents)
     #print input_data
     pretty_event_info = []
-    for event in input_data:
-        pretty_event_info.append({'name':event,'display_name':event})        
+    if "name" not in input_data[0]:
+        for event in input_data:
+            pretty_event_info.append({'name':event,'display_name':event})
+    else:
+        pretty_event_info = input_data
     return jsonify({'data':input_data,'pretty':pretty_event_info})    
     #return jsonify({})
 

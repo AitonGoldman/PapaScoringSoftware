@@ -1,4 +1,4 @@
-rom util import db_util
+from util import db_util
 from flask import Flask
 from util.db_info import DbInfo
 from util import td_config

@@ -297,6 +297,7 @@ def route_initialize_division_final(division_id):
         with open(save_path, 'rb') as csvfile:
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in reader:
+                row[0] = row[0].replace('"',"")
                 new_player = create_player(current_app,{'first_name':row[0],'last_name':''})
                 division_results.append((int(row[1])-1,{'player_id':new_player.player_id,'sum':0,'ifpa_ranking':'0','player_name':row[0]}))
     else:

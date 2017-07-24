@@ -68,11 +68,16 @@
         </td>
       </tr>      
     </table>
-    <center>
-      <span class='big-spinner'>
-        <ion-spinner></ion-spinner>
-      </span>
-    </center>
+    <ion-infinite-scroll
+       on-infinite="loadMore()"
+       distance="1%">
+    </ion-infinite-scroll>    
+    
+    <!-- <center> -->
+    <!--   <span class='big-spinner'> -->
+    <!--     <ion-spinner></ion-spinner> -->
+    <!--   </span> -->
+    <!-- </center> -->
 
     <!-- <ion-infinite-scroll -->
     <!--    on-infinite="loadMore()" -->

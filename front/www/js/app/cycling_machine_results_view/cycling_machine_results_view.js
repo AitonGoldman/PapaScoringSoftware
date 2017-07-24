@@ -7,14 +7,14 @@ angular.module('app.cycling_machine_results_view').controller(
             $scope.current_division_machine_idx = 0;
             $scope.current_division_idx = 0;            
             $scope.current_division_machine_id = undefined;
-            
+            $scope.max_results_per_page=80;
             $scope.cur_num_results_displayed = 15;
-            $scope.utils = Utils;
-            
+            $scope.utils = Utils;            
+            $scope.timeout_between_loads=5000;
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);
             $scope.display_next_result = function(){                
                 $timeout(function(){                    
-                    if($scope.resources.division_machine_results.data.length < $scope.cur_num_results_displayed){
+                    if($scope.resources.division_machine_results.data.length < $scope.cur_num_results_displayed || $scope.cur_num_results_displayed >= $scope.max_results_per_page){
                         $ionicScrollDelegate.scrollTo(0,0);                        
                         $scope.cur_num_results_displayed = 15;
                         $scope.current_division_machine_idx=$scope.current_division_machine_idx+1;
@@ -40,7 +40,7 @@ angular.module('app.cycling_machine_results_view').controller(
                         $ionicScrollDelegate.scrollBy(0,500,true);                        
                         $scope.display_next_result();                        
                     }
-                }, 1000);
+                }, $scope.timeout_between_loads);
                 
             };
             $scope.bootstrap_promise.then(function(data){
@@ -97,20 +97,17 @@ angular.module('app.cycling_division_results_view').controller(
             $scope.cur_num_results_displayed = 15;
             $scope.utils = Utils;
             $scope.current_division_idx = 0;            
+            $scope.max_results_per_page=80;            
+            $scope.timeout_between_loads=5000;
             
             $scope.bootstrap_promise = $scope.controller_bootstrap($scope,$state);
             $scope.display_next_result = function(){                
-                $timeout(function(){                    
-                    //if($scope.resources.division_results.data.ranked_player_list[$scope.current_division_id].length < $scope.cur_num_results_displayed){
-		    if($scope.concat_results.length < $scope.cur_num_results_displayed || $scope.cur_num_results_displayed > 50){
+                $timeout(function(){                                        
+		    if($scope.concat_results.length < $scope.cur_num_results_displayed || $scope.cur_num_results_displayed > $scope.max_results_per_page){
 
                         console.log('moving to next division...');
                         $ionicScrollDelegate.scrollTo(0,0);                        
                         $scope.cur_num_results_displayed = 15;
-                        //$scope.current_division_id=parseInt($scope.current_division_id)+1;
-                        //if($scope.current_division_id > $scope.num_divisions){
-                        //    $scope.current_division_id=1;
-                        //}
                         $scope.current_division_idx=$scope.current_division_idx+1;
                         existing_divisions = _.filter(_.keys($scope.resources.divisions.data),function(o){return o != "metadivisions";});
                         if($scope.current_division_idx > existing_divisions.length - 1){
@@ -129,7 +126,7 @@ angular.module('app.cycling_division_results_view').controller(
                         $ionicScrollDelegate.scrollBy(0,500,true);                        
                         $scope.display_next_result();                        
                     }
-                }, 1000);
+                }, $scope.timeout_between_loads);
             };
             $scope.bootstrap_promise.then(function(data){
                 $ionicScrollDelegate.getScrollView().options.animationDuration = 1000;

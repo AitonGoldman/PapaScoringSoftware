@@ -11,20 +11,10 @@
   </div>    
   <ion-content>
     <div style='text-align:center;' class='standard_large_font padding-top padding-bottom'>
-
-<!--      <select ng-change="jump_to_machine_results()" ng-model='jump_to_division_machine.data' ng-options='machine as machine.division_machine_name for machine in resources.division_machines.data'>
-        
-          </select>-->
 <br>
 <br>
     </div>
     <table class='results_table_machine' style='width:100%'>
-      <!-- <tr> -->
-      <!--   <th><b>Rank</b></th> -->
-      <!--   <th style='padding-left:25px'><b>Player</b></th> -->
-      <!--   <th style='padding-left:25px'><b>Points</b></th> -->
-      <!--   <th style='padding-left:25px'><b>Score</b></th> -->
-      <!-- </tr> -->
       <tr ng-repeat='result in resources.division_machine_results.data|limitTo:cur_num_results_displayed' ng-class='{lightgrey:$even}'>
         <td style='padding-top:10px;vertical-align:middle' align='center'>{{result.rank}}</td>
         <td style='padding-left:5px;padding-top:10px;vertical-align:middle' align='center'>          

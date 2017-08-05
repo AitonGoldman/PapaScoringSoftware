@@ -63,12 +63,20 @@ angular.module('app.finals_scorekeeper.division_final.match.play_order').control
             }],function(err,result){
                 Modals.loaded();
                 if (err == null){
+                    $scope.players_in_previous_orer={};
                     $scope.resources[result.resource_name] = result;                                                            
                     //GUYH!  We have to do this sorting to match the sorting happening on the match page
                     games = $scope.resources.scorekeeping_division_final.data.division_final_rounds[$scope.round_id-1].division_final_matches[$scope.match_id].final_match_game_results;
                     games = _.sortBy(games, [function(o) { return o.division_final_match_game_result_id; }]);
                     $scope.resources.scorekeeping_division_final.data.division_final_rounds[$scope.round_id-1].division_final_matches[$scope.match_id].final_match_game_results=games;
-                    $scope.players = games[$scope.game_index].division_final_match_game_player_results;
+                    $scope.players = games[$scope.game_index].division_final_match_game_player_results;                    
+                    console.log("GAMES");
+                    if ($scope.game_index > 0){
+                        console.log(games[$scope.game_index-1].division_final_match_game_player_results);
+                        result = games[$scope.game_index-1].division_final_match_game_player_results[0];
+                        $scope.players_in_previous_orer[result.papa_points]=result.final_player_id;
+                        
+                    }                    
                     //$scope.resources = Utils.extract_results_from_response(result);
                 } else {
                     console.log(err);                                

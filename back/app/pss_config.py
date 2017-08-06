@@ -28,12 +28,13 @@ def get_config_values_from_db(app):
             for param in config_dict.keys():
                 config_dict[param]=getattr(event,param)                
     return config_dict
+
+def check_db_connection_env_vars_set():
+    if os.getenv('DB_TYPE',None) is None or os.getenv('DB_USERNAME',None) is None or os.getenv('DB_PASSWORD',None) is None:                
+        raise Exception("Required database connection info not set")
     
 def get_db_config():
-    if os.getenv('DB_TYPE',None) is None or os.getenv('DB_USERNAME',None) is None or os.getenv('DB_PASSWORD',None) is None:
-        #FIXME : needs to be cleaner
-        pass
-    
+    check_db_connection_env_vars_set()
     return {"DB_TYPE":os.getenv('DB_TYPE',None),
             "DB_USERNAME":os.getenv('DB_USERNAME',None),
             "DB_PASSWORD":os.getenv('DB_PASSWORD',None)

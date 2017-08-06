@@ -14,6 +14,7 @@ def get_empty_config_dict():
     config_dict['ionic_api_key']=None    
     #config_dict['EVENT_FILE_PATH']=None
     config_dict['sendgrid_api_key']=None
+    config_dict['upload_folder']=None
     #PAY ATTENTION - THIS VALUE IS HERE TO REMIND YOU TO SET IT
     #                WHEN IT GETS USED, IT GETS PULLED STRAIGHT FROM ENV VAR
     config_dict['player_id_seq_start']=None
@@ -51,4 +52,5 @@ def set_event_config_from_db(app):
     if app.event_config['flask_secret_key'] is None:
         raise Exception("You didn't configure your flask secret key!")    
     app.secret_key = app.event_config['flask_secret_key']
+    app.config['UPLOAD_FOLDER']=app.event_config['upload_folder']
     return config_dict

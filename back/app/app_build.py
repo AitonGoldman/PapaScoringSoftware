@@ -43,8 +43,6 @@ def get_base_app(name, instance_config):
     db_handle = db_util.create_db_handle(app,db_url)
     app.tables = ImportedTables(db_handle, name, instance_config['pss_admin_event_name'])    
     pss_config.set_event_config_from_db(app)    
-    #FIXME : yeah
-    app.config['UPLOAD_FOLDER']=os.getenv('UPLOAD_FOLDER',None)        
     LoginManager().init_app(app)
     auth.generate_user_loader(app)
     auth.generate_identity_loaded(app)

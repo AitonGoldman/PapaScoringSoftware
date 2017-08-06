@@ -1,6 +1,6 @@
-from CustomJsonEncoder import CustomJSONEncoder
-from lib import db_util
-import auth, pss_config
+from lib.CustomJsonEncoder import CustomJSONEncoder
+from lib import db_util,pss_config
+from lib.flask_lib import auth
 from lib.db_info import DbInfo
 import os
 from werkzeug.exceptions import BadRequest,default_exceptions, HTTPException

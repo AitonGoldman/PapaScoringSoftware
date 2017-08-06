@@ -1,5 +1,5 @@
-from dispatch import PathDispatcher
-import pss_config
+from lib.flask_lib.dispatch import PathDispatcher
+from lib import pss_config
 from lib import db_util
 from lib.db_info import DbInfo
 

@@ -43,7 +43,8 @@ def get_db_config():
 
 def get_pss_instance_config():
     config = {}
-    config['pss_admin_event_name']=os.getenv('pss_admin_event_name',None)
+    config['pss_admin_event_name']=os.getenv('pss_admin_event_name','pss_admin')
+    config['pss_db_name']=os.getenv('pss_db_name',None)
     db_config=get_db_config()
     config.update(db_config)
     return config

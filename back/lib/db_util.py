@@ -56,7 +56,7 @@ def create_TD_tables(db_handle,drop_tables=False):
 
 def check_database_exists(instance_config,db_info):
     #db_info = DbInfo(instance_config)    
-    db_url = generate_db_url(instance_config['pss_admin_event_name'],db_info)
+    db_url = generate_db_url(instance_config['pss_db_name'],db_info)
     if not database_exists(db_url):        
         raise Exception('You are trying to access a database that does not exist')                                            
 

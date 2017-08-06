@@ -5,7 +5,7 @@ from werkzeug.wsgi import pop_path_info, peek_path_info
 from werkzeug.exceptions import BadRequest
 import app_build
 import os
-import pss_config
+from lib import pss_config
 from lib.db_info import DbInfo
 from lib import db_util
 from sqlalchemy_utils import database_exists
@@ -22,11 +22,11 @@ class PathDispatcher(object):
             if app_instance is None:
                 instance_config = pss_config.get_pss_instance_config()                                
                 db_info = DbInfo(instance_config)    
-                db_url = db_util.generate_db_url(instance_config['pss_admin_event_name'],db_info)
+                db_url = db_util.generate_db_url(instance_config['pss_db_name'],db_info)
                 app = Flask(prefix)
                 db_handle = db_util.create_db_handle(app,db_url)
                 app.tables = ImportedTables(db_handle, prefix, instance_config['pss_admin_event_name'])                    
-                app_instance = app_build.get_event_app(prefix,app,instance_config)                
+                app_instance = app_build.get_event_app(app,instance_config)                
                 if app_instance is not None:                    
                     self.instances[prefix] = app_instance                                                    
             return app_instance

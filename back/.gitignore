@@ -1,0 +1,15 @@
+.*.swp
+venv
+.env
+.aenv
+*.pyc
+*~
+#*#
+*secret_config.py*
+*secret*
+todo
+workflows
+scratchpad
+events.json
+ignore
+*env_vars

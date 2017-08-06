@@ -31,10 +31,10 @@ def create_db_and_tables(app, db_name, db_info, drop_tables=False):
     db_url = generate_db_url(db_name, db_info)
     if not database_exists(db_url):        
         create_database(db_url)
-    db_handle = create_db_handle(db_url,app)
+    db_handle = create_db_handle(app,db_url)
     if db_info.db_type == 'postgres':
         check_if_ranking_funcs_exists(db_handle)
-    app.tables = ImportedTables(db_handle)
+    app.tables = ImportedTables(db_handle,db_name)
     create_TD_tables(db_handle, drop_tables=drop_tables)
     db_handle.engine.dispose()
 
@@ -71,10 +71,13 @@ def generate_db_url(db_name, db_info):
     if db_info is None :
         raise Exception("Missing postgress username or password while trying to build db url")       
     if db_info.is_sqlite():
-        return "sqlite:////tmp/%s.db" % db_name    
+        db_url= "sqlite:////tmp/%s.db" % db_name    
     if db_info.is_postgres():        
-        return "postgresql://%s:%s@localhost/%s" % (db_info.db_username,db_info.db_password,db_name)
-        
+        db_url="postgresql://%s:%s@localhost/%s" % (db_info.db_username,db_info.db_password,db_name)
+    if not database_exists(db_url):        
+        #FIXME : deal with this with an appropriate exception
+        pass
+    return db_url
             
 def app_db_handle(app):    
     return app.tables.db_handle

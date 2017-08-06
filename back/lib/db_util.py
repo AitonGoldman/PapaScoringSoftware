@@ -54,6 +54,12 @@ def create_TD_tables(db_handle,drop_tables=False):
         db_handle.session.commit()
     db_handle.create_all()    
 
+def check_database_exists(instance_config,db_info):
+    #db_info = DbInfo(instance_config)    
+    db_url = generate_db_url(instance_config['pss_admin_event_name'],db_info)
+    if not database_exists(db_url):        
+        raise Exception('You are trying to access a database that does not exist')                                            
+
 def check_table_exists(db_handle):
     db_handle.reflect()    
     if "role" in db_handle.metadata.tables:        
@@ -72,8 +78,6 @@ def generate_db_url(db_name, db_info):
         db_url= "sqlite:////tmp/%s.db" % db_name    
     if db_info.is_postgres():        
         db_url="postgresql://%s:%s@localhost/%s" % (db_info.db_username,db_info.db_password,db_name)
-    if not database_exists(db_url):        
-        raise Exception('You are trying to access a database that does not exist')        
     return db_url
             
 def app_db_handle(app):    

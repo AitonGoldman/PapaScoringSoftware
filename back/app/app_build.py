@@ -1,6 +1,4 @@
 from CustomJsonEncoder import CustomJSONEncoder
-from pss_models import ImportedTables
-from flask import Flask
 from lib import db_util
 import auth, pss_config
 from lib.db_info import DbInfo
@@ -16,43 +14,34 @@ import calendar
 import datetime
 import blueprints
 
-def get_event_app(name):
-    instance_config = pss_config.get_pss_instance_config()                
-    configured_app = get_base_app(name, instance_config)
+# FIXME : name not needed anymore (can get from app)
+def get_event_app(name, app, instance_config):
+    configured_app = get_base_app(name, app, instance_config)
     if name == instance_config['pss_admin_event_name']:
         configured_app.register_blueprint(blueprints.pss_admin_event_blueprint)
     else:
         configured_app.register_blueprint(blueprints.event_blueprint)
     return configured_app
 
-def get_base_app(name, instance_config):    
-    app = Flask(name)
+# FIXME : name not needed anymore (can get from app)
+# FIXME : instance config needed?
+def get_base_app(name, app, instance_config):    
     app.json_encoder = CustomJSONEncoder            
     principals = Principal(app)    
-    app.my_principals = principals
-    #app.register_error_handler(BadRequest, lambda e: 'bad request!')        
+    app.my_principals = principals    
     CORS(
         app,
         headers=['Content-Type', 'Accept'],
         send_wildcard=False,
         supports_credentials=True,
     )
-    db_config = instance_config
-    db_info = DbInfo(db_config)    
-    try:
-        db_url = db_util.generate_db_url(instance_config['pss_admin_event_name'],db_info)
-    except Exception:
-        raise BadRequest('The server is misconfigured, and does not have correct database connection info')
-    db_handle = db_util.create_db_handle(app,db_url)
-    app.tables = ImportedTables(db_handle, name, instance_config['pss_admin_event_name'])    
+    
     pss_config.set_event_config_from_db(app)    
     LoginManager().init_app(app)
     auth.generate_user_loader(app)
     auth.generate_identity_loaded(app)
     for code in default_exceptions.iterkeys():
         app.error_handler_spec[None][code] = make_json_error
-    #app.register_blueprint(admin_login_blueprint)
-    #app.register_blueprint(admin_manage_blueprint)                        
         
     return app
 

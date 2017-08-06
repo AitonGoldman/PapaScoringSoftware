@@ -62,8 +62,6 @@ def check_table_exists(db_handle):
         return False
 
 # FIXME : need to generate db_url by comparing "name" to good list of dbs
-# FIXME : should be using host info in pg_info
-#def generate_db_url(db_name, pg_info=None, use_sqlite=False):
 def generate_db_url(db_name, db_info):
     if db_name is None or db_name == "":
         raise Exception("No db name specified while generating db url")
@@ -75,8 +73,7 @@ def generate_db_url(db_name, db_info):
     if db_info.is_postgres():        
         db_url="postgresql://%s:%s@localhost/%s" % (db_info.db_username,db_info.db_password,db_name)
     if not database_exists(db_url):        
-        #FIXME : deal with this with an appropriate exception
-        pass
+        raise Exception('You are trying to access a database that does not exist')        
     return db_url
             
 def app_db_handle(app):    

@@ -22,12 +22,13 @@ def get_empty_config_dict():
     return config_dict
 
 def get_config_values_from_db(app):    
-    config_dict = get_empty_config_dict()    
-    for event in app.tables.Events.query.all():
+    config_dict = get_empty_config_dict()
+    for event in app.tables.Events.query.all():                
         if event.name == app.name:
             for param in config_dict.keys():
                 config_dict[param]=getattr(event,param)                
-    return config_dict
+            return config_dict
+    return None
 
 def check_db_connection_env_vars_set():
     if os.getenv('DB_TYPE',None) is None or os.getenv('DB_USERNAME',None) is None or os.getenv('DB_PASSWORD',None) is None:                
@@ -48,7 +49,9 @@ def get_pss_instance_config():
     return config
     
 def set_event_config_from_db(app):            
-    config_dict = get_config_values_from_db(app)        
+    config_dict = get_config_values_from_db(app)            
+    if config_dict is None:
+        raise Exception('event %s does not exist' % app.name)    
     app.event_config = config_dict
     if app.event_config['flask_secret_key'] is None:
         raise Exception("You didn't configure your flask secret key!")    

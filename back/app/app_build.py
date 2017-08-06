@@ -14,18 +14,15 @@ import calendar
 import datetime
 import blueprints
 
-# FIXME : name not needed anymore (can get from app)
-def get_event_app(name, app, instance_config):
-    configured_app = get_base_app(name, app, instance_config)
-    if name == instance_config['pss_admin_event_name']:
+def get_event_app(app, instance_config):
+    configured_app = get_base_app(app)
+    if app.name == instance_config['pss_admin_event_name']:        
         configured_app.register_blueprint(blueprints.pss_admin_event_blueprint)
     else:
         configured_app.register_blueprint(blueprints.event_blueprint)
     return configured_app
 
-# FIXME : name not needed anymore (can get from app)
-# FIXME : instance config needed?
-def get_base_app(name, app, instance_config):    
+def get_base_app(app):    
     app.json_encoder = CustomJSONEncoder            
     principals = Principal(app)    
     app.my_principals = principals    

@@ -1,7 +1,5 @@
 from lib.CustomJsonEncoder import CustomJSONEncoder
-from lib import db_util,pss_config
 from lib.flask_lib import auth
-from lib.db_info import DbInfo
 import os
 from werkzeug.exceptions import BadRequest,default_exceptions, HTTPException
 from flask_principal import Principal,Permission
@@ -14,15 +12,15 @@ import calendar
 import datetime
 import blueprints
 
-def get_event_app(app, instance_config):
-    configured_app = get_base_app(app)
-    if app.name == instance_config['pss_admin_event_name']:        
+def get_event_app(app, pss_config):
+    configured_app = get_base_app(app,pss_config)
+    if app.name == pss_config.pss_admin_event_name:        
         configured_app.register_blueprint(blueprints.pss_admin_event_blueprint)
     else:
         configured_app.register_blueprint(blueprints.event_blueprint)
     return configured_app
 
-def get_base_app(app):    
+def get_base_app(app, pss_config):    
     app.json_encoder = CustomJSONEncoder            
     principals = Principal(app)    
     app.my_principals = principals    

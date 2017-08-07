@@ -8,34 +8,28 @@ from sqlalchemy_utils import drop_database
 import time
 import json
 import random
-from lib import db_util,db_info
+from lib.PssConfig import PssConfig
 from lib.flask_lib.dispatch import PathDispatcher
 import os
-#from app import pss_config
 
 class PssIntegrationTestBase(unittest.TestCase):    
     def create_test_db(self):
-        dummy_app = Flask('dummy_app')                
-        db_util.create_db_and_tables(dummy_app,self.test_db_name,self.test_db_info,drop_tables=True)                
+        dummy_app = Flask('dummy_app')
+        self.pss_config.get_db_info().create_db_and_tables(dummy_app)        
         del dummy_app
         
     def initialize_pss_admin_app_in_db(self):
         pss_admin_app = Flask('pss_admin')
-        db_url = db_util.generate_db_url(self.test_db_name, self.test_db_info)
-        db_handle = db_util.create_db_handle(pss_admin_app,db_url)
+        db_handle = self.pss_config.get_db_info().create_db_handle(pss_admin_app)        
         result = db_handle.engine.execute("insert into events (flask_secret_key,name) values ('poop','pss_admin')")        
         db_handle.engine.dispose()
         del pss_admin_app
         
     def setUp(self):
         #pss_config.check_db_connection_env_vars_set()
-        
         self.test_db_name='test_db_%s' % random.randrange(9999999)
-        self.test_db_info = db_info.DbInfo({'DB_TYPE':'postgres',
-                                            'DB_USERNAME':os.getenv('DB_USERNAME'),
-                                            'DB_PASSWORD':os.getenv('DB_PASSWORD')})
-
         os.environ['pss_db_name']=self.test_db_name
+        self.pss_config = PssConfig()
 
         self.create_test_db()
         self.initialize_pss_admin_app_in_db()
@@ -94,7 +88,7 @@ class PssIntegrationTestBase(unittest.TestCase):
                           http_response_code_expected,
                           error_string)
         
-    def tearDown(self):        
-        db_url = db_util.generate_db_url(self.test_db_name, self.test_db_info)        
-        drop_database(db_url)
+    def tearDown(self):                
+        db_url = self.pss_config.get_db_info().generate_db_url()
+        #drop_database(db_url)
         

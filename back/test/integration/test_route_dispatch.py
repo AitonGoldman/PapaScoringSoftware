@@ -3,7 +3,6 @@ import os
 from mock import MagicMock
 import pss_integration_test_base
 import json
-from lib import db_util
 
 class RouteDispatch(pss_integration_test_base.PssIntegrationTestBase):
     def setUp(self):

@@ -1,9 +1,11 @@
 import unittest
 from mock import MagicMock
 from pss_unit_test_base import PssUnitTestBase
-from app import app_build,CustomJsonEncoder
+from lib.flask_lib import app_build
+from lib import CustomJsonEncoder
 from flask import Flask
 from flask_principal import Principal
+from lib.PssConfig import PssConfig
 
 class AppBuildTest(PssUnitTestBase):    
     def setUp(self):
@@ -14,10 +16,10 @@ class AppBuildTest(PssUnitTestBase):
         app.tables = MagicMock()
         fake_events = [self.tables.Events(name='poop2'),
                        self.tables.Events(name='poop3'),
-                       self.tables.Events(name='poop',flask_secret_key='poop_key')]
+                       self.tables.Events(name='poop',flask_secret_key='poop_key',upload_folder='/tmp')]
         
         app.tables.Events.query.all.return_value=fake_events
-        configured_app = app_build.get_base_app(app)        
+        configured_app = app_build.get_base_app(app,PssConfig())        
         custom_json_encoder = configured_app.json_encoder("test string to encode")
         principals = configured_app.my_principals
         self.assertTrue(type(custom_json_encoder) is CustomJsonEncoder.CustomJSONEncoder)
@@ -41,7 +43,7 @@ class AppBuildTest(PssUnitTestBase):
         
         app.tables.Events.query.all.return_value=fake_events
         with self.assertRaises(Exception) as cm:
-            app_build.get_base_app(app)                    
+            app_build.get_base_app(app,PssConfig())                    
         self.assertEquals(cm.exception.message,'event poop does not exist')
 
     def test_get_base_app_with_nonexistent_flask_secret_key(self):
@@ -49,23 +51,25 @@ class AppBuildTest(PssUnitTestBase):
         app.tables = MagicMock()
         fake_events = [self.tables.Events(name='poop2'),
                        self.tables.Events(name='poop3'),
-                       self.tables.Events(name='poop')]
+                       self.tables.Events(name='poop',upload_folder='/tmp')]
         
         app.tables.Events.query.all.return_value=fake_events
         with self.assertRaises(Exception) as cm:
-            app_build.get_base_app(app)                    
+            app_build.get_base_app(app,PssConfig())                    
         self.assertEquals(cm.exception.message,"You didn't configure your flask secret key!")
         
         
     def test_get_event_app_with_existing_event(self):
         app = Flask('poop2')        
         app.tables = MagicMock()
-        fake_events = [self.tables.Events(name='poop2', flask_secret_key='poop2_key'),
+        fake_events = [self.tables.Events(name='poop2', flask_secret_key='poop2_key',upload_folder='/tmp'),
                        self.tables.Events(name='poop3'),
                        self.tables.Events(name='poop',flask_secret_key='poop_key')]
         
         app.tables.Events.query.all.return_value=fake_events
-        configured_app = app_build.get_event_app(app,{'pss_admin_event_name':'poop'})                
+        pss_config=PssConfig()
+        pss_config.pss_admin_event_name='poop'
+        configured_app = app_build.get_event_app(app,pss_config)                
         self.assertTrue(hasattr(configured_app,'blueprints'))
         self.assertTrue('event' in configured_app.blueprints)
         
@@ -74,9 +78,11 @@ class AppBuildTest(PssUnitTestBase):
         app.tables = MagicMock()
         fake_events = [self.tables.Events(name='poop2'),
                        self.tables.Events(name='poop3'),
-                       self.tables.Events(name='poop',flask_secret_key='poop_key')]
+                       self.tables.Events(name='poop',flask_secret_key='poop_key',upload_folder='/tmp')]
         
         app.tables.Events.query.all.return_value=fake_events
-        configured_app = app_build.get_event_app(app,{'pss_admin_event_name':'poop'})                
+        pss_config=PssConfig()
+        pss_config.pss_admin_event_name='poop'
+        configured_app = app_build.get_event_app(app,pss_config)                
         self.assertTrue(hasattr(configured_app,'blueprints'))
         self.assertTrue('pss_admin' in configured_app.blueprints)        

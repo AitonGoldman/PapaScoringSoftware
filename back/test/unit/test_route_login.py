@@ -66,6 +66,3 @@ class RouteLoginTest(PssUnitTestBase):
         mock_request.data = json.dumps({'username':'test_user','password':'password'})
         with self.assertRaises(Unauthorized) as cm:
             auth.pss_admin_login_route(mock_request,mock_tables)
-        
-            
-        

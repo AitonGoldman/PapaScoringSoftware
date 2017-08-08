@@ -8,6 +8,7 @@ class PssUnitTestBase(unittest.TestCase):
     def __init__(self,*args, **kwargs):
         super(PssUnitTestBase, self).__init__(*args, **kwargs)                        
         self.db_handle = SQLAlchemy()
+        #FIXME : need constants for these strings
         self.tables = ImportedTables(self.db_handle,'test_app','test_pss_amin_app')        
         self.mock_app = MagicMock()                
 

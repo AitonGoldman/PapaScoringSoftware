@@ -24,8 +24,10 @@ class PathDispatcher(object):
                 unconfigured_app.tables = ImportedTables(db_handle, prefix, pss_config.pss_admin_event_name)                                    
                 configured_app_instance = app_build.get_event_app(unconfigured_app,pss_config)                
                 if configured_app_instance is not None:                    
-                    self.instances[prefix] = configured_app_instance                                                    
-            return configured_app_instance
+                    self.instances[prefix] = configured_app_instance        
+                return configured_app_instance
+            else:
+                return app_instance
 
     def __call__(self, environ, start_response):
         

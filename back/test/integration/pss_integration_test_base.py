@@ -1,4 +1,5 @@
 import unittest
+from lib import roles
 from gunicorn.http.wsgi import Response,WSGIErrorsWrapper, FileWrapper
 from gunicorn.http.body import Body
 from mock import MagicMock
@@ -15,12 +16,13 @@ import os
 class PssIntegrationTestBase(unittest.TestCase):    
     def create_test_db(self):
         dummy_app = Flask('dummy_app')
-        self.pss_config.get_db_info().create_db_and_tables(dummy_app)        
+        self.pss_config.get_db_info().create_db_and_tables(dummy_app,True)        
         del dummy_app
         
     def initialize_pss_admin_app_in_db(self):
         pss_admin_app = Flask('pss_admin')
         db_handle = self.pss_config.get_db_info().create_db_handle(pss_admin_app)        
+        #FIXME : need constants for these strings
         result = db_handle.engine.execute("insert into events (flask_secret_key,name) values ('poop','pss_admin')")        
         db_handle.engine.dispose()
         del pss_admin_app
@@ -87,6 +89,39 @@ class PssIntegrationTestBase(unittest.TestCase):
         self.assertEquals(http_response.status_code,
                           http_response_code_expected,
                           error_string)
+        
+    def generate_test_user(self,tables,username,password,roles):
+        user = tables.PssUsers(username=username)
+        user.crypt_password(password)
+        tables.db_handle.session.add(user)
+        for role in roles:
+            user.roles.append(role)        
+        
+    def bootstrap_pss_users(self, app):
+        db_handle = self.pss_config.get_db_info().create_db_handle(app)        
+        tables = self.pss_config.get_db_info().getImportedTables(app,"pss_admin")
+        #FIXME : need constants for these strings        
+        role_admin=tables.Roles(name=roles.PSS_ADMIN)
+        role_user=tables.Roles(name=roles.PSS_USER)
+        role_test=tables.Roles(name=roles.TEST)
+        tables.db_handle.session.add(role_admin)
+        tables.db_handle.session.add(role_user)
+        tables.db_handle.session.add(role_test)
+
+        admin_pss_user = self.generate_test_user(tables,
+                                                 'test_pss_admin_user',
+                                                 'password',
+                                                 [role_admin])
+        normal_pss_user = self.generate_test_user(tables,
+                                                  'test_pss_user',
+                                                  'password2',
+                                                  [role_user])
+        pss_user_with_no_roles = self.generate_test_user(tables,
+                                                         'test_pss_user_no_roles',
+                                                         'password3',
+                                                         [])
+        
+        tables.db_handle.session.commit()        
         
     def tearDown(self):                
         db_url = self.pss_config.get_db_info().generate_db_url()

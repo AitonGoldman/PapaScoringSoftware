@@ -4,7 +4,7 @@ def generate_events_class(db_handle):
         """Model object for Events"""
         # pylint: disable=no-init
         # pylint can't find SQLAlchemy's __init__() method for some reason
-        role_id = db_handle.Column(db_handle.Integer, primary_key=True)
+        event_id = db_handle.Column(db_handle.Integer, primary_key=True)
         name = db_handle.Column(db_handle.String(100))
         queue_bump_amount = db_handle.Column(db_handle.Integer)
         stripe_api_key = db_handle.Column(db_handle.String(100))

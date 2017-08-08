@@ -10,6 +10,8 @@ from flask_principal import identity_changed, Identity
 from lib import roles
 from lib.serializer.pss_user import generate_pss_user_serializer
 
+#FIXME : all routes under this need to be rechecked when players stuff is implemented
+
 def load_tables(f):
     @wraps(f)
     def new_f(*args,**kwargs):
@@ -57,5 +59,14 @@ def pss_admin_logout(tables):
     else:
         logged_out_username='anonymous'        
     return jsonify({'status':'%s is logged out' % logged_out_username})
+
+@blueprints.pss_admin_event_blueprint.route('/auth/pss_user/current_user',methods=['GET'])
+def get_current_user():
+    if current_user.is_anonymous():
+        return jsonify({'current_user':None})
+    pss_user_serializer = generate_pss_user_serializer(current_app)    
+    user_dict=pss_user_serializer().dump(current_user).data    
+    return jsonify({'current_user':user_dict})
+
 
 #FIXME : need get_current_user

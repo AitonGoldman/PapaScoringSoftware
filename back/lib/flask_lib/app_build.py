@@ -11,10 +11,15 @@ from traceback import format_exception_only
 import calendar
 import datetime
 import blueprints
+import routes
+from flask_marshmallow import Marshmallow
 
 def get_event_app(app, pss_config):
     configured_app = get_base_app(app,pss_config)
-    if app.name == pss_config.pss_admin_event_name:        
+    if app.name == pss_config.pss_admin_event_name:
+        auth.generate_pss_user_loader(configured_app)
+        auth.generate_pss_user_identity_loaded(configured_app)
+
         configured_app.register_blueprint(blueprints.pss_admin_event_blueprint)
     else:
         configured_app.register_blueprint(blueprints.event_blueprint)
@@ -33,11 +38,10 @@ def get_base_app(app, pss_config):
     
     pss_config.set_event_config_from_db(app)    
     LoginManager().init_app(app)
-    auth.generate_user_loader(app)
-    auth.generate_identity_loaded(app)
     for code in default_exceptions.iterkeys():
         app.error_handler_spec[None][code] = make_json_error
-        
+
+    app.ma = Marshmallow(app)
     return app
 
 def make_json_error(ex):

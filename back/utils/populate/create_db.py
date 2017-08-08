@@ -1,14 +1,7 @@
-from lib import db_util
 from flask import Flask
-from lib.db_info import DbInfo
+from lib.PssConfig  import PssConfig
 from pss_models import ImportedTables
 import os,sys
-
-def get_db_config():
-    return {"DB_TYPE":os.getenv('DB_TYPE',None),
-            "DB_USERNAME":os.getenv('DB_USERNAME',None),
-            "DB_PASSWORD":os.getenv('DB_PASSWORD',None)
-    }    
 
 
 if len(sys.argv) > 1:
@@ -17,13 +10,24 @@ else:
     print "didn't specify db name..."
     sys.exit(1)
 
+os.environ['pss_db_name']=db_name
+pss_config = PssConfig()
 
 real_app = Flask('dummy_app')
-# db_config = get_db_config()    
-# db_info = DbInfo(db_config)    
-# db_url = db_util.generate_db_url(db_name,db_info)    
-# db_handle = db_util.create_db_handle(real_app,db_url)
 
-db_util.create_db_and_tables(real_app,db_name,DbInfo({'DB_TYPE':'postgres','DB_USERNAME':os.getenv('DB_USERNAME'),'DB_PASSWORD':os.getenv('DB_PASSWORD')}),drop_tables=False)
- 
+pss_config.get_db_info().create_db_and_tables(real_app,True)
+pss_config.get_db_info().bootstrap_pss_admin_event(real_app,"pss_admin")
+db_handle = pss_config.get_db_info().create_db_handle(real_app)
+tables = ImportedTables(db_handle, db_name, "whatever")                                    
+role_admin=tables.Roles(name='pss_admin')
+role_test=tables.Roles(name='pss_user')
+tables.db_handle.session.add(role_admin)
+tables.db_handle.session.add(role_test)
+new_pss_user = tables.PssUsers(username='test_pss_user')
+new_pss_user.crypt_password('password')
+tables.db_handle.session.add(new_pss_user)
+new_pss_user.roles.append(role_admin)
+new_pss_user.roles.append(role_test)
+tables.db_handle.session.commit()
+
     

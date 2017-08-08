@@ -85,7 +85,7 @@ class PssIntegrationTestBase(unittest.TestCase):
                 'HTTP_ACCEPT_ENCODING': 'gzip, deflate'}
     
     def assertHttpCodeEquals(self,http_response, http_response_code_expected):
-        error_string = 'Was expecting status code %s, but it was %s' % (http_response_code_expected, http_response.status_code)
+        error_string = 'Was expecting status code %s, but it was %s with message of %s' % (http_response_code_expected, http_response.status_code,http_response.data)
         self.assertEquals(http_response.status_code,
                           http_response_code_expected,
                           error_string)
@@ -116,9 +116,14 @@ class PssIntegrationTestBase(unittest.TestCase):
                                                   'test_pss_user',
                                                   'password2',
                                                   [role_user])
+        pss_user_with_test_role = self.generate_test_user(tables,
+                                                          'test_pss_user_test_role',
+                                                          'password3',
+                                                          [role_test])
+        
         pss_user_with_no_roles = self.generate_test_user(tables,
                                                          'test_pss_user_no_roles',
-                                                         'password3',
+                                                         'password4',
                                                          [])
         
         tables.db_handle.session.commit()        

@@ -1,0 +1,22 @@
+# Papa Scoring Software Architecture
+
+## Overview
+The Papa Scoring Software is pinball tournament scoring software that is designed to meet the following requirements:
+
+- It must support desktop and mobile browsers
+- It must be scalable 
+- It must be easy to add on new features
+- It must be fast
+- It must use off the shelf libraries/frameworks when possible
+
+The PSS backend is a REST server built on Flask with a Postgres database.  The PSS frontend is built on Ionic.  The rest of this document describes the design of the PSS.
+
+## Some Definitons...
+
+Before we begin, we need to go over some definitions :
+- An `Event` (i.e. PAPA 20) contains a number of `Tournaments`.
+- A `PSS User` can create and edit `Events`.
+- A `PSS Event User` is a user involved in running the tournament (i.e. deskworker, scorekeeper, TD, etc).
+- A `PSS Event User` who has TD permissions can create `Tournaments` 
+- A `Player` is a player registered in a specific event.
+

@@ -2,6 +2,7 @@ from flask_login import current_user,LoginManager,_get_user
 from flask_principal import identity_loaded, RoleNeed, UserNeed
 from flask import current_app
 
+#FIXME : generate probably not needed
 def generate_pss_user_loader(app):    
     @app.login_manager.user_loader    
     def load_user(userid):

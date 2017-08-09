@@ -2,21 +2,15 @@ from lib.flask_lib import blueprints
 from flask import jsonify,current_app,request
 from sqlalchemy.orm import joinedload
 from flask_restless.helpers import to_dict
-from functools import wraps
 from werkzeug.exceptions import BadRequest,Unauthorized
 from flask_login import login_user, logout_user, current_user
 import json
 from flask_principal import identity_changed, Identity
 from lib import roles
 from lib.serializer.pss_user import generate_pss_user_serializer
+from lib.route_decorators.db_decorators import load_tables
 
 #FIXME : all routes under this need to be rechecked when players stuff is implemented
-
-def load_tables(f):
-    @wraps(f)
-    def new_f(*args,**kwargs):
-        return f(current_app.tables,*args,**kwargs)
-    return new_f
 
 #FIXME : make sure all PssUser instances are called pss_user
 def check_pss_user_has_admin_site_access(pss_user):

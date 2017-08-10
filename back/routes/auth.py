@@ -13,9 +13,11 @@ from lib.route_decorators.db_decorators import load_tables
 #FIXME : all routes under this need to be rechecked when players stuff is implemented
 
 #FIXME : make sure all PssUser instances are called pss_user
-def check_pss_user_has_admin_site_access(pss_user):
-    user_roles = [role.name for role in pss_user.roles]        
-    allowed_roles = [roles.PSS_ADMIN,roles.PSS_USER]        
+
+def check_pss_user_has_admin_site_access(pss_user,tables):
+    table_roles = tables.Roles.query.filter_by(admin_role=True).all()
+    user_roles = [role.name for role in pss_user.roles]            
+    allowed_roles = [role.name for role in table_roles]            
     if len(list(set(allowed_roles) & set(user_roles))) == 0:
         raise Unauthorized('User can not access this') 
     return True
@@ -31,7 +33,7 @@ def pss_admin_login_route(request,tables):
        pss_user = None
     if pss_user is None:
        raise Unauthorized('Bad username or password')    
-    check_pss_user_has_admin_site_access(pss_user)
+    check_pss_user_has_admin_site_access(pss_user,tables)
     return pss_user
 
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/login',methods=['POST'])
@@ -47,7 +49,7 @@ def pss_admin_login(tables):
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/logout',methods=['GET'])
 @load_tables
 def pss_admin_logout(tables):
-    if current_user.is_anonymous() is False and check_pss_user_has_admin_site_access(current_user):
+    if current_user.is_anonymous() is False:
         logged_out_username=current_user.username
         logout_user()
     else:

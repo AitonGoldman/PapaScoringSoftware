@@ -26,4 +26,8 @@ def generate_pss_user_identity_loaded(app):
         if hasattr(current_user, 'roles'):
             for role in current_user.roles:
                 identity.provides.add(RoleNeed(role.name))
+        if hasattr(current_user, 'event_roles'):
+            for event_role in current_user.event_roles:
+                identity.provides.add(RoleNeed(event_role.event_role.name))
+                
     return on_identity_loaded

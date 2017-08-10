@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
 from pss_models import ImportedTables
 import os
-from base64 import b64encode
 
 POSTGRES_TYPE='postgres'
 SQLITE_TYPE='sqlite'
@@ -71,12 +70,6 @@ class DbInfo():
         result = db_handle.engine.execute("SELECT prosrc FROM pg_proc WHERE proname = 'papa_scoring_func';")
         if not result.fetchone():
             db_handle.engine.execute("CREATE FUNCTION papa_scoring_func(rank real) RETURNS real AS $$ BEGIN IF rank = 1 THEN RETURN 100; ELSIF rank = 2 THEN RETURN 90; ELSIF rank = 3 THEN RETURN 85; ELSIF rank < 88 THEN  RETURN 100-rank-12; ELSIF rank >= 88 THEN RETURN 0; END IF; END; $$ LANGUAGE plpgsql;")
-
-    def bootstrap_pss_admin_event(self, app, pss_admin_event_name):
-        db_handle = self.create_db_handle(app)
-        secret_key=b64encode(os.urandom(24)).decode('utf-8')        
-        
-        db_handle.engine.execute("insert into events (name,flask_secret_key) values ('%s','%s')" % (pss_admin_event_name,secret_key))
 
     def getImportedTables(self,app,pss_admin_site_name):
         db_handle = self.create_db_handle(app)

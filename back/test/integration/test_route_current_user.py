@@ -25,4 +25,4 @@ class RoutePssCurrentUser(pss_integration_test_base.PssIntegrationTestBase):
             self.assertEquals('test_pss_admin_user',pss_user_info['current_user']['username'])
             self.assertTrue('roles' in pss_user_info['current_user'])
             self.assertEquals(1,len(pss_user_info['current_user']['roles']))
- 
+            #FIXME : need event roles check

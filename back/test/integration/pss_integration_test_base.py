@@ -18,7 +18,8 @@ class PssIntegrationTestBase(unittest.TestCase):
         dummy_app = Flask('dummy_app')
         self.pss_config.get_db_info().create_db_and_tables(dummy_app,True)        
         del dummy_app
-        
+
+    #FIXME : need to use lib/bootstrap here    
     def initialize_pss_admin_app_in_db(self):
         pss_admin_app = Flask('pss_admin')
         db_handle = self.pss_config.get_db_info().create_db_handle(pss_admin_app)        
@@ -101,12 +102,12 @@ class PssIntegrationTestBase(unittest.TestCase):
         db_handle = self.pss_config.get_db_info().create_db_handle(app)        
         tables = self.pss_config.get_db_info().getImportedTables(app,"pss_admin")
         #FIXME : need constants for these strings        
-        role_admin=tables.Roles(name=roles.PSS_ADMIN)
-        role_user=tables.Roles(name=roles.PSS_USER)
-        role_test=tables.Roles(name=roles.TEST)
+        role_admin=tables.Roles(name=roles.PSS_ADMIN,admin_role=True)
+        role_user=tables.Roles(name=roles.PSS_USER,admin_role=True)
+        role_player=tables.Roles(name=roles.PSS_PLAYER)        
         tables.db_handle.session.add(role_admin)
-        tables.db_handle.session.add(role_user)
-        tables.db_handle.session.add(role_test)
+        tables.db_handle.session.add(role_user)        
+        tables.db_handle.session.add(role_player)        
 
         admin_pss_user = self.generate_test_user(tables,
                                                  'test_pss_admin_user',
@@ -116,10 +117,10 @@ class PssIntegrationTestBase(unittest.TestCase):
                                                   'test_pss_user',
                                                   'password2',
                                                   [role_user])
-        pss_user_with_test_role = self.generate_test_user(tables,
-                                                          'test_pss_user_test_role',
-                                                          'password3',
-                                                          [role_test])
+        player = self.generate_test_user(tables,
+                                         'test_pss_player',
+                                         'password4',
+                                         [role_player])
         
         pss_user_with_no_roles = self.generate_test_user(tables,
                                                          'test_pss_user_no_roles',

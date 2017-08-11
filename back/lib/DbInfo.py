@@ -73,7 +73,7 @@ class DbInfo():
 
     def getImportedTables(self,app,pss_admin_site_name):
         db_handle = self.create_db_handle(app)
-        return ImportedTables(db_handle,self.db_name,pss_admin_site_name)
+        return ImportedTables(db_handle,app.name,pss_admin_site_name)
     
 # def load_machines_from_json(app,test=False):    
 #     from data_files.machine_list import machines

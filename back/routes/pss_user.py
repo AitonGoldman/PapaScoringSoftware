@@ -9,7 +9,6 @@ from lib.serializer.pss_user import generate_pss_user_serializer
 from lib.route_decorators.db_decorators import load_tables
 
 def create_pss_user_route(tables,request):        
-    # FIXME : need a create event route        
     # FIXME : need to make sure onidentityload pulls event permissions from both tables
 
     # FIXME : need to make sure intergration test is using bootstraping functions
@@ -33,6 +32,7 @@ def create_pss_user_route(tables,request):
 @load_tables
 @create_pss_user_permissions.require(403)
 def create_pss_user(tables):    
+    #FIXME : protect against duplicate users
     new_user = create_pss_user_route(tables,request)
     pss_user_serializer = generate_pss_user_serializer(current_app)    
     user_dict=pss_user_serializer().dump(new_user).data    
@@ -42,4 +42,5 @@ def create_pss_user(tables):
 @load_tables
 @create_pss_event_user_permissions.require(403)
 def create_pss_event_user(tables):        
+    #FIXME : protect against duplicate users
     return jsonify({'pss_user':None})

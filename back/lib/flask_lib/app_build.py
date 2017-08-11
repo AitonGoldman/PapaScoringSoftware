@@ -26,6 +26,7 @@ def get_event_app(app, pss_config):
     return configured_app
 
 def get_base_app(app, pss_config):    
+    app.config['DEBUG']=True
     app.json_encoder = CustomJSONEncoder            
     principals = Principal(app)    
     app.my_principals = principals    

@@ -65,5 +65,4 @@ def get_current_user():
     user_dict=pss_user_serializer().dump(current_user).data    
     return jsonify({'current_user':user_dict})
 
-
-#FIXME : need get_current_user
+#FIXME : need get_current_user for event user

@@ -1,4 +1,5 @@
 PSS_ADMIN="pss_admin"
 PSS_USER="pss_user"
 PSS_PLAYER="player"
+TOURNAMENT_DIRECTOR="tournament_director"
 TEST="test"

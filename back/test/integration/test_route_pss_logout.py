@@ -9,7 +9,6 @@ from flask_login import current_user
 class RoutePssLogout(pss_integration_test_base.PssIntegrationTestBase):
     def setUp(self):
         super(RoutePssLogout,self).setUp()        
-        self.bootstrap_pss_users(self.pss_admin_app)
         
     def test_logout_after_login(self):
         with self.pss_admin_app.test_client() as c:                        

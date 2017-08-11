@@ -1,24 +1,23 @@
 from lib.flask_lib import blueprints
 from lib.flask_lib.permissions import create_pss_event_user_permissions, create_pss_user_permissions
 from flask import jsonify,current_app,request
-from werkzeug.exceptions import BadRequest,Unauthorized
+from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_user, logout_user, current_user
 import json
 from lib import roles
 from lib.serializer.pss_user import generate_pss_user_serializer
 from lib.route_decorators.db_decorators import load_tables
 
-def create_pss_user_route(tables,request):        
-    # FIXME : need to make sure onidentityload pulls event permissions from both tables
-
-    # FIXME : need to make sure intergration test is using bootstraping functions
-    
+def create_pss_user_route(tables,request):            
     if request.data:        
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Username or password not specified')        
     if 'username' not in input_data or 'password' not in input_data or 'role_id' not in input_data:
         raise BadRequest('Information missing')
+    existing_user=tables.PssUsers.query.filter_by(username=input_data['username']).first()
+    if existing_user is not None:
+        raise Conflict('User already exists.')
     new_user = tables.PssUsers(username=input_data['username'])
     event_user = tables.EventUsers()
     event_user.crypt_password(input_data['password'])
@@ -35,7 +34,6 @@ def create_pss_user_route(tables,request):
 @load_tables
 @create_pss_user_permissions.require(403)
 def create_pss_user(tables):    
-    #FIXME : protect against duplicate users
     new_user = create_pss_user_route(tables,request)
     pss_user_serializer = generate_pss_user_serializer(current_app)    
     user_dict=pss_user_serializer().dump(new_user).data    

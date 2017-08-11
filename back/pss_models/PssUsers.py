@@ -16,9 +16,6 @@ def generate_pss_user_event_mapping(db_handle):
     )
     return Event_PssUser_mapping
 
-# FIXME : need to make it possible for a pss event user to have a seperate password for each event.
-#         this means a seperate "password" table for each event.  pss_users who create an event
-#         will have their password set automatically for the event
 # FIXME : need to make it so users can change their info via email confirmation of changes
 
 """Model object for a Pss Users"""

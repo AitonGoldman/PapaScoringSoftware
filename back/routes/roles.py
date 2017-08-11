@@ -21,8 +21,6 @@ def get_roles(tables):
 @load_tables
 def get_roles(tables):    
     roles_list = []
-    #FIXME : this list should be a constant/not hidden here
-    #filtered_roles=[roles.PSS_ADMIN,roles.PSS_USER]
     filtered_roles = tables.EventRoles.query.all()
     pss_roles_serializer = generate_roles_serializer(current_app)
     for role in tables.Roles.query.filter(~tables.Roles.name.in_(filtered_roles)).all():

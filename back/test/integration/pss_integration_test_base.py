@@ -1,5 +1,5 @@
 import unittest
-from lib import roles
+from lib import roles,orm_factories,bootstrap
 from gunicorn.http.wsgi import Response,WSGIErrorsWrapper, FileWrapper
 from gunicorn.http.body import Body
 from mock import MagicMock
@@ -19,14 +19,11 @@ class PssIntegrationTestBase(unittest.TestCase):
         dummy_app = Flask(PSS_ADMIN_EVENT)
         self.pss_config.get_db_info().create_db_and_tables(dummy_app,True)        
         del dummy_app
-
-    #FIXME : need to use lib/bootstrap here    
+    
     def initialize_pss_admin_app_in_db(self):        
-        pss_admin_app = Flask(PSS_ADMIN_EVENT)
-        db_handle = self.pss_config.get_db_info().create_db_handle(pss_admin_app)        
-        #FIXME : need constants for these strings
-        result = db_handle.engine.execute("insert into events (flask_secret_key,name) values ('poop','%s')" % PSS_ADMIN_EVENT)        
-        db_handle.engine.dispose()
+        pss_admin_app = Flask(PSS_ADMIN_EVENT)        
+        tables = self.pss_config.get_db_info().getImportedTables(pss_admin_app,"unimportant")
+        bootstrap.bootstrap_pss_admin_event(tables,PSS_ADMIN_EVENT)
         del pss_admin_app
         
     def setUp(self):
@@ -43,7 +40,8 @@ class PssIntegrationTestBase(unittest.TestCase):
         self.app = PathDispatcher()                
         response,results = self.dispatch_request('/%s/this_does_not_exist' % PSS_ADMIN_EVENT)
         self.pss_admin_app = self.app.instances[PSS_ADMIN_EVENT]
-        
+        bootstrap.bootstrap_roles(self.pss_admin_app.tables)
+        self.bootstrap_pss_users(self.pss_admin_app)
         
     def dispatch_request(self,url):
         mocked_socket = MagicMock()                
@@ -93,48 +91,28 @@ class PssIntegrationTestBase(unittest.TestCase):
         self.assertEquals(http_response.status_code,
                           http_response_code_expected,
                           error_string)
-
-    #FIXME : use proper bootstrapping    
-    def generate_test_user(self,tables,username,password,roles):
-        user = tables.PssUsers(username=username)
-        event_user = tables.EventUsers()
-        event_user.crypt_password(password)
-        user.event_user = event_user
-        tables.db_handle.session.add(user)
-        for role in roles:
-            user.roles.append(role)        
         
     def bootstrap_pss_users(self, app):
-        #db_handle = self.pss_config.get_db_info().create_db_handle(app)        
-        #tables = self.pss_config.get_db_info().getImportedTables(app,PSS_ADMIN_EVENT)
-        db_handle = app.tables.db_handle
         tables = app.tables
-        #FIXME : need constants for these strings        
-        role_admin=tables.Roles(name=roles.PSS_ADMIN,admin_role=True)
-        role_user=tables.Roles(name=roles.PSS_USER,admin_role=True)
-        role_player=tables.Roles(name=roles.PSS_PLAYER)        
-        tables.db_handle.session.add(role_admin)
-        tables.db_handle.session.add(role_user)        
-        tables.db_handle.session.add(role_player)        
-
-        admin_pss_user = self.generate_test_user(tables,
-                                                 'test_pss_admin_user',
-                                                 'password',
-                                                 [role_admin])
-        normal_pss_user = self.generate_test_user(tables,
-                                                  'test_pss_user',
-                                                  'password2',
-                                                  [role_user])
-        player = self.generate_test_user(tables,
-                                         'test_pss_player',
-                                         'password4',
-                                         [role_player])
-        
-        pss_user_with_no_roles = self.generate_test_user(tables,
-                                                         'test_pss_user_no_roles',
-                                                         'password4',
-                                                         [])
-        
+        role_admin=tables.Roles.query.filter_by(name=roles.PSS_ADMIN).first()
+        role_user=tables.Roles.query.filter_by(name=roles.PSS_USER).first()
+        role_player=tables.Roles.query.filter_by(name=roles.TEST).first()
+        admin_pss_user = orm_factories.create_user(app,
+                                                   'test_pss_admin_user',
+                                                   'password',
+                                                   [role_admin])
+        normal_pss_user = orm_factories.create_user(app,
+                                                    'test_pss_user',
+                                                    'password2',
+                                                    [role_user])
+        player = orm_factories.create_user(app,
+                                           'test_player',
+                                           'password3',
+                                           [role_player])
+        pss_user_with_no_roles = orm_factories.create_user(app,
+                                                           'test_pss_user_no_roles',
+                                                           'password',
+                                                           [])
         tables.db_handle.session.commit()        
         
     def tearDown(self):                

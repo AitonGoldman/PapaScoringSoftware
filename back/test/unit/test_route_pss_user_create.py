@@ -48,12 +48,13 @@ class RoutePssUserCreateTest(PssUnitTestBase):
         self.mock_tables = MagicMock()
             
     def test_create_pss_user_route(self):
-        self.mock_request.data = json.dumps({'username':'new_user','password':'new_password','role_id':1})
+        self.mock_request.data = json.dumps({'username':'new_user_for_test_create_pss_user_route','password':'new_password','role_id':1})
         mock_role = self.create_mock_role(roles.PSS_ADMIN)
         mock_role.role_id=1
         self.mock_tables.Roles.query.filter_by().first.return_value = mock_role
         
         self.mock_tables.PssUsers.return_value = self.mock_new_user
+        self.mock_tables.PssUsers.query.filter_by().first.return_value = None
         
         created_user = pss_user.create_pss_user_route(self.mock_tables,self.mock_request)
         self.assertEquals(self.mock_new_user,created_user)

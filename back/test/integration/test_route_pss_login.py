@@ -10,7 +10,6 @@ from flask_login import current_user
 class RoutePssLogin(pss_integration_test_base.PssIntegrationTestBase):
     def setUp(self):
         super(RoutePssLogin,self).setUp()        
-        self.bootstrap_pss_users(self.pss_admin_app)
     #FIXME : make tests more defensive - i.e. check if can do things before you login
     def test_login_good_user_good_password(self):
         with self.pss_admin_app.test_client() as c:                        
@@ -47,7 +46,7 @@ class RoutePssLogin(pss_integration_test_base.PssIntegrationTestBase):
     def test_login_fails_with_pss_user_with_incorrect_role(self):
         with self.pss_admin_app.test_client() as c:                        
             rv = c.post('/auth/pss_user/login',
-                        data=json.dumps({'username':'test_pss_player','password':'password4'}))
+                        data=json.dumps({'username':'test_pss_user_no_roles','password':'password'}))
             self.assertHttpCodeEquals(rv,401)            
             self.assertEquals(rv.data,'{"message": "User can not access this"}')
             self.assertFalse(current_user.is_authenticated(),                              

@@ -2,7 +2,7 @@ from flask import Flask
 from lib.PssConfig  import PssConfig
 from pss_models import ImportedTables
 import os,sys
-from lib import bootstrap,roles
+from lib import bootstrap,roles,orm_factories
 
 if len(sys.argv) > 1:
     db_name=sys.argv[1]
@@ -18,16 +18,13 @@ real_app = Flask('pss_admin')
 pss_config.get_db_info().create_db_and_tables(real_app,True)
 db_handle = pss_config.get_db_info().create_db_handle(real_app)
 tables = pss_config.get_db_info().getImportedTables(real_app,'pss_admin')
-bootstrap.bootstrap_pss_admin_event(tables)
+real_app.tables=tables
+bootstrap.bootstrap_pss_admin_event(tables,'pss_admin')
 bootstrap.bootstrap_roles(tables)
-new_pss_admin_user = tables.PssUsers(username='test_pss_admin_user')
-new_pss_admin_event_user = tables.EventUsers()
-new_pss_admin_event_user.crypt_password('password')
-new_pss_admin_user.event_user=new_pss_admin_event_user
-tables.db_handle.session.add(new_pss_admin_user)
-new_pss_admin_user.roles.append(tables.Roles.query.filter_by(name=roles.PSS_ADMIN).first())
 
-tables.db_handle.session.commit()
+orm_factories.create_user(real_app, 'test_pss_admin_user',
+                          'password', [tables.Roles.query.filter_by(name=roles.PSS_ADMIN).first()],
+                          commit=True)
 
 if len(sys.argv) == 1:
     sys.exit()

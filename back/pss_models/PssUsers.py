@@ -39,7 +39,8 @@ def generate_pss_users_class(db_handle):
            'Roles',
            secondary=Role_PssUser_mapping
         )
-        event_roles = db_handle.relationship('PssUsersEventsRoles')
+        event_roles = db_handle.relationship('EventUsersRoles')
+        event_user = db_handle.relationship('EventUsers',uselist=False)
             
         events = db_handle.relationship(
            'Events',

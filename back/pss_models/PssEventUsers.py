@@ -1,12 +1,15 @@
+#FIXME : rename this file EventUsers.py
+from passlib.hash import sha512_crypt
+
 """Model object for a EventUsers"""
 def generate_event_users_class(db_handle,event_name):
     class EventUsers(db_handle.Model):
         """Model object for Events"""
         # pylint: disable=no-init
-        # pylint can't find SQLAlchemy's __init__() method for some reason
-        __tablename__="event_users_"+event_name        
-        pss_event_user_id = db_handle.Column(db_handle.Integer, primary_key=True)        
+        # pylint can't find SQLAlchemy's __init__() method for some reason        
+        __tablename__="event_users_"+event_name                
         password_crypt = db_handle.Column(db_handle.String(134))
+        pss_user_id = db_handle.Column('pss_user_id', db_handle.Integer, db_handle.ForeignKey('pss_users.pss_user_id'),primary_key=True)
 
         def crypt_password(self, password):
             """Encrypt a plaintext password and store it"""

@@ -13,18 +13,19 @@ from lib.PssConfig import PssConfig
 from lib.flask_lib.dispatch import PathDispatcher
 import os
 
-class PssIntegrationTestBase(unittest.TestCase):    
+PSS_ADMIN_EVENT = "pss_admin_test"
+class PssIntegrationTestBase(unittest.TestCase):        
     def create_test_db(self):
-        dummy_app = Flask('dummy_app')
+        dummy_app = Flask(PSS_ADMIN_EVENT)
         self.pss_config.get_db_info().create_db_and_tables(dummy_app,True)        
         del dummy_app
 
     #FIXME : need to use lib/bootstrap here    
-    def initialize_pss_admin_app_in_db(self):
-        pss_admin_app = Flask('pss_admin')
+    def initialize_pss_admin_app_in_db(self):        
+        pss_admin_app = Flask(PSS_ADMIN_EVENT)
         db_handle = self.pss_config.get_db_info().create_db_handle(pss_admin_app)        
         #FIXME : need constants for these strings
-        result = db_handle.engine.execute("insert into events (flask_secret_key,name) values ('poop','pss_admin')")        
+        result = db_handle.engine.execute("insert into events (flask_secret_key,name) values ('poop','%s')" % PSS_ADMIN_EVENT)        
         db_handle.engine.dispose()
         del pss_admin_app
         
@@ -32,14 +33,16 @@ class PssIntegrationTestBase(unittest.TestCase):
         #pss_config.check_db_connection_env_vars_set()
         self.test_db_name='test_db_%s' % random.randrange(9999999)
         os.environ['pss_db_name']=self.test_db_name
+        os.environ['pss_admin_event_name']=PSS_ADMIN_EVENT
+
         self.pss_config = PssConfig()
 
         self.create_test_db()
         self.initialize_pss_admin_app_in_db()
 
         self.app = PathDispatcher()                
-        response,results = self.dispatch_request('/pss_admin/this_does_not_exist')
-        self.pss_admin_app = self.app.instances['pss_admin']
+        response,results = self.dispatch_request('/%s/this_does_not_exist' % PSS_ADMIN_EVENT)
+        self.pss_admin_app = self.app.instances[PSS_ADMIN_EVENT]
         
         
     def dispatch_request(self,url):
@@ -90,17 +93,22 @@ class PssIntegrationTestBase(unittest.TestCase):
         self.assertEquals(http_response.status_code,
                           http_response_code_expected,
                           error_string)
-        
+
+    #FIXME : use proper bootstrapping    
     def generate_test_user(self,tables,username,password,roles):
         user = tables.PssUsers(username=username)
-        user.crypt_password(password)
+        event_user = tables.EventUsers()
+        event_user.crypt_password(password)
+        user.event_user = event_user
         tables.db_handle.session.add(user)
         for role in roles:
             user.roles.append(role)        
         
     def bootstrap_pss_users(self, app):
-        db_handle = self.pss_config.get_db_info().create_db_handle(app)        
-        tables = self.pss_config.get_db_info().getImportedTables(app,"pss_admin")
+        #db_handle = self.pss_config.get_db_info().create_db_handle(app)        
+        #tables = self.pss_config.get_db_info().getImportedTables(app,PSS_ADMIN_EVENT)
+        db_handle = app.tables.db_handle
+        tables = app.tables
         #FIXME : need constants for these strings        
         role_admin=tables.Roles(name=roles.PSS_ADMIN,admin_role=True)
         role_user=tables.Roles(name=roles.PSS_USER,admin_role=True)

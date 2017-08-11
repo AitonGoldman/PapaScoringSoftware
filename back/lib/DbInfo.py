@@ -55,7 +55,7 @@ class DbInfo():
         db_handle = self.create_db_handle(app)
         if self.db_type == POSTGRES_TYPE:
             self.check_if_ranking_funcs_exists(db_handle)
-        app.tables = ImportedTables(db_handle,self.db_name,None)
+        app.tables = ImportedTables(db_handle,app.name,None)
         self.create_PSS_tables(db_handle, drop_tables=drop_tables)
         db_handle.engine.dispose()
 

@@ -29,10 +29,11 @@ def pss_admin_login_route(request,tables):
     else:
         raise BadRequest('Username or password not specified')        
     pss_user = tables.PssUsers.query.options(joinedload("roles")).filter_by(username=input_data['username']).first()        
-    if pss_user and not pss_user.verify_password(input_data['password']):
+    if pss_user and not pss_user.event_user.verify_password(input_data['password']):
        pss_user = None
     if pss_user is None:
        raise Unauthorized('Bad username or password')    
+    #FIXME : this should be in pss_admin_login(), not here
     check_pss_user_has_admin_site_access(pss_user,tables)
     return pss_user
 

@@ -13,7 +13,7 @@ else:
 os.environ['pss_db_name']=db_name
 pss_config = PssConfig()
 
-real_app = Flask('dummy_app')
+real_app = Flask('pss_admin')
 
 pss_config.get_db_info().create_db_and_tables(real_app,True)
 db_handle = pss_config.get_db_info().create_db_handle(real_app)
@@ -21,7 +21,9 @@ tables = pss_config.get_db_info().getImportedTables(real_app,'pss_admin')
 bootstrap.bootstrap_pss_admin_event(tables)
 bootstrap.bootstrap_roles(tables)
 new_pss_admin_user = tables.PssUsers(username='test_pss_admin_user')
-new_pss_admin_user.crypt_password('password')
+new_pss_admin_event_user = tables.EventUsers()
+new_pss_admin_event_user.crypt_password('password')
+new_pss_admin_user.event_user=new_pss_admin_event_user
 tables.db_handle.session.add(new_pss_admin_user)
 new_pss_admin_user.roles.append(tables.Roles.query.filter_by(name=roles.PSS_ADMIN).first())
 

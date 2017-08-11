@@ -19,7 +19,10 @@ def create_pss_user_route(tables,request):
         raise BadRequest('Username or password not specified')        
     if 'username' not in input_data or 'password' not in input_data or 'role_id' not in input_data:
         raise BadRequest('Information missing')
-    new_user = tables.PssUsers(username=input_data['username'])    
+    new_user = tables.PssUsers(username=input_data['username'])
+    event_user = tables.EventUsers()
+    event_user.crypt_password(input_data['password'])
+    new_user.event_user=event_user
     pss_user_role = tables.Roles.query.filter_by(role_id=int(input_data['role_id'])).first()
     if pss_user_role is None:
         raise BadRequest('Role specified does not exist')        

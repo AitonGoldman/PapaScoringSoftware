@@ -9,7 +9,7 @@ def bootstrap_roles(tables):
     role_user=tables.Roles(name=roles.PSS_USER,admin_role=True)
     role_player=tables.Roles(name=roles.TEST,admin_role=False)
     
-    role_tournament_director=tables.EventRoles(name='tournament_director')
+    role_tournament_director=tables.EventRoles(name=roles.TOURNAMENT_DIRECTOR)
     role_scorekeeper=tables.EventRoles(name='scorekeeper')
     role_deskworker=tables.EventRoles(name='deskworker')
     role_scorekeeper_deskworker=tables.EventRoles(name='scorekeeper_deskworker')
@@ -22,7 +22,7 @@ def bootstrap_roles(tables):
     tables.db_handle.session.add(role_scorekeeper)
     tables.db_handle.session.add(role_deskworker)
     tables.db_handle.session.add(role_scorekeeper_deskworker)
-    tables.db_handle.session.add(role_scorekeeper_deskworker)
+    tables.db_handle.session.add(role_tournament_director)
 
     tables.db_handle.session.commit()    
     

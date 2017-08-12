@@ -22,6 +22,9 @@ def get_event_app(app, pss_config):
 
         configured_app.register_blueprint(blueprints.pss_admin_event_blueprint)
     else:
+        #FIXME : will need new methods to handle users and players
+        auth.generate_pss_user_loader(configured_app)
+        auth.generate_pss_user_identity_loaded(configured_app)
         configured_app.register_blueprint(blueprints.event_blueprint)
     return configured_app
 

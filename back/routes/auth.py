@@ -22,6 +22,14 @@ def check_pss_user_has_admin_site_access(pss_user,tables):
         raise Unauthorized('User can not access this') 
     return True
 
+def check_event_user_has_event_access(pss_event_user,tables):
+    table_roles = tables.EventRoles.query.all()
+    user_roles = [event_role.role.name for event_role in pss_event_user.event_roles]            
+    allowed_roles = [role.name for role in table_roles]            
+    if len(list(set(allowed_roles) & set(user_roles))) == 0:
+        raise Unauthorized('User can not access this') 
+    return True
+
 
 def pss_admin_login_route(request,tables):
     if request.data:        
@@ -37,6 +45,20 @@ def pss_admin_login_route(request,tables):
     check_pss_user_has_admin_site_access(pss_user,tables)
     return pss_user
 
+def pss_event_user_login_route(request,tables):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Username or password not specified')        
+    pss_event_user = tables.PssUsers.query.options(joinedload("roles")).filter_by(username=input_data['username']).first()        
+    if pss_event_user and not pss_event_user.event_user.verify_password(input_data['password']):
+       pss_event_user = None
+    if pss_event_user is None:
+       raise Unauthorized('Bad username or password')    
+    #FIXME : this should be in pss_admin_login(), not here
+    check_event_user_has_event_access(pss_event_user,tables)
+    return pss_event_user
+
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/login',methods=['POST'])
 @load_tables
 def pss_admin_login(tables):    
@@ -48,8 +70,9 @@ def pss_admin_login(tables):
     return jsonify({'pss_user':user_dict})
 
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/logout',methods=['GET'])
+@blueprints.event_blueprint.route('/auth/pss_user/logout',methods=['GET'])
 @load_tables
-def pss_admin_logout(tables):
+def pss_logout(tables):
     if current_user.is_anonymous() is False:
         logged_out_username=current_user.username
         logout_user()
@@ -57,7 +80,18 @@ def pss_admin_logout(tables):
         logged_out_username='anonymous'        
     return jsonify({'status':'%s is logged out' % logged_out_username})
 
+@blueprints.event_blueprint.route('/auth/pss_event_user/login',methods=['POST'])
+@load_tables
+def pss_event_user_login(tables):    
+    pss_event_user = pss_event_user_login_route(request,tables)
+    login_user(pss_event_user)    
+    identity_changed.send(current_app._get_current_object(), identity=Identity(pss_event_user.pss_user_id))
+    pss_user_serializer = generate_pss_user_serializer(current_app)    
+    user_dict=pss_user_serializer().dump(pss_event_user).data
+    return jsonify({'pss_user':user_dict})
+
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/current_user',methods=['GET'])
+@blueprints.event_blueprint.route('/auth/pss_event_user/current_user',methods=['GET'])
 def get_current_user():
     if current_user.is_anonymous():
         return jsonify({'current_user':None})

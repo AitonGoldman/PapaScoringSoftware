@@ -14,55 +14,46 @@ from lib.route_decorators.db_decorators import load_tables
 
 #FIXME : make sure all PssUser instances are called pss_user
 
-def check_pss_user_has_admin_site_access(pss_user,tables):
-    table_roles = tables.Roles.query.filter_by(admin_role=True).all()
-    user_roles = [role.name for role in pss_user.roles]            
+
+def do_user_roles_intersect_with_defined_roles(user_roles,table_roles):
+    user_roles = [role.name for role in user_roles]            
     allowed_roles = [role.name for role in table_roles]            
     if len(list(set(allowed_roles) & set(user_roles))) == 0:
+        #FIXME : should not throw exepction, should return False
         raise Unauthorized('User can not access this') 
     return True
+    
+def check_pss_user_has_admin_site_access(pss_user,tables):
+    table_roles = tables.Roles.query.filter_by(admin_role=True).all()
+    return do_user_roles_intersect_with_defined_roles(pss_user.roles,table_roles)
 
 def check_event_user_has_event_access(pss_event_user,tables):
     table_roles = tables.EventRoles.query.all()
-    user_roles = [event_role.role.name for event_role in pss_event_user.event_roles]            
-    allowed_roles = [role.name for role in table_roles]            
-    if len(list(set(allowed_roles) & set(user_roles))) == 0:
-        raise Unauthorized('User can not access this') 
-    return True
-
-
-def pss_admin_login_route(request,tables):
+    return do_user_roles_intersect_with_defined_roles(pss_event_user.event_roles,table_roles)
+    
+def pss_login_route(request,tables,is_pss_admin_event=True):
     if request.data:        
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Username or password not specified')        
-    pss_user = tables.PssUsers.query.options(joinedload("roles")).filter_by(username=input_data['username']).first()        
-    if pss_user and not pss_user.event_user.verify_password(input_data['password']):
-       pss_user = None
+    pss_user = tables.PssUsers.query.options(joinedload("roles")).filter_by(username=input_data['username']).first()
     if pss_user is None:
-       raise Unauthorized('Bad username or password')    
-    #FIXME : this should be in pss_admin_login(), not here
-    check_pss_user_has_admin_site_access(pss_user,tables)
-    return pss_user
-
-def pss_event_user_login_route(request,tables):
-    if request.data:        
-        input_data = json.loads(request.data)
+        raise Unauthorized('Bad username or password')
+    if pss_user.event_user is None:
+        raise BadRequest('User does not have access to this event')                        
+    if not pss_user.event_user.verify_password(input_data['password']):
+        raise Unauthorized('Bad username or password')
+    #FIXME : is this needed anymore?  if they have a event_user field on the event, then they are okay to go, right?
+    if is_pss_admin_event:
+        check_pss_user_has_admin_site_access(pss_user,tables)
     else:
-        raise BadRequest('Username or password not specified')        
-    pss_event_user = tables.PssUsers.query.options(joinedload("roles")).filter_by(username=input_data['username']).first()        
-    if pss_event_user and not pss_event_user.event_user.verify_password(input_data['password']):
-       pss_event_user = None
-    if pss_event_user is None:
-       raise Unauthorized('Bad username or password')    
-    #FIXME : this should be in pss_admin_login(), not here
-    check_event_user_has_event_access(pss_event_user,tables)
-    return pss_event_user
+        check_event_user_has_event_access(pss_user,tables)    
+    return pss_user
 
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/login',methods=['POST'])
 @load_tables
 def pss_admin_login(tables):    
-    pss_user = pss_admin_login_route(request,tables)
+    pss_user = pss_login_route(request,tables,is_pss_admin_event=True)
     login_user(pss_user)    
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_user.pss_user_id))
     pss_user_serializer = generate_pss_user_serializer(current_app)    
@@ -83,7 +74,7 @@ def pss_logout(tables):
 @blueprints.event_blueprint.route('/auth/pss_event_user/login',methods=['POST'])
 @load_tables
 def pss_event_user_login(tables):    
-    pss_event_user = pss_event_user_login_route(request,tables)
+    pss_event_user = pss_login_route(request,tables,is_pss_admin_event=False)
     login_user(pss_event_user)    
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_event_user.pss_user_id))
     pss_user_serializer = generate_pss_user_serializer(current_app)    

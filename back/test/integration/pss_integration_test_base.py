@@ -25,6 +25,10 @@ class PssIntegrationTestBase(unittest.TestCase):
         tables = self.pss_config.get_db_info().getImportedTables(pss_admin_app,"unimportant")
         bootstrap.bootstrap_pss_admin_event(tables,PSS_ADMIN_EVENT)
         del pss_admin_app
+
+    def get_event_app_in_db(self,app_name):        
+        response,results = self.dispatch_request('/%s/this_does_not_exist' % app_name)
+        return self.app.instances[app_name]                 
         
     def setUp(self):
         #pss_config.check_db_connection_env_vars_set()

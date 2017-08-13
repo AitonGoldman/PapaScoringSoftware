@@ -27,6 +27,20 @@ class RoutePssUserCreate(pss_integration_test_base.PssIntegrationTestBase):
             self.assertTrue(new_user_in_db is not None)
             self.assertEquals(new_user_in_db.username,'new_test_user')
 
+    def test_create_pss_user_fails_when_duplicate_user(self):
+        with self.pss_admin_app.test_client() as c:                        
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps({'username':'test_pss_admin_user','password':'password'}))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.get('/roles')            
+            pss_user_role = [role for role in json.loads(rv.data)['roles'] if (role['name'] == 'pss_user')][0]
+            rv = c.post('/pss_user',
+                        data=json.dumps({'username':'new_test_user','password':'password2','role_id':pss_user_role['role_id']}))
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.post('/pss_user',
+                        data=json.dumps({'username':'new_test_user','password':'password2','role_id':pss_user_role['role_id']}))
+            self.assertHttpCodeEquals(rv,409)
+            
     def test_create_pss_user_fails_with_bad_request_data(self):
         with self.pss_admin_app.test_client() as c:                        
             rv = c.post('/auth/pss_user/login',

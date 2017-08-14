@@ -6,7 +6,7 @@ import json
 from flask_login import current_user
 from flask import Flask
 from lib.PssConfig import PssConfig
-from lib import roles
+from lib import roles_constants
 #FIXME : change name of class/file
 class RouteEventCreate(pss_integration_test_base.PssIntegrationTestBase):
     def setUp(self):
@@ -28,7 +28,7 @@ class RouteEventCreate(pss_integration_test_base.PssIntegrationTestBase):
         new_event_users = new_app.tables.EventUsers.query.all()
         user_with_new_permissions = new_app.tables.PssUsers.query.filter_by(username="test_pss_admin_user").first()
         self.assertEquals(len(user_with_new_permissions.event_roles),1)
-        self.assertEquals(user_with_new_permissions.event_roles[0].name,roles.TOURNAMENT_DIRECTOR)
+        self.assertEquals(user_with_new_permissions.event_roles[0].name,roles_constants.TOURNAMENT_DIRECTOR)
 
     def test_create_event_fails_with_non_alpha_event_name(self):
         new_event_name="poop_New_Event"

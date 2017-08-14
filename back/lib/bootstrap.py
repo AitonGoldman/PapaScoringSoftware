@@ -1,17 +1,17 @@
 import os
 from base64 import b64encode
-from lib import roles
+from lib import roles_constants
 def initialize_admin_event(tables):
     pass
 
 def bootstrap_roles(tables):
-    role_admin=tables.Roles(name=roles.PSS_ADMIN,admin_role=True)
-    role_user=tables.Roles(name=roles.PSS_USER,admin_role=True)
-    role_player=tables.Roles(name=roles.TEST,admin_role=False)
+    role_admin=tables.AdminRoles(name=roles_constants.PSS_ADMIN,admin_role=True)
+    role_user=tables.AdminRoles(name=roles_constants.PSS_USER,admin_role=True)
+    role_player=tables.AdminRoles(name=roles_constants.TEST,admin_role=False)
     
-    role_tournament_director=tables.EventRoles(name=roles.TOURNAMENT_DIRECTOR)
-    role_scorekeeper=tables.EventRoles(name=roles.SCOREKEEPER)
-    role_deskworker=tables.EventRoles(name=roles.DESKWORKER)
+    role_tournament_director=tables.EventRoles(name=roles_constants.TOURNAMENT_DIRECTOR)
+    role_scorekeeper=tables.EventRoles(name=roles_constants.SCOREKEEPER)
+    role_deskworker=tables.EventRoles(name=roles_constants.DESKWORKER)
     role_scorekeeper_deskworker=tables.EventRoles(name='scorekeeper_deskworker')
     #role_player=tables.EventRoles(name='player')
 

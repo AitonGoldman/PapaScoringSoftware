@@ -4,7 +4,7 @@ from mock import MagicMock
 import pss_integration_test_base
 import json
 from flask_login import current_user
-from lib import roles
+from lib import roles_constants
 
 #FIXME : change name of class/file
 class RoutePssUserCreate(pss_integration_test_base.PssIntegrationTestBase):
@@ -22,7 +22,7 @@ class RoutePssUserCreate(pss_integration_test_base.PssIntegrationTestBase):
             rv = c.get('/roles')            
             pss_user_role = [role for role in json.loads(rv.data)['roles'] if (role['name'] == 'pss_user')][0]
             rv = c.post('/pss_user',
-                        data=json.dumps({'username':'new_test_user','password':'password2','role_id':pss_user_role['role_id']}))
+                        data=json.dumps({'username':'new_test_user','password':'password2','role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,200)            
             new_user_in_db = self.pss_admin_app.tables.PssUsers.query.filter_by(username='new_test_user').first()
             self.assertTrue(new_user_in_db is not None)
@@ -36,10 +36,10 @@ class RoutePssUserCreate(pss_integration_test_base.PssIntegrationTestBase):
             rv = c.get('/roles')            
             pss_user_role = [role for role in json.loads(rv.data)['roles'] if (role['name'] == 'pss_user')][0]
             rv = c.post('/pss_user',
-                        data=json.dumps({'username':'new_test_user','password':'password2','role_id':pss_user_role['role_id']}))
+                        data=json.dumps({'username':'new_test_user','password':'password2','role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,200)
             rv = c.post('/pss_user',
-                        data=json.dumps({'username':'new_test_user','password':'password2','role_id':pss_user_role['role_id']}))
+                        data=json.dumps({'username':'new_test_user','password':'password2','role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,409)
             
     def test_create_pss_user_fails_with_bad_request_data(self):
@@ -82,7 +82,7 @@ class RoutePssUserCreate(pss_integration_test_base.PssIntegrationTestBase):
             
         new_app = self.get_event_app_in_db(new_event_name_1)
         with new_app.test_client() as c:                        
-            scorekeeper_role = new_app.tables.EventRoles.query.filter_by(name=roles.SCOREKEEPER).first()
+            scorekeeper_role = new_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
             rv = c.post('/auth/pss_event_user/login',
                         data=json.dumps({'username':'test_pss_admin_user',
                                          'password':'password'}))
@@ -95,8 +95,8 @@ class RoutePssUserCreate(pss_integration_test_base.PssIntegrationTestBase):
             self.assertHttpCodeEquals(rv,200)            
             new_user = new_app.tables.PssUsers.query.filter_by(username='test_pss_admin_user_for_test_create_pss_event_user').first()
             self.assertTrue(new_user is not None)
-            self.assertEquals(len(new_user.roles),0)
+            self.assertEquals(len(new_user.admin_roles),0)
             self.assertEquals(len(new_user.event_roles),1)
-            self.assertEquals(new_user.event_roles[0].name,roles.SCOREKEEPER)
+            self.assertEquals(new_user.event_roles[0].name,roles_constants.SCOREKEEPER)
 
             

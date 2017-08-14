@@ -24,8 +24,8 @@ def do_user_roles_intersect_with_defined_roles(user_roles,table_roles):
     return True
     
 def check_pss_user_has_admin_site_access(pss_user,tables):
-    table_roles = tables.Roles.query.filter_by(admin_role=True).all()
-    return do_user_roles_intersect_with_defined_roles(pss_user.roles,table_roles)
+    table_roles = tables.AdminRoles.query.filter_by(admin_role=True).all()
+    return do_user_roles_intersect_with_defined_roles(pss_user.admin_roles,table_roles)
 
 def check_event_user_has_event_access(pss_event_user,tables):
     table_roles = tables.EventRoles.query.all()
@@ -36,7 +36,7 @@ def pss_login_route(request,tables,is_pss_admin_event=True):
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Username or password not specified')        
-    pss_user = tables.PssUsers.query.options(joinedload("roles")).filter_by(username=input_data['username']).first()
+    pss_user = tables.PssUsers.query.options(joinedload("admin_roles")).filter_by(username=input_data['username']).first()
     if pss_user is None:
         raise Unauthorized('Bad username or password')
     if pss_user.event_user is None:

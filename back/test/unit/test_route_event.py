@@ -7,16 +7,16 @@ from flask import Flask
 from flask_principal import Principal
 from lib.PssConfig import PssConfig
 from routes import event
-from lib import roles,orm_factories
+from lib import roles_constants,orm_factories
 import json
 from werkzeug.exceptions import BadRequest,Unauthorized
 
 class RouteEventTest(PssUnitTestBase):
     def setUp(self):
-        self.mock_user_with_admin_permissions = self.create_mock_user([roles.PSS_ADMIN],is_pss_admin_user=True)
-        self.mock_user_with_user_permissions = self.create_mock_user([roles.PSS_USER],is_pss_admin_user=True)
-        self.mock_user_with_incorrect_permissions = self.create_mock_user([roles.TEST],is_pss_admin_user=True)
-        self.mock_user_with_td_permissions = self.create_mock_user([roles.TOURNAMENT_DIRECTOR],is_pss_admin_user=False)
+        self.mock_user_with_admin_permissions = self.create_mock_user([roles_constants.PSS_ADMIN],is_pss_admin_user=True)
+        self.mock_user_with_user_permissions = self.create_mock_user([roles_constants.PSS_USER],is_pss_admin_user=True)
+        self.mock_user_with_incorrect_permissions = self.create_mock_user([roles_constants.TEST],is_pss_admin_user=True)
+        self.mock_user_with_td_permissions = self.create_mock_user([roles_constants.TOURNAMENT_DIRECTOR],is_pss_admin_user=False)
 
         self.mock_request = MagicMock()        
         self.mock_tables = MagicMock()
@@ -30,7 +30,7 @@ class RouteEventTest(PssUnitTestBase):
         self.mock_event.name='poop'
         self.mock_tables.Events.query.filter_by().first.return_value=None
         self.mock_tables.Events.return_value=self.mock_event                        
-        self.mock_tables.EventRoles.query.filter_by().first.return_value=self.create_mock_role(roles.TOURNAMENT_DIRECTOR)
+        self.mock_tables.EventRoles.query.filter_by().first.return_value=self.create_mock_role(roles_constants.TOURNAMENT_DIRECTOR)
         new_event_tables = MagicMock()
         returned_event = orm_factories.create_event_route(self.mock_user_with_user_permissions,self.mock_tables,mock_input_data,new_event_tables)
         self.assertEquals(self.mock_event,returned_event)

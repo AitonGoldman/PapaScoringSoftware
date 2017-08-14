@@ -26,10 +26,10 @@ def create_pss_user_route(tables,request, app):
     event_user.crypt_password(input_data['password'])
     new_user.event_user=event_user    
     if 'role_id' in input_data:
-        pss_user_role = tables.Roles.query.filter_by(role_id=int(input_data['role_id'])).first()
+        pss_user_role = tables.AdminRoles.query.filter_by(admin_role_id=int(input_data['role_id'])).first()
         if pss_user_role is None:
             raise BadRequest('Role specified does not exist')        
-        new_user.roles.append(pss_user_role)
+        new_user.admin_roles.append(pss_user_role)
     if 'event_role_id' in input_data:
         event = tables.Events.query.filter_by(name=app.name).first()
         new_user.events.append(event)        

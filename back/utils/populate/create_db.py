@@ -2,7 +2,7 @@ from flask import Flask
 from lib.PssConfig  import PssConfig
 from pss_models import ImportedTables
 import os,sys
-from lib import bootstrap,roles,orm_factories
+from lib import bootstrap,roles_constants,orm_factories
 
 if len(sys.argv) > 1:
     db_name=sys.argv[1]
@@ -23,7 +23,7 @@ bootstrap.bootstrap_pss_admin_event(tables,'pss_admin')
 bootstrap.bootstrap_roles(tables)
 
 orm_factories.create_user(real_app, 'test_pss_admin_user',
-                          'password', [tables.Roles.query.filter_by(name=roles.PSS_ADMIN).first()],
+                          'password', [tables.Roles.query.filter_by(name=roles_constants.PSS_ADMIN).first()],
                           commit=True)
 
 if len(sys.argv) == 1:

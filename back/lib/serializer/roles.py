@@ -7,8 +7,8 @@ def generate_event_roles_serializer(app):
             model = app.tables.EventRoles
     return event_roles_schema
 
-def generate_roles_serializer(app):        
-    class roles_schema(app.ma.ModelSchema):
+def generate_admin_roles_serializer(app):        
+    class admin_roles_schema(app.ma.ModelSchema):
         class Meta:
-            model = app.tables.Roles
-    return roles_schema
+            model = app.tables.AdminRoles
+    return admin_roles_schema

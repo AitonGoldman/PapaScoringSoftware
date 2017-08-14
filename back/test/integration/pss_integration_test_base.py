@@ -1,5 +1,5 @@
 import unittest
-from lib import roles,orm_factories,bootstrap
+from lib import roles_constants,orm_factories,bootstrap
 from gunicorn.http.wsgi import Response,WSGIErrorsWrapper, FileWrapper
 from gunicorn.http.body import Body
 from mock import MagicMock
@@ -98,9 +98,9 @@ class PssIntegrationTestBase(unittest.TestCase):
         
     def bootstrap_pss_users(self, app):
         tables = app.tables
-        role_admin=tables.Roles.query.filter_by(name=roles.PSS_ADMIN).first()
-        role_user=tables.Roles.query.filter_by(name=roles.PSS_USER).first()
-        role_player=tables.Roles.query.filter_by(name=roles.TEST).first()
+        role_admin=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_ADMIN).first()
+        role_user=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_USER).first()
+        role_player=tables.AdminRoles.query.filter_by(name=roles_constants.TEST).first()
         admin_pss_user = orm_factories.create_user(app,
                                                    'test_pss_admin_user',
                                                    'password',

@@ -23,8 +23,8 @@ def generate_pss_user_identity_loaded(app):
         #    identity.provides.add(UserNeed(current_user.player_id))            
         #else:            
         identity.provides.add(UserNeed(current_user.pss_user_id))
-        if hasattr(current_user, 'roles'):
-            for role in current_user.roles:
+        if hasattr(current_user, 'admin_roles'):
+            for role in current_user.admin_roles:
                 identity.provides.add(RoleNeed(role.name))
         if hasattr(current_user, 'event_roles'):
             for event_role in current_user.event_roles:

@@ -17,12 +17,12 @@ class PssUnitTestBase(unittest.TestCase):
         return mock_role   
     def create_mock_user(self,role_names,is_pss_admin_user=True):
         mock_user = MagicMock()        
-        mock_user.roles=[]
+        mock_user.admin_roles=[]
         mock_user.event_roles=[]
         for role_name in role_names:
             mock_role = self.create_mock_role(role_name)
             if is_pss_admin_user:
-                mock_user.roles.append(mock_role)
+                mock_user.admin_roles.append(mock_role)
             else:
                 mock_user.event_roles.append(mock_role)
                 

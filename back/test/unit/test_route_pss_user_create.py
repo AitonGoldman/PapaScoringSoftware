@@ -7,7 +7,7 @@ from flask import Flask
 from flask_principal import Principal
 from lib.PssConfig import PssConfig
 from routes import auth,pss_user
-from lib import roles
+from lib import roles_constants
 import json
 from werkzeug.exceptions import BadRequest,Unauthorized
 
@@ -22,10 +22,10 @@ class RoutePssUserCreateTest(PssUnitTestBase):
     
     def create_mock_user(self,role_names):
         mock_user = MagicMock()        
-        mock_user.roles=[]
+        mock_user.admin_roles=[]
         for role_name in role_names:
             mock_role = self.create_mock_role(role_name)            
-            mock_user.roles.append(mock_role)
+            mock_user.admin_roles.append(mock_role)
         mock_user.verify_password.return_value=True            
         return mock_user
 
@@ -39,9 +39,9 @@ class RoutePssUserCreateTest(PssUnitTestBase):
         return fake_verify_password    
     
     def setUp(self):
-        self.mock_user_with_admin_permissions = self.create_mock_user([roles.PSS_ADMIN])
-        self.mock_user_with_user_permissions = self.create_mock_user([roles.PSS_USER])
-        self.mock_user_with_incorrect_permissions = self.create_mock_user([roles.PSS_PLAYER])
+        self.mock_user_with_admin_permissions = self.create_mock_user([roles_constants.PSS_ADMIN])
+        self.mock_user_with_user_permissions = self.create_mock_user([roles_constants.PSS_USER])
+        self.mock_user_with_incorrect_permissions = self.create_mock_user([roles_constants.PSS_PLAYER])
         self.mock_new_user = self.create_mock_user([])
 
         self.mock_request = MagicMock()        
@@ -49,9 +49,9 @@ class RoutePssUserCreateTest(PssUnitTestBase):
             
     def test_create_pss_user_route(self):
         self.mock_request.data = json.dumps({'username':'new_user_for_test_create_pss_user_route','password':'new_password','role_id':1})
-        mock_role = self.create_mock_role(roles.PSS_ADMIN)
+        mock_role = self.create_mock_role(roles_constants.PSS_ADMIN)
         mock_role.role_id=1
-        self.mock_tables.Roles.query.filter_by().first.return_value = mock_role
+        self.mock_tables.AdminRoles.query.filter_by().first.return_value = mock_role
         
         self.mock_tables.PssUsers.return_value = self.mock_new_user
         self.mock_tables.PssUsers.query.filter_by().first.return_value = None
@@ -66,7 +66,7 @@ class RoutePssUserCreateTest(PssUnitTestBase):
 
     def test_create_pss_user_route_fails_with_invalid_role_id(self):
         self.mock_request.data = json.dumps({'username':'new_user','password':'new_password','role_id':1})
-        self.mock_tables.Roles.query.filter_by().first.return_value = None
+        self.mock_tables.AdminRoles.query.filter_by().first.return_value = None
         with self.assertRaises(Exception) as cm:        
             created_user = pss_user.create_pss_user_route(self.mock_tables,self.mock_request,self.mock_app)
         

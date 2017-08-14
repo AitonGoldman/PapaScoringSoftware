@@ -2,7 +2,7 @@ from lib.PssConfig import PssConfig
 from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from base64 import b64encode
 import os
-from lib import roles
+from lib import roles_constants
 
 #FIXME : move this back to route
 def create_event_route(user_creating_event, tables, input_data, new_event_tables):
@@ -11,7 +11,7 @@ def create_event_route(user_creating_event, tables, input_data, new_event_tables
     tables.db_handle.session.add(new_event)
     new_event_user = new_event_tables.EventUsers(pss_user_id=user_creating_event.pss_user_id,
                                                  password_crypt=user_creating_event.event_user.password_crypt)
-    td_role = new_event_tables.EventRoles.query.filter_by(name=roles.TOURNAMENT_DIRECTOR).first()
+    td_role = new_event_tables.EventRoles.query.filter_by(name=roles_constants.TOURNAMENT_DIRECTOR).first()
     
     existing_user_in_new_event = new_event_tables.PssUsers.query.filter_by(pss_user_id=user_creating_event.pss_user_id).first()
     existing_user_in_new_event.event_roles.append(td_role)
@@ -41,7 +41,7 @@ def create_user(flask_app,username,password,roles,commit=False):
     user.event_user = event_user
     tables.db_handle.session.add(user)
     for role in roles:
-        user.roles.append(role)        
+        user.admin_roles.append(role)        
     if commit:
         tables.db_handle.session.commit()
 

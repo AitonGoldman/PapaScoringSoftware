@@ -1,12 +1,12 @@
 from passlib.hash import sha512_crypt
 
-def generate_pss_user_role_mapping(db_handle):
-    Role_PssUser_mapping = db_handle.Table(
-        'role_pss_user',
+def generate_pss_user_admin_role_mapping(db_handle):
+    AdminRole_PssUser_mapping = db_handle.Table(
+        'admin_role_pss_user',
         db_handle.Column('pss_user_id', db_handle.Integer, db_handle.ForeignKey('pss_users.pss_user_id')),
-        db_handle.Column('role_id', db_handle.Integer, db_handle.ForeignKey('roles.role_id'))
+        db_handle.Column('admin_role_id', db_handle.Integer, db_handle.ForeignKey('admin_roles.admin_role_id'))
     )
-    return Role_PssUser_mapping
+    return AdminRole_PssUser_mapping
 
 def generate_pss_user_event_role_mapping(db_handle,event_name):
     EventRole_PssUser_mapping = db_handle.Table(
@@ -29,7 +29,7 @@ def generate_pss_user_event_mapping(db_handle):
 
 """Model object for a Pss Users"""
 def generate_pss_users_class(db_handle,event_name):
-    Role_PssUser_mapping = generate_pss_user_role_mapping(db_handle)
+    AdminRole_PssUser_mapping = generate_pss_user_admin_role_mapping(db_handle)
     Event_PssUser_mapping = generate_pss_user_event_mapping(db_handle)
     EventRole_PssUser_mapping = generate_pss_user_event_role_mapping(db_handle,event_name)
     
@@ -42,11 +42,10 @@ def generate_pss_users_class(db_handle,event_name):
         password_crypt = db_handle.Column(db_handle.String(134))
         has_picture = db_handle.Column(db_handle.Boolean(),default=False)
         ioniccloud_push_token=db_handle.Column(db_handle.String(500))        
-        roles = db_handle.relationship(
-           'Roles',
-           secondary=Role_PssUser_mapping
+        admin_roles = db_handle.relationship(
+            'AdminRoles',
+            secondary=AdminRole_PssUser_mapping
         )
-        #event_roles = db_handle.relationship('EventUsersRoles')
         event_roles = db_handle.relationship(
             'EventRoles',
             secondary=EventRole_PssUser_mapping

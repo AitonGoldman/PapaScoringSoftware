@@ -13,8 +13,10 @@ def create_pss_user_route(tables,request, app):
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Username or password not specified')        
-    if 'username' not in input_data or 'password' not in input_data or 'role_id' not in input_data:
+    if 'username' not in input_data or 'password' not in input_data:        
         raise BadRequest('Information missing')
+    if 'event_role_id' not in input_data and 'role_id' not in input_data:
+        raise BadRequest('Information missing')        
     existing_user=tables.PssUsers.query.filter_by(username=input_data['username']).first()
     #FIXME : needs to be more extensive of a check (i.e. check actual name, etc)
     if existing_user is not None:
@@ -29,9 +31,9 @@ def create_pss_user_route(tables,request, app):
             raise BadRequest('Role specified does not exist')        
         new_user.roles.append(pss_user_role)
     if 'event_role_id' in input_data:
-        event = tables.Events.query.filter_by(name=int(app.name)).first()
+        event = tables.Events.query.filter_by(name=app.name).first()
         new_user.events.append(event)        
-        pss_event_user_role = tables.EventRoles.query.filter_by(role_id=int(input_data['event_role_id'])).first()
+        pss_event_user_role = tables.EventRoles.query.filter_by(event_role_id=int(input_data['event_role_id'])).first()
         if pss_event_user_role is None:
             raise BadRequest('Role specified does not exist')        
         new_user.event_roles.append(pss_event_user_role)
@@ -55,7 +57,7 @@ def create_pss_event_user(tables):
     #FIXME : protect against duplicate users
     if 'role_id' in json.loads(request.data):
         raise BadRequest('Naughty Naughty')
-    new_user = create_pss_user_route(tables,request)
+    new_user = create_pss_user_route(tables,request,current_app)
     pss_user_serializer = generate_pss_user_serializer(current_app)    
     user_dict=pss_user_serializer().dump(new_user).data    
     return jsonify({'new_pss_user':user_dict})

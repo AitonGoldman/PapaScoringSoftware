@@ -119,7 +119,7 @@ class PssIntegrationTestBase(unittest.TestCase):
                                                            [])
         tables.db_handle.session.commit()        
         
-    def tearDown(self):                
+    def tearDown(self):                        
         db_url = self.pss_config.get_db_info().generate_db_url()
         #drop_database(db_url)
         

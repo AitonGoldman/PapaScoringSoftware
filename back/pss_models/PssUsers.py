@@ -8,6 +8,15 @@ def generate_pss_user_role_mapping(db_handle):
     )
     return Role_PssUser_mapping
 
+def generate_pss_user_event_role_mapping(db_handle,event_name):
+    EventRole_PssUser_mapping = db_handle.Table(
+        'event_role_pss_user_'+event_name,
+        #'event_role_pss_user',
+        db_handle.Column('pss_user_id', db_handle.Integer, db_handle.ForeignKey('pss_users.pss_user_id')),
+        db_handle.Column('event_role_id', db_handle.Integer, db_handle.ForeignKey('event_roles.event_role_id'))
+    )
+    return EventRole_PssUser_mapping
+
 def generate_pss_user_event_mapping(db_handle):
     Event_PssUser_mapping = db_handle.Table(
         'event_pss_user',
@@ -19,9 +28,10 @@ def generate_pss_user_event_mapping(db_handle):
 # FIXME : need to make it so users can change their info via email confirmation of changes
 
 """Model object for a Pss Users"""
-def generate_pss_users_class(db_handle):
+def generate_pss_users_class(db_handle,event_name):
     Role_PssUser_mapping = generate_pss_user_role_mapping(db_handle)
     Event_PssUser_mapping = generate_pss_user_event_mapping(db_handle)
+    EventRole_PssUser_mapping = generate_pss_user_event_role_mapping(db_handle,event_name)
     
     class PssUsers(db_handle.Model):
         """Model object for Pss Users"""
@@ -36,7 +46,12 @@ def generate_pss_users_class(db_handle):
            'Roles',
            secondary=Role_PssUser_mapping
         )
-        event_roles = db_handle.relationship('EventUsersRoles')
+        #event_roles = db_handle.relationship('EventUsersRoles')
+        event_roles = db_handle.relationship(
+            'EventRoles',
+            secondary=EventRole_PssUser_mapping
+        )
+        
         event_user = db_handle.relationship('EventUsers',uselist=False)
             
         events = db_handle.relationship(

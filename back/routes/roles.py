@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest,Unauthorized
 from flask_login import login_user, logout_user, current_user
 import json
 from lib import roles
-from lib.serializer.roles import generate_roles_serializer
+from lib.serializer.roles import generate_roles_serializer, generate_event_roles_serializer
 from lib.route_decorators.db_decorators import load_tables
 
 @blueprints.pss_admin_event_blueprint.route('/roles',methods=['GET'])
@@ -19,11 +19,11 @@ def get_roles(tables):
 
 @blueprints.event_blueprint.route('/roles',methods=['GET'])
 @load_tables
-def get_roles(tables):    
+def get_event_roles(tables):    
     roles_list = []
-    filtered_roles = tables.EventRoles.query.all()
-    pss_roles_serializer = generate_roles_serializer(current_app)
-    for role in tables.Roles.query.filter(~tables.Roles.name.in_(filtered_roles)).all():
-        roles_list.append(pss_roles_serializer().dump(role).data)    
-    return jsonify({'roles':roles_list})
+    event_roles = tables.EventRoles.query.all()
+    pss_event_roles_serializer = generate_event_roles_serializer(current_app)
+    for event_role in event_roles:        
+        roles_list.append(pss_event_roles_serializer().dump(event_role).data)    
+    return jsonify({'event_roles':roles_list})
 

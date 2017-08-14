@@ -7,7 +7,7 @@ from flask import Flask
 from flask_principal import Principal
 from lib.PssConfig import PssConfig
 from routes import event
-from lib import roles
+from lib import roles,orm_factories
 import json
 from werkzeug.exceptions import BadRequest,Unauthorized
 
@@ -32,7 +32,7 @@ class RouteEventTest(PssUnitTestBase):
         self.mock_tables.Events.return_value=self.mock_event                        
         self.mock_tables.EventRoles.query.filter_by().first.return_value=self.create_mock_role(roles.TOURNAMENT_DIRECTOR)
         new_event_tables = MagicMock()
-        returned_event = event.create_event_route(self.mock_user_with_user_permissions,self.mock_tables,mock_input_data,new_event_tables)
+        returned_event = orm_factories.create_event_route(self.mock_user_with_user_permissions,self.mock_tables,mock_input_data,new_event_tables)
         self.assertEquals(self.mock_event,returned_event)
         
     def test_create_event_route_fails_with_duplicate_event(self):
@@ -42,7 +42,7 @@ class RouteEventTest(PssUnitTestBase):
         existing_event_mock.Events.query.filter_by().first.return_value = MagicMock()
         pss_config_mock.get_db_info().getImportedTables.return_value=existing_event_mock        
         with self.assertRaises(Exception) as cm:
-            event.create_event_tables(pss_config_mock,self.mock_new_app)
+            orm_factories.create_event_tables(pss_config_mock,self.mock_new_app)
         
         
     

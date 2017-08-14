@@ -10,8 +10,8 @@ def bootstrap_roles(tables):
     role_player=tables.Roles(name=roles.TEST,admin_role=False)
     
     role_tournament_director=tables.EventRoles(name=roles.TOURNAMENT_DIRECTOR)
-    role_scorekeeper=tables.EventRoles(name='scorekeeper')
-    role_deskworker=tables.EventRoles(name='deskworker')
+    role_scorekeeper=tables.EventRoles(name=roles.SCOREKEEPER)
+    role_deskworker=tables.EventRoles(name=roles.DESKWORKER)
     role_scorekeeper_deskworker=tables.EventRoles(name='scorekeeper_deskworker')
     #role_player=tables.EventRoles(name='player')
 

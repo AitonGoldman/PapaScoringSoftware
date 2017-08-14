@@ -4,7 +4,7 @@ from lib.serializer import event
 def generate_event_roles_serializer(app):
     class event_roles_schema(app.ma.ModelSchema):
         class Meta:
-            model = app.tables.PssEventUsersRoles
+            model = app.tables.EventRoles
     return event_roles_schema
 
 def generate_roles_serializer(app):        

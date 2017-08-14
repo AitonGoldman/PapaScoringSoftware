@@ -16,9 +16,9 @@ from lib.route_decorators.db_decorators import load_tables
 
 
 def do_user_roles_intersect_with_defined_roles(user_roles,table_roles):
-    user_roles = [role.name for role in user_roles]            
+    user_roles_names = [role.name for role in user_roles]            
     allowed_roles = [role.name for role in table_roles]            
-    if len(list(set(allowed_roles) & set(user_roles))) == 0:
+    if len(list(set(allowed_roles) & set(user_roles_names))) == 0:
         #FIXME : should not throw exepction, should return False
         raise Unauthorized('User can not access this') 
     return True
@@ -83,7 +83,7 @@ def pss_event_user_login(tables):
 
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/current_user',methods=['GET'])
 @blueprints.event_blueprint.route('/auth/pss_event_user/current_user',methods=['GET'])
-def get_current_user():
+def get_current_user():    
     if current_user.is_anonymous():
         return jsonify({'current_user':None})
     pss_user_serializer = generate_pss_user_serializer(current_app)    

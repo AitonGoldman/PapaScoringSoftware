@@ -47,21 +47,21 @@ class PssIntegrationTestBase(unittest.TestCase):
     def get_event_app_in_db(self,app_name):        
         response,results = self.dispatch_request('/%s/this_does_not_exist' % app_name)
         return self.app.instances[app_name]                 
-
-    # @classmethod
-    # def setUpClass(cls):        
-    # cls.test_db_name=test_db_name_for_run
-
-    @classmethod    
-    def bootstrap_pss_users(cls,app):
+        
+    def bootstrap_pss_users(self,app):
         tables = app.tables
-        role_admin=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_ADMIN).first()
-        role_user=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_USER).first()
-        role_player=tables.AdminRoles.query.filter_by(name=roles_constants.TEST).first()
-        cls.admin_pss_user_password='password55'        
-        cls.admin_pss_user = orm_factories.create_user(app,
-                                                       'test_pss_admin_user%s' % create_uniq_id(),
-                                                       cls.admin_pss_user_password,
+        self.admin_pss_user = tables.PssUsers.query.filter_by(username='test_pss_admin_user').first()
+        self.admin_pss_user_password='password55'
+        if self.admin_pss_user:
+            return
+        role_admin=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_ADMIN).first()        
+        #role_user=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_USER).first()
+        #role_player=tables.AdminRoles.query.filter_by(name=roles_constants.TEST).first()
+                
+        self.admin_pss_user = orm_factories.create_user(app,
+                                                       #'test_pss_admin_user%s' % create_uniq_id(),
+                                                       'test_pss_admin_user',
+                                                       self.admin_pss_user_password,
                                                        [role_admin])
         tables.db_handle.session.commit()        
         

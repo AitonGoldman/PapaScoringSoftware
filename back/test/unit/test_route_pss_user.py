@@ -12,7 +12,7 @@ import json
 from werkzeug.exceptions import BadRequest,Unauthorized
 
 # change name to auth
-class RoutePssUserCreateTest(PssUnitTestBase):    
+class RoutePssUser(PssUnitTestBase):    
 
     
     def create_mock_role(self,role_name):

@@ -1,7 +1,7 @@
 import unittest
 import os
 from mock import MagicMock
-import pss_integration_test_base
+from test.integration import pss_integration_test_base
 import json
 from flask_login import current_user
 
@@ -13,7 +13,7 @@ class RoutePssLogout(pss_integration_test_base.PssIntegrationTestBase):
     def test_logout_after_login(self):
         with self.pss_admin_app.test_client() as c:                        
             rv = c.post('/auth/pss_user/login',
-                        data=json.dumps({'username':'test_pss_admin_user','password':'password'}))
+                        data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
             rv = c.get('/auth/pss_user/logout')           
             self.assertHttpCodeEquals(rv,200)            
             self.assertFalse(current_user.is_authenticated(),                            

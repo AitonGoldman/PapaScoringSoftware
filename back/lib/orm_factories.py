@@ -5,7 +5,7 @@ import os
 from lib import roles_constants
 
 #FIXME : move this back to route
-def create_event_route(user_creating_event, tables, input_data, new_event_tables):
+def create_event(user_creating_event, tables, input_data, new_event_tables):
     secret_key=b64encode(os.urandom(24)).decode('utf-8')        
     new_event = tables.Events(name=input_data['name'],flask_secret_key=secret_key)    
     tables.db_handle.session.add(new_event)
@@ -45,3 +45,4 @@ def create_user(flask_app,username,password,roles,commit=False):
     if commit:
         tables.db_handle.session.commit()
 
+    return user

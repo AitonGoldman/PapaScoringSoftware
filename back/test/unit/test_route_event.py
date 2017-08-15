@@ -32,7 +32,7 @@ class RouteEventTest(PssUnitTestBase):
         self.mock_tables.Events.return_value=self.mock_event                        
         self.mock_tables.EventRoles.query.filter_by().first.return_value=self.create_mock_role(roles_constants.TOURNAMENT_DIRECTOR)
         new_event_tables = MagicMock()
-        returned_event = orm_factories.create_event_route(self.mock_user_with_user_permissions,self.mock_tables,mock_input_data,new_event_tables)
+        returned_event = orm_factories.create_event(self.mock_user_with_user_permissions,self.mock_tables,mock_input_data,new_event_tables)
         self.assertEquals(self.mock_event,returned_event)
         
     def test_create_event_route_fails_with_duplicate_event(self):

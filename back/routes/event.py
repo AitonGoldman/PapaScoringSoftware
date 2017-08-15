@@ -31,7 +31,7 @@ def create_event(tables):
     new_event_app = Flask(input_data['name'])
     new_event_tables = orm_factories.create_event_tables(pss_config,new_event_app)    
 
-    new_event = orm_factories.create_event_route(current_user, tables, input_data, new_event_tables)    
+    new_event = orm_factories.create_event(current_user, tables, input_data, new_event_tables)    
     
     event_serializer = generate_events_serializer(current_app)    
     event_dict=event_serializer().dump(new_event).data    

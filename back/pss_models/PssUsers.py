@@ -38,7 +38,11 @@ def generate_pss_users_class(db_handle,event_name):
         # pylint: disable=no-init
         # pylint can't find SQLAlchemy's __init__() method for some reason
         pss_user_id = db_handle.Column(db_handle.Integer, primary_key=True)
-        username = db_handle.Column(db_handle.String(80), unique=True, nullable=False)    
+        username = db_handle.Column(db_handle.String(80), unique=True, nullable=False)
+        first_name = db_handle.Column(db_handle.String(80), nullable=False)    
+        last_name = db_handle.Column(db_handle.String(80), nullable=False)    
+        extra_title = db_handle.Column(db_handle.String(80))    
+        
         password_crypt = db_handle.Column(db_handle.String(134))
         has_picture = db_handle.Column(db_handle.Boolean(),default=False)
         ioniccloud_push_token=db_handle.Column(db_handle.String(500))        

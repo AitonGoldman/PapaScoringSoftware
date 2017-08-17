@@ -34,6 +34,8 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
             rv = c.post('/pss_user',
                         data=json.dumps({'username':self.event_user,
                                          'password':'password',
+                                         'first_name':'test_event_first_name',
+                                         'last_name':'test_event_last_name',
                                          'event_role_id':scorekeeper_role.event_role_id}))
             self.assertHttpCodeEquals(rv,200)            
         
@@ -49,6 +51,8 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
             rv = c.post('/pss_user',
                         data=json.dumps({'username':self.event_user_2,
                                          'password':'password',
+                                         'first_name':'test_event_2_first_name',
+                                         'last_name':'test_event_2_last_name',                                         
                                          'event_role_id':scorekeeper_role.event_role_id}))
             self.assertHttpCodeEquals(rv,200)            
         

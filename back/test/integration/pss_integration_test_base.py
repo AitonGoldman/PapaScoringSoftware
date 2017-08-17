@@ -58,11 +58,11 @@ class PssIntegrationTestBase(unittest.TestCase):
         #role_user=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_USER).first()
         #role_player=tables.AdminRoles.query.filter_by(name=roles_constants.TEST).first()
                 
-        self.admin_pss_user = orm_factories.create_user(app,
-                                                       #'test_pss_admin_user%s' % create_uniq_id(),
-                                                       'test_pss_admin_user',
-                                                       self.admin_pss_user_password,
-                                                       [role_admin])
+        self.admin_pss_user = orm_factories.create_user(app,                                                       
+                                                        'test_pss_admin_user',
+                                                        'test_first_name','test_last_name',
+                                                        self.admin_pss_user_password,
+                                                        admin_roles=[role_admin])
         tables.db_handle.session.commit()        
         
         
@@ -137,9 +137,10 @@ class PssIntegrationTestBase(unittest.TestCase):
     def bootstrap_extra_users(self,app):
         self.pss_user_with_no_roles_password='password455'                
         self.pss_user_with_no_roles = orm_factories.create_user(app,
-                                                           'test_pss_user_no_roles%s' % self.create_uniq_id() ,
-                                                           self.pss_user_with_no_roles_password,
-                                                           [])
+                                                                'test_pss_user_no_roles%s' % self.create_uniq_id(),
+                                                                'test_event_2_first_name',
+                                                                'test_event_2_last_name',
+                                                                self.pss_user_with_no_roles_password)
         tables = app.tables
         tables.db_handle.session.commit()        
         

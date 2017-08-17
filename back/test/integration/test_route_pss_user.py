@@ -24,7 +24,11 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             rv = c.get('/roles')            
             pss_user_role = [role for role in json.loads(rv.data)['roles'] if (role['name'] == 'pss_user')][0]
             rv = c.post('/pss_user',
-                        data=json.dumps({'username':new_username,'password':'password2','role_id':pss_user_role['admin_role_id']}))
+                        data=json.dumps({'username':new_username,
+                                         'password':'password2',
+                                         'first_name':'fake first name %s' % self.create_uniq_id(),
+                                         'last_name':'fake_last_name',
+                                         'role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,200)            
             new_user_in_db = self.pss_admin_app.tables.PssUsers.query.filter_by(username=new_username).first()
             self.assertTrue(new_user_in_db is not None)
@@ -39,17 +43,26 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             rv = c.get('/roles')            
             pss_user_role = [role for role in json.loads(rv.data)['roles'] if (role['name'] == 'pss_user')][0]
             rv = c.post('/pss_user',
-                        data=json.dumps({'username':new_username,'password':'password2','role_id':pss_user_role['admin_role_id']}))
+                        data=json.dumps({'username':new_username,
+                                         'password':'password2',
+                                         'first_name':'fake first name %s' % self.create_uniq_id(),
+                                         'last_name':'fake_last_name',                                         
+                                         'role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,200)
             rv = c.post('/pss_user',
-                        data=json.dumps({'username':new_username,'password':'password2','role_id':pss_user_role['admin_role_id']}))
+                        data=json.dumps({'username':new_username,
+                                         'password':'password2',
+                                         'first_name':'fake first name %s' % self.create_uniq_id(),
+                                         'last_name':'fake_last_name',                                         
+                                         'role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,409)
     #FIXME : add test cases for no password, no username, etc
     def test_create_pss_user_fails_with_bad_request_data(self):        
         new_username = 'new_user_%s'% self.create_uniq_id()
         with self.pss_admin_app.test_client() as c:                        
             rv = c.post('/auth/pss_user/login',
-                        data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
+                        data=json.dumps({'username':self.admin_pss_user.username,
+                                         'password':self.admin_pss_user_password}))
             self.assertHttpCodeEquals(rv,200)            
             rv = c.get('/roles')                        
             rv = c.post('/pss_user',
@@ -65,7 +78,11 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             self.assertHttpCodeEquals(rv,200)            
             rv = c.get('/roles')                        
             rv = c.post('/pss_user',
-                        data=json.dumps({'username':new_username,'password':'password2','role_id':999999}))
+                        data=json.dumps({'username':new_username,
+                                         'first_name':'fake first name %s' % self.create_uniq_id(),
+                                         'last_name':'fake_last_name',                                         
+                                         'password':'password2',
+                                         'role_id':999999}))
             self.assertHttpCodeEquals(rv,400)            
             nonexistant_new_user_in_db = self.pss_admin_app.tables.PssUsers.query.filter_by(username=new_username).first()
             self.assertTrue(nonexistant_new_user_in_db is None)                         
@@ -84,6 +101,8 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             rv = c.post('/pss_user',
                         data=json.dumps({'username':'test_pss_admin_user_for_test_create_pss_event_user',
                                          'password':'password',
+                                         'first_name':'fake_first_name',
+                                         'last_name':'fake_last_name',
                                          'event_role_id':scorekeeper_role.event_role_id}))
             self.assertHttpCodeEquals(rv,200)            
             new_user = self.event_app.tables.PssUsers.query.filter_by(username='test_pss_admin_user_for_test_create_pss_event_user').first()

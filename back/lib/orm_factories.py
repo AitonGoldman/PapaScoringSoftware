@@ -33,15 +33,27 @@ def create_event_tables(pss_config,new_event_app):
 
     return new_event_tables
 
-def create_user(flask_app,username,password,roles,commit=False):
+def create_user(flask_app,username,
+                first_name,last_name,
+                password,admin_roles=[],
+                event_roles=[], extra_title=None,
+                commit=False):
     tables=flask_app.tables
-    user = tables.PssUsers(username=username)
+    user = tables.PssUsers(username=username,
+                           first_name=first_name,
+                           last_name=last_name)
+    if extra_title:
+        user.extra_title=extra_title
     event_user = tables.EventUsers()
     event_user.crypt_password(password)
     user.event_user = event_user
     tables.db_handle.session.add(user)
-    for role in roles:
-        user.admin_roles.append(role)        
+    for role in admin_roles:
+        user.admin_roles.append(role)
+    for role in event_roles:
+        user.event_roles.append(role)        
+    event = tables.Events.query.filter_by(name=flask_app.name).first()
+    user.events.append(event)
     if commit:
         tables.db_handle.session.commit()
 

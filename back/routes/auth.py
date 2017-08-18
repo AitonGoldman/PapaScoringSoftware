@@ -6,7 +6,6 @@ from werkzeug.exceptions import BadRequest,Unauthorized
 from flask_login import login_user, logout_user, current_user
 import json
 from flask_principal import identity_changed, Identity
-from lib import roles
 from lib.serializer.pss_user import generate_pss_user_serializer
 from lib.route_decorators.db_decorators import load_tables
 

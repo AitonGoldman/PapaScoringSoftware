@@ -40,8 +40,10 @@ class AppBuildTest(PssUnitTestBase):
                        self.tables.Events(name='poop4')]
         
         app.tables.Events.query.all.return_value=fake_events
+        mock_pss_config = MagicMock()
+ 
         with self.assertRaises(Exception) as cm:
-            app_build.get_base_app(app,PssConfig())                    
+            app_build.get_base_app(app,mock_pss_config)                    
         self.assertEquals(cm.exception.message,'event poop does not exist')
 
     def test_get_base_app_with_nonexistent_flask_secret_key(self):

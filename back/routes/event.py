@@ -6,7 +6,6 @@ from flask import jsonify,current_app,request
 from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_user, logout_user, current_user
 import json
-from lib import roles
 from lib.PssConfig import PssConfig
 from lib.serializer.event import generate_events_serializer
 from lib.route_decorators.db_decorators import load_tables

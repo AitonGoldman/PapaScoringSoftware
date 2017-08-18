@@ -4,7 +4,7 @@ from flask import jsonify,current_app,request
 from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_user, logout_user, current_user
 import json
-from lib import roles,orm_factories
+from lib orm_factories
 from lib.serializer.pss_user import generate_pss_user_serializer
 from lib.route_decorators.db_decorators import load_tables
 

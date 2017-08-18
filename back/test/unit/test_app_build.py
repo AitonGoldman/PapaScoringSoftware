@@ -52,8 +52,9 @@ class AppBuildTest(PssUnitTestBase):
                        self.tables.Events(name='poop',upload_folder='/tmp')]
         
         app.tables.Events.query.all.return_value=fake_events
+        mock_pss_config = MagicMock()         
         with self.assertRaises(Exception) as cm:
-            app_build.get_base_app(app,PssConfig())                    
+            app_build.get_base_app(app,mock_pss_config)                    
         self.assertEquals(cm.exception.message,"You didn't configure your flask secret key!")
         
         
@@ -80,8 +81,9 @@ class AppBuildTest(PssUnitTestBase):
                        self.tables.Events(name='poop',flask_secret_key='poop_key',upload_folder='/tmp')]
         
         app.tables.Events.query.all.return_value=fake_events
-        pss_config=PssConfig()
-        pss_config.pss_admin_event_name='poop'
-        configured_app = app_build.get_event_app(app,pss_config)                
+        #pss_config=PssConfig()
+        #pss_config.pss_admin_event_name='poop'
+        mock_pss_config = MagicMock()         
+        configured_app = app_build.get_event_app(app,mock_pss_config)                
         self.assertTrue(hasattr(configured_app,'blueprints'))
         self.assertTrue('pss_admin' in configured_app.blueprints)        

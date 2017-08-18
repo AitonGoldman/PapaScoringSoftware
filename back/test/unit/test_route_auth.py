@@ -49,9 +49,7 @@ class RouteLoginTest(PssUnitTestBase):
     def test_check_event_user_has_event_access_with_correct_roles(self):
         self.mock_tables.EventRoles.query.all.return_value = [self.create_mock_role(roles_constants.TOURNAMENT_DIRECTOR)]        
         self.assertTrue(auth.check_event_user_has_event_access(self.mock_user_with_td_permissions,self.mock_tables))
-
-
-    #FIXME: need a test for the following : user is created for event, then tries to login to another event (including pss_admin)
+    
     def test_pss_login_route(self):
         self.mock_tables.PssUsers.query.options().filter_by().first.return_value = self.mock_user_with_admin_permissions 
         self.mock_tables.AdminRoles.query.filter_by().all.return_value = [self.create_mock_role(roles_constants.PSS_ADMIN)]
@@ -60,6 +58,19 @@ class RouteLoginTest(PssUnitTestBase):
         pss_user_returned = auth.pss_login_route(self.mock_request,self.mock_tables,is_pss_admin_event=True)
         self.assertEquals(pss_user_returned,self.mock_user_with_admin_permissions)
 
+    def test_pss_login_route_fails_when_fields_missing(self):
+        self.mock_user_with_admin_permissions.verify_password = self.generate_fake_verify_password('password')
+        self.mock_tables.PssUsers.query.options().filter_by().first.return_value = self.mock_user_with_admin_permissions 
+        self.mock_request.data = json.dumps({'username':'test_user'})
+        with self.assertRaises(BadRequest) as cm:
+            auth.pss_login_route(self.mock_request,self.mock_tables,is_pss_admin_event=True)        
+        self.mock_request.data = json.dumps({'password':'test_password'})
+        with self.assertRaises(BadRequest) as cm:
+            auth.pss_login_route(self.mock_request,self.mock_tables,is_pss_admin_event=True)        
+        self.mock_request.data = json.dumps({})
+        with self.assertRaises(BadRequest) as cm:
+            auth.pss_login_route(self.mock_request,self.mock_tables,is_pss_admin_event=True)        
+        
     def test_pss_login_route_fails_when_bad_password_provided(self):
         self.mock_user_with_admin_permissions.verify_password = self.generate_fake_verify_password('password')
         self.mock_tables.PssUsers.query.options().filter_by().first.return_value = self.mock_user_with_admin_permissions 

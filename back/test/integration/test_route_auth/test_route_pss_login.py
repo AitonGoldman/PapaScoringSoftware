@@ -74,7 +74,7 @@ class RoutePssLogin(pss_integration_test_existing_event.PssIntegrationTestExisti
         with self.event_app.test_client() as c:                        
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
             rv = c.post('/auth/pss_event_user/login',
-                        data=json.dumps({'username':self.event_user,
+                        data=json.dumps({'username':self.event_user_scorekeeper,
                                          'password':'password'}))
             self.assertHttpCodeEquals(rv,200)                                    
             cookie = rv.headers['Set-Cookie'].split("=")[1]
@@ -119,7 +119,7 @@ class RoutePssLogin(pss_integration_test_existing_event.PssIntegrationTestExisti
         with self.event_app.test_client() as c:                        
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
             rv = c.post('/auth/pss_event_user/login',
-                        data=json.dumps({'username':self.event_user,
+                        data=json.dumps({'username':self.event_user_scorekeeper,
                                          'password':'password'}))
             self.assertHttpCodeEquals(rv,200)                                    
             cookie = rv.headers['Set-Cookie'].split("=")[1]

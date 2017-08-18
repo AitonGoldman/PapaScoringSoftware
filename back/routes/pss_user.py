@@ -18,7 +18,10 @@ def create_pss_user_route(request, app):
     if 'username' not in input_data or 'password' not in input_data or 'first_name' not in input_data or 'last_name' not in input_data:        
         raise BadRequest('Information missing')
     if 'event_role_id' not in input_data and 'role_id' not in input_data:
-        raise BadRequest('Information missing')        
+        raise BadRequest('Information missing')
+    if 'event_role_id' in input_data and 'role_id' in input_data:
+        raise BadRequest('Naughty Naughty')        
+    
     existing_user=tables.PssUsers.query.filter_by(username=input_data['username']).first()
     #FIXME : needs to be more extensive of a check (i.e. check actual name, etc)
     if existing_user is not None:
@@ -51,7 +54,7 @@ def create_pss_user(tables):
     user_dict=pss_user_serializer().dump(new_user).data    
     return jsonify({'new_pss_user':user_dict})
 
-@blueprints.event_blueprint.route('/pss_user',methods=['POST'])
+@blueprints.event_blueprint.route('/pss_event_user',methods=['POST'])
 @load_tables
 @create_pss_event_user_permissions.require(403)
 def create_pss_event_user(tables):        
@@ -62,4 +65,5 @@ def create_pss_event_user(tables):
     pss_user_serializer = generate_pss_user_serializer(current_app)    
     user_dict=pss_user_serializer().dump(new_user).data    
     return jsonify({'new_pss_user':user_dict})
+    
     

@@ -22,8 +22,12 @@ real_app.tables=tables
 bootstrap.bootstrap_pss_admin_event(tables,'pss_admin')
 bootstrap.bootstrap_roles(tables)
 
-orm_factories.create_user(real_app, 'test_pss_admin_user',
-                          'password', [tables.AdminRoles.query.filter_by(name=roles_constants.PSS_ADMIN).first()],
+orm_factories.create_user(real_app,
+                          'test_pss_admin_user',
+                          'test_first_name',
+                          'test_last_name',
+                          'password',
+                          [tables.AdminRoles.query.filter_by(name=roles_constants.PSS_ADMIN).first()],
                           commit=True)
 
 if len(sys.argv) == 1:

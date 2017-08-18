@@ -35,7 +35,9 @@ def pss_login_route(request,tables,is_pss_admin_event=True):
     if request.data:        
         input_data = json.loads(request.data)
     else:
-        raise BadRequest('Username or password not specified')        
+        raise BadRequest('Username or password not specified')
+    if 'username' not in input_data or 'password' not in input_data:
+        raise BadRequest('Missing information')        
     pss_user = tables.PssUsers.query.options(joinedload("admin_roles")).filter_by(username=input_data['username']).first()
     if pss_user is None:
         raise Unauthorized('Bad username or password')

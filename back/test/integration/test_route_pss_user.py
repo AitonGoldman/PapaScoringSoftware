@@ -1,3 +1,4 @@
+import datetime
 import unittest
 import os
 from mock import MagicMock
@@ -7,7 +8,7 @@ import json
 from flask_login import current_user
 from lib import roles_constants
 
-#FIXME : change name of class/file
+
 class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistingEvent):
     def setUp(self):
         super(RoutePssUser,self).setUp()                        
@@ -88,8 +89,9 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             self.assertTrue(nonexistant_new_user_in_db is None)                         
     #FIXME : test no role id while creating 
 
-    #FIXME : negative tests for creating user 
-    def test_create_pss_event_user(self):
+    
+    def test_create_pss_event_user_while_logged_into_event_as_admin(self):
+        #FIXME : use generated names
         self.createEventsAndEventUsers()
         with self.event_app.test_client() as c:                        
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
@@ -98,7 +100,7 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
                                          'password':self.admin_pss_user_password}))
             self.assertHttpCodeEquals(rv,200)            
 
-            rv = c.post('/pss_user',
+            rv = c.post('/pss_event_user',
                         data=json.dumps({'username':'test_pss_admin_user_for_test_create_pss_event_user',
                                          'password':'password',
                                          'first_name':'fake_first_name',
@@ -111,4 +113,48 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             self.assertEquals(len(new_user.event_roles),1)
             self.assertEquals(new_user.event_roles[0].name,roles_constants.SCOREKEEPER)
 
+    def test_create_pss_event_user_while_logged_into_event_as_td(self):
+        print datetime.datetime.now()
+        #FIXME : use generated names
+        #FIXME : for all tests, make sure passwords are generated
+        self.createEventsAndEventUsers()
+        with self.event_app.test_client() as c:                        
+            td_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.TOURNAMENT_DIRECTOR).first()
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.event_user_td,
+                                         'password':'password'}))
+            self.assertHttpCodeEquals(rv,200)            
+            new_username = 'test_pss_user%s' % self.create_uniq_id()
+            rv = c.post('/pss_event_user',
+                        data=json.dumps({'username':new_username ,
+                                         'password':'password',
+                                         'first_name':'fake_first_name%s'% self.create_uniq_id(),
+                                         'last_name':'fake_last_name%s'% self.create_uniq_id(),
+                                         'event_role_id':td_role.event_role_id}))
+            self.assertHttpCodeEquals(rv,200)            
+            new_user = self.event_app.tables.PssUsers.query.filter_by(username=new_username).first()
+            self.assertTrue(new_user is not None)
+            self.assertEquals(len(new_user.admin_roles),0)
+            self.assertEquals(len(new_user.event_roles),1)
+            self.assertEquals(new_user.event_roles[0].name,roles_constants.TOURNAMENT_DIRECTOR)
+        print datetime.datetime.now()
+    def test_create_pss_event_user_while_logged_in_as_scorekeeper_fails(self):                
+        self.createEventsAndEventUsers()
+        with self.event_app.test_client() as c:                        
+            td_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.TOURNAMENT_DIRECTOR).first()
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.event_user_scorekeeper,
+                                         'password':'password'}))
+            self.assertHttpCodeEquals(rv,200)            
+            new_username = 'test_pss_user%s' % self.create_uniq_id()
+            rv = c.post('/pss_event_user',
+                        data=json.dumps({'username':new_username ,
+                                         'password':'password',
+                                         'first_name':'fake_first_name%s'% self.create_uniq_id(),
+                                         'last_name':'fake_last_name%s'% self.create_uniq_id(),
+                                         'event_role_id':td_role.event_role_id}))
+            self.assertHttpCodeEquals(rv,403)            
+            new_user = self.event_app.tables.PssUsers.query.filter_by(username=new_username).first()
+            self.assertTrue(new_user is None)
             
+#FIXME : need all bad input combos?

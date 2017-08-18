@@ -14,7 +14,7 @@ def create_pss_user_route(request, app):
     if request.data:        
         input_data = json.loads(request.data)
     else:
-        raise BadRequest('Username or password not specified')        
+        raise BadRequest('No info in request')        
     if 'username' not in input_data or 'password' not in input_data or 'first_name' not in input_data or 'last_name' not in input_data:        
         raise BadRequest('Information missing')
     if 'event_role_id' not in input_data and 'role_id' not in input_data:
@@ -45,6 +45,43 @@ def create_pss_user_route(request, app):
     tables.db_handle.session.commit()
     return new_user
 
+def get_user_and_event_role_from_input_data(request,app):
+    tables = app.tables
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('No information in request')
+
+    if 'pss_user_id' not in input_data or 'username' not in input_data or 'password' not in input_data or 'event_role_id' not in input_data:
+        raise BadRequest('Information missing')
+    pss_user = app.tables.PssUsers.query.filter_by(pss_user_id=input_data['pss_user_id']).first()
+    if pss_user is None:
+        raise BadRequest('Bad pss user id')        
+    event_role = app.tables.EventRoles.query.filter_by(event_role_id=input_data['event_role_id']).first()
+    if event_role is None:
+        raise BadRequest('Bad event role id')                
+    return pss_user,event_role
+
+def add_existing_user_to_event_route(password,pss_user,event_role,app):
+    tables = app.tables
+    orm_factories.populate_event_user(app,password,
+                                      pss_user,[event_role])
+    tables.db_handle.session.commit()
+    return pss_user
+
+def change_existing_user_in_event_route(pss_user, app, event_role, input_data):
+    tables = app.tables
+    if 'password' in input_data:
+        password=input_data['password']        
+    else:
+        password=None
+    orm_factories.modify_event_user(app,
+                                    pss_user,
+                                    event_role,
+                                    password=password)
+    tables.db_handle.session.commit()
+    return pss_user
+
 @blueprints.pss_admin_event_blueprint.route('/pss_user',methods=['POST'])
 @load_tables
 @create_pss_user_permissions.require(403)
@@ -57,8 +94,7 @@ def create_pss_user(tables):
 @blueprints.event_blueprint.route('/pss_event_user',methods=['POST'])
 @load_tables
 @create_pss_event_user_permissions.require(403)
-def create_pss_event_user(tables):        
-    
+def create_pss_event_user(tables):                
     if 'role_id' in json.loads(request.data):
         raise BadRequest('Naughty Naughty')
     new_user = create_pss_user_route(request,current_app)
@@ -66,4 +102,22 @@ def create_pss_event_user(tables):
     user_dict=pss_user_serializer().dump(new_user).data    
     return jsonify({'new_pss_user':user_dict})
     
+
+@blueprints.event_blueprint.route('/pss_event_user',methods=['PUT'])
+@load_tables
+@create_pss_event_user_permissions.require(403)
+def add_existing_user_to_event(tables):                
+    pss_user, event_role = get_user_and_event_role_from_input_data(request,current_app)
+    input_data = json.loads(request.data)
+    if 'role_id' in input_data:
+        raise BadRequest('Naughty Naughty')
+    event = tables.Events.query.filter_by(name=current_app.name).first()    
+    if event not in pss_user.events:
+        modified_pss_user = add_existing_user_to_event_route(input_data['password'],pss_user,event_role,current_app)        
+    else:
+        modified_pss_user = change_existing_user_in_event_route(pss_user, current_app, event_role, input_data)
+    pss_user_serializer = generate_pss_user_serializer(current_app)    
+    user_dict=pss_user_serializer().dump(modified_pss_user).data    
+    return jsonify({'existing_pss_user_added_to_event':user_dict})
     
+

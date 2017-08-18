@@ -33,6 +33,33 @@ def create_event_tables(pss_config,new_event_app):
 
     return new_event_tables
 
+def populate_event_user(flask_app,password,
+                        pss_user,event_roles,
+                        commit=False):
+    event_user = flask_app.tables.EventUsers()
+    event_user.crypt_password(password)
+    pss_user.event_user = event_user
+    event = flask_app.tables.Events.query.filter_by(name=flask_app.name).first()
+    pss_user.events.append(event)
+    for role in event_roles:
+        pss_user.event_roles.append(role)                
+    if commit:
+        flask_app.tables.db_handle.session.commit()        
+    return event_user
+
+def modify_event_user(flask_app,
+                      pss_user,event_role,
+                      password=None,commit=False):        
+    if password:        
+        pss_user.event_user.crypt_password(password)
+    if event_role:        
+        pss_user.event_roles=[]        
+        pss_user.event_roles.append(event_role)                
+    if commit:
+        flask_app.tables.db_handle.session.commit()        
+    return pss_user
+
+
 def create_user(flask_app,username,
                 first_name,last_name,
                 password,admin_roles=[],
@@ -44,16 +71,10 @@ def create_user(flask_app,username,
                            last_name=last_name)
     if extra_title:
         user.extra_title=extra_title
-    event_user = tables.EventUsers()
-    event_user.crypt_password(password)
-    user.event_user = event_user
+    populate_event_user(flask_app,password,user,event_roles)
     tables.db_handle.session.add(user)
     for role in admin_roles:
         user.admin_roles.append(role)
-    for role in event_roles:
-        user.event_roles.append(role)        
-    event = tables.Events.query.filter_by(name=flask_app.name).first()
-    user.events.append(event)
     if commit:
         tables.db_handle.session.commit()
 

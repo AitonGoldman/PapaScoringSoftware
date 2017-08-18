@@ -57,9 +57,11 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
                                          'last_name':'fake_last_name',                                         
                                          'role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,409)
-    #FIXME : add test cases for no password, no username, etc
+    
     def test_create_pss_user_fails_with_bad_request_data(self):        
         new_username = 'new_user_%s'% self.create_uniq_id()
+        bad_request = {'username':new_username,
+                       'password':'password2'}
         with self.pss_admin_app.test_client() as c:                        
             rv = c.post('/auth/pss_user/login',
                         data=json.dumps({'username':self.admin_pss_user.username,
@@ -69,6 +71,88 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             rv = c.post('/pss_user',
                         data=json.dumps({}))
             self.assertHttpCodeEquals(rv,400)            
+
+            bad_request = {'username':new_username,
+                           'password':'password'}
+            rv = c.post('/pss_user',
+                        data=json.dumps(bad_request))
+            self.assertHttpCodeEquals(rv,400)            
+
+            bad_request = {'username':new_username,                           
+                           'role_id':1}
+            rv = c.post('/pss_user',
+                        data=json.dumps(bad_request))
+            self.assertHttpCodeEquals(rv,400)
+
+            bad_request = {'password':'password',                           
+                           'role_id':1}
+            rv = c.post('/pss_user',
+                        data=json.dumps(bad_request))
+            self.assertHttpCodeEquals(rv,400)            
+
+            bad_request = {'password':'password',
+                           'username':new_username,
+                           'event_role_id':1}
+            rv = c.post('/pss_user',
+                        data=json.dumps(bad_request))
+            self.assertHttpCodeEquals(rv,400)            
+
+    
+    def test_create_pss_event_user_fails_with_bad_request_data(self):        
+        #FIXME : should only need to create event and roles once for whole test run
+        self.createEventsAndEventUsers()
+        new_username = 'new_user_%s'% self.create_uniq_id()
+        bad_request = {'username':new_username,
+                       'password':'password2',
+                       'first_name':'test_first_name_bad',
+                       'last_name':'test_last_name_bad',
+                       'event_role_id':1}
+        with self.event_app.test_client() as c:                        
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.admin_pss_user.username,
+                                         'password':self.admin_pss_user_password}))
+            self.assertHttpCodeEquals(rv,200)                        
+            rv = c.post('/pss_event_user',
+                        data=json.dumps({}))
+            self.assertHttpCodeEquals(rv,400)            
+
+            bad_request_copy = bad_request.copy()
+            bad_request_copy.pop('event_role_id',None)
+            rv = c.post('/pss_event_user',
+                        data=json.dumps(bad_request_copy))
+            self.assertHttpCodeEquals(rv,400)            
+
+            bad_request_copy = bad_request.copy()
+            bad_request_copy.pop('event_role_id',None)
+            bad_request_copy['role_id']=1
+            rv = c.post('/pss_event_user',
+                        data=json.dumps(bad_request_copy))
+            self.assertHttpCodeEquals(rv,400)            
+            
+            bad_request_copy = bad_request.copy()
+            bad_request_copy.pop('username',None)
+            rv = c.post('/pss_event_user',
+                        data=json.dumps(bad_request_copy))
+            self.assertHttpCodeEquals(rv,400)            
+
+            bad_request_copy = bad_request.copy()
+            bad_request_copy.pop('password',None)
+            rv = c.post('/pss_event_user',
+                        data=json.dumps(bad_request_copy))
+            self.assertHttpCodeEquals(rv,400)            
+
+            bad_request_copy = bad_request.copy()
+            bad_request_copy.pop('first_name',None)
+            rv = c.post('/pss_event_user',
+                        data=json.dumps(bad_request_copy))
+            self.assertHttpCodeEquals(rv,400)            
+
+            bad_request_copy = bad_request.copy()
+            bad_request_copy.pop('last_name',None)
+            rv = c.post('/pss_event_user',
+                        data=json.dumps(bad_request_copy))
+            self.assertHttpCodeEquals(rv,400)            
+            
             
 
     def test_create_pss_user_fails_with_incorrect_role(self):
@@ -113,8 +197,7 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             self.assertEquals(len(new_user.event_roles),1)
             self.assertEquals(new_user.event_roles[0].name,roles_constants.SCOREKEEPER)
 
-    def test_create_pss_event_user_while_logged_into_event_as_td(self):
-        print datetime.datetime.now()
+    def test_create_pss_event_user_while_logged_into_event_as_td(self):        
         #FIXME : use generated names
         #FIXME : for all tests, make sure passwords are generated
         self.createEventsAndEventUsers()
@@ -137,7 +220,7 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             self.assertEquals(len(new_user.admin_roles),0)
             self.assertEquals(len(new_user.event_roles),1)
             self.assertEquals(new_user.event_roles[0].name,roles_constants.TOURNAMENT_DIRECTOR)
-        print datetime.datetime.now()
+            
     def test_create_pss_event_user_while_logged_in_as_scorekeeper_fails(self):                
         self.createEventsAndEventUsers()
         with self.event_app.test_client() as c:                        

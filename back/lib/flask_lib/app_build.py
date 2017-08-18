@@ -15,13 +15,13 @@ import routes
 from flask_marshmallow import Marshmallow
 
 def get_event_app(app, pss_config):
-    configured_app = get_base_app(app,pss_config)
-    if app.name == pss_config.pss_admin_event_name:
+    configured_app = get_base_app(app,pss_config)    
+    if app.name == pss_config.pss_admin_event_name:        
         auth.generate_pss_user_loader(configured_app)
         auth.generate_pss_user_identity_loaded(configured_app)
 
         configured_app.register_blueprint(blueprints.pss_admin_event_blueprint)
-    else:
+    else:        
         #FIXME : will need new methods to handle users and players
         auth.generate_pss_user_loader(configured_app)
         auth.generate_pss_user_identity_loaded(configured_app)

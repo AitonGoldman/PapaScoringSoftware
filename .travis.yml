@@ -1,4 +1,4 @@
 language: python
 python:
   - "2.7"
-script: PYTHONPATH=. python -m unittest discover -s back/test/unit
+script: PYTHONPATH=./back python -m unittest discover -s back/test/unit

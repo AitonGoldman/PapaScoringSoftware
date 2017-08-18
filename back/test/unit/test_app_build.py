@@ -98,21 +98,4 @@ class AppBuildTest(PssUnitTestBase):
         mock_pss_config.pss_admin_event_name="poop"
         configured_app = app_build.get_event_app(app,mock_pss_config)                
         self.assertTrue(hasattr(configured_app,'blueprints'))        
-        self.assertTrue('pss_admin' in configured_app.blueprints)        
-
-    def test_experiment_event(self):
-        app = Flask('poop')                
-        app.tables = MagicMock()
-        fake_events = [self.tables.Events(name='poop2'),
-                       self.tables.Events(name='poop3'),
-                       self.tables.Events(name='poop',flask_secret_key='poop_key',upload_folder='/tmp')]
-        
-        app.tables.Events.query.all.return_value=fake_events
-        #pss_config=PssConfig()
-        #pss_config.pss_admin_event_name='poop'
-        mock_pss_config = MagicMock()
-        mock_pss_config.pss_admin_event_name="poop"
-        configured_app = app_build.get_event_app(app,mock_pss_config)                
-        self.assertTrue(hasattr(configured_app,'blueprints'))        
-        self.assertTrue('pss_admin' in configured_app.blueprints)        
-        
+        self.assertTrue('pss_admin' in configured_app.blueprints)                

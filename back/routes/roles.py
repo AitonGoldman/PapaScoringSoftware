@@ -4,7 +4,6 @@ from flask import jsonify,current_app,request
 from werkzeug.exceptions import BadRequest,Unauthorized
 from flask_login import login_user, logout_user, current_user
 import json
-from lib import roles
 from lib.serializer.roles import generate_admin_roles_serializer, generate_event_roles_serializer
 from lib.route_decorators.db_decorators import load_tables
 

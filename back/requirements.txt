@@ -31,3 +31,4 @@ configobj==4.7.2
 mock==2.0.0
 enum34==1.1.6
 sendgrid==3.6.3
+marshmallow-sqlalchemy=0.13.1

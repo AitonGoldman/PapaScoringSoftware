@@ -12,6 +12,7 @@ class AppBuildTest(PssUnitTestBase):
         pass    
     
     def test_get_base_app_for_existing_event(self):
+        #FIXME : need unit tests for pss config and db_info
         app = Flask('poop')        
         app.tables = MagicMock()
         fake_events = [self.tables.Events(name='poop2'),
@@ -19,16 +20,13 @@ class AppBuildTest(PssUnitTestBase):
                        self.tables.Events(name='poop',flask_secret_key='poop_key',upload_folder='/tmp')]
         
         app.tables.Events.query.all.return_value=fake_events
-        configured_app = app_build.get_base_app(app,PssConfig())        
+        mock_pss_config = MagicMock()
+        configured_app = app_build.get_base_app(app,mock_pss_config)        
         custom_json_encoder = configured_app.json_encoder("test string to encode")
         principals = configured_app.my_principals
         self.assertTrue(type(custom_json_encoder) is CustomJsonEncoder.CustomJSONEncoder)
         self.assertTrue(type(principals) is Principal)
-        self.assertTrue(type(configured_app.event_config) is dict)
-        self.assertTrue('flask_secret_key' in configured_app.event_config)
-        self.assertEquals(configured_app.event_config['flask_secret_key'],'poop_key')
-        
-        self.assertTrue(len(configured_app.event_config.keys()) > 0)
+        mock_pss_config.set_event_config_from_db.assert_called_once_with(app)
         self.assertEquals(len(configured_app.error_handler_spec[None].keys()),27)
         self.assertTrue(400 in configured_app.error_handler_spec[None])
 

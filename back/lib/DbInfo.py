@@ -14,8 +14,7 @@ class DbInfo():
                  db_password,
                  db_name,
                  db_host_and_port=None):
-        if db_type is None or db_username is None or db_password is None or db_name is None:
-            print "%s - %s - %s - %s -" % (db_type,db_username,db_password,db_name)
+        if db_type is None or db_username is None or db_password is None or db_name is None:            
             raise Exception('tried to create DbInfo without enough connection information')
         if db_type in [POSTGRES_TYPE,SQLITE_TYPE]:
             self.db_type = db_type

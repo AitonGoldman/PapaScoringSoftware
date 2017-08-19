@@ -51,19 +51,28 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
         
         self.event_app_2 = self.get_event_app_in_db(self.new_event_name_2)
         self.event_user_scorekeeper_2='eventUserScorekeeper%s'%self.create_uniq_id()
+        self.event_user_td_2='eventUserTd%s'%self.create_uniq_id()
+        
         with self.event_app_2.test_client() as c:                        
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
             rv = c.post('/auth/pss_event_user/login',
                         data=json.dumps({'username':self.admin_pss_user.username,
                                          'password':self.admin_pss_user_password}))
-            self.assertHttpCodeEquals(rv,200)            
-
+            self.assertHttpCodeEquals(rv,200)                        
             rv = c.post('/pss_event_user',
                         data=json.dumps({'username':self.event_user_scorekeeper_2,
                                          'password':'password',
                                          'first_name':'test_event_2_sc_first_name',
                                          'last_name':'test_event_2_sc_last_name',                                         
                                          'event_role_id':scorekeeper_role.event_role_id}))
+            self.assertHttpCodeEquals(rv,200)                        
+            rv = c.post('/pss_event_user',
+                        data=json.dumps({'username':self.event_user_td_2,
+                                         'password':'password',
+                                         'first_name':'test_event_2_td_first_name',
+                                         'last_name':'test_event_2_td_last_name',                                         
+                                         'event_role_id':td_role.event_role_id}))
+            
             self.assertHttpCodeEquals(rv,200)            
         
 

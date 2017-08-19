@@ -6,6 +6,7 @@ import pss_integration_test_existing_event
 import json
 from flask_login import current_user
 from lib import roles_constants
+from sqlalchemy.orm import joinedload
 
 
 class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistingEvent):
@@ -313,4 +314,64 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             self.assertHttpCodeEquals(rv,403)                        
             
                                     
+    def test_get_users(self):        
+        self.createEventsAndEventUsers()
+        with self.pss_admin_app.test_client() as c:                                                
+            existing_users = self.pss_admin_app.tables.PssUsers.query.all()
+            rv = c.get('/pss_user')
+            self.assertHttpCodeEquals(rv,200)
+            pss_users = json.loads(rv.data)['existing_pss_users']                        
+            self.assertEquals(len(pss_users),len(existing_users))
+            for pss_user in pss_users:
+                if pss_user['event_user']:
+                    self.assertTrue('password_crypt' not in pss_user['event_user'])
+
+        with self.event_app.test_client() as c:                                                
+            user_count = self.pss_admin_app.tables.PssUsers.query.count()
+            rv = c.get('/pss_user')
+            self.assertHttpCodeEquals(rv,200)
+            pss_users = json.loads(rv.data)['existing_pss_users']            
+            self.assertEquals(len(pss_users),user_count)
+            pss_users = json.loads(rv.data)['existing_pss_users']                        
+            self.assertEquals(len(pss_users),len(existing_users))
+            for pss_user in pss_users:
+                if pss_user['event_user']:                    
+                    self.assertTrue('password_crypt' not in pss_user['event_user'])
+
+    def test_get_event_users(self):        
+        self.createEventsAndEventUsers()
+        with self.event_app.test_client() as c:                                                
+            event_users = self.event_app.tables.PssUsers.query.filter(self.event_app.tables.PssUsers.event_user!=None).all()
+            rv = c.get('/pss_event_user')
+            self.assertHttpCodeEquals(rv,200)
+            returned_event_users = json.loads(rv.data)['existing_pss_event_users']
+            self.assertEquals(len(returned_event_users),len(event_users))
+            for returned_event_user in returned_event_users:               
+                self.assertTrue('password_crypt' not in returned_event_user['event_user'])
+                    
+    def test_get_user(self):        
+        self.createEventsAndEventUsers()
+        with self.pss_admin_app.test_client() as c:                                                
+            rv = c.get('/pss_user/2')
+            self.assertHttpCodeEquals(rv,200)
+            pss_user = json.loads(rv.data)['existing_pss_user']                                    
+            self.assertEquals(pss_user['username'],'eventUserScorekeeper')
+            self.assertTrue(pss_user['event_user'] is None)
+                        
+        with self.event_app.test_client() as c:                                                
+            rv = c.get('/pss_event_user/1')
+            self.assertHttpCodeEquals(rv,200)
+            pss_user = json.loads(rv.data)['existing_pss_user']            
+            self.assertEquals(pss_user['username'],'test_pss_admin_user')
+            self.assertTrue(pss_user['event_user'] is not None)
+
+            existing_users = self.pss_admin_app.tables.PssUsers.query.all()
+            event = self.event_app.tables.Events.query.filter_by(name=self.event_app.name).first()
+            for existing_user in existing_users:
+                if existing_user.event_user and event not in existing_user.events:
+                    event_user = existing_user                    
+            rv = c.get('/pss_event_user/%s'%event_user.pss_user_id)
+            self.assertHttpCodeEquals(rv,400)
+                        
+            
             

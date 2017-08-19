@@ -19,7 +19,7 @@ class RoutePssCurrentUser(pss_integration_test_base.PssIntegrationTestBase):
             self.assertHttpCodeEquals(rv,200)
             pss_user_info = json.loads(rv.data)
             self.assertTrue('current_user' in pss_user_info)            
-            self.assertFalse('password_crypt' in pss_user_info['current_user'])
+            self.assertTrue('password_crypt' not in pss_user_info['current_user']['event_user'])
             self.assertTrue('username' in pss_user_info['current_user'])
             self.assertEquals(self.admin_pss_user.username,pss_user_info['current_user']['username'])
             self.assertTrue('admin_roles' in pss_user_info['current_user'])

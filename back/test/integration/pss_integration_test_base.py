@@ -143,33 +143,8 @@ class PssIntegrationTestBase(unittest.TestCase):
                                                                 self.pss_user_with_no_roles_password)
         tables = app.tables
         tables.db_handle.session.commit()        
-        
-    # def bootstrap_pss_users(self, app):
-    #     tables = app.tables
-    #     role_admin=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_ADMIN).first()
-    #     role_user=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_USER).first()
-    #     role_player=tables.AdminRoles.query.filter_by(name=roles_constants.TEST).first()
-    #     self.admin_pss_user_password='password55'        
-    #     self.admin_pss_user = orm_factories.create_user(app,
-    #                                                'test_pss_admin_user%s' % self.create_uniq_id(),
-    #                                                self.admin_pss_user_password,
-    #                                                [role_admin])
-    #     # self.normal_pss_user_password='password255'        
-    #     # self.normal_pss_user = orm_factories.create_user(app,
-    #     #                                             'test_pss_user%s' % self.create_uniq_id(),
-    #     #                                             self.normal_pss_user_password,
-    #     #                                             [role_user])
-    #     # self.player = orm_factories.create_user(app,
-    #     #                                    'test_player%s' %  self.create_uniq_id(),
-    #     #                                    'password3',
-    #     #                                    [role_player])
-    #     # self.pss_user_with_no_roles_password='password455'                
-    #     # self.pss_user_with_no_roles = orm_factories.create_user(app,
-    #     #                                                    'test_pss_user_no_roles%s' % self.create_uniq_id() ,
-    #     #                                                    self.pss_user_with_no_roles_password,
-    #     #                                                    [])
-    #     tables.db_handle.session.commit()        
-        
+
+
 #    @classmethod
 #    def tearDownClass(cls):        
 #        db_url = PssConfig().get_db_info().generate_db_url()                

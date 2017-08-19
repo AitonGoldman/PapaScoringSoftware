@@ -126,16 +126,47 @@ def add_existing_user_to_event(tables):
     return jsonify({'existing_pss_user_added_to_event':user_dict})
 
 @blueprints.event_blueprint.route('/pss_user',methods=['GET'])
+@blueprints.pss_admin_event_blueprint.route('/pss_user',methods=['GET'])
 @load_tables
 def get_existing_users(tables):                
     existing_users = tables.PssUsers.query.options(joinedload("event_roles"),joinedload("admin_roles"),joinedload("events"),joinedload("event_user")).all()
     pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
     existing_users_list = []
     for existing_user in existing_users:        
-        user_dict = pss_user_serializer(existing_user)
+        user_dict = pss_user_serializer(existing_user)                
         existing_users_list.append(user_dict)
     
     return jsonify({'existing_pss_users':existing_users_list})
+
+
+@blueprints.event_blueprint.route('/pss_event_user',methods=['GET'])
+@load_tables
+def get_existing_event_users(tables):                
+    existing_users = tables.PssUsers.query.options(joinedload("event_roles"),joinedload("admin_roles"),joinedload("events"),joinedload("event_user")).filter(tables.PssUsers.event_user!=None).all()
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    existing_users_list = []
+    for existing_user in existing_users:        
+        user_dict = pss_user_serializer(existing_user)                
+        existing_users_list.append(user_dict)
     
+    return jsonify({'existing_pss_event_users':existing_users_list})
+
+@blueprints.event_blueprint.route('/pss_event_user/<pss_user_id>',methods=['GET'])
+@load_tables
+def get_existing_event_user(tables,pss_user_id):                
+    existing_user = tables.PssUsers.query.options(joinedload("event_roles"),joinedload("admin_roles"),joinedload("events"),joinedload("event_user")).filter_by(pss_user_id=pss_user_id).first()
+    if existing_user.event_user is None:
+        raise BadRequest('User is not in this event')
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    user_dict = pss_user_serializer(existing_user)                            
+    return jsonify({'existing_pss_user':user_dict})
+
+@blueprints.pss_admin_event_blueprint.route('/pss_user/<pss_user_id>',methods=['GET'])
+@load_tables
+def get_existing_user(tables,pss_user_id):                
+    existing_user = tables.PssUsers.query.options(joinedload("event_roles"),joinedload("admin_roles"),joinedload("events"),joinedload("event_user")).filter_by(pss_user_id=pss_user_id).first()
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    user_dict = pss_user_serializer(existing_user)                            
+    return jsonify({'existing_pss_user':user_dict})
     
 

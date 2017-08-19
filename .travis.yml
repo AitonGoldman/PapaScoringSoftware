@@ -3,4 +3,4 @@ python:
   - "2.7"
 cache: pip
 install: "pip install -r back/requirements.txt"
-script: PYTHONPATH=./back python -m unittest discover -s back/test/unit
+script: ./back/run_tests.sh

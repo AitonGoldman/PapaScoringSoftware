@@ -44,7 +44,7 @@ class DbInfo():
 
     def create_db_handle(self,flask_app):
         flask_app.config['SQLALCHEMY_DATABASE_URI'] = self.generate_db_url()    
-        db_handle = SQLAlchemy(flask_app)
+        db_handle = SQLAlchemy(flask_app,session_options={"autoflush": False})
         return db_handle
 
     def create_db_and_tables(self, app, drop_tables=False):            

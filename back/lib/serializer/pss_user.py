@@ -1,16 +1,17 @@
-from lib.serializer import roles,event
-from marshmallow_sqlalchemy import field_for
-from marshmallow import fields
+from lib.serializer import roles,event,generic
+from flask_restless.helpers import to_dict
 
-def generate_pss_user_serializer(app):    
-    admin_roles_schema = roles.generate_admin_roles_serializer(app)
-    event_roles_schema  = roles.generate_event_roles_serializer(app)
-    events_schema  = event.generate_events_serializer(app)
-    class pss_user_schema(app.ma.ModelSchema):                
-        admin_roles = app.ma.Nested(admin_roles_schema,many=True)
-        event_roles = app.ma.Nested(event_roles_schema,many=True)
-        password_crypt = field_for(app.tables.PssUsers, 'password_crypt',load_only=True)
-        events = app.ma.Nested(events_schema,many=True)
-        class Meta:
-            model = app.tables.PssUsers
-    return pss_user_schema
+ALL='all'
+
+def generate_pss_user_to_dict_serializer(type_of_serializer):
+    def serialize_full_pss_user(pss_user_model):
+        generic_serializer = generic.generate_generic_serializer(generic.ALL)
+        serialized_pss_user = to_dict(pss_user_model)                
+        serialized_pss_user.pop('password_crypt',None)
+        serialized_pss_user['admin_roles']=[generic_serializer(role) for role in pss_user_model.admin_roles]
+        serialized_pss_user['event_roles']=[generic_serializer(role) for role in pss_user_model.event_roles]
+        serialized_pss_user['events']=[generic_serializer(event) for event in pss_user_model.events]
+        serialized_pss_user['event_user']=generic_serializer(pss_user_model.event_user)
+        return serialized_pss_user        
+    if type_of_serializer == ALL:
+        return serialize_full_pss_user

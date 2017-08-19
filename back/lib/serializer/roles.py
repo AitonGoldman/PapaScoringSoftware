@@ -1,4 +1,5 @@
 from lib.serializer import event
+from flask_restless.helpers import to_dict
 
 #FIXME : rename this to user_event_roles mapper
 def generate_event_roles_serializer(app):

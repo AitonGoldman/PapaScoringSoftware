@@ -1,4 +1,3 @@
-
 from flask import Flask
 from lib.flask_lib import blueprints
 from lib.flask_lib.permissions import create_pss_event_permissions
@@ -7,7 +6,8 @@ from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_user, logout_user, current_user
 import json
 from lib.PssConfig import PssConfig
-from lib.serializer.event import generate_events_serializer
+from lib.serializer import generic
+from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from pss_models.PssUsers import generate_pss_user_event_role_mapping
 import os
@@ -32,8 +32,8 @@ def create_event(tables):
 
     new_event = orm_factories.create_event(current_user, tables, input_data, new_event_tables)    
     
-    event_serializer = generate_events_serializer(current_app)    
-    event_dict=event_serializer().dump(new_event).data    
+    generic_serializer = generic.generate_generic_serializer(serializer.generic.ALL)
+    event_dict=generic_serializer(new_event)    
     return jsonify({'new_event':event_dict})
  
 

@@ -6,8 +6,19 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
         super(PssIntegrationTestExistingEvent,self).setUp()
         
     def createEventsAndEventUsers(self):
-        self.new_event_name='newEvent%s'%self.create_uniq_id()
-        self.new_event_name_2='newEvent%s'%self.create_uniq_id()
+        #self.new_event_name='newEvent%s'%self.create_uniq_id()
+        #self.new_event_name_2='newEvent%s'%self.create_uniq_id()
+        self.new_event_name='newEvent'
+        self.new_event_name_2='newEventTwo'
+
+        if self.pss_admin_app.tables.Events.query.filter_by(name=self.new_event_name).first():
+            self.event_app = self.get_event_app_in_db(self.new_event_name)
+            self.event_app_2 = self.get_event_app_in_db(self.new_event_name_2)
+            self.event_user_scorekeeper='eventUserScorekeeper'
+            self.event_user_td='eventUserTd'
+            self.event_user_scorekeeper_2='eventUserScorekeeper2'
+            self.event_user_td_2='eventUserTd2'            
+            return
         
         with self.pss_admin_app.test_client() as c:            
             rv = c.post('/auth/pss_user/login',
@@ -22,9 +33,11 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
             
         self.event_app = self.get_event_app_in_db(self.new_event_name)
 
-        self.event_user_scorekeeper='eventUserScorekeeper%s'%self.create_uniq_id()        
-        self.event_user_td='eventUserTd%s'%self.create_uniq_id()        
-        
+        #self.event_user_scorekeeper='eventUserScorekeeper%s'%self.create_uniq_id()        
+        #self.event_user_td='eventUserTd%s'%self.create_uniq_id()        
+        self.event_user_scorekeeper='eventUserScorekeeper'
+        self.event_user_td='eventUserTd'
+
         with self.event_app.test_client() as c:                        
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
             td_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.TOURNAMENT_DIRECTOR).first()
@@ -50,8 +63,10 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
             
         
         self.event_app_2 = self.get_event_app_in_db(self.new_event_name_2)
-        self.event_user_scorekeeper_2='eventUserScorekeeper%s'%self.create_uniq_id()
-        self.event_user_td_2='eventUserTd%s'%self.create_uniq_id()
+        #self.event_user_scorekeeper_2='eventUserScorekeeper%s'%self.create_uniq_id()
+        #self.event_user_td_2='eventUserTd%s'%self.create_uniq_id()
+        self.event_user_scorekeeper_2='eventUserScorekeeper2'
+        self.event_user_td_2='eventUserTd2'
         
         with self.event_app_2.test_client() as c:                        
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()

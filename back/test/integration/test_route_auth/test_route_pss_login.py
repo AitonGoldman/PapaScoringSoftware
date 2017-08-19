@@ -1,7 +1,6 @@
 import unittest
 import os
 from mock import MagicMock
-#from test.integration import pss_integration_test_base
 import pss_integration_test_existing_event
 
 import json
@@ -27,7 +26,7 @@ class RoutePssLogin(pss_integration_test_existing_event.PssIntegrationTestExisti
             self.assertTrue(current_user.is_authenticated(),                              
                              "Was expecting user to be logged in, but user was not logged in")            
             returned_user = json.loads(rv.data)['pss_user']
-            self.assertEquals(returned_user['username'],self.admin_pss_user.username)
+            self.assertEquals(returned_user['username'],self.admin_pss_user.username)            
             self.assertEquals(returned_user['admin_roles'][0]['name'],'pss_admin')
             
     def test_login_fails_with_bad_login(self):
@@ -90,32 +89,6 @@ class RoutePssLogin(pss_integration_test_existing_event.PssIntegrationTestExisti
     
     def test_login_fails_when_logging_into_1_event_and_admin_event(self):
         self.createEventsAndEventUsers()
-        # new_event_name_1 = 'testEventOneFail%s'%self.create_uniq_id()                
-        
-        # #FIXME : alot of this test shouldd be abstracted out
-        # with self.pss_admin_app.test_client() as c:                        
-        #     rv = c.post('/auth/pss_user/login',
-        #                 data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
-        #     self.assertHttpCodeEquals(rv,200)            
-        #     rv = c.post('/event',
-        #                 data=json.dumps({'name':new_event_name_1}))
-        #     self.assertHttpCodeEquals(rv,200)
-            
-        #new_app = self.get_event_app_in_db(new_event_name_1)
-        # with self.event_app.test_client() as c:                        
-        #     scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
-        #     rv = c.post('/auth/pss_event_user/login',
-        #                 data=json.dumps({'username':self.admin_pss_user.username,
-        #                                  'password':self.admin_pss_user_password}))
-        #     self.assertHttpCodeEquals(rv,200)            
-
-        #     rv = c.post('/pss_user',
-        #                 data=json.dumps({'username':'test_users_for_test_login_fails_when_logging_into_2_events',
-        #                                  'password':'password',
-        #                                  'event_role_id':scorekeeper_role.event_role_id}))
-        #     self.assertHttpCodeEquals(rv,200)            
-
-            
         with self.event_app.test_client() as c:                        
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
             rv = c.post('/auth/pss_event_user/login',

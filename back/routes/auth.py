@@ -6,7 +6,8 @@ from werkzeug.exceptions import BadRequest,Unauthorized
 from flask_login import login_user, logout_user, current_user
 import json
 from flask_principal import identity_changed, Identity
-from lib.serializer.pss_user import generate_pss_user_serializer
+from lib.serializer.pss_user import  generate_pss_user_to_dict_serializer
+from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 
 #FIXME : all routes under this need to be rechecked when players stuff is implemented
@@ -57,8 +58,8 @@ def pss_admin_login(tables):
     pss_user = pss_login_route(request,tables,is_pss_admin_event=True)
     login_user(pss_user)    
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_user.pss_user_id))
-    pss_user_serializer = generate_pss_user_serializer(current_app)    
-    user_dict=pss_user_serializer().dump(pss_user).data
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    user_dict=pss_user_serializer(pss_user)
     return jsonify({'pss_user':user_dict})
 
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/logout',methods=['GET'])
@@ -78,17 +79,20 @@ def pss_event_user_login(tables):
     pss_event_user = pss_login_route(request,tables,is_pss_admin_event=False)
     login_user(pss_event_user)    
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_event_user.pss_user_id))
-    pss_user_serializer = generate_pss_user_serializer(current_app)    
-    user_dict=pss_user_serializer().dump(pss_event_user).data
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    user_dict=pss_user_serializer(pss_event_user)
     return jsonify({'pss_user':user_dict})
 
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/current_user',methods=['GET'])
 @blueprints.event_blueprint.route('/auth/pss_event_user/current_user',methods=['GET'])
-def get_current_user():    
+@load_tables
+def get_current_user(tables):    
     if current_user.is_anonymous():
         return jsonify({'current_user':None})
-    pss_user_serializer = generate_pss_user_serializer(current_app)    
-    user_dict=pss_user_serializer().dump(current_user).data    
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    #GUYH - need to reget the current user, otherwise the serializer chokes on the proxy current_user gives back
+    user = tables.PssUsers.query.filter_by(pss_user_id=current_user.pss_user_id).first()
+    user_dict=pss_user_serializer(user)
     return jsonify({'current_user':user_dict})
 
 #FIXME : need get_current_user for event user

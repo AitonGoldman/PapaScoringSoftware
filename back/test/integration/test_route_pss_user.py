@@ -2,7 +2,6 @@ import datetime
 import unittest
 import os
 from mock import MagicMock
-#import pss_integration_test_base
 import pss_integration_test_existing_event
 import json
 from flask_login import current_user

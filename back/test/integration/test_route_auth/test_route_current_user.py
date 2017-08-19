@@ -11,11 +11,11 @@ class RoutePssCurrentUser(pss_integration_test_base.PssIntegrationTestBase):
         super(RoutePssCurrentUser,self).setUp()        
         
     def test_get_current_user_after_login(self):
-        with self.pss_admin_app.test_client() as c:                                    
+        with self.pss_admin_app.test_client() as c:                                                
             rv = c.post('/auth/pss_user/login',
                         data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
-            self.assertHttpCodeEquals(rv,200)
-            rv = c.get('/auth/pss_user/current_user')
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.get('/auth/pss_user/current_user')            
             self.assertHttpCodeEquals(rv,200)
             pss_user_info = json.loads(rv.data)
             self.assertTrue('current_user' in pss_user_info)            

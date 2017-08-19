@@ -1,3 +1,4 @@
+from flask_restless.helpers import to_dict
 from lib.flask_lib import blueprints
 from lib.flask_lib.permissions import create_pss_event_user_permissions, create_pss_user_permissions
 from flask import jsonify,current_app,request
@@ -5,8 +6,11 @@ from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_user, logout_user, current_user
 import json
 from lib import orm_factories
-from lib.serializer.pss_user import generate_pss_user_serializer
+from lib.serializer.pss_user import generate_pss_user_to_dict_serializer
+from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
+from sqlalchemy.orm import joinedload
+
 
 #FIXME : tables not needed
 def create_pss_user_route(request, app):            
@@ -87,8 +91,8 @@ def change_existing_user_in_event_route(pss_user, app, event_role, input_data):
 @create_pss_user_permissions.require(403)
 def create_pss_user(tables):    
     new_user = create_pss_user_route(request,current_app)
-    pss_user_serializer = generate_pss_user_serializer(current_app)    
-    user_dict=pss_user_serializer().dump(new_user).data    
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    user_dict=pss_user_serializer(new_user)
     return jsonify({'new_pss_user':user_dict})
 
 @blueprints.event_blueprint.route('/pss_event_user',methods=['POST'])
@@ -98,8 +102,8 @@ def create_pss_event_user(tables):
     if 'role_id' in json.loads(request.data):
         raise BadRequest('Naughty Naughty')
     new_user = create_pss_user_route(request,current_app)
-    pss_user_serializer = generate_pss_user_serializer(current_app)    
-    user_dict=pss_user_serializer().dump(new_user).data    
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    user_dict=pss_user_serializer(new_user)
     return jsonify({'new_pss_user':user_dict})
     
 
@@ -116,8 +120,22 @@ def add_existing_user_to_event(tables):
         modified_pss_user = add_existing_user_to_event_route(input_data['password'],pss_user,event_role,current_app)        
     else:
         modified_pss_user = change_existing_user_in_event_route(pss_user, current_app, event_role, input_data)
-    pss_user_serializer = generate_pss_user_serializer(current_app)    
-    user_dict=pss_user_serializer().dump(modified_pss_user).data    
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    user_dict=pss_user_serializer(modified_pss_user)
     return jsonify({'existing_pss_user_added_to_event':user_dict})
+
+@blueprints.event_blueprint.route('/pss_user',methods=['GET'])
+@load_tables
+def get_existing_users(tables):                
+    existing_users = tables.PssUsers.query.options(joinedload("event_roles"),joinedload("admin_roles"),joinedload("events"),joinedload("event_user")).all()
+    pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+    existing_users_list = []
+    for existing_user in existing_users:        
+        user_dict = pss_user_serializer(existing_user)
+        existing_users_list.append(user_dict)
+    
+    return jsonify({'existing_pss_users':existing_users_list})
+    
     
 

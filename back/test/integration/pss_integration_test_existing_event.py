@@ -12,12 +12,15 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
         self.new_event_name_2='newEventTwo'
 
         if self.pss_admin_app.tables.Events.query.filter_by(name=self.new_event_name).first():
+            #FIXME : should not define these in two places, or make them so generic
             self.event_app = self.get_event_app_in_db(self.new_event_name)
             self.event_app_2 = self.get_event_app_in_db(self.new_event_name_2)
             self.event_user_scorekeeper='eventUserScorekeeper'
             self.event_user_td='eventUserTd'
             self.event_user_scorekeeper_2='eventUserScorekeeper2'
             self.event_user_td_2='eventUserTd2'            
+            self.player_one_first_name='playerOneFirstName'
+
             return
         
         with self.pss_admin_app.test_client() as c:            
@@ -37,7 +40,7 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
         #self.event_user_td='eventUserTd%s'%self.create_uniq_id()        
         self.event_user_scorekeeper='eventUserScorekeeper'
         self.event_user_td='eventUserTd'
-
+        self.player_one_first_name='playerOneFirstName'        
         with self.event_app.test_client() as c:                        
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
             td_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.TOURNAMENT_DIRECTOR).first()
@@ -60,8 +63,17 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
                                          'last_name':'test_event_td_last_name',
                                          'event_role_id':td_role.event_role_id}))
             self.assertHttpCodeEquals(rv,200)            
+            rv = c.post('/player',
+                        data=json.dumps({'first_name':self.player_one_first_name,
+                                         'last_name':'test_player_last_name',
+                                         'ifpa_ranking':9999}))
+            self.assertHttpCodeEquals(rv,200)
+            created_player = json.loads(rv.data)['new_player']
+            self.player_one_player_id=created_player['player_id']            
+            self.player_one_event_player_id=created_player['event_player']['event_player_id']            
+            new_event_player = self.event_app.tables.EventPlayers.query.filter_by(event_player_id=self.player_one_event_player_id).first()
+            self.player_one_event_player_pin=new_event_player.event_player_pin
             
-        
         self.event_app_2 = self.get_event_app_in_db(self.new_event_name_2)
         #self.event_user_scorekeeper_2='eventUserScorekeeper%s'%self.create_uniq_id()
         #self.event_user_td_2='eventUserTd%s'%self.create_uniq_id()

@@ -3,6 +3,7 @@ from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from base64 import b64encode
 import os
 from lib import roles_constants
+import random
 
 #FIXME : move this back to route
 def create_event(user_creating_event, tables, input_data, new_event_tables):
@@ -27,9 +28,14 @@ def create_event_tables(pss_config,new_event_app):
     if existing_event is not None:
         raise Conflict('Event already exists')             
     metadata = new_event_tables.db_handle.metadata
-    event_role_pss_user_table = metadata.tables['event_role_pss_user_'+new_event_app.name]
+    event_role_pss_user_table = metadata.tables['event_role_pss_user_'+new_event_app.name]    
     event_role_pss_user_table.create(new_event_tables.db_handle.session.bind)
+
+    player_role_player_table = metadata.tables['player_role_player_'+new_event_app.name]    
+    player_role_player_table.create(new_event_tables.db_handle.session.bind)
+    
     new_event_tables.EventUsers.__table__.create(new_event_tables.db_handle.session.bind)    
+    new_event_tables.EventPlayers.__table__.create(new_event_tables.db_handle.session.bind)    
 
     return new_event_tables
 
@@ -79,3 +85,36 @@ def create_user(flask_app,username,
         tables.db_handle.session.commit()
 
     return user
+
+
+def populate_player(flask_app,new_player,
+                    ifpa_ranking,
+                    commit=False):
+    event_player = flask_app.tables.EventPlayers(ifpa_ranking=ifpa_ranking)    
+    event_player.event_player_pin=random.randrange(1000,9999)    
+
+    new_player.event_player = event_player
+    
+    event = flask_app.tables.Events.query.filter_by(name=flask_app.name).first()
+    new_player.events.append(event)
+    player_role = flask_app.tables.PlayerRoles.query.filter_by(name=roles_constants.PSS_PLAYER).first()
+    new_player.player_roles.append(player_role)
+    if commit:
+        flask_app.tables.db_handle.session.commit()        
+    return event_player
+
+def create_player(flask_app,
+                  first_name,last_name,
+                  ifpa_ranking,extra_title=None,
+                  commit=False):
+    tables=flask_app.tables
+    new_player = tables.Players(first_name=first_name,
+                          last_name=last_name)
+    if extra_title:
+        new_player.extra_title=extra_title
+    populate_player(flask_app,new_player,ifpa_ranking)
+    tables.db_handle.session.add(new_player)
+    if commit:
+        tables.db_handle.session.commit()
+
+    return new_player

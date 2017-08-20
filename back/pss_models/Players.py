@@ -35,6 +35,8 @@ def generate_players_class(db_handle,event_name):
         ifpa_id = db_handle.Column(db_handle.Integer)                
         has_picture = db_handle.Column(db_handle.Boolean(),default=False)
         ioniccloud_push_token=db_handle.Column(db_handle.String(500))        
+        team_id = db_handle.Column('team_id', db_handle.Integer, db_handle.ForeignKey('teams_'+event_name+'.team_id'))
+        
 
         player_roles = db_handle.relationship(
             'PlayerRoles',
@@ -42,6 +44,8 @@ def generate_players_class(db_handle,event_name):
         )
 
         event_player = db_handle.relationship('EventPlayers',uselist=False)
+
+        team = db_handle.relationship('Teams',uselist=False)
             
         events = db_handle.relationship(
            'Events',

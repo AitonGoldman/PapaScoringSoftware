@@ -36,6 +36,10 @@ def create_event_tables(pss_config,new_event_app):
     
     new_event_tables.EventUsers.__table__.create(new_event_tables.db_handle.session.bind)    
     new_event_tables.EventPlayers.__table__.create(new_event_tables.db_handle.session.bind)    
+    new_event_tables.Teams.__table__.create(new_event_tables.db_handle.session.bind)    
+    new_event_tables.Tournaments.__table__.create(new_event_tables.db_handle.session.bind)    
+    new_event_tables.Divisions.__table__.create(new_event_tables.db_handle.session.bind)        
+    new_event_tables.DivisionMachines.__table__.create(new_event_tables.db_handle.session.bind)    
 
     return new_event_tables
 

@@ -73,6 +73,28 @@ class DbInfo():
     def getImportedTables(self,app,pss_admin_site_name):
         db_handle = self.create_db_handle(app)
         return ImportedTables(db_handle,app.name,pss_admin_site_name)
+
+    def load_machines_from_json(self,app,test=False):            
+        from data_files.machine_list_abbreviations import machines
+        from data_files.machine_list_test import test_machines
+
+        machines_to_load = machines
+        if test:
+            machines_to_load = test_machines
+        for machine in machines_to_load:
+            if app.tables.Machines.query.filter_by(machine_name=machine['machine_name']).first():
+                continue
+            new_machine = app.tables.Machines(
+                machine_name=machine['machine_name']
+            )
+            if 'abbreviation' in machine:
+                new_machine.abbreviation = machine['abbreviation']
+            else:
+                new_machine.abbreviation = machine['machine_name'][0:4]
+            
+            app.tables.db_handle.session.add(new_machine)
+        app.tables.db_handle.session.commit()
+    
     
 # def load_machines_from_json(app,test=False):    
 #     from data_files.machine_list import machines

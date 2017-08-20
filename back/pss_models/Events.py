@@ -17,6 +17,6 @@ def generate_events_class(db_handle):
         sendgrid_api_key = db_handle.Column(db_handle.String(100))
         player_id_seq_start = db_handle.Column(db_handle.Integer)
         upload_folder = db_handle.Column(db_handle.String(100))
-        
+        ifpa_api_key=db_handle.Column(db_handle.String(100))
     return Events
     

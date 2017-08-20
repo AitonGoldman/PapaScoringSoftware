@@ -105,3 +105,51 @@ class RoutePssLogin(pss_integration_test_existing_event.PssIntegrationTestExisti
             self.assertEquals(json.loads(rv.data)['current_user'],None)
 
             
+    def test_player_login(self):
+        self.createEventsAndEventUsers()        
+        with self.event_app.test_client() as c:                        
+            tables = self.event_app.tables
+            existing_player = tables.Players.query.filter(tables.Players.event_player.has(tables.EventPlayers.event_player_id==1)).first()
+            rv = c.post('/auth/player/login',
+                        data=json.dumps({'event_player_number':1,'event_player_pin':existing_player.event_player.event_player_pin}))
+            self.assertHttpCodeEquals(rv,200)            
+            self.assertTrue(hasattr(current_user, 'player_id'),                              
+                            "Was expecting current_user to have a player_id attr, but it did not")
+            self.assertEquals(current_user.player_id,
+                              1,
+                              "expected player_id to be 1, but got %s" % (current_user.player_id))
+            self.assertTrue(current_user.is_authenticated(),                              
+                             "Was expecting player to be logged in, but player was not logged in")            
+            returned_player = json.loads(rv.data)['player']
+            self.assertEquals(returned_player['player_id'],1)            
+            self.assertTrue('event_player_pin' not in returned_player['event_player'])
+            self.assertEquals(returned_player['event_player']['ifpa_ranking'],9999)
+            self.assertEquals(len(returned_player['player_roles']),1)
+
+    def test_player_login_with_bad_info_fails(self):
+        self.createEventsAndEventUsers()        
+        with self.event_app.test_client() as c:                        
+            tables = self.event_app.tables
+            existing_player = tables.Players.query.filter(tables.Players.event_player.has(tables.EventPlayers.event_player_id==1)).first()
+            rv = c.post('/auth/player/login',
+                        data=json.dumps({'event_player_number':9999,'event_player_pin':existing_player.event_player.event_player_pin}))
+            self.assertHttpCodeEquals(rv,401)            
+            self.assertFalse(current_user.is_authenticated())
+
+            rv = c.post('/auth/player/login',
+                        data=json.dumps({'event_player_number':1,'event_player_pin':0}))
+            self.assertHttpCodeEquals(rv,401)            
+            self.assertFalse(current_user.is_authenticated())
+
+    def test_player_login_to_wrong_site_fails(self):
+        self.createEventsAndEventUsers()        
+        with self.event_app_2.test_client() as c:                        
+            tables = self.event_app.tables
+            existing_player = self.event_app.tables.Players.query.filter(tables.Players.event_player.has(tables.EventPlayers.event_player_id==2)).first()            
+            rv = c.post('/auth/player/login',
+                        data=json.dumps({'event_player_number':2,'event_player_pin':existing_player.event_player.event_player_pin}))
+            self.assertHttpCodeEquals(rv,401)            
+            self.assertFalse(current_user.is_authenticated())
+
+            
+            

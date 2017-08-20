@@ -7,6 +7,8 @@ from flask_login import login_user, logout_user, current_user
 import json
 from flask_principal import identity_changed, Identity
 from lib.serializer.pss_user import  generate_pss_user_to_dict_serializer
+from lib.serializer.player import  generate_player_to_dict_serializer
+
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 
@@ -52,6 +54,22 @@ def pss_login_route(request,tables,is_pss_admin_event=True):
         check_event_user_has_event_access(pss_user,tables)    
     return pss_user
 
+def player_login_route(request,tables):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Username or password not specified')
+    if 'event_player_number' not in input_data or 'event_player_pin' not in input_data:
+        raise BadRequest('Missing information')        
+    player = tables.Players.query.options(joinedload("player_roles"),
+                                          joinedload("event_player"),
+                                          joinedload("events")).filter(tables.Players.event_player.has(tables.EventPlayers.event_player_id==input_data['event_player_number'])).first()
+    if player is None:
+        raise Unauthorized('Bad player id')
+    if player.event_player.event_player_pin != input_data['event_player_pin']:
+        raise Unauthorized('Bad player pin number')        
+    return player
+
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/login',methods=['POST'])
 @load_tables
 def pss_admin_login(tables):    
@@ -82,6 +100,17 @@ def pss_event_user_login(tables):
     pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
     user_dict=pss_user_serializer(pss_event_user)
     return jsonify({'pss_user':user_dict})
+
+@blueprints.event_blueprint.route('/auth/player/login',methods=['POST'])
+@load_tables
+def player_login(tables):    
+    player = player_login_route(request,tables)
+    login_user(player)    
+    identity_changed.send(current_app._get_current_object(), identity=Identity(player.player_id))
+    player_serializer = generate_player_to_dict_serializer(serializer.player.ALL)
+    user_dict=player_serializer(player)
+    return jsonify({'player':user_dict})
+
 
 @blueprints.pss_admin_event_blueprint.route('/auth/pss_user/current_user',methods=['GET'])
 @blueprints.event_blueprint.route('/auth/pss_event_user/current_user',methods=['GET'])

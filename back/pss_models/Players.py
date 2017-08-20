@@ -68,7 +68,7 @@ def generate_players_class(db_handle,event_name):
 
         def get_id(self):
             """Get the user's id"""
-            return self.pss_user_id
+            return "player_%s"%self.player_id
         
     return Players
     

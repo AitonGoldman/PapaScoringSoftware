@@ -28,15 +28,10 @@ def create_event_tables(pss_config,new_event_app):
     if existing_event is not None:
         raise Conflict('Event already exists')             
     metadata = new_event_tables.db_handle.metadata
-    print "creating tables 2..."
     event_role_pss_user_table = metadata.tables['event_role_pss_user_'+new_event_app.name]    
-    print "creating tables 2a..."
     event_role_pss_user_table.create(new_event_tables.db_handle.session.bind)
-    print "creating tables 2b..."
     player_role_player_table = metadata.tables['player_role_player_'+new_event_app.name]    
-    print "creating tables 2c..."
     player_role_player_table.create(new_event_tables.db_handle.session.bind)
-    print "creating tables 3..."
 
     new_event_tables.EventUsers.__table__.create(new_event_tables.db_handle.session.bind)    
     new_event_tables.EventPlayers.__table__.create(new_event_tables.db_handle.session.bind)    

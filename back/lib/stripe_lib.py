@@ -4,8 +4,7 @@ from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 def get_sku_price(sku,STRIPE_API_KEY):
     if 'STRIPE_API_KEY' is None:
         raise BadRequest('Stripe API key is not set')
-    stripe.api_key = STRIPE_API_KEY
-    print STRIPE_API_KEY
+    stripe.api_key = STRIPE_API_KEY    
     product_list = stripe.Product.list(limit=50)    
     items = product_list['data']
     dict_sku_prices = {}

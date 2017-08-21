@@ -109,10 +109,7 @@ class RoutePssLogin(pss_integration_test_existing_event.PssIntegrationTestExisti
         self.createEventsAndEventUsers()        
         with self.event_app.test_client() as c:                        
             tables = self.event_app.tables
-            for player in tables.Players.query.all():
-                print player.event_player.event_player_id
             existing_player = tables.Players.query.filter(tables.Players.event_player.has(tables.EventPlayers.event_player_id==1)).first()
-            print existing_player
             rv = c.post('/auth/player/login',
                         data=json.dumps({'event_player_number':1,'event_player_pin':existing_player.event_player.event_player_pin}))
             self.assertHttpCodeEquals(rv,200)            

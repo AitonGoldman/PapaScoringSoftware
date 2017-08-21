@@ -3,7 +3,7 @@ python:
   - "2.7"
 cache: pip
 install: "pip install -r back/requirements.txt"
-script: ./back/run_tests.sh
+script: ./back/run_tests_in_travis.sh
 services:
   - postgresql
 addons:

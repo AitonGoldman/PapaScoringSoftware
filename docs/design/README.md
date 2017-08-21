@@ -45,17 +45,20 @@ The goal for the PSS is to be able to scale up by simply starting another instan
 
 In turns out acheiving point 3 is a little tricky because SQLAlchemy can't point at different tables once the `Flask Application` has been instantiated.  So, we do something called application dispatching (see this link for the nitty gritty : ).  The TLDR; is that the PSS looks at the incoming url, determines the `Event` the request is directed at, and then directs the request to a `Flask Application` that is pointed only to the tables that are relevant to that `Event`.
 
-If you want more details on the implementation, look at [back/app/__init__.py](../../back/app/__init__.py).
+If you want more details on the implementation, you can start by looking at [back/app/__init__.py](../../back/app/__init__.py).
 
-## Permissions and Roles
+## Event Users and Players
+
 The PSS has three types of users :
 - a `Event Owner`
 - a `Event User`
 - a `Player`
 
-Event Owners and Event Users are stored in one table ( in the `PssUsers` table ) and players are stored in a second table (in the Players table).  Roles are assigned to indiviual users/players.  For example, a `Event Owner` will have the `PssUser` and `tournament_director` role assigned to them, while a `Event User` who is a scorekeeper will have the role `scorekeeper` assigned to them.  Note that event roles are specific to `Events` - for example, for PAPA 20 my event roles are scorekeeper and deskworker.  But for PPO 6 it is just scorekeeper.  Having the deskworker role in PAPA 20 does not mean I get deskworker permissions in PPO 6.
+## Permissions and Roles
 
-roles are used by the backend to determine what a user/player can and can not do.  The frontend uses a user/player roles to determine what to show.  If a user/player with incorrect permissions tries to perform an action on the backend, that action will be rejected.
+Roles determine what the users/players can (and can not do) and are assigned to indiviual users/players. Roles for Event Users (i.e. deskworker, scorekeeper, tournament director, etc) are assigned by Event Owners.  For example, let's say I am an Event Owner and Elizabeth is a scorekeeper at my event - then I will get the `Tournament_Director` role assigned to my account automatically for my event and I will assign the `Scorekeeper` role to Elizabeth's account for my event.  Note that event roles are specific to `Events` - for example, let's say for PAPA 20 my event roles are scorekeeper and deskworker.  But for PPO 6 it is just scorekeeper.  Having the deskworker role in PAPA 20 does not mean I get deskworker permissions in PPO 6.
+
+Note that the frontend uses a user/player roles to determine what to show.  If a user/player with incorrect permissions tries to perform an action on the backend, that action will be rejected.
 
 ## The Pss Admin interface and Events
 
@@ -82,9 +85,53 @@ The backend provides three different ways to login - they are :
 - Login for a `Event User` or a `Event Owner` to an `Event`
 - Login for a `Player` to an `Event`
 
-A `Event Owner` can log into the Pss Admin interface or into a specific `Pss Event`.  A `Event User` can log into a specific event.  A `Player` will also be able to log into a specific event, but will need to use a different login endpoint than the `Event User` (due to using different credentials than the `Event User` i.e. player number/pin vs username/password)
+A `Event Owner` can log into the Pss Admin interface or into a specific `Pss Event`.  A `Event User` can log into a specific event with their username and password.  A `Player` will also be able to log into a specific event, but will need to use a different login endpoint than the `Event User`.  This is because a player will use different credentials to login - specifically, the player will use their player number and player pin (both assigned when players are added to an Event)
 
 The admin interface is a seperate `Flask Application` - this means that if you login to the admin interface, the cookie with your credentials will not give you access to a `Event` - you will need to explicitly login to an Event seperately.  The reverse is also true (i.e. logging into an event will not give you access to the admin interface).  Note that this is also true of seperate `Events` (i.e. I'm a deskworker in both the PAPA 20 event and the PPO 6 event - if I login to the PAPA 20 event, that does not log me into the PPO 6 event).
 
-## Event Users and Players
+## Creating and editing Events and Tournaments
+
+Only a Event Owner can create an Event through the admin interface.  Event Owners can only edit Events they have created.  In order to create/edit a Tournament they must login to an event.  Event Owners can only create/edit tournaments in their own Events or in Events they have been given the Tournament Director role.
+
+Once a Tournament is created it is possible to add Machines to that tournament.  Once a Machine is added to a tournament, it is possible to disable or remove the machine.  Disabling the machine means no new games can be started on the machine and the machine will be marked as DOWN in the UI - you would use this when a machine is down for tech repair.  Removing a machine means that no new games can be started on the game and the machine will be removed from the UI (except for results) - you would use this when a machine is pulled from the bank.
+
+A tournament can be marked as active or inactive.  In an active tournament, players can buy tickets, start new games, and have scores recored.  In an inactive, players can buy tickets and have scores recorded but can't start new games.
+
+Tournaments have a property "allow_ticket_purchases" - if the property is set to false, then ticket purchases will not be allowed (from the desk or directly by players).  Note that this can be set independently of the tournament active/inactive flag (i.e. you can cut off ticket sales before the tournament ends).
+
+## Creating users and players, or adding existing users and players to events
+
+A Event Owner user can be created in 2 ways
+
+- The Pss Instance admin creates the user (i.e. the person who setup and is running the PSS instance)
+- The person who wants the account goes through the email valiation process
+
+The end result is an Event Owner user is created.
+
+Once the Event Owner is created, they can create Events and Event Users.  As an example, let's say the Event Owner Doug wants to add Fred as a scorekeeper to his Event.  He would go through the following steps : 
+
+- Doug logs into his Event
+- Doug enters Freds name into the Event User creation screen
+- The system determines if Fred already has an account
+- If he does, then Doug assigns Fred's account the scoreekeeper role for Doug's event and set's Fred's password (which is only valid for Doug's event)
+- If he doesn't, Doug does all the same steps as if the account was there but the system creates Fred's account silently
+
+Note that when Doug created his event, his account was automatically added to his event as a Tournament Director.
+
+The process for adding players to an event is similar to adding Event Users - with the additional steps :
+- Players are assigned a player number (i.e. 123) and a player pin ( for logging into the Event i.e. 4444) that are specific to each Event
+- Players can have an ifpa id associated with them
+- Players can have a wppr ranking associated with them (which is updated upon being added to an event) 
+
+## Teams
+
+The PSS allows you to create teams and assign players to teams.  Teams are event specific. 
+
+Each Tournament allows you to configure.. 
+- whether or not the Tournament is a team tournament.
+- the max number of people per team.
+
+
+
+
 

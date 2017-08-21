@@ -28,6 +28,7 @@ def generate_divisions_class(db_handle,event_name):
         number_of_signifigant_scores=db_handle.Column(db_handle.Integer,default=4)
         ifpa_rank_restriction=db_handle.Column(db_handle.Integer)
         team_tournament=db_handle.Column(db_handle.Boolean,default=False)
+        number_players_per_team=db_handle.Column(db_handle.Integer,default=2)
         
         finals_style=db_handle.Column(db_handle.String(100),default="PAPA")
         number_of_qualifiers=db_handle.Column(db_handle.Integer,default=24)
@@ -39,5 +40,8 @@ def generate_divisions_class(db_handle,event_name):
         division_machines = db_handle.relationship('DivisionMachines')
         tournament = db_handle.relationship('Tournaments',uselist=False)
 
+        allow_desk_purchases = db_handle.Column(db_handle.Boolean,default=True)
+        allow_phone_purchases = db_handle.Column(db_handle.Boolean,default=True)
+        
     return Divisions
     

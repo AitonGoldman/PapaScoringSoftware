@@ -6,13 +6,10 @@ from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_user, logout_user, current_user
 import json
 from lib import orm_factories
-#from lib.serializer.pss_user import generate_pss_user_to_dict_serializer
 from lib.serializer.player import generate_player_to_dict_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
-
-
 
 def create_player_route(request, app):            
     tables = app.tables
@@ -37,7 +34,9 @@ def create_player_route(request, app):
                                              input_data['ifpa_ranking'])
     if extra_title:
         new_player.extra_title=extra_title
-    
+    if 'ifpa_id' in input_data:
+        new_player.ifpa_id=input_data['ifpa_id']
+        
     tables.db_handle.session.add(new_player)
     tables.db_handle.session.commit()
     return new_player
@@ -46,7 +45,6 @@ def add_existing_player_to_event_route(input_data,player,app):
     tables = app.tables
     if 'ifpa_ranking' not in input_data:
         raise BadRequest('missing ifpa ranking')    
-    #FIXME : should do better player checking (i.e. force submission of first_name/lastname and check that against existing user?)
     orm_factories.populate_player(app,
                                   player,
                                   input_data['ifpa_ranking'])

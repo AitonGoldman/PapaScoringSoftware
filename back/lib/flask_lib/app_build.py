@@ -12,7 +12,13 @@ import calendar
 import datetime
 import blueprints
 import routes
-from flask_marshmallow import Marshmallow
+#from flask_marshmallow import Marshmallow
+
+def generate_check_event_config(pss_config):
+    def check_event_config():
+        from flask import current_app
+        pss_config.set_event_config_from_db(current_app)        
+    return check_event_config
 
 def get_event_app(app, pss_config):
     configured_app = get_base_app(app,pss_config)    
@@ -45,7 +51,8 @@ def get_base_app(app, pss_config):
     for code in default_exceptions.iterkeys():
         app.error_handler_spec[None][code] = make_json_error
 
-    app.ma = Marshmallow(app)
+    #app.ma = Marshmallow(app)
+    app.before_request(generate_check_event_config(pss_config))
     return app
 
 def make_json_error(ex):

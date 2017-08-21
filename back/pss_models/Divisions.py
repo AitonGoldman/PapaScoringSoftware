@@ -8,25 +8,26 @@ def generate_divisions_class(db_handle,event_name):
         tournament_name=db_handle.Column(db_handle.String(100))
         tournament_id=db_handle.Column('tournament_id', db_handle.Integer, db_handle.ForeignKey('tournaments_'+event_name+'.tournament_id'))
         
-        team_tournament=db_handle.Column(db_handle.Boolean)
-
         queuing=db_handle.Column(db_handle.Boolean)
         num_spaces_to_bump_player_down_queue=db_handle.Column(db_handle.Integer)
 
         use_stripe=active=db_handle.Column(db_handle.Boolean)
         stripe_sku=db_handle.Column(db_handle.String(100))
+        discount_stripe_sku=db_handle.Column(db_handle.String(100))
         stripe_price=db_handle.Column(db_handle.Float)
+        discount_stripe_price=db_handle.Column(db_handle.Float)
         manually_set_price=db_handle.Column(db_handle.Float)
         #FIXME : make ticket discounts more flexible
         number_of_tickets_for_discount=db_handle.Column(db_handle.Integer)
         discount_price=db_handle.Column(db_handle.Integer)
+        number_of_unused_tickets_allowed=db_handle.Column(db_handle.Integer)
         
         active=db_handle.Column(db_handle.Boolean,default=False)
         scoring_style=db_handle.Column(db_handle.String(100))
         limited_herb=db_handle.Column(db_handle.Boolean)
         number_of_signifigant_scores=db_handle.Column(db_handle.Integer)
         ifpa_rank_restriction=db_handle.Column(db_handle.Integer)
-        number_of_unused_tickets_allowed=db_handle.Column(db_handle.Integer)
+        team_tournament=db_handle.Column(db_handle.Boolean)
         
         finals_style=db_handle.Column(db_handle.String(100))
         number_of_qualifiers=db_handle.Column(db_handle.Integer)

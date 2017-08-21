@@ -6,3 +6,5 @@ install: "pip install -r back/requirements.txt"
 script: ./back/run_tests.sh
 services:
   - postgresql
+addons:
+  postgresql: "9.6"

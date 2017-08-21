@@ -23,7 +23,6 @@ def create_event(user_creating_event, tables, input_data, new_event_tables):
     return new_event
 
 def create_event_tables(pss_config,new_event_app):
-    print "creating tables 1..."
     new_event_tables = pss_config.get_db_info().getImportedTables(new_event_app,"pss_admin")    
     existing_event = new_event_tables.Events.query.filter_by(name=new_event_app.name).first()
     if existing_event is not None:
@@ -31,9 +30,11 @@ def create_event_tables(pss_config,new_event_app):
     metadata = new_event_tables.db_handle.metadata
     print "creating tables 2..."
     event_role_pss_user_table = metadata.tables['event_role_pss_user_'+new_event_app.name]    
+    print "creating tables 2a..."
     event_role_pss_user_table.create(new_event_tables.db_handle.session.bind)
-
+    print "creating tables 2b..."
     player_role_player_table = metadata.tables['player_role_player_'+new_event_app.name]    
+    print "creating tables 2c..."
     player_role_player_table.create(new_event_tables.db_handle.session.bind)
     print "creating tables 3..."
 
@@ -43,7 +44,6 @@ def create_event_tables(pss_config,new_event_app):
     new_event_tables.Tournaments.__table__.create(new_event_tables.db_handle.session.bind)    
     new_event_tables.Divisions.__table__.create(new_event_tables.db_handle.session.bind)        
     new_event_tables.DivisionMachines.__table__.create(new_event_tables.db_handle.session.bind)    
-    print "creating tables 4..."
 
     return new_event_tables
 

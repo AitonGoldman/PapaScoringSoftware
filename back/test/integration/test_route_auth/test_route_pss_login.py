@@ -88,42 +88,23 @@ class RoutePssLogin(pss_integration_test_existing_event.PssIntegrationTestExisti
             
     
     def test_login_fails_when_logging_into_1_event_and_admin_event(self):
-        print "---"
-        print "creating event"
-        print "---"
         self.createEventsAndEventUsers()
-        print "---"
-        print "done creating event - starting test..."
-        print "---"
         
         with self.event_app.test_client() as c:                        
-            print "---"
-            print "test..."
-            print "---"
 
             scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
             rv = c.post('/auth/pss_event_user/login',
                         data=json.dumps({'username':self.event_user_scorekeeper,
                                          'password':'password'}))
-            self.assertHttpCodeEquals(rv,200)                                    
+            self.assertHttpCodeEquals(rv,200)
             cookie = rv.headers['Set-Cookie'].split("=")[1]
             cookie = cookie.split(";")[0]                        
-            print "---"
-            print "done with part 1 of test..."
-            print "---"
 
-        with self.pss_admin_app.test_client() as c:                                
-            print "---"
-            print "start with part 2 of test..."
-            print "---"
-
+        with self.pss_admin_app.test_client() as c:                             
             c.set_cookie('localhost','session', cookie)
             rv = c.get('/auth/pss_user/current_user')
             self.assertHttpCodeEquals(rv,200)            
             self.assertEquals(json.loads(rv.data)['current_user'],None)
-            print "---"
-            print "done with part 2 of test..."
-            print "---"
 
             
     def test_player_login(self):

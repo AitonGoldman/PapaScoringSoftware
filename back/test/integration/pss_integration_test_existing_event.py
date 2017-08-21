@@ -35,9 +35,11 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
             rv = c.post('/auth/pss_user/login',
                         data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
             self.assertHttpCodeEquals(rv,200)            
+            print "------ 5a"
             rv = c.post('/event',
                        data=json.dumps({'name':self.new_event_name}))
             self.assertHttpCodeEquals(rv,200)
+            print "------ 5b"
             rv = c.post('/event',
                        data=json.dumps({'name':self.new_event_name_2}))
             self.assertHttpCodeEquals(rv,200)

@@ -22,16 +22,21 @@ def create_player_route(request, app):
         raise BadRequest('No info in request')        
     if 'first_name' not in input_data or 'last_name' not in input_data or 'ifpa_ranking' not in input_data:        
         raise BadRequest('Information missing')
-    
-    existing_player=tables.Players.query.filter_by(first_name=input_data['first_name'],last_name=input_data['last_name']).first()
-    #FIXME : needs to be more extensive of a check (i.e. check actual name, etc)
+    if 'extra_title' in input_data:
+        extra_title = input_data['extra_title']
+    else:
+        extra_title = None
+    existing_player=tables.Players.query.filter_by(first_name=input_data['first_name'],
+                                                   last_name=input_data['last_name'],
+                                                   extra_title=extra_title).first()
     if existing_player is not None:
-        raise Conflict('Player already exists.')
+        raise Conflict('Player %s already exists.' % existing_player)
     new_player = orm_factories.create_player(app,
                                              input_data['first_name'],
                                              input_data['last_name'],
                                              input_data['ifpa_ranking'])
-    
+    if extra_title:
+        new_player.extra_title=extra_title
     
     tables.db_handle.session.add(new_player)
     tables.db_handle.session.commit()
@@ -123,6 +128,8 @@ def get_existing_event_player(tables,player_id):
 @load_tables
 def get_existing_player(tables,player_id):                
     existing_player = tables.Players.query.options(joinedload("player_roles"),joinedload("events"),joinedload("event_player")).filter_by(player_id=player_id).first()
+    if existing_player is None:
+        raise BadRequest('Player does not exist')
     player_serializer = generate_player_to_dict_serializer(serializer.player.ALL)
     user_dict = player_serializer(existing_player)                            
     return jsonify({'existing_player':user_dict})

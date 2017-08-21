@@ -29,7 +29,17 @@ def create_pss_user_route(request, app):
     existing_user=tables.PssUsers.query.filter_by(username=input_data['username']).first()
     #FIXME : needs to be more extensive of a check (i.e. check actual name, etc)
     if existing_user is not None:
-        raise Conflict('User already exists.')
+        raise Conflict('Username %s already used.' % existing_user.username)
+    if 'extra_title' in input_data:
+        extra_title = input_data['extra_title']
+    else:
+        extra_title = None    
+    existing_user=tables.PssUsers.query.filter_by(first_name=input_data['first_name'],
+                                                  last_name=input_data['last_name'],
+                                                  extra_title=extra_title).first()
+    if existing_user is not None:
+        raise Conflict('User with name %s already created.' % existing_user)
+    
     if 'role_id' in input_data:
         pss_user_role = tables.AdminRoles.query.filter_by(admin_role_id=int(input_data['role_id'])).first()
         if pss_user_role is None:
@@ -44,7 +54,9 @@ def create_pss_user_route(request, app):
         new_user = orm_factories.create_user(app,input_data['username'],
                                              input_data['first_name'],input_data['last_name'],
                                              input_data['password'],event_roles=[pss_event_user_role])
-    
+    if 'extra_title' in input_data:
+        new_user.extra_title = input_data['extra_title']
+        
     tables.db_handle.session.add(new_user)
     tables.db_handle.session.commit()
     return new_user

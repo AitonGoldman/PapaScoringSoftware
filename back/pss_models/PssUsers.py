@@ -62,6 +62,7 @@ def generate_pss_users_class(db_handle,event_name):
            secondary=Event_PssUser_mapping
         )
         
+        
         def crypt_password(self, password):
             """Encrypt a plaintext password and store it"""
             self.password_crypt = sha512_crypt.encrypt(password)
@@ -71,7 +72,12 @@ def generate_pss_users_class(db_handle,event_name):
             return sha512_crypt.verify(password, self.password_crypt)
         
         def __repr__(self):
-            return '<User %r>' % self.username
+            #return '<User %r>' % self.username
+            existing_user_name = self.first_name+" "+self.last_name
+            if self.extra_title:
+                existing_user_name = existing_user_name + " " + self.extra_title
+            
+            return existing_user_name
             
         @staticmethod
         def is_authenticated():

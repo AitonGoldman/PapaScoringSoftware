@@ -53,7 +53,13 @@ def generate_players_class(db_handle,event_name):
         )
         
         def __repr__(self):
-            return '<Player %r>' % self.first_name+" "+self.last_name
+            existing_player_name = self.first_name+" "+self.last_name
+            if self.extra_title:
+                existing_player_name = existing_player_name + " " + self.extra_title
+            
+            return existing_player_name
+
+            #return '<Player %r>' % self.first_name+" "+self.last_name
             
         @staticmethod
         def is_authenticated():

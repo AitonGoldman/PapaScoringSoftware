@@ -6,25 +6,21 @@ from lib.serializer.generic import  generate_generic_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
+from lib.serializer.deserialize import deserialize_json
 
-def edit_division_machine_route(division_machine_id,request,tables):
+def edit_division_machine_route(division_machine_id,request,app):
     if request.data:        
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Username or password not specified')
-    existing_division_machine = tables.DivisionMachines.query.filter_by(division_machine_id=division_machine_id).first()    
+    existing_division_machine = app.tables.DivisionMachines.query.filter_by(division_machine_id=division_machine_id).first()    
     if existing_division_machine is None:
-        raise BadRequest('Bad division machine submitted')        
-    if 'active' in input_data and input_data['active'] is True:
-        existing_division_machine.active=True
-    else:
-        existing_division_machine.active=False
-
-    if 'removed' in input_data and input_data['removed'] is True:
+        raise BadRequest('Bad division machine submitted')
+    deserialize_json(existing_division_machine,input_data,app)    
+    if existing_division_machine.removed:
          existing_division_machine.removed=True
          existing_division_machine.active=False
-    else:
-        existing_division_machine.removed=False
+         
     return existing_division_machine
 
 def create_division_machine_route(request,tables):
@@ -52,8 +48,8 @@ def create_division_machine_route(request,tables):
                                                    division_machine_name=existing_machine.machine_name,
                                                    division_machine_abbreviation=existing_machine.abbreviation,
                                                    active=True)    
-    existing_division.division_machines.append(new_division_machine)    
     tables.db_handle.session.add(new_division_machine)
+    existing_division.division_machines.append(new_division_machine)    
     tables.db_handle.session.commit()
     return new_division_machine
 
@@ -67,7 +63,7 @@ def create_division_machine(tables):
 @blueprints.event_blueprint.route('/division_machine/<division_machine_id>',methods=['PUT'])
 @load_tables
 def edit_division_machine(tables,division_machine_id):    
-    edited_division_machine = edit_division_machine_route(division_machine_id,request,tables)    
+    edited_division_machine = edit_division_machine_route(division_machine_id,request,current_app)    
     tables.db_handle.session.commit()
     division_machine_serializer = generate_generic_serializer(serializer.generic.ALL)
     return jsonify({'edited_division_machine':division_machine_serializer(edited_division_machine)})

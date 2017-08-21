@@ -8,10 +8,10 @@ from PssUsers import generate_pss_users_class
 from Players import generate_players_class
 from EventPlayers import generate_event_players_class
 from Teams import generate_teams_class
+from MultiDivisionTournaments import generate_mutli_division_tournaments_class
 from Tournaments import generate_tournaments_class
-from Divisions import generate_divisions_class
 from Machines import generate_machines_class
-from DivisionMachines import generate_division_machines_class
+from TournamentMachines import generate_tournament_machines_class
 
 
 class ImportedTables():
@@ -25,10 +25,10 @@ class ImportedTables():
         self.PssUsers = generate_pss_users_class(db_handle,event_name)        
         self.Players = generate_players_class(db_handle,event_name)
         self.EventPlayers = generate_event_players_class(db_handle,event_name)
-        self.Teams = generate_teams_class(db_handle,event_name)
-        self.Divisions = generate_divisions_class(db_handle,event_name)
+        self.Teams = generate_teams_class(db_handle,event_name)        
         self.Machines = generate_machines_class(db_handle,event_name)
-        self.DivisionMachines = generate_division_machines_class(db_handle,event_name)
+        self.TournamentMachines = generate_tournament_machines_class(db_handle,event_name)
+        self.MultiDivisionTournaments = generate_mutli_division_tournaments_class(db_handle,event_name)
         self.Tournaments = generate_tournaments_class(db_handle,event_name)
         self.db_handle=db_handle
     def get_list_of_event_specific_tables(self):

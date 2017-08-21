@@ -28,18 +28,7 @@ def create_event_tables(pss_config,new_event_app):
     if existing_event is not None:
         raise Conflict('Event already exists')             
     metadata = new_event_tables.db_handle.metadata
-    event_role_pss_user_table = metadata.tables['event_role_pss_user_'+new_event_app.name]    
-    event_role_pss_user_table.create(new_event_tables.db_handle.session.bind)
-    player_role_player_table = metadata.tables['player_role_player_'+new_event_app.name]    
-    player_role_player_table.create(new_event_tables.db_handle.session.bind)
-
-    new_event_tables.EventUsers.__table__.create(new_event_tables.db_handle.session.bind)    
-    new_event_tables.EventPlayers.__table__.create(new_event_tables.db_handle.session.bind)    
-    new_event_tables.Teams.__table__.create(new_event_tables.db_handle.session.bind)    
-    new_event_tables.Tournaments.__table__.create(new_event_tables.db_handle.session.bind)    
-    new_event_tables.Divisions.__table__.create(new_event_tables.db_handle.session.bind)        
-    new_event_tables.DivisionMachines.__table__.create(new_event_tables.db_handle.session.bind)    
-
+    metadata.create_all(new_event_tables.db_handle.session.bind)
     return new_event_tables
 
 def populate_event_user(flask_app,password,

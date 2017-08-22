@@ -47,7 +47,7 @@ class PssIntegrationTestBase(unittest.TestCase):
         
     def setUp(self):        
         self.test_db_name=test_db_name_for_run
-        os.environ['pss_db_name']=self.test_db_name
+        os.environ['pss_db_name']=test_db_name_for_run
         os.environ['pss_admin_event_name']=PSS_ADMIN_EVENT        
         static_setup()
         self.pss_config = PssConfig()

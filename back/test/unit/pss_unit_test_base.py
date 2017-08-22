@@ -10,18 +10,21 @@ class PssUnitTestBase(unittest.TestCase):
         self.db_handle = SQLAlchemy()
         #FIXME : need constants for these strings
         self.tables = ImportedTables(self.db_handle,'test_app','test_pss_amin_app')        
-        self.mock_app = MagicMock()                
+        self.mock_app = MagicMock()
+        
     def create_mock_role(self,role_name):
         mock_role = MagicMock()
         mock_role.name = role_name
         return mock_role
-    def create_mock_player(self,role_names,is_pss_admin_user=True):
+    
+    def create_mock_player(self,role_names):
         mock_player = MagicMock()        
         mock_player.player_roles=[]        
         for role_name in role_names:
             mock_role = self.create_mock_role(role_name)
             mock_player.player_roles.append(mock_role)                        
-        return mock_player    
+        return mock_player
+    
     def create_mock_user(self,role_names,is_pss_admin_user=True):
         mock_user = MagicMock()        
         mock_user.admin_roles=[]

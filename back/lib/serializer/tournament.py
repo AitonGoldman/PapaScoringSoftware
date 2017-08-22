@@ -8,7 +8,7 @@ def generate_tournament_to_dict_serializer(type_of_serializer):
         generic_serializer = generic.generate_generic_serializer(generic.ALL)
         serialized_tournament = to_dict(tournament_model)                        
         serialized_tournament['tournament_machines']=[generic_serializer(tournament_machine) for tournament_machine in tournament_model.tournament_machines]
-        serialized_tournament['tournament']=generic_serializer(tournament_model.tournament)
+        serialized_tournament['multi_division_tournament']=generic_serializer(tournament_model.multi_division_tournament)
         return serialized_tournament        
     if type_of_serializer == ALL:
         return serialize_full_tournament

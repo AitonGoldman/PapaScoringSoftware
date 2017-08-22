@@ -1,6 +1,6 @@
 def deserialize_json(model,input_data,app):
     for c in model.__table__.columns:        
-        if len(c.foreign_keys) > 0:
+        if len(c.foreign_keys) > 0 or c.primary_key:
             continue
         if c.name in input_data:
             setattr(model,c.name,input_data[c.name])

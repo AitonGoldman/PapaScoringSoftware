@@ -4,6 +4,5 @@ import roles
 import event
 import player
 import ifpa
-import division
 import tournament
-import division_machine
+import tournament_machine

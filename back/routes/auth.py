@@ -65,7 +65,8 @@ def player_login_route(request,tables):
                                           joinedload("events")).filter(tables.Players.event_player.has(tables.EventPlayers.event_player_id==input_data['event_player_number'])).first()
     if player is None:
         raise Unauthorized('Bad player id')
-    if player.event_player.event_player_pin != input_data['event_player_pin']:
+    print player.event_player.event_player_pin
+    if player.event_player.event_player_pin != int(input_data['event_player_pin']):
         raise Unauthorized('Bad player pin number')        
     return player
 

@@ -27,7 +27,8 @@ class RouteLoginTest(PssUnitTestBase):
         self.mock_user_with_user_permissions = self.create_mock_user([roles_constants.PSS_USER],is_pss_admin_user=True)
         self.mock_user_with_incorrect_permissions = self.create_mock_user([roles_constants.TEST],is_pss_admin_user=True)
         self.mock_user_with_td_permissions = self.create_mock_user([roles_constants.TOURNAMENT_DIRECTOR],is_pss_admin_user=False)
-
+        self.mock_player = self.create_mock_player([roles_constants.PSS_PLAYER])
+        
         self.mock_request = MagicMock()        
         self.mock_tables = MagicMock()
         
@@ -98,4 +99,47 @@ class RouteLoginTest(PssUnitTestBase):
         with self.assertRaises(Unauthorized) as cm:
             auth.pss_login_route(self.mock_request,self.mock_tables,is_pss_admin_event=False)
 
+    def test_player_login_route(self):
+        self.mock_player.event_player.event_player_pin=1234
+        self.mock_tables.Players.query.options().filter().first.return_value = self.mock_player 
+
+        self.mock_request.data = json.dumps({'event_player_number':'111','event_player_pin':'1234'})
+        player_returned = auth.player_login_route(self.mock_request,self.mock_tables)
+        self.assertEquals(player_returned,self.mock_player)
+
+    def test_pss_login_route_fails_when_fields_missing(self):
+        self.mock_player.event_player.event_player_pin=1234
+        self.mock_tables.Players.query.options().filter().first.return_value = self.mock_player 
+
+        self.mock_request.data = json.dumps({'event_player_number':'111'})
+        with self.assertRaises(BadRequest) as cm:
+            auth.player_login_route(self.mock_request,self.mock_tables)
+        self.assertEquals(cm.exception.description,"Missing information")
+        
+        self.mock_request.data = json.dumps({'event_player_pin':'1234'})
+        with self.assertRaises(BadRequest) as cm:
+            auth.player_login_route(self.mock_request,self.mock_tables)                    
+        self.assertEquals(cm.exception.description,"Missing information")
+
+        self.mock_request.data = json.dumps({})
+        with self.assertRaises(BadRequest) as cm:
+            auth.player_login_route(self.mock_request,self.mock_tables)                    
+        self.assertEquals(cm.exception.description,"Missing information")
+            
+        
+    def test_player_login_route_fails_when_bad_pin_or_bad_event_player_number_provided(self):
+        self.mock_player.event_player.event_player_pin=1234
+        self.mock_tables.Players.query.options().filter().first.return_value = self.mock_player 
+        self.mock_request.data = json.dumps({'event_player_number':'111','event_player_pin':'5555'})
+        with self.assertRaises(Unauthorized) as cm:
+            auth.player_login_route(self.mock_request,self.mock_tables)
+        self.assertEquals(cm.exception.description,"Bad player pin number")
+
+        self.mock_tables.Players.query.options().filter().first.return_value = None
+        self.mock_request.data = json.dumps({'event_player_number':'99999','event_player_pin':'1234'})
+        with self.assertRaises(Unauthorized) as cm:
+            auth.player_login_route(self.mock_request,self.mock_tables)
+        self.assertEquals(cm.exception.description,"Bad player id")
+                    
+            
             

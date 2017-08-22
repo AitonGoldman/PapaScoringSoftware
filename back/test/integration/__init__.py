@@ -15,8 +15,8 @@ app=None
 def static_setup():    
     global app,test_db_name_for_run,PSS_ADMIN_EVENT,pss_config    
     if app is None:
-        create_test_db(test_db_name_for_run)
         pss_config = PssConfig()
+        create_test_db(test_db_name_for_run)
         app = PathDispatcher()            
         initialize_pss_admin_app_in_db(db_name=test_db_name_for_run)
         response,results = dispatch_request('/%s/this_does_not_exist' % PSS_ADMIN_EVENT)

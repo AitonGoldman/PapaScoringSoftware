@@ -8,15 +8,15 @@ from mock import MagicMock
 from gunicorn.http.wsgi import Response,WSGIErrorsWrapper, FileWrapper
 
 test_db_name_for_run='test_db_%s' % random.randrange(9999999)
-pss_config = PssConfig()
 PSS_ADMIN_EVENT = "pss_admin_test"
-pss_config = PssConfig()
+pss_config = None
 app=None
 
 def static_setup():    
-    global app,test_db_name_for_run,PSS_ADMIN_EVENT    
+    global app,test_db_name_for_run,PSS_ADMIN_EVENT,pss_config    
     if app is None:
         create_test_db(test_db_name_for_run)
+        pss_config = PssConfig()
         app = PathDispatcher()            
         initialize_pss_admin_app_in_db(db_name=test_db_name_for_run)
         response,results = dispatch_request('/%s/this_does_not_exist' % PSS_ADMIN_EVENT)

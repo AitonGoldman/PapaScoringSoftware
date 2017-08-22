@@ -9,7 +9,8 @@ from lib.PssConfig import PssConfig
 from routes import auth,pss_user
 from lib import roles_constants
 import json
-from werkzeug.exceptions import BadRequest,Unauthorized
+from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
+import re
 
 class RoutePssUser(PssUnitTestBase):    
 
@@ -61,7 +62,8 @@ class RoutePssUser(PssUnitTestBase):
                                              'password':'new_password',
                                              'role_id':1,
                                              'first_name':'test_first_name',
-                                             'last_name':'test_last_name'})
+                                             'last_name':'test_last_name',
+                                             'extra_title':'test_extra_title'})
         mock_role = self.create_mock_role(roles_constants.PSS_ADMIN)
         mock_role.role_id=1
         self.mock_tables.AdminRoles.query.filter_by().first.return_value = mock_role
@@ -71,6 +73,44 @@ class RoutePssUser(PssUnitTestBase):
         
         created_user = pss_user.create_pss_user_route(self.mock_request,self.mock_app)
         self.assertEquals(self.mock_new_user,created_user)        
+        self.assertTrue('username' in self.mock_tables.PssUsers.call_args[1])
+        self.assertTrue('first_name' in self.mock_tables.PssUsers.call_args[1])
+        self.assertTrue('last_name' in self.mock_tables.PssUsers.call_args[1])        
+        self.assertEquals(self.mock_tables.PssUsers.call_args[1]['username'],'test_pss_user')
+        self.assertEquals(self.mock_tables.PssUsers.call_args[1]['first_name'],'test_first_name')
+        self.assertEquals(self.mock_tables.PssUsers.call_args[1]['last_name'],'test_last_name')
+        self.assertEquals(created_user.extra_title,'test_extra_title')
+        
+    def test_create_pss_user_route_duplicate_username_fails(self):
+        self.mock_request.data = json.dumps({'username':'test_pss_user',
+                                             'password':'new_password',
+                                             'role_id':1,
+                                             'first_name':'test_first_name',
+                                             'last_name':'test_last_name',
+                                             'extra_title':'jr'})
+        mock_role = self.create_mock_role(roles_constants.PSS_ADMIN)
+        mock_role.role_id=1
+        self.mock_tables.AdminRoles.query.filter_by().first.return_value = mock_role
+
+        self.mock_new_user.username='test_pss_user'
+        self.mock_tables.PssUsers.return_value = self.mock_new_user
+
+        self.mock_tables.PssUsers.query.filter_by().first.return_value = self.mock_new_user        
+        with self.assertRaises(Conflict) as cm:        
+            created_user = pss_user.create_pss_user_route(self.mock_request,self.mock_app)        
+        self.assertRegexpMatches(cm.exception.description,re.compile('Username .+ already used'))        
+        
+        mock_user_with_same_name = self.create_mock_user([])
+        mock_user_with_same_name.username='youwillnotmatchthis'
+        mock_user_with_same_name.first_name='test_first_name'
+        mock_user_with_same_name.last_name='test_first_name'
+        mock_user_with_same_name.extra_title='jr'
+        
+        self.mock_tables.PssUsers.query.filter_by.side_effect=self.generate_mock_user_side_effect(mock_user_with_same_name)
+        with self.assertRaises(Conflict) as cm:        
+            created_user = pss_user.create_pss_user_route(self.mock_request,self.mock_app)        
+        self.assertRegexpMatches(cm.exception.description,re.compile('User with name .+ already created'))
+
         
     def test_create_pss_event_user_route(self):
         self.mock_request.data = json.dumps({'username':'event_user',

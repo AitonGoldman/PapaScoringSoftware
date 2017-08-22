@@ -12,7 +12,9 @@ class PssConfig():
         )
         self.pss_admin_event_name=os.getenv('pss_admin_event_name','pss_admin')            
 
-    def get_db_info(self):
+    def get_db_info(self,db_name=None):
+        if db_name:
+            self.db_info.db_name=db_name
         return self.db_info
     
     def get_event_config_from_db(self, app):

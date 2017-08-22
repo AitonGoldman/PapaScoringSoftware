@@ -13,40 +13,20 @@ from lib.PssConfig import PssConfig
 from lib.flask_lib.dispatch import PathDispatcher
 import os
 import datetime
-from test.integration import test_db_name_for_run
-
-PSS_ADMIN_EVENT = "pss_admin_test"
-
-def create_uniq_id():
-    random_string = ""
-    for x in range(15):
-        random_string = random_string+chr(random.randrange(97,122))        
-    return random_string
+from test.integration import test_db_name_for_run,static_setup,PSS_ADMIN_EVENT,dispatch_request
 
 
 class PssIntegrationTestBase(unittest.TestCase):        
+
     def create_uniq_id(self):
         random_string = ""
         for x in range(15):
             random_string = random_string+chr(random.randrange(97,122))        
         return random_string
         
-    def create_test_db(self):        
-        dummy_app = Flask(PSS_ADMIN_EVENT)
-        #self.pss_config.get_db_info().create_db_and_tables(dummy_app,True)
-        
-        self.pss_config.get_db_info().create_db_and_tables(dummy_app,False)        
-        del dummy_app
-    
-    def initialize_pss_admin_app_in_db(self):        
-        pss_admin_app = Flask(PSS_ADMIN_EVENT)        
-        tables = self.pss_config.get_db_info().getImportedTables(pss_admin_app,"unimportant")
-        bootstrap.bootstrap_pss_admin_event(tables,PSS_ADMIN_EVENT)
-        del pss_admin_app
-
     def get_event_app_in_db(self,app_name):        
-        response,results = self.dispatch_request('/%s/this_does_not_exist' % app_name)
-        return self.app.instances[app_name]                 
+         response,results = self.dispatch_request('/%s/this_does_not_exist' % app_name)
+         return self.app.instances[app_name]                 
         
     def bootstrap_pss_users(self,app):
         tables = app.tables
@@ -63,71 +43,21 @@ class PssIntegrationTestBase(unittest.TestCase):
                                                         'test_first_name','test_last_name',
                                                         self.admin_pss_user_password,
                                                         admin_roles=[role_admin])
-        tables.db_handle.session.commit()        
+        tables.db_handle.session.commit()                
         
-        
-    def setUp(self):                    
-        
-        #pss_config.check_db_connection_env_vars_set()
-        #self.test_db_name='test_db_%s' % random.randrange(9999999)
+    def setUp(self):        
         self.test_db_name=test_db_name_for_run
         os.environ['pss_db_name']=self.test_db_name
-        os.environ['pss_admin_event_name']=PSS_ADMIN_EVENT
-
+        os.environ['pss_admin_event_name']=PSS_ADMIN_EVENT        
+        static_setup()
         self.pss_config = PssConfig()
-
-        self.create_test_db()
-        self.initialize_pss_admin_app_in_db()
-
-        self.app = PathDispatcher()                
-        response,results = self.dispatch_request('/%s/this_does_not_exist' % PSS_ADMIN_EVENT)
-        self.pss_admin_app = self.app.instances[PSS_ADMIN_EVENT]        
+        from test.integration import app
+        self.dispatch_request=dispatch_request
+        self.app = app        
+        self.pss_admin_app = app.instances[PSS_ADMIN_EVENT]                
         bootstrap.bootstrap_roles(self.pss_admin_app.tables)        
         self.bootstrap_pss_users(self.pss_admin_app)                
-            
-    def dispatch_request(self,url):
-        mocked_socket = MagicMock()                
-        mocked_request = MagicMock()                
-        response = Response(mocked_request, mocked_socket, None)
-        req_env = self.create_full_env(url)        
-        return response,self.app(req_env,response.start_response)
-
-    def create_full_env(self,url):
-        socket = MagicMock()
-        error = MagicMock()
-        fw = MagicMock()
-        body = MagicMock()
-        return {'HTTP_REFERER': 'http://localhost/dist_2/',
-                'SERVER_SOFTWARE': 'gunicorn/19.3.0',
-                'SCRIPT_NAME': '',
-                'REQUEST_METHOD': 'GET',
-                'PATH_INFO': url,
-                'HTTP_ORIGIN': 'http://localhost',
-                'SERVER_PROTOCOL': 'HTTP/1.1',
-                'QUERY_STRING': '',
-                'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:49.0) Gecko/20100101 Firefox/49.0',
-                'HTTP_CONNECTION': 'keep-alive',
-                'HTTP_COOKIE': 'session=.eJyrVorPTFGyqlZSSFKyUvIN8cqKCg819quKNPXLyq6KNPLK8ctyNfatysjwC3fL9A8PNPDLysnwDUm3VarVUcpMSc0rySyp1EssLcmIL6ksSFWyyivNyUGSAZluUgsAzZoixw.CuJ5xA.agefXt7Vfjcyp7ql3Phgp8aBdAU',
-                'SERVER_NAME': '0.0.0.0',
-                'REMOTE_ADDR': '192.168.1.178',
-                'wsgi.url_scheme': 'http',
-                'SERVER_PORT': '8000',
-                'REMOTE_PORT': '52458',
-                'wsgi.input': body,                
-                'HTTP_HOST': '192.168.1.178:8000',
-                'wsgi.multithread': False,
-                'HTTP_CACHE_CONTROL': 'max-age=0',
-                'HTTP_ACCEPT': 'application/json, text/plain, */*',
-                'wsgi.version': (1, 0),
-                'RAW_URI': url,
-                'wsgi.run_once': False,
-                'wsgi.errors': error,                
-                'wsgi.multiprocess': False,
-                'HTTP_ACCEPT_LANGUAGE': 'en-US,en;q=0.5',
-                'gunicorn.socket': socket,
-                'wsgi.file_wrapper': fw,                
-                'HTTP_ACCEPT_ENCODING': 'gzip, deflate'}
-    
+                
     def assertHttpCodeEquals(self,http_response, http_response_code_expected):
         error_string = 'Was expecting status code %s, but it was %s with message of %s' % (http_response_code_expected, http_response.status_code,http_response.data)
         self.assertEquals(http_response.status_code,
@@ -144,10 +74,4 @@ class PssIntegrationTestBase(unittest.TestCase):
         tables = app.tables
         tables.db_handle.session.commit()        
 
-
-#    @classmethod
-#    def tearDownClass(cls):        
-#        db_url = PssConfig().get_db_info().generate_db_url()                
-#        drop_database(db_url)
-        
 

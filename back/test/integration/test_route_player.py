@@ -24,18 +24,67 @@ class RoutePlayer(pss_integration_test_existing_event.PssIntegrationTestExisting
             rv = c.post('/player',
                         data=json.dumps({'first_name':new_player_first_name,
                                          'last_name':'last_name',
-                                         'ifpa_ranking':9999}))
+                                         'ifpa_ranking':9999,
+                                         'ifpa_id':1}))
 
             self.assertHttpCodeEquals(rv,200)            
             returned_player = json.loads(rv.data)['new_player']
             self.assertEquals(returned_player['first_name'],new_player_first_name)
             self.assertEquals(returned_player['last_name'],'last_name')
+            self.assertEquals(returned_player['ifpa_id'], 1)
+            
             self.assertEquals(returned_player['event_player']['ifpa_ranking'],9999)
             self.assertEquals(len(returned_player['player_roles']),1)
             self.assertEquals(len(returned_player['events']),1)            
             new_player_in_db = self.event_app.tables.Players.query.filter_by(first_name=new_player_first_name).first()
             self.assertTrue(new_player_in_db is not None)
             self.assertTrue(new_player_in_db.event_player is not None)
+
+
+    def test_duplicate_create_player_fails_with_duplicate_full_names(self):        
+        self.createEventsAndEventUsers()
+        new_player_first_name='first_name%s'%self.create_uniq_id()
+        with self.event_app.test_client() as c:                        
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.event_user_td,
+                                         'password':'password'}))
+            self.assertHttpCodeEquals(rv,200)                        
+            rv = c.post('/player',
+                        data=json.dumps({'first_name':new_player_first_name,
+                                         'last_name':'last_name',
+                                         'extra_title':'jr',
+                                         'ifpa_ranking':9999}))
+
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.post('/player',
+                        data=json.dumps({'first_name':new_player_first_name,
+                                         'last_name':'last_name',
+                                         'extra_title':'jr',
+                                         'ifpa_ranking':9999}))
+            self.assertHttpCodeEquals(rv,409)
+
+    def test_duplicate_create_player_with_duplicate_full_names_but_different_extra_title(self):        
+        self.createEventsAndEventUsers()
+        new_player_first_name='first_name%s'%self.create_uniq_id()
+        with self.event_app.test_client() as c:                        
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.event_user_td,
+                                         'password':'password'}))
+            self.assertHttpCodeEquals(rv,200)                        
+            rv = c.post('/player',
+                        data=json.dumps({'first_name':new_player_first_name,
+                                         'last_name':'last_name',
+                                         'extra_title':'jr',
+                                         'ifpa_ranking':9999}))
+
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.post('/player',
+                        data=json.dumps({'first_name':new_player_first_name,
+                                         'last_name':'last_name',
+                                         'extra_title':'sr',
+                                         'ifpa_ranking':9999}))
+            self.assertHttpCodeEquals(rv,200)
+            
             
     def test_create_player_while_logged_into_event_as_scorekeeper_fails(self):        
         self.createEventsAndEventUsers()

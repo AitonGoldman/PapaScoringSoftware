@@ -21,8 +21,7 @@ class PssUnitTestBase(unittest.TestCase):
         for role_name in role_names:
             mock_role = self.create_mock_role(role_name)
             mock_player.player_roles.append(mock_role)                        
-        return mock_player
-    
+        return mock_player    
     def create_mock_user(self,role_names,is_pss_admin_user=True):
         mock_user = MagicMock()        
         mock_user.admin_roles=[]
@@ -36,4 +35,13 @@ class PssUnitTestBase(unittest.TestCase):
                 
         mock_user.verify_password.return_value=True            
         return mock_user
-
+    
+    def generate_mock_user_side_effect(self,side_effect_mock_user):
+        def return_mock_user(*args,**kargs):            
+            mock = MagicMock()
+            if len(kargs) == 1:
+                mock.first.return_value=None
+            else:
+                mock.first.return_value=side_effect_mock_user            
+            return mock
+        return return_mock_user

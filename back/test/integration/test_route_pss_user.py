@@ -29,13 +29,14 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
                                          'password':'password2',
                                          'first_name':'fake first name %s' % self.create_uniq_id(),
                                          'last_name':'fake_last_name',
+                                         'extra_title':'jr',
                                          'role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,200)            
             new_user_in_db = self.pss_admin_app.tables.PssUsers.query.filter_by(username=new_username).first()
             self.assertTrue(new_user_in_db is not None)
             self.assertEquals(new_user_in_db.username,new_username)
 
-    def test_create_pss_user_fails_when_duplicate_user(self):
+    def test_create_pss_user_fails_when_duplicate_usernames(self):
         new_username = 'new_user_dup_%s'% self.create_uniq_id()
         with self.pss_admin_app.test_client() as c:                        
             rv = c.post('/auth/pss_user/login',
@@ -47,17 +48,72 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
                         data=json.dumps({'username':new_username,
                                          'password':'password2',
                                          'first_name':'fake first name %s' % self.create_uniq_id(),
-                                         'last_name':'fake_last_name',                                         
+                                         'last_name':'fake_last_name',
                                          'role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,200)
             rv = c.post('/pss_user',
                         data=json.dumps({'username':new_username,
                                          'password':'password2',
                                          'first_name':'fake first name %s' % self.create_uniq_id(),
-                                         'last_name':'fake_last_name',                                         
+                                         'last_name':'fake_last_name',
                                          'role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,409)
-    
+
+    def test_create_pss_user_fails_when_duplicate_full_names(self):
+        new_username = 'new_user_dup_%s'% self.create_uniq_id()
+        new_username_2 = 'new_user_dup_%s'% self.create_uniq_id()
+        first_name = 'first_name %s' % self.create_uniq_id()
+        with self.pss_admin_app.test_client() as c:                        
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.get('/roles')            
+            pss_user_role = [role for role in json.loads(rv.data)['roles'] if (role['name'] == 'pss_user')][0]
+            rv = c.post('/pss_user',
+                        data=json.dumps({'username':new_username,
+                                         'password':'password2',
+                                         'first_name':first_name,
+                                         'last_name':'fake_last_name',
+                                         'extra_title':'jr',
+                                         'role_id':pss_user_role['admin_role_id']}))
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.post('/pss_user',
+                        data=json.dumps({'username':new_username_2,
+                                         'password':'password2',
+                                         'first_name':first_name,
+                                         'last_name':'fake_last_name',
+                                         'extra_title':'jr',                                         
+                                         'role_id':pss_user_role['admin_role_id']}))
+            self.assertHttpCodeEquals(rv,409)
+
+    def test_create_pss_user_when_duplicate_full_names_but_different_extra_title(self):
+        new_username = 'new_user_dup_%s'% self.create_uniq_id()
+        new_username_2 = 'new_user_dup_%s'% self.create_uniq_id()
+        first_name = 'first_name %s' % self.create_uniq_id()
+
+        with self.pss_admin_app.test_client() as c:                        
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.get('/roles')            
+            pss_user_role = [role for role in json.loads(rv.data)['roles'] if (role['name'] == 'pss_user')][0]
+            rv = c.post('/pss_user',
+                        data=json.dumps({'username':new_username,
+                                         'password':'password2',
+                                         'first_name':first_name,
+                                         'last_name':'fake_last_name',
+                                         'extra_title':'jr',                                         
+                                         'role_id':pss_user_role['admin_role_id']}))
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.post('/pss_user',
+                        data=json.dumps({'username':new_username_2,
+                                         'password':'password2',
+                                         'first_name':first_name,
+                                         'last_name':'fake_last_name',
+                                         'extra_title':'sr',                                         
+                                         'role_id':pss_user_role['admin_role_id']}))
+            self.assertHttpCodeEquals(rv,200)
+            
     def test_create_pss_user_fails_with_bad_request_data(self):        
         new_username = 'new_user_%s'% self.create_uniq_id()
         bad_request = {'username':new_username,
@@ -160,6 +216,30 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
             self.assertEquals(len(new_user.admin_roles),0)
             self.assertEquals(len(new_user.event_roles),1)
             self.assertEquals(new_user.event_roles[0].name,roles_constants.TOURNAMENT_DIRECTOR)
+
+    def test_create_pss_event_user_fails_when_duplicate_usernames(self):
+        self.createEventsAndEventUsers()
+        new_username = 'new_user_dup_%s'% self.create_uniq_id()
+        with self.event_app.test_client() as c:                        
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
+            self.assertHttpCodeEquals(rv,200)            
+            td_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.TOURNAMENT_DIRECTOR).first()
+
+            rv = c.post('/pss_event_user',
+                        data=json.dumps({'username':new_username,
+                                         'password':'password2',
+                                         'first_name':'fake first name %s' % self.create_uniq_id(),
+                                         'last_name':'fake_last_name',
+                                         'event_role_id':td_role.event_role_id}))
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.post('/pss_event_user',
+                        data=json.dumps({'username':new_username,
+                                         'password':'password2',
+                                         'first_name':'fake first name %s' % self.create_uniq_id(),
+                                         'last_name':'fake_last_name',
+                                         'event_role_id':td_role.event_role_id}))
+            self.assertHttpCodeEquals(rv,409)
             
     def test_create_pss_event_user_while_logged_in_as_scorekeeper_fails(self):                
         self.createEventsAndEventUsers()

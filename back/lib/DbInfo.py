@@ -48,7 +48,7 @@ class DbInfo():
         return db_handle
 
     def create_db_and_tables(self, app, drop_tables=False):            
-        db_url = self.generate_db_url()        
+        db_url = self.generate_db_url()                
         if not database_exists(db_url):
             create_database(db_url)
         db_handle = self.create_db_handle(app)

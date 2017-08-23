@@ -10,7 +10,7 @@ from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
 from lib.flask_lib.permissions import create_tournament_permissions
 from lib.serializer.deserialize import deserialize_json
-
+from lib import orm_factories
 
 def edit_tournament_route(tournament,input_data,app):
     deserialize_json(tournament,input_data,app)
@@ -31,35 +31,30 @@ def edit_tournament_route(tournament,input_data,app):
         tournament.discount_stripe_price = None
         tournament.discount_stripe_sku = None
             
-def create_tournament_route(request,tables):
+def create_tournament_route(request,app):
     if request.data:        
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Username or password not specified')
     if 'tournament_name' not in input_data:
         raise BadRequest('Missing information')        
-    existing_tournament = tables.Tournaments.query.filter_by(tournament_name=input_data['tournament_name']).first()
+    existing_tournament = app.tables.Tournaments.query.filter_by(tournament_name=input_data['tournament_name']).first()
     if existing_tournament:
-        raise BadRequest('Trying to use an already used name for tournament')        
-    new_tournament = tables.Tournaments(tournament_name=input_data['tournament_name'])
-    tables.db_handle.session.add(new_tournament)
-    if 'multi_division_tournament_name' in input_data and 'multi_division_tournament_id' not in input_data:
-        multi_division_tournament = tables.MultiDivisionTournaments(multi_division_tournament_name=input_data['multi_division_tournament_name'])
-        tables.db_handle.session.add(multi_division_tournament)
-        new_tournament.multi_division_tournament=multi_division_tournament
-    if 'multi_division_tournament_id' in input_data:
-        multi_division_tournament = tables.MultiDivisionTournaments.query.filter_by(multi_division_tournament_id=input_data['multi_division_tournament_id']).first()
-        if multi_division_tournament is None:
-            raise BadRequest('Bad multi division tournament id')                            
-        new_tournament.multi_division_tournament=multi_division_tournament
-        
-    tables.db_handle.session.commit()
+        raise BadRequest('Trying to use an already used name for tournament')
+    multi_division_tournament_name = input_data.get('multi_division_tournament_name',None)
+    multi_division_tournament_id = input_data.get('multi_division_tournament_id',None)
+    
+    new_tournament = orm_factories.create_tournament(app,
+                                                     input_data['tournament_name'],
+                                                     multi_division_tournament_name,
+                                                     multi_division_tournament_id)    
+    app.tables.db_handle.session.commit()
     return new_tournament
 
 @blueprints.event_blueprint.route('/tournament',methods=['POST'])
 @load_tables
 def create_tournament(tables):    
-    new_tournament = create_tournament_route(request,tables)
+    new_tournament = create_tournament_route(request,current_app)
     tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
     return jsonify({'new_tournament':tournament_serializer(new_tournament)})
 

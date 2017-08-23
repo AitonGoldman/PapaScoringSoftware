@@ -25,6 +25,7 @@ class RouteEventTest(PssUnitTestBase):
         self.mock_new_app = MagicMock()
         self.mock_new_app.name='poop'
         
+    # er - this should be testing the route, not the orm factories 
     def test_create_event_route(self):
         mock_input_data={'name':'poop'}
         self.mock_event.name='poop'

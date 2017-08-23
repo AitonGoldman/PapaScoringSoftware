@@ -23,14 +23,14 @@ def edit_tournament_machine_route(tournament_machine_id,request,app):
          
     return existing_tournament_machine
 
-def create_tournament_machine_route(request,tables):
+def create_tournament_machine_route(request,app):
     if request.data:        
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Username or password not specified')
     if 'tournament_id' not in input_data or 'machine_id' not in input_data:
         raise BadRequest('Missing information')        
-    existing_tournament_machine = tables.TournamentMachines.query.filter_by(machine_id=input_data['machine_id']).first()
+    existing_tournament_machine = app.tables.TournamentMachines.query.filter_by(machine_id=input_data['machine_id']).first()
     if existing_tournament_machine:
         if existing_tournament_machine.removed is False:
             raise BadRequest('Trying to add an already added machine')
@@ -39,24 +39,24 @@ def create_tournament_machine_route(request,tables):
             existing_tournament_machine.active = True
             return existing_tournament_machine
             
-    existing_tournament = tables.Tournaments.query.filter_by(tournament_id=input_data['tournament_id']).first()
-    existing_machine = tables.Machines.query.filter_by(machine_id=input_data['machine_id']).first()
+    existing_tournament = app.tables.Tournaments.query.filter_by(tournament_id=input_data['tournament_id']).first()
+    existing_machine = app.tables.Machines.query.filter_by(machine_id=input_data['machine_id']).first()
     if existing_tournament is None or existing_machine is None:
         raise BadRequest('Trying to add to a bad tournament, or trying to add a bad machine')        
 
-    new_tournament_machine = tables.TournamentMachines(machine_id=input_data['machine_id'],
+    new_tournament_machine = app.tables.TournamentMachines(machine_id=input_data['machine_id'],
                                                    tournament_machine_name=existing_machine.machine_name,
                                                    tournament_machine_abbreviation=existing_machine.abbreviation,
                                                    active=True)    
-    tables.db_handle.session.add(new_tournament_machine)
+    app.tables.db_handle.session.add(new_tournament_machine)
     existing_tournament.tournament_machines.append(new_tournament_machine)    
-    tables.db_handle.session.commit()
+    app.tables.db_handle.session.commit()
     return new_tournament_machine
 
 @blueprints.event_blueprint.route('/tournament_machine',methods=['POST'])
 @load_tables
 def create_tournament_machine(tables):    
-    new_tournament_machine = create_tournament_machine_route(request,tables)
+    new_tournament_machine = create_tournament_machine_route(request,current_app)
     tournament_machine_serializer = generate_generic_serializer(serializer.generic.ALL)
     return jsonify({'new_tournament_machine':tournament_machine_serializer(new_tournament_machine)})
 

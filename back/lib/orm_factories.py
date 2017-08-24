@@ -3,7 +3,12 @@ from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from base64 import b64encode
 import os
 from lib import roles_constants
+from lib import token_helpers
 import random
+from lib.serializer import deserialize
+import datetime
+
+ACTIONS_TO_ADD_TICKET_SUMMARY_TO = ["Score Recorded","Ticket Purchase","Player Ticket Purchase Complete"]
 
 #FIXME : move this back to route
 def create_event(user_creating_event, tables, input_data, new_event_tables):
@@ -132,3 +137,44 @@ def create_tournament(flask_app,tournament_name,
         flask_app.tables.db_handle.session.commit()
     return new_tournament
 
+def create_audit_log(app, audit_log_params, commit=False):
+    # action,user_id, player_id=None,
+    #                 division_machine_id=None,team_id=None,generic_json_data=None,
+    #                 commit=True,summary=False,description=None
+    global ACTIONS_TO_ADD_TICKET_SUMMARY_TO
+    tables = app.tables
+    audit_log = tables.AuditLogs()
+    deserialize.deserialize_json(audit_log,audit_log_params,app,allow_foreign_keys=True)
+    #audit_log.action=action
+    audit_log.action_date=datetime.datetime.now()    
+    if 'pss_user_id' in audit_log_params and audit_log_params['pss_user_id'] is not None:
+        audit_log.player_initiated=False
+    if 'player_id' in audit_log_params and audit_log_params['player_id'] is not None and 'pss_user_id' not in audit_log_params:
+        audit_log.player_initiated=True            
+    tables.db_handle.session.add(audit_log)
+    if commit is True:
+        tables.db_handle.session.commit()    
+    if audit_log_params['action'] not in ACTIONS_TO_ADD_TICKET_SUMMARY_TO:
+        return
+    player = tables.Players.query.filter_by(player_id=audit_log_params['player_id']).first()
+    
+    tournament_token_count,meta_tournament_token_count = token_helpers.get_number_of_unused_tickets_for_player_in_all_tournaments(player,
+                                                                                                                                  app,
+                                                                                                                                  remove_empty_tournaments=True)
+    token_count_string = "ticket summary - " + ", ".join([token_count['tournament_name']+':'+str(token_count['count']) for token_count in tournament_token_count])
+    #print tournament_token_count_string
+    if len(meta_tournament_token_count) > 0:
+        meta_tournament_token_count_string = ", ".join([token_count['meta_tournament_name']+':'+str(token_count['count']) for token_count in meta_tournament_token_count])
+        token_count_string = token_count_string + ", "+meta_tournament_token_count_string
+    
+    
+    audit_log_ticket_summary = tables.AuditLogs()
+    audit_log_ticket_summary.action="Ticket Summary"
+    audit_log_ticket_summary.action_date=datetime.datetime.now()
+    if 'player_id' in audit_log_params and audit_log_params['player_id']:
+         audit_log_ticket_summary.player_id=audit_log_params['player_id']
+    audit_log_ticket_summary.description=token_count_string    
+    audit_log_ticket_summary.summary=True
+    tables.db_handle.session.add(audit_log_ticket_summary)
+    if commit is True:
+        tables.db_handle.session.commit()

@@ -4,7 +4,7 @@ from flask import jsonify,current_app,request
 from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_user, logout_user, current_user
 import json
-from lib import orm_factories
+from lib import orm_factories,token_helpers
 from lib.serializer.generic import generate_generic_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
@@ -63,21 +63,21 @@ def calculate_list_of_tickets_and_prices_for_player(current_ticket_count,
     
         
     
-def get_number_of_unused_tickets_for_player(player,flask_app,meta_tournament=None,tournament=None):
-    #FIXME : explore if it makes sense to query al tokens (for all divisions) at once
-    query = flask_app.tables.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False)
-    if player.team_id is None and tournament and tournament.team_tournament:
-        return 0
-    if tournament:
-        if tournament.team_tournament is True:
-            token_count = query.filter_by(tournament_id=tournament.tournament_id,team_id=player.team_id).count()            
-        else:            
-            token_count = query.filter_by(player_id=player.player_id,tournament_id=tournament.tournament_id).count()
-    if meta_tournament:
-        token_count = query.filter_by(meta_tournament_id=meta_tournament.meta_tournament_id).count()    
-    return token_count
+# def get_number_of_unused_tickets_for_player(player,flask_app,meta_tournament=None,tournament=None):
+#     #FIXME : explore if it makes sense to query al tokens (for all divisions) at once
+#     query = flask_app.tables.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False)
+#     if player.team_id is None and tournament and tournament.team_tournament:
+#         return 0
+#     if tournament:
+#         if tournament.team_tournament is True:
+#             token_count = query.filter_by(tournament_id=tournament.tournament_id,team_id=player.team_id).count()            
+#         else:            
+#             token_count = query.filter_by(player_id=player.player_id,tournament_id=tournament.tournament_id).count()
+#     if meta_tournament:
+#         token_count = query.filter_by(meta_tournament_id=meta_tournament.meta_tournament_id).count()    
+#     return token_count
         
-@blueprints.event_blueprint.route('/token/<player_id>',methods=['GET'])
+@blueprints.event_blueprint.route('/token/player_id/<player_id>',methods=['GET'])
 @load_tables
 def get_player_tokens_count(tables,player_id):                
     player = tables.Players.query.filter_by(player_id=player_id).first()
@@ -87,19 +87,19 @@ def get_player_tokens_count(tables,player_id):
     meta_tournament_ticket_prices=[]
     
     for tournament in tables.Tournaments.query.filter_by(meta_tournament_id=None).all():
-        count = get_number_of_unused_tickets_for_player(player,current_app,tournament=tournament)
+        count = token_helpers.get_number_of_unused_tickets_for_player(player,current_app,tournament=tournament)
         token_count_per_tournament.append({tournament.tournament_id:count})
         tournament_ticket_prices.append(calculate_list_of_tickets_and_prices_for_player(count,
                                                                                         player,
                                                                                         current_app,
                                                                                         tournament=tournament))        
     for meta_tournament in tables.MetaTournaments.query.all():
-        count = get_number_of_unused_tickets_for_player(player,current_app,meta_tournament=meta_tournament)
+        count = token_helpers.get_number_of_unused_tickets_for_player(player,current_app,meta_tournament=meta_tournament)
         token_count_per_meta_tournament.append({meta_tournament.meta_tournament_id:count})
         meta_tournament_ticket_prices.append(calculate_list_of_tickets_and_prices_for_player(count,
                                                                                         player,
                                                                                         current_app,
-                                                                                        meta_tournament=meta_tournament))        
+                                                                                        meta_tournament=meta_tournament))
         
     return jsonify({'tournament_token_count':token_count_per_tournament,
                     'meta_tournament_token_count':token_count_per_meta_tournament,

@@ -14,6 +14,7 @@ from MetaTournaments import generate_meta_tournaments_class
 from Machines import generate_machines_class
 from TournamentMachines import generate_tournament_machines_class
 from Tokens import generate_tokens_class
+from AuditLogs import generate_audit_logs_class
 
 
 class ImportedTables():
@@ -33,7 +34,9 @@ class ImportedTables():
         self.MultiDivisionTournaments = generate_mutli_division_tournaments_class(db_handle,event_name)
         self.Tournaments = generate_tournaments_class(db_handle,event_name)
         self.MetaTournaments = generate_meta_tournaments_class(db_handle,event_name)
-        self.Tokens = generate_tokens_class(db_handle,event_name)        
+        self.Tokens = generate_tokens_class(db_handle,event_name)
+        self.AuditLogs = generate_audit_logs_class(db_handle,event_name)        
+        
         self.db_handle=db_handle
     def get_list_of_event_specific_tables(self):
         #FIXME : make this do something

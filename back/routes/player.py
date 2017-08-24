@@ -11,6 +11,16 @@ from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
 
+def check_multi_division_tournament_selection_is_valid(app, player):
+    if player.event_player.multi_division_tournament_id is None:
+        return
+    tournament = app.tables.query.Tournaments.query.filter_by(tournament_id=player.event_player.multi_division_tournament_id)
+    if tournament.require_selection_of_multidivision_tournament and player.multi_division_tournament_id is None:
+        raise BadRequest('No division in the multi division tournament has been selected')
+    if tournament.ifpa_rank_restriction and player.event_player and player.event_player.ifpa_ranking < tournament.ifpa_rank_restriction:
+        raise BadRequest('Ifpa restrictions have been violated')    
+    pass
+
 def create_player_route(request, app):            
     tables = app.tables
     if request.data:        
@@ -28,6 +38,7 @@ def create_player_route(request, app):
                                                    extra_title=extra_title).first()
     if existing_player is not None:
         raise Conflict('Player %s already exists.' % existing_player)
+    
     new_player = orm_factories.create_player(app,
                                              input_data['first_name'],
                                              input_data['last_name'],
@@ -36,6 +47,9 @@ def create_player_route(request, app):
         new_player.extra_title=extra_title
     if 'ifpa_id' in input_data:
         new_player.ifpa_id=input_data['ifpa_id']
+    check_multi_division_tournament_selection_is_valid(app, new_player)        
+    if 'multi_division_tournament_id' in input_data:
+        new_player.event_player.multi_division_tournament_id = input_data['multi_division_tournament_id']
         
     tables.db_handle.session.add(new_player)
     tables.db_handle.session.commit()
@@ -48,6 +62,10 @@ def add_existing_player_to_event_route(input_data,player,app):
     orm_factories.populate_player(app,
                                   player,
                                   input_data['ifpa_ranking'])
+    check_multi_division_tournament_selection_is_valid(app, player)        
+    if 'multi_division_tournament_id' in input_data:
+        player.event_player.multi_division_tournament_id = input_data['multi_division_tournament_id']
+    
     tables.db_handle.session.commit()
     return player
 

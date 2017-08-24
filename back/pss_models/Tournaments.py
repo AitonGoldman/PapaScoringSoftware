@@ -32,6 +32,7 @@ def generate_tournaments_class(db_handle,event_name):
         ifpa_rank_restriction=db_handle.Column(db_handle.Integer)
         team_tournament=db_handle.Column(db_handle.Boolean,default=False)
         number_players_per_team=db_handle.Column(db_handle.Integer,default=2)
+        require_selection_of_multidivision_tournament=db_handle.Column(db_handle.Boolean,default=False)
         
         finals_style=db_handle.Column(db_handle.String(100),default="PAPA")
         number_of_qualifiers=db_handle.Column(db_handle.Integer,default=24)

@@ -28,3 +28,15 @@ def get_number_of_unused_tickets_for_player(player,flask_app,meta_tournament=Non
     if meta_tournament:
         token_count = query.filter_by(meta_tournament_id=meta_tournament.meta_tournament_id).count()    
     return token_count
+
+def get_normal_and_discount_amounts(tournament,amount):
+    if tournament.number_of_tickets_for_discount:
+        if amount < tournament.number_of_tickets_for_discount:
+            return (amount,0)
+        if amount == tournament.number_of_tickets_for_discount:
+            return (0,tournament.number_of_tickets_for_discount)        
+        return (amount%tournament.number_of_tickets_for_discount,int(amount/tournament.number_of_tickets_for_discount))
+    else:
+        return (amount,0)
+    pass
+

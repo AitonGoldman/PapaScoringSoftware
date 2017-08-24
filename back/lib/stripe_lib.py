@@ -14,4 +14,4 @@ def get_sku_price(sku,STRIPE_API_KEY):
     if sku in dict_sku_prices:
         return dict_sku_prices[sku]
     else:        
-        return None
+        raise BadRequest('invalid sku specified')

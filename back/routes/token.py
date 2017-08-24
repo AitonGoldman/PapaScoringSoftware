@@ -9,6 +9,109 @@ from lib.serializer.generic import generate_generic_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
+from lib.flask_lib.permissions import event_user_buy_tickets_permissions
+from lib.flask_lib.permissions import player_buy_tickets_permissions
+
+def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
+                          type, player,
+                          app, new_token_purchase,
+                          player_initiated=False, comped=False):    
+    purchase_summary = []
+    if len(list_of_tournament_tokens) == 0:
+        return []
+    for token_count in list_of_tournament_tokens:
+        tournament = tournaments_dict[token_count['%s_id' % type]]
+        normal_and_discount_amounts = token_helpers.get_normal_and_discount_amounts(tournament,int(token_count['token_count']))
+        if int(token_count['token_count'])==0:
+            continue
+        purchase_summary.append([tournament.tournament_name,token_count['token_count']])
+        for count in range(int(token_count['token_count'])):
+            new_token = app.tables.Tokens()
+            if player_initiated:
+                new_token.paid_for=False
+            else:
+                new_token.paid_for=True
+            new_token.comped=comped
+            new_token.player_id=player.player_id
+            if tournament.team_tournament and player.team_id:
+                new_token.team_id=player.team_id
+            if type == "tournament":
+                new_token.tournament_id=tournament.tournament_id
+            else:
+                new_token.meta_tournament_id=tournament.meta_tournament_id
+                
+            app.tables.db_handle.session.add(new_token)            
+            new_token_purchase.tokens.append(new_token)
+    return purchase_summary
+    
+def verify_tournament_and_meta_tournament_request_counts_are_valid(input_data, player,
+                                                                   type, tournaments_dict,
+                                                                   app):
+    list_of_tournament_tokens=[]
+    list_of_meta_tournament_tokens=[]
+
+    for token_count in input_data['%s_token_counts' % type]:        
+        if int(token_count['token_count']) == 0:
+            continue
+        tournament = tournaments_dict[token_count['%s_id' % type]]
+        if type == 'tournament':
+            request_token_count = token_helpers.get_number_of_unused_tickets_for_player(player,app,tournament=tournament)
+        else:
+            request_token_count = token_helpers.get_number_of_unused_tickets_for_player(player,app,meta_tournament=tournament)            
+        max_tokens_player_is_allowed_to_buy = tournament.number_of_unused_tickets_allowed - request_token_count
+        if max_tokens_player_is_allowed_to_buy-int(token_count['token_count'])<0:
+            raise BadRequest('Fuck off, Ass Wipe')
+        if tournament.ifpa_rank_restriction and player.event_player.ifpa_ranking and player.event_player.ifpa_ranking < tournament.ifpa_rank_restriction:
+            raise BadRequest('Ifpa restrictions have been violated')    
+        
+        list_of_tournament_tokens.append(token_count)
+    return list_of_tournament_tokens
+    
+
+def purchase_tickets_route(request,player,app,player_initiated=False):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('No info in request')        
+
+    if player.is_active() is False:
+        #FIXME : investigate use player.is_active() for making player inactive    
+        pass
+
+    list_of_tournament_tokens=[]
+    list_of_meta_tournament_tokens=[]
+
+    comped = input_data.get('comped',False)
+    
+    tournaments_dict = {tournament.tournament_id:tournament for tournament in app.tables.Tournaments.query.all()}
+    meta_tournaments_dict = {meta_tournament.meta_tournament_id:meta_tournament for meta_tournament in app.tables.MetaTournaments.query.all()}
+    
+    list_of_tournament_tokens = verify_tournament_and_meta_tournament_request_counts_are_valid(input_data, player,
+                                                                                               "tournament", tournaments_dict,
+                                                                                               app)
+    list_of_meta_tournament_tokens = verify_tournament_and_meta_tournament_request_counts_are_valid(input_data, player,
+                                                                                                    "meta_tournament", meta_tournaments_dict,
+                                                                                                    app)
+
+    tokens_created = []
+    new_token_purchase=app.tables.TokenPurchases()
+    app.tables.db_handle.session.add(new_token_purchase)    
+
+    purchase_summary = insert_tokens_into_db(list_of_tournament_tokens,
+                                             tournaments_dict,
+                                             "tournament",
+                                             player,
+                                             app,
+                                             new_token_purchase,
+                                             player_initiated=player_initiated,
+                                             comped=comped)
+    meta_purchase_summary = insert_tokens_into_db(list_of_meta_tournament_tokens, meta_tournaments_dict,
+                                                  "meta_tournament", player,
+                                                  app, new_token_purchase,
+                                                  player_initiated=player_initiated, comped=comped)    
+    
+    app.tables.db_handle.session.commit()
+    return new_token_purchase,purchase_summary+meta_purchase_summary
 
 def get_discount_price(tournament):
     if tournament.use_stripe:
@@ -22,10 +125,8 @@ def get_price(tournament):
     else:
         return tournament.manually_set_price
     
-def calculate_list_of_tickets_and_prices_for_player(current_ticket_count,
-                                                    player,
-                                                    flask_app,
-                                                    meta_tournament=None,
+def calculate_list_of_tickets_and_prices_for_player(current_ticket_count, player,
+                                                    flask_app, meta_tournament=None,
                                                     tournament=None):
     if meta_tournament:
         tournament = meta_tournament
@@ -60,23 +161,7 @@ def calculate_list_of_tickets_and_prices_for_player(current_ticket_count,
         current_ticket_amount=current_ticket_amount+1        
     cutoff_index=tournament.number_of_unused_tickets_allowed-current_ticket_count
     return [{'amount':0,'price':0}]+output_list[0:cutoff_index]
-    
-        
-    
-# def get_number_of_unused_tickets_for_player(player,flask_app,meta_tournament=None,tournament=None):
-#     #FIXME : explore if it makes sense to query al tokens (for all divisions) at once
-#     query = flask_app.tables.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False)
-#     if player.team_id is None and tournament and tournament.team_tournament:
-#         return 0
-#     if tournament:
-#         if tournament.team_tournament is True:
-#             token_count = query.filter_by(tournament_id=tournament.tournament_id,team_id=player.team_id).count()            
-#         else:            
-#             token_count = query.filter_by(player_id=player.player_id,tournament_id=tournament.tournament_id).count()
-#     if meta_tournament:
-#         token_count = query.filter_by(meta_tournament_id=meta_tournament.meta_tournament_id).count()    
-#     return token_count
-        
+            
 @blueprints.event_blueprint.route('/token/player_id/<player_id>',methods=['GET'])
 @load_tables
 def get_player_tokens_count(tables,player_id):                
@@ -88,18 +173,22 @@ def get_player_tokens_count(tables,player_id):
     
     for tournament in tables.Tournaments.query.filter_by(meta_tournament_id=None).all():
         count = token_helpers.get_number_of_unused_tickets_for_player(player,current_app,tournament=tournament)
-        token_count_per_tournament.append({tournament.tournament_id:count})
+        token_count_per_tournament.append({'tournament_name':tournament.tournament_name,
+                                           'tournament_id':tournament.tournament_id,
+                                           'count':count})
         tournament_ticket_prices.append(calculate_list_of_tickets_and_prices_for_player(count,
                                                                                         player,
                                                                                         current_app,
                                                                                         tournament=tournament))        
     for meta_tournament in tables.MetaTournaments.query.all():
         count = token_helpers.get_number_of_unused_tickets_for_player(player,current_app,meta_tournament=meta_tournament)
-        token_count_per_meta_tournament.append({meta_tournament.meta_tournament_id:count})
+        token_count_per_meta_tournament.append({'meta_tournament_name':meta_tournament.meta_tournament_name,
+                                                'meta_tournament_id':meta_tournament.meta_tournament_id,
+                                                'count':count})
         meta_tournament_ticket_prices.append(calculate_list_of_tickets_and_prices_for_player(count,
-                                                                                        player,
-                                                                                        current_app,
-                                                                                        meta_tournament=meta_tournament))
+                                                                                             player,
+                                                                                             current_app,
+                                                                                             meta_tournament=meta_tournament))
         
     return jsonify({'tournament_token_count':token_count_per_tournament,
                     'meta_tournament_token_count':token_count_per_meta_tournament,
@@ -107,3 +196,25 @@ def get_player_tokens_count(tables,player_id):
                     'meta_tournament_ticket_prices':meta_tournament_ticket_prices})
 
 
+@blueprints.event_blueprint.route('/token',methods=['POST'])
+@player_buy_tickets_permissions.require(403)
+@load_tables
+def player_purchase_tokens(tables,player_id):
+    # check if current user is a player or not
+    pass
+
+@blueprints.event_blueprint.route('/token/player_id/<player_id>',methods=['POST'])
+@event_user_buy_tickets_permissions.require(403)
+@load_tables
+def event_user_purchase_tokens(tables,player_id):
+    player = current_app.tables.Players.query.filter_by(player_id=player_id).first()
+    if player is None:
+        raise BadRequest('player does not exist')
+    new_token_purchase,purchase_summary = purchase_tickets_route(request,player,current_app,player_initiated=False)
+    generic_serializer = generate_generic_serializer(serializer.generic.ALL)
+    return jsonify({'new_token_purchase':generic_serializer(new_token_purchase),
+                    'purchase_summary':purchase_summary})
+    
+  
+    # check if current user is a player or not
+    pass

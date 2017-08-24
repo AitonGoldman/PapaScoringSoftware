@@ -149,5 +149,7 @@ class RouteTokenTest(PssUnitTestBase):
         self.assertEquals(returned_ticket_and_price_list,expected_ticket_and_price_list)
  
 
+    def test_check_multi_division_tournament_selection_is_valid(self):
+        pass
     
     

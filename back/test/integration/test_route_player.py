@@ -184,6 +184,7 @@ class RoutePlayer(pss_integration_test_existing_event.PssIntegrationTestExisting
             self.assertEquals(player['first_name'],'playerOneFirstName')
             self.assertTrue(player['event_player'] is not None)
 
-                        
+    def test_add_existing_player_to_event_with_multi_division_tournament_selected(self):
+        pass
             
             

@@ -99,6 +99,10 @@ A tournament can be marked as active or inactive.  In an active tournament, play
 
 Tournaments have a property "allow_ticket_purchases" - if the property is set to false, then ticket purchases will not be allowed (from the desk or directly by players).  Note that this can be set independently of the tournament active/inactive flag (i.e. you can cut off ticket sales before the tournament ends).
 
+## MetaTournaments
+
+Let's say you are running a multi-day tournament, and you want to have a seperate classics tournament on each day of the event.  MetaTournaments allow players to purchase classics tickets that are good for any of the classics tournaments.  Event users with the Tournament_Director role can create MetaTournaments and add existing divisions to them.  Note that MetaTournaments are only relevant when purchasing tickets, and are not used during scorekeeping or displaying results. 
+
 ## Creating users and players, or adding existing users and players to events
 
 A Event Owner user can be created in 2 ways
@@ -130,6 +134,7 @@ The PSS allows you to create teams and assign players to teams.  Teams are event
 Each Tournament allows you to configure.. 
 - whether or not the Tournament is a team tournament.
 - the max number of people per team.
+
 
 
 

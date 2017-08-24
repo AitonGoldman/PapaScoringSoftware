@@ -27,7 +27,7 @@ Note that this means there is a global list of players - i.e. you don't have to 
 
 ## Teams
 
-Teams are represented by the Teams table.  There is a one-to-many relationship between Teams and Players (i.e. multiple players can be on one team).  Note that the PSS puts no hard-coded upper limit on the number of players on a team.
+Teams are represented by the Teams table.  There is a one-to-many relationship between Teams and Players that is event specific (i.e. multiple players can be on one team).  Note that the PSS puts no hard-coded upper limit on the number of players on a team.
 
 ## A little bit more about PssUsers/Players and EventUsers/EventPlayers
 
@@ -38,14 +38,20 @@ Event Users/Players need the ability to have a seperate password/pin number (and
 
 We provide this functionality by creating a EventUsers/EventPlayers tables for each event.  This table contains the encrypted password/pin number for a Event User/Player which is only valid for the given event.  There is a 1-to-1 relationship between the PssUsers/Players table and the event specific EventUsers/EventPlayers table.
 
-## Tournaments, MultiDivisionTournaments, DivisionMachines, Machines!
-Tournaments are represented in the Tournaments table.  It captures any configuration information for that tournament.  MultiDivisionTournaments represent a tournament with multiple divisions.  DivisionMachines represents machines in the tournament bank.  Machines represents the list of machines that the PSS knows about.
+## Tournaments, MultiDivisionTournaments, TournamentMachines, Machines!
+Tournaments are represented in the Tournaments table.  It captures any configuration information for that tournament.  MultiDivisionTournaments represent a tournament with multiple divisions.  TournamentMachines represents machines in the tournament bank.  Machines represents the list of machines that the PSS knows about.
 
 There is a one-to-many relationship between DivisionMachines and Machines (i.e. there can be 3 different Metallica's in 3 different Tournaments in an Event)
 There is a one-to-many relationship between Tournaments and MultiDivisionTournaments (i.e. multiple Tournaments can be linked to a single MultiDivisionTournament)
 There is a one-to-many relationship between Tournaments and DivisionMachines (i.e. one Tournament can have multiple DivisionMachines)
 
 Note that in the case of a multi-division tournament, the "divisions" will be represented as seperate Tournaments with a entry in the MultiDivisionTournaments table.  This information will only be used at 2 times : 1) at ticket purchase time (to make sure the player doesn't accidently buy tickets for a division they are not registered for).  2) if a player wants to move between divisions, it will not allow players to move "down".
+
+## MetaTournaments
+The MetaTournaments table is event specific, and has a one to many relationship with the event Tournaments table (i.e. multiple tournaments can be part of a single MetaTournament).  For an explanation of why this is done, please see the architecture overview here : 
+
+## Token
+
 
 
 

@@ -39,16 +39,23 @@ class PssUnitTestBase(unittest.TestCase):
         mock_user.verify_password.return_value=True            
         return mock_user
 
-    def generate_side_effect_confirm_args(self,args_to_confirm,return_value=None):
+    def generate_side_effect_confirm_args(self,args_to_confirm,values=None,return_value=None,return_count=None):
         def side_effect_confirm_args(*args,**kargs):                        
             for arg_to_confirm in args_to_confirm:                
                 if arg_to_confirm not in kargs:
                     raise Exception('args %s not found' % arg_to_confirm)
+                if values and arg_to_confirm in values and values[arg_to_confirm]!=kargs[arg_to_confirm]:
+                    raise Exception('arg "%s" is expected to be "%s", but instead got "%s"' % (arg_to_confirm, values[arg_to_confirm],kargs[arg_to_confirm]))
+                    
             for arg_actually_used in kargs.keys():
                 if arg_actually_used not in args_to_confirm:
                     print "\n !!!!!!! found arg %s was used, but was not expecting it\n" % arg_actually_used            
             if return_value:
                 return return_value
+            elif return_count:                
+                count_mock = MagicMock()
+                count_mock.count.return_value=return_count
+                return count_mock
             else:
                 return MagicMock()
         return side_effect_confirm_args

@@ -6,3 +6,4 @@ import player
 import ifpa
 import tournament
 import tournament_machine
+import token

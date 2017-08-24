@@ -7,19 +7,20 @@ def generate_tournaments_class(db_handle,event_name):
         tournament_name=db_handle.Column(db_handle.String(100))
         multi_division_tournament_name=db_handle.Column(db_handle.String(100))
         multi_division_tournament_id=db_handle.Column('multi_division_tournament_id', db_handle.Integer, db_handle.ForeignKey('multi_division_tournaments_'+event_name+'.multi_division_tournament_id'))
+        meta_tournament_id=db_handle.Column('meta_tournament_id', db_handle.Integer, db_handle.ForeignKey('meta_tournaments_'+event_name+'.meta_tournament_id'))        
         
         queuing=db_handle.Column(db_handle.Boolean,default=False)
         num_spaces_to_bump_player_down_queue=db_handle.Column(db_handle.Integer,default=1)
 
-        use_stripe=active=db_handle.Column(db_handle.Boolean,default=False)
+        use_stripe=db_handle.Column(db_handle.Boolean,default=False)
         stripe_sku=db_handle.Column(db_handle.String(100))
         discount_stripe_sku=db_handle.Column(db_handle.String(100))
         stripe_price=db_handle.Column(db_handle.Float)
         discount_stripe_price=db_handle.Column(db_handle.Float)
         manually_set_price=db_handle.Column(db_handle.Float)
         #FIXME : make ticket discounts more flexible
-        minimum_number_of_tickets_allowed=db_handle.Column(db_handle.Integer)
-        minimum_number_of_tickets_allowed_for_each_purchase=db_handle.Column(db_handle.Integer)
+        minimum_number_of_tickets_allowed=db_handle.Column(db_handle.Integer,default=1)
+        ticket_increment_for_each_purchase=db_handle.Column(db_handle.Integer,default=1)
         number_of_tickets_for_discount=db_handle.Column(db_handle.Integer)
         discount_price=db_handle.Column(db_handle.Integer)
         number_of_unused_tickets_allowed=db_handle.Column(db_handle.Integer,default=15)

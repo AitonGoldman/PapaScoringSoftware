@@ -12,6 +12,8 @@ from sqlalchemy.orm import joinedload
 from lib.flask_lib.permissions import event_user_buy_tickets_permissions
 from lib.flask_lib.permissions import player_buy_tickets_permissions
 
+#FIXME : figure out a way to just pass type into functions that need to accept both tournaments and meta_tournaments (i.e. see insert_tokens_into_db)
+
 def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
                           type, player,
                           app, new_token_purchase,
@@ -23,8 +25,14 @@ def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
         tournament = tournaments_dict[token_count['%s_id' % type]]
         normal_and_discount_amounts = token_helpers.get_normal_and_discount_amounts(tournament,int(token_count['token_count']))
         if int(token_count['token_count'])==0:
-            continue
-        purchase_summary.append([tournament.tournament_name,token_count['token_count']])
+            continue        
+        if type == "tournament":
+            ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,tournament=tournament)
+        else:
+            ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,meta_tournament=meta_tournament)
+
+        #FIXME : this should be a dict, not a list
+        purchase_summary.append([tournament.tournament_name,token_count['token_count'],ticket_cost])
         for count in range(int(token_count['token_count'])):
             new_token = app.tables.Tokens()
             if player_initiated:
@@ -93,37 +101,43 @@ def purchase_tickets_route(request,player,app,player_initiated=False):
                                                                                                     "meta_tournament", meta_tournaments_dict,
                                                                                                     app)
 
-    tokens_created = []
     new_token_purchase=app.tables.TokenPurchases()
     app.tables.db_handle.session.add(new_token_purchase)    
 
-    purchase_summary = insert_tokens_into_db(list_of_tournament_tokens,
-                                             tournaments_dict,
-                                             "tournament",
-                                             player,
-                                             app,
-                                             new_token_purchase,
-                                             player_initiated=player_initiated,
-                                             comped=comped)
+    purchase_summary = insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
+                                             "tournament", player,
+                                             app, new_token_purchase,
+                                             player_initiated=player_initiated, comped=comped)
     meta_purchase_summary = insert_tokens_into_db(list_of_meta_tournament_tokens, meta_tournaments_dict,
                                                   "meta_tournament", player,
                                                   app, new_token_purchase,
                                                   player_initiated=player_initiated, comped=comped)    
-    
+    total_cost = sum(int(summary[2]['price']) for summary in purchase_summary+meta_purchase_summary)
+    new_token_purchase.total_cost=total_cost
+    if player_initiated is False:
+        new_token_purchase.completed_purchase=True
     app.tables.db_handle.session.commit()
     return new_token_purchase,purchase_summary+meta_purchase_summary
 
+#FIXME : Better name for this
 def get_discount_price(tournament):
     if tournament.use_stripe:
         return tournament.discount_stripe_price
     else:
         return tournament.discount_price
 
+#FIXME : Better name for this
 def get_price(tournament):
     if tournament.use_stripe:
         return tournament.stripe_price
     else:
         return tournament.manually_set_price
+
+def calculate_cost_of_single_ticket_count(amount,player,flask_app,meta_tournament=None,tournament=None):
+    calculated_list = calculate_list_of_tickets_and_prices_for_player(0, player,
+                                                                      flask_app, meta_tournament=meta_tournament,
+                                                                      tournament=tournament)
+    return [calculated_cost for calculated_cost in calculated_list if int(calculated_cost['amount'])==int(amount)][0]
     
 def calculate_list_of_tickets_and_prices_for_player(current_ticket_count, player,
                                                     flask_app, meta_tournament=None,
@@ -211,10 +225,12 @@ def event_user_purchase_tokens(tables,player_id):
     if player is None:
         raise BadRequest('player does not exist')
     new_token_purchase,purchase_summary = purchase_tickets_route(request,player,current_app,player_initiated=False)
+    #total_cost = sum(int(summary[2]['price']) for summary in purchase_summary)
     generic_serializer = generate_generic_serializer(serializer.generic.ALL)
     return jsonify({'new_token_purchase':generic_serializer(new_token_purchase),
-                    'purchase_summary':purchase_summary})
-    
+                    'purchase_summary':purchase_summary,
+                    'total_cost':new_token_purchase.total_cost})
+
   
     # check if current user is a player or not
     pass

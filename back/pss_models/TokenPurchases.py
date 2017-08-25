@@ -10,6 +10,7 @@ def generate_token_purchases_class(db_handle,event_name):
         completed_purchase=db_handle.Column(db_handle.Boolean,default=False)
         stripe_transaction_id = db_handle.Column(db_handle.String(180))
         tokens = db_handle.relationship('Tokens')
+        total_cost = db_handle.Column(db_handle.Integer)
 
     return TokenPurchases
     

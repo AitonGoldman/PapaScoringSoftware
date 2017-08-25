@@ -73,7 +73,8 @@ def player_login_route(request,tables):
 @load_tables
 def pss_admin_login(tables):    
     pss_user = pss_login_route(request,tables,is_pss_admin_event=True)
-    login_user(pss_user)    
+    if login_user(pss_user) is False:
+        raise Unauthorized('User is not active')
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_user.pss_user_id))
     pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
     user_dict=pss_user_serializer(pss_user)
@@ -94,7 +95,8 @@ def pss_logout(tables):
 @load_tables
 def pss_event_user_login(tables):    
     pss_event_user = pss_login_route(request,tables,is_pss_admin_event=False)
-    login_user(pss_event_user)    
+    if login_user(pss_event_user) is False:
+        raise Unauthorized('User is not active')
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_event_user.pss_user_id))
     pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
     user_dict=pss_user_serializer(pss_event_user)
@@ -104,7 +106,8 @@ def pss_event_user_login(tables):
 @load_tables
 def player_login(tables):    
     player = player_login_route(request,tables)
-    login_user(player)    
+    if login_user(player) is False:
+        raise Unauthorized('Player is not active')
     identity_changed.send(current_app._get_current_object(), identity=Identity(player.player_id))
     player_serializer = generate_player_to_dict_serializer(serializer.player.ALL)
     user_dict=player_serializer(player)

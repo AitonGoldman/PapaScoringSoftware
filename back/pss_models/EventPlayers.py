@@ -12,6 +12,7 @@ def generate_event_players_class(db_handle,event_name):
         event_player_pin = db_handle.Column(db_handle.Integer)        
         ifpa_ranking = db_handle.Column(db_handle.Integer)        
         multi_division_tournament_id = db_handle.Column("tournament_id", db_handle.Integer, db_handle.ForeignKey("tournaments_"+event_name+".tournament_id"))
+        active=db_handle.Column(db_handle.Boolean(),default=True)
         
     return EventPlayers
     

@@ -10,6 +10,7 @@ def generate_event_users_class(db_handle,event_name):
         __tablename__="event_users_"+event_name                
         password_crypt = db_handle.Column(db_handle.String(134))
         pss_user_id = db_handle.Column('pss_user_id', db_handle.Integer, db_handle.ForeignKey('pss_users.pss_user_id'),primary_key=True)
+        active=db_handle.Column(db_handle.Boolean(),default=True)
 
         def crypt_password(self, password):
             """Encrypt a plaintext password and store it"""

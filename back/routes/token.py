@@ -8,6 +8,7 @@ from lib import orm_factories,token_helpers
 from lib.serializer.generic import generate_generic_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
+from lib.route_decorators.auth_decorators import check_current_user_is_active
 from sqlalchemy.orm import joinedload
 from lib.flask_lib.permissions import event_user_buy_tickets_permissions
 from lib.flask_lib.permissions import player_buy_tickets_permissions
@@ -89,10 +90,6 @@ def purchase_tickets_route(request,player,app,player_initiated=False):
         input_data = json.loads(request.data)
     else:
         raise BadRequest('No info in request')        
-
-    if player.is_active() is False:
-        #FIXME : investigate use player.is_active() for making player inactive    
-        pass
 
     list_of_tournament_tokens=[]
     list_of_meta_tournament_tokens=[]
@@ -220,6 +217,7 @@ def get_player_tokens_count(tables,player_id):
 
 @blueprints.event_blueprint.route('/token',methods=['POST'])
 @player_buy_tickets_permissions.require(403)
+@check_current_user_is_active
 @load_tables
 def player_purchase_tokens(tables):
     player = current_app.tables.Players.query.filter_by(player_id=current_user.player_id).first()
@@ -234,6 +232,7 @@ def player_purchase_tokens(tables):
 
 @blueprints.event_blueprint.route('/token/player_id/<player_id>',methods=['POST'])
 @event_user_buy_tickets_permissions.require(403)
+@check_current_user_is_active
 @load_tables
 def event_user_purchase_tokens(tables,player_id):
     player = current_app.tables.Players.query.filter_by(player_id=player_id).first()
@@ -245,7 +244,3 @@ def event_user_purchase_tokens(tables,player_id):
     return jsonify({'new_token_purchase':generic_serializer(new_token_purchase),
                     'purchase_summary':purchase_summary,
                     'total_cost':new_token_purchase.total_cost})
-
-  
-    # check if current user is a player or not
-    pass

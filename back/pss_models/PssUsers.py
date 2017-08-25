@@ -83,11 +83,12 @@ def generate_pss_users_class(db_handle,event_name):
         def is_authenticated():
             """Users are always authenticated"""
             return True
-        
-        @staticmethod
-        def is_active():
-            """Users are always active"""
-            return True
+
+        def is_active(self):            
+            if self.event_user:
+                return self.event_user.active
+            else:
+                return True
         
         @staticmethod
         def is_anonymous():

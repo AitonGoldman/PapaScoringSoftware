@@ -36,7 +36,6 @@ def generate_players_class(db_handle,event_name):
         has_picture = db_handle.Column(db_handle.Boolean(),default=False)
         ioniccloud_push_token=db_handle.Column(db_handle.String(500))        
         team_id = db_handle.Column('team_id', db_handle.Integer, db_handle.ForeignKey('teams_'+event_name+'.team_id'))
-        
 
         player_roles = db_handle.relationship(
             'PlayerRoles',
@@ -65,12 +64,13 @@ def generate_players_class(db_handle,event_name):
         def is_authenticated():
             """Users are always authenticated"""
             return True
-        
-        @staticmethod
-        def is_active():
-            """Users are always active"""
-            return True
-        
+                
+        def is_active(self):            
+            if self.event_player:
+                return self.event_player.active
+            else:
+                return True
+            
         @staticmethod
         def is_anonymous():
             """No anon users"""

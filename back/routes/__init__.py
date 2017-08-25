@@ -7,3 +7,4 @@ import ifpa
 import tournament
 import tournament_machine
 import token
+import stripe_routes

@@ -9,7 +9,8 @@ def generate_pss_user_loader(app):
         if isinstance( userid, ( int, long ) ):
             return app.tables.PssUsers.query.get(int(userid))            
         elif "player" in userid:
-            pass
+            userid = userid.replace("player_","")
+            return app.tables.Players.query.get(int(userid))            
     return load_user
     
 def generate_pss_user_identity_loaded(app):

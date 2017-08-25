@@ -15,6 +15,7 @@ from Machines import generate_machines_class
 from TournamentMachines import generate_tournament_machines_class
 from Tokens import generate_tokens_class
 from TokenPurchases import generate_token_purchases_class
+from TokenPurchaseSummaries import generate_token_purchase_summaries_class
 
 from AuditLogs import generate_audit_logs_class
 
@@ -37,7 +38,8 @@ class ImportedTables():
         self.Tournaments = generate_tournaments_class(db_handle,event_name)
         self.MetaTournaments = generate_meta_tournaments_class(db_handle,event_name)
         self.Tokens = generate_tokens_class(db_handle,event_name)
-        self.TokenPurchases = generate_token_purchases_class(db_handle,event_name)        
+        self.TokenPurchases = generate_token_purchases_class(db_handle,event_name)
+        self.TokenPurchaseSummaries = generate_token_purchase_summaries_class(db_handle,event_name)        
         self.AuditLogs = generate_audit_logs_class(db_handle,event_name)        
         
         self.db_handle=db_handle

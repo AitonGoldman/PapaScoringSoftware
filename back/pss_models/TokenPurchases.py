@@ -11,6 +11,6 @@ def generate_token_purchases_class(db_handle,event_name):
         stripe_transaction_id = db_handle.Column(db_handle.String(180))
         tokens = db_handle.relationship('Tokens')
         total_cost = db_handle.Column(db_handle.Integer)
-
+        token_purchase_summaries = db_handle.relationship('TokenPurchaseSummaries')
     return TokenPurchases
     

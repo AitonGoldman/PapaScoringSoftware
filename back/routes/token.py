@@ -33,6 +33,14 @@ def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
 
         #FIXME : this should be a dict, not a list
         purchase_summary.append([tournament.tournament_name,token_count['token_count'],ticket_cost])
+        token_purchase_summary = app.tables.TokenPurchaseSummaries()
+        if type == "tournament":
+            token_purchase_summary.tournament_id=tournament.tournament_id
+        else:
+            token_purchase_summary.meta_tournament_id=tournament.meta_tournament_id
+        token_purchase_summary.token_count=token_count['token_count']
+        app.tables.db_handle.session.add(token_purchase_summary)
+        new_token_purchase.token_purchase_summaries.append(token_purchase_summary)
         for count in range(int(token_count['token_count'])):
             new_token = app.tables.Tokens()
             if player_initiated:
@@ -213,9 +221,16 @@ def get_player_tokens_count(tables,player_id):
 @blueprints.event_blueprint.route('/token',methods=['POST'])
 @player_buy_tickets_permissions.require(403)
 @load_tables
-def player_purchase_tokens(tables,player_id):
-    # check if current user is a player or not
-    pass
+def player_purchase_tokens(tables):
+    player = current_app.tables.Players.query.filter_by(player_id=current_user.player_id).first()
+    if player is None:
+        raise BadRequest('player does not exist')
+    new_token_purchase,purchase_summary = purchase_tickets_route(request,player,current_app,player_initiated=True)
+    generic_serializer = generate_generic_serializer(serializer.generic.ALL)
+    return jsonify({'new_token_purchase':generic_serializer(new_token_purchase),
+                    'purchase_summary':purchase_summary,
+                    'total_cost':new_token_purchase.total_cost})
+
 
 @blueprints.event_blueprint.route('/token/player_id/<player_id>',methods=['POST'])
 @event_user_buy_tickets_permissions.require(403)

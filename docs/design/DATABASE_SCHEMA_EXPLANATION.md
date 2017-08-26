@@ -31,7 +31,7 @@ Teams are represented by the Teams table.  There is a one-to-many relationship b
 
 ## A little bit more about PssUsers/Players and EventUsers/EventPlayers
 
-Event Users/Players need the ability to have a seperate password/pin number (and other information) for each event.  There 2 reasons for this :
+Event Users/Players need the ability to have a seperate password/pin number (and other information) for each event.  There 3 reasons for this :
 - Event Users/Players don't have to remember their password/pin number between events - TDs will reset/change the password/pin at the begining of each event for that event. 
 - Prevents other Event Owners from (accidently or purposely) screwing with a Event User's/Players account.
 - Provides a deterrent to people who might discover a Event Users/Players password/pin number and use it at a different event.
@@ -50,7 +50,20 @@ Note that in the case of a multi-division tournament, the "divisions" will be re
 ## MetaTournaments
 The MetaTournaments table is event specific, and has a one to many relationship with the event Tournaments table (i.e. multiple tournaments can be part of a single MetaTournament).  For an explanation of why this is done, please see the architecture overview here : 
 
-## Token
+## Tokens, TokenPurchases, and TokenPuchaseSummaries
+Please see the architecture overview for a explanation of what Tokens represent.  The `used` column gets marked no matter how the Token got used (i.e. deleted, score recorded, voided).
+
+The Tokens table has a one-to-many relationship with..
+- The Players table (i.e. one player can have many tokens)
+- The Teams table (i.e. one team can have many tokens)
+- The Tournaments table (i.e. each token belongs to one or 0 tournaments)
+- The MetaTournaments table (i.e. each token belongs to one of more meta_tournaments)
+- The TokenPurchase table (i.e. one TokenPurchase can consist of multiple tokens)
+
+The TokenPurchases table represents a single purchase.  For example, if I buy 3 tickets in main A and 4 tickets in classics then the TokenPurchase will contain all those tokens, in addition to the total cost of that purchase and the end results of the purchase (i.e. did it succeed or fail).  TokenPurchaseSummaries are associated with a single TokenPurchase and are summaries of the token count for each division.  Using the previous example, we would have two TokenPurchaseSummaries associated with the TokenPurchase - one for the main A tickets (which would record a count of 3) and one for the classics tickets (which would record a count of 4).  The TokenPurchaseSummaries make the three step process of "purchasing from your phone" much easier.  Please see the architecture overview for a explanation of the three step "purchasing from your phone" process.
+
+
+
 
 
 

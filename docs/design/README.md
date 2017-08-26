@@ -135,6 +135,38 @@ Each Tournament allows you to configure..
 - whether or not the Tournament is a team tournament.
 - the max number of people per team.
 
+Players on teams share tickets for a team tournament.  For example : if Aiton and Doug are on a team named "TEAM AWESOME" and Aiton purchases a ticket for "TEAM AWESOME" in the split flipper tournament, then both Doug and Aiton can use that ticket in the split flipper tournament.
+
+## Tokens and Tickets
+
+The goal of the PSS is to provide a platform that makes implementing tournament formats relatively easy.  Part of that platform is how "tickets" are represented.  I put "ticket" in quotes because a ticket can represent different things depenidng on the tournament format.  For example, a ticket at a HERB tournament has a one-to-one relationship with a single machine score - i.e. you pay for your ticket and then exchange that ticket for a single game on a single machine.  But at a papa style tournament, a single ticket represents an entry and that entry consists of multiple machine scores - i.e. I pay for a ticket which enables me to play 5 games, which I can void at any time before finishing the 5 games.  
+
+The PSS needs to be able to handle both these formats, plus many others.  The way it does this is by seperating out the with the concept of Tokens.  A Token allows a player to play a single game.  When a player buys a "ticket", the PSS creates an appropriate number of Tokens for that ticket.  For example, if a player buys a ticket in a HERB tournament then the PSS creates one Token for that player for that tournament.   But if the player is playing in a PAPA style tournament (and the PSS supported PAPA style tournaments) then the PSS would create 5 tokens for that player for that tournament.  
+
+Before a player starts a game, the PSS checks that the player has available tokens for that tournament.  The PSS also checks that a player has available tokens for a given tournament before allowing the player to be queued on a machine.  A Token is only marked as used if the player records a score or voids the ticket.  Note that if the player has to be taken off the machine (machine broke, scorekeeper made a mistake, etc) then no Token is marked as used.
+
+If a token is bought for a team tournament, then the token is associated with both the player that bought it and the team that player belongs to.  
+
+If a token is bought for a MetaTournament then the token is assoicated with the MetaTournament.  The code that checks if a player has enough tokens to start a game/queue up on a game in a divisions will look for tokens associated with a MetaTournament if that division belongs to a MetaTournament.
+
+## Purchasing tickets
+
+The PSS allows purchases to be made in two ways.  The first way is by an Event User (i.e. a deskworker) - when a purchase is made this way, the token(s) are marked as paid and can be used immediately and the Event User is responsible for collecting the money outside of the PSS (i.e. swipe their card, take their cash).  The second way to purchase tickets is for a player to directly purchase tickets.  This type of purchase is a 3 step process.  
+
+The first step is the creation of the Tokens, but they are not marked as paid for.  The second step is getting authorization (for the total purchase amount) from a third party credit card processing service called Stripe - this involves collecting credit card info from the player and it gives us back an authorization token from Stripe.  Note that this is done entirely with javascript provided by Stripe, which means the PSS never actually has the credit card info.  The third step is passed the authorization token from step 2 and submits the purchase to Stripe.  If the purchase is successful then the Tokens that were created in step 1 are marked as paid for, and are available to be used.
+
+When we submit the purchase to stripe we are actually submitting a list of SKUs which we have already definined in Stripe.  If you are giving discounts on different ticket amounts (i.e. 1 for 3, 3 for 8) then you'll need two skus for each tournament (one for the normal price, one for the discount price) - otherwise you only need one sku per tournament.  For example, let's say tickets for Main A tournament cost 3 bucks for 1 ticket, and 8 bucks for 3 tickets.  We would need to define 2 SKUs - 1 for the 1 ticket cost, and 1 for the 3 ticket cost.  When it's time to submit the purchase, the PSS figures out how many of each SKU to submit.  For example, if a player buys 11 tickets then the purchase would consist of 3 discount price SKUs and 2 normal price SKUs.
+
+Stripe can return back a number of errors which the PSS is capable of handling (i.e. bank refuses transaction, transaction rate exceeded, etc) - all errors returned by stripe are logged.  Tokens are NEVER marked as paid for if the PSS gets an error back from Sripe.
+
+## Audit Log
+
+
+
+
+
+
+
 
 
 

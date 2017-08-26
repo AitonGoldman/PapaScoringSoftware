@@ -180,7 +180,8 @@ def calculate_list_of_tickets_and_prices_for_player(current_ticket_count, player
         current_ticket_amount=current_ticket_amount+1        
     cutoff_index=tournament.number_of_unused_tickets_allowed-current_ticket_count
     return [{'amount':0,'price':0}]+output_list[0:cutoff_index]
-            
+
+#FIXME : should this info come as part of the GET /player instead of as a seperate get?
 @blueprints.event_blueprint.route('/token/player_id/<player_id>',methods=['GET'])
 @load_tables
 def get_player_tokens_count(tables,player_id):                

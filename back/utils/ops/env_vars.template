@@ -1,0 +1,11 @@
+# type of database : sqlite or postgres
+export db_type=
+
+# username to use for connecting to database
+export db_username=
+
+# password to use for connecting to database
+export db_password=
+
+# name of database to connect to.  NOTE : see bootstraping document for how create this db
+export pss_db_name=

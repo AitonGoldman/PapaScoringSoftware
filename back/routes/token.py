@@ -24,13 +24,15 @@ def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
         return []
     for token_count in list_of_tournament_tokens:
         tournament = tournaments_dict[token_count['%s_id' % type]]
+        if tournament.team_tournament and player.team_id is None:
+            continue
         normal_and_discount_amounts = token_helpers.get_normal_and_discount_amounts(tournament,int(token_count['token_count']))
         if int(token_count['token_count'])==0:
             continue        
         if type == "tournament":
             ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,tournament=tournament)
         else:
-            ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,meta_tournament=meta_tournament)
+            ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,meta_tournament=tournament)
 
         #FIXME : this should be a dict, not a list
         purchase_summary.append([tournament.tournament_name,token_count['token_count'],ticket_cost])
@@ -42,12 +44,18 @@ def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
         token_purchase_summary.token_count=token_count['token_count']
         app.tables.db_handle.session.add(token_purchase_summary)
         new_token_purchase.token_purchase_summaries.append(token_purchase_summary)
+
+        if player_initiated:
+            new_token_purchase.stripe_purchase=True
+        else:
+            new_token_purchase.stripe_purchase=False
+            
         for count in range(int(token_count['token_count'])):
             new_token = app.tables.Tokens()
             if player_initiated:
-                new_token.paid_for=False
+                new_token.paid_for=False                
             else:
-                new_token.paid_for=True
+                new_token.paid_for=True                
             new_token.comped=comped
             new_token.player_id=player.player_id
             if tournament.team_tournament and player.team_id:
@@ -76,6 +84,8 @@ def verify_tournament_and_meta_tournament_request_counts_are_valid(input_data, p
         else:
             request_token_count = token_helpers.get_number_of_unused_tickets_for_player(player,app,meta_tournament=tournament)            
         max_tokens_player_is_allowed_to_buy = tournament.number_of_unused_tickets_allowed - request_token_count
+        if app.tables.TournamentMachines.query.filter_by(player_id=player.player_id).first():
+            max_tokens_player_is_allowed_to_buy=max_tokens_player_is_allowed_to_buy-1
         if max_tokens_player_is_allowed_to_buy-int(token_count['token_count'])<0:
             raise BadRequest('Fuck off, Ass Wipe')
         if tournament.ifpa_rank_restriction and player.event_player.ifpa_ranking and player.event_player.ifpa_ranking < tournament.ifpa_rank_restriction:
@@ -96,7 +106,7 @@ def purchase_tickets_route(request,player,app,player_initiated=False):
 
     comped = input_data.get('comped',False)
     
-    tournaments_dict = {tournament.tournament_id:tournament for tournament in app.tables.Tournaments.query.all()}
+    tournaments_dict = {tournament.tournament_id:tournament for tournament in app.tables.Tournaments.query.filter_by(meta_tournament_id=None).all()}
     meta_tournaments_dict = {meta_tournament.meta_tournament_id:meta_tournament for meta_tournament in app.tables.MetaTournaments.query.all()}
     
     list_of_tournament_tokens = verify_tournament_and_meta_tournament_request_counts_are_valid(input_data, player,
@@ -121,6 +131,8 @@ def purchase_tickets_route(request,player,app,player_initiated=False):
     new_token_purchase.total_cost=total_cost
     if player_initiated is False:
         new_token_purchase.completed_purchase=True
+    else:
+        new_token_purchase.completed_purchase=False        
     app.tables.db_handle.session.commit()
     return new_token_purchase,purchase_summary+meta_purchase_summary
 

@@ -34,7 +34,7 @@ def get_normal_and_discount_amounts(tournament,amount):
         if amount < tournament.number_of_tickets_for_discount:
             return (amount,0)
         if amount == tournament.number_of_tickets_for_discount:
-            return (0,tournament.number_of_tickets_for_discount)        
+            return (0,1)        
         return (amount%tournament.number_of_tickets_for_discount,int(amount/tournament.number_of_tickets_for_discount))
     else:
         return (amount,0)

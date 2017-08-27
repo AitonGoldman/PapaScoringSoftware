@@ -101,7 +101,52 @@ class LibTokenHelpersTest(PssUnitTestBase):
         returned_token_count = token_helpers.get_number_of_unused_tickets_for_player(mock_player,self.mock_app,meta_tournament=mock_meta_tournament)        
         self.assertEquals(returned_token_count,1)
 
-    def get_number_of_unused_tickets_for_player_in_all_tournaments(self):
-        pass
+    def test_get_number_of_unused_tickets_for_player_in_all_tournaments(self):                
+        mock_player = MagicMock()
+        mock_player.player_id=1
+        mock_tournament = MagicMock()
+        mock_tournament.tournament_name='test_tournament'
+        mock_tournament.tournament_id=1
+        mock_meta_tournament = MagicMock()
+        mock_meta_tournament.meta_tournament_name='test_meta_tournament'
+        mock_meta_tournament.meta_tournament_id=2
 
-    
+        self.mock_tables.Tournaments.query.filter_by().all.return_value = [mock_tournament]
+        self.mock_tables.MetaTournaments.query.all.return_value = [mock_meta_tournament]
+
+        mock_query = MagicMock()
+        mock_query.filter_by().count.return_value=1
+        self.mock_tables.Tokens.query.filter_by.return_value = mock_query
+        
+        mock_tournament.team_tournament = False
+        mock_player.team_id = None
+        mock_tokens_count = token_helpers.get_number_of_unused_tickets_for_player_in_all_tournaments(mock_player,self.mock_app)
+        self.assertEquals(len(mock_tokens_count),2)
+        self.assertEquals(mock_tokens_count[0][0]['tournament_id'],1)
+        self.assertEquals(mock_tokens_count[0][0]['count'],1)
+        self.assertEquals(mock_tokens_count[1][0]['meta_tournament_id'],2)
+        self.assertEquals(mock_tokens_count[1][0]['count'],1)
+
+
+        mock_query.filter_by().count.return_value=0
+        mock_tokens_count = token_helpers.get_number_of_unused_tickets_for_player_in_all_tournaments(mock_player,self.mock_app)
+        self.assertEquals(len(mock_tokens_count),2)
+        self.assertEquals(len(mock_tokens_count[0]),0)
+        self.assertEquals(len(mock_tokens_count[1]),0)
+        
+    def test_get_normal_and_discount_amounts(self):
+        mock_tournament = MagicMock()
+        mock_tournament.number_of_tickets_for_discount=None
+        counts = token_helpers.get_normal_and_discount_amounts(mock_tournament,11)
+        self.assertEquals(counts,(11,0))
+
+        mock_tournament.number_of_tickets_for_discount=3
+        counts = token_helpers.get_normal_and_discount_amounts(mock_tournament,3)
+        self.assertEquals(counts,(0,1))
+
+        counts = token_helpers.get_normal_and_discount_amounts(mock_tournament,2)
+        self.assertEquals(counts,(2,0))        
+                
+        counts = token_helpers.get_normal_and_discount_amounts(mock_tournament,11)
+        self.assertEquals(counts,(2,3))
+        

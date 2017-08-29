@@ -37,7 +37,7 @@ class PssIntegrationTestBase(unittest.TestCase):
         role_admin=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_ADMIN).first()        
         #role_user=tables.AdminRoles.query.filter_by(name=roles_constants.PSS_USER).first()
         #role_player=tables.AdminRoles.query.filter_by(name=roles_constants.TEST).first()
-                
+        #FIXME : should use self.create_users function
         self.admin_pss_user = orm_factories.create_user(app,                                                       
                                                         'test_pss_admin_user',
                                                         'test_first_name','test_last_name',

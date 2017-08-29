@@ -17,7 +17,7 @@ def generate_tournaments_class(db_handle,event_name):
         discount_stripe_sku=db_handle.Column(db_handle.String(100))
         stripe_price=db_handle.Column(db_handle.Float)
         discount_stripe_price=db_handle.Column(db_handle.Float)
-        manually_set_price=db_handle.Column(db_handle.Float)
+        manually_set_price=db_handle.Column(db_handle.Float,default=15.0)
         #FIXME : make ticket discounts more flexible
         minimum_number_of_tickets_allowed=db_handle.Column(db_handle.Integer,default=1)
         ticket_increment_for_each_purchase=db_handle.Column(db_handle.Integer,default=1)

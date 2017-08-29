@@ -16,6 +16,9 @@ def generate_meta_tournaments_class(db_handle,event_name):
         discount_stripe_price=db_handle.Column(db_handle.Float)
         manually_set_price=db_handle.Column(db_handle.Float,default=15.0)
         discount_price=db_handle.Column(db_handle.Integer)
+        tournaments = db_handle.relationship('Tournaments')
+        ifpa_rank_restriction=db_handle.Column(db_handle.Integer,default=0)
+        team_tournament=db_handle.Column(db_handle.Boolean,default=False)
         
     return MetaTournaments
 

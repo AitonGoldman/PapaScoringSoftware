@@ -44,7 +44,7 @@ def pss_login_route(request,tables,is_pss_admin_event=True):
         raise Unauthorized('Bad username or password')
     if pss_user.event_user is None:
         raise BadRequest('User does not have access to this event')                        
-    if not pss_user.event_user.verify_password(input_data['password']):
+    if not pss_user.event_user.verify_password(input_data['password']):        
         raise Unauthorized('Bad username or password')
     #FIXME : is this needed anymore?  if they have a event_user field on the event, then they are okay to go, right?
     if is_pss_admin_event:

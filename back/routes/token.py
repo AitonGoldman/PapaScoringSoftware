@@ -35,7 +35,11 @@ def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
             ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,meta_tournament=tournament)
 
         #FIXME : this should be a dict, not a list
-        purchase_summary.append([tournament.tournament_name,token_count['token_count'],ticket_cost])
+        if type == "tournament":
+            tournament_name=tournament.tournament_name
+        else:
+            tournament_name=tournament.meta_tournament_name            
+        purchase_summary.append([tournament_name,token_count['token_count'],ticket_cost])
         token_purchase_summary = app.tables.TokenPurchaseSummaries()
         if type == "tournament":
             token_purchase_summary.tournament_id=tournament.tournament_id

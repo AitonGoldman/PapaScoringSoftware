@@ -16,8 +16,8 @@ class RouteTokenTest(pss_integration_test_existing_tournament_and_metatournament
         with self.event_app.test_client() as c:                        
             tables = self.event_app.tables
             rv = c.post('/auth/pss_event_user/login',
-                        data=json.dumps({'username':self.event_user_td,
-                                         'password':'password'}))
+                        data=json.dumps({'username':self.standard_td_username,
+                                         'password':self.generic_password}))
             self.assertHttpCodeEquals(rv,200)            
             rv = c.post('/token/player_id/%s' % self.player_id_with_no_tokens,
                         data=json.dumps({'tournament_token_counts':[{'tournament_id':1,'token_count':2}],'meta_tournament_token_counts':[{'meta_tournament_id':1,'token_count':2}]}))
@@ -38,8 +38,8 @@ class RouteTokenTest(pss_integration_test_existing_tournament_and_metatournament
     def test_create_token_with_discount(self):        
         with self.event_app.test_client() as c:                        
             rv = c.post('/auth/pss_event_user/login',
-                        data=json.dumps({'username':self.event_user_td,
-                                         'password':'password'}))
+                        data=json.dumps({'username':self.standard_td_username,
+                                         'password':self.generic_password}))
             self.assertHttpCodeEquals(rv,200)            
             rv = c.post('/token/player_id/%s' % self.player_id_with_no_tokens,
                         data=json.dumps({'tournament_token_counts':[{'tournament_id':4,'token_count':2}],'meta_tournament_token_counts':[]}))
@@ -90,8 +90,8 @@ class RouteTokenTest(pss_integration_test_existing_tournament_and_metatournament
         with self.event_app.test_client() as c:                        
             tables = self.event_app.tables
             rv = c.post('/auth/pss_event_user/login',
-                        data=json.dumps({'username':self.event_user_td,
-                                         'password':'password'}))
+                        data=json.dumps({'username':self.standard_td_username,
+                                         'password':self.generic_password}))
             self.assertHttpCodeEquals(rv,200)            
             rv = c.post('/token',
                         data=json.dumps({'tournament_token_counts':[{'tournament_id':4,'token_count':2}],'meta_tournament_token_counts':[]}))
@@ -100,8 +100,8 @@ class RouteTokenTest(pss_integration_test_existing_tournament_and_metatournament
         with self.event_app.test_client() as c:                        
             tables = self.event_app.tables
             rv = c.post('/auth/pss_event_user/login',
-                        data=json.dumps({'username':self.event_user_scorekeeper,
-                                         'password':'password'}))
+                        data=json.dumps({'username':self.standard_scorekeeper_username,
+                                         'password':self.generic_password}))
             self.assertHttpCodeEquals(rv,200)                                    
             rv = c.post('/token',
                         data=json.dumps({'tournament_token_counts':[{'tournament_id':4,'token_count':2}],'meta_tournament_token_counts':[]}))
@@ -116,8 +116,8 @@ class RouteTokenTest(pss_integration_test_existing_tournament_and_metatournament
         with self.event_app.test_client() as c:                        
             tables = self.event_app.tables
             rv = c.post('/auth/pss_event_user/login',
-                        data=json.dumps({'username':self.event_user_td,
-                                         'password':'password'}))
+                        data=json.dumps({'username':self.standard_td_username,
+                                         'password':self.generic_password}))
             self.assertHttpCodeEquals(rv,200)            
             rv = c.post('/token/player_id/%s' % self.player_id_with_no_tokens,
                         data=json.dumps({'tournament_token_counts':[{'tournament_id':1,'token_count':16}],'meta_tournament_token_counts':[{'meta_tournament_id':1,'token_count':2}]}))

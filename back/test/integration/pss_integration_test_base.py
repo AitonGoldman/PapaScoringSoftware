@@ -30,6 +30,7 @@ class PssIntegrationTestBase(unittest.TestCase):
         
     def bootstrap_pss_users(self,app):
         tables = app.tables
+        #FIXME : pull out the actual admin username and password
         self.admin_pss_user = tables.PssUsers.query.filter_by(username='test_pss_admin_user').first()
         self.admin_pss_user_password='password55'        
         if self.admin_pss_user:
@@ -90,20 +91,30 @@ class PssIntegrationTestBase(unittest.TestCase):
                                          'extra_title':extra_title,
                                          'role_id':pss_user_role['admin_role_id']}))
             self.assertHttpCodeEquals(rv,200)            
+
+    def create_event_user_for_test(self,app,
+                                   username,
+                                   first_name=None,last_name=None,
+                                   password=None,extra_title=None):
         
-    # def bootstrap_extra_users(self,app):
-    #     self.create_user_for_test(app
-    #                               username,
-    #                               first_name,last_name=None,
-    #                               password=None,extra_title=None,
-    #                               role_name=None)
-    #     # self.pss_user_with_no_roles_password='password455'                
-    #     # self.pss_user_with_no_roles = orm_factories.create_user(app,
-    #     #                                                         'test_pss_user_no_roles%s' % self.create_uniq_id(),
-    #     #                                                         'test_event_2_first_name',
-    #     #                                                         'test_event_2_last_name',
-    #     #                                                         self.pss_user_with_no_roles_password)
-    #     # tables = app.tables
-    #     # tables.db_handle.session.commit()        
-
-
+        with app.test_client() as c:
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.get('/roles')            
+            if password is None:
+                password=self.create_uniq_id()
+            if first_name is None:
+                first_name=self.create_uniq_id()
+            if last_name is None:
+                last_name=self.create_uniq_id()
+            pss_event_user_role = [role for role in json.loads(rv.data)['roles'] if (role['name'] == role_name)][0]
+            rv = c.post('/pss_event_user',
+                        data=json.dumps({'username':username,
+                                         'password':password,
+                                         'first_name':first_name,
+                                         'last_name':last_name,
+                                         'extra_title':extra_title,
+                                         'role_id':pss_event_user_role['admin_role_id']}))
+            self.assertHttpCodeEquals(rv,200)            
+            

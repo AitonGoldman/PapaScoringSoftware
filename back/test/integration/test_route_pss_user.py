@@ -317,6 +317,7 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
 
 
     def test_add_existing_pss_user_scorekeeper_to_event_as_tournament_director(self):                
+        #FIXME : create user for this
         self.createEventsAndEventUsers()
         scorekeeper_role = self.event_app_2.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
         td_role = self.event_app_2.tables.EventRoles.query.filter_by(name=roles_constants.TOURNAMENT_DIRECTOR).first()        
@@ -343,12 +344,9 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
 
     def test_edit_existing_pss_event_user(self):                
         self.createEventsAndEventUsers()
-        scorekeeper_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.SCOREKEEPER).first()
+
         td_role = self.event_app.tables.EventRoles.query.filter_by(name=roles_constants.TOURNAMENT_DIRECTOR).first()        
         td_role_id = td_role.event_role_id
-        #existing_pss_user = self.event_app.tables.PssUsers.query.filter(self.event_app.tables.PssUsers.event_roles.contains(scorekeeper_role)).first()
-        #existing_pss_user_id=existing_pss_user.pss_user_id
-        #existing_pss_username=existing_pss_user.username
             
         with self.event_app.test_client() as c:                                    
             
@@ -357,26 +355,24 @@ class RoutePssUser(pss_integration_test_existing_event.PssIntegrationTestExistin
                                          'password':'password'}))
             self.assertHttpCodeEquals(rv,200)
 
-            new_username=self.event_user_scorekeeper+"%s" % self.create_uniq_id()
-            
-            rv = c.post('/pss_event_user',
-                        data=json.dumps({'username':new_username,
-                                         'password':'password',
-                                         'first_name':'test_event_sc_first_name %s ' % self.create_uniq_id(),
-                                         'last_name':'test_event_sc_last_name',
-                                         'event_role_id':scorekeeper_role.event_role_id}))
-            self.assertHttpCodeEquals(rv,200)
-            new_user_id = json.loads(rv.data)['new_pss_user']['pss_user_id']
+            user_pw='password222'
+            username='test_pss_user_scorekeeper%s'% self.create_uniq_id()                
+            role_name=roles_constants.SCOREKEEPER
+            new_user = self.create_event_user_for_test(self.event_app,
+                                                       username,role_name,                                  
+                                                       password=user_pw)
+
+            new_user_id = new_user['new_pss_user']['pss_user_id']            
             rv = c.put('/pss_event_user',
-                       data=json.dumps({'username':new_username,
+                       data=json.dumps({'username':username,
                                         'password':'newpassword',
                                         'pss_user_id':new_user_id,
                                         'event_role_id':td_role.event_role_id}))
-            self.assertHttpCodeEquals(rv,200)            
-            existing_user = self.event_app.tables.PssUsers.query.filter_by(username=new_username).first()
+            self.assertHttpCodeEquals(rv,200)
+            existing_user = self.event_app.tables.PssUsers.query.filter_by(username=username).first()
             self.assertTrue(roles_constants.TOURNAMENT_DIRECTOR in [ role.name for role in existing_user.event_roles])            
             rv = c.post('/auth/pss_event_user/login',
-                        data=json.dumps({'username':new_username,
+                        data=json.dumps({'username':username,
                                          'password':'newpassword'}))
             self.assertHttpCodeEquals(rv,200)                        
             

@@ -80,7 +80,7 @@ def change_existing_player_in_event_route(player, app, input_data):
 @create_player_permissions.require(403)
 def create_player(tables):                
     new_player = create_player_route(request,current_app)
-    player_serializer = generate_player_to_dict_serializer(serializer.player.ALL)
+    player_serializer = generate_player_to_dict_serializer(serializer.player.ON_PLAYER_CREATE)
     player_dict=player_serializer(new_player)
     return jsonify({'new_player':player_dict})
     

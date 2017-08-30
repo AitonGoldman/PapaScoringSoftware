@@ -46,10 +46,18 @@ class RoutePssLogin(pss_integration_test_existing_event.PssIntegrationTestExisti
                              "Was expecting user to not be logged in, but user was logged in")
     
     def test_login_fails_with_pss_user_with_incorrect_role(self):
-        self.bootstrap_extra_users(self.pss_admin_app)
+        #self.bootstrap_extra_users(self.pss_admin_app)
+        user_pw='password455'
+        username='test_pss_user_no_roles%s'% self.create_uniq_id()                
+        role_name=roles_constants.TEST
+        self.create_user_for_test(self.pss_admin_app,
+                                  username,                                  
+                                  password=user_pw,
+                                  role_name=role_name)
+
         with self.pss_admin_app.test_client() as c:                        
             rv = c.post('/auth/pss_user/login',
-                        data=json.dumps({'username':self.pss_user_with_no_roles.username,'password':self.pss_user_with_no_roles_password}))
+                        data=json.dumps({'username':username,'password':user_pw}))
             self.assertHttpCodeEquals(rv,401)            
             self.assertEquals(rv.data,'{"message": "User can not access this"}')
             self.assertFalse(current_user.is_authenticated(),                              

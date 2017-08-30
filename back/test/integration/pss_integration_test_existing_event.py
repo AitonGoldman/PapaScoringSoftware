@@ -4,6 +4,67 @@ from lib import roles_constants
 class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTestBase):        
     def setUp(self):
         super(PssIntegrationTestExistingEvent,self).setUp()
+
+    def create_player_for_test(self,app,                               
+                               first_name=None,last_name=None,
+                               ifpa_ranking=None,
+                               extra_title=None):
+        if first_name is None:
+            first_name=self.create_uniq_id()
+        if last_name is None:
+            last_name=self.create_uniq_id()
+        if ifpa_ranking is None:
+            ifpa_ranking=9999
+            
+        with app.test_client() as c:                                                            
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.admin_pss_user.username,
+                                         'password':self.admin_pss_user_password}))
+            self.assertHttpCodeEquals(rv,200)                        
+            player_dict = {'first_name':first_name,
+                           'last_name':last_name,
+                           'ifpa_ranking':ifpa_ranking}
+            if extra_title:
+                player_dict['extra_title']=extra_title
+            rv = c.post('/player',
+                        data=json.dumps(player_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)['new_player']
+    
+    def create_event_user_for_test(self,app,
+                                   username, role_name,
+                                   first_name=None,last_name=None,
+                                   password=None,extra_title=None):
+        with app.test_client() as c:                        
+            if password is None:
+                password=self.create_uniq_id()
+            if first_name is None:
+                first_name=self.create_uniq_id()
+            if last_name is None:
+                last_name=self.create_uniq_id()
+
+            role = self.event_app.tables.EventRoles.query.filter_by(name=role_name).first()
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.admin_pss_user.username,
+                                         'password':self.admin_pss_user_password}))
+            self.assertHttpCodeEquals(rv,200)            
+
+            rv = c.post('/pss_event_user',
+                        data=json.dumps({'username':username,
+                                         'password':password,
+                                         'first_name':first_name,
+                                         'last_name':last_name,
+                                         'event_role_id':role.event_role_id}))
+            self.assertHttpCodeEquals(rv,200)            
+            return json.loads(rv.data)
+        
+    def create_event_for_test(self,event_name):
+        rv = c.post('/auth/pss_user/login',
+                    data=json.dumps({'username':self.admin_pss_user.username,'password':self.admin_pss_user_password}))
+        self.assertHttpCodeEquals(rv,200)            
+        rv = c.post('/event',
+                    data=json.dumps({'name':event_name}))
+        self.assertHttpCodeEquals(rv,200)
         
     def createEventsAndEventUsers(self):
         #self.new_event_name='newEvent%s'%self.create_uniq_id()
@@ -38,12 +99,13 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
 
         self.event_app = self.get_event_app_in_db(self.new_event_name)
 
-        #self.event_user_scorekeeper='eventUserScorekeeper%s'%self.create_uniq_id()        
-        #self.event_user_td='eventUserTd%s'%self.create_uniq_id()        
         self.event_user_scorekeeper='eventUserScorekeeper'
         self.event_user_td='eventUserTd'
         self.player_one_first_name='playerOneFirstName'
+        self.player_one_last_name='test_player_last_name'
+        
         self.player_two_first_name='playerTwoFirstName'        
+        self.player_two_last_name='test_player_last_name'        
      
         with self.event_app.test_client() as c:                        
             
@@ -68,26 +130,20 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
                                          'last_name':'test_event_td_last_name',
                                          'event_role_id':td_role.event_role_id}))
             self.assertHttpCodeEquals(rv,200)            
-            rv = c.post('/player',
-                        data=json.dumps({'first_name':self.player_one_first_name,
-                                         'last_name':'test_player_last_name',
-                                         'ifpa_ranking':9999}))
-            self.assertHttpCodeEquals(rv,200)
-            created_player = json.loads(rv.data)['new_player']
+            created_player = self.create_player_for_test(self.event_app,                               
+                                                         first_name=self.player_one_first_name,
+                                                         last_name=self.player_one_last_name)
             self.player_one_player_id=created_player['player_id']            
             self.player_one_event_player_id=created_player['event_player']['event_player_id']            
-            new_event_player = self.event_app.tables.EventPlayers.query.filter_by(event_player_id=self.player_one_event_player_id).first()
-            self.player_one_event_player_pin=new_event_player.event_player_pin
+            self.player_one_event_player_pin=created_player['event_player']['event_player_pin']
 
-            rv = c.post('/player',
-                        data=json.dumps({'first_name':self.player_two_first_name,
-                                         'last_name':'test_player_last_name',
-                                         'ifpa_ranking':9999}))
+            created_player = self.create_player_for_test(self.event_app,                               
+                                                         first_name=self.player_two_first_name,
+                                                         last_name=self.player_two_last_name)
+            
             self.assertHttpCodeEquals(rv,200)
 
         self.event_app_2 = self.get_event_app_in_db(self.new_event_name_2)
-        #self.event_user_scorekeeper_2='eventUserScorekeeper%s'%self.create_uniq_id()
-        #self.event_user_td_2='eventUserTd%s'%self.create_uniq_id()
         self.event_user_scorekeeper_2='eventUserScorekeeper2'
         self.event_user_td_2='eventUserTd2'
 

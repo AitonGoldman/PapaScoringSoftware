@@ -14,7 +14,11 @@ from werkzeug.exceptions import BadRequest,Unauthorized
 def generate_mock_tournament(tournament_id=None,meta_tournament_id=None):
     mock_tournament = MagicMock()        
     mock_tournament.number_of_tickets_for_discount=None
-    mock_tournament.tournament_name="test tournament"
+    if tournament_id:
+        mock_tournament.tournament_name="test tournament"
+    if meta_tournament_id:
+        mock_tournament.meta_tournament_name="test meta tournament"
+        
     mock_tournament.team_tournament=False
     mock_tournament.minimum_number_of_tickets_allowed=1
     mock_tournament.number_of_unused_tickets_allowed=15
@@ -179,7 +183,7 @@ class RouteTokenTest(PssUnitTestBase):
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
 #        self.mock_player.ifpa_ranking=9999
-        self.mock_player.team_id=None
+        self.mock_player.event_player.team_id=None
 
         self.mock_tables.TournamentMachines.query.filter_by().first.retrun_value=MagicMock()
         self.mock_tables.Tokens.return_value = self.mock_token
@@ -210,7 +214,7 @@ class RouteTokenTest(PssUnitTestBase):
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
 #        self.mock_player.ifpa_ranking=9999
-        self.mock_player.team_id=None
+        self.mock_player.event_player.team_id=None
 
         self.mock_tables.TournamentMachines.query.filter_by().first.retrun_value=MagicMock()
         self.mock_tables.Tokens.return_value = self.mock_token
@@ -236,7 +240,7 @@ class RouteTokenTest(PssUnitTestBase):
 
     def test_insert_tokens_into_db_with_mulitple_tokens(self):        
         self.mock_player = self.create_mock_player(roles_constants.PSS_PLAYER)
-        self.mock_player.team_id=None
+        self.mock_player.event_player.team_id=None
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
 
@@ -260,7 +264,7 @@ class RouteTokenTest(PssUnitTestBase):
         
     def test_insert_tokens_into_db_for_teams(self):
         self.mock_player = self.create_mock_player(roles_constants.PSS_PLAYER)
-        self.mock_player.team_id=1
+        self.mock_player.event_player.team_id=1
         self.mock_tournament.team_tournament=True
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
@@ -291,7 +295,7 @@ class RouteTokenTest(PssUnitTestBase):
 
     def test_insert_tokens_into_db_for_team_tournament_when_player_is_not_in_team(self):
         self.mock_player = self.create_mock_player(roles_constants.PSS_PLAYER)
-        self.mock_player.team_id=None
+        self.mock_player.event_player.team_id=None
         self.mock_tournament.team_tournament=True
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
@@ -317,7 +321,7 @@ class RouteTokenTest(PssUnitTestBase):
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
 #        self.mock_player.ifpa_ranking=9999
-        self.mock_player.team_id=None
+        self.mock_player.event_player.team_id=None
         
         self.mock_tables.TournamentMachines.query.filter_by().first.retrun_value=MagicMock()
         self.mock_tables.Tokens.return_value = self.mock_token
@@ -339,7 +343,7 @@ class RouteTokenTest(PssUnitTestBase):
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
 #        self.mock_player.ifpa_ranking=9999
-        self.mock_player.team_id=None
+        self.mock_player.event_player.team_id=None
 
         self.mock_tables.TournamentMachines.query.filter_by().first.retrun_value=MagicMock()        
         self.mock_tables.Tokens.return_value = self.mock_token
@@ -366,7 +370,7 @@ class RouteTokenTest(PssUnitTestBase):
 
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
-        self.mock_player.team_id=None
+        self.mock_player.event_player.team_id=None
 
         mock_query = MagicMock()
         mock_query.filter_by().count.return_value=1
@@ -411,11 +415,13 @@ class RouteTokenTest(PssUnitTestBase):
 
     def test_purchase_tickets_route(self):
         self.mock_player = self.create_mock_player(roles_constants.PSS_PLAYER)
-
+        self.mock_audit_log = MagicMock()
+        self.mock_audit_log.__table__ = MagicMock()
+        
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
-        self.mock_player.team_id=None
-        self.mock_meta_tournament.tournament_name='mock meta tournament'
+        self.mock_player.event_player.team_id=None
+        #self.mock_meta_tournament.meta_tournament_name='mock meta tournament'
         mock_query = MagicMock()
         mock_query.filter_by().count.return_value=1
         self.mock_tables.Tokens.query.filter_by.return_value = mock_query
@@ -430,11 +436,14 @@ class RouteTokenTest(PssUnitTestBase):
 
         self.mock_tables.TournamentMachines.query.filter_by().first.retrun_value=MagicMock()        
         self.mock_tables.Tokens.return_value = self.mock_token
+        self.mock_tables.AuditLogs.return_value = self.mock_audit_log
+        
         self.mock_tables.TokenPurchases.return_value = self.mock_token_purchase
         self.mock_tables.TokenPurchaseSummaries.return_value = self.mock_token_purchase_summary                        
         self.mock_tables.TournamentMachines.query.filter_by().first.return_value=None        
         mock_request = MagicMock()
         mock_request.data = json.dumps(input_data)
+        
         token_purchase, purchase_summary = token.purchase_tickets_route(mock_request,self.mock_player,self.mock_app)
         self.assertEquals(len(purchase_summary),2)
         self.assertEquals(self.mock_token_purchase.total_cost,12)

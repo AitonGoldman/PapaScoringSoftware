@@ -55,7 +55,7 @@ class LibTokenHelpersTest(PssUnitTestBase):
         mock_token = MagicMock()
         mock_player = MagicMock()
         mock_player.player_id=1
-        mock_player.team_id=1
+        mock_player.event_player.team_id=1
         
         mock_multi_division_tournament = MagicMock()        
         
@@ -73,7 +73,7 @@ class LibTokenHelpersTest(PssUnitTestBase):
         mock_token = MagicMock()
         mock_player = MagicMock()
         mock_player.player_id=1
-        mock_player.team_id=None
+        mock_player.event_player.team_id=None
         
         mock_multi_division_tournament = MagicMock()        
         
@@ -91,7 +91,7 @@ class LibTokenHelpersTest(PssUnitTestBase):
         mock_token = MagicMock()
         mock_player = MagicMock()
         mock_player.player_id=1
-        mock_player.team_id=1
+        mock_player.event_player.team_id=1
         
         mock_multi_division_tournament = MagicMock()        
         
@@ -119,7 +119,7 @@ class LibTokenHelpersTest(PssUnitTestBase):
         self.mock_tables.Tokens.query.filter_by.return_value = mock_query
         
         mock_tournament.team_tournament = False
-        mock_player.team_id = None
+        mock_player.event_player.team_id = None
         mock_tokens_count = token_helpers.get_number_of_unused_tickets_for_player_in_all_tournaments(mock_player,self.mock_app)
         self.assertEquals(len(mock_tokens_count),2)
         self.assertEquals(mock_tokens_count[0][0]['tournament_id'],1)

@@ -11,9 +11,11 @@ from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
 from lib.flask_lib.permissions import player_buy_tickets_permissions
 import stripe
+from lib.route_decorators.auth_decorators import check_current_user_is_active
 
 @blueprints.event_blueprint.route('/stripe/token_purchase/<token_purchase_id>',methods=['POST'])
 @player_buy_tickets_permissions.require(403)
+@check_current_user_is_active
 @load_tables
 def player_purchase_tokens_with_stripe(tables,token_purchase_id):
     if request.data:        

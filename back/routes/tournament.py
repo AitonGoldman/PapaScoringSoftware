@@ -11,6 +11,7 @@ from sqlalchemy.orm import joinedload
 from lib.flask_lib.permissions import create_tournament_permissions
 from lib.serializer.deserialize import deserialize_json
 from lib import orm_factories
+from lib.route_decorators.auth_decorators import check_current_user_is_active
 
 def edit_tournament_route(tournament,input_data,app):
     deserialize_json(tournament,input_data,app)
@@ -52,6 +53,8 @@ def create_tournament_route(request,app):
     return new_tournament
 
 @blueprints.event_blueprint.route('/tournament',methods=['POST'])
+@create_tournament_permissions.require(403)
+@check_current_user_is_active
 @load_tables
 def create_tournament(tables):    
     new_tournament = create_tournament_route(request,current_app)
@@ -59,6 +62,8 @@ def create_tournament(tables):
     return jsonify({'new_tournament':tournament_serializer(new_tournament)})
 
 @blueprints.event_blueprint.route('/tournament/<tournament_id>',methods=['PUT'])
+@create_tournament_permissions.require(403)
+@check_current_user_is_active
 @load_tables
 def edit_tournament(tables,tournament_id):    
     if request.data:        
@@ -73,26 +78,3 @@ def edit_tournament(tables,tournament_id):
     tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
     return jsonify({'edited_tournament':tournament_serializer(tournament)})
 
-
-# def create_tournament_route(request,tables):
-#     if request.data:        
-#         input_data = json.loads(request.data)
-#     else:
-#         raise BadRequest('Username or password not specified')
-#     if 'tournament_name' not in input_data:
-#         raise BadRequest('Missing information')
-#     existing_tournament = tables.Tournaments.query.filter_by(tournament_name=input_data['tournament_name']).first()
-#     if existing_tournament:
-#         raise BadRequest('Trying to use an already used name for tournament')        
-#     new_tournament = tables.Tournaments(tournament_name=input_data['tournament_name'])
-#     tables.db_handle.session.add(new_tournament)
-#     tables.db_handle.session.commit()
-#     return new_tournament
-
-# @blueprints.event_blueprint.route('/tournament',methods=['POST'])
-# @create_tournament_permissions.require(403)
-# @load_tables
-# def create_tournament(tables):    
-#     new_tournament = create_tournament_route(request,tables)
-#     generic_serializer = generate_generic_serializer(serializer.generic.ALL)
-#     return jsonify({'new_tournament':generic_serializer(new_tournament)})

@@ -10,6 +10,7 @@ from sqlalchemy.orm import joinedload
 from lib.flask_lib.permissions import create_tournament_permissions
 from lib.serializer.deserialize import deserialize_json
 from lib import orm_factories
+from lib.route_decorators.auth_decorators import check_current_user_is_active
 
             
 def create_meta_tournament_route(request,app):
@@ -33,6 +34,8 @@ def create_meta_tournament_route(request,app):
     return new_meta_tournament
 
 @blueprints.event_blueprint.route('/meta_tournament',methods=['POST'])
+@create_tournament_permissions.require(403)
+@check_current_user_is_active
 @load_tables
 def create_meta_tournament(tables):    
     new_meta_tournament = create_meta_tournament_route(request,current_app)

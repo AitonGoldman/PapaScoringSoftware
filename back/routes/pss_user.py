@@ -9,6 +9,7 @@ from lib import orm_factories
 from lib.serializer.pss_user import generate_pss_user_to_dict_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
+from lib.route_decorators.auth_decorators import check_current_user_is_active
 from sqlalchemy.orm import joinedload
 
 
@@ -100,6 +101,7 @@ def change_existing_user_in_event_route(pss_user, app, event_role, input_data):
 
 @blueprints.pss_admin_event_blueprint.route('/pss_user',methods=['POST'])
 @load_tables
+@check_current_user_is_active
 @create_pss_user_permissions.require(403)
 def create_pss_user(tables):    
     new_user = create_pss_user_route(request,current_app)
@@ -109,6 +111,7 @@ def create_pss_user(tables):
 
 @blueprints.event_blueprint.route('/pss_event_user',methods=['POST'])
 @load_tables
+@check_current_user_is_active
 @create_pss_event_user_permissions.require(403)
 def create_pss_event_user(tables):                
     if 'role_id' in json.loads(request.data):
@@ -121,6 +124,7 @@ def create_pss_event_user(tables):
 
 @blueprints.event_blueprint.route('/pss_event_user',methods=['PUT'])
 @load_tables
+@check_current_user_is_active
 @create_pss_event_user_permissions.require(403)
 def add_existing_user_to_event(tables):                
     pss_user, event_role = get_user_and_event_role_from_input_data(request,current_app)

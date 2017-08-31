@@ -9,6 +9,8 @@ from lib.PssConfig import PssConfig
 from lib.serializer import generic
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
+from lib.route_decorators.auth_decorators import check_current_user_is_active
+
 from pss_models.PssUsers import generate_pss_user_event_role_mapping
 import os
 from lib import orm_factories
@@ -16,6 +18,7 @@ from lib import orm_factories
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['POST'])
 @load_tables
 @create_pss_event_permissions.require(403)
+@check_current_user_is_active
 def create_event(tables):                    
     
     if request.data:        

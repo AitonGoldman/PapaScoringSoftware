@@ -5,6 +5,7 @@ def generate_teams_class(db_handle,event_name):
         __tablename__="teams_"+event_name                
         team_id=db_handle.Column(db_handle.Integer, primary_key=True)
         team_name=db_handle.Column(db_handle.String(100))
-        
+        event_players = db_handle.relationship('EventPlayers')
+
     return Teams
     

@@ -32,7 +32,7 @@ We want the following from our database :
 - The ability to designate `Event Users` as participating in a specific event
 - The ability to keep scores and ticket purchases seperate between `Events`
 
-We do this by keeping everything in one postgres database, but keeping event specific information in seperate tables (i.e. there is a `Player` table for PAPA 20 and a seperate `Player` table for Pittsburgh Pinball Open).
+We do this by keeping everything in one postgres database, but keeping event specific information in seperate tables (i.e. there is a `EventPlayer` table for PAPA 20 and a seperate `EventPlayer` table for Pittsburgh Pinball Open).
 
 Please see the [Database Schema] document for in depth details (DATABASE_SCHEMA_EXPLANATION.md)
 
@@ -87,7 +87,11 @@ The backend provides three different ways to login - they are :
 
 A `Event Owner` can log into the Pss Admin interface or into a specific `Pss Event`.  A `Event User` can log into a specific event with their username and password.  A `Player` will also be able to log into a specific event, but will need to use a different login endpoint than the `Event User`.  This is because a player will use different credentials to login - specifically, the player will use their player number and player pin (both assigned when players are added to an Event)
 
-The admin interface is a seperate `Flask Application` - this means that if you login to the admin interface, the cookie with your credentials will not give you access to a `Event` - you will need to explicitly login to an Event seperately.  The reverse is also true (i.e. logging into an event will not give you access to the admin interface).  Note that this is also true of seperate `Events` (i.e. I'm a deskworker in both the PAPA 20 event and the PPO 6 event - if I login to the PAPA 20 event, that does not log me into the PPO 6 event).
+The admin interface is a seperate `Flask Application` - this means that if you login to the admin interface, the cookie with your credentials will not give you access to a `Event` - you will need to explicitly login to an Event seperately.  The reverse is also true (i.e. logging into an event will not give you access to the admin interface).  Note that this is also true of seperate `Events` (i.e. I'm a deskworker in both the PAPA 20 event and the PPO 6 event - if I login to the PAPA 20 event, that does not log me into the PPO 6 event).  The ImportedTables class (see below) is used to make sure the correct event specific table is being used.
+
+## ImportedTables and Event Specific Tables
+
+When a Flask Application is initialized, an ImportedTables class is also created.  ImportedTables handles initizling all the SQLAlchemy ORM classes (i.e. it contains a Players class instance that represents the Players table, etc ).  Part of that process is making sure the ORM classes for event specific tables are pointed at the tables that are for the correct event.  For example, when the PAPA 21 Flask Application is initialized, the ImportedTables that also gets initialized will only point to the EventPlayers table for PAPA 21.
 
 ## Creating and editing Events and Tournaments
 

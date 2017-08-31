@@ -6,7 +6,19 @@ class PssIntegrationTestExistingTournamentAndMetaTournament(pss_integration_test
         super(PssIntegrationTestExistingTournamentAndMetaTournament,self).setUp()
         self.createEventsAndEventUsers()
         self.createTournament()
-        
+
+    def createTeamAndAddPlayers(self,team_name,player_id_1,player_id_2,app):
+        #FIXME : this should use real routes once they exist
+        with app.test_client() as c:            
+            new_team = app.tables.Teams()        
+            app.tables.db_handle.session.add(new_team)            
+            player_1 = app.tables.Players.query.filter_by(player_id=player_id_1).first()
+            player_2 = app.tables.Players.query.filter_by(player_id=player_id_2).first()                                
+            new_team.event_players.append(player_1.event_player)
+            new_team.event_players.append(player_2.event_player)            
+            app.tables.db_handle.session.commit()
+        return new_team.team_id
+    
     def createTournament(self):
         self.new_tournament_name='newTournament'
         self.new_tournament_name2='newTournament2'

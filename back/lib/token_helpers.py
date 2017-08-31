@@ -18,11 +18,11 @@ def get_number_of_unused_tickets_for_player_in_all_tournaments(player,app,remove
 def get_number_of_unused_tickets_for_player(player,flask_app,meta_tournament=None,tournament=None):
     #FIXME : explore if it makes sense to query al tokens (for all divisions) at once
     query = flask_app.tables.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False)
-    if player.team_id is None and tournament and tournament.team_tournament:
+    if player.event_player.team_id is None and tournament and tournament.team_tournament:
         return 0
     if tournament:
         if tournament.team_tournament is True:
-            token_count = query.filter_by(tournament_id=tournament.tournament_id,team_id=player.team_id).count()            
+            token_count = query.filter_by(tournament_id=tournament.tournament_id,team_id=player.event_player.team_id).count()            
         else:            
             token_count = query.filter_by(player_id=player.player_id,tournament_id=tournament.tournament_id).count()
     if meta_tournament:

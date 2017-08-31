@@ -6,7 +6,7 @@ class PssIntegrationTestExistingEvent(pss_integration_test_base.PssIntegrationTe
         super(PssIntegrationTestExistingEvent,self).setUp()        
         self.standard_player_first_name='standardPlayerFirstName'
         self.standard_player_last_name='standardPlayerLastName'        
-        self.standard_event_name="standardEvent"                
+        self.standard_event_name="standardevent"                
         self.standard_scorekeeper_username='standardScorkeeper'
         self.standard_td_username='standardTd'
         self.generic_password='password'

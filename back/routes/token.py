@@ -24,7 +24,7 @@ def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
         return []
     for token_count in list_of_tournament_tokens:
         tournament = tournaments_dict[token_count['%s_id' % type]]
-        if tournament.team_tournament and player.team_id is None:
+        if tournament.team_tournament and player.event_player.team_id is None:
             continue
         normal_and_discount_amounts = token_helpers.get_normal_and_discount_amounts(tournament,int(token_count['token_count']))
         if int(token_count['token_count'])==0:
@@ -62,8 +62,8 @@ def insert_tokens_into_db(list_of_tournament_tokens, tournaments_dict,
                 new_token.paid_for=True                
             new_token.comped=comped
             new_token.player_id=player.player_id
-            if tournament.team_tournament and player.team_id:
-                new_token.team_id=player.team_id
+            if tournament.team_tournament and player.event_player.team_id:
+                new_token.team_id=player.event_player.team_id
             if type == "tournament":
                 new_token.tournament_id=tournament.tournament_id
             else:
@@ -192,7 +192,7 @@ def calculate_list_of_tickets_and_prices_for_player(current_ticket_count, player
 
     if flask_app.tables.TournamentMachines.query.filter_by(player_id=player.player_id).first():
         current_ticket_amount=current_ticket_amount+1
-    if player.team_id and flask_app.tables.TournamentMachines.query.filter_by(team_id=player.team_id).first():
+    if player.event_player.team_id and flask_app.tables.TournamentMachines.query.filter_by(team_id=player.event_player.team_id).first():
         current_ticket_amount=current_ticket_amount+1        
     cutoff_index=tournament.number_of_unused_tickets_allowed-current_ticket_count
     return [{'amount':0,'price':0}]+output_list[0:cutoff_index]

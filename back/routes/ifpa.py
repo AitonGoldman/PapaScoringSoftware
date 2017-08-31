@@ -1,5 +1,6 @@
 from flask_restless.helpers import to_dict
 from lib.flask_lib import blueprints
+from lib.flask_lib.permissions import ifpa_lookup_permissions
 from flask import jsonify,current_app,request
 from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_required,current_user
@@ -8,6 +9,7 @@ import urllib2
 import ssl
 import json
 import re
+
 
 def get_ifpa_ranking_via_website(player_name):
     content=requests.get('http://www.ifpapinball.com/ajax/searchplayer.php?search=%s' % player_name).content
@@ -26,6 +28,7 @@ def get_ifpa_ranking_via_website(player_name):
     return ifpa_results
 
 @login_required
+@ifpa_lookup_permissions.require(403)
 @blueprints.event_blueprint.route('/ifpa/<player_name>',methods=['GET'])
 def route_get_ifpa_ranking(player_name):
     ctx = ssl.create_default_context()

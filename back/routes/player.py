@@ -10,6 +10,7 @@ from lib.serializer.player import generate_player_to_dict_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
+from lib.route_decorators.auth_decorators import check_current_user_is_active
 
 def check_multi_division_tournament_selection_is_valid(app, player):
     if player.event_player.multi_division_tournament_id is None:
@@ -77,6 +78,7 @@ def change_existing_player_in_event_route(player, app, input_data):
 
 @blueprints.event_blueprint.route('/player',methods=['POST'])
 @load_tables
+@check_current_user_is_active
 @create_player_permissions.require(403)
 def create_player(tables):                
     new_player = create_player_route(request,current_app)
@@ -87,6 +89,7 @@ def create_player(tables):
 
 @blueprints.event_blueprint.route('/player',methods=['PUT'])
 @load_tables
+@check_current_user_is_active
 @create_player_permissions.require(403)
 def add_existing_player_to_event(tables):                    
     input_data = json.loads(request.data)

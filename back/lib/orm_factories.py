@@ -137,6 +137,21 @@ def create_tournament(flask_app,tournament_name,
         flask_app.tables.db_handle.session.commit()
     return new_tournament
 
+def create_queue_for_tournament_machine(app,tournament_machine,max_queue_length,commit=False):
+    old_queue_slot=None
+    for queue_position in range(max_queue_length,0,-1):
+        new_queue_slot=app.tables.Queues()
+        new_queue_slot.position=queue_position
+        if old_queue_slot:            
+            new_queue_slot.queue_child=old_queue_slot
+        new_queue_slot.tournament_machine = tournament_machine
+        app.tables.db_handle.session.add(new_queue_slot)
+        old_queue_slot=new_queue_slot
+    
+    if commit:
+        app.tables.db_handle.session.commit()
+    
+    
 def create_audit_log(app, audit_log_params, commit=False):
     # action,user_id, player_id=None,
     #                 division_machine_id=None,team_id=None,generic_json_data=None,

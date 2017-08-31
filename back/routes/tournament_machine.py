@@ -2,13 +2,14 @@ from lib.flask_lib import blueprints
 from flask import jsonify,current_app,request
 from werkzeug.exceptions import BadRequest,Unauthorized
 import json
-from lib.serializer.generic import  generate_generic_serializer
+from lib.serializer.tournament_machine import generate_tournament_machine_to_dict_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
 from lib.serializer.deserialize import deserialize_json
 from lib.flask_lib.permissions import create_tournament_permissions
 from lib.route_decorators.auth_decorators import check_current_user_is_active
+from lib import orm_factories
 
 def edit_tournament_machine_route(tournament_machine_id,request,app):
     if request.data:        
@@ -52,7 +53,11 @@ def create_tournament_machine_route(request,app):
                                                    active=True)    
     app.tables.db_handle.session.add(new_tournament_machine)
     existing_tournament.tournament_machines.append(new_tournament_machine)    
+    if existing_tournament_machine is None:        
+        orm_factories.create_queue_for_tournament_machine(app,new_tournament_machine,16)        
     app.tables.db_handle.session.commit()
+    
+
     return new_tournament_machine
 
 @blueprints.event_blueprint.route('/tournament_machine',methods=['POST'])
@@ -60,8 +65,9 @@ def create_tournament_machine_route(request,app):
 @check_current_user_is_active
 @load_tables
 def create_tournament_machine(tables):    
-    new_tournament_machine = create_tournament_machine_route(request,current_app)
-    tournament_machine_serializer = generate_generic_serializer(serializer.generic.ALL)
+    new_tournament_machine = create_tournament_machine_route(request,current_app)    
+    #tournament_machine_serializer = generate_generic_serializer(serializer.generic.ALL)
+    tournament_machine_serializer = generate_tournament_machine_to_dict_serializer(serializer.generic.ALL)
     return jsonify({'new_tournament_machine':tournament_machine_serializer(new_tournament_machine)})
 
 @blueprints.event_blueprint.route('/tournament_machine/<tournament_machine_id>',methods=['PUT'])
@@ -71,6 +77,8 @@ def create_tournament_machine(tables):
 def edit_tournament_machine(tables,tournament_machine_id):    
     edited_tournament_machine = edit_tournament_machine_route(tournament_machine_id,request,current_app)    
     tables.db_handle.session.commit()
-    tournament_machine_serializer = generate_generic_serializer(serializer.generic.ALL)
+    #tournament_machine_serializer = generate_generic_serializer(serializer.generic.ALL)
+    tournament_machine_serializer = generate_tournament_machine_to_dict_serializer(serializer.generic.ALL)
+
     return jsonify({'edited_tournament_machine':tournament_machine_serializer(edited_tournament_machine)})
     

@@ -12,6 +12,8 @@ def generate_tournament_machines_class(db_handle,event_name):
         player_id=db_handle.Column('player_id', db_handle.Integer, db_handle.ForeignKey('players.player_id'))
         team_id=db_handle.Column('team_id', db_handle.Integer, db_handle.ForeignKey('teams_'+event_name+'.team_id'))
         active=db_handle.Column(db_handle.Boolean,default=False)
-        removed=db_handle.Column(db_handle.Boolean)        
+        removed=db_handle.Column(db_handle.Boolean)
+        queue = db_handle.relationship('Queues')        
+
     return TournamentMachines
     

@@ -147,10 +147,10 @@ def create_audit_log(app, audit_log_params, commit=False):
     deserialize.deserialize_json(audit_log,audit_log_params,app,allow_foreign_keys=True)
     #audit_log.action=action
     audit_log.action_date=datetime.datetime.now()    
-    if 'pss_user_id' in audit_log_params and audit_log_params['pss_user_id'] is not None:
-        audit_log.player_initiated=False
-    if 'player_id' in audit_log_params and audit_log_params['player_id'] is not None and 'pss_user_id' not in audit_log_params:
-        audit_log.player_initiated=True            
+    #if 'pss_user_id' in audit_log_params and audit_log_params['pss_user_id'] is not None:
+    #    audit_log.player_initiated=False
+    #if 'player_id' in audit_log_params and audit_log_params['player_id'] is not None and 'pss_user_id' not in audit_log_params:
+    #    audit_log.player_initiated=True            
     tables.db_handle.session.add(audit_log)
     if commit is True:
         tables.db_handle.session.commit()    
@@ -178,3 +178,4 @@ def create_audit_log(app, audit_log_params, commit=False):
     tables.db_handle.session.add(audit_log_ticket_summary)
     if commit is True:
         tables.db_handle.session.commit()
+    

@@ -39,7 +39,8 @@ def pss_login_route(request,tables,is_pss_admin_event=True):
         raise BadRequest('Username or password not specified')
     if 'username' not in input_data or 'password' not in input_data:
         raise BadRequest('Missing information')        
-    pss_user = tables.PssUsers.query.options(joinedload("admin_roles")).filter_by(username=input_data['username']).first()
+    pss_user = tables.PssUsers.query.options(joinedload("admin_roles"),joinedload("event_roles"),joinedload("events"),joinedload("event_user")).filter_by(username=input_data['username']).first()
+    #pss_user = tables.PssUsers.query.filter_by(username=input_data['username']).first()
     if pss_user is None:
         raise Unauthorized('Bad username or password')
     if pss_user.event_user is None:
@@ -122,8 +123,9 @@ def get_current_user(tables):
         return jsonify({'current_user':None})
     pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
     #GUYH - need to reget the current user, otherwise the serializer chokes on the proxy current_user gives back
-    user = tables.PssUsers.query.filter_by(pss_user_id=current_user.pss_user_id).first()
+    #user = tables.PssUsers.query.filter_by(pss_user_id=current_user.pss_user_id).first()
+    user = tables.PssUsers.query.options(joinedload("admin_roles"),joinedload("event_roles"),joinedload("events"),joinedload("event_user")).filter_by(pss_user_id=current_user.pss_user_id).first()
     user_dict=pss_user_serializer(user)
     return jsonify({'current_user':user_dict})
 
-#FIXME : need get_current_user for event user
+#FIXME : need get_current_user for player

@@ -136,7 +136,19 @@ def purchase_tickets_route(request,player,app,player_initiated=False):
     if player_initiated is False:
         new_token_purchase.completed_purchase=True
     else:
-        new_token_purchase.completed_purchase=False        
+        new_token_purchase.completed_purchase=False    
+    audit_log={'player_id':player.player_id,
+               'action':'Ticket Purchase',
+               'player_initiated':player_initiated}
+    purchase_summary_string = ", ".join([" : ".join([str(summary[0]),str(summary[1])]) for summary in purchase_summary+meta_purchase_summary])    
+
+    if player_initiated is False:
+        audit_log_description_string='tickets purchased - %s ' % (purchase_summary_string)
+    else:
+        audit_log_description_string='started purchase (token_purchase_id : %s) - %s' % (new_token_purchase.token_purchase_id,purchase_summary_string)
+        
+    audit_log['description']=audit_log_description_string
+    orm_factories.create_audit_log(app,audit_log)    
     app.tables.db_handle.session.commit()
     return new_token_purchase,purchase_summary+meta_purchase_summary
 

@@ -146,6 +146,7 @@ def add_existing_user_to_event(tables):
 @load_tables
 def get_existing_users(tables):                
     existing_users = tables.PssUsers.query.options(joinedload("event_roles"),joinedload("admin_roles"),joinedload("events"),joinedload("event_user")).all()
+    #existing_users = tables.PssUsers.query.all()
     pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
     existing_users_list = []
     for existing_user in existing_users:        

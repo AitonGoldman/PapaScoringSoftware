@@ -93,7 +93,9 @@ def create_player(tables):
 @create_player_permissions.require(403)
 def add_existing_player_to_event(tables):                    
     input_data = json.loads(request.data)
-    player = tables.Players.query.filter_by(player_id=input_data['player_id']).first()
+    player = tables.Players.query.options(joinedload("player_roles"),
+                                          joinedload("event_player"),
+                                          joinedload("events")).filter_by(player_id=input_data['player_id']).first()
     if player is None:
         raise BadRequest('No such player')
     event = tables.Events.query.filter_by(name=current_app.name).first()    

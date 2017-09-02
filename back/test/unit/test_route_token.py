@@ -421,7 +421,7 @@ class RouteTokenTest(PssUnitTestBase):
         self.mock_tournament_machine.player_id=None        
         self.mock_player.player_id=1
         self.mock_player.event_player.team_id=None
-        #self.mock_meta_tournament.meta_tournament_name='mock meta tournament'
+        self.mock_meta_tournament.meta_tournament_name='mock meta tournament'
         mock_query = MagicMock()
         mock_query.filter_by().count.return_value=1
         self.mock_tables.Tokens.query.filter_by.return_value = mock_query

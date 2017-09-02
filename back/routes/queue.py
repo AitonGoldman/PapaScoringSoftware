@@ -151,10 +151,10 @@ def add_player_to_queue(tables,tournament_machine_id):
     
     with tables.db_handle.session.no_autoflush:                
         try:                                           
-            queues_to_lock_for_addition = tables.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine_id).all()
+            #queues_to_lock_for_addition = tables.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine_id).all()
             existing_queue = queue_helpers.get_queue_player_is_already_in(player_id,current_app)            
             if existing_queue and existing_queue.tournament_machine_id == int(tournament_machine_id):                
-                tables.db_handle.session.commit()
+                #tables.db_handle.session.commit()
                 return jsonify({'result':'noop','added_queue':{}})
             if existing_queue:                
                 tournament_machine_id_to_remove_from = existing_queue.tournament_machine_id
@@ -169,18 +169,18 @@ def add_player_to_queue(tables,tournament_machine_id):
                     notification_helpers.notify_list_of_players(queues[existing_position:],"test message")
             
             queues = queue_helpers.get_queue_for_tounament_machine(current_app,tournament_machine_id)
-
-            sorted_remove_queue=queue_helpers.get_sorted_queue_for_tournament_machine(queues)                
-            for index,queue in enumerate(sorted_remove_queue):
-                if queue.player_id is None:
-                    break
-            if queue.player_id is None:
-                queue.player_id=player_id
-            if 'sleep' in input_data:
-                time.sleep(int(input_data['sleep']))
+            updated_queue = queue_helpers.add_player_to_queue(current_app,player_id,queues)
+            ##sorted_remove_queue=queue_helpers.get_sorted_queue_for_tournament_machine(queues)                
+            #for index,queue in enumerate(queues):
+            #    if queue.player_id is None:
+            #        break
+            #if queue.player_id is None:
+            #    queue.player_id=player_id
+            #if 'sleep' in input_data:
+            #    time.sleep(int(input_data['sleep']))
             tables.db_handle.session.commit()
             queue_serializer = serializer.queue.generate_queue_to_dict_serializer(serializer.queue.ALL)
-            return jsonify({'result':'player added','added_queue':queue_serializer(queue)})
+            return jsonify({'result':'player added','added_queue':queue_serializer(updated_queue)})
             
         except Exception as e:            
             tables.db_handle.session.commit()

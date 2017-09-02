@@ -1,5 +1,6 @@
 from sqlalchemy.orm import joinedload
 import itertools
+from werkzeug.exceptions import BadRequest
 
 def get_queue_for_tounament_machine(app,tournament_machine_id):
     return app.tables.Queues.query.options(joinedload("tournament_machine"),joinedload("player")).filter_by(tournament_machine_id=tournament_machine_id).order_by(app.tables.Queues.position).all()
@@ -25,8 +26,16 @@ def get_position_of_player_in_queue(app,player_id):
     else:
         return None    
 
-def add_player_to_queue(app,player_id,queues=None,tournament_machine_id=None):
-    pass
+def add_player_to_queue(player_id,queues):
+    for index,queue in enumerate(queues):
+        if queue.player_id is None:
+            break
+    if queue.player_id is not None:
+        raise BadRequest('no room left in queue')
+
+    if queue.player_id is None:
+        queue.player_id=player_id
+    return queue    
 
 def bump_player_down_queue(app,tournament_machine_id,queues):            
     #FIXME : actually use bump_amount to allow for larger bumps than 1
@@ -50,7 +59,8 @@ def remove_player_from_queue(app,player_id,queues=None,tournament_machine_id=Non
         position_in_queue=get_position_of_player_in_queue(app,player_id)
         if position_in_queue is None:
             return False
-    sorted_remove_queue=get_sorted_queue_for_tournament_machine(queues)                
+    #sorted_remove_queue=get_sorted_queue_for_tournament_machine(queues)
+    sorted_remove_queue=queues
     players_to_notify=[]
     for index,queue in enumerate(sorted_remove_queue):
         if index == len(sorted_remove_queue)-1:

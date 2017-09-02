@@ -62,6 +62,8 @@ The Tokens table has a one-to-many relationship with..
 
 The TokenPurchases table represents a single purchase.  For example, if I buy 3 tickets in main A and 4 tickets in classics then the TokenPurchase will contain all those tokens, in addition to the total cost of that purchase and the end results of the purchase (i.e. did it succeed or fail).  TokenPurchaseSummaries are associated with a single TokenPurchase and are summaries of the token count for each division.  Using the previous example, we would have two TokenPurchaseSummaries associated with the TokenPurchase - one for the main A tickets (which would record a count of 3) and one for the classics tickets (which would record a count of 4).  The TokenPurchaseSummaries make the three step process of "purchasing from your phone" much easier.  Please see the architecture overview for a explanation of the three step "purchasing from your phone" process.
 
+## Queues and SpecialQueues
+
 
 
 

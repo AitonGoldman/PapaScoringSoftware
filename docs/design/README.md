@@ -163,9 +163,29 @@ When we submit the purchase to stripe we are actually submitting a list of SKUs 
 
 Stripe can return back a number of errors which the PSS is capable of handling (i.e. bank refuses transaction, transaction rate exceeded, etc) - all errors returned by stripe are logged.  Tokens are NEVER marked as paid for if the PSS gets an error back from Sripe.
 
+## Queues
+
+Queues are associated with a specific TournamentMachine, and the maximum length of a queue can be configured for each tournament.  Event Users (with the correct permissions) can add or remove any player from a queue.  Players can add or remove only themselves from a queue, with one exception : it is possible for players to add or remove other players if they have another player's number and pin (i.e. you ask a friend to queue you becuase you don't have a phone).
+
+Players can not be queued up on a machine if no one is playing on the machine.  Players can not be queued if they do not have any tickets for the tournament.  Players can only be on one queue at a time across an entire event.  If a player is already in a queue, and they are added to another queue, then they will automatically be removed from the queue they were previously on.
+
+If a player is at the head of the queue, then the scorekeeper will be forced to start them on the machine once the current player is done playing.  Scorekeepers have the option of "bumping" someone down the queue if they are not present when it is their turn.  A player can only be bumped once - the second time they are removed from the queue.
+
+If a Event User mistakenly removes someone from a queue, scorekeepers have the option of inserting someone into the top of the queue.
+
+Players who have logged into the PSS via their android or ios phones can be notified via push notification of any changes to a queue that they are on.  Players will only recieve notifications if the change affects them - i.e. player at the head of the queue will not be notified if the player in slot 3 of the queue is removed.  Notifications are turned off by default, and are configured at the tournament level.
+
 ## Audit Log
 
+The following three things are pretty common things to hear from players : 
 
+- "The software says I don't have any more tickets left, but I know I do" 
+- "My score is missing"
+- "The score recorded is wrong"
+
+TDs need the ability to determine if the player is correct, or if the player is mistaken.  The audit log lets you do that by allowing you to see a players full history.  Each action taken by the player is placed in the audit log, along with any metadata associated with that action.  For example :  every time a scorekeeper records a score for a player. the PSS also records the scorekeeper, the time, and a summary of the players updated number of tickets.
+
+TDs can view and search the audit log in the audit log view.  By default, the audit log view is only viewable by TDs but this is configurable.  In the audit log view, you can see a players history (or a machine history ) for a given time frame (i.e. see the whole thing, or only look at the past 25 minutes), or you can search through a player (or machine) history based on any of the audit log fields - i.e. search through a player history for a specific machine.
 
 
 

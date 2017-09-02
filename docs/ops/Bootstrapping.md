@@ -47,6 +47,9 @@ source ./utils/ops/env_vars
 PYTHONPATH=. ./utils/gunicorn.cmd 1
 ```
 
+Note that the PSS will default to running on port 8000.
+
+
 In a seperate window, run the following command 
 
 ```

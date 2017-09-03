@@ -10,6 +10,7 @@ from lib import queue_helpers
 from lib import roles_constants,orm_factories
 import json
 from werkzeug.exceptions import BadRequest,Unauthorized
+import routes
 
 def generate_mock_tournament(tournament_id=None,meta_tournament_id=None):
     mock_tournament = MagicMock()        
@@ -45,144 +46,295 @@ class RouteQueueTest(PssUnitTestBase):
         self.mock_tournament_machine=MagicMock()
         self.mock_tournament=generate_mock_tournament(tournament_id=1)        
         self.mock_meta_tournament=generate_mock_tournament(meta_tournament_id=1)        
+        self.create_mock_queues()
 
-    def test_get_queue_for_tounament_machine(self):
-        #not needed
-        pass
-    def test_get_queue_player_is_already_in(self):
-        #not needed
-        pass
-    
-    def test_get_queue_for_tounament(self):
-        mock_queue_one=MagicMock()
-        mock_queue_one.tournament_machine_id=1
-        mock_queue_one.player_id=1
-        mock_queue_two=MagicMock()
-        mock_queue_two.tournament_machine_id=2
-        mock_queue_two.player_id=2
-        mock_queue_three=MagicMock()
-        mock_queue_three.tournament_machine_id=3
-        mock_queue_three.player_id=3
+    def test_clear_tournament_queue_route(self):
+        self.mock_queue_one.bumped=True                
+        self.mock_queue_two.bumped=True
+        self.mock_queue_three.bumped=False
 
-        self.mock_tables.Queues.query.options().join().filter_by().order_by().all.return_value=[mock_queue_one,mock_queue_two,mock_queue_three]
-        results = queue_helpers.get_queue_for_tounament(self.mock_app,1) 
-        grouped_results = [[q for q in group_q] for id,group_q in results]
-        self.assertEquals(1,grouped_results[0][0].player_id)
-        self.assertEquals(2,grouped_results[1][0].player_id)
-        self.assertEquals(3,grouped_results[2][0].player_id)
-    
-    def test_add_player_to_queue(self):
-        mock_queue_one=MagicMock()
-        mock_queue_one.tournament_machine_id=1
-        mock_queue_one.player_id=1
-        mock_queue_two=MagicMock()
-        mock_queue_two.tournament_machine_id=1
-        mock_queue_two.player_id=2
-        mock_queue_three=MagicMock()
-        mock_queue_three.tournament_machine_id=1
-        mock_queue_three.player_id=3
-        mock_queue_four=MagicMock()        
-        mock_queue_four.tournament_machine_id=1
-        mock_queue_four.player_id=None
-                
-        queues = [mock_queue_one,mock_queue_two,mock_queue_three,mock_queue_four]
-        result = queue_helpers.add_player_to_queue(4,queues)
-        self.assertEquals(mock_queue_four,result)
-        self.assertEquals(1,queues[0].player_id)
-        self.assertEquals(2,queues[1].player_id)
-        self.assertEquals(3,queues[2].player_id)
-        self.assertEquals(4,queues[3].player_id)        
-        with self.assertRaises(BadRequest) as cm:                
-            result = queue_helpers.add_player_to_queue(4,queues)
+        self.mock_tables.Queues.query.options().join().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]
+        #self.mock_tables.db_handle.session.no_autoflush.return_value.__enter__.return_value=MagicMock()
+        result = routes.queue.clear_tournament_queue_route(self.mock_app,1)
+        self.assertEquals(result,{'result':'clear!'})
+        self.assertEquals(self.mock_queue_one.player_id,None)
+        self.assertEquals(self.mock_queue_two.player_id,None)
+        self.assertEquals(self.mock_queue_three.player_id,None)
+        self.assertEquals(self.mock_queue_one.bumped,False)
+        self.assertEquals(self.mock_queue_two.bumped,False)
+        
+    def test_remove_player_from_queue_route(self):
+        mock_request_data = MagicMock()
+        mock_tournament_machine = MagicMock()
+        mock_player = MagicMock()        
+        mock_user = MagicMock()
+        mock_user.pss_user_id=1
+        
+        self.mock_queue_one.bumped=True
+        self.mock_queue_two.bumped=True
+        self.mock_queue_three.bumped=False        
+        
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]        
+        self.mock_tables.TournamentMachines.query.filter_by().first.return_value=mock_tournament_machine
+        self.mock_tables.Players.query.filter_by().first.return_value=mock_player
+
+        mock_request_data.data = '{"player_id":2}'
+        self.mock_tables.Queues.query.options().filter_by().first.return_value=self.mock_queue_two        
+        results = routes.queue.remove_player_from_queue_route(mock_request_data,self.mock_app,1,mock_user)        
+        self.assertEquals(results['updated_queue'][0].player_id,1)
+        self.assertEquals(results['updated_queue'][0].bumped,True)        
+        self.assertEquals(results['updated_queue'][1].player_id,3)
+        self.assertEquals(results['updated_queue'][1].bumped,False)        
+        self.assertEquals(results['updated_queue'][2].player_id,None)
+        self.assertEquals(results['updated_queue'][2].bumped,False)        
+
+        mock_request_data.data = '{"player_id":1}'
+        self.mock_tables.Queues.query.options().filter_by().first.return_value=self.mock_queue_one        
+        results = routes.queue.remove_player_from_queue_route(mock_request_data,self.mock_app,1,mock_user)        
+
+        self.assertEquals(results['updated_queue'][0].player_id,3)
+        self.assertEquals(results['updated_queue'][0].bumped,False)        
+        self.assertEquals(results['updated_queue'][1].player_id,None)
+        self.assertEquals(results['updated_queue'][1].bumped,False)        
+        self.assertEquals(results['updated_queue'][2].player_id,None)
+        self.assertEquals(results['updated_queue'][2].bumped,False)        
+
+        mock_request_data.data = '{"player_id":3}'
+        self.mock_tables.Queues.query.options().filter_by().first.return_value=self.mock_queue_one        
+        results = routes.queue.remove_player_from_queue_route(mock_request_data,self.mock_app,1,mock_user)        
+
+        self.assertEquals(results['updated_queue'][0].player_id,None)
+        self.assertEquals(results['updated_queue'][0].bumped,False)        
+        self.assertEquals(results['updated_queue'][1].player_id,None)
+        self.assertEquals(results['updated_queue'][1].bumped,False)        
+        self.assertEquals(results['updated_queue'][2].player_id,None)
+        self.assertEquals(results['updated_queue'][2].bumped,False)        
+
+        mock_request_data.data = '{"player_id":3}'
+        self.mock_tables.Queues.query.options().filter_by().first.return_value=None        
+        results = routes.queue.remove_player_from_queue_route(mock_request_data,self.mock_app,1,mock_user)        
+
+        self.assertEquals(results['result'],'noop')
+        
+    def test_bump_player_down_queue_route(self):
+        mock_request_data = MagicMock()
+        mock_tournament_machine = MagicMock()
+        mock_request_data.data = '{"action":"bump","player_id":1}'
+        mock_player = MagicMock()        
+        mock_player.player_id=1
+        
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]        
+        self.mock_tables.TournamentMachines.query.filter_by().first.return_value=mock_tournament_machine
+        self.mock_tables.Players.query.filter_by().first.return_value=mock_player
+
+        results = routes.queue.bump_player_down_queue_route(mock_request_data,self.mock_app,1)
+        self.assertEquals(self.mock_queue_one.player_id,2)
+        self.assertEquals(self.mock_queue_one.bumped,False)
+        self.assertEquals(self.mock_queue_two.player_id,1)
+        self.assertEquals(self.mock_queue_two.bumped,True)
+
+        mock_request_data.data = '{"action":"bump","player_id":2}'        
+        mock_player.player_id=2                
+        
+        results = routes.queue.bump_player_down_queue_route(mock_request_data,self.mock_app,1)
+        self.assertEquals(self.mock_queue_one.player_id,1)
+        self.assertEquals(self.mock_queue_one.bumped,True)
+        self.assertEquals(self.mock_queue_two.player_id,2)
+        self.assertEquals(self.mock_queue_two.bumped,True)
+
+        mock_request_data.data = '{"action":"bump","player_id":1}'        
+        mock_player.player_id=1                
+        
+        results = routes.queue.bump_player_down_queue_route(mock_request_data,self.mock_app,1)
+        self.assertEquals(self.mock_queue_one.player_id,2)
+        self.assertEquals(self.mock_queue_one.bumped,True)
+        self.assertEquals(self.mock_queue_two.player_id,3)
+        self.assertEquals(self.mock_queue_two.bumped,False)
+
+    def test_bump_player_down_queue_route_removes_player_with_queue_size_of_1(self):
+        mock_request_data = MagicMock()
+        mock_tournament_machine = MagicMock()
+        mock_request_data.data = '{"action":"bump","player_id":1}'
+        mock_player = MagicMock()        
+        mock_player.player_id=1
+        
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two]        
+        self.mock_tables.TournamentMachines.query.filter_by().first.return_value=mock_tournament_machine
+        self.mock_tables.Players.query.filter_by().first.return_value=mock_player
+
+        self.mock_queue_two.player_id=None        
+        results = routes.queue.bump_player_down_queue_route(mock_request_data,self.mock_app,1)
+        self.assertEquals(self.mock_queue_one.player_id,None)
+        self.assertEquals(self.mock_queue_one.bumped,False)
+        self.assertEquals(self.mock_queue_two.player_id,None)
+        self.assertEquals(self.mock_queue_two.bumped,False)        
+
+    def test_bump_player_down_queue_route_fails_with_wrong_player(self):
+        mock_request_data = MagicMock()
+        mock_tournament_machine = MagicMock()
+        mock_player = MagicMock()        
+        
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]        
+        self.mock_tables.TournamentMachines.query.filter_by().first.return_value=mock_tournament_machine
+        self.mock_tables.Players.query.filter_by().first.return_value=mock_player
+
+        mock_request_data.data = '{"action":"bump","player_id":2}'
+        mock_player.player_id=1
+
+        with self.assertRaises(Exception) as cm:        
+            results = routes.queue.bump_player_down_queue_route(mock_request_data,self.mock_app,1)
+        self.assertEquals(cm.exception.description,"Tried to bump player that is not at head of queue")
+
+
+    def test_add_player_to_queue_route(self):
+        mock_request_data = MagicMock()
+        mock_tournament_machine = MagicMock()
+        mock_request_data.data = '{"action":"poop","player_id":4}'
+        mock_player = MagicMock()        
+        mock_player.player_id=4
+        mock_user = MagicMock()
+        mock_user.pss_user_id=1
+
+        mock_query = MagicMock()
+        mock_query.filter_by().count.return_value=1
+        self.mock_tables.Tokens.query.filter_by.return_value = mock_query        
+        
+        self.mock_queue_three.player_id=None        
+        
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]        
+        self.mock_tables.Queues.query.options().filter_by().first.return_value=None
+
+        self.mock_tables.TournamentMachines.query.filter_by().first.return_value=mock_tournament_machine
+        self.mock_tournament.meta_tournament_id=None
+        self.mock_tables.Tournaments.query.filter_by().first.return_value=self.mock_tournament
+        
+        self.mock_tables.Players.query.filter_by().first.return_value=mock_player
+        routes.queue.add_player_to_queue_route_validate(mock_request_data,self.mock_app,1,mock_user)
+        routes.queue.add_player_to_queue_route_remove_existing(mock_request_data,self.mock_app,1,mock_user)
+        
+        results = routes.queue.add_player_to_queue_route(mock_request_data,self.mock_app,1,mock_user)
+        self.assertEquals(results['result'],"player added")
+        self.assertEquals(results['added_queue'],self.mock_queue_three)
+        self.assertEquals(results['added_queue'].player_id,4)
+
+        self.mock_tournament.meta_tournament_id=1
+        self.mock_tables.MetaTournaments.query.filter_by().first.return_value=self.mock_meta_tournament
+        self.mock_queue_three.player_id=None
+        results = routes.queue.add_player_to_queue_route(mock_request_data,self.mock_app,1,mock_user)
+        self.assertEquals(results['result'],"player added")
+        self.assertEquals(results['added_queue'],self.mock_queue_three)
+        self.assertEquals(results['added_queue'].player_id,4)
+
+    def test_add_player_to_queue_route_when_player_already_in_another_queue(self):
+        mock_request_data = MagicMock()
+        mock_tournament_machine = MagicMock()
+        mock_request_data.data = '{"action":"bump","player_id":4}'
+        mock_player = MagicMock()        
+        mock_player.player_id=4
+        mock_user = MagicMock()
+        mock_user.pss_user_id=1
+
+        mock_query = MagicMock()
+        mock_query.filter_by().count.return_value=1
+        self.mock_tables.Tokens.query.filter_by.return_value = mock_query        
+        
+        self.mock_queue_three.player_id=None                
+        self.mock_queue_four.player_id=4                
+        self.mock_queue_four.tournament_machine_id=2                
+        
+        #self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_four]        
+        self.mock_tables.Queues.query.options().filter_by().first.return_value=self.mock_queue_four
+
+        self.mock_tables.TournamentMachines.query.filter_by().first.return_value=mock_tournament_machine
+        self.mock_tournament.meta_tournament_id=None
+        self.mock_tables.Tournaments.query.filter_by().first.return_value=self.mock_tournament
+        
+        self.mock_tables.Players.query.filter_by().first.return_value=mock_player
+
+        routes.queue.add_player_to_queue_route_validate(mock_request_data,self.mock_app,1,mock_user)
+        routes.queue.add_player_to_queue_route_remove_existing(mock_request_data,self.mock_app,1,mock_user)                
+
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]        
+        results = routes.queue.add_player_to_queue_route(mock_request_data,self.mock_app,1,mock_user)
+        
+        self.assertEquals(results['result'],"player added")
+        self.assertEquals(results['added_queue'],self.mock_queue_three)
+        self.assertEquals(results['added_queue'].player_id,4)
+        self.assertEquals(self.mock_queue_four.player_id,None)
+        
+    def test_add_player_to_queue_route_fails_when_queue_is_full_or_empty(self):
+        mock_request_data = MagicMock()
+        mock_tournament_machine = MagicMock()
+        mock_request_data.data = '{"action":"bump","player_id":4}'
+        mock_player = MagicMock()        
+        mock_player.player_id=4
+        mock_user = MagicMock()
+        mock_user.pss_user_id=1
+
+        mock_query = MagicMock()
+        mock_query.filter_by().count.return_value=1
+        self.mock_tables.Tokens.query.filter_by.return_value = mock_query                        
+        
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]        
+        self.mock_tables.Queues.query.options().filter_by().first.return_value=None
+
+        self.mock_tables.TournamentMachines.query.filter_by().first.return_value=mock_tournament_machine
+        self.mock_tournament.meta_tournament_id=None
+        self.mock_tables.Tournaments.query.filter_by().first.return_value=self.mock_tournament
+        
+        self.mock_tables.Players.query.filter_by().first.return_value=mock_player
+        with self.assertRaises(Exception) as cm:                
+            results = routes.queue.add_player_to_queue_route(mock_request_data,self.mock_app,1,mock_user)
         self.assertEquals(cm.exception.description,"no room left in queue")
 
-    def test_remove_player_from_queue(self):
-        mock_queue_one=MagicMock()
-        mock_queue_one.tournament_machine_id=1
-        mock_queue_one.player_id=1
-        mock_queue_one.position=1
+        self.mock_queue_one.player_id=None
+        self.mock_queue_two.player_id=None
+        self.mock_queue_three.player_id=None
+
+        with self.assertRaises(Exception) as cm:
+            routes.queue.add_player_to_queue_route_validate(mock_request_data,self.mock_app,1,mock_user)
+            routes.queue.add_player_to_queue_route_remove_existing(mock_request_data,self.mock_app,1,mock_user)                               
+            results = routes.queue.add_player_to_queue_route(mock_request_data,self.mock_app,1,mock_user)
+        self.assertEquals(cm.exception.description,"Can not add to empty queue.  Please see scorekeeper")
         
-        mock_queue_two=MagicMock()
-        mock_queue_two.tournament_machine_id=1
-        mock_queue_two.player_id=2
-        mock_queue_two.position=2
+    def test_add_player_to_queue_route_fails_with_no_tickets(self):
+        mock_request_data = MagicMock()
+        mock_tournament_machine = MagicMock()
+        mock_request_data.data = '{"action":"bump","player_id":4}'
+        mock_player = MagicMock()        
+        mock_player.player_id=4
+        mock_user = MagicMock()
+        mock_user.pss_user_id=1
 
-        mock_queue_three=MagicMock()
-        mock_queue_three.tournament_machine_id=1
-        mock_queue_three.player_id=3
-        mock_queue_three.position=3
-
-        mock_queue_four=MagicMock()        
-        mock_queue_four.tournament_machine_id=1
-        mock_queue_four.player_id=None
-        mock_queue_four.position=4
-
-        self.mock_tables.Queues.query.options().filter_by().first.return_value=mock_queue_two
-                
-        queues = [mock_queue_one,mock_queue_two,mock_queue_three,mock_queue_four]
-        result = queue_helpers.remove_player_from_queue(self.mock_app,2,queues)
-        self.assertTrue(result)
-        self.assertEquals(1,queues[0].player_id)
-        self.assertEquals(3,queues[1].player_id)
-        self.assertEquals(None,queues[2].player_id)
-        self.assertEquals(None,queues[3].player_id)        
-
-        self.mock_tables.Queues.query.options().filter_by().first.return_value=mock_queue_two        
-        result = queue_helpers.remove_player_from_queue(self.mock_app,3,queues)
-        self.assertTrue(result)
-        self.assertEquals(1,queues[0].player_id)
-        self.assertEquals(None,queues[1].player_id)
-        self.assertEquals(None,queues[2].player_id)
-        self.assertEquals(None,queues[3].player_id)        
-
-        self.mock_tables.Queues.query.options().filter_by().first.return_value=mock_queue_one        
-        result = queue_helpers.remove_player_from_queue(self.mock_app,1,queues)
-        self.assertTrue(result)
-        self.assertEquals(None,queues[0].player_id)
-        self.assertEquals(None,queues[1].player_id)
-        self.assertEquals(None,queues[2].player_id)
-        self.assertEquals(None,queues[3].player_id)        
+        mock_query = MagicMock()
+        mock_query.filter_by().count.return_value=0
+        self.mock_tables.Tokens.query.filter_by.return_value = mock_query        
         
+        self.mock_queue_three.player_id=None
+        
+        self.mock_tables.Queues.query.options().filter_by().order_by().all.return_value=[self.mock_queue_one,self.mock_queue_two,self.mock_queue_three]        
         self.mock_tables.Queues.query.options().filter_by().first.return_value=None
+
+        self.mock_tables.TournamentMachines.query.filter_by().first.return_value=mock_tournament_machine
+        self.mock_tournament.meta_tournament_id=None
+        self.mock_tables.Tournaments.query.filter_by().first.return_value=self.mock_tournament
         
-        result = queue_helpers.remove_player_from_queue(self.mock_app,2,queues)            
-        self.assertEquals(result,False)
+        self.mock_tables.Players.query.filter_by().first.return_value=mock_player
 
+        with self.assertRaises(Exception) as cm:                
+            routes.queue.add_player_to_queue_route_validate(mock_request_data,self.mock_app,1,mock_user)
+            routes.queue.add_player_to_queue_route_remove_existing(mock_request_data,self.mock_app,1,mock_user)                               
+            results = routes.queue.add_player_to_queue_route(mock_request_data,self.mock_app,1,mock_user)
+        self.assertEquals(cm.exception.description,"Player has no tokens")
+
+        self.mock_tournament.meta_tournament_id=1
+        self.mock_tables.MetaTournaments.query.filter_by().first.return_value=self.mock_meta_tournament
         
-    def test_bump_player_down_queue(self):
-        mock_queue_one=MagicMock()
-        mock_queue_one.tournament_machine_id=1
-        mock_queue_one.player_id=1
-        mock_queue_one.bumped=False
-        
-        mock_queue_two=MagicMock()
-        mock_queue_two.tournament_machine_id=1
-        mock_queue_two.player_id=2
-        mock_queue_two.bumped=False
-
-        mock_queue_three=MagicMock()
-        mock_queue_three.tournament_machine_id=1
-        mock_queue_three.player_id=3
-        mock_queue_three.bumped=False
-
-        mock_queue_four=MagicMock()        
-        mock_queue_four.tournament_machine_id=1
-        mock_queue_four.player_id=None
-        mock_queue_four.bumped=False
-                
-        queues = [mock_queue_one,mock_queue_two,mock_queue_three,mock_queue_four]
-        self.mock_tables.Queues.query.options().filter_by().first.return_value=mock_queue_one        
-        result = queue_helpers.bump_player_down_queue(self.mock_app,1,queues)
-        self.assertEquals(queues,result)        
-        self.assertEquals(queues[0].player_id,2)
-        self.assertEquals(queues[0].bumped,False)
-        self.assertEquals(queues[1].player_id,1)
-        self.assertEquals(queues[1].bumped,True)
-
-        result = queue_helpers.bump_player_down_queue(self.mock_app,1,queues)        
-        self.assertEquals(queues[0].player_id,1)
-        self.assertEquals(queues[0].bumped,True)
-        self.assertEquals(queues[1].player_id,2)
-        self.assertEquals(queues[1].bumped,True)
-
+        with self.assertRaises(Exception) as cm:
+            routes.queue.add_player_to_queue_route_validate(mock_request_data,self.mock_app,1,mock_user)
+            routes.queue.add_player_to_queue_route_remove_existing(mock_request_data,self.mock_app,1,mock_user)                                           
+            results = routes.queue.add_player_to_queue_route(mock_request_data,self.mock_app,1,mock_user)
+        self.assertEquals(cm.exception.description,"Player has no tokens")
+ 
         

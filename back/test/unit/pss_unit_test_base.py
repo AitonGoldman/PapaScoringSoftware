@@ -11,6 +11,32 @@ class PssUnitTestBase(unittest.TestCase):
         #FIXME : need constants for these strings
         self.tables = ImportedTables(self.db_handle,'test_app','test_pss_amin_app')        
         self.mock_app = MagicMock()
+
+    def create_mock_queues(self):
+        self.mock_queue_one=MagicMock()
+        self.mock_queue_one.tournament_machine_id=1
+        self.mock_queue_one.player_id=1
+        self.mock_queue_one.bumped=False
+        self.mock_queue_one.position=1
+        
+        self.mock_queue_two=MagicMock()
+        self.mock_queue_two.tournament_machine_id=1
+        self.mock_queue_two.player_id=2
+        self.mock_queue_two.bumped=False
+        self.mock_queue_two.position=2
+
+        self.mock_queue_three=MagicMock()
+        self.mock_queue_three.tournament_machine_id=1
+        self.mock_queue_three.player_id=3
+        self.mock_queue_three.bumped=False
+        self.mock_queue_three.position=3
+
+        self.mock_queue_four=MagicMock()        
+        self.mock_queue_four.tournament_machine_id=1
+        self.mock_queue_four.player_id=None
+        self.mock_queue_four.player_id=4
+        self.mock_queue_four.bumped=False
+        self.mock_queue_four.position=4
         
     def create_mock_role(self,role_name):
         mock_role = MagicMock()

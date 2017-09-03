@@ -26,13 +26,13 @@ def get_position_of_player_in_queue(app,player_id):
     else:
         return None    
 
-def add_player_to_queue(player_id,queues):
+def add_player_to_queue(player_id,queues,app,tournament_machine_id):
+    queues_to_lock_for_addition = app.tables.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine_id).all()
     for index,queue in enumerate(queues):
         if queue.player_id is None:
             break
     if queue.player_id is not None:
         raise BadRequest('no room left in queue')
-
     if queue.player_id is None:
         queue.player_id=player_id
     return queue    

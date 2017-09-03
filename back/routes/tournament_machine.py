@@ -30,7 +30,7 @@ def create_tournament_machine_route(request,app):
     if request.data:        
         input_data = json.loads(request.data)
     else:
-        raise BadRequest('Username or password not specified')
+        raise BadRequest('info not specified')
     if 'tournament_id' not in input_data or 'machine_id' not in input_data:
         raise BadRequest('Missing information')        
     existing_tournament_machine = app.tables.TournamentMachines.query.filter_by(machine_id=input_data['machine_id']).first()
@@ -54,7 +54,7 @@ def create_tournament_machine_route(request,app):
     app.tables.db_handle.session.add(new_tournament_machine)
     existing_tournament.tournament_machines.append(new_tournament_machine)    
     if existing_tournament_machine is None:        
-        orm_factories.create_queue_for_tournament_machine(app,new_tournament_machine,16)        
+        orm_factories.create_queue_for_tournament_machine(app,new_tournament_machine,existing_tournament.queue_size)        
     app.tables.db_handle.session.commit()
     
 

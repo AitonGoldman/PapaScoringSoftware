@@ -20,7 +20,7 @@ class PssIntegrationTestBase(unittest.TestCase):
 
     def create_uniq_id(self):
         random_string = ""
-        for x in range(15):
+        for x in range(5):
             random_string = random_string+chr(random.randrange(97,122))        
         return random_string
         
@@ -56,12 +56,21 @@ class PssIntegrationTestBase(unittest.TestCase):
         bootstrap.bootstrap_roles(self.pss_admin_app.tables)        
         self.bootstrap_pss_users(self.pss_admin_app)                
                 
-    def assertHttpCodeEquals(self,http_response, http_response_code_expected):
-        error_string = 'Was expecting status code %s, but it was %s with message of %s' % (http_response_code_expected, http_response.status_code,http_response.data)
+    def assertHttpCodeEquals(self,http_response, http_response_code_expected,http_error_message=None):
+        if http_error_message:
+            expecting_message_string=' and expecting message "%s"'%http_error_message
+        else:
+            expecting_message_string=''
+        error_string = 'Was expecting status code %s %s, but it was %s with message of %s' % (http_response_code_expected, expecting_message_string, http_response.status_code,http_response.data)
         self.assertEquals(http_response.status_code,
                           http_response_code_expected,
                           error_string)
-        
+        if http_error_message:
+            response_error = json.loads(http_response.data)['message']
+            self.assertEquals(response_error,
+                              http_error_message,
+                              error_string)
+            
     def create_user_for_test(self,app,
                              username,
                              first_name=None,last_name=None,

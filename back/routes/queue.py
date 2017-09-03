@@ -95,7 +95,7 @@ def remove_player_from_queue_route(request,app,tournament_machine_id,user):
 @check_current_user_is_active
 @load_tables
 def remove_player_from_queue(tables,tournament_machine_id):
-    return jsonify(remove_player_from_queue_route(request,current_app,tournament_machine_id))
+    return jsonify(remove_player_from_queue_route(request,current_app,tournament_machine_id,current_user))
 
 def bump_player_down_queue_route(request,app,tournament_machine_id):
     if request.data:        
@@ -116,7 +116,7 @@ def bump_player_down_queue_route(request,app,tournament_machine_id):
             if action == 'bump':                                
                 queues = queue_helpers.get_queue_for_tounament_machine(app,tournament_machine_id)
                 if queues[0].player_id != int(player_id):
-                    raise BadRequest('Tried to bump player that is not at head of queue')
+                    raise BadRequest('Bump failed (the queue might have changed under you).  Please try again')
                 #FIXME : change logic to allow for more than one bump
                 if queues[0].bumped is False and queues[1].player_id is not None:                    
                     queue_helpers.bump_player_down_queue(app,tournament_machine_id,queues)
@@ -141,7 +141,7 @@ def bump_player_down_queue_route(request,app,tournament_machine_id):
 @check_current_user_is_active
 @load_tables
 def bump_player_down_queue(tables,tournament_machine_id):
-    return jsonify(bump_player_down_queue_route(request,app,tournament_machine_id))
+    return jsonify(bump_player_down_queue_route(request,current_app,tournament_machine_id))
 
 #FIXME : raise exception, don't swallow it
 def add_player_to_queue_route_validate(request,app,tournament_machine_id,user):

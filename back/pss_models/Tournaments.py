@@ -10,6 +10,7 @@ def generate_tournaments_class(db_handle,event_name):
         meta_tournament_id=db_handle.Column('meta_tournament_id', db_handle.Integer, db_handle.ForeignKey('meta_tournaments_'+event_name+'.meta_tournament_id'))        
         
         queuing=db_handle.Column(db_handle.Boolean,default=False)
+        queue_size=db_handle.Column(db_handle.Integer,default=15)
         num_spaces_to_bump_player_down_queue=db_handle.Column(db_handle.Integer,default=1)
 
         use_stripe=db_handle.Column(db_handle.Boolean,default=False)

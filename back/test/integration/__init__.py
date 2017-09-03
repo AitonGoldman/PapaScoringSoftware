@@ -24,7 +24,8 @@ def static_setup():
 def create_test_db(db_name=None):    
     global PSS_ADMIN_EVENT,pss_config    
     dummy_app = Flask(PSS_ADMIN_EVENT)            
-    pss_config.get_db_info(db_name=db_name).create_db_and_tables(dummy_app,False)        
+    pss_config.get_db_info(db_name=db_name).create_db_and_tables(dummy_app,False)
+    pss_config.get_db_info(db_name=db_name).load_machines_from_json(dummy_app,True)
     del dummy_app
     
 def initialize_pss_admin_app_in_db(db_name=None):        

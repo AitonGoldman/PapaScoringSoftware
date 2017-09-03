@@ -18,6 +18,28 @@ class PssIntegrationTestExistingTournamentAndMetaTournament(pss_integration_test
             new_team.event_players.append(player_2.event_player)            
             app.tables.db_handle.session.commit()
         return new_team.team_id
+
+    def createTournamentMachine(self):
+        with self.event_app.test_client() as c:            
+            existing_machines = self.event_app.tables.TournamentMachines.query.order_by(self.event_app.tables.TournamentMachines.machine_id).all()
+            if existing_machines:
+                new_machine_id=existing_machines[-1].machine_id+1
+            else:
+                new_machine_id=1
+            existing_tournament = self.event_app.tables.Tournaments.query.filter_by(tournament_id=1).first()
+            existing_tournament.queue_size=3
+            self.event_app.tables.db_handle.session.commit()
+            
+            rv = c.post('/auth/pss_event_user/login',
+                        data=json.dumps({'username':self.standard_td_username,
+                                         'password':self.generic_password}))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.post('/tournament_machine',
+                        data=json.dumps({'tournament_id':1,
+                                         'machine_id':new_machine_id}))
+            self.assertHttpCodeEquals(rv,200)            
+            return json.loads(rv.data)['new_tournament_machine']
+        
     
     def createTournament(self):
         self.new_tournament_name='newTournament'
@@ -37,7 +59,7 @@ class PssIntegrationTestExistingTournamentAndMetaTournament(pss_integration_test
                                          'last_name':'test_player_last_name',
                                          'ifpa_ranking':9999}))
             self.assertHttpCodeEquals(rv,200)
-            self.player_id_with_no_tokens=json.loads(rv.data)['new_player']['event_player']['player_id']
+            self.player_id_with_no_tokens=json.loads(rv.data)['new_player']['player_id']
             self.player_with_no_tokens=self.event_app.tables.Players.query.filter_by(player_id=self.player_id_with_no_tokens).first()
             self.player_event_id_with_no_tokens=self.player_with_no_tokens.event_player.event_player_id
             self.player_event_pin_with_no_tokens=self.player_with_no_tokens.event_player.event_player_pin

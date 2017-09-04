@@ -36,6 +36,7 @@ def get_event_app(app, pss_config):
 
 def get_base_app(app, pss_config):    
     app.config['DEBUG']=True
+    app.config['SESSION_COOKIE_PATH']='/%s'%app.name
     app.json_encoder = CustomJSONEncoder            
     principals = Principal(app)    
     app.my_principals = principals    

@@ -1,0 +1,37 @@
+
+.chatitem {
+
+}
+.chatitem.ng-enter {
+    -webkit-animation: bounceIn 1s;
+    animation: bounceIn 1s;
+}
+.chatitem.ng-exit {
+    -webkit-animation: bounceOut 1s;
+    animation: bounceOut 1s;
+}
+
+.backglass:after {
+    background-image: url('http://www.planetarypinball.com/mm5/images/products/pinbotglassL.jpg');
+    background-repeat: no-repeat;
+    content: '';
+    display: block;
+    width:100px;
+    height:100px;
+    position: relative;
+    /* //background-position: 25% 25%; */
+    /* background-size: contain; */
+    /* -moz-background-size: contain; */
+    /* -webkit-background-size: contain; */
+    top:100px;
+    margin-left:auto;
+    z-index:999;
+}
+
+.circular--square {
+  border-top-left-radius: 50% 50%;
+  border-top-right-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  border-bottom-left-radius: 50% 50%;
+}
+

@@ -1,0 +1,109 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+
+// // $tabs-height:                     49px !default;
+// // $tabs-text-font-size:             14px !default;
+// // $tabs-text-font-size-side-icon:   10px !default;
+// // $tabs-icon-size:                  32px !default;
+// // $tabs-badge-padding:              1px 6px !default;
+// // $tabs-badge-font-size:            12px !default;
+
+// $tabs-height:                     59px !default;
+// // $tabs-text-font-size:             14px !default;
+// // $tabs-text-font-size-side-icon:   10px !default;
+// // $tabs-icon-size:                  32px !default;
+// // $tabs-badge-padding:              1px 6px !default;
+// // $tabs-badge-font-size:            12px !default;
+
+
+// $bar-height:                      74px !default;
+// $bar-title-font-size:             14px !default;
+// $bar-padding-portrait:            20px !default;
+// // $bar-padding-landscape:           5px !default;
+// // $bar-transparency:                1 !default;
+
+// $font-size-base:                  28px !default;
+// $item-font-size:                  28px !default;
+
+
+// $button-large-font-size:                26px !default;
+// //$button-height:                   42px !default;
+// //$button-padding:                  12px !default;
+// //$button-icon-size:                24px !default;
+
+// //$positive:                        red !default;
+
+// // $input-height-base: 100px;
+// // $input-bg: blue;
+// // $input-color: blue;
+// // $input-border: solid;
+// // $input-border-width: 10px;
+
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+
+
+.desktop-only { 
+    @media screen and (max-device-width: 611px){         
+      display:none;
+    }
+}
+
+.mobile-only { 
+    @media screen and (min-device-width: 610px){         
+      display:none;
+    }
+}
+
+.desktop-75-width {
+    @media screen and (min-device-width: 611px){         
+      width:75%;
+    }                    
+}
+
+.desktop-50-width {
+    @media screen and (min-device-width: 611px){         
+      width:50%;
+    }                    
+}
+.slowride{
+    -webkit-animation-duration: 5s;
+    animation-duration: 5s;
+}
+
+.medride{
+    -webkit-animation-duration: 3s;
+    animation-duration: 3s;
+}
+
+.truncate{
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;    
+}
+
+.button-pagraph {
+  line-height: 1.5em;
+}
+
+.grey {
+  color: #AAAAAA;
+}

@@ -15,6 +15,15 @@ from pss_models.PssUsers import generate_pss_user_event_role_mapping
 import os
 from lib import orm_factories
 
+@blueprints.pss_admin_event_blueprint.route('/event',methods=['GET'])
+@load_tables
+def get_events(tables):                    
+    events = tables.Events.query.all()
+    event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        
+    #FIXME : pss_admin should not be hard coded here
+    return jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})
+    
+
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['POST'])
 @load_tables
 @create_pss_event_permissions.require(403)

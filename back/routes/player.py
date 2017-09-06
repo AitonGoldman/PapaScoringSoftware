@@ -11,6 +11,7 @@ from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
 from lib.route_decorators.auth_decorators import check_current_user_is_active
+import time
 
 def check_multi_division_tournament_selection_is_valid(app, player):
     if player.event_player.multi_division_tournament_id is None:
@@ -116,8 +117,7 @@ def get_existing_players(tables):
     existing_players_list = []
     for existing_player in existing_players:        
         user_dict = pss_player_serializer(existing_player)                
-        existing_players_list.append(user_dict)
-    
+        existing_players_list.append(user_dict)        
     return jsonify({'existing_players':existing_players_list})
 
 

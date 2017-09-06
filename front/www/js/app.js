@@ -4,8 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('pss', ['ionic', 'ngAnimate','event_select'])
-
+angular.module('pss', ['ionic', 'ngAnimate','event_select','pss_admin','resource_wrapper','credentials'])
     .run(function($ionicPlatform) {
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -13,7 +12,6 @@ angular.module('pss', ['ionic', 'ngAnimate','event_select'])
             if (window.cordova && window.cordova.plugins.Keyboard) {
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 cordova.plugins.Keyboard.disableScroll(true);
-
             }
             if (window.StatusBar) {
                 // org.apache.cordova.statusbar required
@@ -21,12 +19,10 @@ angular.module('pss', ['ionic', 'ngAnimate','event_select'])
             }
         });
     })
-
     .config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
         $ionicConfigProvider.backButton.text('');
         $ionicConfigProvider.backButton.icon('ion-arrow-left-c');
         $ionicConfigProvider.backButton.previousTitleText(false);
-
-        // if none of the above states are matched, use this as the fallback
-        
+        $ionicConfigProvider.views.maxCache(0);
+        $ionicConfigProvider.templates.maxPrefetch(0);
     });

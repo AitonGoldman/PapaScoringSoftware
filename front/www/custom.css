@@ -2,13 +2,15 @@
 .chatitem {
 
 }
+
 .chatitem.ng-enter {
-    -webkit-animation: bounceIn 1s;
-    animation: bounceIn 1s;
+    -webkit-animation: slideInLeft 1s;
+    animation: slideInLeft 1s;
 }
+
 .chatitem.ng-exit {
-    -webkit-animation: bounceOut 1s;
-    animation: bounceOut 1s;
+    -webkit-animation: slideOutRight 1s;
+    animation: slideOutRight 1s;
 }
 
 .backglass:after {

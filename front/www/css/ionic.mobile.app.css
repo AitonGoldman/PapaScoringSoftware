@@ -9831,13 +9831,21 @@ a.button {
   .desktop-50-width {
     width: 50%; } }
 
-.slowride {
-  -webkit-animation-duration: 5s;
-  animation-duration: 5s; }
+@media screen and (max-device-width: 610px) {
+  .desktop-50-width {
+    width: 100%; } }
 
-.medride {
-  -webkit-animation-duration: 3s;
-  animation-duration: 3s; }
+@media screen and (max-device-width: 610px) {
+  .mobile-almost-full-width-button {
+    width: 90%;
+    margin-bottom: 5px;
+    margin-top: 5px; } }
+
+@media screen and (min-device-width: 611px) {
+  .mobile-almost-full-width-button {
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 10px; } }
 
 .truncate {
   white-space: nowrap;
@@ -9849,3 +9857,11 @@ a.button {
 
 .grey {
   color: #AAAAAA; }
+
+.mobile_logo {
+  width: 42px;
+  height: 42px; }
+
+.desktop_logo {
+  width: 42px;
+  height: 42px; }

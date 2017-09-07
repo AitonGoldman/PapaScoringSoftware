@@ -1,24 +1,22 @@
-<div class='item item-borderless'>
-  <center>
-    Enter Login Info 
-    <hr>
-  </center>
-</div>
 <div>
-  <label class="item item-input">
-    <input type="text" placeholder="First Name">
-  </label>
-  <label class="item item-input">
-    <input type="text" placeholder="Last Name">
-  </label>
+  <form>
+      <label class="item item-input">
+        <input type="text" placeholder="Username" ng-model="pss_user.username"/>        
+      </label>
+
+      <label class="item item-input">
+        <input type="text" placeholder="Password" ng-model="pss_user.password"/>
+      </label>
 </div>
 <div class='row'>
   <div class='col'>
   </div>
-  <button class="padding button-pagraph col-33 button button-block button-positive">
-    Login
+  <input ng-click='login_func()' type="button" class="padding button-pagraph col-33 button button-block button-positive" value="Login">
+
   </button>
   <div class='col'>
   </div>    
 </div>
+</form>
+
 

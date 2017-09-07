@@ -44,6 +44,7 @@ def pss_login_route(request,tables,is_pss_admin_event=True):
     if pss_user is None:
         raise Unauthorized('Bad username or password')
     if pss_user.event_user is None:
+        #FIXME : need special handling for pss_admin here?
         raise BadRequest('User does not have access to this event')                        
     if not pss_user.event_user.verify_password(input_data['password']):        
         raise Unauthorized('Bad username or password')

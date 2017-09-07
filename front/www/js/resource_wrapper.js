@@ -3,7 +3,7 @@ angular.module('resource_wrapper')
     .factory('resourceWrapperService',
              ['$resource','$q','$ionicLoading','$ionicPopup','$state','$timeout',
               function($resource, $q, $ionicLoading,$ionicPopup, $state, $timeout) {
-                  //FIXME : this should be in it's own service, but I'm being lazy
+                  //FIXME : this should be in it's own service, but I'm being lazy                  
                   var generate_on_failure = function(new_state,custom_error){
                       var on_failure= function(data){                          
                           var error_message;
@@ -39,7 +39,7 @@ angular.module('resource_wrapper')
 		                  rejection.data.debug="HTTP Timeout while getting<br>"+rejection.config.url;
 	                      }
                               if(rejection.status == 401 || rejection.status == 403){                
-		                  rejection.data.message="You are not authroized to do this.";
+		                  rejection.data.message="You are not authorized to do this.";
                               }                              
                               if(rejection.status == 409){                
 		                  rejection.data.debug="";
@@ -58,11 +58,12 @@ angular.module('resource_wrapper')
 
                   };
 
-                  var get_wrapper_with_loading = function(api_name,on_success,on_error){
+                  var get_wrapper_with_loading = function(api_name,on_success,on_error,url_parameters,post_parameters){
+                      var method = api_name.substring(0,api_name.indexOf('_'));                                                                                        
                       return $ionicLoading.show({
                           template: 'Loading...'                         
                       }).then(function(){                          
-                          new_res = rest_api[api_name].get(on_success,on_error);
+                          new_res = rest_api[api_name][method](url_parameters,post_parameters,on_success,on_error);
                           return new_res.$promise;
                       }).then(function(){
                           $timeout($ionicLoading.hide,250);
@@ -71,7 +72,13 @@ angular.module('resource_wrapper')
                       });
                   };
                   var rest_api = {};
-                  rest_api['events'] = $resource('http://0.0.0.0:8000/pss_admin/event',{},{'get':{interceptor:generate_response_interceptor()}});
+                  rest_api['get_events'] = $resource('http://0.0.0.0:8000/pss_admin/event',
+                                                 {},
+                                                 {'get':{interceptor:generate_response_interceptor()}});                  
+                  rest_api['post_pss_admin_login'] = $resource('http://0.0.0.0:8000/pss_admin/auth/pss_user/login',
+                                                          {},
+                                                               {'post':{method:"POST",interceptor:generate_response_interceptor()}});
+                  
                   return {'get_wrapper':function(api_name){return rest_api[api_name];},
                           'get_wrapper_with_loading':get_wrapper_with_loading,
                           'stay_on_current_state_for_error':generate_on_failure('.'),

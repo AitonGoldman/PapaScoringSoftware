@@ -61,6 +61,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "www/lib/ionic/scss/ionic";
 
 
+.input_height_div {
+  height: $input-height-base;
+}
+
 .desktop-only { 
     @media screen and (max-device-width: 611px){         
       display:none;

@@ -1,49 +1,7 @@
-<div class='chatitem' ng-if="post_success!=undefined">
-  <div>
-    <div class='item item-borderless'>
-      <center>
-        Logged In <i class="icon ion-checkmark-circled balanced" style='font-size:26px'></i>
-        <hr>
-      </center>
-    </div>
-    <div class='row'>
-      <div class='col-50'>
-        <span style='float:right'>
-           User Name :
-        </span>
-      </div>
-      <div class='col'>
-      </div>
-      <div class='col-50'>
-        <span style='float:left'>
-          {{logged_in_user.username}}
-        </span>
-      </div>        
-    </div>
-    <div class='row'>
-      <div class='col-50 truncate'>
-        <span style='float:right'>
-          Tickets Left:
-        </span>
-      </div>
-      <div class='col'>
-      </div>
-      <div class='col-50'>
-        <span style='float:left'>
-          5
-        </span>
-      </div>        
-    </div>      
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
   </div>
-  <div class='row'>
-    <div class='col'>
-    </div>
-    <button class="padding button-pagraph col-33 button button-block button-positive">
-      Home
-    </button>
-    <div class='col'>
-    </div>
-    
+  <div class='row' ui-view='post_success_buttons'>
   </div>  
 </div>
 <div ng-if="post_success==undefined">

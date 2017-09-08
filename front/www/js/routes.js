@@ -56,7 +56,16 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             'pssAdminHeader@':{
                 templateUrl: 'templates/pss_admin_header.html'//,
                 //controller: 'pss_admin_controller'
-            }            
+            },
+            'post_success@app.pss_admin.login':{
+                templateUrl: 'templates/pss_admin_login_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.pss_admin.login':{
+                templateUrl: 'templates/pss_admin_login_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }
+            
         },data: {
             title: "Enter Login Info"
         }

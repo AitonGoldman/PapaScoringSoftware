@@ -3,6 +3,10 @@
 
 }
 
+.chatitemup {
+
+}
+
 .chatitem.ng-enter {
     -webkit-animation: slideInLeft 1s;
     animation: slideInLeft 1s;
@@ -11,6 +15,16 @@
 .chatitem.ng-exit {
     -webkit-animation: slideOutRight 1s;
     animation: slideOutRight 1s;
+}
+
+.chatitemup.ng-enter {
+    -webkit-animation: slideInUp 1s;
+    animation: slideInUp 1s;
+}
+
+.chatitemup.ng-exit {
+    -webkit-animation: slideOutDown 1s;
+    animation: slideOutDown 1s;
 }
 
 .backglass:after {

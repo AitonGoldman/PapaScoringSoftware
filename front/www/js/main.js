@@ -19,7 +19,11 @@ angular.module('pss', ['ionic', 'ngAnimate','resource_wrapper','credentials','ap
             }
         });
     })
-    .config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider) {
+    .config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider,$httpProvider) {
+        $httpProvider.defaults.useXDomain = true;
+        $httpProvider.defaults.withCredentials = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
         $ionicConfigProvider.views.transition('none');
         $ionicConfigProvider.backButton.text('');
         $ionicConfigProvider.backButton.icon('ion-arrow-left-c');

@@ -41,7 +41,7 @@ def create_event(tables):
     pss_config=PssConfig()
     new_event_app = Flask(input_data['name'])
     new_event_tables = orm_factories.create_event_tables(pss_config,new_event_app)    
-    new_event = orm_factories.create_event(current_user, tables, input_data, new_event_tables)        
+    new_event = orm_factories.create_event(current_user, tables, input_data, new_event_tables,current_user.pss_user_id)        
     generic_serializer = generic.generate_generic_serializer(serializer.generic.ALL)
     event_dict=generic_serializer(new_event)    
     return jsonify({'new_event':event_dict})

@@ -1,0 +1,23 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <div class='row' ui-view='post_success_buttons'>
+  </div>  
+</div>
+<div ng-if="post_success==undefined">
+  <form>
+      <label class="item item-input">
+        <input type="text" placeholder="Event Name" ng-model="event.name"/>        
+      </label>
+</div>
+<div class='row' ng-if="post_success==undefined">
+  <div class='col'>
+  </div>
+  <input ng-click='create_event_func()' type="button" class="padding button-pagraph col-33 button button-block button-positive" value="Create Event" />
+<!--  </button> -->
+  <div class='col'>
+  </div>    
+</div>
+</form>
+
+

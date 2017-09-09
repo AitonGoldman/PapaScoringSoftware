@@ -67,7 +67,32 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             }
             
         },data: {
-            title: "Enter Login Info"
+            title: "Login"
+        }
+    }).state('app.pss_admin.create_event', {
+        cache:false,
+        url: '/create_event',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/create_event_content.html',
+                controller: 'app.pss_admin.create_event_controller'
+            },
+            'pssAdminHeader@':{
+                templateUrl: 'templates/pss_admin_header.html'//,
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/pss_admin_footer.html'//,
+            },
+            'post_success@app.pss_admin.login':{
+                templateUrl: 'templates/event_create_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.pss_admin.login':{
+                templateUrl: 'templates/event_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Create Event"
         }
     })
 

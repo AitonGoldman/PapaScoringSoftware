@@ -76,8 +76,11 @@ angular.module('resource_wrapper')
                                                  {},
                                                  {'get':{interceptor:generate_response_interceptor()}});                  
                   rest_api['post_pss_admin_login'] = $resource('http://0.0.0.0:8000/pss_admin/auth/pss_user/login',
-                                                          {},
+                                                               {},
                                                                {'post':{method:"POST",interceptor:generate_response_interceptor()}});
+                  rest_api['post_create_event'] = $resource('http://0.0.0.0:8000/pss_admin/event',
+                                                            {},
+                                                            {'post':{method:"POST",interceptor:generate_response_interceptor()}});
                   
                   return {'get_wrapper':function(api_name){return rest_api[api_name];},
                           'get_wrapper_with_loading':get_wrapper_with_loading,

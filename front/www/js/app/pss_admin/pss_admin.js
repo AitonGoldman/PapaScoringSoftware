@@ -26,4 +26,21 @@ angular.module('pss_admin').controller(
             };
         }
     ]);
+angular.module('pss_admin').controller(
+    'app.pss_admin.create_event_controller',[
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {
+            $scope.event={};
+            $scope.bootstrap();            
+            $scope.create_event_func = function(){                
+                var on_success = function(data){
+                    $scope.logged_in_user=data['new_event'];                    
+                    $scope.post_success = true;
+                };                
+                var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
+                var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,on_failure,{},{name:$scope.event.name});            
+
+            };
+        }
+    ]);
 

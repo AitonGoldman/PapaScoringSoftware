@@ -5,6 +5,7 @@ def generate_events_class(db_handle):
         # pylint: disable=no-init
         # pylint can't find SQLAlchemy's __init__() method for some reason
         event_id = db_handle.Column(db_handle.Integer, primary_key=True)
+        event_creator_pss_user_id=db_handle.Column('pss_user_id', db_handle.Integer, db_handle.ForeignKey('pss_users.pss_user_id'))
         name = db_handle.Column(db_handle.String(100))
         queue_bump_amount = db_handle.Column(db_handle.Integer)
         stripe_api_key = db_handle.Column(db_handle.String(100))

@@ -10,10 +10,10 @@ import datetime
 
 ACTIONS_TO_ADD_TICKET_SUMMARY_TO = ["Score Recorded","Ticket Purchase","Player Ticket Purchase Complete"]
 
-#FIXME : move this back to route
-def create_event(user_creating_event, tables, input_data, new_event_tables):
+def create_event(user_creating_event, tables, input_data, new_event_tables,event_owner_pss_user_id):
     secret_key=b64encode(os.urandom(24)).decode('utf-8')        
     new_event = tables.Events(name=input_data['name'],flask_secret_key=secret_key)    
+    new_event.event_creator_pss_user_id=event_owner_pss_user_id
     tables.db_handle.session.add(new_event)
     new_event_user = new_event_tables.EventUsers(pss_user_id=user_creating_event.pss_user_id,
                                                  password_crypt=user_creating_event.event_user.password_crypt)

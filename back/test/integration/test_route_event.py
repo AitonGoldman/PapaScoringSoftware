@@ -54,6 +54,9 @@ class RouteEventCreate(pss_integration_test_base.PssIntegrationTestBase):
             rv = c.post('/event',
                         data=json.dumps({'name':new_event_name}))
             self.assertHttpCodeEquals(rv,409)                        
-            
+
+    def test_create_event_sets_correct_event_creator_pss_user_id:
+        #FINISH ME
+        pass
             
             

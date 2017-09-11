@@ -1,0 +1,9 @@
+<div>
+  <button ng-if="back_button!=false" ng-click="test_back()" class="button button-large ion-reply  button-clear button-dark">&nbsp; Back &nbsp;</button>
+  <button ng-repeat='header_link in header_links' class="desktop-only button button-large button-clear button-dark {{header_link.icon}}">&nbsp;{{header_link.label}}&nbsp;</button>
+  <button ng-if='credentials.is_logged_in("pss_admin")==false' class="desktop-only button button-large button-clear button-dark ion-person"  ui-sref='app.pss_admin.login'>&nbsp;Login&nbsp;</button>
+  <button ng-if='credentials.is_logged_in("pss_admin")==true' class="desktop-only button button-large button-clear button-dark ion-person" ui-sref='app.pss_admin.login'>&nbsp;Logout&nbsp;</button>
+  <button class="desktop-only button button-large ion-help  button-clear button-dark">&nbsp; Help &nbsp;</button>         
+  <button ui-sref='app.event_select' class="desktop-only button button-large button-clear button-dark"><img class='desktop_logo' src='http://papa.org/wp-content/uploads/PAPAmenulogo1.png'></button>
+</div>
+

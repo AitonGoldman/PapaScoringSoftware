@@ -24,6 +24,7 @@
       -->
     <link rel="stylesheet" media="screen and (max-device-width: 610px)" href="css/ionic.mobile.app.css">
     <link rel="stylesheet" media="screen and (min-device-width: 611px)" href="css/ionic.app.css">
+    <link href="css/progress-wizard.min.css" rel="stylesheet">
 
     <!--<link href="css/ionic.app.css" rel="stylesheet">-->
 
@@ -48,15 +49,16 @@
   </head>
 
   <body ng-app="pss">
-    <ion-nav-bar align-title='left'>
-      <ion-nav-back-button>
-      </ion-nav-back-button>
-      <ion-nav-buttons side="right">
+      <ion-nav-bar class="bar-royal">
+        <ion-nav-buttons side="left">
         <div ui-view='pssAdminHeader'>
         </div>
-      </ion-nav-buttons>
-      
-    </ion-nav-bar>
-    <ion-nav-view name='topView'></ion-nav-view>
+        </ion-nav-buttons>
+        <ion-nav-back-button>
+          <i class="ion-arrow-left-c"></i> Back
+        </ion-nav-back-button>
+        
+      </ion-nav-bar>
+      <ion-nav-view name='topView'></ion-nav-view>
   </body>
 </html>

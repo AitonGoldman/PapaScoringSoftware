@@ -43,14 +43,25 @@ angular.module('credentials')
                      var admin_roles=credential_to_set.pss_user.admin_roles;
                      var event_roles=credential_to_set.pss_user.event_roles;
                      if (admin_roles.length > 0){
-                         credentials[event].admin_roles=_.map(admin_roles, function(role){return role.name;});
+                         admin_roles=_.map(admin_roles, function(role){return role.name;});
+                     } else {
+                         admin_roles=[];
                      }
                      if (event_roles.length > 0){
-                         credentials[event].event_roles=_.map(event_roles, function(role){return role.name;});
+                         event_roles=_.map(event_roles, function(role){return role.name;});
+                     } else {
+                         event_roles=[];
                      }
-                     $cookies.put('session_user',credentials[event].username);                     
+                     credentials[event].roles=_.concat(event_roles,admin_roles);
+                     $cookies.put('session_user',credentials[event].username);
+                     $cookies.put('session_roles',credentials[event].roles);                     
                  };
-
+                 
+                 var remove_credentials_on_logout = function(event,credential_to_set){                     
+                     $cookies.remove('session_user');
+                     $cookies.remove('session_roles');                                          
+                 };
+                 
                  var has_role = function(role,event){
                      return _.indexOf(_.concat(credentials[event].admin_roles,credentials[event].event_roles),role) != -1;
                  };
@@ -69,6 +80,6 @@ angular.module('credentials')
                          set_pss_user_credentials:set_pss_user_credentials,
                          is_logged_in:is_logged_in
                          };
-              }
+                 }
              ]
             );

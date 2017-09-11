@@ -8,12 +8,18 @@ import json
 from lib.PssConfig import PssConfig
 from lib.serializer import generic
 from lib import serializer
+from lib.serializer.deserialize import deserialize_json
 from lib.route_decorators.db_decorators import load_tables
 from lib.route_decorators.auth_decorators import check_current_user_is_active
 
 from pss_models.PssUsers import generate_pss_user_event_role_mapping
 import os
 from lib import orm_factories
+
+def edit_event_route(event,input_data,app):
+    deserialize_json(event,input_data,app)
+    #FIXME : should check that api keys are valid
+
 
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['GET'])
 @load_tables
@@ -47,3 +53,22 @@ def create_event(tables):
     return jsonify({'new_event':event_dict})
  
 
+@blueprints.pss_admin_event_blueprint.route('/event/<event_id>',methods=['PUT'])
+@load_tables
+@create_pss_event_permissions.require(403)
+@check_current_user_is_active
+def edit_event(tables,event_id):                        
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Event details not specified')        
+    event = tables.Events.query.filter_by(event_id=event_id).first()
+    if event is None:
+        raise BadRequest('Bad event submitted')
+    if event.event_creator_pss_user_id != current_user.pss_user_id:
+        raise BadRequest('You can not edit this event')        
+    edit_event_route(event,input_data,current_app)
+    tables.db_handle.session.commit()
+    generic_serializer = generic.generate_generic_serializer(serializer.generic.ALL)
+    event_dict=generic_serializer(event)    
+    return jsonify({'event':event_dict})

@@ -3,21 +3,52 @@ angular.module('pss_admin').controller(
     'app.pss_admin_controller',[
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {
-            $scope.bootstrap();
+            $scope.bootstrap(false);
+            
+            $scope.toggle_view_item_actions = function(item){
+                if(item.display_actions==undefined){
+                    item.display_actions=true;
+                    return;
+                }
+                item.display_actions=item.display_actions==false;
+            };
+            
+            var set_list_items_ui_sref_and_args = function(i) {                
+                //FIXME : the label_to_display should probably be set on the backend? Not sure about this
+                i.ui_sref='app.pss_admin.edit_event({event_id:event.event_id})';
+                i.label_to_display=i.event_name;                
+            };
+            var set_list_items_actions_and_args = function(i) {                
+                //FIXME : the label_to_display should probably be set on the backend? Not sure about this
+                i.actions_ui_sref_list=[{label:"Basic Editing",ui_sref:"app.pss_admin.edit_event_wizard({event_id:event.event_id,wizard_step:1})"},
+                                        {label:"Advanced Editing",ui_sref:"app.pss_admin.edit_event({event_id:event.event_id})"}];
+                i.label_to_display=i.event_name;                
+            };             
+            var on_success = function(data){
+                $scope.events=data['events'];
+                //_.map($scope.events, set_list_items_ui_sref_and_args);
+                _.map($scope.events, set_list_items_actions_and_args);  
+            };            
+            var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_events',on_success,on_failure,{});            
+            
         }
     ]);
 angular.module('pss_admin').controller(
     'app.pss_admin.login_controller',[
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {
-            $scope.pss_user={};
             $scope.bootstrap();
+            $scope.pss_user={};            
             $scope.login_func = function(){
                 $scope.post_success = false;
                 var on_success = function(data){
                     $scope.logged_in_user=data['pss_user'];
                     credentialsService.set_pss_user_credentials("pss_admin",data);
-                    $scope.post_success = true;
+                    $scope.post_results={};
+                    $scope.post_results.title="Logged In!";
+                    $scope.post_results.results=[['User Name',data['pss_user'].username]];                    
+                    $scope.post_success = true;                    
                 };
                 
                 var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
@@ -30,15 +61,45 @@ angular.module('pss_admin').controller(
     'app.pss_admin.create_event_controller',[
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {
-            $scope.event={};
-            $scope.bootstrap();            
+            $scope.bootstrap();
+            $scope.event={};            
             $scope.create_event_func = function(){                
                 var on_success = function(data){
-                    $scope.logged_in_user=data['new_event'];                    
+                    // $scope.logged_in_user=data['new_event'];
+                    $scope.post_results={};
+                    $scope.post_results.title="Event Created!";
+                    $scope.post_results.results=[['Event Name',data['new_event'].name]];                                        
                     $scope.post_success = true;
                 };                
                 var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
                 var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,on_failure,{},{name:$scope.event.name});            
+
+            };
+        }
+    ]);
+
+angular.module('pss_admin').controller(
+    'app.pss_admin.edit_event_wizard_controller',[
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {            
+            $scope.wizard_step = $state.params.wizard_step;
+            if(_.isEmpty($state.params.event) && $scope.wizard_step != 1){
+                $state.go('app.pss_admin');
+            }            
+            $scope.bootstrap();
+            $scope.event=$state.params.event;
+            $scope.edit_event_func = function(event){                
+                var on_success = function(data){                    
+                    $scope.post_results={};
+                    $scope.post_results.title="Event Edited!";
+                    $scope.post_results.results=[['Queue Bump Amount',event.queue_bump_amount],
+                                                 ['Allowed Unused Tickets',event.number_unused_tickets_allowed],
+                                                 ['Player Id Sequence Start',event.player_id_seq_start]
+                                                ];                                        
+                    $scope.post_success = true;
+                };                
+                var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
+                var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,on_failure,{event_id:$state.params.event_id},event);            
 
             };
         }

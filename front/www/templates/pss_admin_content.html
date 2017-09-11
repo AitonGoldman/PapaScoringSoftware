@@ -4,7 +4,29 @@
   </center>
 </div>      
 <div class="chatitem list" ng-if='credentials.is_logged_in()==true'>
-  <div ui-sref='app.pss_admin.create_event' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Create Event</div>
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model='filter_for'>
+    </label>
+  </div>
+  <ion-item ui-sref='app.pss_admin.create_event' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Create Event</ion-item>
+  <div class='padding'></div>
+  <ion-item ui-sref='{{event.ui_sref}}' class='item item-icon-left' ng-repeat='event in events|filter:{$:filter_for}' ng-if='event.ui_sref!=undefined'>
+    <i class='icon ion-edit'></i>
+    {{event.label_to_display}}
+  </ion-item>
+  <div class='card' style='margin:0;margin-top:2px' ng-repeat='event in events|filter:{$:filter_for}' ng-if='event.actions_ui_sref_list!=undefined'>
+    <div class='item item-divider item-icon-left' ng-click='toggle_view_item_actions(event)'>
+      <i class='icon ion-edit'></i>
+      {{event.label_to_display}}
+    </div>
+    <div ui-sref='{{action.ui_sref}}' class="item item-icon-left" ng-if="event.display_actions==true" ng-repeat='action in event.actions_ui_sref_list'>
+      <i class='icon ion-compose'></i>      
+      {{action.label}}
+    </div>
+  </div>
+  
 </div>      
 
 

@@ -17,7 +17,7 @@ angular.module('pss', ['ionic', 'ngAnimate','resource_wrapper','credentials','ap
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
-        });
+        });        
     })
     .config(function($stateProvider, $urlRouterProvider,$ionicConfigProvider,$httpProvider) {
         $httpProvider.defaults.useXDomain = true;
@@ -25,9 +25,10 @@ angular.module('pss', ['ionic', 'ngAnimate','resource_wrapper','credentials','ap
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
         $ionicConfigProvider.views.transition('none');
-        $ionicConfigProvider.backButton.text('');
-        $ionicConfigProvider.backButton.icon('ion-arrow-left-c');
+        //$ionicConfigProvider.backButton.text('');
+        //$ionicConfigProvider.backButton.icon('ion-arrow-left-c');
         $ionicConfigProvider.backButton.previousTitleText(false);
         $ionicConfigProvider.views.maxCache(0);
         $ionicConfigProvider.templates.maxPrefetch(0);
+        
     });

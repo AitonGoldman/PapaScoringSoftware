@@ -2,40 +2,31 @@ angular.module('credentials',[]);
 angular.module('credentials')
     .factory('credentialsService',
              ['$cookies',function($cookies) {
-                 var credentials = {};                 
-/*{
-  "pss_user": {
-    "admin_roles": [
-      {
-        "admin_role": true, 
-        "admin_role_id": 1, 
-        "name": "pss_admin"
-      }
-    ], 
-    "event_roles": [], 
-    "event_user": {
-      "active": true, 
-      "pss_user_id": 1
-    }, 
-    "events": [
-      {
-        "event_id": 1, 
-        "event_name": "pss_admin"
-      }, 
-      {
-        "event_id": 2, 
-        "event_name": "poopone"
-      }
-    ], 
-    "extra_title": null, 
-    "first_name": "test_first_name", 
-    "has_picture": false, 
-    "ioniccloud_push_token": null, 
-    "last_name": "test_last_name", 
-    "pss_user_id": 1, 
-    "username": "test_pss_admin_user"
-  }
-}*/
+                 var credentials = {};
+                 var logged_in = false;
+                 
+                 var set_pss_user_credentials_from_cookies = function(event){                     
+                     if(!_.isEmpty(credentials) && credentials[event]!=undefined){
+                         logged_in = true;
+                         return;
+                     }
+                     credentials = $cookies.getObject('credentials_cookie');                     
+                     if(credentials==undefined){                                                  
+                         credentials={};
+                     }
+                     if(credentials[event]!=undefined){
+                         logged_in = true;
+                         return;                         
+                     } else {
+                         logged_in = false;
+                         return;
+                     }
+                 };
+
+                 var get_credentials = function(){
+                     return credentials;
+                 };
+                 
                  var set_pss_user_credentials = function(event,credential_to_set){                     
                      credentials[event] = {};
                      credentials[event].username=credential_to_set.pss_user.username;
@@ -53,31 +44,29 @@ angular.module('credentials')
                          event_roles=[];
                      }
                      credentials[event].roles=_.concat(event_roles,admin_roles);
-                     $cookies.put('session_user',credentials[event].username);
-                     $cookies.put('session_roles',credentials[event].roles);                     
+                     $cookies.putObject('credentials_cookie',credentials);
+                     //$cookies.put('session_user_id',credentials[event].pss_user_id);
+                     //$cookies.put('session_user',credentials[event].username);
+                     //$cookies.put('session_roles',credentials[event].roles);                     
                  };
                  
-                 var remove_credentials_on_logout = function(event,credential_to_set){                     
-                     $cookies.remove('session_user');
-                     $cookies.remove('session_roles');                                          
+                 var remove_credentials_on_logout = function(event){                     
+                     credentials[event]={};                                          
+                     $cookies.remove('credentials_cookie');
+                     logged_in=false;
                  };
                  
                  var has_role = function(role,event){
                      return _.indexOf(_.concat(credentials[event].admin_roles,credentials[event].event_roles),role) != -1;
                  };
 
-                 var is_logged_in = function(event){                     
-                     if($cookies.get('session_user')!=undefined){                         
-                         return true;
-                     }
-                     if(credentials[event] == undefined || (credentials[event] != undefined && credentials[event].username==undefined && credentials[event].player_id==undefined)){
-                         return false;
-                     } else {
-                         return true;
-                     }
+                 var is_logged_in = function(event){
+                     return logged_in;
                  };
-                 return {credentials:credentials,
+                 return {get_credentials:get_credentials,
+                         set_pss_user_credentials_from_cookies:set_pss_user_credentials_from_cookies,
                          set_pss_user_credentials:set_pss_user_credentials,
+                         remove_credentials_on_logout:remove_credentials_on_logout,
                          is_logged_in:is_logged_in
                          };
                  }

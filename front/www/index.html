@@ -49,14 +49,14 @@
   </head>
 
   <body ng-app="pss">
-      <ion-nav-bar class="bar-royal">
+      <ion-nav-bar>
         <ion-nav-buttons side="left">
         <div ui-view='pssAdminHeader'>
         </div>
         </ion-nav-buttons>
-        <ion-nav-back-button>
-          <i class="ion-arrow-left-c"></i> Back
-        </ion-nav-back-button>
+        <ion-nav-buttons side="right">
+          <button class="poop desktop-only button button-large button-clear button-dark"><img class='desktop_logo' src='http://papa.org/wp-content/uploads/PAPAmenulogo1.png'></button>
+        </ion-nav-buttons>        
         
       </ion-nav-bar>
       <ion-nav-view name='topView'></ion-nav-view>

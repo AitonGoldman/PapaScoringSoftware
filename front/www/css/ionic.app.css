@@ -9865,6 +9865,19 @@ a.button {
   width: 42px;
   height: 42px; }
 
+.mobile_logo_small {
+  width: 32px;
+  height: 32px; }
+
 .desktop_logo {
   width: 42px;
   height: 42px; }
+
+.selectable-text {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text; }
+
+.center-aligned-placeholder {
+  text-align: center; }

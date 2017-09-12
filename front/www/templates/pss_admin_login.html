@@ -6,6 +6,7 @@
 </div>
 <div ng-if="post_success==undefined">
   <form>
+  <div> 
       <label class="item item-input">
         <input type="text" placeholder="Username" ng-model="pss_user.username"/>        
       </label>
@@ -14,7 +15,7 @@
         <input type="text" placeholder="Password" ng-model="pss_user.password"/>
       </label>
 </div>
-<div class='row' ng-if="post_success==undefined">
+<div class='row'>
   <div class='col'>
   </div>
   <input ng-click='login_func()' type="button" class="padding button-pagraph col-33 button button-block button-positive" value="Login">
@@ -24,5 +25,5 @@
   </div>    
 </div>
 </form>
-
+</div>
 

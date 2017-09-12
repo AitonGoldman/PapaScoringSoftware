@@ -28,8 +28,7 @@ angular.module('resource_wrapper')
 
                   var generate_response_interceptor = function(custom_error){
                       var response_interceptor = {
-	                  'responseError': function(rejection) {                                          
-                              alert('poop');
+	                  'responseError': function(rejection) {                                                                        
                               console.log('erroring out with rejection status of '+rejection.status);
                               if(custom_error != undefined){                                  
                                   if(custom_error.message != undefined){
@@ -78,10 +77,15 @@ angular.module('resource_wrapper')
                   };
                   var rest_api = {};
                   var rest_server = "http://192.168.1.178:8000";
+                  //var rest_server = "http://0.0.0.0:8000";                  
                   
                   rest_api['get_events'] = $resource(rest_server+'/pss_admin/event',
-                                                 {},
-                                                 {'get':{interceptor:generate_response_interceptor()}});                  
+                                                     {},
+                                                     {'get':{interceptor:generate_response_interceptor()}});
+                  rest_api['get_event'] = $resource(rest_server+'/pss_admin/event/:event_id',
+                                                    {},
+                                                    {'get':{interceptor:generate_response_interceptor()}});                  
+                  
                   rest_api['post_pss_admin_login'] = $resource(rest_server+'/pss_admin/auth/pss_user/login',
                                                                {},
                                                                {'post':{method:"POST",interceptor:generate_response_interceptor()}});

@@ -15,24 +15,6 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },data: {            
             header_links: []
         }                    
-    }).state('test', {
-        cache:false,        
-        url: '/test',        
-        views: {
-            'topView': {
-                template: '<ion-view view-title="no joy"><ion-content><br><br><br><br><a ui-sref="test2">test 2</a></ion-content></ion-view>',
-                controller: 'test_controller'
-            }
-         }      
-    }).state('test2', {
-        cache:false,        
-        url: '/test/test2',        
-        views: {
-            'topView': {
-                template: '<ion-view view-title="poop"><ion-content><br><br><br><br><a ui-sref="test">poop</a></ion-content></ion-view>',
-                controller: 'test_controller'
-            }
-         }                                  
     }).state('app.event_select',{
         cache:false,        
         url:'/event_select',
@@ -135,7 +117,31 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }            
         },data: {
-            title: "Manage Events"
+            title: "Edit Event"
+        },params: {
+            event: {value:{}}
+        }
+    }).state('app.pss_admin.edit_event_basic', {
+        cache:false,
+        url: '/edit_event_basic/:event_id/:wizard_step',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/edit_event_basic_content.html',
+                controller: 'app.pss_admin.edit_event_wizard_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/pss_admin_footer.html'//,
+            },
+            'post_success@app.pss_admin.edit_event_basic':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.pss_admin.edit_event_basic':{
+                templateUrl: 'templates/event_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Edit Event"
         },params: {
             event: {value:{}}
         }

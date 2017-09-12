@@ -28,7 +28,19 @@ def get_events(tables):
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        
     #FIXME : pss_admin should not be hard coded here
     return jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})
-    
+
+
+@blueprints.pss_admin_event_blueprint.route('/event/<event_id>',methods=['GET'])
+@load_tables
+@create_pss_event_permissions.require(403)
+@check_current_user_is_active
+def get_event(tables,event_id):                    
+    event = tables.Events.query.filter_by(event_id=event_id).first()
+    if event.event_creator_pss_user_id != current_user.pss_user_id:
+        raise BadRequest('Can not get event details if it is not your event')
+    event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.ALL)            
+    return jsonify({'event':event_serializer(event)})
+
 
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['POST'])
 @load_tables

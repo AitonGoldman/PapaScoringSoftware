@@ -30,5 +30,8 @@ angular.module('pss', ['ionic', 'ngAnimate','resource_wrapper','credentials','ap
         $ionicConfigProvider.backButton.previousTitleText(false);
         $ionicConfigProvider.views.maxCache(0);
         $ionicConfigProvider.templates.maxPrefetch(0);
-        
+        $ionicConfigProvider.navBar.alignTitle("center");
+        if (!ionic.Platform.isIOS()) {
+            $ionicConfigProvider.scrolling.jsScrolling(false);
+        }        
     });

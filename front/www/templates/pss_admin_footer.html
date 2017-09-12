@@ -2,17 +2,20 @@
   <i class="icon ion-person" ></i>
   Login
 </a>
-<a class="tab-item" ng-if='credentials.is_logged_in("pss_admin")==true'>
-  <i class="icon ion-person assertive" ></i>
+<a ui-sref='app.pss_admin.login' class="tab-item" ng-if='credentials.is_logged_in("pss_admin")==true'>
+  <i  class="icon ion-person assertive" ></i>
   Logout
 </a>
-<a ui-sref='app.event_select' class="tab-item">
-  <img class='mobile_logo' src='http://papa.org/wp-content/uploads/PAPAmenulogo1.png'> 
-</a>    
 <a class="tab-item">
   <i class="icon ion-help" ></i>
   Help
 </a>
-
+<a ng-click="openPopover($event)" class="tab-item">
+  <i class="icon ion-ios-photos-outline" ></i>
+  Quick Links
+</a>
+<a ng-click="openPopover($event)" class="tab-item">
+  <img id="mobilePoop" class='mobile_logo' src='http://papa.org/wp-content/uploads/PAPAmenulogo1.png'>
+</a>    
 
 

@@ -20,14 +20,14 @@
         <center>
           The number of spots a player will be "bumped" down a queue if they are not present when it is their turn to play.
         </center>
-      </div>
+      </div>      
       <div class='row'>
         <div class='col'>
         </div>
         <input ng-disabled='event.queue_bump_amount==undefined || event.queue_bump_amount == ""' ui-sref-opts='{reload:true}' ui-sref='app.pss_admin.edit_event_wizard({wizard_step:2,event:event})' type="button" class="padding button-pagraph col-33 button button-block button-positive" value="Next Step" />
         <div class='col'>
         </div>    
-      </div>
+      </div>      
     </form>
   </div>
   <div ng-if="wizard_step==2">

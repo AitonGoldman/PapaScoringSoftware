@@ -33,9 +33,8 @@ angular.module('pss_admin').controller(
                 $scope.events=data['events'];
                 //_.map($scope.events, set_list_items_ui_sref_and_args);
                 _.map($scope.events, set_list_items_actions_and_args);  
-            };            
-            var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
-            var prom =resourceWrapperService.get_wrapper_with_loading('get_events',on_success,on_failure,{},{});                        
+            };                        
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_events',on_success,{},{});                        
         }
     ]);
 angular.module('pss_admin').controller(
@@ -54,9 +53,8 @@ angular.module('pss_admin').controller(
                     $scope.post_success = true;
                     $scope.disable_back_button();
                 };
-                
-                var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
-                var prom =resourceWrapperService.get_wrapper_with_loading('post_pss_admin_login',on_success,on_failure,{},{username:$scope.pss_user.username,password:$scope.pss_user.password});            
+                                
+                var prom =resourceWrapperService.get_wrapper_with_loading('post_pss_admin_login',on_success,{},{username:$scope.pss_user.username,password:$scope.pss_user.password});            
 
             };
         }
@@ -76,9 +74,8 @@ angular.module('pss_admin').controller(
                     $scope.disable_back_button();
                     $scope.post_success = true;
                     
-                };                
-                var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
-                var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,on_failure,{},{name:$scope.event.name});            
+                };                                
+                var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,{},{name:$scope.event.name});            
 
             };
         }
@@ -102,9 +99,8 @@ angular.module('pss_admin').controller(
                     $scope.event=data['event'];
                     //_.map($scope.events, set_list_items_ui_sref_and_args);
                     //_.map($scope.events, set_list_items_actions_and_args);  
-                };            
-                var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
-                var prom =resourceWrapperService.get_wrapper_with_loading('get_event',on_success,on_failure,{event_id:$state.params.event_id},{});                        
+                };                            
+                var prom =resourceWrapperService.get_wrapper_with_loading('get_event',on_success,{event_id:$state.params.event_id},{});                        
             }
             
             //}
@@ -137,8 +133,9 @@ angular.module('pss_admin').controller(
                     $scope.disable_back_button();
                     $scope.post_success = true;
                 };                
-                var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
-                var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,on_failure,{event_id:$state.params.event_id},event);            
+                //var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
+                //var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,on_failure,{event_id:$state.params.event_id},event); 
+                var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,{event_id:$state.params.event_id},event);            
 
             };
         }

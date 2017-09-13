@@ -1,38 +1,24 @@
+
 angular.module('pss_admin',[]);
 angular.module('pss_admin').controller(
     'app.pss_admin_controller',[
-        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
-        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {
+        '$scope','$state','resourceWrapperService','listGeneration',
+        function($scope, $state,resourceWrapperService,listGeneration ) {
             $scope.bootstrap({});
+
+            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
             
-            $scope.toggle_view_item_actions = function(item){
-                if(item.display_actions==undefined){
-                    item.display_actions=true;
-                    return;
-                }
-                item.display_actions=item.display_actions==false;
-            };
-            
-            var set_list_items_ui_sref_and_args = function(i) {                
-                //FIXME : the label_to_display should probably be set on the backend? Not sure about this
-                i.ui_sref='app.pss_admin.edit_event({event_id:event.event_id})';
-                i.label_to_display=i.event_name;                
-            };
-            var set_list_items_actions_and_args = function(i) {                
-                //FIXME : the label_to_display should probably be set on the backend? Not sure about this
-                i.actions_ui_sref_list = [{label:"Advanced Editing",ui_sref:"app.pss_admin.edit_event({event_id:event.event_id})"}];
-                if(i.wizard_configured == false){
-                    basic_edit_action = {label:"Wizard Configuration",ui_sref:"app.pss_admin.edit_event_wizard({event_id:event.event_id,wizard_step:1})"};
-                } else {
-                    basic_edit_action = {label:"Basic Editing",ui_sref:"app.pss_admin.edit_event_basic({event_id:event.event_id,wizard_step:0})"};
-                }
-                i.actions_ui_sref_list.splice(0,0,basic_edit_action);
-                i.label_to_display=i.event_name;                
-            };             
             var on_success = function(data){
-                $scope.events=data['events'];
-                //_.map($scope.events, set_list_items_ui_sref_and_args);
-                _.map($scope.events, set_list_items_actions_and_args);  
+                $scope.items=data['events'];                
+                var basic_sref='.edit_event_basic({event_id:event.event_id,wizard_step:0})';
+                var advanced_sref='.edit_event({event_id:event.event_id})';
+                var wizard_sref='.edit_event_wizard({event_id:event.event_id,wizard_step:1})';
+                var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('event_name',
+                                                                                                            advanced_sref,
+                                                                                                            wizard_sref,
+                                                                                                            basic_sref
+                                                                                                           );
+                _.map($scope.items, set_list_items_actions_and_args);  
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_events',on_success,{},{});                        
         }
@@ -89,16 +75,11 @@ angular.module('pss_admin').controller(
             if(_.isEmpty($state.params.event) && $scope.wizard_step > 1){
                 $state.go('app.pss_admin');
             }
-            //if($scope.wizard_step==0){
-            //    $scope.event={};
-            //} else {
             if($scope.wizard_step!=0){
                 $scope.event=$state.params.event;    
             } else {
                 var on_success = function(data){
                     $scope.event=data['event'];
-                    //_.map($scope.events, set_list_items_ui_sref_and_args);
-                    //_.map($scope.events, set_list_items_actions_and_args);  
                 };                            
                 var prom =resourceWrapperService.get_wrapper_with_loading('get_event',on_success,{event_id:$state.params.event_id},{});                        
             }
@@ -133,8 +114,6 @@ angular.module('pss_admin').controller(
                     $scope.disable_back_button();
                     $scope.post_success = true;
                 };                
-                //var on_failure = resourceWrapperService.stay_on_current_state_for_error;            
-                //var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,on_failure,{event_id:$state.params.event_id},event); 
                 var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,{event_id:$state.params.event_id},event);            
 
             };

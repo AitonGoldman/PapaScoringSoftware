@@ -50,9 +50,13 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/pss_admin_footer.html'//,
-            }            
+            },
+            'list@app.pss_admin':{
+                templateUrl: 'templates/generic_list.html'//,
+            }
         },data: {
-            title: "Manage Events"
+            title: "Manage Events",
+            quick_links_url: 'templates/pss_admin_quick_links.html'
         }
     }).state('app.pss_admin.login', {
         cache:false,

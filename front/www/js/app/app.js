@@ -33,36 +33,21 @@ angular.module('app').controller(
                 history.back();
             };
 
-            var template = '<ion-popover-view><ion-header-bar> <h1 class="title">Quick Links</h1> </ion-header-bar> <ion-content> <div class="list"><div class="item" ng-click="popoverClick()">Event Select</div></div></ion-content></ion-popover-view>';
-
-            var template_intro = '<ion-popover-view><ion-header-bar> <h1 class="title">Use Me!</h1> </ion-header-bar> <ion-content> Click on this icon to get quick links</ion-content></ion-popover-view>';            
-            $scope.popover = $ionicPopover.fromTemplate(template, {                
-                scope: $scope
-            });
-            $scope.popover_intro = $ionicPopover.fromTemplate(template_intro, {                
-                scope: $scope
-            });
-
             
-            $rootScope.openPopover = function($event) {                
-                for(i in $event){
-                    console.log(i+":"+$event[i]);
-                }                
-                $scope.popover.show($event);
-            };
-            $rootScope.openPopoverOnLogin = function(){                
-                $ionicPopup.alert({
-                    title:"Use Quicklinks!",
-                    template:"<center>use the papa icon<br> <img class='mobile_logo_small' src='http://papa.org/wp-content/uploads/PAPAmenulogo1.png'><br>for quick navigation</center>"
+            $rootScope.openPopover = function($event) {                                
+                $ionicPopover.fromTemplateUrl($state.current.data.quick_links_url, {                
+                    scope: $scope
+                }).then(function(popover){
+                    $scope.popover = popover;
+                    $scope.popover.show($event);
                 });
-                //var quickLinks = document.getElementById('desktopQuickLinks');
-                //var test = ionic.DomUtil.getPositionInParent(quickLinks);
-                //console.log(test);   
-                //$scope.popover_intro.show(quickLinks);                
+                
             };
+            
             $rootScope.popoverClick = function(sref) {                                
                 $scope.popover.hide();
-                $state.go("app.event_select");                
+                $scope.popover.remove();                
+                $state.go(sref);                
             };            
             
             //REMEMBER ME : for later

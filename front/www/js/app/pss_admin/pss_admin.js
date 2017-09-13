@@ -11,7 +11,7 @@ angular.module('pss_admin').controller(
             var on_success = function(data){
                 $scope.items=data['events'];                
                 var basic_sref='.edit_event_basic({event_id:item.event_id})';
-                var advanced_sref='.edit_event({event_id:item.event_id})';
+                var advanced_sref='.edit_event_advanced({event_id:item.event_id})';
                 var wizard_sref='.edit_event_wizard({event_id:item.event_id,wizard_step:1})';
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('event_name',
                                                                                                             advanced_sref,
@@ -75,7 +75,7 @@ angular.module('pss_admin').controller(
             $scope.wizard_step = $state.params.wizard_step;                        
             var basic_edit=false;
             
-            if($scope.wizard_step == ""){                
+            if($scope.wizard_step == undefined){                
                 basic_edit=true;
             }
             if(_.isEmpty($state.params.event) && $scope.wizard_step > 1){
@@ -108,16 +108,37 @@ angular.module('pss_admin').controller(
                 return false;
             };
             
-            $scope.edit_event_func = function(event){                
+            $scope.filter_id_field = function(field_name){
+                if(field_name.indexOf("_id")>0 || field_name.indexOf("secret") > 0){
+                    return false;
+                } else {
+                    return true;
+                }
+            };
+            
+            $scope.edit_event_func = function(event,result_fields){                
                 event.wizard_configured=true;
                 var on_success = function(data){                    
                     $scope.post_results={};
                     $scope.post_results.title="Event Edited!";
                     //FIXME : this should use descriptions we got from backend
-                    $scope.post_results.results=[['Queue Bump Amount',event.queue_bump_amount],
-                                                 ['Allowed Unused Tickets',event.number_unused_tickets_allowed],
-                                                 ['Player Id Sequence Start',event.player_id_seq_start]
-                                                ];                                        
+                    var results = [];
+                    
+                    var item = data['event'];
+                    if(result_fields == undefined){
+                        result_fields=[];
+                        for(key in item){
+                            if(key.indexOf('_id')==-1 && key.indexOf('secret')==-1){
+                                result_fields.push(key);
+                            }                            
+                        }
+                    }
+                    for(result_field_idx in result_fields){
+                        result_field = result_fields[result_field_idx];
+                        results.push([$scope.descriptions.short_descriptions[result_field],item[result_field]]);
+                    }
+                                        
+                    $scope.post_results.results=results;                    
                     $scope.disable_back_button();
                     $scope.post_success = true;
                 };                

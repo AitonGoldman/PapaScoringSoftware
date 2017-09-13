@@ -128,7 +128,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         }
     }).state('app.pss_admin.edit_event_basic', {
         cache:false,
-        url: '/edit_event_basic/:event_id/:wizard_step',
+        url: '/edit_event_basic/:event_id',
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_basic_content.html',
@@ -142,6 +142,30 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.pss_admin.edit_event_basic':{
+                templateUrl: 'templates/event_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Edit Event"
+        },params: {
+            event: {value:{}}
+        }
+    }).state('app.pss_admin.edit_event_advanced', {
+        cache:false,
+        url: '/edit_event_advanced/:event_id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/edit_event_advanced_content.html',
+                controller: 'app.pss_admin.edit_event_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/pss_admin_footer.html'//,
+            },
+            'post_success@app.pss_admin.edit_event_advanced':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.pss_admin.edit_event_advanced':{
                 templateUrl: 'templates/event_create_post_success_buttons.html'//,
                 //controller: 'pss_admin_controller'
             }            

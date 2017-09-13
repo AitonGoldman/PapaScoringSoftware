@@ -107,7 +107,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_wizard_content.html',
-                controller: 'app.pss_admin.edit_event_wizard_controller'
+                controller: 'app.pss_admin.edit_event_controller'
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/pss_admin_footer.html'//,
@@ -123,7 +123,8 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },data: {
             title: "Edit Event"
         },params: {
-            event: {value:{}}
+            event: {value:{}},
+            descriptions: {value:{}}
         }
     }).state('app.pss_admin.edit_event_basic', {
         cache:false,
@@ -131,7 +132,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_basic_content.html',
-                controller: 'app.pss_admin.edit_event_wizard_controller'
+                controller: 'app.pss_admin.edit_event_controller'
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/pss_admin_footer.html'//,

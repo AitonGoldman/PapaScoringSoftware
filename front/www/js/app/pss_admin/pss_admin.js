@@ -10,9 +10,9 @@ angular.module('pss_admin').controller(
             
             var on_success = function(data){
                 $scope.items=data['events'];                
-                var basic_sref='.edit_event_basic({event_id:event.event_id,wizard_step:0})';
-                var advanced_sref='.edit_event({event_id:event.event_id})';
-                var wizard_sref='.edit_event_wizard({event_id:event.event_id,wizard_step:1})';
+                var basic_sref='.edit_event_basic({event_id:item.event_id})';
+                var advanced_sref='.edit_event({event_id:item.event_id})';
+                var wizard_sref='.edit_event_wizard({event_id:item.event_id,wizard_step:1})';
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('event_name',
                                                                                                             advanced_sref,
                                                                                                             wizard_sref,
@@ -68,24 +68,30 @@ angular.module('pss_admin').controller(
     ]);
 
 angular.module('pss_admin').controller(
-    'app.pss_admin.edit_event_wizard_controller',[
+    'app.pss_admin.edit_event_controller',[
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
-        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {            
-            $scope.wizard_step = $state.params.wizard_step;
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {                        
+            $scope.bootstrap({back_button:true});
+            $scope.wizard_step = $state.params.wizard_step;                        
+            var basic_edit=false;
+            
+            if($scope.wizard_step == ""){                
+                basic_edit=true;
+            }
             if(_.isEmpty($state.params.event) && $scope.wizard_step > 1){
                 $state.go('app.pss_admin');
             }
-            if($scope.wizard_step!=0){
-                $scope.event=$state.params.event;    
-            } else {
+            if($scope.wizard_step>1){                
+                $scope.item=$state.params.event;
+                $scope.descriptions=$state.params.descriptions;
+            }
+            if(basic_edit == true || $scope.wizard_step == 1) {
                 var on_success = function(data){
-                    $scope.event=data['event'];
+                    $scope.item=data['event'];
+                    $scope.descriptions=data['descriptions'];                    
                 };                            
                 var prom =resourceWrapperService.get_wrapper_with_loading('get_event',on_success,{event_id:$state.params.event_id},{});                        
-            }
-            
-            //}
-            $scope.bootstrap({back_button:true});            
+            }                                    
             
             $scope.submit_button_disabled = function(event,num_fields){                
                 if(_.isEmpty(event)){
@@ -94,19 +100,20 @@ angular.module('pss_admin').controller(
                 if(_.size(event)<num_fields && $scope.wizard_step > 0){
                     return true;
                 }
-                for(i in event){
-                    console.log(i);
+                for(i in event){                    
                     if(event[i]==""){
                         return true;
                     }
                 }                
                 return false;
             };
+            
             $scope.edit_event_func = function(event){                
                 event.wizard_configured=true;
                 var on_success = function(data){                    
                     $scope.post_results={};
                     $scope.post_results.title="Event Edited!";
+                    //FIXME : this should use descriptions we got from backend
                     $scope.post_results.results=[['Queue Bump Amount',event.queue_bump_amount],
                                                  ['Allowed Unused Tickets',event.number_unused_tickets_allowed],
                                                  ['Player Id Sequence Start',event.player_id_seq_start]

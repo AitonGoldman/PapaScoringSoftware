@@ -101,6 +101,20 @@ angular.module('app').controller(
 //   };
 // });
 
+angular.module('app').directive('pssTextInputBasic', function($state) {
+  return {
+      restrict: 'AE',
+      replace: 'true',
+      scope:true,
+      templateUrl: 'templates/generic_text_input_basic.html',
+      link: function(scope, elem, attrs) {
+          scope.field = attrs.field;
+          scope.basic = attrs.basic;          
+      }      
+  };
+});
+
+
 //REMEMBER ME : for later
 // angular.module('app').filter('genericSearch', function () {
 //   return function (items) {

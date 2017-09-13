@@ -20,7 +20,24 @@ def edit_event_route(event,input_data,app):
     deserialize_json(event,input_data,app)
     #FIXME : should check that api keys are valid
 
+def get_event_field_descriptions():
+    long_descriptions={}
+    short_descriptions={}
+    short_descriptions['queue_bump_amount']='Queue bump amount'
+    short_descriptions['player_id_seq_start']='Player id sequence start'
+    short_descriptions['active']='Active'
+    short_descriptions['number_unused_tickets_allowed']='Max unused tickets'
+    short_descriptions['stripe_public_key']='Stripe public key'
+    short_descriptions['stripe_api_key']='Stripe private key'    
 
+    long_descriptions['queue_bump_amount']='The number of spots a player will be "bumped" down a queue if they are not present when it is their turn to play.'
+    long_descriptions['player_id_seq_start']='The starting player id.  All player ids will follow this id.  I.e. if this is set to 100, the first player that registers will be player 100, then player 101, etc.'
+    long_descriptions['active']='If a event is not Active, it will only be available via the archive section of the site'
+    long_descriptions['number_unused_tickets_allowed']='The maximum number of unused tickets a player is allowed to have at one time.  Note that this includes a ticket currently being played by a player.'
+    long_descriptions['stripe_public_key']='Stripe public key.  If you do not set this, you can not use stripe for player ticket purchases.'
+    long_descriptions['stripe_api_key']='Stripe private/api key. If you do not set this, you can not use stripe for player ticket purchases.'    
+    return {'long_descriptions':long_descriptions,'short_descriptions':short_descriptions}
+    
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['GET'])
 @load_tables
 def get_events(tables):                    
@@ -39,7 +56,7 @@ def get_event(tables,event_id):
     if event.event_creator_pss_user_id != current_user.pss_user_id:
         raise BadRequest('Can not get event details if it is not your event')
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.ALL)            
-    return jsonify({'event':event_serializer(event)})
+    return jsonify({'event':event_serializer(event),'descriptions':get_event_field_descriptions()})
 
 
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['POST'])

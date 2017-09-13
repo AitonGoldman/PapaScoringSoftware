@@ -7,55 +7,18 @@
 <div ng-if="post_success==undefined">
   <form name="myForm">
     <div class="card">
-      <div class="item item-divider">
-        Queue Bump Amount
-      </div>      
-      <div>
-        <label class="item item-input">
-            <input class='center-aligned-placeholder' type="text" placeholder="Queue Bump Amount" ng-model="event.queue_bump_amount"/>
-        </label>
-      </div>
-      <div class='row'>
-        <center>
-          The number of spots a player will be "bumped" down a queue if they are not present when it is their turn to play.
-        </center>
-      </div>
+      <pss-text-input-basic field='queue_bump_amount' basic='true'/>
     </div>
     <div class="card">
-      <div class="item item-divider">
-        Allowed Unused Tickets
-      </div>          
-    <div>
-      <label class="item item-input">
-        <input class='center-aligned-placeholder' type="text" placeholder="Number Unused Tickets Allowed" ng-model="event.number_unused_tickets_allowed"/>        
-      </label>
+      <pss-text-input-basic field='number_unused_tickets_allowed' basic='true'/>
     </div>
-    <div class='row'>
-      <center>
-        The maximum number of unused tickets a player is allowed to have at one time.  Note that this includes a ticket currently being played by a player.  
-      </center>
-    </div>
-    </div>
-        <div class="card">
-      <div class="item item-divider">
-        Player Id Sequence Start
-      </div>      
-
-    <div>
-      <label class="item item-input">
-        <input class='center-aligned-placeholder' type="text" placeholder="Player Id Sequence Start" ng-model="event.player_id_seq_start"/>        
-      </label>
-    </div>
-    <div class='row'>
-      <center>
-        The starting player id.  All player ids will follow this id.  I.e. if this is set to 100, the first player that registers will be player 100, then player 101, etc.
-      </center>
-    </div>
+    <div class="card">
+      <pss-text-input-basic field='player_id_seq_start' basic='true'/>
     </div>
     <div class='row'>
       <div class='col'>
       </div>
-      <button ng-click='edit_event_func(event)' ng-disabled='submit_button_disabled(event,3)' ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
+      <button ng-click='edit_event_func(item)' ng-disabled='submit_button_disabled(item,3)' ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
       <div class='col'>
       </div>    
     </div>

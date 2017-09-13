@@ -43,7 +43,7 @@ angular.module('resource_wrapper')
                               if(rejection.status == 500){                
 		                  rejection.data.message="WHOAH!  Server puked.";
 		                  rejection.data.debug="";
-                                  on_failure(rejection.data,'.');
+                                  on_failure(rejection.data,'app');
                               }
                               if(custom_error != undefined){                                  
                                   if(custom_error.message != undefined){

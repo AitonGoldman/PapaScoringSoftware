@@ -1,0 +1,12 @@
+<div class="chatitem" ng-if='credentials.is_logged_in(event_name)==false'>
+  <center>
+    <h2>Please Log In</h2>
+  </center>
+</div>      
+<div class="chatitem list" ng-if='credentials.is_logged_in(event_name)==true'>
+  <ion-item ui-sref='.manage_tournaments' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Manage Tournaments</ion-item>
+</div>      
+
+
+
+

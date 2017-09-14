@@ -174,6 +174,98 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },params: {
             event: {value:{}}
         }
+    }).state('app.event', {
+        cache:false,
+        url: '/event/:event_name',
+        views: {
+            // 'topView@': {
+            //     templateUrl: 'templates/pss_admin_2.html',
+            //     controller: 'app_controller'
+            // },            
+            'pssAdminHeader@':{
+                templateUrl: 'templates/generic_event_header.html'//,
+            },
+            'pssAdminContent@app':{
+                templateUrl: 'templates/event_content.html',
+                controller: 'app.event_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            }
+        },data: {
+            title: "Event Front Page",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
+    }).state('app.event.login', {
+        cache:false,
+        url: '/event_login',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/event_login.html',
+                controller: 'app.pss_admin.login_controller'
+                
+            },
+            'post_success@app.event.login':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.login':{
+                templateUrl: 'templates/event_login_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }
+            
+        },data: {
+            title: "Login"
+        }
+    }).state('app.event.manage_tournaments', {
+        cache:false,
+        url: '/manage_tournaments',
+        views: {
+            // 'topView@': {
+            //     templateUrl: 'templates/pss_admin_2.html',
+            //     controller: 'app_controller'
+            // },            
+            'pssAdminContent@app':{
+                templateUrl: 'templates/manage_tournaments_content.html',
+                controller: 'app.event.manage_tournaments_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'list@app.pss_admin':{
+                templateUrl: 'templates/generic_list.html'//,
+            }
+        },data: {
+            title: "Manage Tournaments",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
+    }).state('app.event.manage_tournaments.create_tournament', {
+        cache:false,
+        url: '/create_tournament',
+        views: {
+            // 'topView@': {
+            //     templateUrl: 'templates/pss_admin_2.html',
+            //     controller: 'app_controller'
+            // },            
+            'pssAdminContent@app':{
+                templateUrl: 'templates/create_tournament_content.html',
+                controller: 'app.event.manage_tournaments.create_tournament_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.event.manage_tournaments.create_tournament':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.manage_tournaments.create_tournament':{
+                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }
+        },data: {
+            title: "Manage Tournaments",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
     })
 
     ;}]);

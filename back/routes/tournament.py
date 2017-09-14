@@ -36,7 +36,7 @@ def create_tournament_route(request,app):
     if request.data:        
         input_data = json.loads(request.data)
     else:
-        raise BadRequest('Username or password not specified')
+        raise BadRequest('Missing information')
     if 'tournament_name' not in input_data:
         raise BadRequest('Missing information')        
     existing_tournament = app.tables.Tournaments.query.filter_by(tournament_name=input_data['tournament_name']).first()
@@ -44,11 +44,16 @@ def create_tournament_route(request,app):
         raise BadRequest('Trying to use an already used name for tournament')
     multi_division_tournament_name = input_data.get('multi_division_tournament_name',None)
     multi_division_tournament_id = input_data.get('multi_division_tournament_id',None)
-    
+    if 'finals_style' in input_data:
+        finals_style = input_data['finals_style']
+    else:
+        finals_style = None
+        
     new_tournament = orm_factories.create_tournament(app,
                                                      input_data['tournament_name'],
                                                      multi_division_tournament_name,
-                                                     multi_division_tournament_id)    
+                                                     multi_division_tournament_id,
+                                                     finals_style=finals_style)    
     app.tables.db_handle.session.commit()
     return new_tournament
 

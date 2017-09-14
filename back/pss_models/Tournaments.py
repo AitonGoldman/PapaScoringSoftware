@@ -47,6 +47,6 @@ def generate_tournaments_class(db_handle,event_name):
 
         allow_desk_purchases = db_handle.Column(db_handle.Boolean,default=True)
         allow_phone_purchases = db_handle.Column(db_handle.Boolean,default=True)
-        
+        wizard_configured=db_handle.Column(db_handle.Boolean,default=False)        
     return Tournaments
     

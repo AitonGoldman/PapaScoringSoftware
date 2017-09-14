@@ -118,8 +118,9 @@ def create_player(flask_app,
 
 def create_tournament(flask_app,tournament_name,
                       multi_division_tournament_name=None,
-                      multi_division_tournament_id=None,
-                      commit=False):
+                      multi_division_tournament_id=None,                      
+                      commit=False,
+                      finals_style=None):
     new_tournament = flask_app.tables.Tournaments(tournament_name=tournament_name)
     flask_app.tables.db_handle.session.add(new_tournament)
     if multi_division_tournament_name and multi_division_tournament_id is None:
@@ -132,7 +133,9 @@ def create_tournament(flask_app,tournament_name,
         if multi_division_tournament is None:
             raise BadRequest('Bad multi division tournament id')                            
         new_tournament.multi_division_tournament=multi_division_tournament
-        new_tournament.multi_division_tournament_name=multi_division_tournament.multi_division_tournament_name        
+        new_tournament.multi_division_tournament_name=multi_division_tournament.multi_division_tournament_name
+    if finals_style:
+        new_tournament.finals_style=finals_style
     if commit:
         flask_app.tables.db_handle.session.commit()
     return new_tournament

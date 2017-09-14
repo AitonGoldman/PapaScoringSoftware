@@ -1,4 +1,4 @@
-angular.module('app',['event_select','pss_admin']);
+angular.module('app',['event_select','pss_admin','event']);
 angular.module('app').controller(
     'app_controller',[
         '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup',
@@ -9,24 +9,41 @@ angular.module('app').controller(
             $scope.test_alert = function(message){
                 alert(message);
             };
-            $scope.bootstrap = function(options){
+            $scope.bootstrap = function(options){               
                 //FIXME : rely on cookies to tell us if we are logged in after page reload                
                 $scope.state = $state;
+                if($state.current.name.indexOf('pss_admin')!=-1){
+                    $state.params.event_name='pss_admin';
+                }
+                $scope.event_name = $state.params.event_name;
+                $rootScope.event_name = $state.params.event_name;
                 $ionicNavBarDelegate.title($state.current.data.title);                                
                 $rootScope.header_links=$state.current.data.header_links;
                 $rootScope.back_button=options.back_button==true;
-                credentialsService.set_pss_user_credentials_from_cookies("pss_admin");
-                $scope.credentials_for_event = credentialsService.get_credentials()['pss_admin'];                                
+                credentialsService.set_pss_user_credentials_from_cookies($scope.event_name);
+                $scope.credentials_for_event = credentialsService.get_credentials()[$scope.event_name];                
+                $rootScope.is_logged_in=credentialsService.is_logged_in($scope.event_name);
             };
             
-            $rootScope.pss_admin_logout = function(){
-                credentialsService.remove_credentials_on_logout("pss_admin");
-                $state.go('app.pss_admin.login');
+            $rootScope.pss_admin_logout = function(event){
+                credentialsService.remove_credentials_on_logout(event);                
+                $rootScope.is_logged_in=credentialsService.is_logged_in(event);
+                if(event == "pss_admin"){
+                    $state.go('app.pss_admin.login');    
+                }else{
+                    $state.go('app.event.login');
+                }
+                
+                
             };
             
             $scope.disable_back_button = function(){
                 $rootScope.back_button=false;
             };
+            $scope.enable_back_button = function(){
+                $rootScope.back_button=true;
+            };
+            
             
             $rootScope.go_back = function(){
                 history = $ionicHistory.viewHistory();

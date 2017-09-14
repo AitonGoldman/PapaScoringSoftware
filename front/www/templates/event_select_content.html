@@ -1,10 +1,9 @@
-
 <center>
-    <button class="button mobile-almost-full-width-button button-calm" ui-sref='app.pss_admin'>
-      Manage Events
-    </button>
-    <button style='margin:auto' class="button button-positive mobile-almost-full-width-button" ng-repeat='item in items'>
-      {{item.event_name}}
-    </button>
-  </center>
+  <button class="button mobile-almost-full-width-button button-calm" ui-sref='app.pss_admin'>
+    Manage Events
+  </button>
+  <button ui-sref='app.event({event_name:item.event_name})' style='margin:auto' class="button button-positive mobile-almost-full-width-button" ng-repeat='item in items'>
+    {{item.event_name}}
+  </button>
+</center>
 

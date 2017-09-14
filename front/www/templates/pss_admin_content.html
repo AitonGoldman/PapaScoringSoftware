@@ -1,9 +1,9 @@
-<div class="chatitem" ng-if='credentials.is_logged_in()==false'>
+<div class="chatitem" ng-if='credentials.is_logged_in("pss_admin")==false'>
   <center>
     <h2>Please Log In</h2>
   </center>
 </div>      
-<div class="chatitem list" ng-if='credentials.is_logged_in()==true'>
+<div class="chatitem list" ng-if='credentials.is_logged_in("pss_admin")==true'>
   <div class="item-input-inset">
     <label class="item-input-wrapper">
       <i class="icon ion-ios-search placeholder-icon"></i>

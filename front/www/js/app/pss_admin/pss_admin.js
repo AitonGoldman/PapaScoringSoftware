@@ -28,19 +28,23 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {
             $scope.bootstrap({back_button:true});
+            $scope.enable_back_button();
             $scope.pss_user={};            
-            $scope.login_func = function(){                
+            $scope.login_func = function(rest_resource,event){                
                 var on_success = function(data){
                     $scope.logged_in_user=data['pss_user'];
-                    credentialsService.set_pss_user_credentials("pss_admin",data);
+                    credentialsService.set_pss_user_credentials(event,data);
                     $scope.post_results={};
                     $scope.post_results.title="Logged In!";
                     $scope.post_results.results=[['User Name',data['pss_user'].username]];                    
-                    $scope.post_success = true;
+                    $scope.post_success = true;                    
                     $scope.disable_back_button();
                 };
-                                
-                var prom =resourceWrapperService.get_wrapper_with_loading('post_pss_admin_login',on_success,{},{username:$scope.pss_user.username,password:$scope.pss_user.password});            
+                var url_params = {};
+                if($scope.event_name != 'pss_admin'){
+                    url_params = {event_name:$scope.event_name};
+                }
+                var prom =resourceWrapperService.get_wrapper_with_loading(rest_resource,on_success,url_params,{username:$scope.pss_user.username,password:$scope.pss_user.password});            
 
             };
         }

@@ -84,3 +84,8 @@ class RouteTournamentTest(PssUnitTestBase):
         returned_tournament = tournament.create_tournament_route(mock_input_data,self.mock_app)                
         self.assertEquals(returned_tournament.multi_division_tournament,mock_multi_division_tournament)
         self.assertEquals(returned_tournament.multi_division_tournament_name,'poop_main')
+
+    def test_create_tournament_with_ppo_style_finals(self):
+        #FIXME : this also means fixes are needed in the normal style test
+        pass
+        

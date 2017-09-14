@@ -85,9 +85,16 @@ angular.module('resource_wrapper')
                   rest_api['post_pss_admin_login'] = $resource(rest_server+'/pss_admin/auth/pss_user/login',
                                                                {},
                                                                {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['post_event_login'] = $resource(rest_server+'/:event_name/auth/pss_event_user/login',
+                                                               {},
+                                                               {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
                   rest_api['post_create_event'] = $resource(rest_server+'/pss_admin/event',
                                                             {},
                                                             {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['post_create_tournament'] = $resource(rest_server+'/:event_name/tournament',
+                                                            {},
+                                                            {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  
                   rest_api['put_edit_event'] = $resource(rest_server+'/pss_admin/event/:event_id',
                                                             {},
                                                             {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});

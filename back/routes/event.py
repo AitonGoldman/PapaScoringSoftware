@@ -63,7 +63,7 @@ def get_event(tables,event_id):
     if event.event_creator_pss_user_id != current_user.pss_user_id:
         raise BadRequest('Can not get event details if it is not your event')
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.ALL)            
-    return jsonify({'event':event_serializer(event),'descriptions':get_event_field_descriptions()})
+    return jsonify({'item':event_serializer(event),'descriptions':get_event_field_descriptions()})
 
 
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['POST'])
@@ -107,4 +107,4 @@ def edit_event(tables,event_id):
     tables.db_handle.session.commit()
     generic_serializer = generic.generate_generic_serializer(serializer.generic.ALL)
     event_dict=generic_serializer(event)    
-    return jsonify({'event':event_dict})
+    return jsonify({'item':event_dict})

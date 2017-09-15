@@ -85,31 +85,31 @@ angular.module('pss_admin').controller(
             if($scope.wizard_step == undefined){                
                 basic_edit=true;
             }
-            if(_.isEmpty($state.params.event) && $scope.wizard_step > 1){
-                $state.go('app.pss_admin');
+            if(_.isEmpty($state.params.item) && $scope.wizard_step > 1){
+                $state.go('^');
             }
             if($scope.wizard_step>1){                
-                $scope.item=$state.params.event;
+                $scope.item=$state.params.item;
                 $scope.descriptions=$state.params.descriptions;
             }
             if(basic_edit == true || $scope.wizard_step == 1) {
                 var on_success = function(data){
-                    $scope.item=data['event'];
+                    $scope.item=data['item'];
                     $scope.descriptions=data['descriptions'];                    
                 };                            
                 ////var prom =resourceWrapperService.get_wrapper_with_loading('get_event',on_success,{event_id:$state.params.event_id},{});                
                 var prom =resourceWrapperService.get_wrapper_with_loading(get_route,on_success,{event_name:$state.params.event_name,id:$state.params.id},{});                        
             }                                    
             
-            $scope.submit_button_disabled = function(event,num_fields){                
-                if(_.isEmpty(event)){
+            $scope.submit_button_disabled = function(item,num_fields){                
+                if(_.isEmpty(item)){
                     return true;
                 }                
-                if(_.size(event)<num_fields && $scope.wizard_step > 0){
+                if(_.size(item)<num_fields && $scope.wizard_step > 0){
                     return true;
                 }
-                for(i in event){                    
-                    if(event[i]==""){
+                for(i in item){                    
+                    if(item[i]==""){
                         return true;
                     }
                 }                
@@ -132,7 +132,7 @@ angular.module('pss_admin').controller(
                     //FIXME : this should use descriptions we got from backend
                     var results = [];
                     
-                    var item = data['event'];
+                    var item = data['item'];                    
                     if(result_fields == undefined){
                         result_fields=[];
                         for(key in item){
@@ -140,18 +140,17 @@ angular.module('pss_admin').controller(
                                 result_fields.push(key);
                             }                            
                         }
-                    }
+                    }                    
                     for(result_field_idx in result_fields){
                         result_field = result_fields[result_field_idx];
                         results.push([$scope.descriptions.short_descriptions[result_field],item[result_field]]);
-                    }
-                                        
+                    }                    
                     $scope.post_results.results=results;                    
                     $scope.disable_back_button();
                     $scope.post_success = true;
                 };                
                 //var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,{event_id:$state.params.event_id},event);
-                var prom =resourceWrapperService.get_wrapper_with_loading(edit_route,on_success,{id:$state.params.id},event);            
+                var prom =resourceWrapperService.get_wrapper_with_loading(edit_route,on_success,{id:$state.params.id,event_name:$state.params.event_name},event);            
             };
         }
     ]);

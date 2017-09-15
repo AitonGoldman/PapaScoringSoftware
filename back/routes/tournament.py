@@ -108,7 +108,7 @@ def edit_tournament(tables,tournament_id):
     edit_tournament_route(tournament,input_data,current_app)
     tables.db_handle.session.commit()
     tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
-    return jsonify({'edited_tournament':tournament_serializer(tournament)})
+    return jsonify({'item':tournament_serializer(tournament)})
 
 
 @blueprints.event_blueprint.route('/tournament',methods=['GET'])
@@ -126,5 +126,5 @@ def get_tournament(tables,tournament_id):
     if tournament is None:
         raise BadRequest('Bad tournament requested')    
     tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
-    return jsonify({'tournament':tournament_serializer(tournament),'descriptions':get_tournament_field_descriptions()})
+    return jsonify({'item':tournament_serializer(tournament),'descriptions':get_tournament_field_descriptions()})
 

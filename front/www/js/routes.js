@@ -125,7 +125,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             edit_route: "put_edit_event",
             get_route: "get_event"            
         },params: {
-            event: {value:{}},
+            item: {value:{}},
             descriptions: {value:{}}            
         }
     }).state('app.pss_admin.edit_event_basic', {
@@ -152,7 +152,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             edit_route: "put_edit_event",
             get_route: "get_event"      
         },params: {
-            event: {value:{}}
+            item: {value:{}}
         }
     }).state('app.pss_admin.edit_event_advanced', {
         cache:false,
@@ -178,7 +178,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             edit_route: "put_edit_event",
             get_route: "get_event"      
         },params: {
-            event: {value:{}}
+            item: {value:{}}
         }
     }).state('app.event', {
         cache:false,
@@ -299,7 +299,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             edit_route: "put_edit_tournament",
             get_route:"get_tournament"
         },params: {
-            event: {value:{}},
+            item: {value:{}},
             descriptions: {value:{}}
         }
     })

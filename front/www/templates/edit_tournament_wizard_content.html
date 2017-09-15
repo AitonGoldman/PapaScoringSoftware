@@ -1,5 +1,5 @@
 <ul class="progress-indicator" ng-if="post_success==undefined">
-  <li ng-repeat='step_status in [1,2,3,4]' ng-class="{completed:wizard_step > step_status || post_success != undefined}"> <span class="bubble"></span> Step {{step_status}}. </li>
+  <li ng-repeat='step_status in [1,2,3,4,5]' ng-class="{completed:wizard_step > step_status || post_success != undefined}"> <span class="bubble"></span> Step {{step_status}}. </li>
 </ul>
 
 <div class='chatitemup' ng-if="post_success!=undefined">
@@ -15,7 +15,7 @@
       <div class='row'>
         <div class='col'>
         </div>
-        <button ng-disabled='item.queue_bump_amount==undefined || item.queue_bump_amount == ""' ui-sref-opts='{reload:true}' ui-sref='app.pss_admin.edit_event_wizard({wizard_step:2,event:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive">Next Step </button>
+        <button ui-sref-opts='{reload:true}' ui-sref='app.event.manage_tournaments.edit_tournament_wizard({wizard_step:2,item:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive">Next Step </button>
         <div class='col'>
         </div>    
       </div>      
@@ -23,27 +23,71 @@
   </div>
   <div ng-if="wizard_step==2">
     <form>
-      <pss-text-input-basic field='number_unused_tickets_allowed'> </pss-text-input-basic>
+      <pss-text-input-basic field='manually_set_price'> </pss-text-input-basic>
       <div class='row'>
         <div class='col'>
         </div>
-        <button ng-disabled='item.number_unused_tickets_allowed==undefined || item.number_unused_tickets_allowed == ""' ui-sref-opts='{reload:true}' ui-sref='app.pss_admin.edit_event_wizard({wizard_step:3,event:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive"> Next Step </button>
+        <button ng-disabled='item.manually_set_price==undefined || item.manually_set_price == ""' ui-sref-opts='{reload:true}' ui-sref='app.event.manage_tournaments.edit_tournament_wizard({wizard_step:3,item:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive"> Next Step </button>
         <div class='col'>
         </div>    
       </div>
     </form>
-    </div>
+  </div>
   <div ng-if="wizard_step==3">
     <form>
-      <pss-text-input-basic field='player_id_seq_start'> </pss-text-input-basic>
+      <div>
+        <div class='row'>
+          <div class='col' style='text-align:right'>Offer tickets discounts</div>
+          <div class='col'>
+            <label class="toggle">
+              <input type="checkbox" ng-model="ticket_discount">
+              <div class="track">
+                <div class="handle"></div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      <pss-text-input-basic field='number_of_tickets_for_discount' ng-if='ticket_discount==true'> </pss-text-input-basic>
+      <br>
+      <pss-text-input-basic field='discount_price' ng-if='ticket_discount==true'> </pss-text-input-basic>      
       <div class='row'>
         <div class='col'>
         </div>
-        <button ng-click='edit_event_func(item,["queue_bump_amount","number_unused_tickets_allowed","player_id_seq_start"])' ng-disabled='item.player_id_seq_start==undefined || item.player_id_seq_start == ""' ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" >Save Changes</button>
+        <button  ui-sref-opts='{reload:true}' ui-sref='app.event.manage_tournaments.edit_tournament_wizard({wizard_step:4,item:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive"> Next Step </button>
         <div class='col'>
         </div>    
       </div>
     </form>
-  </div>      
+  </div>
+  <div ng-if="wizard_step==4">
+    <form>
+      <pss-boolean-input-basic field='limited_herb'> </pss-boolean-input-basic>
+      <div class='row'>
+        <div class='col'>
+        </div>
+        <button ui-sref-opts='{reload:true}' ui-sref='app.event.manage_tournaments.edit_tournament_wizard({wizard_step:5,item:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive"> Next Step </button>
+        <div class='col'>
+        </div>    
+      </div>
+    </form>
+  </div>
+  <div ng-if="wizard_step==5">
+    <form>
+      <pss-text-input-basic field='number_of_qualifiers' ng-if='item.finals_style=="PAPA"'> </pss-text-input-basic>
+      <pss-text-input-basic field='number_of_qualifiers_for_a_when_finals_style_is_ppo' ng-if='item.finals_style=="PPO"'> </pss-text-input-basic>
+      <br>
+      <pss-text-input-basic field='number_of_qualifiers_for_b_when_finals_style_is_ppo' ng-if='item.finals_style=="PPO"'> </pss-text-input-basic>
+
+      <div class='row'>
+        <div class='col'>
+        </div>
+        <button ng-click='edit_event_func(item,["queuing","manually_set_price","limited_herb","number_of_qualifiers"])'  ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" >Save Changes</button>
+        <div class='col'>
+        </div>    
+      </div>
+    </form>
+  </div>  
 </div>
 

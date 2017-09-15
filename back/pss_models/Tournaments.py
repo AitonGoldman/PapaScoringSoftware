@@ -23,6 +23,7 @@ def generate_tournaments_class(db_handle,event_name):
         minimum_number_of_tickets_allowed=db_handle.Column(db_handle.Integer,default=1)
         ticket_increment_for_each_purchase=db_handle.Column(db_handle.Integer,default=1)
         number_of_tickets_for_discount=db_handle.Column(db_handle.Integer)
+        discount=db_handle.Column(db_handle.Boolean,default=False)
         discount_price=db_handle.Column(db_handle.Integer)
         number_of_unused_tickets_allowed=db_handle.Column(db_handle.Integer,default=15)
         

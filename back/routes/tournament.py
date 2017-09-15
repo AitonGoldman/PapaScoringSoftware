@@ -17,6 +17,7 @@ def get_tournament_field_descriptions():
     long_descriptions={}
     short_descriptions={}
     short_descriptions["queuing"]="Enable queuing"
+    short_descriptions["discount"]="Offer discount"
     short_descriptions["manually_set_price"]="Ticket price"
     short_descriptions["number_of_tickets_for_discount"]="Discount on X tickets"
     short_descriptions["discount_price"]="Discount ticket price"
@@ -27,6 +28,7 @@ def get_tournament_field_descriptions():
     short_descriptions["number_of_qualifiers_for_a_when_finals_style_is_ppo"]="Number of A qualifiers"
     short_descriptions["number_of_qualifiers_for_b_when_finals_style_is_ppo"]="Number of B qualifiers"    
 
+    long_descriptions["discount"]="Offer a discount if players buy a certain number of tickets"
     long_descriptions["queuing"]="Enabling queuing will allow players to be queued on machines in this tournament."
     long_descriptions["manually_set_price"]="The price of a single ticket"
     long_descriptions["number_of_tickets_for_discount"]="The number of tickets to offer a discount on.  For example, if this is set to 3 then a player will pay the discount amount when they buy 3 tickets."

@@ -93,8 +93,17 @@ angular.module('pss_admin').controller(
                 $scope.descriptions=$state.params.descriptions;
             }
             if(basic_edit == true || $scope.wizard_step == 1) {
-                var on_success = function(data){
+                var on_success = function(data){                    
                     $scope.item=data['item'];
+                    var orig_item_fields=[];
+                    for(i in $scope.item){
+                        orig_item_fields.push(i);
+                    }
+                    $scope.item.bobo={};
+                    for(idx in orig_item_fields){
+                        field_name = orig_item_fields[idx];
+                        $scope.item.bobo[field_name]=$scope.item[field_name];
+                    }
                     $scope.descriptions=data['descriptions'];                    
                 };                            
                 ////var prom =resourceWrapperService.get_wrapper_with_loading('get_event',on_success,{event_id:$state.params.event_id},{});                
@@ -133,18 +142,35 @@ angular.module('pss_admin').controller(
                     var results = [];
                     
                     var item = data['item'];                    
-                    if(result_fields == undefined){
-                        result_fields=[];
-                        for(key in item){
-                            if(key.indexOf('_id')==-1 && key.indexOf('secret')==-1){
-                                result_fields.push(key);
-                            }                            
+                    // if(result_fields == undefined){
+                    //     result_fields=[];
+                    //     for(key in item){
+                    //         if(key.indexOf('_id')==-1 && key.indexOf('secret')==-1){
+                    //             result_fields.push(key);
+                    //         }                            
+                    //     }
+                    // }                    
+                    // for(result_field_idx in result_fields){
+                    //     result_field = result_fields[result_field_idx];
+                    //     results.push([$scope.descriptions.short_descriptions[result_field],item[result_field]]);
+                    // }                    
+
+                    // results = [];
+                    for(field_name in item){
+                        if(field_name=="bobo"){
+                            continue;
                         }
-                    }                    
-                    for(result_field_idx in result_fields){
-                        result_field = result_fields[result_field_idx];
-                        results.push([$scope.descriptions.short_descriptions[result_field],item[result_field]]);
-                    }                    
+                        if(field_name=="wizard_configured"){
+                            continue;
+                        }
+                        if(_.isArray(item[field_name])){
+                            continue;
+                        }
+                        if(event.bobo[field_name]!=item[field_name]){
+                            results.push([$scope.descriptions.short_descriptions[field_name],item[field_name]]);   
+                        };
+                    }
+                    //FIXME : results page needs to say something about "these are the changed fields" on edit
                     $scope.post_results.results=results;                    
                     $scope.disable_back_button();
                     $scope.post_success = true;

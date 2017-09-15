@@ -35,23 +35,11 @@
   </div>
   <div ng-if="wizard_step==3">
     <form>
-      <div>
-        <div class='row'>
-          <div class='col' style='text-align:right'>Offer tickets discounts</div>
-          <div class='col'>
-            <label class="toggle">
-              <input type="checkbox" ng-model="ticket_discount">
-              <div class="track">
-                <div class="handle"></div>
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
-      
-      <pss-text-input-basic field='number_of_tickets_for_discount' ng-if='ticket_discount==true'> </pss-text-input-basic>
+      <pss-boolean-input-basic field='discount'> </pss-boolean-input-basic>
       <br>
-      <pss-text-input-basic field='discount_price' ng-if='ticket_discount==true'> </pss-text-input-basic>      
+      <pss-text-input-basic field='number_of_tickets_for_discount' ng-if='item.discount==true'> </pss-text-input-basic>
+      <br>
+      <pss-text-input-basic field='discount_price' ng-if='item.discount==true'> </pss-text-input-basic>      
       <div class='row'>
         <div class='col'>
         </div>

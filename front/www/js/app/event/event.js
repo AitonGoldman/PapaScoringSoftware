@@ -33,7 +33,22 @@ angular.module('event').controller(
     'app.event.manage_tournaments_controller',[
         '$scope','$state','resourceWrapperService','listGeneration',
         function($scope, $state,resourceWrapperService,listGeneration ) {
-            $scope.bootstrap({back_button:true});            
+            $scope.bootstrap({back_button:true});
+            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
+            
+            var on_success = function(data){
+                $scope.items=data['tournaments'];                
+                var basic_sref='.edit_tournament_basic({id:item.tournament_id})';
+                var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';
+                var wizard_sref='.edit_tournament_wizard({id:item.tournament_id,wizard_step:1})';
+                var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('tournament_name',
+                                                                                                            advanced_sref,
+                                                                                                            wizard_sref,
+                                                                                                            basic_sref
+                                                                                                           );
+                _.map($scope.items, set_list_items_actions_and_args);  
+            };                        
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_tournaments',on_success,{event_name:$scope.event_name},{});                        
         }]);
 
 angular.module('event').controller(

@@ -1,8 +1,8 @@
-<a ui-sref='app.pss_admin.login' class="tab-item" ng-if='credentials.is_logged_in("pss_admin")==false'>
+<a ui-sref='app.pss_admin.login' class="tab-item" ng-if='is_logged_in==false'>
   <i class="icon ion-person" ></i>
   Login
 </a>
-<a ui-sref='app.pss_admin.login' class="tab-item" ng-if='credentials.is_logged_in("pss_admin")==true'>
+<a ng-click='pss_admin_logout(event_name)' class="tab-item" ng-if='is_logged_in==true'>
   <i  class="icon ion-person assertive" ></i>
   Logout
 </a>

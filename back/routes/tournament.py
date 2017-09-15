@@ -13,6 +13,33 @@ from lib.serializer.deserialize import deserialize_json
 from lib import orm_factories
 from lib.route_decorators.auth_decorators import check_current_user_is_active
 
+def get_tournament_field_descriptions():
+    long_descriptions={}
+    short_descriptions={}
+    short_descriptions["queuing"]="Enable queuing"
+    short_descriptions["manually_set_price"]="Ticket price"
+    short_descriptions["number_of_tickets_for_discount"]="Discount on X tickets"
+    short_descriptions["discount_price"]="Discount ticket price"
+    short_descriptions["limited_herb"]="Limited herb"
+    short_descriptions["number_of_signifigant_scores"]="# of signifigant scores"
+    short_descriptions["team_tournament"]="Team tournament"
+    short_descriptions["number_of_qualifiers"]="Number of qualifiers"
+    short_descriptions["number_of_qualifiers_for_a_when_finals_style_is_ppo"]="Number of A qualifiers"
+    short_descriptions["number_of_qualifiers_for_b_when_finals_style_is_ppo"]="Number of B qualifiers"    
+
+    long_descriptions["queuing"]="Enabling queuing will allow players to be queued on machines in this tournament."
+    long_descriptions["manually_set_price"]="The price of a single ticket"
+    long_descriptions["number_of_tickets_for_discount"]="The number of tickets to offer a discount on.  For example, if this is set to 3 then a player will pay the discount amount when they buy 3 tickets."
+    long_descriptions["discount_price"]="The discount price when the player purchases the discount amount of tickets."
+    long_descriptions["limited_herb"]="If enabled, the tournament will be limited herb.  This will automatically limit the totoal number of tickets a player can purchase"
+    long_descriptions["number_of_signifigant_scores"]="The number of scores that will be used for your overall ranking.  For example, if this is set to 5 then your top 5 scores on 5 seperate machines will be used to calculate your overall ranking."
+    long_descriptions["team_tournament"]="Enabling this makes this tournament a team tournament.  Only players on a team will be able to buy tickets and play games in this tournament"
+    long_descriptions["number_of_qualifiers"]="The number of players that will qualify"
+    long_descriptions["number_of_qualifiers_for_a_when_finals_style_is_ppo"]="The number of players that will qualify for A division"
+    long_descriptions["number_of_qualifiers_for_b_when_finals_style_is_ppo"]="The number of players that will qualify for B division.  Note that these players will follow the A division qualifiers.  For example, if the number of players that will qualify for A division is 16, and B division is set to 16 then the players that will qualify for B are player with rankings 16-32"    
+
+    return {'long_descriptions':long_descriptions,'short_descriptions':short_descriptions}
+
 def edit_tournament_route(tournament,input_data,app):
     deserialize_json(tournament,input_data,app)
     if tournament.use_stripe:
@@ -48,7 +75,7 @@ def create_tournament_route(request,app):
         finals_style = input_data['finals_style']
     else:
         finals_style = None
-        
+    
     new_tournament = orm_factories.create_tournament(app,
                                                      input_data['tournament_name'],
                                                      multi_division_tournament_name,
@@ -82,4 +109,22 @@ def edit_tournament(tables,tournament_id):
     tables.db_handle.session.commit()
     tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
     return jsonify({'edited_tournament':tournament_serializer(tournament)})
+
+
+@blueprints.event_blueprint.route('/tournament',methods=['GET'])
+@load_tables
+def get_tournaments(tables):    
+
+    tournaments = tables.Tournaments.query.all()
+    tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
+    return jsonify({'tournaments':[tournament_serializer(tournament) for tournament in tournaments]})
+
+@blueprints.event_blueprint.route('/tournament/<tournament_id>',methods=['GET'])
+@load_tables
+def get_tournament(tables,tournament_id):    
+    tournament = tables.Tournaments.query.filter_by(tournament_id=tournament_id).first()
+    if tournament is None:
+        raise BadRequest('Bad tournament requested')    
+    tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
+    return jsonify({'tournament':tournament_serializer(tournament),'descriptions':get_tournament_field_descriptions()})
 

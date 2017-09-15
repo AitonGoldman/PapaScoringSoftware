@@ -88,4 +88,6 @@ class RouteTournamentTest(PssUnitTestBase):
     def test_create_tournament_with_ppo_style_finals(self):
         #FIXME : this also means fixes are needed in the normal style test
         pass
-        
+    
+    def test_get_tournaments(self):        
+        pass

@@ -103,7 +103,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         }
     }).state('app.pss_admin.edit_event_wizard', {
         cache:false,
-        url: '/edit_event_wizard/:event_id/:wizard_step',
+        url: '/edit_event_wizard/:id/:wizard_step',
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_wizard_content.html',
@@ -121,14 +121,16 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }            
         },data: {
-            title: "Edit Event"
+            title: "Edit Event",
+            edit_route: "put_edit_event",
+            get_route: "get_event"            
         },params: {
             event: {value:{}},
-            descriptions: {value:{}}
+            descriptions: {value:{}}            
         }
     }).state('app.pss_admin.edit_event_basic', {
         cache:false,
-        url: '/edit_event_basic/:event_id',
+        url: '/edit_event_basic/:id',
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_basic_content.html',
@@ -146,13 +148,15 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }            
         },data: {
-            title: "Edit Event"
+            title: "Edit Event",
+            edit_route: "put_edit_event",
+            get_route: "get_event"      
         },params: {
             event: {value:{}}
         }
     }).state('app.pss_admin.edit_event_advanced', {
         cache:false,
-        url: '/edit_event_advanced/:event_id',
+        url: '/edit_event_advanced/:id',
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_advanced_content.html',
@@ -170,7 +174,9 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }            
         },data: {
-            title: "Edit Event"
+            title: "Edit Event",
+            edit_route: "put_edit_event",
+            get_route: "get_event"      
         },params: {
             event: {value:{}}
         }
@@ -234,7 +240,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             },
             'list@app.pss_admin':{
                 templateUrl: 'templates/generic_list.html'//,
-            }
+            },
+            'list@app.event.manage_tournaments':{
+                templateUrl: 'templates/generic_list.html'//,
+            }            
         },data: {
             title: "Manage Tournaments",
             quick_links_url: 'templates/event_quick_links.html'
@@ -265,6 +274,33 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },data: {
             title: "Manage Tournaments",
             quick_links_url: 'templates/event_quick_links.html'
+        }
+    }).state('app.event.manage_tournaments.edit_tournament_wizard', {
+        cache:false,
+        url: '/edit_tournament_wizard/:id/:wizard_step',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/edit_tournament_wizard_content.html',
+                controller: 'app.pss_admin.edit_event_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.event.manage_tournaments.edit_tournament_wizard':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.manage_tournaments.edit_tournament_wizard':{
+                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Edit Tournamnt",
+            edit_route: "put_edit_tournament",
+            get_route:"get_tournament"
+        },params: {
+            event: {value:{}},
+            descriptions: {value:{}}
         }
     })
 

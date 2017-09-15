@@ -5,14 +5,14 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','listGeneration',
         function($scope, $state,resourceWrapperService,listGeneration ) {
             $scope.bootstrap({});
-
+            
             $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
             
             var on_success = function(data){
                 $scope.items=data['events'];                
-                var basic_sref='.edit_event_basic({event_id:item.event_id})';
-                var advanced_sref='.edit_event_advanced({event_id:item.event_id})';
-                var wizard_sref='.edit_event_wizard({event_id:item.event_id,wizard_step:1})';
+                var basic_sref='.edit_event_basic({id:item.event_id})';
+                var advanced_sref='.edit_event_advanced({id:item.event_id})';
+                var wizard_sref='.edit_event_wizard({id:item.event_id,wizard_step:1})';
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('event_name',
                                                                                                             advanced_sref,
                                                                                                             wizard_sref,
@@ -76,7 +76,10 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {                        
             $scope.bootstrap({back_button:true});
-            $scope.wizard_step = $state.params.wizard_step;                        
+            $scope.wizard_step = $state.params.wizard_step;                                    
+            var edit_route = $state.current.data.edit_route;
+            var get_route = $state.current.data.get_route;            
+            console.log(edit_route);
             var basic_edit=false;
             
             if($scope.wizard_step == undefined){                
@@ -94,7 +97,8 @@ angular.module('pss_admin').controller(
                     $scope.item=data['event'];
                     $scope.descriptions=data['descriptions'];                    
                 };                            
-                var prom =resourceWrapperService.get_wrapper_with_loading('get_event',on_success,{event_id:$state.params.event_id},{});                        
+                ////var prom =resourceWrapperService.get_wrapper_with_loading('get_event',on_success,{event_id:$state.params.event_id},{});                
+                var prom =resourceWrapperService.get_wrapper_with_loading(get_route,on_success,{event_name:$state.params.event_name,id:$state.params.id},{});                        
             }                                    
             
             $scope.submit_button_disabled = function(event,num_fields){                
@@ -146,8 +150,8 @@ angular.module('pss_admin').controller(
                     $scope.disable_back_button();
                     $scope.post_success = true;
                 };                
-                var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,{event_id:$state.params.event_id},event);            
-
+                //var prom =resourceWrapperService.get_wrapper_with_loading('put_edit_event',on_success,{event_id:$state.params.event_id},event);
+                var prom =resourceWrapperService.get_wrapper_with_loading(edit_route,on_success,{id:$state.params.id},event);            
             };
         }
     ]);

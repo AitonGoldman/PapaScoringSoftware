@@ -1,0 +1,25 @@
+<div>
+  <div class="item item-divider" ng-if='basic=="true"'>
+    {{descriptions.short_descriptions[field]}}
+  </div>      
+  <div>
+    <div class='row'>
+      <div class='col'></div>
+      <div class='col'>{{descriptions.short_descriptions[field]}}</div>
+      <div class='col'>
+        <label class="toggle">
+          <input type="checkbox" ng-model="item[field]">
+          <div class="track">
+            <div class="handle"></div>
+          </div>
+        </label>
+      </div>
+      <div class='col'></div>
+    </div>
+  </div>
+  <div class='row'>
+    <center>
+      {{descriptions.long_descriptions[field]}}
+    </center>
+  </div>
+</div>

@@ -78,10 +78,15 @@ angular.module('resource_wrapper')
                   rest_api['get_events'] = $resource(rest_server+'/pss_admin/event',
                                                      {},
                                                      {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
-                  rest_api['get_event'] = $resource(rest_server+'/pss_admin/event/:event_id',
+                  rest_api['get_event'] = $resource(rest_server+'/pss_admin/event/:id',
                                                     {},
                                                     {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
-                  
+                  rest_api['get_tournaments'] = $resource(rest_server+'/:event_name/tournament',
+                                                          {},
+                                                          {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_tournament'] = $resource(rest_server+'/:event_name/tournament/:id',
+                                                         {},
+                                                         {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                                    
                   rest_api['post_pss_admin_login'] = $resource(rest_server+'/pss_admin/auth/pss_user/login',
                                                                {},
                                                                {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
@@ -95,7 +100,7 @@ angular.module('resource_wrapper')
                                                             {},
                                                             {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   
-                  rest_api['put_edit_event'] = $resource(rest_server+'/pss_admin/event/:event_id',
+                  rest_api['put_edit_event'] = $resource(rest_server+'/pss_admin/event/:id',
                                                             {},
                                                             {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   

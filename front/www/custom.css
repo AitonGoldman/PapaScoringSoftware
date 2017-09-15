@@ -12,10 +12,10 @@
     animation: slideInLeft 1s;
 }
 
-.chatitem.ng-exit {
-    -webkit-animation: slideOutRight 1s;
-    animation: slideOutRight 1s;
-}
+/* .chatitem.ng-leave { */
+/*     -webkit-animation: fadeOut 1s; */
+/*     animation: fadeOut 1s; */
+/* } */
 
 .chatitemup.ng-enter {
     -webkit-animation: slideInUp 1s;

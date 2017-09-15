@@ -4,7 +4,7 @@
 </ion-item>
 <div class='card' style='margin:0;margin-top:2px' ng-repeat='item in items|filter:{$:filter_for}' ng-if='item.actions_ui_sref_list!=undefined'>
   <div class='item item-divider item-icon-left' ng-click='toggle_view_item_actions(item)'>
-    <i class='icon ion-edit'></i>
+    <i class='icon {{item.icon}}'></i>
     {{item.label_to_display}}
   </div>
   <div ui-sref='{{action.ui_sref}}' class="item item-icon-left" ng-if="item.display_actions==true" ng-repeat='action in item.actions_ui_sref_list'>

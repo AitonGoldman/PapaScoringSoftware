@@ -144,6 +144,19 @@ angular.module('app').directive('pssBooleanInputBasic', function($state) {
   };
 });
 
+angular.module('app').directive('pssBooleanInputAdvanced', function($state) {
+  return {
+      restrict: 'AE',
+      replace: 'true',
+      scope:true,
+      templateUrl: 'templates/generic_boolean_input_advanced.html',
+      link: function(scope, elem, attrs) {
+          scope.field = attrs.field;
+          scope.basic = attrs.basic;          
+      }      
+  };
+});
+
 
 angular.module('app').directive('pssTextInputAdvanced', function($state) {
   return {

@@ -302,6 +302,58 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             item: {value:{}},
             descriptions: {value:{}}
         }
+    }).state('app.event.manage_tournaments.edit_tournament_basic', {
+        cache:false,
+        url: '/edit_tournament_basic/:id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/edit_tournament_basic_content.html',
+                controller: 'app.pss_admin.edit_event_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.event.manage_tournaments.edit_tournament_basic':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.manage_tournaments.edit_tournament_basic':{
+                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Edit Tournament",
+            edit_route: "put_edit_tournament",
+            get_route: "get_tournament"      
+        },params: {
+            item: {value:{}}
+        }
+    }).state('app.event.manage_tournaments.edit_tournament_advanced', {
+        cache:false,
+        url: '/edit_tournament_advanced/:id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/edit_tournament_advanced_content.html',
+                controller: 'app.pss_admin.edit_event_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.event.manage_tournaments.edit_tournament_advanced':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.manage_tournaments.edit_tournament_advanced':{
+                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Edit Tournament",
+            edit_route: "put_edit_tournament",
+            get_route: "get_tournament"      
+        },params: {
+            item: {value:{}}
+        }
     })
 
     ;}]);

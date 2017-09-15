@@ -1,0 +1,51 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <div class='row' ui-view='post_success_buttons'>
+  </div>  
+</div>
+<div ng-if="post_success==undefined">
+  <form name="myForm">
+    <div class='list'>
+      <pss-boolean-input-advanced field='queuing'>  </pss-boolean-input-advanced>
+      <pss-boolean-input-advanced field="active"> </pss-boolean-input-advanced>
+      <pss-boolean-input-advanced field="team_tournament"> </pss-boolean-input-advanced>
+      <pss-boolean-input-advanced field="allow_desk_purchases"> </pss-boolean-input-advanced>
+      <pss-boolean-input-advanced field="allow_phone_purchases"> </pss-boolean-input-advanced>
+
+      <pss-boolean-input-advanced field="use_stripe"> </pss-boolean-input-advanced>
+      <pss-text-input-advanced class='chatitem' field="manually_set_price" ng-if="item.use_stripe!=true"> </pss-text-input-advanced>
+      <pss-text-input-advanced class='chatitem' ng-if="item.use_stripe==true" field="stripe_sku"> </pss-text-input-advanced>      
+
+      <pss-boolean-input-advanced field='discount'>  </pss-boolean-input-advanced>
+      <pss-text-input-advanced class='chatitem' ng-if="item.discount==true" field="number_of_tickets_for_discount"> </pss-text-input-advanced>
+      <pss-text-input-advanced class='chatitem' ng-if="item.discount==true && item.use_stripe!=true" field="discount_price"> </pss-text-input-advanced>
+      <pss-text-input-advanced class='chatitem' ng-if="item.use_stripe==true && item.discount==true" field="discount_stripe_sku"> </pss-text-input-advanced>
+      
+      <pss-text-input-advanced field="limited_herb"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_signifigant_scores"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="team_tournament"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_qualifiers"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_qualifiers_for_a_when_finals_style_is_ppo"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_qualifiers_for_b_when_finals_style_is_ppo"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_games_played_in_each_finals_match"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="queue_size"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="minimum_number_of_tickets_allowed"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="ticket_increment_for_each_purchase"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_unused_tickets_allowed"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="ifpa_rank_restriction"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_players_per_team"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_games_played_in_each_finals_match"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="style_of_points_assigned_during_finals"> </pss-text-input-advanced>
+
+    </div>
+    <div class='row'>
+      <div class='col'>
+      </div>
+      <button ng-click='edit_event_func(item)'  ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
+      <div class='col'>
+      </div>    
+    </div>
+  </form>
+</div>
+

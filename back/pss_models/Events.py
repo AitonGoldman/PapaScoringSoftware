@@ -13,7 +13,7 @@ def generate_events_class(db_handle):
         number_unused_tickets_allowed = db_handle.Column(db_handle.Integer)
         ionic_profile = db_handle.Column(db_handle.String(100))
         ionic_api_key = db_handle.Column(db_handle.String(100))
-        active = db_handle.Column(db_handle.Boolean)
+        active = db_handle.Column(db_handle.Boolean,default=False)
         flask_secret_key = db_handle.Column(db_handle.String(100))
         sendgrid_api_key = db_handle.Column(db_handle.String(100))
         player_id_seq_start = db_handle.Column(db_handle.Integer)

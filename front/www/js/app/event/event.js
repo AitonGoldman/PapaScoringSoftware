@@ -46,7 +46,9 @@ angular.module('event').controller(
                                                                                                             wizard_sref,
                                                                                                             basic_sref
                                                                                                            );
-                _.map($scope.items, set_list_items_actions_and_args);  
+                _.map($scope.items, set_list_items_actions_and_args);
+                _.map($scope.items, listGeneration.set_active_inactive_icon);
+                
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_tournaments',on_success,{event_name:$scope.event_name},{});                        
         }]);

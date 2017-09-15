@@ -25,16 +25,27 @@ angular.module('list_generation')
                              basic_edit_action = {label:"Basic Editing",ui_sref:basic_sref};
                          }
                          i.actions_ui_sref_list.splice(0,0,basic_edit_action);
-                         i.label_to_display=i[display_label_field];                
+                         i.label_to_display=i[display_label_field];                         
                      };             
                      return set_list_items_actions_and_args;
-                 };                                     
+                 };
                  
+                 var set_active_inactive_icon = function(i){
+                    if(i.active == undefined){
+                        return;                        
+                    }
+                    if(i.active == true){
+                        i.icon='ion-play';
+                    } else {
+                        i.icon='ion-stop';
+                    }                     
+                 };
 
                  return {
                      generate_set_list_items_ui_sref_and_args:generate_set_list_items_ui_sref_and_args,
                      toggle_view_item_actions:toggle_view_item_actions,
-                     generate_set_list_items_actions_and_args:generate_set_list_items_actions_and_args
+                     generate_set_list_items_actions_and_args:generate_set_list_items_actions_and_args,
+                     set_active_inactive_icon:set_active_inactive_icon
                  };
              }
              ]

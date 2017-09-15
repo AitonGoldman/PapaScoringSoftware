@@ -12,13 +12,14 @@ angular.module('pss_admin').controller(
                 $scope.items=data['events'];                
                 var basic_sref='.edit_event_basic({id:item.event_id})';
                 var advanced_sref='.edit_event_advanced({id:item.event_id})';
-                var wizard_sref='.edit_event_wizard({id:item.event_id,wizard_step:1})';
+                var wizard_sref='.edit_event_wizard({id:item.event_id,wizard_step:1})';                
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('event_name',
                                                                                                             advanced_sref,
                                                                                                             wizard_sref,
                                                                                                             basic_sref
                                                                                                            );
-                _.map($scope.items, set_list_items_actions_and_args);  
+                _.map($scope.items, set_list_items_actions_and_args);
+                _.map($scope.items, listGeneration.set_active_inactive_icon);
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_events',on_success,{},{});                        
         }

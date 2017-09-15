@@ -1,5 +1,5 @@
 <ul class="progress-indicator" ng-if="post_success==undefined">
-  <li ng-repeat='step_status in [1,2,3,4,5]' ng-class="{completed:wizard_step > step_status || post_success != undefined}"> <span class="bubble"></span> Step {{step_status}}. </li>
+  <li ng-repeat='step_status in [1,2,3,4,5,6]' ng-class="{completed:wizard_step > step_status || post_success != undefined}"> <span class="bubble"></span> Step {{step_status}}. </li>
 </ul>
 
 <div class='chatitemup' ng-if="post_success!=undefined">
@@ -62,6 +62,19 @@
     </form>
   </div>
   <div ng-if="wizard_step==5">
+    <form>
+      <pss-text-input-basic field='numbeer_of_signifigant_scores'> </pss-text-input-basic>
+      <div class='row'>
+        <div class='col'>
+        </div>
+        <button  ui-sref-opts='{reload:true}' ui-sref='app.event.manage_tournaments.edit_tournament_wizard({wizard_step:6,item:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive"> Next Step </button>
+        <div class='col'>
+        </div>    
+      </div>
+    </form>
+  </div>
+  
+  <div ng-if="wizard_step==6">
     <form>
       <pss-text-input-basic field='number_of_qualifiers' ng-if='item.finals_style=="PAPA"'> </pss-text-input-basic>
       <pss-text-input-basic field='number_of_qualifiers_for_a_when_finals_style_is_ppo' ng-if='item.finals_style=="PPO"'> </pss-text-input-basic>

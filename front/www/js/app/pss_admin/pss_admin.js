@@ -2,8 +2,8 @@
 angular.module('pss_admin',[]);
 angular.module('pss_admin').controller(
     'app.pss_admin_controller',[
-        '$scope','$state','resourceWrapperService','listGeneration',
-        function($scope, $state,resourceWrapperService,listGeneration ) {
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
+        function($scope, $state,resourceWrapperService,listGeneration, eventTournamentLib) {
             $scope.bootstrap({});
             
             $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
@@ -20,6 +20,7 @@ angular.module('pss_admin').controller(
                                                                                                            );
                 _.map($scope.items, set_list_items_actions_and_args);
                 _.map($scope.items, listGeneration.set_active_inactive_icon);
+                $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_events',on_success,{},{});                        
         }
@@ -166,7 +167,7 @@ angular.module('pss_admin').controller(
                         }
                         if(_.isArray(item[field_name])){
                             continue;
-                        }
+                        }                        
                         if(event.bobo[field_name]!=item[field_name]){
                             results.push([$scope.descriptions.short_descriptions[field_name],item[field_name]]);   
                         };

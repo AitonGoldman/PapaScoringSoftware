@@ -11,5 +11,10 @@
     <i class='icon ion-compose'></i>      
     {{action.label}}
   </div>
+  <div ng-click="{{action.ng_click}}" class="item item-icon-left" ng-if="item.display_actions==true" ng-repeat='action in item.actions_ng_click_list'>
+    <i class='icon ion-compose'></i>      
+    {{action.label}}
+  </div>
+  
 </div>
   

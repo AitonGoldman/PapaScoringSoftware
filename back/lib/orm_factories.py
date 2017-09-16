@@ -116,6 +116,18 @@ def create_player(flask_app,
 
     return new_player
 
+def create_multi_tournament(flask_app,
+                            multi_division_tournament_name,
+                            number_divisions):
+    new_multi_division_tournament = flask_app.tables.MultiDivisionTournaments(multi_division_tournament_name=multi_division_tournament_name)
+    flask_app.tables.db_handle.session.add(new_multi_division_tournament)
+    division_titles = ["A","B","C","D","E","F","G"]
+    for division_index in range(0,number_divisions):
+        new_tournament = create_tournament(flask_app,"%s %s" % (multi_division_tournament_name,division_titles[division_index]))
+        flask_app.tables.db_handle.session.add(new_tournament)
+        new_tournament.multi_division_tournament=new_multi_division_tournament                
+    return new_multi_division_tournament    
+
 def create_tournament(flask_app,tournament_name,
                       multi_division_tournament_name=None,
                       multi_division_tournament_id=None,                      
@@ -123,11 +135,11 @@ def create_tournament(flask_app,tournament_name,
                       finals_style=None):
     new_tournament = flask_app.tables.Tournaments(tournament_name=tournament_name)
     flask_app.tables.db_handle.session.add(new_tournament)
-    if multi_division_tournament_name and multi_division_tournament_id is None:
-        multi_division_tournament = flask_app.tables.MultiDivisionTournaments(multi_division_tournament_name=multi_division_tournament_name)
-        flask_app.tables.db_handle.session.add(multi_division_tournament)
-        new_tournament.multi_division_tournament=multi_division_tournament
-        new_tournament.multi_division_tournament_name=multi_division_tournament_name
+    # if multi_division_tournament_name and multi_division_tournament_id is None:
+    #     multi_division_tournament = flask_app.tables.MultiDivisionTournaments(multi_division_tournament_name=multi_division_tournament_name)
+    #     flask_app.tables.db_handle.session.add(multi_division_tournament)
+    #     new_tournament.multi_division_tournament=multi_division_tournament
+    #     new_tournament.multi_division_tournament_name=multi_division_tournament_name
     if multi_division_tournament_id:
         multi_division_tournament = flask_app.tables.MultiDivisionTournaments.query.filter_by(multi_division_tournament_id=multi_division_tournament_id).first()
         if multi_division_tournament is None:

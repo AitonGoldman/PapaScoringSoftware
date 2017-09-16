@@ -19,6 +19,19 @@
       <ion-radio ng-model="tournament.finals_style" ng-value="'PPO'">Single Division With A/B Finals</ion-radio>
       <ion-radio ng-model="tournament.finals_style" ng-value="'MULTI'">Multiple Divisions</ion-radio>
     </ion-list>
+    <div class="list" ng-if='tournament.finals_style=="MULTI"'>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          Number of divisions
+        </div>
+        <select ng-model='tournament.number_of_divisions'>
+          <option>4</option>
+          <option>3</option>
+          <option>2</option>
+          <option>1</option>
+        </select>
+      </label>
+    </div>
     <div class='row'>
       <div class='col'>
       </div>

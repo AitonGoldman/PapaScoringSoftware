@@ -167,7 +167,11 @@ angular.module('pss_admin').controller(
                         }
                         if(_.isArray(item[field_name])){
                             continue;
+                        }
+                        if(_.isObject(item[field_name])){
+                            continue;
                         }                        
+                        
                         if(event.bobo[field_name]!=item[field_name]){
                             results.push([$scope.descriptions.short_descriptions[field_name],item[field_name]]);   
                         };

@@ -63,11 +63,22 @@ angular.module('event').controller(
             $scope.create_tournament_func = function(tournament){                                
                 var on_success = function(data){                    
                     $scope.post_results={};
-                    $scope.post_results.title="Event Edited!";
+                    $scope.post_results.title="Tournament Created!";
                     //FIXME : this should use descriptions we got from backend
                     var results = [];
                     
-                    var item = data['new_tournament'];                    
+                    var item;
+                    if(data['new_tournament']==undefined){
+                        item = data['multi_division_tournament'];
+                        results.push(["name",item["multi_division_tournament_name"]]);
+                        $scope.post_results.results=results;                    
+                        $scope.disable_back_button();
+                        $scope.post_success = true;                        
+                        return;
+                    }
+
+                    item = data['new_tournament'];                    
+                    
                     results.push(["name",item["tournament_name"]]);
                     var description;
                     if(item["finals_style"]=="PAPA"){
@@ -76,7 +87,7 @@ angular.module('event').controller(
                     if(item["finals_style"]=="PPO"){
                         description="Single Division with A/B finals";
                     }
-                    if(item["finals_style"]=="PAPA" && item["multi_division_tournament_id"]!=undefined ){
+                    if(item["finals_style"]=="PAPA" && item["multi_division_tournament_id"]!=undefined ){                        
                         description="Muti Division";
                     }                    
                     results.push(["type",description]);                                        
@@ -84,7 +95,16 @@ angular.module('event').controller(
                     $scope.disable_back_button();
                     $scope.post_success = true;
                 };                
-                var prom =resourceWrapperService.get_wrapper_with_loading('post_create_tournament',on_success,{event_name:$scope.event_name},$scope.tournament);            
+                var prom;
+                if($scope.tournament["finals_style"]=="MULTI"){
+                    prom = resourceWrapperService.get_wrapper_with_loading('post_create_multi_division_tournament',
+                                                                           on_success,{event_name:$scope.event_name},
+                                                                           {multi_division_tournament_name:$scope.tournament.tournament_name,number_of_divisions:$scope.tournament.number_of_divisions});
+                }else{
+                    prom = resourceWrapperService.get_wrapper_with_loading('post_create_tournament',on_success,{event_name:$scope.event_name},$scope.tournament);
+                }
+                
+                
             
             };
         }]);

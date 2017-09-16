@@ -32,8 +32,8 @@ angular.module('list_generation')
                      return set_list_items_actions_and_args;
                  };
 
-                 var set_active_inactive_icon = function(i){
-                    if(i.active == undefined){                        
+                 var set_active_inactive_icon = function(i){                     
+                     if(i.active == undefined){                                                
                         return;                        
                     }
                     if(i.active == true){                        

@@ -15,6 +15,7 @@ def generate_event_to_dict_serializer(type_of_serializer):
         serialized_event['event_name']=event_model.name
         serialized_event['wizard_configured']=event_model.wizard_configured
         serialized_event['event_creator_pss_user_id']=event_model.event_creator_pss_user_id
+        serialized_event['active']=event_model.active
         
         return serialized_event
     if type_of_serializer == MINIMUM_EVENT:

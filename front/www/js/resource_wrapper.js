@@ -97,8 +97,12 @@ angular.module('resource_wrapper')
                                                             {},
                                                             {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   rest_api['post_create_tournament'] = $resource(rest_server+'/:event_name/tournament',
-                                                            {},
+                                                                 {},
                                                                  {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['post_create_meta_tournament'] = $resource(rest_server+'/:event_name/meta_tournament',
+                                                                 {},
+                                                                 {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  
                   rest_api['post_create_multi_division_tournament'] = $resource(rest_server+'/:event_name/multi_tournament',
                                                                                 {},
                                                                                 {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});

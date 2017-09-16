@@ -354,6 +354,28 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },params: {
             item: {value:{}}
         }
+    }).state('app.event.manage_tournaments.create_meta_tournament', {
+        cache:false,
+        url: '/create_meta_tournament',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/create_meta_tournament_content.html',
+                controller: 'app.event.manage_tournaments.create_meta_tournament_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.event.manage_tournaments.create_meta_tournament':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.manage_tournaments.create_meta_tournament':{
+                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Create Meta Tournament"
+        }
     })
 
     ;}]);

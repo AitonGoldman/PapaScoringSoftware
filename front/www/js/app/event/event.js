@@ -142,3 +142,164 @@ angular.module('event').controller(
             var prom_tournaments = resourceWrapperService.get_wrapper_with_loading('get_tournaments',function(data){$scope.tournaments=data['tournaments'];},{event_name:$scope.event_name},{});                                    
         }
     ]);
+
+angular.module('event').controller(
+    'app.event.select_players_to_add_to_event_controller',[
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
+        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
+            $scope.bootstrap({back_button:true});
+            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
+
+            // var generate_player_list_items_actions_and_args = function(display_label_field,advanced_sref,wizard_sref,basic_sref) {
+            //     var player_list_items_actions_and_args = function(i) {                                     
+            //         i.actions_ui_sref_list = [{label:"Advanced Editing",ui_sref:advanced_sref}];
+            //         if(i.wizard_configured == false){
+            //             basic_edit_action = {label:"Wizard Configuration",ui_sref:wizard_sref};
+            //         } else {
+            //             basic_edit_action = {label:"Basic Editing",ui_sref:basic_sref};
+            //         }
+            //         i.actions_ui_sref_list.splice(0,0,basic_edit_action);
+            //         i.actions_ng_click_list=[{label:"Toggle active",ng_click:'toggle_item_active(item,event_name)'}];
+            //         i.label_to_display=i[display_label_field];
+                    
+            //     };             
+            //     return player_list_items_actions_and_args;
+            // };
+            // var basic_sref='.edit_tournament_basic({id:item.tournament_id})';
+            // var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';
+            // var wizard_sref='.edit_tournament_wizard({id:item.tournament_id,wizard_step:1})';
+            // var player_list_items_actions_and_args=generate_player_list_items_actions_and_args('player_name',
+            //                                                                                    advanced_sref,
+            //                                                                                    wizard_sref,
+            //                                                                                    basic_sref
+            //                                                                                   );
+            var set_list_items_ui_sref_and_args = listGeneration.generate_set_list_items_ui_sref_and_args(".add_existing_player_to_event({player_id:item.player_id})","player_name");
+
+            var on_success = function(data){
+                var raw_items=data['existing_players'];
+                $scope.items = _.filter(raw_items, function(n) {
+                    if(n.event_player){
+                        return false;
+                    };
+                    return true;
+                });                
+                _.map($scope.items, set_list_items_ui_sref_and_args);
+            };                        
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_players',on_success,{event_name:$scope.event_name},{});                        
+        }]);
+
+angular.module('event').controller(
+    'app.event.select_players_to_add_to_event.add_players_to_event_controller',[
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$ionicPopup',
+        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$ionicPopup) {
+            $scope.bootstrap({back_button:true});            
+            
+            $scope.disable_submit = function(){
+                if($scope.event && $scope.event.force_ifpa_lookup==true){
+                    if($scope.player.ifpa_ranking==undefined || $scope.player.ifpa_ranking==""){
+                        return true;
+                    }
+                }
+                if($scope.tournaments && $scope.tournaments.length>0){
+                    if($scope.player.multi_division_tournament_id == undefined){
+                        return true;
+                    }
+                }
+                return false;
+            };
+            
+            $scope.showAlert = function() {
+                var alertPopup = $ionicPopup.alert({
+                    title: 'Not Found',
+                    template: 'Player not in IFPA rankings.'                    
+                });
+
+                alertPopup.then(function(res) {
+                    
+                });
+            };
+            $scope.showConfirm = function() {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Consume Ice Cream',
+                    templateUrl: 'templates/ifpa_select.html',
+                    scope:$scope
+                });
+
+                confirmPopup.then(function(res) {
+                    if(res) {
+                        var idx = $scope.ifpa_popup.multi_ifpa_ranking_index;                        
+                        $scope.player.ifpa_ranking=$scope.ifpa_rankings[idx].wppr_rank;
+                        $scope.player.ifpa_id=$scope.ifpa_rankings[idx].player_id;
+                    } else {                        
+                    }
+                });
+            };            
+            $scope.get_ifpa_ranking = function(){
+                var on_ifpa_success = function(data){
+                    if(data.ifpa_ranking.search.length==0){
+                        $scope.player.ifpa_ranking='not ranked';
+                        $scope.showAlert();
+                    }                    
+                    if(data.ifpa_ranking.search.length==1){
+                        $scope.player.ifpa_ranking=data.ifpa_ranking.search[0].wppr_rank;                        
+                        $scope.player.ifpa_id=data.ifpa_ranking.search[0].player_id;
+                    }
+                    if(data.ifpa_ranking.search.length > 1){                        
+                        $scope.ifpa_rankings=data.ifpa_ranking.search;
+                        console.log($scope.ifpa_rankings);
+                        $scope.showConfirm();
+                    }
+                };
+                var player_name=$scope.player.first_name+" "+$scope.player.last_name;
+                var prom =resourceWrapperService.get_wrapper_with_loading('get_ifpa_ranking',on_ifpa_success,{event_name:$state.params.event_name,player_name:player_name},{});                            
+            };
+            $scope.create_player_func = function(player_id){                
+                var on_create_success = function(data){                    
+                    // $scope.logged_in_user=data['new_event'];
+                    console.log(data['new_player']);
+                    $scope.post_results={};
+                    $scope.post_results.title="Player Added To Event!";
+                    $scope.post_results.results=[];
+                    var player_name=data['new_player'].first_name+" "+data['new_player'].last_name;
+                    if(data['new_player'].extra_title!=undefined){
+                        player_name=player_name+" "+data['new_player'].extra_title;
+                    }
+                    $scope.post_results.results.push(['Player Name',player_name]);                    
+                    $scope.post_results.results.push(['Player Pin',data['new_player']['event_player']['event_player_pin']]);                                        
+                    $scope.disable_back_button();
+                    $scope.post_success = true;
+                    
+                };
+                if($scope.player.ifpa_ranking=="not ranked"){
+                    $scope.player.ifpa_ranking="9999999";
+                }                
+                if(player_id==undefined){
+                    var prom =resourceWrapperService.get_wrapper_with_loading('post_create_player',on_create_success,{event_name:$state.params.event_name},$scope.player);
+                } else {
+                    var prom2 =resourceWrapperService.get_wrapper_with_loading('put_add_player',on_create_success,{event_name:$state.params.event_name},$scope.player);                    
+                }
+                
+
+            };
+
+            var on_player_load_success = function(data){                                
+                if(data['existing_player']){
+                    $scope.player = data['existing_player'];
+                }
+                
+            };
+            
+            var on_success = function(data){
+                $scope.tournaments = data['multi_division_tournaments'];
+                $scope.event = data['event'];
+            };
+            $scope.player = {};
+            if($state.params.player_id!=undefined){                                
+                //FIXME : get_wrapper_with_loading() can not run concurrently - due to ionicloading promises
+                var prom2 = resourceWrapperService.get_wrapper_without_loading('get_player',on_player_load_success,{player_id:$state.params.player_id},{});
+            } 
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_multi_division_tournaments',on_success,{event_name:$scope.event_name},{});                                    
+            $scope.ifpa_popup = {};
+            
+            
+        }]);

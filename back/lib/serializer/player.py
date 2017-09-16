@@ -20,7 +20,8 @@ def generate_player_to_dict_serializer(type_of_serializer):
         serialized_player = to_dict(player_model)                        
         #serialized_pss_user['admin_roles']=[generic_serializer(role) for role in pss_user_model.admin_roles]
         serialized_player['player_roles']=[generic_serializer(role) for role in player_model.player_roles]
-        serialized_player['events']=[generic_serializer(event) for event in player_model.events]        
+        serialized_player['events']=[generic_serializer(event) for event in player_model.events]
+        serialized_player['player_name']="%s" % player_model
         if player_model.event_player:
             serialized_player['event_player']=generic_serializer(player_model.event_player)        
             serialized_player['event_player'].pop('event_player_pin',None)        

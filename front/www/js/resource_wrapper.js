@@ -63,7 +63,7 @@ angular.module('resource_wrapper')
                           template: 'Loading...'                         
                       }).then(function(){                          
                           //new_res = rest_api[api_name][method](url_parameters,post_parameters,on_success,on_error);
-                          new_res = rest_api[api_name][method](url_parameters,post_parameters,on_success);
+                          var new_res = rest_api[api_name][method](url_parameters,post_parameters,on_success);
                           return new_res.$promise;
                       }).then(function(){
                           $timeout($ionicLoading.hide,250);
@@ -71,6 +71,18 @@ angular.module('resource_wrapper')
                           $timeout($ionicLoading.hide,250);
                       });
                   };
+
+                  var get_wrapper_without_loading = function(api_name,on_success,url_parameters,post_parameters){
+                      var method = api_name.substring(0,api_name.indexOf('_'));                                                                                        
+                          //new_res = rest_api[api_name][method](url_parameters,post_parameters,on_success,on_error);
+                          var new_res = rest_api[api_name][method](url_parameters,post_parameters,on_success);
+                          return new_res.$promise.then(function(){
+                              $timeout($ionicLoading.hide,250);
+                          }, function(){
+                              $timeout($ionicLoading.hide,250);
+                          });
+                  };
+                  
                   var rest_api = {};
                   var rest_server = "http://192.168.1.178:8000";
                   //var rest_server = "http://0.0.0.0:8000";                  
@@ -84,9 +96,21 @@ angular.module('resource_wrapper')
                   rest_api['get_tournaments'] = $resource(rest_server+'/:event_name/tournament',
                                                           {},
                                                           {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_players'] = $resource(rest_server+'/:event_name/player',
+                                                          {},
+                                                      {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_player'] = $resource(rest_server+'/pss_admin/player/:player_id',
+                                                     {},
+                                                     {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                                    
                   rest_api['get_tournament'] = $resource(rest_server+'/:event_name/tournament/:id',
                                                          {},
-                                                         {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                                    
+                                                         {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_ifpa_ranking'] = $resource(rest_server+'/:event_name/ifpa/:player_name',
+                                                           {},
+                                                           {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
+                  rest_api['get_multi_division_tournaments'] = $resource(rest_server+'/:event_name/multi_tournament',
+                                                                         {},
+                                                                         {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   rest_api['post_pss_admin_login'] = $resource(rest_server+'/pss_admin/auth/pss_user/login',
                                                                {},
                                                                {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
@@ -99,6 +123,13 @@ angular.module('resource_wrapper')
                   rest_api['post_create_tournament'] = $resource(rest_server+'/:event_name/tournament',
                                                                  {},
                                                                  {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['post_create_player'] = $resource(rest_server+'/:event_name/player',
+                                                             {},
+                                                             {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['put_add_player'] = $resource(rest_server+'/:event_name/player',
+                                                         {},
+                                                         {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  
                   rest_api['post_create_meta_tournament'] = $resource(rest_server+'/:event_name/meta_tournament',
                                                                  {},
                                                                  {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
@@ -114,7 +145,8 @@ angular.module('resource_wrapper')
                                                               {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   
                   return {'get_wrapper':function(api_name){return rest_api[api_name];},
-                          'get_wrapper_with_loading':get_wrapper_with_loading
+                          'get_wrapper_with_loading':get_wrapper_with_loading,
+                          'get_wrapper_without_loading':get_wrapper_without_loading
                          };
               }
              ]

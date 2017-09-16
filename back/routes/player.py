@@ -25,12 +25,18 @@ def check_multi_division_tournament_selection_is_valid(app, player):
 
 def create_player_route(request, app):            
     tables = app.tables
+    event = tables.Events.query.filter_by(name=app.name).first()
     if request.data:        
         input_data = json.loads(request.data)
     else:
         raise BadRequest('No info in request')        
-    if 'first_name' not in input_data or 'last_name' not in input_data or 'ifpa_ranking' not in input_data:        
+    if 'first_name' not in input_data or 'last_name' not in input_data:        
         raise BadRequest('Information missing')
+    if event.force_ifpa_lookup and 'ifpa_ranking' not in input_data:
+        raise BadRequest('No ifpa ranking')
+    if event.force_ifpa_lookup is not True and 'ifpa_ranking' not in input_data:
+        input_data['ifpa_ranking']=999999
+        
     if 'extra_title' in input_data:
         extra_title = input_data['extra_title']
     else:
@@ -59,12 +65,20 @@ def create_player_route(request, app):
 
 def add_existing_player_to_event_route(input_data,player,app):
     tables = app.tables
-    if 'ifpa_ranking' not in input_data:
-        raise BadRequest('missing ifpa ranking')    
+    event = tables.Events.query.filter_by(name=app.name).first()
+    if event.force_ifpa_lookup and 'ifpa_ranking' not in input_data:
+        raise BadRequest('No ifpa ranking')
+    if event.force_ifpa_lookup is not True and 'ifpa_ranking' not in input_data:
+        input_data['ifpa_ranking']=999999
+    
     orm_factories.populate_player(app,
                                   player,
                                   input_data['ifpa_ranking'])
-    check_multi_division_tournament_selection_is_valid(app, player)        
+    if 'ifpa_id' in input_data:
+        player.ifpa_id=input_data['ifpa_id']
+        
+    check_multi_division_tournament_selection_is_valid(app, player)
+    
     if 'multi_division_tournament_id' in input_data:
         player.event_player.multi_division_tournament_id = input_data['multi_division_tournament_id']
     
@@ -104,9 +118,9 @@ def add_existing_player_to_event(tables):
         modified_player = add_existing_player_to_event_route(input_data,player,current_app)        
     else:
         modified_player = change_existing_player_in_event_route(player, current_app, input_data)
-    player_serializer = generate_player_to_dict_serializer(serializer.player.ALL)    
+    player_serializer = generate_player_to_dict_serializer(serializer.player.ON_PLAYER_CREATE)    
     user_dict=player_serializer(modified_player)
-    return jsonify({'existing_player_added_to_event':user_dict})
+    return jsonify({'new_player':user_dict})
 
 @blueprints.event_blueprint.route('/player',methods=['GET'])
 @blueprints.pss_admin_event_blueprint.route('/player',methods=['GET'])

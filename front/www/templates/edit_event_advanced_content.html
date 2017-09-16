@@ -19,11 +19,13 @@
       <pss-text-input-advanced field="player_id_seq_start"> </pss-text-input-advanced>
       <pss-text-input-advanced field="upload_folder"> </pss-text-input-advanced>
       <pss-text-input-advanced field="ifpa_api_key"> </pss-text-input-advanced>
+      <pss-boolean-input-advanced field="force_ifpa_lookup"> </pss-boolean-input-advanced>
+      
     </div>
     <div class='row'>
       <div class='col'>
       </div>
-      <button ng-click='edit_event_func(item)' ng-disabled='submit_button_disabled(item,3)' ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
+      <button ng-click='edit_event_func(item)'  ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
       <div class='col'>
       </div>    
     </div>

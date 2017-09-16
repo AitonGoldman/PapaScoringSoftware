@@ -1,4 +1,4 @@
-<ion-item ui-sref='{item.ui_sref}}' class='item item-icon-left' ng-repeat='item in items|filter:{$:filter_for}' ng-if='item.ui_sref!=undefined'>
+<ion-item ui-sref='{{item.ui_sref}}' class='item item-icon-left' ng-repeat='item in items|filter:{$:filter_for}' ng-if='item.ui_sref!=undefined'>
   <i class='icon ion-edit'></i>
   {{item.label_to_display}}
 </ion-item>

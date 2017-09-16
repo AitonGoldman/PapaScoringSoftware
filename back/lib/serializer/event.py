@@ -16,6 +16,7 @@ def generate_event_to_dict_serializer(type_of_serializer):
         serialized_event['wizard_configured']=event_model.wizard_configured
         serialized_event['event_creator_pss_user_id']=event_model.event_creator_pss_user_id
         serialized_event['active']=event_model.active
+        serialized_event['force_ifpa_lookup']=event_model.force_ifpa_lookup        
         
         return serialized_event
     if type_of_serializer == MINIMUM_EVENT:

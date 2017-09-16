@@ -34,7 +34,7 @@ def generate_players_class(db_handle,event_name):
         extra_title = db_handle.Column(db_handle.String(80))    
         ifpa_id = db_handle.Column(db_handle.Integer)                
         has_picture = db_handle.Column(db_handle.Boolean(),default=False)
-        ioniccloud_push_token=db_handle.Column(db_handle.String(500))        
+        ioniccloud_push_token=db_handle.Column(db_handle.String(500))                
 
         player_roles = db_handle.relationship(
             'PlayerRoles',

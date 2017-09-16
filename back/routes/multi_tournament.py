@@ -35,10 +35,19 @@ def create_mutli_tournament(tables):
 
 
 
-@blueprints.event_blueprint.route('/mutli_tournament',methods=['GET'])
+@blueprints.event_blueprint.route('/multi_tournament',methods=['GET'])
 @load_tables
 def get_multi_tournaments(tables):    
-    tournaments = tables.Tournaments.query.all()
+    multi_division_tournament = tables.MultiDivisionTournaments.query.first()
+    if multi_division_tournament is None:
+        tournaments = []
+    else:
+        tournaments = tables.Tournaments.query.filter_by(multi_division_tournament_id=multi_division_tournament.multi_division_tournament_id).all()
+    event = tables.Events.query.filter_by(name=current_app.name).first()
+    event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        
+    #multi_division_tournament_serializer = generate_generic_serializer(serializer.generic.ALL)
     tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
-    return jsonify({'tournaments':[tournament_serializer(tournament) for tournament in tournaments]})
+    return_message = {'multi_division_tournaments':[tournament_serializer(tournament) for tournament in tournaments],
+                      'event': event_serializer(event)}    
+    return jsonify(return_message)
 

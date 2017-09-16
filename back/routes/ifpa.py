@@ -20,7 +20,9 @@ def get_ifpa_ranking_via_website(player_name):
     actual_ranks = []
     for index,p in enumerate(players):
         #print players[index]
-        actual_ranks.append({'wppr_rank':p[2],
+        rank_with_suffix=p[2]
+        rank_without_suffix = rank_with_suffix.replace("rd","").replace("st","").replace("nd","").replace("th","")
+        actual_ranks.append({'wppr_rank':rank_without_suffix,
                              'player_id':p[0],
                              'first_name':p[1]})
     count = len(players)
@@ -40,7 +42,7 @@ def route_get_ifpa_ranking(player_name):
         search_results = json.load(search_result_raw)
     else:
         search_results = get_ifpa_ranking_via_website(player_name)
-    return jsonify({'data':search_results})
+    return jsonify({'ifpa_ranking':search_results})
     
 
 

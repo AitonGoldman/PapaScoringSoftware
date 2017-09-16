@@ -36,6 +36,7 @@ def get_event_field_descriptions():
     short_descriptions['upload_folder']='Upload Folder'
     short_descriptions['ifpa_api_key']='IFPA api key'
     short_descriptions['wizard_configured']='wizard configured (ignore this)'
+    short_descriptions['force_ifpa_lookup']='Force IFPA lookup for players'
 
     long_descriptions['queue_bump_amount']='The number of spots a player will be "bumped" down a queue if they are not present when it is their turn to play.'
     long_descriptions['player_id_seq_start']='The starting player id.  All player ids will follow this id.  I.e. if this is set to 100, the first player that registers will be player 100, then player 101, etc.'

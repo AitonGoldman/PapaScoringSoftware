@@ -376,6 +376,82 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },data: {
             title: "Create Meta Tournament"
         }
+    }).state('app.event.select_players_to_add_to_event', {
+        cache:false,
+        url: '/select_players_to_add_to_event',
+        views: {
+            // 'topView@': {
+            //     templateUrl: 'templates/pss_admin_2.html',
+            //     controller: 'app_controller'
+            // },            
+            'pssAdminContent@app':{
+                templateUrl: 'templates/select_players_to_add_to_event.html',
+                controller: 'app.event.select_players_to_add_to_event_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'list@app.event.select_players_to_add_to_event':{
+                templateUrl: 'templates/generic_list.html'//,
+            }            
+        },data: {
+            title: "Add Players To Event",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
+    }).state('app.event.select_players_to_add_to_event.add_player_to_event', {
+        cache:false,
+        url: '/add_players_to_event',
+        views: {
+            // 'topView@': {
+            //     templateUrl: 'templates/pss_admin_2.html',
+            //     controller: 'app_controller'
+            // },            
+            'pssAdminContent@app':{
+                templateUrl: 'templates/add_players_to_event_content.html',
+                controller: 'app.event.select_players_to_add_to_event.add_players_to_event_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.event.select_players_to_add_to_event.add_player_to_event':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.select_players_to_add_to_event.add_player_to_event':{
+                templateUrl: 'templates/add_player_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Add Players To Event",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
+    }).state('app.event.select_players_to_add_to_event.add_existing_player_to_event', {
+        cache:false,
+        url: '/add_existing_players_to_event/:player_id',
+        views: {
+            // 'topView@': {
+            //     templateUrl: 'templates/pss_admin_2.html',
+            //     controller: 'app_controller'
+            // },            
+            'pssAdminContent@app':{
+                templateUrl: 'templates/add_players_to_event_content.html',
+                controller: 'app.event.select_players_to_add_to_event.add_players_to_event_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.event.select_players_to_add_to_event.add_existing_player_to_event':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.select_players_to_add_to_event.add_existing_player_to_event':{
+                templateUrl: 'templates/add_player_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Add Players To Event",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
     })
 
     ;}]);

@@ -45,7 +45,9 @@ angular.module('shared').controller(
                     if(field_name=="wizard_configured"){continue;}
                     if(_.isArray(item[field_name])){continue;}
                     if(_.isObject(item[field_name])){continue;}                                            
-                    if(event.bobo[field_name]!=item[field_name]){
+                    console.log($scope.item);
+                    console.log(item);
+                    if($scope.item.bobo[field_name]!=item[field_name]){
                         results.push([$scope.descriptions.short_descriptions[field_name],item[field_name]]);   
                     };
                 }
@@ -59,9 +61,9 @@ angular.module('shared').controller(
                 var prom =resourceWrapperService.get_wrapper_with_loading(get_route,on_get_success,{event_name:$state.params.event_name,id:$state.params.id},{});                
             }                                    
                                     
-            $scope.edit_event_func = function(event,result_fields){                
-                event.wizard_configured=true;
-                var prom =resourceWrapperService.get_wrapper_with_loading(edit_route,on_edit_success,{id:$state.params.id,event_name:$state.params.event_name},event);
+            $scope.edit_event_func = function(old_event,result_fields){                
+                old_event.wizard_configured=true;
+                var prom =resourceWrapperService.get_wrapper_with_loading(edit_route,on_edit_success,{id:$state.params.id,event_name:$state.params.event_name},old_event);
             };
         }
     ]);

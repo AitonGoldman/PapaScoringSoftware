@@ -8,6 +8,4 @@
   <ion-item ui-sref='.add_player_to_event' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Add New Player To PSS</ion-item>
   
   <div class='padding'></div>
-  <!--<div ui-view='list'>
-      </div>-->
-  <pss-generic-list filter-to-apply="playerSearch"> </pss-generic-list>
+  <pss-generic-list items-to-list='items' filter-to-apply="playerSearch" not-found-message="Player Not Found"> </pss-generic-list>

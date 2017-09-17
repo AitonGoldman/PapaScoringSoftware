@@ -6,15 +6,22 @@
 </div>
 <div ng-if="post_success==undefined">
   <form>
-      <label class="item item-input">
-        <input type="text" placeholder="First Name" ng-model="player.first_name" ng-disabled='player.player_id != undefined'/>        
-      </label>
-      <label class="item item-input">
-        <input type="text" placeholder="Last Name" ng-model="player.last_name" ng-disabled='player.player_id != undefined'/>        
-      </label>
-      <label class="item item-input">
-        <input type="text" placeholder="Extra Title" ng-model="player.extra_title" ng-disabled='player.player_id != undefined'/>        
-      </label>
+    <div class='row'>
+      <div ng-class={'col-80':player.player_id!=undefined,'col':player.player_id==undefined}>
+        <label class="item item-input">
+          <input type="text" placeholder="First Name" ng-model="player.first_name" ng-disabled='player.player_id != undefined'/>        
+        </label>
+        <label class="item item-input">
+          <input type="text" placeholder="Last Name" ng-model="player.last_name" ng-disabled='player.player_id != undefined'/>        
+        </label>
+        <label class="item item-input">
+          <input type="text" placeholder="Extra Title" ng-model="player.extra_title" ng-disabled='player.player_id != undefined'/>        
+        </label>
+      </div>
+      <div ng-class={'col-20':player.player_id!=undefined} style='margin:auto'>
+        <img ng-if='player.player_id!=undefined' src='/123.jpg' class='padding circular--square' style='opacity:.5;height:130px;width:130px'>
+      </div>
+    </div>
       <div class="list" ng-if="event.force_ifpa_lookup==true">
         <div class="item item-input-inset">
           <label class="item-input-wrapper">

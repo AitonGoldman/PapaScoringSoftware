@@ -49,15 +49,21 @@ angular.module('event').controller(
                                                                                                            );                
                 _.map($scope.items, set_list_items_actions_and_args);
                 _.map($scope.items, listGeneration.set_active_inactive_icon);
+
                 var meta_tournament_items=data['meta_tournaments'];
-                var basic_meta_sref='.edit_meta_tournament_basic({id:item.meta_tournament_id})';
-                var set_list_items_srefs=listGeneration.generate_set_list_items_ui_sref_and_args(basic_meta_sref,
-                                                                                                 'meta_tournament_name'
-                                                                                                );                
-                _.map(meta_tournament_items, set_list_items_srefs);
+                var basic_sref='.edit_meta_tournament_basic({id:item.meta_tournament_id})';
+                var advanced_sref='.edit_meta_tournament_advanced({id:item.meta_tournament_id})';
+                var wizard_sref='.edit_meta_tournament_wizard({id:item.meta_tournament_id,wizard_step:1})';
+                set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('meta_tournament_name',
+                                                                                                        advanced_sref,
+                                                                                                        wizard_sref,
+                                                                                                        basic_sref,
+                                                                                                        true
+                                                                                                       );                
+                _.map(meta_tournament_items, set_list_items_actions_and_args);
+                $scope.meta_tournament_items = meta_tournament_items;
+                //$scope.items=$scope.items.concat(meta_tournament_items);
                 
-                $scope.items=$scope.items.concat(meta_tournament_items);
-                $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_tournaments',on_success,{event_name:$scope.event_name},{});                        
         }]);

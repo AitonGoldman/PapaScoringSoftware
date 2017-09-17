@@ -107,6 +107,9 @@ angular.module('resource_wrapper')
                   rest_api['get_tournament'] = $resource(rest_server+'/:event_name/tournament/:id',
                                                          {},
                                                          {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_meta_tournament'] = $resource(rest_server+'/:event_name/meta_tournament/:id',
+                                                              {},
+                                                              {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
                   rest_api['get_ifpa_ranking'] = $resource(rest_server+'/:event_name/ifpa/:player_name',
                                                            {},
                                                            {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
@@ -145,6 +148,9 @@ angular.module('resource_wrapper')
                   rest_api['put_edit_tournament'] = $resource(rest_server+'/:event_name/tournament/:id',
                                                               {},
                                                               {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['put_edit_meta_tournament'] = $resource(rest_server+'/:event_name/meta_tournament/:id',
+                                                                   {},
+                                                                   {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   
                   return {'get_wrapper':function(api_name){return rest_api[api_name];},
                           'get_wrapper_with_loading':get_wrapper_with_loading,

@@ -16,7 +16,7 @@ angular.module('list_generation')
                      };
                      return set_list_items_ui_sref_and_args;
                  };
-                 var generate_set_list_items_actions_and_args = function(display_label_field,advanced_sref,wizard_sref,basic_sref) {
+                 var generate_set_list_items_actions_and_args = function(display_label_field,advanced_sref,wizard_sref,basic_sref,display_active_toggle) {
                      var set_list_items_actions_and_args = function(i) {                                     
                          i.actions_ui_sref_list = [{label:"Advanced Editing",ui_sref:advanced_sref}];
                          if(i.wizard_configured == false){
@@ -25,7 +25,9 @@ angular.module('list_generation')
                              basic_edit_action = {label:"Basic Editing",ui_sref:basic_sref};
                          }
                          i.actions_ui_sref_list.splice(0,0,basic_edit_action);
-                         i.actions_ng_click_list=[{label:"Toggle active",ng_click:'toggle_item_active(item,event_name)'}];
+                         if(display_active_toggle==undefined){
+                             i.actions_ng_click_list=[{label:"Toggle active",ng_click:'toggle_item_active(item,event_name)'}];
+                         }                         
                          i.label_to_display=i[display_label_field];
                          
                      };             

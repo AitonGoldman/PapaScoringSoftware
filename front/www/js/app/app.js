@@ -196,7 +196,11 @@ angular.module('app').directive('pssGenericList', function($state) {
       scope:true,
       templateUrl: 'templates/generic_list_directive.html',
       link: function(scope, elem, attrs) {
-          scope.filter_to_apply = attrs.filterToApply;          
+          console.log(attrs);
+          scope.itemsToList=attrs.itemsToList;          
+          scope.filter_to_apply = attrs.filterToApply;
+          scope.fake_scope=scope;
+          scope.not_found_message=attrs.notFoundMessage;
       }      
   };
 });

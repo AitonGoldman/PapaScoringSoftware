@@ -1,0 +1,41 @@
+<ul class="progress-indicator" ng-if="post_success==undefined">
+  <li ng-repeat='step_status in [1,2,3]' ng-class="{completed:wizard_step > step_status || post_success != undefined}"> <span class="bubble"></span> Step {{step_status}}. </li>
+</ul>
+
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <div class='row' ui-view='post_success_buttons'>
+  </div>  
+</div>
+<div ng-if="post_success==undefined">
+  <div ng-if="wizard_step==1">
+    <form>
+      <pss-text-input-basic field='manually_set_price'> </pss-text-input-basic>
+      <div class='row'>
+        <div class='col'>
+        </div>
+        <button ng-disabled='item.manually_set_price==undefined || item.manually_set_price == ""' ui-sref-opts='{reload:true}' ui-sref='app.event.manage_tournaments.edit_tournament_wizard({wizard_step:2,item:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive"> Next Step </button>
+        <div class='col'>
+        </div>    
+      </div>
+    </form>
+  </div>
+  <div ng-if="wizard_step==2">
+    <form>
+      <pss-boolean-input-basic field='discount'> </pss-boolean-input-basic>
+      <br>
+      <pss-text-input-basic field='number_of_tickets_for_discount' ng-if='item.discount==true'> </pss-text-input-basic>
+      <br>
+      <pss-text-input-basic field='discount_price' ng-if='item.discount==true'> </pss-text-input-basic>      
+      <div class='row'>
+        <div class='col'>
+        </div>
+        <button ng-click='edit_event_func(item,[])'  ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" >Save Changes</button>
+        <div class='col'>
+        </div>    
+      </div>
+    </form>
+  </div>
+</div>
+

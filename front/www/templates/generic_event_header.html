@@ -3,11 +3,7 @@
   <button ng-repeat='header_link in header_links' class="desktop-only button button-large button-clear button-dark {{header_link.icon}}">&nbsp;{{header_link.label}}&nbsp;</button>
   <button ng-if='credentials.is_logged_in(event_name)==false' class="desktop-only button button-large button-clear button-dark ion-person"  ui-sref='app.event.login'>&nbsp;Login&nbsp;</button>
   <button ng-if='credentials.is_logged_in(event_name)==true' class="desktop-only button button-large button-clear button-dark ion-person" ng-click='pss_admin_logout(event_name)'>&nbsp;Logout&nbsp;</button>
-  <button class="desktop-only button button-large ion-help  button-clear button-dark">&nbsp;Help&nbsp;</button>         
-
   <button ng-click="openPopover($event)" class="desktop-only button button-large button-clear button-dark ion-ios-photos-outline">&nbsp;Quick Links&nbsp;</button>
-  <!--<button class="poop desktop-only button button-large button-clear button-dark"><img class='desktop_logo' src='http://papa.org/wp-content/uploads/PAPAmenulogo1.png'></button>-->
-<!--  <button class="button button-large ion-reply  button-clear button-dark" ng-click="openPopover($event)">Open Popover</button>-->
 
   
 </div>

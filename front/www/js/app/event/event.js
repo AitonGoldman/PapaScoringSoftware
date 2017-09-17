@@ -55,10 +55,8 @@ angular.module('event').controller(
                                                                                                  'meta_tournament_name'
                                                                                                 );                
                 _.map(meta_tournament_items, set_list_items_srefs);
-
-                console.log($scope.items);
+                
                 $scope.items=$scope.items.concat(meta_tournament_items);
-                console.log($scope.items);
                 $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_tournaments',on_success,{event_name:$scope.event_name},{});                        
@@ -71,25 +69,44 @@ angular.module('event').controller(
             $scope.bootstrap({back_button:true});
             $scope.tournament={};
 
-            $scope.create_tournament_func = function(tournament){                                
-                var on_success = function(data){                    
+            $scope.create_tournament_func = function(tournament){
+                if($scope.tournament["finals_style"]=="MULTI"){
+                    create_multi_division_tournament_func(tournament);
+                } else {
+                    create_normal_tournament_func(tournament);
+                }                
+            };
+            var create_multi_division_tournament_func = function(tournament){
+                var on_success = function(data){
+
                     $scope.post_results={};
                     $scope.post_results.title="Tournament Created!";
                     //FIXME : this should use descriptions we got from backend
                     var results = [];
                     
-                    var item;
-                    if(data['new_tournament']==undefined){
-                        item = data['multi_division_tournament'];
-                        results.push(["name",item["multi_division_tournament_name"]]);
-                        $scope.post_results.results=results;                    
-                        $scope.disable_back_button();
-                        $scope.post_success = true;                        
-                        return;
-                    }
-
-                    item = data['new_tournament'];                    
                     
+                    var item = data['multi_division_tournament'];
+                    results.push(["name",item["multi_division_tournament_name"]]);
+                    results.push(["type","Multi Division"]);
+                    $scope.post_results.results=results;                    
+                    $scope.disable_back_button();
+                    $scope.post_success = true;                        
+
+                };
+                var post_object = {multi_division_tournament_name:$scope.tournament.tournament_name,
+                                   number_of_divisions:$scope.tournament.number_of_divisions};
+                var prom = resourceWrapperService.get_wrapper_with_loading('post_create_multi_division_tournament',
+                                                                       on_success,{event_name:$scope.event_name},
+                                                                       post_object);
+                
+            };
+            var create_normal_tournament_func = function(tournament){                                
+                var on_success = function(data){                    
+                    $scope.post_results={};
+                    $scope.post_results.title="Tournament Created!";
+                    //FIXME : this should use descriptions we got from backend
+                    var results = [];                                        
+                    var item = data['new_tournament'];                                        
                     results.push(["name",item["tournament_name"]]);
                     var description;
                     if(item["finals_style"]=="PAPA"){
@@ -98,25 +115,15 @@ angular.module('event').controller(
                     if(item["finals_style"]=="PPO"){
                         description="Single Division with A/B finals";
                     }
-                    if(item["finals_style"]=="PAPA" && item["multi_division_tournament_id"]!=undefined ){                        
-                        description="Muti Division";
-                    }                    
                     results.push(["type",description]);                                        
                     $scope.post_results.results=results;                    
                     $scope.disable_back_button();
                     $scope.post_success = true;
                 };                
-                var prom;
-                if($scope.tournament["finals_style"]=="MULTI"){
-                    prom = resourceWrapperService.get_wrapper_with_loading('post_create_multi_division_tournament',
-                                                                           on_success,{event_name:$scope.event_name},
-                                                                           {multi_division_tournament_name:$scope.tournament.tournament_name,number_of_divisions:$scope.tournament.number_of_divisions});
-                }else{
-                    prom = resourceWrapperService.get_wrapper_with_loading('post_create_tournament',on_success,{event_name:$scope.event_name},$scope.tournament);
-                }
-                
-                
-            
+                var prom = resourceWrapperService.get_wrapper_with_loading('post_create_tournament',
+                                                                           on_success,
+                                                                           {event_name:$scope.event_name},
+                                                                           $scope.tournament);
             };
         }]);
 
@@ -131,15 +138,22 @@ angular.module('event').controller(
                     $scope.new_meta_tournament=data['new_meta_tournament'];
                     $scope.post_results={};
                     $scope.post_results.title="MetaTournamet created!";
-                    $scope.post_results.results=[['MetaTournament Name',data['new_meta_tournament'].meta_tournament_name]];                    
+                    $scope.post_results.results=[['MetaTournament Name',
+                                                  data['new_meta_tournament'].meta_tournament_name]];                    
                     $scope.post_success = true;
                     $scope.disable_back_button();
                 };
                                 
-                var prom_meta_tournament = resourceWrapperService.get_wrapper_with_loading('post_create_meta_tournament',on_success,{event_name:$scope.event_name},$scope.meta_tournament);            
+                var prom_meta_tournament = resourceWrapperService.get_wrapper_with_loading('post_create_meta_tournament',
+                                                                                           on_success,
+                                                                                           {event_name:$scope.event_name},
+                                                                                           $scope.meta_tournament);            
 
             };
-            var prom_tournaments = resourceWrapperService.get_wrapper_with_loading('get_tournaments',function(data){$scope.tournaments=data['tournaments'];},{event_name:$scope.event_name},{});                                    
+            var prom_tournaments = resourceWrapperService.get_wrapper_with_loading('get_tournaments',
+                                                                                   function(data){$scope.tournaments=data['tournaments'];},
+                                                                                   {event_name:$scope.event_name},
+                                                                                   {});                                    
         }
     ]);
 
@@ -245,8 +259,7 @@ angular.module('event').controller(
                         $scope.player.ifpa_id=data.ifpa_ranking.search[0].player_id;
                     }
                     if(data.ifpa_ranking.search.length > 1){                        
-                        $scope.ifpa_rankings=data.ifpa_ranking.search;
-                        console.log($scope.ifpa_rankings);
+                        $scope.ifpa_rankings=data.ifpa_ranking.search;                        
                         $scope.showConfirm();
                     }
                 };
@@ -255,8 +268,7 @@ angular.module('event').controller(
             };
             $scope.create_player_func = function(player_id){                
                 var on_create_success = function(data){                    
-                    // $scope.logged_in_user=data['new_event'];
-                    console.log(data['new_player']);
+                    // $scope.logged_in_user=data['new_event'];                    
                     $scope.post_results={};
                     $scope.post_results.title="Player Added To Event!";
                     $scope.post_results.results=[];

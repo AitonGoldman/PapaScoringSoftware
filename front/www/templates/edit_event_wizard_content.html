@@ -15,7 +15,7 @@
       <div class='row'>
         <div class='col'>
         </div>
-        <button ng-disabled='item.queue_bump_amount==undefined || item.queue_bump_amount == ""' ui-sref-opts='{reload:true}' ui-sref='app.pss_admin.edit_event_wizard({wizard_step:2,item:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive">Next Step </button>
+        <button ng-disabled='item.queue_bump_amount==undefined || item.queue_bump_amount == ""' ui-sref-opts='{reload:true}' ui-sref='app.pss_admin.edit_event_wizard({wizard_step:2,event:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive">Next Step </button>
         <div class='col'>
         </div>    
       </div>      
@@ -27,7 +27,7 @@
       <div class='row'>
         <div class='col'>
         </div>
-        <button ng-disabled='item.number_unused_tickets_allowed==undefined || item.number_unused_tickets_allowed == ""' ui-sref-opts='{reload:true}' ui-sref='app.pss_admin.edit_event_wizard({wizard_step:3,item:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive"> Next Step </button>
+        <button ng-disabled='item.number_unused_tickets_allowed==undefined || item.number_unused_tickets_allowed == ""' ui-sref-opts='{reload:true}' ui-sref='app.pss_admin.edit_event_wizard({wizard_step:3,event:item,descriptions:descriptions})' class="padding button-pagraph col-50 button button-block button-positive"> Next Step </button>
         <div class='col'>
         </div>    
       </div>

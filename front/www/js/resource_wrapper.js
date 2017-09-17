@@ -65,10 +65,12 @@ angular.module('resource_wrapper')
                           //new_res = rest_api[api_name][method](url_parameters,post_parameters,on_success,on_error);
                           var new_res = rest_api[api_name][method](url_parameters,post_parameters,on_success);
                           return new_res.$promise;
-                      }).then(function(){
+                      }).then(function(data){                          
+                          $timeout($ionicLoading.hide,250);                          
+                          return data;
+                      }, function(data){
                           $timeout($ionicLoading.hide,250);
-                      }, function(){
-                          $timeout($ionicLoading.hide,250);
+                          return data;
                       });
                   };
 

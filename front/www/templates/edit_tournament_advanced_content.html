@@ -25,9 +25,10 @@
       <pss-text-input-advanced field="limited_herb"> </pss-text-input-advanced>
       <pss-text-input-advanced field="number_of_signifigant_scores"> </pss-text-input-advanced>
       <pss-text-input-advanced field="team_tournament"> </pss-text-input-advanced>
-      <pss-text-input-advanced field="number_of_qualifiers"> </pss-text-input-advanced>
-      <pss-text-input-advanced field="number_of_qualifiers_for_a_when_finals_style_is_ppo"> </pss-text-input-advanced>
-      <pss-text-input-advanced field="number_of_qualifiers_for_b_when_finals_style_is_ppo"> </pss-text-input-advanced>
+
+      <pss-text-input-advanced field="number_of_qualifiers" ng-if="item.finals_style=='PAPA'"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_qualifiers_for_a_when_finals_style_is_ppo" ng-if="item.finals_style=='PPO'"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_of_qualifiers_for_b_when_finals_style_is_ppo" ng-if="item.finals_style=='PPO'"> </pss-text-input-advanced>
       <pss-text-input-advanced field="number_of_games_played_in_each_finals_match"> </pss-text-input-advanced>
       <pss-text-input-advanced field="queue_size"> </pss-text-input-advanced>
       <pss-text-input-advanced field="minimum_number_of_tickets_allowed"> </pss-text-input-advanced>

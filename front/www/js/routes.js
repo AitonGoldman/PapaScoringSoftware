@@ -77,7 +77,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             }
             
         },data: {
-            title: "Login"
+            title: "Login"            
         }
     }).state('app.pss_admin.create_event', {
         cache:false,
@@ -107,7 +107,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_wizard_content.html',
-                controller: 'app.pss_admin.edit_event_controller'
+                controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/pss_admin_footer.html'//,
@@ -134,7 +134,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_basic_content.html',
-                controller: 'app.pss_admin.edit_event_controller'
+                controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/pss_admin_footer.html'//,
@@ -160,7 +160,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_event_advanced_content.html',
-                controller: 'app.pss_admin.edit_event_controller'
+                controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/pss_admin_footer.html'//,
@@ -273,7 +273,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             }
         },data: {
             title: "Manage Tournaments",
-            quick_links_url: 'templates/event_quick_links.html'
+            quick_links_url: 'templates/event_quick_links.html'            
         }
     }).state('app.event.manage_tournaments.edit_tournament_wizard', {
         cache:false,
@@ -281,7 +281,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_tournament_wizard_content.html',
-                controller: 'app.pss_admin.edit_event_controller'
+                controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/event_footer.html'//,
@@ -295,7 +295,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }            
         },data: {
-            title: "Edit Tournamnt",
+            title: "Create Tournament",
             edit_route: "put_edit_tournament",
             get_route:"get_tournament"
         },params: {
@@ -308,7 +308,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_tournament_basic_content.html',
-                controller: 'app.pss_admin.edit_event_controller'
+                controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/event_footer.html'//,
@@ -334,7 +334,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/edit_tournament_advanced_content.html',
-                controller: 'app.pss_admin.edit_event_controller'
+                controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
                 templateUrl: 'templates/event_footer.html'//,

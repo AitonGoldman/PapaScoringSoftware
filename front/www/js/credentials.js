@@ -7,16 +7,16 @@ angular.module('credentials')
                  var logged_in = {};
                  
                  var set_pss_user_credentials_from_cookies = function(event){                     
-                     console.log('setting credentials from cookies...');                     
+                     
                      if(event==undefined){
-                         console.log('bailing...');
+                         
                          return;
                      }
                      if(!_.isEmpty(credentials) && credentials[event]!=undefined){
                          logged_in[event] = true;
                          return;
                      }
-                     console.log('actually setting credentials from cookies...');
+                     
                      if(!_.isEmpty(credentials)){
                          logged_in[event] = false;
                          return;                         
@@ -63,7 +63,7 @@ angular.module('credentials')
                  };
                  
                  var remove_credentials_on_logout = function(event){                     
-                     console.log('removing '+event);
+                     
                      credentials[event]=undefined;                                          
                      $cookies.remove('credentials_cookie');
                      $cookies.putObject('credentials_cookie',credentials);

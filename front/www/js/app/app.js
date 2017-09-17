@@ -1,4 +1,4 @@
-angular.module('app',['event_select','pss_admin','event']);
+angular.module('app',['event_select','pss_admin','event','shared']);
 angular.module('app').controller(
     'app_controller',[
         '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup',
@@ -171,6 +171,18 @@ angular.module('app').directive('pssTextInputAdvanced', function($state) {
   };
 });
 
+angular.module('app').directive('pssGenericList', function($state) {
+  return {
+      restrict: 'AE',
+      replace: 'true',
+      scope:true,
+      templateUrl: 'templates/generic_list_directive.html',
+      link: function(scope, elem, attrs) {
+          scope.filter_to_apply = attrs.filterToApply;          
+      }      
+  };
+});
+
 
 //REMEMBER ME : for later
 // angular.module('app').filter('genericSearch', function () {
@@ -184,3 +196,33 @@ angular.module('app').controller(
         function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory) {
             
         }]);
+
+angular.module('app').filter('useFilter', function($filter) {
+    return function() {
+        var filterName = [].splice.call(arguments, 1, 1)[0];
+        return $filter(filterName).apply(null, arguments);
+    };
+});
+
+angular.module('app').filter('playerSearch', function() {
+
+  // Create the return function
+  // set the required parameter name to **number**
+    return function(items,str_to_search_for,fields_to_match) {        
+        console.log(str_to_search_for);
+        console.log(fields_to_match);
+        //var regex = "/"+str_to_search_for+"/";
+        var regex = str_to_search_for;
+        var re = new RegExp(regex,"g");
+        return _.filter(items, function(item) {                
+                console.log(item.first_name.match(re));
+                if(item.player_name.match(re)!=null){                    
+                    return true;
+                }
+                if(item.player_id==str_to_search_for){                    
+                    return true;
+                }                        
+            return false;
+        });
+  };
+});

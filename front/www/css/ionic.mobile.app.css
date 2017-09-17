@@ -9850,6 +9850,13 @@ a.button {
     margin-bottom: 10px;
     margin-top: 10px; } }
 
+@media screen and (max-device-width: 610px) {
+  .mobile-truncate-back-button {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; } }
+
 .truncate {
   white-space: nowrap;
   overflow: hidden;

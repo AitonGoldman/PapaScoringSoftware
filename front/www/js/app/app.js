@@ -18,11 +18,15 @@ angular.module('app').controller(
                 $scope.event_name = $state.params.event_name;
                 $rootScope.event_name = $state.params.event_name;
                 $ionicNavBarDelegate.title($state.current.data.title);                                
+                $ionicNavBarDelegate.align('right');
                 $rootScope.header_links=$state.current.data.header_links;
-                $rootScope.back_button=options.back_button==true;
+                //$rootScope.back_button=options.back_button==true;
                 credentialsService.set_pss_user_credentials_from_cookies($scope.event_name);
                 $scope.credentials_for_event = credentialsService.get_credentials()[$scope.event_name];                
                 $rootScope.is_logged_in=credentialsService.is_logged_in($scope.event_name);
+                //var parent_state = 
+                $rootScope.back_button_title=$state.get('^').data.back_title;
+                
             };
             
             $rootScope.pss_admin_logout = function(event){
@@ -46,15 +50,29 @@ angular.module('app').controller(
             
             
             $rootScope.go_back = function(){
-                history = $ionicHistory.viewHistory();
-                history.back();
+                //history = $ionicHistory.viewHistory();
+                //history.back();
+                $state.go('.^');
             };
 
+            $rootScope.openHelpPopover = function($event) {                                
+                //                $ionicPopover.fromTemplateUrl('templates/'+$state.current.name+'-help.html', {
+                $ionicPopover.fromTemplateUrl('templates/help.html', {                
+                    scope: $scope
+                }).then(function(popover){
+                    $scope.popover.hide();
+                    $scope.popover.remove();                    
+                    $scope.popover = popover;
+                    $scope.popover.show($scope.popover_event);
+                });
+                
+            };
             
             $rootScope.openPopover = function($event) {                                
                 $ionicPopover.fromTemplateUrl($state.current.data.quick_links_url, {                
                     scope: $scope
                 }).then(function(popover){
+                    $scope.popover_event = $event;
                     $scope.popover = popover;
                     $scope.popover.show($event);
                 });
@@ -208,14 +226,10 @@ angular.module('app').filter('playerSearch', function() {
 
   // Create the return function
   // set the required parameter name to **number**
-    return function(items,str_to_search_for,fields_to_match) {        
-        console.log(str_to_search_for);
-        console.log(fields_to_match);
-        //var regex = "/"+str_to_search_for+"/";
+    return function(items,str_to_search_for,fields_to_match) {                 
         var regex = str_to_search_for;
         var re = new RegExp(regex,"g");
-        return _.filter(items, function(item) {                
-                console.log(item.first_name.match(re));
+        return _.filter(items, function(item) {                                
                 if(item.player_name.match(re)!=null){                    
                     return true;
                 }

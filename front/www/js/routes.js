@@ -34,7 +34,8 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 templateUrl: 'templates/event_select_footer.html'//,                
             }            
         },data: {
-            title: "Select Events"
+            title: "Select Events",
+            back_title: "Switch Event"
         }
     }).state('app.pss_admin', {
         cache:false,
@@ -56,6 +57,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             }
         },data: {
             title: "Manage Events",
+            back_title: "Events",            
             quick_links_url: 'templates/pss_admin_quick_links.html'
         }
     }).state('app.pss_admin.login', {
@@ -199,7 +201,8 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 templateUrl: 'templates/event_footer.html'//,
             }
         },data: {
-            title: "Event Front Page",
+            title: "Front Page",
+            back_title: "Home",
             quick_links_url: 'templates/event_quick_links.html'
         }
     }).state('app.event.login', {
@@ -246,6 +249,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             }            
         },data: {
             title: "Manage Tournaments",
+            back_title: "Manage Tournaments",
             quick_links_url: 'templates/event_quick_links.html'
         }
     }).state('app.event.manage_tournaments.create_tournament', {
@@ -272,7 +276,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }
         },data: {
-            title: "Manage Tournaments",
+            title: "Create Tournament",
             quick_links_url: 'templates/event_quick_links.html'            
         }
     }).state('app.event.manage_tournaments.edit_tournament_wizard', {
@@ -295,7 +299,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }            
         },data: {
-            title: "Create Tournament",
+            title: "Edit Tournament",
             edit_route: "put_edit_tournament",
             get_route:"get_tournament"
         },params: {
@@ -396,6 +400,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             }            
         },data: {
             title: "Add Players To Event",
+            back_title: "Select Players",
             quick_links_url: 'templates/event_quick_links.html'
         }
     }).state('app.event.select_players_to_add_to_event.add_player_to_event', {

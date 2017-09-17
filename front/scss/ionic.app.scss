@@ -107,6 +107,15 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     
 }
 
+.mobile-truncate-back-button{
+    @media screen and (max-device-width: 610px){         
+        width:100px;
+        white-space: nowrap;
+        overflow:hidden;
+        text-overflow: ellipsis;
+    }
+}
+
 .truncate{
   white-space: nowrap;
   overflow:hidden;

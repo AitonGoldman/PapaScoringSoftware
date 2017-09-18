@@ -16,9 +16,9 @@ def allowed_file(filename):
 def generate_img_url(type, event_id, tournament_id=None,player_id=None):
     timestamp = datetime.datetime.now().strftime("%s")
     if type=="put_edit_event": 
-            uploaded_image_url='http://192.168.1.178:8100/img/events/%s/%s.jpg?%s' % (event_id,event_id,timestamp)    
+            uploaded_image_url='/img/events/%s/%s.jpg?%s' % (event_id,event_id,timestamp)    
     if type=="put_edit_tournament": 
-            uploaded_image_url='http://0.0.0.0:8100/img/events/%s/tournaments/%s.jpg?%s' % (event_id,tournament_id,timestamp)    
+            uploaded_image_url='/img/events/%s/tournaments/%s.jpg?%s' % (event_id,tournament_id,timestamp)    
     return uploaded_image_url
     
 @blueprints.event_blueprint.route('/media_upload/jpg_pic',methods=['POST'])

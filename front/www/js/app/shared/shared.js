@@ -24,15 +24,6 @@ angular.module('shared').controller(
                 $scope.item.img_url=response.data;                
                 $scope.pic_selected=false;                
                 $scope.item.has_pic=true;
-                if(edit_route=="put_edit_event"){
-                    $scope.uploaded_image_url='/img/events/'+$state.params.id+'/'+$state.params.id+'.jpg';    
-                }
-                if(edit_route=="put_edit_tournament"){
-                    $scope.uploaded_image_url='/img/events/'+$scope.item.event_id+'/tournaments/'+$state.params.id+'.jpg';    
-                }
-                if(edit_route=="put_edit_meta_tournament"){
-                    $scope.uploaded_image_url='/img/events/'+$scope.item.event_id+'/meta_tournaments/'+$state.params.id+'.jpg';    
-                }                
             };
             $scope.uploader.onAfterAddingFile = function(fileItem) {                
                 $scope.pic_selected=true;
@@ -75,10 +66,13 @@ angular.module('shared').controller(
                 for(field_name in item){
                     if(field_name=="bobo"){continue;}
                     if(field_name=="wizard_configured"){continue;}
+                    if(field_name=="has_pic"){continue;}                    
                     if(_.isArray(item[field_name])){continue;}
                     if(_.isObject(item[field_name])){continue;}                                            
-                    console.log($scope.item);
-                    console.log(item);
+                    if(field_name=="img_url"){
+                        results.push(['New Image Uploaded','True']);
+                        continue;
+                    }                                        
                     if($scope.item.bobo[field_name]!=item[field_name]){
                         results.push([$scope.descriptions.short_descriptions[field_name],item[field_name]]);   
                     };

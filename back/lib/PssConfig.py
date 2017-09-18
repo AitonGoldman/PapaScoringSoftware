@@ -37,6 +37,8 @@ class PssConfig():
         if 'flask_secret_key' not in app.event_config or app.event_config['flask_secret_key'] is None:
             raise Exception("You didn't configure your flask secret key!")    
         app.secret_key = app.event_config['flask_secret_key']
-        app.config['UPLOAD_FOLDER']=app.event_config['upload_folder']
+        for key,value in app.event_config.iteritems():
+            if os.getenv(key,None):
+                app.event_config[key]=os.getenv(key)
         return config_dict
         

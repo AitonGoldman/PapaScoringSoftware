@@ -37,6 +37,7 @@ def get_event_field_descriptions():
     short_descriptions['ifpa_api_key']='IFPA api key'
     short_descriptions['wizard_configured']='wizard configured (ignore this)'
     short_descriptions['force_ifpa_lookup']='Force IFPA lookup for players'
+    short_descriptions['has_pic']='Event picture'
 
     long_descriptions['queue_bump_amount']='The number of spots a player will be "bumped" down a queue if they are not present when it is their turn to play.'
     long_descriptions['player_id_seq_start']='The starting player id.  All player ids will follow this id.  I.e. if this is set to 100, the first player that registers will be player 100, then player 101, etc.'
@@ -84,7 +85,9 @@ def create_event(tables):
     pss_config=PssConfig()
     new_event_app = Flask(input_data['name'])
     new_event_tables = orm_factories.create_event_tables(pss_config,new_event_app)    
-    new_event = orm_factories.create_event(current_user, tables, input_data, new_event_tables,current_user.pss_user_id)        
+    new_event = orm_factories.create_event(current_user, tables, input_data, new_event_tables,current_user.pss_user_id)    
+    os.makedirs("%s/img/events/%s" % (current_app.event_config['upload_folder'],new_event.event_id))
+    os.makedirs("%s/img/events/%s/tournaments" % (current_app.event_config['upload_folder'],new_event.event_id))
     generic_serializer = generic.generate_generic_serializer(serializer.generic.ALL)
     event_dict=generic_serializer(new_event)    
     return jsonify({'new_event':event_dict})

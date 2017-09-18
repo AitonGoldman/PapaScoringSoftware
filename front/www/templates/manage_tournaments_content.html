@@ -9,11 +9,11 @@
   <ion-item ui-sref='.create_meta_tournament' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Create Meta Tournament</ion-item>
 
   <div class='padding'> </div>  
-  Meta Tournaments
+  <span ng-if='meta_tournament_items.length > 0'>Meta Tournaments</span>
   <pss-generic-list items-to-list='meta_tournament_items' filter-to-apply="filter"> </pss-generic-list>
 
   <div class='padding'> </div>  
-  Tournaments
+  <span ng-if='items.length > 0'>Tournaments</span>
   <pss-generic-list items-to-list='items' filter-to-apply="filter"> </pss-generic-list>
 
 

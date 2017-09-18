@@ -5,6 +5,7 @@ def generate_tournaments_class(db_handle,event_name):
         __tablename__="tournaments_"+event_name                
         tournament_id=db_handle.Column(db_handle.Integer, primary_key=True)
         tournament_name=db_handle.Column(db_handle.String(100))
+        event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
         multi_division_tournament_name=db_handle.Column(db_handle.String(100))
         multi_division_tournament_id=db_handle.Column('multi_division_tournament_id', db_handle.Integer, db_handle.ForeignKey('multi_division_tournaments_'+event_name+'.multi_division_tournament_id'))
         meta_tournament_id=db_handle.Column('meta_tournament_id', db_handle.Integer, db_handle.ForeignKey('meta_tournaments_'+event_name+'.meta_tournament_id'))        
@@ -49,6 +50,7 @@ def generate_tournaments_class(db_handle,event_name):
         allow_desk_purchases = db_handle.Column(db_handle.Boolean,default=True)
         allow_phone_purchases = db_handle.Column(db_handle.Boolean,default=True)
         wizard_configured=db_handle.Column(db_handle.Boolean,default=False)
-        has_pic=db_handle.Column(db_handle.Boolean,default=False)                
+        has_pic=db_handle.Column(db_handle.Boolean,default=False)
+        img_url=db_handle.Column(db_handle.String(100))
     return Tournaments
     

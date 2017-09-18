@@ -17,8 +17,12 @@ def generate_event_to_dict_serializer(type_of_serializer):
         serialized_event['event_creator_pss_user_id']=event_model.event_creator_pss_user_id
         serialized_event['active']=event_model.active
         serialized_event['force_ifpa_lookup']=event_model.force_ifpa_lookup        
-        serialized_event['has_pic']=event_model.has_pic        
-        
+        serialized_event['has_pic']=event_model.has_pic                
+        if event_model.has_pic:
+            serialized_event['img_url']=event_model.img_url
+            
+            #    serialized_event['image_path']='/img/events/%s/%s.jpg' % (event_model.event_id,event_model.event_id)
+            
         return serialized_event
     if type_of_serializer == MINIMUM_EVENT:
         return serialize_minimal_event

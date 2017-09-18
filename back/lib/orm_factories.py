@@ -133,7 +133,9 @@ def create_tournament(flask_app,tournament_name,
                       multi_division_tournament_id=None,                      
                       commit=False,
                       finals_style=None):
-    new_tournament = flask_app.tables.Tournaments(tournament_name=tournament_name)
+    event = flask_app.tables.Events.query.filter_by(name=flask_app.name).first()
+    new_tournament = flask_app.tables.Tournaments(tournament_name=tournament_name,event_id=event.event_id)
+    
     flask_app.tables.db_handle.session.add(new_tournament)
     # if multi_division_tournament_name and multi_division_tournament_id is None:
     #     multi_division_tournament = flask_app.tables.MultiDivisionTournaments(multi_division_tournament_name=multi_division_tournament_name)

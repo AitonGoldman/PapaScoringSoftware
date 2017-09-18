@@ -7,17 +7,28 @@
     {{not_found_message}}
   </ion-item>
   <div class='card' style='margin:0;margin-top:2px' ng-repeat='item in fake_scope[itemsToList]|useFilter:filter_to_apply:filter_for as actioncount' ng-if='item.actions_ui_sref_list!=undefined'>
-    <div class='item item-divider item-icon-left' ng-click='toggle_view_item_actions(item)'>
-      <i class='icon {{item.icon}}'></i>
-      {{item.label_to_display}}
+    <div class='row'>
+      <div class='col'>
+        <div class='item item-divider item-icon-left' ng-click='toggle_view_item_actions(item)'>
+          <i class='icon {{item.icon}}'></i>
+          {{item.label_to_display}}
+        </div>
+      </div>
     </div>
-    <div ui-sref='{{action.ui_sref}}' class="item item-icon-left" ng-if="item.display_actions==true" ng-repeat='action in item.actions_ui_sref_list'>
-      <i class='icon ion-compose'></i>      
-      {{action.label}}
+    <div class='row'>
+      <div ng-class="{'col-80':item.has_pic==true,'col':item.has_pic!=true}">      
+        <div ui-sref='{{action.ui_sref}}' class="item item-icon-left" ng-if="item.display_actions==true" ng-repeat='action in item.actions_ui_sref_list'>
+          <i class='icon ion-compose'></i>      
+          {{action.label}}
+        </div>
+        <div ng-click="{{action.ng_click}}" class="item item-icon-left" ng-if="item.display_actions==true" ng-repeat='action in item.actions_ng_click_list'>
+          <i class='icon ion-compose'></i>      
+          {{action.label}}
+        </div>
+      </div>
+      <div class='col-20' style='margin:auto' ng-if='item.has_pic==true && item.display_actions==true'>
+        <img src='{{item.img_url}}' class='padding circular--square' style='opacity:.5;height:130px;width:130px'>
+      </div>
     </div>
-    <div ng-click="{{action.ng_click}}" class="item item-icon-left" ng-if="item.display_actions==true" ng-repeat='action in item.actions_ng_click_list'>
-      <i class='icon ion-compose'></i>      
-      {{action.label}}
-    </div>    
   </div>
 </div>  

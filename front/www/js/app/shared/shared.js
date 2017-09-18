@@ -1,14 +1,43 @@
 angular.module('shared',[]);
 angular.module('shared').controller(
     'app.shared.edit_event_tournament_controller',[
-        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib',
-        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib ) {                        
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib','$http','FileUploader',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib,$http,FileUploader ) {                        
             $scope.bootstrap({back_button:true});
             $scope.wizard_step = $state.params.wizard_step;                                    
-
             var edit_route = $state.current.data.edit_route;
             var get_route = $state.current.data.get_route;                        
             var basic_or_advanced_edit=false;
+            var file_form_data = {type:edit_route,id:$state.params.id};            
+            $scope.uploaded_file=false;
+
+            var url = "";
+            if(edit_route=="put_edit_tournament"){
+                url="http://0.0.0.0:8000/"+$state.params.event_name+"/media_upload/jpg_pic";
+            }
+            if(edit_route=="put_edit_event"){
+                url = "http://0.0.0.0:8000/pss_admin/media_upload/jpg_pic";
+            }            
+            
+            $scope.uploader = new FileUploader({url:url,formData:[file_form_data]});            
+            $scope.uploader.onSuccessItem=function(item, response, status, headers){
+                $scope.item.img_url=response.data;                
+                $scope.pic_selected=false;                
+                $scope.item.has_pic=true;
+                if(edit_route=="put_edit_event"){
+                    $scope.uploaded_image_url='/img/events/'+$state.params.id+'/'+$state.params.id+'.jpg';    
+                }
+                if(edit_route=="put_edit_tournament"){
+                    $scope.uploaded_image_url='/img/events/'+$scope.item.event_id+'/tournaments/'+$state.params.id+'.jpg';    
+                }
+                if(edit_route=="put_edit_meta_tournament"){
+                    $scope.uploaded_image_url='/img/events/'+$scope.item.event_id+'/meta_tournaments/'+$state.params.id+'.jpg';    
+                }                
+            };
+            $scope.uploader.onAfterAddingFile = function(fileItem) {                
+                $scope.pic_selected=true;
+            };            
+
             
             if($scope.wizard_step == undefined){                
                 basic_or_advanced_edit=true;
@@ -31,7 +60,10 @@ angular.module('shared').controller(
                     field_name = orig_item_fields[idx];
                     $scope.item.bobo[field_name]=$scope.item[field_name];
                 }
-                $scope.descriptions=data['descriptions'];                    
+                $scope.descriptions=data['descriptions'];
+                if($scope.item.has_pic==true){
+                    $scope.event_image_url='/img/events/'+$state.params.id+'/'+$state.params.id+'.jpg';
+                }                
             };
 
             var on_edit_success = function(data){                    
@@ -65,5 +97,6 @@ angular.module('shared').controller(
                 old_event.wizard_configured=true;
                 var prom =resourceWrapperService.get_wrapper_with_loading(edit_route,on_edit_success,{id:$state.params.id,event_name:$state.params.event_name},old_event);
             };
+            
         }
     ]);

@@ -1,8 +1,8 @@
 angular.module('app',['event_select','pss_admin','event','shared']);
 angular.module('app').controller(
     'app_controller',[
-        '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup',
-        function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory,$ionicPopover,$ionicPopup) {
+        '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup','$http',
+        function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory,$ionicPopover,$ionicPopup,$http) {
             if ($rootScope.credentials == undefined){
                 $rootScope.credentials=credentialsService;
             }
@@ -83,58 +83,60 @@ angular.module('app').controller(
                 $scope.popover.hide();
                 $scope.popover.remove();                
                 $state.go(sref);                
-            };            
+            };
             
-            //REMEMBER ME : for later
-            // $scope.generic_search = function(list_to_search,name_field_of_item,id_field_of_item,value_to_filter_for){
-            //     $scope.search_results = _.filter(list_to_search,
-            //              function(item) {
-                             
-            //                  if(_.startsWith(item[name_field_of_item],value_to_filter_for)){
-            //                      return true; 
-            //                  }
-            //                  if(/^\d+$/.test(value_to_filter_for)){
-            //                      if(item[id_field_of_item] == value_to_filter_for){
-            //                          return true; 
-            //                      }                                                                  
-            //                  }                             
-            //                  return false;
-            //              });
-            // };
+            $scope.uploadedFile = function(element) {
+                console.log('in uploadedFiled');
+                $scope.$apply(function($scope) {
+                    console.log('in uploadedFiled apply');
+                    $scope.files = element.files;         
+                });
+            };
 
-            //REMEMBER ME : for later            
-            // $scope.generic_search = function(item,index,complete_list){
-            //     var name_field_of_item='';
-            //     var id_field_of_item='';
-            //     if(_.startsWith(item[name_field_of_item],value_to_filter_for)){
-            //         return true; 
-            //     }
-            //     if(/^\d+$/.test(value_to_filter_for)){
-            //         if(item[id_field_of_item] == value_to_filter_for){
-            //             return true; 
-            //         }                                                                  
-            //     }                             
-            //     return false;
-            // };
-            
+            $scope.addFile = function(event_id) {
+                console.log('in addfile');
+                $scope.uploadfile($scope.files,
+                                  event_id,
+                                  function( msg ) // success
+                                  {
+                                      console.log('in addfile - success');
+                                      console.log('uploaded');
+                                  },
+                                  function( msg ) // error
+                                  {
+                                      console.log('in addfile - failure');                                  
+                                      console.log('error');
+                                  });
+            };
+            $scope.uploadfile = function(files,event_id,success,error){                
+                var url = 'http://0.0.0.0:8000/pss_admin/media_upload/event/'+event_id+'/jpg_pic';
+                console.log(url);
+                for ( var i = 0; i < files.length; i++)
+                {
+                    var fd = new FormData();
+                    fd.append("file", files[i]);
+                    console.log(files[i]);
+                    $http.post(url, fd, { 
+                        withCredentials : false,
+                        headers : {
+                            'Content-Type' : undefined
+                        },
+                        transformRequest : angular.identity
+                        
+                    }).success(function(data){
+                        console.log('success!');
+                        console.log(data);
+                        $rootScope.pic_uploaded=true;                        
+                        
+                    }).error(function(data){
+                        console.log('uh oh!');                    
+                        console.log(data);                        
+                    });
+                }
+            };            
         }
     ]
 );
-
-//REMEMBER ME : for later
-// angular.module('app').directive('pssHeader', function($state) {
-//   return {
-//       restrict: 'AE',
-//       replace: 'true',
-//       templateUrl: 'templates/generic_header.html',
-//       link: function(scope, elem, attrs) {
-//           for(i in $state.current){
-//               alert($state.current.name);
-//           }          
-//           scope.header_links = $state.data.header_links;
-//     }      
-//   };
-// });
 
 angular.module('app').directive('pssTextInputBasic', function($state) {
   return {

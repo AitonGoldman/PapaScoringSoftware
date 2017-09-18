@@ -15,6 +15,32 @@
     <div class="card">
       <pss-text-input-basic field='player_id_seq_start' basic='true'/>
     </div>
+    <div class="card">      
+      <div class="item item-divider">
+        Event Picture
+      </div>      
+      <div>
+        <div class='row'>
+          <div class='col'>
+            <input type="file" nv-file-select uploader="uploader"/><br>
+          </div>
+          <div class='col'>
+            <ul ng-if='pic_selected==true'>
+              <li ng-repeat="img_item in uploader.queue">
+                Name: <span ng-bind="img_item.file.name"></span><br/>
+                <button ng-click="img_item.upload()">upload</button>
+              </li>
+            </ul>
+            <img  ng-if='pic_selected!=true' src='{{item.img_url}}'  class='padding circular--square' style='height:130px;width:130px'>            
+          </div>
+        </div>
+      </div>
+      <div>
+        <center>
+          Upload a picture to represent this event.
+        </center>
+      </div>
+    </div>
     <div class='row'>
       <div class='col'>
       </div>

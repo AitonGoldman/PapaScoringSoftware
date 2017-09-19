@@ -16,6 +16,12 @@ angular.module('list_generation')
                      };
                      return set_list_items_ui_sref_and_args;
                  };
+                 var generate_tournament_machine_actions = function(){
+                     var set_actions = function(i){
+
+                     };
+                     return set_actions;
+                 };
                  var generate_set_list_items_actions_and_args = function(display_label_field,advanced_sref,wizard_sref,basic_sref,display_active_toggle) {
                      var set_list_items_actions_and_args = function(i) {                                     
                          i.actions_ui_sref_list = [{label:"Advanced Editing",ui_sref:advanced_sref}];
@@ -49,7 +55,8 @@ angular.module('list_generation')
                      generate_set_list_items_ui_sref_and_args:generate_set_list_items_ui_sref_and_args,
                      toggle_view_item_actions:toggle_view_item_actions,
                      generate_set_list_items_actions_and_args:generate_set_list_items_actions_and_args,
-                     set_active_inactive_icon:set_active_inactive_icon
+                     set_active_inactive_icon:set_active_inactive_icon,
+                     generate_tournament_machine_actions:generate_tournament_machine_actions
                  };
              }
              ]

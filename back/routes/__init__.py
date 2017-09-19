@@ -12,3 +12,4 @@ import meta_tournament
 import queue
 import multi_tournament
 import media_upload
+import machine

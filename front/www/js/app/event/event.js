@@ -69,6 +69,78 @@ angular.module('event').controller(
         }]);
 
 angular.module('event').controller(
+    'app.event.manage_tournament_machines_controller',[
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
+        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
+            $scope.bootstrap();
+            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
+            
+            var on_success = function(data){
+                //$scope.items=data['tournaments'];
+                $scope.items=data['tournaments'];
+                
+                // var basic_sref='.edit_tournament_basic({id:item.tournament_id})';
+                // var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';
+                // var wizard_sref='.edit_tournament_wizard({id:item.tournament_id,wizard_step:1})';
+                // var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('tournament_name',
+                //                                                                                             advanced_sref,
+                //                                                                                             wizard_sref,
+                //                                                                                             basic_sref
+                //                                                                                            );                
+                _.forEach($scope.items, function(tournament) {
+                    _.map(tournament.tournament_machines, function(i){i.actions_ui_sref_list=[];i.actions_ng_click_list=[{label:'Disable machine'},{label:'Remove machine'}];i.label_to_display=i.tournament_machine_name;});                    
+                });
+                
+                
+                
+            };                        
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_tournaments',on_success,{event_name:$scope.event_name},{});                        
+        }]);
+
+angular.module('event').controller(
+    'app.event.manage_tournament_machines.add_tournament_machine_controller',[
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
+        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
+            $scope.bootstrap();
+            
+            $scope.tournament_machines={tournament_id:$state.params.tournament_id};
+            $scope.add_machine_func = function(){                
+                var filtered_values =  _.filter($scope.items, function(item) {                                
+                    if(item.checked==true){                    
+                         return true;
+                     }                        
+                    return false;
+                });
+
+                $scope.tournament_machines.tournament_machines=filtered_values;
+                
+                var on_submit_success = function(data){                    
+                    $scope.item=data['item'];
+                    $scope.post_results={};
+                    $scope.post_results.title="Machines Added!";                    
+                    $scope.post_results.results=[];
+                    _.forEach(filtered_values, function(machine) {
+                        $scope.post_results.results.push(["Machine Name",machine.machine_name]);
+                    });
+                    $scope.post_success = true;
+                    $scope.disable_back_button();
+                    
+                };                        
+                var prom =resourceWrapperService.get_wrapper_with_loading('post_add_tournament_machines',
+                                                                          on_submit_success,
+                                                                          {event_name:$scope.event_name},
+                                                                          $scope.tournament_machines);                        
+
+            };
+            var on_get_success = function(data){                
+                $scope.items = data['machines'];
+                console.log($scope.items);
+            };
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_machines',on_get_success,{event_name:$scope.event_name},{});                        
+
+        }]);
+
+angular.module('event').controller(
     'app.event.manage_tournaments.create_tournament_controller',[
         '$scope','$state','resourceWrapperService','listGeneration',
         function($scope, $state,resourceWrapperService,listGeneration ) {

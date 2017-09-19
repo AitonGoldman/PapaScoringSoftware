@@ -116,6 +116,10 @@ angular.module('resource_wrapper')
                   rest_api['get_multi_division_tournaments'] = $resource(rest_server+'/:event_name/multi_tournament',
                                                                          {},
                                                                          {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_machines'] = $resource(rest_server+'/:event_name/machine',
+                                                       {},
+                                                       {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  
                   rest_api['post_pss_admin_login'] = $resource(rest_server+'/pss_admin/auth/pss_user/login',
                                                                {},
                                                                {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
@@ -142,6 +146,10 @@ angular.module('resource_wrapper')
                   rest_api['post_create_multi_division_tournament'] = $resource(rest_server+'/:event_name/multi_tournament',
                                                                                 {},
                                                                                 {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['post_add_tournament_machines'] = $resource(rest_server+'/:event_name/tournament_machine',
+                                                                       {},
+                                                                       {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+
                   rest_api['put_edit_event'] = $resource(rest_server+'/pss_admin/event/:id',
                                                             {},
                                                             {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});

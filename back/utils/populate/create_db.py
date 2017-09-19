@@ -33,7 +33,7 @@ orm_factories.create_user(real_app,
 if len(sys.argv) == 1:
     sys.exit()
 
-pss_config.get_db_info().load_machines_from_json(real_app,test=True)
+pss_config.get_db_info().load_machines_from_json(real_app,test=False)
 
 # need to bootstrap test env
 # new_event = tables.Events(name="test_event")

@@ -197,12 +197,27 @@ angular.module('app').directive('pssGenericList', function($state) {
       replace: 'true',
       scope:true,
       templateUrl: 'templates/generic_list_directive.html',
-      link: function(scope, elem, attrs) {
-          console.log(attrs);
-          scope.itemsToList=attrs.itemsToList;          
-          scope.filter_to_apply = attrs.filterToApply;
+      link: function(scope, elem, attrs) {          
+          //if(attrs.itemsToList.indexOf('.')<0){
+          scope.itemsToList=attrs.itemsToList;
+          scope.subItemsToList=attrs.subItemsToList;          
+          //} else {
+              //var itemsToListArray = attrs.itemsToList.split('.');              
+          //}
+          //for(i in scope){
+          //    console.log(i+"--"+scope[i]);
+          //}
           scope.fake_scope=scope;
+          scope.filter_to_apply = attrs.filterToApply;          
           scope.not_found_message=attrs.notFoundMessage;
+          scope.list_title = attrs.listTitle;
+          
+          scope.fake_scope_lookup = function(field,sub_field){              
+              if(sub_field != undefined){                                    
+                  return scope[field][sub_field];
+              }              
+              return scope[field];              
+          };          
       }      
   };
 });
@@ -234,15 +249,44 @@ angular.module('app').filter('playerSearch', function() {
   // set the required parameter name to **number**
     return function(items,str_to_search_for,fields_to_match) {                 
         var regex = str_to_search_for;
+        if(regex!=undefined){
+            regex=regex.toLowerCase();
+        }
         var re = new RegExp(regex,"g");
         return _.filter(items, function(item) {                                
-                if(item.player_name.match(re)!=null){                    
-                    return true;
-                }
-                if(item.player_id==str_to_search_for){                    
-                    return true;
-                }                        
+            if(item.player_name.toLowerCase().match(re)!=null){                    
+                return true;
+            }
+            if(item.player_id==str_to_search_for){                    
+                return true;
+            }                        
             return false;
         });
-  };
+    };
+});
+
+angular.module('app').filter('machineSearch', function() {
+
+  // Create the return function
+  // set the required parameter name to **number**
+    return function(items,str_to_search_for) {                         
+        var regex = str_to_search_for;
+        if(regex!=undefined){
+            regex=regex.toLowerCase();
+        }
+        var re = new RegExp(regex,"g");
+        var filtered_values =  _.filter(items, function(item) {                                
+            if( item.machine_name.toLowerCase().match(re)!=null){                    
+                    return true;
+                }
+            // if(item.checked==true){                    
+            //     return true;
+            // }                        
+            return false;
+        });
+        // if(regex!=undefined && regex.length > 0){
+        //     return _.orderBy(filtered_values, ['checked'], ['desc']);
+        // }        
+        return filtered_values;
+    };
 });

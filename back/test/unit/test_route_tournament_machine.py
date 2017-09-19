@@ -20,6 +20,7 @@ class RouteTournamentMachineTest(PssUnitTestBase):
         self.mock_app.tables = self.mock_tables
         
     def test_create_tournament_machine_route(self):
+        #FIXME : need to change to reflect that machine_ids is now a list
         mock_input_data=MagicMock()
         mock_input_data.data = json.dumps({'tournament_id':'1',
                                            'machine_id':'1'})
@@ -42,6 +43,7 @@ class RouteTournamentMachineTest(PssUnitTestBase):
         self.assertEquals(mock_tournament_machine,returned_tournament_machine)
 
     def test_create_tournament_machine_route_fails_with_missing_info(self):
+        #FIXME : need to change to reflect that machine_ids is now a list
         mock_input_data=MagicMock()
         mock_input_data.data = json.dumps({'tournament_id':'1'})
         mock_tournament = MagicMock()
@@ -57,6 +59,7 @@ class RouteTournamentMachineTest(PssUnitTestBase):
         self.assertEquals(cm.exception.description,"Missing information")
 
     def test_create_tournament_machine_route_fails_with_bad_info(self):
+        #FIXME : need to change to reflect that machine_ids is now a list
         mock_input_data=MagicMock()
         mock_input_data.data = json.dumps({'tournament_id':'999',
                                            'machine_id':'1'})
@@ -82,6 +85,7 @@ class RouteTournamentMachineTest(PssUnitTestBase):
         
         
     def test_create_tournament_machine_route_readd_machine(self):
+        #FIXME : need to change to reflect that machine_ids is now a list
         mock_input_data=MagicMock()
         mock_input_data.data = json.dumps({'tournament_id':'1',
                                            'machine_id':'1'})
@@ -126,4 +130,5 @@ class RouteTournamentMachineTest(PssUnitTestBase):
         self.assertEquals(mock_tournament_machine.active,False)
         self.assertEquals(mock_tournament_machine.removed,False)
         
-        
+    def test_get_tournament_machines_route(self):
+        pass

@@ -138,7 +138,7 @@ def edit_tournament(tables,tournament_id):
 @blueprints.event_blueprint.route('/tournament',methods=['GET'])
 @load_tables
 def get_tournaments(tables):    
-    tournaments = tables.Tournaments.query.all()
+    tournaments = tables.Tournaments.query.options(joinedload("tournament_machines")).all()
     tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
     meta_tournaments = tables.MetaTournaments.query.all()
     meta_tournament_serializer = generate_generic_serializer(serializer.generic.ALL)

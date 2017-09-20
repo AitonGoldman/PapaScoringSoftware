@@ -16,30 +16,56 @@ angular.module('list_generation')
                      };
                      return set_list_items_ui_sref_and_args;
                  };
-                 var generate_tournament_machine_actions = function(){
-                     var set_actions = function(i){
 
+                 var build_action_ui_sref = function(label,ui_sref){
+                     return {label:label,ui_sref:ui_sref};
+                 };
+                 
+                 var build_action_ng_click = function(label,ng_click){
+                     return {label:label,ng_click:ng_click};
+                 };
+
+                 var add_action_ui_sref_to_item = function(item,action){
+                     if(item.actions_ui_sref_list==undefined){
+                         item.actions_ui_sref_list=[];
+                     }
+                     item.actions_ui_sref_list.push(action);
+                 };
+                 var add_action_ng_click_to_item = function(item,action){
+                     if(item.actions_ng_click_list==undefined){
+                         item.actions_ng_click_list=[];
+                     }
+                     item.actions_ng_click_list.push(action);
+                 };
+
+                 var generate_tournament_machine_actions = function(display_label_field){
+                     var set_actions = function(i){
+                         //i.actions_ui_sref_list=[];                         
+                         i.label_to_display=i[display_label_field];
+                         add_action_ng_click_to_item(i,
+                                                     build_action_ng_click('Toggle Active','toggle_item_active(item,event_name)'));
+                         add_action_ng_click_to_item(i,
+                                                     build_action_ng_click('Remove Machine','toggle_item_active(item,event_name)'));                         
                      };
                      return set_actions;
                  };
-                 var generate_set_list_items_actions_and_args = function(display_label_field,advanced_sref,wizard_sref,basic_sref,display_active_toggle) {
-                     var set_list_items_actions_and_args = function(i) {                                     
-                         i.actions_ui_sref_list = [{label:"Advanced Editing",ui_sref:advanced_sref}];
-                         if(i.wizard_configured == false){
-                             basic_edit_action = {label:"Wizard Configuration",ui_sref:wizard_sref};
-                         } else {
-                             basic_edit_action = {label:"Basic Editing",ui_sref:basic_sref};
-                         }
-                         i.actions_ui_sref_list.splice(0,0,basic_edit_action);
-                         if(display_active_toggle==undefined){
-                             i.actions_ng_click_list=[{label:"Toggle active",ng_click:'toggle_item_active(item,event_name)'}];
-                         }                         
+                 
+                 //needs some cleaning up
+                 var generate_set_list_items_actions_and_args = function(display_label_field,advanced_sref,basic_sref,display_active_toggle) {
+                     var set_list_items_actions_and_args = function(i) {                                                              
                          i.label_to_display=i[display_label_field];
-                         
+                         if(display_active_toggle==undefined||display_active_toggle==true){
+                             add_action_ng_click_to_item(i,
+                                                         build_action_ng_click('Toggle Active','toggle_item_active(item,event_name)'));
+                         }                                                  
+                         add_action_ui_sref_to_item(i,
+                                                    build_action_ui_sref('Advanced Editing',advanced_sref));
+                         add_action_ui_sref_to_item(i,
+                                                    build_action_ui_sref('Basic Editing',basic_sref));
                      };             
                      return set_list_items_actions_and_args;
                  };
-
+                 
                  var set_active_inactive_icon = function(i){                     
                      if(i.active == undefined){                                                
                         return;                        

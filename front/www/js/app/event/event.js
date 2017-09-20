@@ -35,34 +35,29 @@ angular.module('event').controller(
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
             $scope.bootstrap({back_button:true});
             $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
-            
+            $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
             var on_success = function(data){
                 //$scope.items=data['tournaments'];
                 $scope.items=data['tournaments'];                                
                 var basic_sref='.edit_tournament_basic({id:item.tournament_id})';
-                var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';
-                var wizard_sref='.edit_tournament_wizard({id:item.tournament_id,wizard_step:1})';
+                var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';                
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('tournament_name',
                                                                                                             advanced_sref,
-                                                                                                            wizard_sref,
                                                                                                             basic_sref
                                                                                                            );                
                 _.map($scope.items, set_list_items_actions_and_args);
                 _.map($scope.items, listGeneration.set_active_inactive_icon);
 
                 var meta_tournament_items=data['meta_tournaments'];
-                var basic_sref='.edit_meta_tournament_basic({id:item.meta_tournament_id})';
-                var advanced_sref='.edit_meta_tournament_advanced({id:item.meta_tournament_id})';
-                var wizard_sref='.edit_meta_tournament_wizard({id:item.meta_tournament_id,wizard_step:1})';
+                basic_sref='.edit_meta_tournament_basic({id:item.meta_tournament_id})';
+                advanced_sref='.edit_meta_tournament_advanced({id:item.meta_tournament_id})';                
                 set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('meta_tournament_name',
                                                                                                         advanced_sref,
-                                                                                                        wizard_sref,
                                                                                                         basic_sref,
-                                                                                                        true
+                                                                                                        false
                                                                                                        );                
                 _.map(meta_tournament_items, set_list_items_actions_and_args);
-                $scope.meta_tournament_items = meta_tournament_items;
-                //$scope.items=$scope.items.concat(meta_tournament_items);
+                $scope.meta_tournament_items = meta_tournament_items;                
                 
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_tournaments',on_success,{event_name:$scope.event_name},{});                        
@@ -88,9 +83,10 @@ angular.module('event').controller(
                 //                                                                                             basic_sref
                 //                                                                                            );                
                 _.forEach($scope.items, function(tournament) {
-                    _.map(tournament.tournament_machines, function(i){i.actions_ui_sref_list=[];i.actions_ng_click_list=[{label:'Disable machine'},{label:'Remove machine'}];i.label_to_display=i.tournament_machine_name;});                    
+                    _.map(tournament.tournament_machines, listGeneration.generate_tournament_machine_actions('tournament_machine_name'));                    
+                    _.map(tournament.tournament_machines,function(i){i.actions_ui_sref_list=[];});
                 });
-                
+                //function(i){i.actions_ui_sref_list=[];i.actions_ng_click_list=[{label:'Disable machine'},{label:'Remove machine'}];i.label_to_display=i.tournament_machine_name;}                
                 
                 
             };                        
@@ -242,29 +238,6 @@ angular.module('event').controller(
             $scope.bootstrap({back_button:true});
             $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
 
-            // var generate_player_list_items_actions_and_args = function(display_label_field,advanced_sref,wizard_sref,basic_sref) {
-            //     var player_list_items_actions_and_args = function(i) {                                     
-            //         i.actions_ui_sref_list = [{label:"Advanced Editing",ui_sref:advanced_sref}];
-            //         if(i.wizard_configured == false){
-            //             basic_edit_action = {label:"Wizard Configuration",ui_sref:wizard_sref};
-            //         } else {
-            //             basic_edit_action = {label:"Basic Editing",ui_sref:basic_sref};
-            //         }
-            //         i.actions_ui_sref_list.splice(0,0,basic_edit_action);
-            //         i.actions_ng_click_list=[{label:"Toggle active",ng_click:'toggle_item_active(item,event_name)'}];
-            //         i.label_to_display=i[display_label_field];
-                    
-            //     };             
-            //     return player_list_items_actions_and_args;
-            // };
-            // var basic_sref='.edit_tournament_basic({id:item.tournament_id})';
-            // var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';
-            // var wizard_sref='.edit_tournament_wizard({id:item.tournament_id,wizard_step:1})';
-            // var player_list_items_actions_and_args=generate_player_list_items_actions_and_args('player_name',
-            //                                                                                    advanced_sref,
-            //                                                                                    wizard_sref,
-            //                                                                                    basic_sref
-            //                                                                                   );
             var set_list_items_ui_sref_and_args = listGeneration.generate_set_list_items_ui_sref_and_args(".add_existing_player_to_event({player_id:item.player_id})","player_name");
 
             var on_success = function(data){

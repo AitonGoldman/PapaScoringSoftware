@@ -20,14 +20,21 @@ angular.module('event_tournament_lib')
                  var toggle_item_active = function(item,event_name){
                      var id;
                      var rest_route;
-                     
-                     if(item.event_id!=undefined){
+
+                     //FIXME : building the rest_route and getting the appropriate id needs to be done better
+                     if(item.tournament_id==undefined){
                          id=item.event_id;
-                         rest_route='put_edit_event';
-                     } else {
+                         rest_route='put_edit_event';                         
+                     }
+                     if(item.tournament_id!=undefined && item.tournament_machine_id==undefined){
                          id=item.tournament_id;
-                         rest_route='put_edit_tournament';
-                     }                     
+                         rest_route='put_edit_tournament';                         
+                     }
+                     if(item.tournament_id!=undefined && item.tournament_machine_id!=undefined){
+                         id=item.tournament_id;
+                         rest_route='put_edit_tournament_machine';                         
+                     }
+                     
                      var on_success = function(data){
                          item.active=data['item'].active;
                          if(item.active == true){                        

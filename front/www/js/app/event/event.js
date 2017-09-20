@@ -65,30 +65,41 @@ angular.module('event').controller(
 
 angular.module('event').controller(
     'app.event.manage_tournament_machines_controller',[
-        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
-        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$timeout','$ionicActionSheet',
+        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$timeout,$ionicActionSheet) {            
             $scope.bootstrap();
             $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
+                       
+            $scope.remove_item = function(item){
+            var hideSheet = $ionicActionSheet.show({
+                destructiveText: 'Remove Machine',
+                titleText: 'Are you SURE you want to remove this machine?',
+                cancelText: 'Cancel',
+                cancel: function() {
+                    // add cancel code..
+                },
+                buttonClicked: function(index) {
+                    console.log(index);
+                    return true;
+                },
+                destructiveButtonClicked: function(index){
+                    eventTournamentLib.remove_item(item,$state.params.event_name);
+                    hideSheet();
+                }
+            });
+
+            };
             
-            var on_success = function(data){
-                //$scope.items=data['tournaments'];
+            var on_success = function(data){                
                 $scope.items=data['tournaments'];
-                
-                // var basic_sref='.edit_tournament_basic({id:item.tournament_id})';
-                // var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';
-                // var wizard_sref='.edit_tournament_wizard({id:item.tournament_id,wizard_step:1})';
-                // var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('tournament_name',
-                //                                                                                             advanced_sref,
-                //                                                                                             wizard_sref,
-                //                                                                                             basic_sref
-                //                                                                                            );                
+                $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
                 _.forEach($scope.items, function(tournament) {
                     _.map(tournament.tournament_machines, listGeneration.generate_tournament_machine_actions('tournament_machine_name'));                    
                     _.map(tournament.tournament_machines,function(i){i.actions_ui_sref_list=[];});
-                });
-                //function(i){i.actions_ui_sref_list=[];i.actions_ng_click_list=[{label:'Disable machine'},{label:'Remove machine'}];i.label_to_display=i.tournament_machine_name;}                
-                
-                
+                    _.map(tournament.tournament_machines, listGeneration.set_active_inactive_icon);
+                    tournament.tournament_machines = _.filter(tournament.tournament_machines, function(o) { return o.removed!=true; });
+
+                });                                
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_tournaments',on_success,{event_name:$scope.event_name},{});                        
         }]);
@@ -98,7 +109,7 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
             $scope.bootstrap();
-            
+            $scope.pop("text goes here AGAIN let's see how bug this can get oops mispeleed bog");            
             $scope.tournament_machines={tournament_id:$state.params.tournament_id};
             $scope.add_machine_func = function(){                
                 var filtered_values =  _.filter($scope.items, function(item) {                                

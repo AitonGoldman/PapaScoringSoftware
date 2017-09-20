@@ -25,7 +25,7 @@
     <link rel="stylesheet" media="screen and (max-device-width: 610px)" href="css/ionic.mobile.app.css">
     <link rel="stylesheet" media="screen and (min-device-width: 611px)" href="css/ionic.app.css">
     <link href="css/progress-wizard.min.css" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet" />
     <!--<link href="css/ionic.app.css" rel="stylesheet">-->
 
 
@@ -38,6 +38,7 @@
     <script src="lib/third_party/angular-resource.min.js"></script>
     <script src="lib/third_party/angular-file-upload.min.js"></script>
     <script src="https://cdn.jsdelivr.net/lodash/4.16.4/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
 
     <script src="js/main.js"></script>
     <script src="https://code.angularjs.org/1.5.3/angular-cookies.min.js"></script>
@@ -55,7 +56,8 @@
   </head>
 
   <body ng-app="pss">
-      <ion-nav-bar>
+    <toaster-container></toaster-container>
+    <ion-nav-bar>
         <ion-nav-buttons side="left">
         <div ui-view='pssAdminHeader'>
         </div>

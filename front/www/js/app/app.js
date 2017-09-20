@@ -1,8 +1,8 @@
 angular.module('app',['event_select','pss_admin','event','shared']);
 angular.module('app').controller(
     'app_controller',[
-        '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup','$http',
-        function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory,$ionicPopover,$ionicPopup,$http) {
+        '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup','$http','toaster',
+        function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory,$ionicPopover,$ionicPopup,$http,toaster) {
             if ($rootScope.credentials == undefined){
                 $rootScope.credentials=credentialsService;
             }
@@ -133,7 +133,10 @@ angular.module('app').controller(
                         console.log(data);                        
                     });
                 }
-            };            
+            };
+            $scope.pop = function(text){
+	        toaster.pop({type:'info',title:'title',body:text,timeout:0});
+	    };            
         }
     ]
 );

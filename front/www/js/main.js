@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('pss', ['ionic', 'ngAnimate','resource_wrapper','credentials','app','ngCookies','list_generation','event_tournament_lib','angularFileUpload'])
+angular.module('pss', ['ionic', 'ngAnimate','resource_wrapper','credentials','app','ngCookies','list_generation','event_tournament_lib','angularFileUpload','toaster'])
     .run(function($ionicPlatform) {
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

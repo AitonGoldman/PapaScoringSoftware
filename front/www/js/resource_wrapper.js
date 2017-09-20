@@ -156,6 +156,10 @@ angular.module('resource_wrapper')
                   rest_api['put_edit_tournament'] = $resource(rest_server+'/:event_name/tournament/:id',
                                                               {},
                                                               {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['put_edit_tournament_machine'] = $resource(rest_server+'/:event_name/tournament_machine/:id',
+                                                              {},
+                                                              {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  
                   rest_api['put_edit_meta_tournament'] = $resource(rest_server+'/:event_name/meta_tournament/:id',
                                                                    {},
                                                                    {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});

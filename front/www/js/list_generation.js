@@ -45,7 +45,7 @@ angular.module('list_generation')
                          add_action_ng_click_to_item(i,
                                                      build_action_ng_click('Toggle Active','toggle_item_active(item,event_name)'));
                          add_action_ng_click_to_item(i,
-                                                     build_action_ng_click('Remove Machine','toggle_item_active(item,event_name)'));                         
+                                                     build_action_ng_click('Remove Machine','remove_item(item,event_name)'));                         
                      };
                      return set_actions;
                  };

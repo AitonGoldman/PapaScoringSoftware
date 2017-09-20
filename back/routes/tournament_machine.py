@@ -20,6 +20,7 @@ def edit_tournament_machine_route(tournament_machine_id,request,app):
     existing_tournament_machine = app.tables.TournamentMachines.query.filter_by(tournament_machine_id=tournament_machine_id).first()    
     if existing_tournament_machine is None:
         raise BadRequest('Bad tournament machine submitted')
+    print input_data
     deserialize_json(existing_tournament_machine,input_data,app)    
     if existing_tournament_machine.removed:
          existing_tournament_machine.removed=True
@@ -89,6 +90,6 @@ def edit_tournament_machine(tables,tournament_machine_id):
     #tournament_machine_serializer = generate_generic_serializer(serializer.generic.ALL)
     tournament_machine_serializer = generate_tournament_machine_to_dict_serializer(serializer.generic.ALL)
 
-    return jsonify({'edited_tournament_machine':tournament_machine_serializer(edited_tournament_machine)})
+    return jsonify({'item':tournament_machine_serializer(edited_tournament_machine)})
     
 

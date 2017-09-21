@@ -55,7 +55,7 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {
             $scope.bootstrap({back_button:true});
-            $scope.event={};            
+            $scope.item={};            
             $scope.create_event_func = function(){                
                 var on_success = function(data){
                     // $scope.logged_in_user=data['new_event'];
@@ -66,9 +66,14 @@ angular.module('pss_admin').controller(
                     $scope.post_success = true;
                     
                 };                                
-                var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,{},{name:$scope.event.name});            
+                var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,{},$scope.item);            
 
             };
+            var on_get_success = function(data){
+                $scope.descriptions=data['descriptions'];
+            };                        
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_event_descriptions',on_get_success,{},{});                        
+            
         }
     ]);
 

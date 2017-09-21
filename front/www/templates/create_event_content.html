@@ -5,20 +5,28 @@
   </div>  
 </div>
 <div ng-if="post_success==undefined">
-  <form>
-      <label class="item item-input">
-        <input type="text" placeholder="Event Name" ng-model="event.name"/>        
-      </label>
-</div>
-<div class='row' ng-if="post_success==undefined">
-  <div class='col'>
+  <label class="item item-input">
+    <input type="text" placeholder="Event Name" ng-model="item.name"/>        
+  </label>
+  <div class="card">
+    <pss-text-input-basic field='queue_bump_amount' basic='true'/>
   </div>
-  <button ng-click='create_event_func()' type="button" class="padding button-pagraph col-50 button button-block button-positive">
-    Create Event
-  </button>
-  <div class='col'>
-  </div>    
+  <div class="card">
+    <pss-text-input-basic field='number_unused_tickets_allowed' basic='true'/>
+  </div>
+  <div class="card">
+    <pss-text-input-basic field='player_id_seq_start' basic='true'/>
+  </div>
+  <div class='row'>
+    <div class='col'>
+    </div>
+    <button ng-click='create_event_func()' type="button" class="padding button-pagraph col-50 button button-block button-positive">
+      Create Event
+    </button>
+    <div class='col'>
+    </div>    
+  </div>
 </div>
-</form>
+
 
 

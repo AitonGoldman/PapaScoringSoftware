@@ -1,8 +1,8 @@
 angular.module('app',['event_select','pss_admin','event','shared']);
 angular.module('app').controller(
     'app_controller',[
-        '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup','$http','toaster',
-        function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory,$ionicPopover,$ionicPopup,$http,toaster) {
+        '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup','$http','toaster','$ionicScrollDelegate',
+        function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory,$ionicPopover,$ionicPopup,$http,toaster,$ionicScrollDelegate) {
             if ($rootScope.credentials == undefined){
                 $rootScope.credentials=credentialsService;
             }
@@ -46,6 +46,7 @@ angular.module('app').controller(
             };
             $scope.bootstrap = function(options){               
                 //FIXME : rely on cookies to tell us if we are logged in after page reload                                
+                $ionicScrollDelegate.scrollTop();
                 $scope.state = $state;
                 if($state.current.name.indexOf('pss_admin')!=-1){
                     $state.params.event_name='pss_admin';

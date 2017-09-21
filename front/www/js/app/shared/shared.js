@@ -1,10 +1,10 @@
 angular.module('shared',[]);
 angular.module('shared').controller(
     'app.shared.edit_event_tournament_controller',[
-        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib','$http','FileUploader',
-        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib,$http,FileUploader ) {                        
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib','$http','FileUploader','$ionicScrollDelegate',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib,$http,FileUploader,$ionicScrollDelegate ) {                        
             $scope.bootstrap({back_button:true});
-            var header_links=[{icon:'ion-person',label:'Advanced Edit'}];            
+            var header_links=[{icon:'ion-edit',label:'Advanced Edit'}];            
             $scope.wizard_step = $state.params.wizard_step;                                    
             var edit_route = $state.current.data.edit_route;
             var get_route = $state.current.data.get_route;                        
@@ -61,6 +61,7 @@ angular.module('shared').controller(
             };
 
             var on_edit_success = function(data){                    
+                $ionicScrollDelegate.scrollTop();
                 $scope.post_results={};
                 $scope.post_results.title="Event Edited!";                    
                 var results = [];

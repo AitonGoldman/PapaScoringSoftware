@@ -161,10 +161,10 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration',
         function($scope, $state,resourceWrapperService,listGeneration ) {
             $scope.bootstrap({back_button:true});
-            $scope.tournament={};
+            $scope.item={};
 
             $scope.create_tournament_func = function(tournament){
-                if($scope.tournament["finals_style"]=="MULTI"){
+                if($scope.item["finals_style"]=="MULTI"){
                     create_multi_division_tournament_func(tournament);
                 } else {
                     create_normal_tournament_func(tournament);
@@ -187,8 +187,8 @@ angular.module('event').controller(
                     $scope.post_success = true;                        
 
                 };
-                var post_object = {multi_division_tournament_name:$scope.tournament.tournament_name,
-                                   number_of_divisions:$scope.tournament.number_of_divisions};
+                var post_object = {multi_division_tournament_name:$scope.item.tournament_name,
+                                   number_of_divisions:$scope.item.number_of_divisions};
                 var prom = resourceWrapperService.get_wrapper_with_loading('post_create_multi_division_tournament',
                                                                        on_success,{event_name:$scope.event_name},
                                                                        post_object);
@@ -217,8 +217,14 @@ angular.module('event').controller(
                 var prom = resourceWrapperService.get_wrapper_with_loading('post_create_tournament',
                                                                            on_success,
                                                                            {event_name:$scope.event_name},
-                                                                           $scope.tournament);
+                                                                           $scope.item);
             };
+            var on_get_success = function(data){
+                $scope.descriptions=data['descriptions'];
+            };                        
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_tournament_descriptions',on_get_success,{event_name:$state.params.event_name},{});                        
+
+            
         }]);
 
 angular.module('event').controller(

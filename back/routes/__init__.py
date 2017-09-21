@@ -13,3 +13,5 @@ import queue
 import multi_tournament
 import media_upload
 import machine
+import event_description
+import tournament_description

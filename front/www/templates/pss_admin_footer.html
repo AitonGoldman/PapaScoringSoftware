@@ -10,6 +10,11 @@
   <i class="icon ion-ios-photos-outline" ></i>
   Quick Links
 </a>
+<a ng-repeat='header_link in header_links' ui-sref='{{header_link.link}}' class="tab-item">
+  <i class="icon {{header_link.icon}}" ></i>
+  {{header_link.label}}
+</a>
+
 <a ng-click="openPopover($event)" class="tab-item">
   <img id="mobilePoop" class='mobile_logo' src='http://papa.org/wp-content/uploads/PAPAmenulogo1.png'>
 </a>    

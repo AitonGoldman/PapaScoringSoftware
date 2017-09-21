@@ -12,19 +12,19 @@
 </center>
 <form>
   <label class="item item-input">
-    <input type="text" placeholder="Event Name" ng-model="tournament.tournament_name"/>        
+    <input type="text" placeholder="Event Name" ng-model="item.tournament_name"/>        
   </label>
     <ion-list>
-      <ion-radio ng-model="tournament.finals_style" ng-value="'PAPA'">Single Division</ion-radio>
-      <ion-radio ng-model="tournament.finals_style" ng-value="'PPO'">Single Division With A/B Finals</ion-radio>
-      <ion-radio ng-model="tournament.finals_style" ng-value="'MULTI'">Multiple Divisions</ion-radio>
+      <ion-radio ng-model="item.finals_style" ng-value="'PAPA'">Single Division</ion-radio>
+      <ion-radio ng-model="item.finals_style" ng-value="'PPO'">Single Division With A/B Finals</ion-radio>
+      <ion-radio ng-model="item.finals_style" ng-value="'MULTI'">Multiple Divisions</ion-radio>
     </ion-list>
     <div class="list" ng-if='tournament.finals_style=="MULTI"'>
       <label class="item item-input item-select">
         <div class="input-label">
           Number of divisions
         </div>
-        <select ng-model='tournament.number_of_divisions'>
+        <select ng-model='item.number_of_divisions'>
           <option>4</option>
           <option>3</option>
           <option>2</option>
@@ -32,6 +32,38 @@
         </select>
       </label>
     </div>
+    <div class="card">
+      <pss-boolean-input-basic field='queuing' basic='true'/>
+    </div>
+    <div class="card">
+      <pss-text-input-basic field='manually_set_price' basic='true'/>
+    </div>
+    <div class="card">
+      <pss-boolean-input-basic field='discount' basic='true'/>
+    </div>
+    <div class="card" ng-if='item.discount==true'>
+      <pss-text-input-basic field='number_of_tickets_for_discount' basic='true'/>
+    </div>
+    <div class="card" ng-if='item.discount==true'>
+      <pss-text-input-basic field='discount_price' basic='true'/>
+    </div>
+    <div class="card">
+      <pss-boolean-input-basic field='limited_herb' basic='true'/>
+    </div>
+    <div class="card">
+      <pss-text-input-basic field='number_of_signifigant_scores' basic='true'/>
+    </div>
+    
+    <div class="card" ng-if='item.finals_style=="PAPA"'>
+      <pss-text-input-basic field='number_of_qualifiers' basic='true'/>
+    </div>
+    <div class="card" ng-if='item.finals_style=="PPO"'>
+      <pss-text-input-basic field='number_of_qualifiers_for_a_when_finals_style_is_ppo' basic='true'/>
+    </div>
+    <div class="card" ng-if='item.finals_style=="PPO"'>
+      <pss-text-input-basic field='number_of_qualifiers_for_b_when_finals_style_is_ppo' basic='true'/>
+    </div>
+    
     <div class='row'>
       <div class='col'>
       </div>

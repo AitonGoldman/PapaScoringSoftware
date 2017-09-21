@@ -10,7 +10,7 @@ import datetime
 
 ACTIONS_TO_ADD_TICKET_SUMMARY_TO = ["Score Recorded","Ticket Purchase","Player Ticket Purchase Complete"]
 
-def create_event(user_creating_event, tables, input_data, new_event_tables,event_owner_pss_user_id):
+def create_event(user_creating_event, tables, input_data, new_event_tables,event_owner_pss_user_id,commit=False):
     secret_key=b64encode(os.urandom(24)).decode('utf-8')        
     new_event = tables.Events(name=input_data['name'],flask_secret_key=secret_key)    
     new_event.event_creator_pss_user_id=event_owner_pss_user_id
@@ -22,9 +22,10 @@ def create_event(user_creating_event, tables, input_data, new_event_tables,event
     existing_user_in_new_event = new_event_tables.PssUsers.query.filter_by(pss_user_id=user_creating_event.pss_user_id).first()
     existing_user_in_new_event.event_roles.append(td_role)
     new_event_tables.db_handle.session.add(new_event_user)
-    user_creating_event.events.append(new_event)
-    new_event_tables.db_handle.session.commit()
-    tables.db_handle.session.commit()        
+    user_creating_event.events.append(new_event)    
+    if commit:
+        new_event_tables.db_handle.session.commit()
+        tables.db_handle.session.commit()        
     return new_event
 
 def create_event_tables(pss_config,new_event_app):

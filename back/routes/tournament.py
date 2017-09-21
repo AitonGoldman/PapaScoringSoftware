@@ -102,7 +102,8 @@ def create_tournament_route(request,app):
                                                      input_data['tournament_name'],
                                                      multi_division_tournament_name,
                                                      multi_division_tournament_id,
-                                                     finals_style=finals_style)    
+                                                     finals_style=finals_style)
+    deserialize_json(new_tournament,input_data,app)
     app.tables.db_handle.session.commit()
     return new_tournament
 

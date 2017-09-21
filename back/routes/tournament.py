@@ -143,9 +143,23 @@ def get_tournaments(tables):
     meta_tournaments = tables.MetaTournaments.query.all()
     meta_tournament_serializer = generate_generic_serializer(serializer.generic.ALL)
 
-    return jsonify({'tournaments':[tournament_serializer(tournament) for tournament in tournaments],
-                    'meta_tournaments':[meta_tournament_serializer(meta_tournament) for meta_tournament in meta_tournaments]})
+    #return jsonify({'tournaments':[tournament_serializer(tournament) for tournament in tournaments],
+    #                'meta_tournaments':[meta_tournament_serializer(meta_tournament) for meta_tournament in meta_tournaments]})
 
+    response = jsonify({'tournaments':[tournament_serializer(tournament) for tournament in tournaments],
+                        'meta_tournaments':[meta_tournament_serializer(meta_tournament) for meta_tournament in meta_tournaments]})
+    if len(tournaments) == 0:
+        response.set_cookie('wizard_mode','2')        
+    if len(tournaments) == 1 and len(tournaments[0].tournament_machines)==0:        
+        response.set_cookie('wizard_mode','3')
+    if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '5':        
+        response.set_cookie('wizard_mode','666')
+    if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '3':        
+        response.set_cookie('wizard_mode','4')
+        
+    return response
+
+    
 @blueprints.event_blueprint.route('/tournament/<tournament_id>',methods=['GET'])
 @load_tables
 def get_tournament(tables,tournament_id):    

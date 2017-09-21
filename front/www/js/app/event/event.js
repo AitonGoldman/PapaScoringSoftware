@@ -3,7 +3,9 @@ angular.module('event').controller(
     'app.event_controller',[
         '$scope','$state','resourceWrapperService','listGeneration',
         function($scope, $state,resourceWrapperService,listGeneration ) {
-            $scope.bootstrap({back_button:true});            
+            $scope.bootstrap({back_button:true});
+            $scope.check_for_hiding_based_on_wizard();
+            $scope.wizard_mode_pop();                            
         }]);
 
 angular.module('event').controller(
@@ -31,14 +33,21 @@ angular.module('event').controller(
 
 angular.module('event').controller(
     'app.event.manage_tournaments_controller',[
-        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
-        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$cookies',
+        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$cookies) {
             $scope.bootstrap({back_button:true});
+            $scope.check_for_hiding_based_on_wizard();            
             $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
             $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
             var on_success = function(data){
                 //$scope.items=data['tournaments'];
-                $scope.items=data['tournaments'];                                
+                $scope.items=data['tournaments'];
+                $scope.wizard_mode_pop();                                
+                var wizard_mode = $cookies.get('wizard_mode');
+                if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '3' && $scope.items.length==1 && $scope.items[0].tournament_machines.length > 0){
+                    $scope.pop("all done");
+                }
+
                 var basic_sref='.edit_tournament_basic({id:item.tournament_id})';
                 var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';                
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('tournament_name',
@@ -46,6 +55,7 @@ angular.module('event').controller(
                                                                                                             basic_sref
                                                                                                            );                
                 _.map($scope.items, set_list_items_actions_and_args);
+                _.map($scope.items, listGeneration.set_add_machine_action);
                 _.map($scope.items, listGeneration.set_active_inactive_icon);
 
                 var meta_tournament_items=data['meta_tournaments'];
@@ -108,8 +118,7 @@ angular.module('event').controller(
     'app.event.manage_tournament_machines.add_tournament_machine_controller',[
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
-            $scope.bootstrap();
-            $scope.pop("text goes here AGAIN let's see how bug this can get oops mispeleed bog");            
+            $scope.bootstrap();            
             $scope.tournament_machines={tournament_id:$state.params.tournament_id};
             $scope.add_machine_func = function(){                
                 var filtered_values =  _.filter($scope.items, function(item) {                                

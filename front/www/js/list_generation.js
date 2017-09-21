@@ -51,20 +51,29 @@ angular.module('list_generation')
                  };
                  
                  //needs some cleaning up
-                 var generate_set_list_items_actions_and_args = function(display_label_field,advanced_sref,basic_sref,display_active_toggle) {
+                 var generate_set_list_items_actions_and_args = function(display_label_field,
+                                                                         advanced_sref,
+                                                                         basic_sref,                                                                         
+                                                                         display_active_toggle) {
                      var set_list_items_actions_and_args = function(i) {                                                              
                          i.label_to_display=i[display_label_field];
                          if(display_active_toggle==undefined||display_active_toggle==true){
                              add_action_ng_click_to_item(i,
                                                          build_action_ng_click('Toggle Active','toggle_item_active(item,event_name)'));
                          }                                                  
-                         add_action_ui_sref_to_item(i,
-                                                    build_action_ui_sref('Advanced Editing',advanced_sref));
+                         //add_action_ui_sref_to_item(i,
+                         //build_action_ui_sref('Advanced Editing',advanced_sref));
                          add_action_ui_sref_to_item(i,
                                                     build_action_ui_sref('Basic Editing',basic_sref));
                      };             
                      return set_list_items_actions_and_args;
                  };
+
+                 var set_add_machine_action = function(i){                     
+                     add_action_ui_sref_to_item(i,
+                                                build_action_ui_sref('Add Machines','.add_tournament_machine({tournament_id:item.tournament_id})'));
+                };                
+
                  
                  var set_active_inactive_icon = function(i){                     
                      if(i.active == undefined){                                                
@@ -82,7 +91,8 @@ angular.module('list_generation')
                      toggle_view_item_actions:toggle_view_item_actions,
                      generate_set_list_items_actions_and_args:generate_set_list_items_actions_and_args,
                      set_active_inactive_icon:set_active_inactive_icon,
-                     generate_tournament_machine_actions:generate_tournament_machine_actions
+                     generate_tournament_machine_actions:generate_tournament_machine_actions,
+                     set_add_machine_action:set_add_machine_action
                  };
              }
              ]

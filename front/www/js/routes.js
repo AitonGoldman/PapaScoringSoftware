@@ -509,6 +509,30 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },params: {
             item: {value:{}}
         }
+    }).state('app.event.manage_tournaments.add_tournament_machine', {
+        cache:false,
+        url: '/add_tournament_machine/:tournament_id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/add_tournament_machine_content.html',
+                controller: 'app.event.manage_tournament_machines.add_tournament_machine_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'
+            },
+            'post_success@app.event.manage_tournaments.add_tournament_machine':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.manage_tournaments.add_tournament_machine':{
+                templateUrl: 'templates/manage_tournament_add_tournament_machine_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Add Machine",
+            back_title: "Add Machine",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
     }).state('app.event.manage_tournament_machines', {
         cache:false,
         url: '/manage_tournament_machines',

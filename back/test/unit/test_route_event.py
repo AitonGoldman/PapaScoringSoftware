@@ -45,5 +45,9 @@ class RouteEventTest(PssUnitTestBase):
         with self.assertRaises(Exception) as cm:
             orm_factories.create_event_tables(pss_config_mock,self.mock_new_app)
         
-        
+    def test_get_events_in_event(self):
+        pass
+
+    def test_wizard_mode_cookie(self):
+        pass
     

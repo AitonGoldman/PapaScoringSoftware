@@ -51,7 +51,9 @@ def create_tournament_machine_route(machine_id,tournament_id,app):
     app.tables.db_handle.session.add(new_tournament_machine)
     existing_tournament.tournament_machines.append(new_tournament_machine)    
     if existing_tournament_machine is None:        
-        orm_factories.create_queue_for_tournament_machine(app,new_tournament_machine,existing_tournament.queue_size)        
+        orm_factories.create_queue_for_tournament_machine(app,new_tournament_machine,existing_tournament.queue_size)
+    existing_event = app.tables.Events.query.filter_by(event_id=existing_tournament.event_id).first()
+    existing_event.wizard_configured = True
     #app.tables.db_handle.session.commit()
     
 

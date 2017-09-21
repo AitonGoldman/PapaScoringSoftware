@@ -48,13 +48,22 @@ def get_event_field_descriptions():
     return {'long_descriptions':long_descriptions,'short_descriptions':short_descriptions}
     
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['GET'])
+@blueprints.event_blueprint.route('/event',methods=['GET'])
 @load_tables
 def get_events(tables):                    
     events = tables.Events.query.all()
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        
     #FIXME : pss_admin should not be hard coded here
-    return jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})
-
+    #return jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})
+    response = jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})
+    if len(events) == 1:
+        response.set_cookie('wizard_mode','0')            
+    if len(events) == 2 and events[1].wizard_configured is not True:
+        response.set_cookie('wizard_mode','1')
+    if len(events) == 2 and events[1].wizard_configured == True:
+        response.set_cookie('wizard_mode','666')        
+        
+    return response
 
 @blueprints.pss_admin_event_blueprint.route('/event/<event_id>',methods=['GET'])
 @load_tables
@@ -65,7 +74,11 @@ def get_event(tables,event_id):
     if event.event_creator_pss_user_id != current_user.pss_user_id:
         raise BadRequest('Can not get event details if it is not your event')
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.ALL)            
-    return jsonify({'item':event_serializer(event),'descriptions':get_event_field_descriptions()})
+
+    #return jsonify({'item':event_serializer(event),'descriptions':get_event_field_descriptions()})
+    response =  jsonify({'item':event_serializer(event),'descriptions':get_event_field_descriptions()})
+    response.set_cookie('wizard_mode',"")
+    return response
 
 
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['POST'])

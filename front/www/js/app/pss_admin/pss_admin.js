@@ -5,11 +5,11 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
         function($scope, $state,resourceWrapperService,listGeneration, eventTournamentLib) {
             $scope.bootstrap({back_button:false});            
-            
             $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
             
             var on_success = function(data){
-                $scope.items=data['events'];                
+                $scope.items=data['events'];
+                //$scope.wizard_mode_pop();                
                 var basic_sref='.edit_event_basic({id:item.event_id})';
                 var advanced_sref='.edit_event_advanced({id:item.event_id})';                
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('event_name',
@@ -28,6 +28,7 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope ) {
             $scope.bootstrap({back_button:true});
+            
             $scope.enable_back_button();
             $scope.pss_user={};            
             $scope.login_func = function(rest_resource,event){                

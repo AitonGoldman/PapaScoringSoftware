@@ -9,8 +9,43 @@ angular.module('app').controller(
             $scope.test_alert = function(message){
                 alert(message);
             };
+            $scope.check_for_hiding_based_on_wizard = function(){
+                var wizard_mode = $cookies.get('wizard_mode');
+                console.log(wizard_mode);
+                if(wizard_mode != '666'){
+                    $rootScope.hide_based_on_cookie=false;
+                }
+            };
+
+            $scope.wizard_mode_pop = function(){
+                var wizard_mode = $cookies.get('wizard_mode');
+                //need to check if logged in before toasting
+                if(wizard_mode != undefined && wizard_mode != '666' && $rootScope.is_logged_in==true){
+                    if($state.current.name=='app.pss_admin' && wizard_mode == '0'){
+                        $scope.pop("Wizard mode activated!  Click 'Create Event'");
+                    }
+                    if($state.current.name=='app.pss_admin' && wizard_mode == '1'){
+                        $scope.pop("Event created. Go create a tourney");
+                    }
+                    if($state.current.name=='app.event' && (wizard_mode == '1' || wizard_mode == '2')){
+                        $scope.pop("Click manage tournaments");
+                        return false;
+                    }
+                    if($state.current.name=='app.event.manage_tournaments' && (wizard_mode == '2')){
+                        $scope.pop("Click create tournament");
+                    }
+                    if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '3'){
+                        $scope.pop("Click tournament and add machines");
+                    }
+                    if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '4'){
+                        $scope.pop("All Done!");
+                        $cookies.put('wizard_mode','5');                        
+                    }                                                                                
+                }                
+                return true;
+            };
             $scope.bootstrap = function(options){               
-                //FIXME : rely on cookies to tell us if we are logged in after page reload                
+                //FIXME : rely on cookies to tell us if we are logged in after page reload                                
                 $scope.state = $state;
                 if($state.current.name.indexOf('pss_admin')!=-1){
                     $state.params.event_name='pss_admin';
@@ -26,7 +61,6 @@ angular.module('app').controller(
                 $rootScope.is_logged_in=credentialsService.is_logged_in($scope.event_name);
                 //var parent_state = 
                 $rootScope.back_button_title=$state.get('^').data.back_title;
-                
             };
             
             $rootScope.pss_admin_logout = function(event){

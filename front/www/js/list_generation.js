@@ -81,8 +81,10 @@ angular.module('list_generation')
                     }
                     if(i.active == true){                        
                         i.icon='ion-play';
+                        i.icon_color='green';
                     } else {                        
                         i.icon='ion-stop';
+                        i.icon_color='red';
                     }                     
                  };
 

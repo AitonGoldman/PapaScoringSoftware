@@ -4,6 +4,7 @@ angular.module('shared').controller(
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib','$http','FileUploader',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib,$http,FileUploader ) {                        
             $scope.bootstrap({back_button:true});
+            var header_links=[{icon:'ion-person',label:'Advanced Edit'}];            
             $scope.wizard_step = $state.params.wizard_step;                                    
             var edit_route = $state.current.data.edit_route;
             var get_route = $state.current.data.get_route;                        
@@ -14,11 +15,13 @@ angular.module('shared').controller(
             var url = "";
             if(edit_route=="put_edit_tournament"){
                 url="http://0.0.0.0:8000/"+$state.params.event_name+"/media_upload/jpg_pic";
+                header_links[0]['link'] = '.manage_tournaments.edit_tournament_advanced({id:'+$state.params.id+'})';
             }
             if(edit_route=="put_edit_event"){
                 url = "http://0.0.0.0:8000/pss_admin/media_upload/jpg_pic";
+                header_links[0]['link'] = '.pss_admin.edit_event_advanced({id:'+$state.params.id+'})';
             }            
-            
+            $scope.add_header_links(header_links);
             $scope.uploader = new FileUploader({url:url,formData:[file_form_data]});            
             $scope.uploader.onSuccessItem=function(item, response, status, headers){
                 $scope.item.img_url=response.data;                

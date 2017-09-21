@@ -39,8 +39,10 @@ angular.module('event_tournament_lib')
                          item.active=data['item'].active;
                          if(item.active == true){                        
                              item.icon='ion-play';
+                             item.icon_color='green';
                          } else {                        
                              item.icon='ion-stop';
+                             item.icon_color='red';                             
                          }                                              
                      };
                      

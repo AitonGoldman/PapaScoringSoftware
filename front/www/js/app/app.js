@@ -62,6 +62,10 @@ angular.module('app').controller(
                 //var parent_state = 
                 $rootScope.back_button_title=$state.get('^').data.back_title;
             };
+
+            $scope.add_header_links = function(links){
+                $rootScope.header_links=links;                
+            };
             
             $rootScope.pss_admin_logout = function(event){
                 credentialsService.remove_credentials_on_logout(event);                

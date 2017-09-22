@@ -88,8 +88,7 @@ angular.module('event').controller(
                 cancel: function() {
                     // add cancel code..
                 },
-                buttonClicked: function(index) {
-                    console.log(index);
+                buttonClicked: function(index) {                    
                     return true;
                 },
                 destructiveButtonClicked: function(index){
@@ -149,8 +148,7 @@ angular.module('event').controller(
 
             };
             var on_get_success = function(data){                
-                $scope.items = data['machines'];
-                console.log($scope.items);
+                $scope.items = data['machines'];                
             };
             var prom =resourceWrapperService.get_wrapper_with_loading('get_machines',on_get_success,{event_name:$scope.event_name},{});                        
 
@@ -392,3 +390,106 @@ angular.module('event').controller(
             
             
         }]);
+
+angular.module('event').controller(
+    'app.event.token_purchase_controller',[
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','$filter',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,$filter ) {                        
+            $scope.bootstrap({back_button:true});                        
+            $scope.total_cost=0;
+            $scope.filter_for={};
+            $scope.filtered_player={};            
+            $scope.on_ticket_change = function(){                
+                console.log($scope.token_info.tournament_ticket_prices);
+                console.log($scope.token_info.meta_tournament_ticket_prices);                
+                $scope.total_cost=0;
+                _.map($scope.token_info.tournament_ticket_prices, function(i){
+                    if(i.purchase!=undefined){
+                        $scope.total_cost=$scope.total_cost+i.purchase.price;                        
+                    }
+                });
+                _.map($scope.token_info.meta_tournament_ticket_prices, function(i){
+                    if(i.purchase!=undefined){
+                        $scope.total_cost=$scope.total_cost+i.purchase.price;
+                    }
+                });
+
+            };
+            $scope.on_change = function(){
+                $scope.token_info_gotten=undefined;
+                var filtered_players = _.filter($scope.players,function(p){
+                    if(parseInt(p.event_player.event_player_id) == parseInt($scope.filter_for.filter_for)){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                if(filtered_players.length==1){
+                    $scope.filtered_player=filtered_players[0];
+                }
+                if(filtered_players.length==0){
+                    $scope.filtered_player={};
+                } 
+                
+            };
+            $scope.purchase = function(){
+                console.log($scope.token_info);
+                var on_post_success = function(data){
+                    $scope.post_results={};
+                    $scope.post_results.title="Tickets Purchased!";
+                    $scope.post_results.results=[];
+                    console.log(data.purchase_summary);
+                    var total_purchase_cost = 0;
+                    _.forEach(data.purchase_summary,function(i){
+                        if(i[2].amount==undefined){
+                            return;
+                        }
+                        total_purchase_cost=total_purchase_cost+i[2].price;
+                        $scope.post_results.results.push([i[0],i[2].amount+" : $"+i[2].price]);
+                    });
+                    $scope.post_results.results.push(["Total Cost","$"+total_purchase_cost]);
+                    $scope.post_success = true;
+
+                };
+
+                var token_purchases={'tournament_token_counts':[],
+                                     'meta_tournament_token_counts':[]};
+                _.map($scope.token_info.tournament_ticket_prices, function(i){
+                    if(i.purchase!=undefined){
+                        token_purchases.tournament_token_counts.push({token_count:i.purchase.amount,tournament_id:i.tournament_id});
+                        //$scope.total_cost=$scope.total_cost+i.purchase.price;                        
+                    }
+                });
+
+                var purchase_token_prom = resourceWrapperService.get_wrapper_with_loading('post_token_purchase_desk',
+                                                                                          on_post_success,
+                                                                                          {event_name:$scope.event_name,player_id:$scope.filtered_player.player_id},
+                                                                                          token_purchases);            
+                
+            };
+            $scope.get_token_info_for_player_func = function(){
+                var on_get_success = function(data){
+                    $scope.token_info=data;
+                    $scope.token_info_gotten=true;
+                    console.log(data);
+                };
+                var get_token_info_prom = resourceWrapperService.get_wrapper_with_loading('get_token_info_for_player',
+                                                                                          on_get_success,
+                                                                                          {event_name:$scope.event_name,player_id:$scope.filtered_player.player_id},
+                                                                                          {});            
+                
+            };
+            $scope.purchase_tokens_func = function(){                
+                                
+                // var purchase_prom = resourceWrapperService.get_wrapper_with_loading('post_purchase_tokens',
+                //                                                                     on_post_success,
+                //                                                                     {event_name:$scope.event_name,player_id:$scope.filtered_player.player_id},
+                //                                                                     $scope.tokens);            
+
+            };
+            var token_prom = resourceWrapperService.get_wrapper_with_loading('get_event_players',
+                                                                             function(data){$scope.players=data['existing_event_players'];},
+                                                                             {event_name:$scope.event_name},
+                                                                             {});                                    
+        }
+    ]);

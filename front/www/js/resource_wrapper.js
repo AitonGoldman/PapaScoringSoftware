@@ -86,8 +86,8 @@ angular.module('resource_wrapper')
                   };
                   
                   var rest_api = {};
-                  //var rest_server = "http://192.168.1.178:8000";
-                  var rest_server = "http://0.0.0.0:8000";                  
+                  var rest_server = "http://192.168.1.178:8000";
+                  //var rest_server = "http://0.0.0.0:8000";                  
                   var timeout=5000;
                   rest_api['get_events'] = $resource(rest_server+'/pss_admin/event',
                                                      {},
@@ -101,9 +101,16 @@ angular.module('resource_wrapper')
                   rest_api['get_players'] = $resource(rest_server+'/:event_name/player',
                                                           {},
                                                       {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_event_players'] = $resource(rest_server+'/:event_name/event_player',
+                                                            {},
+                                                            {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
                   rest_api['get_player'] = $resource(rest_server+'/pss_admin/player/:player_id',
                                                      {},
                                                      {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_token_info_for_player'] = $resource(rest_server+'/:event_name/token/player_id/:player_id',
+                                                                    {},
+                                                                    {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  
                   rest_api['get_event_descriptions'] = $resource(rest_server+'/pss_admin/event_description',
                                                                  {},
                                                                  {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
@@ -149,6 +156,9 @@ angular.module('resource_wrapper')
                   rest_api['post_create_meta_tournament'] = $resource(rest_server+'/:event_name/meta_tournament',
                                                                  {},
                                                                  {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['post_token_purchase_desk'] = $resource(rest_server+'/:event_name/token/player_id/:player_id',
+                                                                   {},
+                                                                   {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   
                   rest_api['post_create_multi_division_tournament'] = $resource(rest_server+'/:event_name/multi_tournament',
                                                                                 {},

@@ -573,6 +573,27 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             back_title: "Add Machine",
             quick_links_url: 'templates/event_quick_links.html'
         }
+    }).state('app.event.token_purchase', {
+        cache:false,
+        url: '/token',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/token_purchase_content.html',
+                controller: 'app.event.token_purchase_controller'
+                
+            },
+            'post_success@app.event.token_purchase':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.event.token_purchase':{
+                templateUrl: 'templates/token_purchase_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }
+            
+        },data: {
+            title: "Token Purchase"
+        }
     })
 
     ;}]);

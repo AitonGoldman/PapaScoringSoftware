@@ -224,19 +224,29 @@ def get_player_tokens_count(tables,player_id):
         token_count_per_tournament.append({'tournament_name':tournament.tournament_name,
                                            'tournament_id':tournament.tournament_id,
                                            'count':count})
-        tournament_ticket_prices.append(calculate_list_of_tickets_and_prices_for_player(count,
-                                                                                        player,
-                                                                                        current_app,
-                                                                                        tournament=tournament))        
+        #tournament_ticket_prices.append(calculate_list_of_tickets_and_prices_for_player(count,
+        #                                                                                player,
+        #                                                                                current_app,
+        #                                                                                tournament=tournament))
+        ticket_price_list = calculate_list_of_tickets_and_prices_for_player(count,
+                                                                            player,
+                                                                            current_app,
+                                                                            tournament=tournament)
+        tournament_ticket_prices.append({'tournament_id':tournament.tournament_id,
+                                         'tournament_name':tournament.tournament_name,
+                                         'prices':ticket_price_list})                
     for meta_tournament in tables.MetaTournaments.query.all():
         count = token_helpers.get_number_of_unused_tickets_for_player(player,current_app,meta_tournament=meta_tournament)
         token_count_per_meta_tournament.append({'meta_tournament_name':meta_tournament.meta_tournament_name,
                                                 'meta_tournament_id':meta_tournament.meta_tournament_id,
                                                 'count':count})
-        meta_tournament_ticket_prices.append(calculate_list_of_tickets_and_prices_for_player(count,
-                                                                                             player,
-                                                                                             current_app,
-                                                                                             meta_tournament=meta_tournament))
+        ticket_prices_list = calculate_list_of_tickets_and_prices_for_player(count,
+                                                                             player,
+                                                                             current_app,
+                                                                             meta_tournament=meta_tournament)
+        meta_tournament_ticket_prices.append({'meta_tournament_id':meta_tournament.meta_tournament_id,
+                                              'meta_tournament_name':meta_tournament.meta_tournament_name,
+                                              'prices':ticket_price_list})
         
     return jsonify({'tournament_token_count':token_count_per_tournament,
                     'meta_tournament_token_count':token_count_per_meta_tournament,

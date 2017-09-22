@@ -307,6 +307,7 @@ angular.module('app').filter('playerSearch', function() {
     };
 });
 
+
 angular.module('app').filter('machineSearch', function() {
 
   // Create the return function

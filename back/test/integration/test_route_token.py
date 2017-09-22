@@ -176,7 +176,8 @@ class RouteTokenTest(pss_integration_test_existing_tournament_and_metatournament
             self.assertEquals(results['message'],'Fuck off, Ass Wipe')
             
             
-            
+    def test_get_token_info(self):        
+        pass
             
     # test bad input
     

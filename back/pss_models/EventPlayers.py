@@ -6,8 +6,8 @@ def generate_event_players_class(db_handle,event_name):
         # pylint: disable=no-init
         # pylint can't find SQLAlchemy's __init__() method for some reason        
         __tablename__="event_players_"+event_name                
-        #FIXME : rename this event_player_number
-        event_player_id = db_handle.Column(db_handle.Integer, Sequence('event_player_seq_'+event_name))
+        #FIXME : rename this event_player_number        
+        event_player_id = db_handle.Column(db_handle.Integer, Sequence('event_player_seq_'+event_name,start=100))
         player_id = db_handle.Column('player_id', db_handle.Integer, db_handle.ForeignKey('players.player_id'),primary_key=True)
         event_player_pin = db_handle.Column(db_handle.Integer)        
         ifpa_ranking = db_handle.Column(db_handle.Integer)        

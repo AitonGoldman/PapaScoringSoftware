@@ -84,6 +84,49 @@ def create_user(flask_app,username,
 
     return user
 
+def check_user_create_is_valid(input_data, app):            
+    tables = app.tables
+    
+    if 'username' not in input_data or 'password' not in input_data or 'first_name' not in input_data or 'last_name' not in input_data:        
+        raise BadRequest('Information missing')
+    if 'event_role_id' not in input_data and 'role_id' not in input_data:
+        raise BadRequest('Information missing')
+    if 'event_role_id' in input_data and 'role_id' in input_data:
+        raise BadRequest('Naughty Naughty')        
+    
+    existing_user=tables.PssUsers.query.filter_by(username=input_data['username']).first()
+    #FIXME : needs to be more extensive of a check (i.e. check actual name, etc)
+    if existing_user is not None:
+        raise Conflict('Username %s already used.' % existing_user.username)
+    if 'extra_title' in input_data:
+        extra_title = input_data['extra_title']
+    else:
+        extra_title = None    
+    existing_user=tables.PssUsers.query.filter_by(first_name=input_data['first_name'],
+                                                  last_name=input_data['last_name'],
+                                                  extra_title=extra_title).first()
+    if existing_user is not None:
+        raise Conflict('User with name %s already created.' % existing_user)
+    
+    if 'role_id' in input_data:
+        pss_user_role = tables.AdminRoles.query.filter_by(admin_role_id=int(input_data['role_id'])).first()
+        if pss_user_role is None:
+            raise BadRequest('Role specified does not exist')
+        new_user = create_user(app,input_data['username'],
+                               input_data['first_name'],input_data['last_name'],
+                               input_data['password'],admin_roles=[pss_user_role])        
+    if 'event_role_id' in input_data:
+        pss_event_user_role = tables.EventRoles.query.filter_by(event_role_id=int(input_data['event_role_id'])).first()
+        if pss_event_user_role is None:
+            raise BadRequest('Role specified does not exist')
+        new_user = create_user(app,input_data['username'],
+                               input_data['first_name'],input_data['last_name'],
+                               input_data['password'],event_roles=[pss_event_user_role])
+    if 'extra_title' in input_data:
+        new_user.extra_title = input_data['extra_title']
+                
+    return new_user
+
 
 def populate_player(flask_app,new_player,
                     ifpa_ranking,

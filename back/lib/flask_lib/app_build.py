@@ -13,6 +13,7 @@ import datetime
 import blueprints
 import routes
 #from flask_marshmallow import Marshmallow
+from flask_mail import Mail
 
 def generate_check_event_config(pss_config):
     def check_event_config():
@@ -37,6 +38,14 @@ def get_event_app(app, pss_config):
 def get_base_app(app, pss_config):    
     app.config['DEBUG']=True
     app.config['SESSION_COOKIE_PATH']='/%s'%app.name
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USE_SSL'] = True
+    #FIXME : need a null check for mail info
+    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')    
+    mail = Mail(app)
+    app.mail=mail
     app.json_encoder = CustomJSONEncoder            
     principals = Principal(app)    
     app.my_principals = principals    

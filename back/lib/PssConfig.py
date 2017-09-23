@@ -39,6 +39,6 @@ class PssConfig():
         app.secret_key = app.event_config['flask_secret_key']
         for key,value in app.event_config.iteritems():
             if os.getenv(key,None):
-                app.event_config[key]=os.getenv(key)
+                app.event_config[key]=os.getenv(key)        
         return config_dict
         

@@ -594,6 +594,50 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },data: {
             title: "Token Purchase"
         }
+    }).state('app.register_new_pss_user', {
+        cache:false,
+        url: '/register_new_pss_user',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/register_new_pss_user_content.html',
+                controller: 'app.register_new_pss_user_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.register_new_pss_user':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.register_new_pss_user':{
+                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "Register new user"
+        }
+    }).state('app.register_new_pss_user_confirm', {
+        cache:false,
+        url: '/register_new_pss_user_confirm',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/register_new_pss_user_confirm_content.html',
+                controller: 'app.register_new_pss_user_confirm_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            },
+            'post_success@app.register_new_pss_user_confirm':{
+                templateUrl: 'templates/generic_post_success.html'//,
+                //controller: 'pss_admin_controller'
+            },
+            'post_success_buttons@app.register_new_pss_user_confirm':{
+                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
+                //controller: 'pss_admin_controller'
+            }            
+        },data: {
+            title: "New User Activated!"
+        }
     })
 
     ;}]);

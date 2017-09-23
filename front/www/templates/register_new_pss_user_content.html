@@ -1,0 +1,51 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <h2>A confirmation email has been sent.</h2>
+  Your information has been submitted, and an email has been sent to you with a confirmation link.  Your account will not be activated until you click on the confirmation link.  The email should arrive sometime in the next hour.  
+</div>
+<div ng-if="post_success==undefined">
+  <form name="myForm">
+    <div class='list'>
+      <div class="item item-input-inset item-borderless">
+        <span class="input-label">First Name</span>
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="First Name" ng-model="new_pss_user.first_name">
+        </label>
+      </div>
+      <div class="item item-input-inset item-borderless">
+        <span class="input-label">Last Name</span>
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="Last Name" ng-model="new_pss_user.last_name">
+        </label>
+      </div>
+      <div class="item item-input-inset item-borderless">
+        <span class="input-label">User Name</span>
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="User Name" ng-model="new_pss_user.username">
+        </label>
+      </div>      
+      <div class="item item-input-inset item-borderless">
+        <span class="input-label">Password</span>
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="Password" ng-model="new_pss_user.password">
+        </label>
+      </div>      
+      <div class="item item-input-inset item-borderless">
+        <span class="input-label">Email address</span>
+        <label class="item-input-wrapper">
+          <input type="text" placeholder="Email Address" ng-model="new_pss_user.email">
+        </label>
+      </div>      
+      
+    </div>
+    <div class='row'>
+      <div class='col'>
+      </div>
+      <button ng-click='request_register_pss_user_func()' type="button" class="padding button-pagraph col-50 button button-block button-positive">
+        Submit
+      </button>
+      <div class='col'>
+      </div>    
+    </div>
+
+  </form>
+</div>

@@ -33,3 +33,4 @@ enum34==1.1.6
 sendgrid==3.6.3
 marshmallow-sqlalchemy==0.13.1
 flask-marshmallow==0.8.0
+flask-mail==0.9.1

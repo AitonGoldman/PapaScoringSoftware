@@ -1,4 +1,4 @@
-angular.module('app',['event_select','pss_admin','event','shared']);
+angular.module('app',['event_select','pss_admin','event','shared','register']);
 angular.module('app').controller(
     'app_controller',[
         '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup','$http','toaster','$ionicScrollDelegate',
@@ -282,6 +282,31 @@ angular.module('app').filter('useFilter', function($filter) {
     return function() {
         var filterName = [].splice.call(arguments, 1, 1)[0];
         return $filter(filterName).apply(null, arguments);
+    };
+});
+
+
+angular.module('app').filter('eventSearch', function($state,credentialsService) {    
+    return function(items,str_to_search_for,fields_to_match) {                 
+        var creds=credentialsService.get_credentials()[$state.params.event_name];
+        var regex = str_to_search_for;
+        if(regex!=undefined){
+            regex=regex.toLowerCase();
+        }
+        var re = new RegExp(regex,"g");
+
+        return _.filter(items, function(item) {
+            if(item.event_creator_pss_user_id==creds.pss_user_id){
+                console.log(item);
+                if(item.event_name.toLowerCase().match(re)!=null){                    
+                    return true;
+                } else {
+                    return false;
+                }                
+            } else {
+                return false;
+            }            
+        });
     };
 });
 

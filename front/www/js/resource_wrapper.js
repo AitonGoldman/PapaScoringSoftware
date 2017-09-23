@@ -121,6 +121,9 @@ angular.module('resource_wrapper')
                   rest_api['get_tournament'] = $resource(rest_server+'/:event_name/tournament/:id',
                                                          {},
                                                          {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_confirm_register_pss_user'] = $resource(rest_server+'/pss_admin/itsdangerous/pss_user_confirm/:itsdangerous',
+                                                                        {},
+                                                                        {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   rest_api['get_meta_tournament'] = $resource(rest_server+'/:event_name/meta_tournament/:id',
                                                               {},
                                                               {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
@@ -154,8 +157,11 @@ angular.module('resource_wrapper')
                                                          {'put':{method:"PUT",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   
                   rest_api['post_create_meta_tournament'] = $resource(rest_server+'/:event_name/meta_tournament',
-                                                                 {},
-                                                                 {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                                                                      {},
+                                                                      {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['post_request_register_pss_user'] = $resource(rest_server+'/pss_admin/itsdangerous/pss_user',
+                                                                         {},
+                                                                         {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   rest_api['post_token_purchase_desk'] = $resource(rest_server+'/:event_name/token/player_id/:player_id',
                                                                    {},
                                                                    {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});

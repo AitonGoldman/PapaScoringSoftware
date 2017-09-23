@@ -53,8 +53,7 @@ def get_event_field_descriptions():
 def get_events(tables):                    
     events = tables.Events.query.all()
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        
-    #FIXME : pss_admin should not be hard coded here
-    #return jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})
+    #FIXME : pss_admin should not be hard coded here    
     response = jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})
     if len(events) == 1:
         response.set_cookie('wizard_mode','0')            

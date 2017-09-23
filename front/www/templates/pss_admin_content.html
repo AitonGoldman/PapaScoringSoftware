@@ -1,7 +1,10 @@
 <div class="chatitem" ng-if='credentials.is_logged_in("pss_admin")==false'>
   <center>
     <h2>Please Log In</h2>
+    or
+    <h2><a ui-sref="app.register_new_pss_user">Get a Pss Event Creator account</a></h2>
   </center>
+  
 </div>      
 <div class="chatitem list" ng-if='credentials.is_logged_in("pss_admin")==true'>
   <div class="item-input-inset">
@@ -14,7 +17,7 @@
   <div class='padding'></div>
   <!--<div ui-view='list'>
       </div>-->
-  <pss-generic-list items-to-list='items' filter-to-apply="filter"> </pss-generic-list>
+  <pss-generic-list items-to-list='items' filter-to-apply="eventSearch"> </pss-generic-list>
 
 </div>      
 

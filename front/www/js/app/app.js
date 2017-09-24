@@ -24,31 +24,27 @@ angular.module('app').controller(
                         $scope.pop("Wizard mode activated!  You will now be guided through an initial setup.  Click 'Create Event'");
                     }
                     if($state.current.name=='app.pss_admin' && wizard_mode == '1'){
-                        $scope.pop("Event created.  Now goto the event select page (link in the quick links), login to your event, and create a tournament");
+                        $scope.pop("Event created.  Now goto the 'Event Select' page (the link is in the quick links), login to your event, and create a tournament");
                     }
                     if($state.current.name=='app.event' && (wizard_mode == '1' || wizard_mode == '2')){
-                        $scope.pop("Click manage tournaments");
+                        $scope.pop("Click QuickCreate tournaments");
                         return false;
                     }
-                    if($state.current.name=='app.event.manage_tournaments' && (wizard_mode == '2')){
-                        $scope.pop("Click create tournament");
-                    }
-                    if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '3'){
-                        $scope.pop("Click tournament and then click add machines");
-                    }
-                    if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '4'){
+                    if($state.current.name=='app.event' && wizard_mode == '555'){
                         $scope.pop("You have finished setting up your event and tournament.  More text here about what to do next!");
-                        $cookies.put('wizard_mode','5');                        
+                        $cookies.put('wizard_mode','666');                        
                     }                                                                                
                 }                
                 return true;
             };
-            $scope.post_success_handler = function(title,post_results_rows){
-                $scope.post_results={};
-                $scope.post_results.title=title;
-                $scope.post_results.results=post_results_rows;
-                $scope.post_success = true;
-                $ionicScrollDelegate.scrollTop();                
+            $scope.post_success_handler = function(title,post_results_rows,scope){
+                var post_results={};
+                post_results.title=title;
+                post_results.results=post_results_rows;
+                scope.post_results=post_results;
+                scope.post_success = true;
+                $ionicScrollDelegate.scrollTop();
+                return post_results;
             };
             $scope.bootstrap = function(options){               
                 //FIXME : rely on cookies to tell us if we are logged in after page reload                                
@@ -109,6 +105,15 @@ angular.module('app').controller(
                     $scope.popover.remove();                    
                     $scope.popover = popover;
                     $scope.popover.show($scope.popover_event);
+                });
+                
+            };
+            $rootScope.openFreestandingHelpPopover = function($event) {                                
+                $ionicPopover.fromTemplateUrl('templates/help.html', {                
+                    scope: $scope
+                }).then(function(popover){                    
+                    $scope.popover = popover;
+                    $scope.popover.show($event);
                 });
                 
             };
@@ -183,7 +188,11 @@ angular.module('app').directive('pssTextInputBasic', function($state) {
       templateUrl: 'templates/generic_text_input_basic.html',
       link: function(scope, elem, attrs) {
           scope.field = attrs.field;
-          scope.basic = attrs.basic;          
+          scope.basic = attrs.basic;
+          scope.type = attrs.type;
+          if(scope.type == undefined){
+              scope.type="text";
+          }
       }      
   };
 });
@@ -209,7 +218,8 @@ angular.module('app').directive('pssBooleanInputAdvanced', function($state) {
       templateUrl: 'templates/generic_boolean_input_advanced.html',
       link: function(scope, elem, attrs) {
           scope.field = attrs.field;
-          scope.basic = attrs.basic;          
+          scope.basic = attrs.basic;
+          scope.type = attrs.type;          
       }      
   };
 });

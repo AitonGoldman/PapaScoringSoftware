@@ -30,7 +30,7 @@ def edit_tournament_machine_route(tournament_machine_id,request,app):
 
 #def create_tournament_machine_route(request,app):
 def create_tournament_machine_route(machine_id,tournament_id,app):
-    existing_tournament_machine = app.tables.TournamentMachines.query.filter_by(machine_id=machine_id).first()
+    existing_tournament_machine = app.tables.TournamentMachines.query.filter_by(machine_id=machine_id,tournament_id=tournament_id).first()
     if existing_tournament_machine:
         if existing_tournament_machine.removed is False:
             raise BadRequest('Trying to add an already added machine')

@@ -6,7 +6,16 @@
 </div>
 <div class='chatitemup' ng-if="post_success==undefined">
 <center>
-  Choose a tournament name and the type of tournament to create
+  <span ng-if='state != "app.event.quick_create_tournament"'>Choose a tournament name, a type of tournament to create, and set initial configuration paramters</span>
+  <span ng-if='state == "app.event.quick_create_tournament"'><h2>You must enter the following info :</h2><b>
+    <ul>
+      <li> A name for the tournament.
+      <li> Select the type of tournament. 
+      <li> Set the initial configuration options.
+    </ul></b>
+    <br>
+    Once you are done, click the "Create Tournament" button at the bottom of the page.
+  </span>
   <br>
   <br>
 </center>
@@ -14,10 +23,14 @@
   <label class="item item-input">
     <input type="text" placeholder="Event Name" ng-model="item.tournament_name"/>        
   </label>
+  <div class="card">
+    <div class="item item-divider">
+      Select type of tournament. <span style='float:right'> <a ng-click='openFreestandingHelpPopover($event)'>Help</a> </span>
+    </div>      
     <ion-list>
       <ion-radio ng-model="item.finals_style" ng-value="'PAPA'">Single Division</ion-radio>
-      <ion-radio ng-model="item.finals_style" ng-value="'PPO'">Single Division With A/B Finals</ion-radio>
-      <ion-radio ng-model="item.finals_style" ng-value="'MULTI'">Multiple Divisions</ion-radio>
+      <ion-radio ng-model="item.finals_style" ng-value="'PPO'">Single Division With A/B Finals</ion-radio>      
+      <ion-radio ng-model="item.finals_style" ng-value="'MULTI'" ng-if='state != "app.event.quick_create_tournament"'>Multiple Divisions</ion-radio>
     </ion-list>
     <div class="list" ng-if='tournament.finals_style=="MULTI"'>
       <label class="item item-input item-select">
@@ -32,36 +45,37 @@
         </select>
       </label>
     </div>
-    <div class="card">
+  </div>
+  <div class="card">
       <pss-boolean-input-basic field='queuing' basic='true'/>
     </div>
     <div class="card">
-      <pss-text-input-basic field='manually_set_price' basic='true'/>
+      <pss-text-input-basic field='manually_set_price' basic='true' type='number'/>
     </div>
     <div class="card">
       <pss-boolean-input-basic field='discount' basic='true'/>
     </div>
     <div class="card" ng-if='item.discount==true'>
-      <pss-text-input-basic field='number_of_tickets_for_discount' basic='true'/>
+      <pss-text-input-basic field='number_of_tickets_for_discount' basic='true' type='number'/>
     </div>
     <div class="card" ng-if='item.discount==true'>
-      <pss-text-input-basic field='discount_price' basic='true'/>
+      <pss-text-input-basic field='discount_price' basic='true' type='number'/>
     </div>
     <div class="card">
       <pss-boolean-input-basic field='limited_herb' basic='true'/>
     </div>
     <div class="card">
-      <pss-text-input-basic field='number_of_signifigant_scores' basic='true'/>
+      <pss-text-input-basic field='number_of_signifigant_scores' basic='true' type='number'/>
     </div>
     
     <div class="card" ng-if='item.finals_style=="PAPA"'>
-      <pss-text-input-basic field='number_of_qualifiers' basic='true'/>
+      <pss-text-input-basic field='number_of_qualifiers' basic='true' type='number'/>
     </div>
     <div class="card" ng-if='item.finals_style=="PPO"'>
-      <pss-text-input-basic field='number_of_qualifiers_for_a_when_finals_style_is_ppo' basic='true'/>
+      <pss-text-input-basic field='number_of_qualifiers_for_a_when_finals_style_is_ppo' basic='true' type='number'/>
     </div>
     <div class="card" ng-if='item.finals_style=="PPO"'>
-      <pss-text-input-basic field='number_of_qualifiers_for_b_when_finals_style_is_ppo' basic='true'/>
+      <pss-text-input-basic field='number_of_qualifiers_for_b_when_finals_style_is_ppo' basic='true' type='number'/>
     </div>
     
     <div class='row'>

@@ -394,7 +394,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.manage_meta_tournaments.create_meta_tournament':{
-                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
+                templateUrl: 'templates/meta_tournament_create_post_success_buttons.html'//,
                 //controller: 'pss_admin_controller'
             }            
         },data: {
@@ -613,6 +613,8 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             
         },data: {
             title: "Token Purchase"
+        },params: {
+            player: {value:{}}
         }
     }).state('app.register_new_pss_user', {
         cache:false,
@@ -670,6 +672,49 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             
         },data: {
             title: "Player Info"
+        }
+    }).state('app.event.quick_create_tournament', {
+        cache:false,
+        url: '/quick_create_tournament',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/create_tournament_content.html',
+                controller: 'app.event.manage_tournaments.create_tournament_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'
+            },
+            'post_success@app.event.quick_create_tournament':{
+                templateUrl: 'templates/generic_post_success.html'
+            },
+            'post_success_buttons@app.event.quick_create_tournament':{
+                templateUrl: 'templates/tournament_quick_create_post_success_buttons.html'
+            }
+        },data: {
+            title: "Create Tournament",
+            quick_links_url: 'templates/event_quick_links.html'            
+        }
+    }).state('app.event.quick_add_tournament_machine', {
+        cache:false,
+        url: '/quick_add_tournament_machine/:tournament_id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/add_tournament_machine_content.html',
+                controller: 'app.event.manage_tournament_machines.add_tournament_machine_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'
+            },
+            'post_success@app.event.quick_add_tournament_machine':{
+                templateUrl: 'templates/generic_post_success.html'                
+            },
+            'post_success_buttons@app.event.quick_add_tournament_machine':{
+                templateUrl: 'templates/quick_add_tournament_machine_post_success_buttons.html'                
+            }            
+        },data: {
+            title: "Add Machine",
+            back_title: "Add Machine",
+            quick_links_url: 'templates/event_quick_links.html'
         }
     })
 

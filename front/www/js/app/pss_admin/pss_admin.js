@@ -39,7 +39,7 @@ angular.module('pss_admin').controller(
                     //$scope.post_results.results=[['User Name',data['pss_user'].username]];                    
                     //$scope.post_success = true;                    
                     //$scope.disable_back_button();
-                    $scope.post_success_handler("Logged In!",[['User Name',data['pss_user'].username]]);
+                    $scope.post_success_handler("Logged In!",[['User Name',data['pss_user'].username]],$scope);
 
                 };
                 var url_params = {};
@@ -64,9 +64,8 @@ angular.module('pss_admin').controller(
                     //$scope.post_results.title="Event Created!";
                     //$scope.post_results.results=[['Event Name',data['new_event'].name]];                                        
                     ///$scope.disable_back_button();
-                    //$scope.post_success = true;
-                    $scope.post_success_handler("Event Created!",[['Event Name',data['new_event'].name]]);
-                    
+                    //$scope.post_success = true;                    
+                    $scope.post_success_handler("Event Created!",[['Event Name',data['new_event'].name]],$scope);                    
                 };                                
                 var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,{},$scope.item);            
 

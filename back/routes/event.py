@@ -7,7 +7,7 @@ from flask_login import login_user, logout_user, current_user
 import json
 from lib.PssConfig import PssConfig
 from lib.serializer import generic
-from lib import serializer
+from lib import serializer, roles_constants
 from lib.serializer.deserialize import deserialize_json
 from lib.route_decorators.db_decorators import load_tables
 from lib.route_decorators.auth_decorators import check_current_user_is_active
@@ -52,15 +52,19 @@ def get_event_field_descriptions():
 @load_tables
 def get_events(tables):                    
     events = tables.Events.query.all()
+    
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        
     #FIXME : pss_admin should not be hard coded here    
-    response = jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})
-    if len(events) == 1:
-        response.set_cookie('wizard_mode','0')            
-    if len(events) == 2 and events[1].wizard_configured is not True:
-        response.set_cookie('wizard_mode','1')
-    if len(events) == 2 and events[1].wizard_configured == True:
-        response.set_cookie('wizard_mode','666')        
+    response = jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})    
+    if current_user.is_anonymous() is False and len(current_user.admin_roles) > 0 and current_user.admin_roles[0].name == roles_constants.PSS_USER:        
+        user_events = [event for event in events if event.event_creator_pss_user_id==current_user.pss_user_id]
+        if len(user_events) == 0:
+            print "here we go"
+            response.set_cookie('wizard_mode','0')            
+        if len(user_events) == 1 and user_events[0].wizard_configured is not True:
+            response.set_cookie('wizard_mode','1')
+        if len(user_events) == 1 and user_events[0].wizard_configured == True:
+            response.set_cookie('wizard_mode','666')        
         
     return response
 
@@ -91,7 +95,14 @@ def create_event(tables):
     else:
         raise BadRequest('Event details not specified')        
     if 'name' not in input_data:
+        raise BadRequest('Event name missing')
+    if 'queue_bump_amount' not in input_data:
+        raise BadRequest('Queue bump amount missing')
+    if 'number_unused_tickets_allowed' not in input_data:
+        raise BadRequest('Max unused tickets missing ')
+    if 'name' not in input_data:
         raise BadRequest('Information missing')
+    
     if not input_data['name'].isalpha():
         raise BadRequest('Name specified has non alpha characters')
     pss_config=PssConfig()

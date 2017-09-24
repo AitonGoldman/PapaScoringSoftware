@@ -87,7 +87,22 @@ def create_tournament_route(request,app):
     else:
         raise BadRequest('Missing information')
     if 'tournament_name' not in input_data:
-        raise BadRequest('Missing information')        
+        raise BadRequest('Missing tournament name')
+    if 'finals_style' not in input_data:
+        raise BadRequest('Missing tournament type')
+    if 'number_of_signifigant_scores' not in input_data:
+        raise BadRequest('Missing number of signifigant scores')
+    if input_data['finals_style']=="PAPA" and 'number_of_qualifiers' not in input_data:
+        raise BadRequest('Missing number of qualifiers')
+    if input_data['finals_style']=="PPO" and 'number_of_qualifiers_for_a_when_finals_style_is_ppo' not in input_data:
+        raise BadRequest('Missing number of qualifiers')        
+    if 'discount' in input_data and input_data['discount'] is True:
+        if 'discount_price' not in input_data or 'number_of_tickets_for_discount' not in input_data:
+            raise BadRequest('Missing discount info')
+    
+    if 'manually_set_price' not in input_data:
+        input_data['manually_set_price']=0
+    
     existing_tournament = app.tables.Tournaments.query.filter_by(tournament_name=input_data['tournament_name']).first()
     if existing_tournament:
         raise BadRequest('Trying to use an already used name for tournament')
@@ -103,6 +118,8 @@ def create_tournament_route(request,app):
                                                      multi_division_tournament_name,
                                                      multi_division_tournament_id,
                                                      finals_style=finals_style)
+    if 'active' in input_data:
+        new_tournament.active=input_data['active']
     deserialize_json(new_tournament,input_data,app)
     app.tables.db_handle.session.commit()
     return new_tournament
@@ -151,12 +168,15 @@ def get_tournaments(tables):
                         'meta_tournaments':[meta_tournament_serializer(meta_tournament) for meta_tournament in meta_tournaments]})
     if len(tournaments) == 0:
         response.set_cookie('wizard_mode','2')        
-    if len(tournaments) == 1 and len(tournaments[0].tournament_machines)==0:        
-        response.set_cookie('wizard_mode','3')
+    #if len(tournaments) == 1 and len(tournaments[0].tournament_machines)==0:        
+    #    response.set_cookie('wizard_mode','3')
+    print request.cookies.get('wizard_mode')
+    if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '2':        
+        response.set_cookie('wizard_mode','4')
     if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '5':        
         response.set_cookie('wizard_mode','666')
-    if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '3':        
-        response.set_cookie('wizard_mode','4')
+    #if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '3':        
+    #    response.set_cookie('wizard_mode','4')
         
     return response
 

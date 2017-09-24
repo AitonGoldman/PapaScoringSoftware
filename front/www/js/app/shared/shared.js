@@ -78,7 +78,7 @@ angular.module('shared').controller(
                         results.push([$scope.descriptions.short_descriptions[field_name],item[field_name]]);   
                     };                    
                 }
-                $scope.post_success_handler("Event Edited!",results);
+                $scope.post_success_handler("Event Edited!",results,$scope);
                 //FIXME : results page needs to say something about "these are the changed fields" on edit
             };                                
             

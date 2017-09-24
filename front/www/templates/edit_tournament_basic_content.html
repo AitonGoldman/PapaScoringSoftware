@@ -10,32 +10,32 @@
       <pss-boolean-input-basic field='queuing' basic='true'/>
     </div>
     <div class="card">
-      <pss-text-input-basic field='manually_set_price' basic='true'/>
+      <pss-text-input-basic field='manually_set_price' basic='true' type='number'/>
     </div>
     <div class="card">
       <pss-boolean-input-basic field='discount' basic='true'/>
     </div>
     <div class="card" ng-if='item.discount==true'>
-      <pss-text-input-basic field='number_of_tickets_for_discount' basic='true'/>
+      <pss-text-input-basic field='number_of_tickets_for_discount' basic='true'  type='number'/>
     </div>
     <div class="card" ng-if='item.discount==true'>
-      <pss-text-input-basic field='discount_price' basic='true'/>
+      <pss-text-input-basic field='discount_price' basic='true'  type='number'/>
     </div>
     <div class="card">
       <pss-boolean-input-basic field='limited_herb' basic='true'/>
     </div>
     <div class="card">
-      <pss-text-input-basic field='number_of_signifigant_scores' basic='true'/>
+      <pss-text-input-basic field='number_of_signifigant_scores' basic='true'  type='number'/>
     </div>
     
     <div class="card" ng-if='item.finals_style=="PAPA"'>
-      <pss-text-input-basic field='number_of_qualifiers' basic='true'/>
+      <pss-text-input-basic field='number_of_qualifiers' basic='true'  type='number'/>
     </div>
     <div class="card" ng-if='item.finals_style=="PPO"'>
-      <pss-text-input-basic field='number_of_qualifiers_for_a_when_finals_style_is_ppo' basic='true'/>
+      <pss-text-input-basic field='number_of_qualifiers_for_a_when_finals_style_is_ppo' basic='true'  type='number'/>
     </div>
     <div class="card" ng-if='item.finals_style=="PPO"'>
-      <pss-text-input-basic field='number_of_qualifiers_for_b_when_finals_style_is_ppo' basic='true'/>
+      <pss-text-input-basic field='number_of_qualifiers_for_b_when_finals_style_is_ppo' basic='true'  type='number'/>
     </div>
     <div class="card">      
       <div class="item item-divider">

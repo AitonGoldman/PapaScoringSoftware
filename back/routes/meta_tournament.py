@@ -19,9 +19,11 @@ def create_meta_tournament_route(request,app):
     if request.data:        
         input_data = json.loads(request.data)
     else:
-        raise BadRequest('Username or password not specified')
+        raise BadRequest('Information not specified')
     if 'meta_tournament_name' not in input_data:
-        raise BadRequest('Missing information')        
+        raise BadRequest('Missing meta tournament name')
+    if input_data['meta_tournament_name'] == "":
+        raise BadRequest('Missing meta tournament name')    
     existing_meta_tournament = app.tables.MetaTournaments.query.filter_by(meta_tournament_name=input_data['meta_tournament_name']).first()
     if existing_meta_tournament:
         raise BadRequest('Trying to use an already used name for a meta tournament')

@@ -15,8 +15,9 @@ from lib import orm_factories
 @load_tables
 def get_machines(tables):    
     machines = tables.Machines.query.all()
-    machines_mapping_to_active_tournament_machines = tables.Machines.query.join(tables.TournamentMachines).filter(tables.TournamentMachines.active==True).all()
-    machines_list = list(set(machines) - set(machines_mapping_to_active_tournament_machines))
+    #machines_mapping_to_active_tournament_machines = tables.Machines.query.join(tables.TournamentMachines).filter(tables.TournamentMachines.active==True).all()
+    #machines_list = list(set(machines) - set(machines_mapping_to_active_tournament_machines))
     machine_serializer = generate_generic_serializer(serializer.generic.ALL)
 
-    return jsonify({'machines':[machine_serializer(machine) for machine in machines_list]})
+    #return jsonify({'machines':[machine_serializer(machine) for machine in machines_list]})
+    return jsonify({'machines':[machine_serializer(machine) for machine in machines]})

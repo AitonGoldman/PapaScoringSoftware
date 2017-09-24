@@ -1,0 +1,33 @@
+<div>
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Player Number" ng-model='filter_for.filter_for' ng-change='on_change()'>
+    </label>
+    <button class="button button-small" ng-click='get_player_info_func()'>
+      Select
+    </button>    
+  </div>
+  <div class='row'  ng-if='filtered_player.player_id!=undefined'>
+    <div ng-class="{'col-80':filtered_player.has_pic==true,'col':filtered_player.has_pic!=true}">      
+      <div class="item item-borderless">
+        {{filtered_player.first_name}} &nbsp;  
+      </div>
+      <div class="item item-borderless">
+        {{filtered_player.last_name}} &nbsp; 
+      </div>
+    </div>
+    <div class='col-20' style='margin:auto' ng-if='filtered_player.has_pic==true'>
+      <img src='{{filtered_player.img_url}}' class='padding circular--square' style='opacity:.5;height:130px;width:130px'>
+    </div>
+  </div>
+  <div class='list'  ng-if='filtered_players.length > 0'>
+    <ion-item ng-repeat='player in filtered_players' ng-click='select_player_from_list(player)'>
+      {{player.player_name}}
+    </ion-item>
+  </div>
+  
+  <div class="list" ng-if='player_info_gotten!=undefined'>
+  </div>
+</div>
+

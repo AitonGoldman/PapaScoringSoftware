@@ -61,9 +61,6 @@ angular.module('shared').controller(
             };
 
             var on_edit_success = function(data){                    
-                $ionicScrollDelegate.scrollTop();
-                $scope.post_results={};
-                $scope.post_results.title="Event Edited!";                    
                 var results = [];
                 
                 var item = data['item'];                    
@@ -79,12 +76,10 @@ angular.module('shared').controller(
                     }                                        
                     if($scope.item.bobo[field_name]!=item[field_name]){
                         results.push([$scope.descriptions.short_descriptions[field_name],item[field_name]]);   
-                    };
+                    };                    
                 }
+                $scope.post_success_handler("Event Edited!",results);
                 //FIXME : results page needs to say something about "these are the changed fields" on edit
-                $scope.post_results.results=results;                    
-                $scope.disable_back_button();
-                $scope.post_success = true;
             };                                
             
             if(basic_or_advanced_edit == true || $scope.wizard_step == 1) {

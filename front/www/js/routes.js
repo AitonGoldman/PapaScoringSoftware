@@ -358,7 +358,27 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },params: {
             item: {value:{}}
         }
-    }).state('app.event.manage_tournaments.create_meta_tournament', {
+    }).state('app.event.manage_meta_tournaments', {
+        cache:false,
+        url: '/manage_meta_tournaments',
+        views: {
+            // 'topView@': {
+            //     templateUrl: 'templates/pss_admin_2.html',
+            //     controller: 'app_controller'
+            // },            
+            'pssAdminContent@app':{
+                templateUrl: 'templates/manage_meta_tournaments_content.html',
+                controller: 'app.event.manage_tournaments_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'//,
+            }            
+        },data: {
+            title: "Manage MetaTournaments",
+            back_title: "Manage MetaTournaments",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
+    }).state('app.event.manage_meta_tournaments.create_meta_tournament', {
         cache:false,
         url: '/create_meta_tournament',
         views: {
@@ -369,11 +389,11 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             'pssAdminFooter@app':{
                 templateUrl: 'templates/event_footer.html'//,
             },
-            'post_success@app.event.manage_tournaments.create_meta_tournament':{
+            'post_success@app.event.manage_meta_tournaments.create_meta_tournament':{
                 templateUrl: 'templates/generic_post_success.html'//,
                 //controller: 'pss_admin_controller'
             },
-            'post_success_buttons@app.event.manage_tournaments.create_meta_tournament':{
+            'post_success_buttons@app.event.manage_meta_tournaments.create_meta_tournament':{
                 templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
                 //controller: 'pss_admin_controller'
             }            
@@ -427,7 +447,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }            
         },data: {
-            title: "Add Players To Event",
+            title: "Register Players",
             quick_links_url: 'templates/event_quick_links.html'
         }
     }).state('app.event.select_players_to_add_to_event.add_existing_player_to_event', {
@@ -454,7 +474,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 //controller: 'pss_admin_controller'
             }            
         },data: {
-            title: "Add Players To Event",
+            title: "Register Players",
             quick_links_url: 'templates/event_quick_links.html'
         }
     }).state('app.event.manage_tournaments.edit_meta_tournament_advanced', {
@@ -637,6 +657,19 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             }            
         },data: {
             title: "New User Activated!"
+        }
+    }).state('app.event.player_info', {
+        cache:false,
+        url: '/player_info',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/player_info_content.html',
+                controller: 'app.event.player_info_controller'
+                
+            }
+            
+        },data: {
+            title: "Player Info"
         }
     })
 

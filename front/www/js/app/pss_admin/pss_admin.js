@@ -5,11 +5,10 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
         function($scope, $state,resourceWrapperService,listGeneration, eventTournamentLib) {
             $scope.bootstrap({back_button:false});            
-            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
-            
-            var on_success = function(data){
-                $scope.items=data['events'];
-                //$scope.wizard_mode_pop();                
+            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;            
+            var on_success = function(data){                
+                $scope.items=data['events'];                
+                $scope.wizard_mode_pop();                
                 var basic_sref='.edit_event_basic({id:item.event_id})';
                 var advanced_sref='.edit_event_advanced({id:item.event_id})';                
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('event_name',
@@ -35,11 +34,13 @@ angular.module('pss_admin').controller(
                 var on_success = function(data){
                     $scope.logged_in_user=data['pss_user'];
                     credentialsService.set_pss_user_credentials(event,data);
-                    $scope.post_results={};
-                    $scope.post_results.title="Logged In!";
-                    $scope.post_results.results=[['User Name',data['pss_user'].username]];                    
-                    $scope.post_success = true;                    
-                    $scope.disable_back_button();
+                    //$scope.post_results={};
+                    //$scope.post_results.title="Logged In!";
+                    //$scope.post_results.results=[['User Name',data['pss_user'].username]];                    
+                    //$scope.post_success = true;                    
+                    //$scope.disable_back_button();
+                    $scope.post_success_handler("Logged In!",[['User Name',data['pss_user'].username]]);
+
                 };
                 var url_params = {};
                 if($scope.event_name != 'pss_admin'){
@@ -59,11 +60,12 @@ angular.module('pss_admin').controller(
             $scope.create_event_func = function(){                
                 var on_success = function(data){
                     // $scope.logged_in_user=data['new_event'];
-                    $scope.post_results={};
-                    $scope.post_results.title="Event Created!";
-                    $scope.post_results.results=[['Event Name',data['new_event'].name]];                                        
-                    $scope.disable_back_button();
-                    $scope.post_success = true;
+                    //$scope.post_results={};
+                    //$scope.post_results.title="Event Created!";
+                    //$scope.post_results.results=[['Event Name',data['new_event'].name]];                                        
+                    ///$scope.disable_back_button();
+                    //$scope.post_success = true;
+                    $scope.post_success_handler("Event Created!",[['Event Name',data['new_event'].name]]);
                     
                 };                                
                 var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,{},$scope.item);            

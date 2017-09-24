@@ -13,6 +13,7 @@ def generate_tokens_class(db_handle,event_name):
         team_id=db_handle.Column('team_id', db_handle.Integer, db_handle.ForeignKey('teams_'+event_name+'.team_id'))        
         tournament_id=db_handle.Column('tournament_id', db_handle.Integer, db_handle.ForeignKey('tournaments_'+event_name+'.tournament_id'))
         meta_tournament_id=db_handle.Column('meta_tournament_id', db_handle.Integer, db_handle.ForeignKey('meta_tournaments_'+event_name+'.meta_tournament_id'))
-        token_purchase_id=db_handle.Column('token_purchase_id', db_handle.Integer, db_handle.ForeignKey('token_purchases_'+event_name+'.token_purchase_id'))                
+        token_purchase_id=db_handle.Column('token_purchase_id', db_handle.Integer, db_handle.ForeignKey('token_purchases_'+event_name+'.token_purchase_id'))
+        
     return Tokens
     

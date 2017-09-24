@@ -10,22 +10,21 @@ angular.module('app').controller(
                 alert(message);
             };
             $scope.check_for_hiding_based_on_wizard = function(){
-                var wizard_mode = $cookies.get('wizard_mode');
-                console.log(wizard_mode);
+                var wizard_mode = $cookies.get('wizard_mode');                
                 if(wizard_mode != '666'){
                     $rootScope.hide_based_on_cookie=false;
                 }
             };
 
             $scope.wizard_mode_pop = function(){
-                var wizard_mode = $cookies.get('wizard_mode');
-                //need to check if logged in before toasting
+                var wizard_mode = $cookies.get('wizard_mode');                
+                //need to check if logged in before toasting                                
                 if(wizard_mode != undefined && wizard_mode != '666' && $rootScope.is_logged_in==true){
                     if($state.current.name=='app.pss_admin' && wizard_mode == '0'){
-                        $scope.pop("Wizard mode activated!  Click 'Create Event'");
+                        $scope.pop("Wizard mode activated!  You will now be guided through an initial setup.  Click 'Create Event'");
                     }
                     if($state.current.name=='app.pss_admin' && wizard_mode == '1'){
-                        $scope.pop("Event created. Go create a tourney");
+                        $scope.pop("Event created.  Now goto the event select page (link in the quick links), login to your event, and create a tournament");
                     }
                     if($state.current.name=='app.event' && (wizard_mode == '1' || wizard_mode == '2')){
                         $scope.pop("Click manage tournaments");
@@ -35,14 +34,21 @@ angular.module('app').controller(
                         $scope.pop("Click create tournament");
                     }
                     if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '3'){
-                        $scope.pop("Click tournament and add machines");
+                        $scope.pop("Click tournament and then click add machines");
                     }
                     if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '4'){
-                        $scope.pop("All Done!");
+                        $scope.pop("You have finished setting up your event and tournament.  More text here about what to do next!");
                         $cookies.put('wizard_mode','5');                        
                     }                                                                                
                 }                
                 return true;
+            };
+            $scope.post_success_handler = function(title,post_results_rows){
+                $scope.post_results={};
+                $scope.post_results.title=title;
+                $scope.post_results.results=post_results_rows;
+                $scope.post_success = true;
+                $ionicScrollDelegate.scrollTop();                
             };
             $scope.bootstrap = function(options){               
                 //FIXME : rely on cookies to tell us if we are logged in after page reload                                
@@ -124,37 +130,29 @@ angular.module('app').controller(
                 $state.go(sref);                
             };
             
-            $scope.uploadedFile = function(element) {
-                console.log('in uploadedFiled');
-                $scope.$apply(function($scope) {
-                    console.log('in uploadedFiled apply');
+            $scope.uploadedFile = function(element) {                
+                $scope.$apply(function($scope) {                    
                     $scope.files = element.files;         
                 });
             };
 
-            $scope.addFile = function(event_id) {
-                console.log('in addfile');
+            $scope.addFile = function(event_id) {                
                 $scope.uploadfile($scope.files,
                                   event_id,
                                   function( msg ) // success
-                                  {
-                                      console.log('in addfile - success');
-                                      console.log('uploaded');
+                                  {                                                                            
                                   },
                                   function( msg ) // error
-                                  {
-                                      console.log('in addfile - failure');                                  
-                                      console.log('error');
+                                  {                                      
                                   });
             };
             $scope.uploadfile = function(files,event_id,success,error){                
                 var url = 'http://0.0.0.0:8000/pss_admin/media_upload/event/'+event_id+'/jpg_pic';
-                console.log(url);
+                
                 for ( var i = 0; i < files.length; i++)
                 {
                     var fd = new FormData();
-                    fd.append("file", files[i]);
-                    console.log(files[i]);
+                    fd.append("file", files[i]);                    
                     $http.post(url, fd, { 
                         withCredentials : false,
                         headers : {
@@ -162,14 +160,11 @@ angular.module('app').controller(
                         },
                         transformRequest : angular.identity
                         
-                    }).success(function(data){
-                        console.log('success!');
-                        console.log(data);
+                    }).success(function(data){                                                
                         $rootScope.pic_uploaded=true;                        
                         
                     }).error(function(data){
-                        console.log('uh oh!');                    
-                        console.log(data);                        
+                                                
                     });
                 }
             };
@@ -296,8 +291,7 @@ angular.module('app').filter('eventSearch', function($state,credentialsService) 
         var re = new RegExp(regex,"g");
 
         return _.filter(items, function(item) {
-            if(item.event_creator_pss_user_id==creds.pss_user_id){
-                console.log(item);
+            if(item.event_creator_pss_user_id==creds.pss_user_id){                
                 if(item.event_name.toLowerCase().match(re)!=null){                    
                     return true;
                 } else {

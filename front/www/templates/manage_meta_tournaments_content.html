@@ -1,0 +1,15 @@
+
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model='filter_for'>
+    </label>
+  </div>
+  <ion-item  ui-sref='.create_meta_tournament' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Create Meta Tournament</ion-item>
+
+  <div class='padding'> </div>
+  <span ng-if='meta_tournament_items.length > 0'>Meta Tournaments</span>
+  <pss-generic-list items-to-list='meta_tournament_items' filter-to-apply="filter"> </pss-generic-list>
+
+
+  

@@ -5,7 +5,7 @@ from flask import jsonify,current_app,request
 from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
 from flask_login import login_user, logout_user, current_user
 import json
-from lib import orm_factories
+from lib import orm_factories,token_helpers
 from lib.serializer.player import generate_player_to_dict_serializer
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
@@ -150,7 +150,10 @@ def get_existing_event_players(tables):
 @blueprints.event_blueprint.route('/event_player/<player_id>',methods=['GET'])
 @load_tables
 def get_existing_event_player(tables,player_id):                
+    #existing_player = tables.Players.query.options(joinedload("player_roles"),joinedload("events"),joinedload("event_player"),joinedload('token')).filter_by(player_id=player_id).first()
     existing_player = tables.Players.query.options(joinedload("player_roles"),joinedload("events"),joinedload("event_player")).filter_by(player_id=player_id).first()
+    tournament_token_count,meta_tournament_token_count = token_helpers.get_number_of_unused_tickets_for_player_in_all_tournaments(existing_player,current_app,remove_empty_tournaments=False)
+    print tournament_token_count
     if existing_player is None:
         raise BadRequest('Player does not exist')
     if existing_player is not None and existing_player.event_player is None:

@@ -4,7 +4,7 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration',
         function($scope, $state,resourceWrapperService,listGeneration ) {
             $scope.bootstrap({back_button:true});
-            $scope.check_for_hiding_based_on_wizard();
+            $scope.check_for_hiding_based_on_wizard();            
             $scope.wizard_mode_pop();                            
         }]);
 
@@ -18,11 +18,13 @@ angular.module('event').controller(
                 var on_success = function(data){
                     $scope.logged_in_user=data['pss_user'];
                     credentialsService.set_pss_user_credentials($scope.event_id,data);
-                    $scope.post_results={};
-                    $scope.post_results.title="Logged In!";
-                    $scope.post_results.results=[['User Name',data['pss_user'].username]];                    
-                    $scope.post_success = true;
-                    $scope.disable_back_button();
+                    //$scope.post_results={};
+                    //$scope.post_results.title="Logged In!";
+                    //$scope.post_results.results=[['User Name',data['pss_user'].username]];
+                    //$scope.post_success = true;
+                    //$scope.disable_back_button();
+                    $scope.post_success_handler("Logged In!",[['User Name',data['pss_user'].username]]);
+                    
                 };
                                 
                 var prom =resourceWrapperService.get_wrapper_with_loading('post_event_login',on_success,{event_name:$scope.event_name},{username:$scope.pss_user.username,password:$scope.pss_user.password});            
@@ -131,14 +133,16 @@ angular.module('event').controller(
                 
                 var on_submit_success = function(data){                    
                     $scope.item=data['item'];
-                    $scope.post_results={};
-                    $scope.post_results.title="Machines Added!";                    
-                    $scope.post_results.results=[];
+                    //$scope.post_results={};
+                    //$scope.post_results.title="Machines Added!";                    
+                    //$scope.post_results.results=[];
+                    var results = [];
                     _.forEach(filtered_values, function(machine) {
-                        $scope.post_results.results.push(["Machine Name",machine.machine_name]);
+                        results.push(["Machine Name",machine.machine_name]);
                     });
-                    $scope.post_success = true;
-                    $scope.disable_back_button();
+                    $scope.post_success_handler("Machines Added!",results);                    
+                    //$scope.post_success = true;
+                    //$scope.disable_back_button();
                     
                 };                        
                 var prom =resourceWrapperService.get_wrapper_with_loading('post_add_tournament_machines',
@@ -171,18 +175,17 @@ angular.module('event').controller(
             var create_multi_division_tournament_func = function(tournament){
                 var on_success = function(data){
 
-                    $scope.post_results={};
-                    $scope.post_results.title="Tournament Created!";
+                    //$scope.post_results={};
+                    //$scope.post_results.title="Tournament Created!";
                     //FIXME : this should use descriptions we got from backend
                     var results = [];
-                    
-                    
                     var item = data['multi_division_tournament'];
                     results.push(["name",item["multi_division_tournament_name"]]);
                     results.push(["type","Multi Division"]);
-                    $scope.post_results.results=results;                    
-                    $scope.disable_back_button();
-                    $scope.post_success = true;                        
+                    //$scope.post_results.results=results;                    
+                    //$scope.disable_back_button();
+                    //$scope.post_success = true;                        
+                    $scope.post_success_handler("Tournament Created!",results);
 
                 };
                 var post_object = {multi_division_tournament_name:$scope.item.tournament_name,
@@ -194,8 +197,8 @@ angular.module('event').controller(
             };
             var create_normal_tournament_func = function(tournament){                                
                 var on_success = function(data){                    
-                    $scope.post_results={};
-                    $scope.post_results.title="Tournament Created!";
+                    //$scope.post_results={};
+                    //$scope.post_results.title="Tournament Created!";
                     //FIXME : this should use descriptions we got from backend
                     var results = [];                                        
                     var item = data['new_tournament'];                                        
@@ -208,9 +211,11 @@ angular.module('event').controller(
                         description="Single Division with A/B finals";
                     }
                     results.push(["type",description]);                                        
-                    $scope.post_results.results=results;                    
-                    $scope.disable_back_button();
-                    $scope.post_success = true;
+                    //$scope.post_results.results=results;                    
+                    //$scope.disable_back_button();
+                    //$scope.post_success = true;
+                    $scope.post_success_handler("Tournament Created!",results);
+                    
                 };                
                 var prom = resourceWrapperService.get_wrapper_with_loading('post_create_tournament',
                                                                            on_success,
@@ -234,12 +239,14 @@ angular.module('event').controller(
             $scope.create_meta_tournament_func = function(){                
                 var on_success = function(data){
                     $scope.new_meta_tournament=data['new_meta_tournament'];
-                    $scope.post_results={};
-                    $scope.post_results.title="MetaTournamet created!";
-                    $scope.post_results.results=[['MetaTournament Name',
-                                                  data['new_meta_tournament'].meta_tournament_name]];                    
-                    $scope.post_success = true;
-                    $scope.disable_back_button();
+                    //$scope.post_results={};
+                    //$scope.post_results.title="MetaTournamet created!";
+                    var results=[['MetaTournament Name',
+                                  data['new_meta_tournament'].meta_tournament_name]];                    
+                    //$scope.post_success = true;
+                    //$scope.disable_back_button();
+                    $scope.post_success_handler("MetaTournament Created!",results);
+                    
                 };
                                 
                 var prom_meta_tournament = resourceWrapperService.get_wrapper_with_loading('post_create_meta_tournament',
@@ -344,18 +351,20 @@ angular.module('event').controller(
             $scope.create_player_func = function(player_id){                
                 var on_create_success = function(data){                    
                     // $scope.logged_in_user=data['new_event'];                    
-                    $scope.post_results={};
-                    $scope.post_results.title="Player Added To Event!";
-                    $scope.post_results.results=[];
+                    //$scope.post_results={};
+                    //$scope.post_results.title="Player Added To Event!";
+                    //$scope.post_results.results=[];
+                    var results = [];
                     var player_name=data['new_player'].first_name+" "+data['new_player'].last_name;
                     if(data['new_player'].extra_title!=undefined){
                         player_name=player_name+" "+data['new_player'].extra_title;
                     }
-                    $scope.post_results.results.push(['Player Name',player_name]);                    
-                    $scope.post_results.results.push(['Player Pin',data['new_player']['event_player']['event_player_pin']]);                                        
-                    $scope.disable_back_button();
-                    $scope.post_success = true;
-                    
+                    results.push(['Player Name',player_name]);                    
+                    results.push(['Player Pin',data['new_player']['event_player']['event_player_pin']]);                                        
+                    //$scope.disable_back_button();
+                    //$scope.post_success = true;
+                    $scope.post_success_handler("Player Added To Event!",results);
+
                 };
                 if($scope.player.ifpa_ranking=="not ranked"){
                     $scope.player.ifpa_ranking="9999999";
@@ -400,8 +409,6 @@ angular.module('event').controller(
             $scope.filter_for={};
             $scope.filtered_player={};            
             $scope.on_ticket_change = function(){                
-                console.log($scope.token_info.tournament_ticket_prices);
-                console.log($scope.token_info.meta_tournament_ticket_prices);                
                 $scope.total_cost=0;
                 _.map($scope.token_info.tournament_ticket_prices, function(i){
                     if(i.purchase!=undefined){
@@ -432,34 +439,36 @@ angular.module('event').controller(
                 } 
                 
             };
-            $scope.purchase = function(){
-                console.log($scope.token_info);
+            $scope.purchase = function(){                
                 var on_post_success = function(data){
-                    $scope.post_results={};
-                    $scope.post_results.title="Tickets Purchased!";
-                    $scope.post_results.results=[];
-                    console.log(data.purchase_summary);
+                    //$scope.post_results={};
+                    //$scope.post_results.title="Tickets Purchased!";
+                    //$scope.post_results.results=[];                    
+                    var results = [];
                     var total_purchase_cost = 0;
                     _.forEach(data.purchase_summary,function(i){
                         if(i[2].amount==undefined){
                             return;
                         }
                         total_purchase_cost=total_purchase_cost+i[2].price;
-                        $scope.post_results.results.push([i[0],i[2].amount+" : $"+i[2].price]);
+                        results.push([i[0],i[2].amount+" : $"+i[2].price]);
                     });
-                    $scope.post_results.results.push(["Total Cost","$"+total_purchase_cost]);
-                    $scope.post_success = true;
-
-                };
-
+                    results.push(["Total Cost","$"+total_purchase_cost]);
+                    //$scope.post_success = true;
+                    $scope.post_success_handler("Tickets Purchased!",results);
+                };                
                 var token_purchases={'tournament_token_counts':[],
                                      'meta_tournament_token_counts':[]};
                 _.map($scope.token_info.tournament_ticket_prices, function(i){
                     if(i.purchase!=undefined){
-                        token_purchases.tournament_token_counts.push({token_count:i.purchase.amount,tournament_id:i.tournament_id});
-                        //$scope.total_cost=$scope.total_cost+i.purchase.price;                        
+                        token_purchases.tournament_token_counts.push({token_count:i.purchase.amount,tournament_id:i.tournament_id});                        
                     }
                 });
+                _.map($scope.token_info.meta_tournament_ticket_prices, function(i){
+                    if(i.purchase!=undefined){
+                        token_purchases.meta_tournament_token_counts.push({token_count:i.purchase.amount,meta_tournament_id:i.meta_tournament_id});                        
+                    }
+                });                
 
                 var purchase_token_prom = resourceWrapperService.get_wrapper_with_loading('post_token_purchase_desk',
                                                                                           on_post_success,
@@ -471,7 +480,7 @@ angular.module('event').controller(
                 var on_get_success = function(data){
                     $scope.token_info=data;
                     $scope.token_info_gotten=true;
-                    console.log(data);
+                    
                 };
                 var get_token_info_prom = resourceWrapperService.get_wrapper_with_loading('get_token_info_for_player',
                                                                                           on_get_success,
@@ -486,6 +495,72 @@ angular.module('event').controller(
                 //                                                                     {event_name:$scope.event_name,player_id:$scope.filtered_player.player_id},
                 //                                                                     $scope.tokens);            
 
+            };
+            var token_prom = resourceWrapperService.get_wrapper_with_loading('get_event_players',
+                                                                             function(data){$scope.players=data['existing_event_players'];},
+                                                                             {event_name:$scope.event_name},
+                                                                             {});                                    
+        }
+    ]);
+
+angular.module('event').controller(
+    'app.event.player_info_controller',[
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','$filter',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,$filter ) {                        
+            $scope.bootstrap({back_button:true});                        
+            $scope.total_cost=0;
+            $scope.filter_for={};
+            $scope.filtered_player={};
+            $scope.filtered_players=[];
+            $scope.select_player_from_list = function(player){
+                $scope.filtered_player=player;
+                $scope.filtered_players=[];                
+            };
+            $scope.on_change = function(){
+                $scope.player_info_gotten=undefined;
+                $scope.filtered_players=[];                
+                var regex = $scope.filter_for.filter_for;
+                if(regex!=undefined){
+                    regex=regex.toLowerCase();
+                }
+                var re = new RegExp(regex,"g");
+                
+                var filtered_players = _.filter($scope.players,function(p){
+                    if(regex==""){
+                        return false;
+                    }
+                    if(parseInt(p.event_player.event_player_id) == parseInt($scope.filter_for.filter_for)){                        
+                        return true;
+                    }
+                    if(p.player_name.toLowerCase().match(re)!=null){                        
+                        return true;
+                    }
+                    return false;
+                });
+                if(filtered_players.length>4){
+                    
+                }                
+                if(filtered_players.length>1 && filtered_players.length<5){
+                    $scope.filtered_players=filtered_players;
+                }
+                if(filtered_players.length==1){
+                    $scope.filtered_player=filtered_players[0];
+                }
+                if(filtered_players.length==0){                    
+                    $scope.filtered_player={};
+                } 
+                
+            };
+            $scope.get_player_info_func = function(){
+                var on_get_success = function(data){
+                    $scope.player_info=data;
+                    $scope.player_info_gotten=true;                    
+                };
+                var get_token_info_prom = resourceWrapperService.get_wrapper_with_loading('get_player_info',
+                                                                                          on_get_success,
+                                                                                          {event_name:$scope.event_name,player_id:$scope.filtered_player.player_id},
+                                                                                          {});            
+                
             };
             var token_prom = resourceWrapperService.get_wrapper_with_loading('get_event_players',
                                                                              function(data){$scope.players=data['existing_event_players'];},

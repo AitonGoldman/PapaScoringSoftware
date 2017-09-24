@@ -15,6 +15,6 @@ def generate_event_players_class(db_handle,event_name):
         active=db_handle.Column(db_handle.Boolean(),default=True)
         team_id = db_handle.Column('team_id', db_handle.Integer, db_handle.ForeignKey('teams_'+event_name+'.team_id'))
         team = db_handle.relationship('Teams',uselist=False)        
-        
+
     return EventPlayers
     

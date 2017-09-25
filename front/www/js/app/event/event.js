@@ -528,57 +528,14 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','$filter',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,$filter ) {                        
             $scope.bootstrap({back_button:true});                        
-            $scope.total_cost=0;
-            $scope.filter_for={};
-            $scope.filtered_player={};
-            $scope.filtered_players=[];
-            $scope.select_player_from_list = function(player){
-                $scope.filtered_player=player;
-                $scope.filtered_players=[];                
-            };
-            $scope.on_change = function(){
-                $scope.player_info_gotten=undefined;
-                $scope.filtered_players=[];                
-                var regex = $scope.filter_for.filter_for;
-                if(regex!=undefined){
-                    regex=regex.toLowerCase();
-                }
-                var re = new RegExp(regex,"g");
-                
-                var filtered_players = _.filter($scope.players,function(p){
-                    if(regex==""){
-                        return false;
-                    }
-                    if(parseInt(p.event_player.event_player_id) == parseInt($scope.filter_for.filter_for)){                        
-                        return true;
-                    }
-                    if(p.player_name.toLowerCase().match(re)!=null){                        
-                        return true;
-                    }
-                    return false;
-                });
-                if(filtered_players.length>4){
-                    
-                }                
-                if(filtered_players.length>1 && filtered_players.length<5){
-                    $scope.filtered_players=filtered_players;
-                }
-                if(filtered_players.length==1){
-                    $scope.filtered_player=filtered_players[0];
-                }
-                if(filtered_players.length==0){                    
-                    $scope.filtered_player={};
-                } 
-                
-            };
-            $scope.get_player_info_func = function(){
+            $scope.get_player_info_func = function(player_id){                
                 var on_get_success = function(data){
-                    $scope.player_info=data;
-                    $scope.player_info_gotten=true;                    
+                    $scope.player_info=data['existing_player'];
+                    $scope.player_selected=true;
                 };
-                var get_token_info_prom = resourceWrapperService.get_wrapper_with_loading('get_player_info',
+                var get_token_info_prom = resourceWrapperService.get_wrapper_with_loading('get_event_player',
                                                                                           on_get_success,
-                                                                                          {event_name:$scope.event_name,player_id:$scope.filtered_player.player_id},
+                                                                                          {event_name:$scope.event_name,player_id:player_id},
                                                                                           {});            
                 
             };

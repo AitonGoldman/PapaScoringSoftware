@@ -58,6 +58,7 @@ def get_events(tables):
     response = jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})    
     if current_user.is_anonymous() is False and len(current_user.admin_roles) > 0 and current_user.admin_roles[0].name == roles_constants.PSS_USER:        
         user_events = [event for event in events if event.event_creator_pss_user_id==current_user.pss_user_id]
+        print len(user_events)
         if len(user_events) == 0:
             print "here we go"
             response.set_cookie('wizard_mode','0')            

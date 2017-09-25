@@ -88,6 +88,7 @@ angular.module('resource_wrapper')
                   var rest_api = {};
                   var rest_server = "http://192.168.1.178:8000";
                   //var rest_server = "http://0.0.0.0:8000";                  
+                  //var rest_server = "http://9.75.197.224:8000";
                   var timeout=5000;
                   rest_api['get_events'] = $resource(rest_server+'/pss_admin/event',
                                                      {},
@@ -107,6 +108,10 @@ angular.module('resource_wrapper')
                   rest_api['get_player'] = $resource(rest_server+'/pss_admin/player/:player_id',
                                                      {},
                                                      {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_event_player'] = $resource(rest_server+'/:event_name/event_player/:player_id',
+                                                           {},
+                                                           {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  
                   rest_api['get_token_info_for_player'] = $resource(rest_server+'/:event_name/token/player_id/:player_id',
                                                                     {},
                                                                     {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});

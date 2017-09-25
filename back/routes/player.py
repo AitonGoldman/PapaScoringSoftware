@@ -152,14 +152,15 @@ def get_existing_event_players(tables):
 def get_existing_event_player(tables,player_id):                
     #existing_player = tables.Players.query.options(joinedload("player_roles"),joinedload("events"),joinedload("event_player"),joinedload('token')).filter_by(player_id=player_id).first()
     existing_player = tables.Players.query.options(joinedload("player_roles"),joinedload("events"),joinedload("event_player")).filter_by(player_id=player_id).first()
-    tournament_token_count,meta_tournament_token_count = token_helpers.get_number_of_unused_tickets_for_player_in_all_tournaments(existing_player,current_app,remove_empty_tournaments=False)
-    print tournament_token_count
+    tournament_token_count,meta_tournament_token_count = token_helpers.get_number_of_unused_tickets_for_player_in_all_tournaments(existing_player,current_app,remove_empty_tournaments=False)    
     if existing_player is None:
         raise BadRequest('Player does not exist')
     if existing_player is not None and existing_player.event_player is None:
         raise BadRequest('Player is not in this event')
     player_serializer = generate_player_to_dict_serializer(serializer.player.ALL)
     user_dict = player_serializer(existing_player)                            
+    user_dict['tournament_tokens']=to_dict(tournament_token_count)
+    user_dict['meta_tournament_tokens']=to_dict(meta_tournament_token_count)    
     return jsonify({'existing_player':user_dict})
 
 @blueprints.pss_admin_event_blueprint.route('/player/<player_id>',methods=['GET'])

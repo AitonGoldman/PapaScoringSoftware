@@ -6,11 +6,11 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         url: '/app',        
         views: {
             'topView@': {
-                templateUrl: 'templates/pss_admin_2.html',
+                templateUrl: 'templates/pss_admin_2.html',//check
                 controller: 'app_controller'
             },
             'pssAdminHeader@':{
-                templateUrl: 'templates/generic_pss_admin_header.html'//,
+                templateUrl: 'templates/generic_pss_admin_header.html'//check
             }
         },data: {            
             header_links: []
@@ -19,19 +19,15 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         cache:false,        
         url:'/event_select',
         views: {
-            // 'topView@': {
-            //     templateUrl: 'templates/pss_admin_2.html',
-            //     controller: 'app_controller'
-            // },
             'pssAdminContent@app':{
                 templateUrl: 'templates/event_select_content.html',
                 controller: 'app.event_select_controller'
             },
             'pssAdminHeader@':{                
-                 templateUrl: 'templates/generic_header.html'//,                
+                 templateUrl: 'templates/generic_header.html'// check                
              },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_select_footer.html'//,                
+                templateUrl: 'templates/event_select_footer.html'// check                
             }            
         },data: {
             title: "Select Events",
@@ -50,14 +46,14 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.pss_admin_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/pss_admin_footer.html'//,
+                templateUrl: 'templates/pss_admin_footer.html'// check
             },
             'list@app.pss_admin':{
                 templateUrl: 'templates/generic_list.html'//,
             }
         },data: {
-            title: "Manage Events",
-            back_title: "Events",            
+            title: "Home",
+            back_title: "Home",            
             quick_links_url: 'templates/pss_admin_quick_links.html'
         }
     }).state('app.pss_admin.login', {
@@ -70,12 +66,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 
             },
             'post_success@app.pss_admin.login':{
-                templateUrl: 'templates/generic_post_success.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_post_success.html'// check                
             },
             'post_success_buttons@app.pss_admin.login':{
-                templateUrl: 'templates/pss_admin_login_post_success_buttons.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_goto_parent_post_success_buttons.html'// check                
             }
             
         },data: {
@@ -90,15 +84,13 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.pss_admin.create_event_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/pss_admin_footer.html'//,
+                templateUrl: 'templates/pss_admin_footer.html'// check
             },
             'post_success@app.pss_admin.create_event':{
-                templateUrl: 'templates/generic_post_success.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_post_success.html'// check                
             },
             'post_success_buttons@app.pss_admin.create_event':{
-                templateUrl: 'templates/event_create_post_success_buttons.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_goto_parent_post_success_buttons.html'// check                
             }            
         },data: {
             title: "Create Event"            
@@ -112,10 +104,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/pss_admin_footer.html'//,
+                templateUrl: 'templates/pss_admin_footer.html'// check
             },
             'post_success@app.pss_admin.edit_event_wizard':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.pss_admin.edit_event_wizard':{
@@ -139,10 +131,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/pss_admin_footer.html'//,
+                templateUrl: 'templates/pss_admin_footer.html'// check
             },
             'post_success@app.pss_admin.edit_event_basic':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.pss_admin.edit_event_basic':{
@@ -165,10 +157,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/pss_admin_footer.html'//,
+                templateUrl: 'templates/pss_admin_footer.html'// check
             },
             'post_success@app.pss_admin.edit_event_advanced':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.pss_admin.edit_event_advanced':{
@@ -186,19 +178,15 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         cache:false,
         url: '/event/:event_name',
         views: {
-            // 'topView@': {
-            //     templateUrl: 'templates/pss_admin_2.html',
-            //     controller: 'app_controller'
-            // },            
             'pssAdminHeader@':{
-                templateUrl: 'templates/generic_event_header.html'//,
+                templateUrl: 'templates/generic_event_header.html'// check
             },
             'pssAdminContent@app':{
                 templateUrl: 'templates/event_content.html',
                 controller: 'app.event_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             }
         },data: {
             title: "Front Page",
@@ -215,12 +203,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 
             },
             'post_success@app.event.login':{
-                templateUrl: 'templates/generic_post_success.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_post_success.html'// check                
             },
             'post_success_buttons@app.event.login':{
-                templateUrl: 'templates/event_login_post_success_buttons.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_goto_parent_post_success_buttons.html'// check                
             }
             
         },data: {
@@ -239,7 +225,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.manage_tournaments_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'list@app.pss_admin':{
                 templateUrl: 'templates/generic_list.html'//,
@@ -256,24 +242,18 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         cache:false,
         url: '/create_tournament',
         views: {
-            // 'topView@': {
-            //     templateUrl: 'templates/pss_admin_2.html',
-            //     controller: 'app_controller'
-            // },            
             'pssAdminContent@app':{
                 templateUrl: 'templates/create_tournament_content.html',
                 controller: 'app.event.manage_tournaments.create_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.manage_tournaments.create_tournament':{
-                templateUrl: 'templates/generic_post_success.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_post_success.html'// check                
             },
             'post_success_buttons@app.event.manage_tournaments.create_tournament':{
-                templateUrl: 'templates/tournament_create_post_success_buttons.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_goto_parent_post_success_buttons.html'// check                                
             }
         },data: {
             title: "Create Tournament",
@@ -288,10 +268,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.manage_tournaments.edit_tournament_wizard':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.manage_tournaments.edit_tournament_wizard':{
@@ -315,10 +295,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.manage_tournaments.edit_tournament_basic':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.manage_tournaments.edit_tournament_basic':{
@@ -341,10 +321,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.manage_tournaments.edit_tournament_advanced':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.manage_tournaments.edit_tournament_advanced':{
@@ -371,7 +351,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.manage_tournaments_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             }            
         },data: {
             title: "Manage MetaTournaments",
@@ -387,10 +367,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.manage_tournaments.create_meta_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.manage_meta_tournaments.create_meta_tournament':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.manage_meta_tournaments.create_meta_tournament':{
@@ -413,7 +393,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.select_players_to_add_to_event_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'list@app.event.select_players_to_add_to_event':{
                 templateUrl: 'templates/generic_list.html'//,
@@ -436,10 +416,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.select_players_to_add_to_event.add_players_to_event_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.select_players_to_add_to_event.add_player_to_event':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.select_players_to_add_to_event.add_player_to_event':{
@@ -463,10 +443,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.select_players_to_add_to_event.add_players_to_event_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.select_players_to_add_to_event.add_existing_player_to_event':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.select_players_to_add_to_event.add_existing_player_to_event':{
@@ -486,10 +466,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.manage_tournaments.edit_meta_tournament_advanced':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.manage_tournaments.edit_meta_tournament_advanced':{
@@ -512,10 +492,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.shared.edit_event_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.event.manage_tournaments.edit_meta_tournament_basic':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.event.manage_tournaments.edit_meta_tournament_basic':{
@@ -538,15 +518,13 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.manage_tournament_machines.add_tournament_machine_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'
+                templateUrl: 'templates/event_footer.html' // check
             },
             'post_success@app.event.manage_tournaments.add_tournament_machine':{
-                templateUrl: 'templates/generic_post_success.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_post_success.html'// check
             },
             'post_success_buttons@app.event.manage_tournaments.add_tournament_machine':{
-                templateUrl: 'templates/manage_tournament_add_tournament_machine_post_success_buttons.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_goto_parent_post_success_buttons.html'// check                
             }            
         },data: {
             title: "Add Machine",
@@ -562,7 +540,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.manage_tournament_machines_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'
+                templateUrl: 'templates/event_footer.html' //check
             }            
         },data: {
             title: "Manage Machines",
@@ -581,12 +559,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 templateUrl: 'templates/event_footer.html'
             },
             'post_success@app.event.manage_tournament_machines.add_tournament_machine':{
-                templateUrl: 'templates/generic_post_success.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_post_success.html'// check
             },
             'post_success_buttons@app.event.manage_tournament_machines.add_tournament_machine':{
-                templateUrl: 'templates/tournament_machine_add_post_success_buttons.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_goto_parent_post_success_buttons.html'// check                
             }            
         },data: {
             title: "Add Machine",
@@ -603,12 +579,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 
             },
             'post_success@app.event.token_purchase':{
-                templateUrl: 'templates/generic_post_success.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/generic_post_success.html'// check                
             },
             'post_success_buttons@app.event.token_purchase':{
-                templateUrl: 'templates/token_purchase_post_success_buttons.html'//,
-                //controller: 'pss_admin_controller'
+                templateUrl: 'templates/token_purchase_post_success_buttons.html'// check                
             }
             
         },data: {
@@ -625,10 +599,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.register_new_pss_user_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.register_new_pss_user':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.register_new_pss_user':{
@@ -647,10 +621,10 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.register_new_pss_user_confirm_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'//,
+                templateUrl: 'templates/event_footer.html'// check
             },
             'post_success@app.register_new_pss_user_confirm':{
-                templateUrl: 'templates/generic_post_success.html'//,
+                templateUrl: 'templates/generic_post_success.html'// check
                 //controller: 'pss_admin_controller'
             },
             'post_success_buttons@app.register_new_pss_user_confirm':{
@@ -682,7 +656,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.manage_tournaments.create_tournament_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'
+                templateUrl: 'templates/event_footer.html' // check
             },
             'post_success@app.event.quick_create_tournament':{
                 templateUrl: 'templates/generic_post_success.html'
@@ -703,13 +677,13 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
                 controller: 'app.event.manage_tournament_machines.add_tournament_machine_controller'
             },
             'pssAdminFooter@app':{
-                templateUrl: 'templates/event_footer.html'
+                templateUrl: 'templates/event_footer.html' // check
             },
             'post_success@app.event.quick_add_tournament_machine':{
                 templateUrl: 'templates/generic_post_success.html'                
             },
             'post_success_buttons@app.event.quick_add_tournament_machine':{
-                templateUrl: 'templates/quick_add_tournament_machine_post_success_buttons.html'                
+                templateUrl: 'templates/generic_goto_parent_post_success_buttons.html'// check                
             }            
         },data: {
             title: "Add Machine",

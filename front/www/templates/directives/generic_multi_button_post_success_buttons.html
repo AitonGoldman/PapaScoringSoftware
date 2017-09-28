@@ -1,0 +1,44 @@
+<div> 
+  <div ng-if="num_buttons==1">
+    <center>
+      <button style='margin-left:auto;margin-right:auto;margin-top:10px' ui-sref='{{buttonsInfo[0].ui_sref}}'  class="padding button-pagraph col-50 button button-block button-positive">
+        {{buttonsInfo[0].title}}
+      </button>
+    </center>
+  </div>  
+  <div class='row' ng-if="num_buttons==2">
+  <div class='col-10'>
+  </div>
+  <button ui-sref='{{buttonsInfo[0].ui_sref}}' style='margin-left:auto;margin-right:auto;margin-top:10px' class="col padding button-pagraph button button-block button-positive">
+     {{buttonsInfo[0].title}} 
+  </button>
+  <div class='col-10'>
+  </div>
+  <button ui-sref='{{buttonsInfo[1].ui_sref}}' style='margin-left:auto;margin-right:auto;margin-top:10px' class="col padding button-pagraph button button-block button-positive">
+     {{buttonsInfo[1].title}}
+  </button>
+  <div class='col-10'>
+  </div>
+</div>
+<div ng-if="num_buttons==3">
+  <div class='row'>
+    <button ui-sref='{{buttonsInfo[0].ui_sref}}' style='margin-left:auto;margin-right:auto;margin-top:10px' class="col padding button-pagraph button button-block button-positive">
+       {{buttonsInfo[0].title}} 
+    </button>
+    <div class='col-10'>
+    </div>
+    <button ui-sref='{{buttonsInfo[1].ui_sref}}' style='margin-left:auto;margin-right:auto;margin-top:10px' class="col padding button-pagraph button button-block button-positive">
+       {{buttonsInfo[1].title}}
+    </button>
+  </div>
+  <div class='row'>
+    <div class='col-20'>
+    </div>
+    <button ui-sref='{{buttonsInfo[2].ui_sref}}' style='margin-left:auto;margin-right:auto;margin-top:10px' class="col padding button-pagraph button button-block button-positive">
+       {{buttonsInfo[2].title}} 
+    </button>
+    <div class='col-20'>
+    </div>    
+  </div>  
+</div>
+</div>

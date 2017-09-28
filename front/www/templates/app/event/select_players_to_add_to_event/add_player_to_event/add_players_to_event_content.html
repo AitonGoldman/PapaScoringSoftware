@@ -1,8 +1,7 @@
 <div class='chatitemup' ng-if="post_success!=undefined">
   <div ui-view='post_success'>
   </div>
-  <div ui-view='post_success_buttons'>
-  </div>  
+  <post-success-multiple-buttons buttons-info="[{title:'Purchase Tickets',ui_sref:'app.event.token_purchase({player:{{player}}})'},{title:'Add Another Player',ui_sref:'app.event.select_players_to_add_to_event'},{title:'Home',ui_sref:'app.event'}]"></post-success-multiple-buttons>
 </div>
 <div ng-if="post_success==undefined">
   <form>

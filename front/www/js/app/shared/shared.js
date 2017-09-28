@@ -19,7 +19,7 @@ angular.module('shared').controller(
             }
             if(edit_route=="put_edit_event"){
                 url = "http://0.0.0.0:8000/pss_admin/media_upload/jpg_pic";
-                header_links[0]['link'] = '.pss_admin.edit_event_advanced({id:'+$state.params.id+'})';
+                header_links[0]['link'] = '.edit_event_advanced({id:'+$state.params.id+'})';
             }            
             $scope.add_header_links(header_links);
             $scope.uploader = new FileUploader({url:url,formData:[file_form_data]});            

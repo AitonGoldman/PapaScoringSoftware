@@ -1,6 +1,9 @@
 <div class='chatitemup' ng-if="post_success!=undefined">
   <h2>A confirmation email has been sent.</h2>
   Your information has been submitted, and an email has been sent to you with a confirmation link.  Your account will not be activated until you click on the confirmation link.  The email should arrive sometime in the next hour.  
+  <post-success-multiple-buttons buttons-info="[{title:'Go Home',ui_sref:'app.pss_admin'}]"></post-success-multiple-buttons>
+  </div>  
+
 </div>
 <div ng-if="post_success==undefined">
   <form name="myForm">

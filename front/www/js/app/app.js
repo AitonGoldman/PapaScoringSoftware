@@ -63,7 +63,7 @@ angular.module('app').controller(
                 $scope.credentials_for_event = credentialsService.get_credentials()[$scope.event_name];                
                 $rootScope.is_logged_in=credentialsService.is_logged_in($scope.event_name);
                 //var parent_state =                
-                $rootScope.back_button_title=$state.get('^').data.back_title;
+                $rootScope.back_button_title=$state.get('^').data.back_title;                
             };
 
             $scope.add_header_links = function(links){
@@ -93,7 +93,7 @@ angular.module('app').controller(
             $rootScope.go_back = function(){
                 //history = $ionicHistory.viewHistory();
                 //history.back();
-                $state.go('.^');
+                $state.go('.^');                
             };
 
             $rootScope.openHelpPopover = function($event) {                                
@@ -185,7 +185,7 @@ angular.module('app').directive('pssTextInputBasic', function($state) {
       restrict: 'AE',
       replace: 'true',
       scope:true,
-      templateUrl: 'templates/generic_text_input_basic.html',
+      templateUrl: 'templates/directives/generic_text_input_basic.html',
       link: function(scope, elem, attrs) {
           scope.field = attrs.field;
           scope.basic = attrs.basic;
@@ -202,7 +202,7 @@ angular.module('app').directive('pssBooleanInputBasic', function($state) {
       restrict: 'AE',
       replace: 'true',
       scope:true,
-      templateUrl: 'templates/generic_boolean_input_basic.html',
+      templateUrl: 'templates/directives/generic_boolean_input_basic.html',
       link: function(scope, elem, attrs) {
           scope.field = attrs.field;
           scope.basic = attrs.basic;          
@@ -215,7 +215,7 @@ angular.module('app').directive('pssBooleanInputAdvanced', function($state) {
       restrict: 'AE',
       replace: 'true',
       scope:true,
-      templateUrl: 'templates/generic_boolean_input_advanced.html',
+      templateUrl: 'templates/directives/generic_boolean_input_advanced.html',
       link: function(scope, elem, attrs) {
           scope.field = attrs.field;
           scope.basic = attrs.basic;
@@ -230,7 +230,7 @@ angular.module('app').directive('pssTextInputAdvanced', function($state) {
       restrict: 'AE',
       replace: 'true',
       scope:true,
-      templateUrl: 'templates/generic_text_input_advanced.html',
+      templateUrl: 'templates/directives/generic_text_input_advanced.html',
       link: function(scope, elem, attrs) {
           scope.field = attrs.field;
           scope.basic = attrs.basic;          
@@ -238,22 +238,42 @@ angular.module('app').directive('pssTextInputAdvanced', function($state) {
   };
 });
 
+angular.module('app').directive('postSuccessMultipleButtons', function($state) {
+  return {
+      restrict: 'AE',
+      replace: 'true',
+      scope:{myValue: "@buttonsInfo"},
+      templateUrl: 'templates/directives/generic_multi_button_post_success_buttons.html',
+      link: function(scope, elem, attrs) {          
+          //scope.buttonsInfo = scope.$eval(attrs.buttonsInfo);
+          scope.buttonsInfo = scope.$eval(scope.myValue);
+          console.log(scope.buttonsInfo);
+          scope.num_buttons = scope.buttonsInfo.length;          
+      }      
+  };
+});
+
+angular.module('app').directive('postSuccessSingleButton', function($state) {
+  return {
+      restrict: 'AE',
+      replace: 'true',
+      scope:true,
+      templateUrl: 'templates/directives/generic_goto_parent_post_success_buttons.html',
+      link: function(scope, elem, attrs) {
+      }      
+  };
+});
+
+
 angular.module('app').directive('pssGenericList', function($state) {
   return {
       restrict: 'AE',
       replace: 'true',
       scope:true,
-      templateUrl: 'templates/generic_list_directive.html',
+      templateUrl: 'templates/directives/generic_list_directive.html',
       link: function(scope, elem, attrs) {          
-          //if(attrs.itemsToList.indexOf('.')<0){
           scope.itemsToList=attrs.itemsToList;
           scope.subItemsToList=attrs.subItemsToList;          
-          //} else {
-              //var itemsToListArray = attrs.itemsToList.split('.');              
-          //}
-          //for(i in scope){
-          //    console.log(i+"--"+scope[i]);
-          //}
           scope.fake_scope=scope;
           scope.filter_to_apply = attrs.filterToApply;          
           scope.not_found_message=attrs.notFoundMessage;

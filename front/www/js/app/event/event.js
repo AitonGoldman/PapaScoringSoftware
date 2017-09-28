@@ -280,7 +280,7 @@ angular.module('event').controller(
             $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
 
             var set_list_items_ui_sref_and_args = listGeneration.generate_set_list_items_ui_sref_and_args(".add_existing_player_to_event({player_id:item.player_id})","player_name");
-
+            
             var on_success = function(data){
                 var raw_items=data['existing_players'];
                 $scope.items = _.filter(raw_items, function(n) {
@@ -290,6 +290,7 @@ angular.module('event').controller(
                     return true;
                 });                
                 _.map($scope.items, set_list_items_ui_sref_and_args);
+                console.log($scope.items);
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_players',on_success,{event_name:$scope.event_name},{});                        
         }]);
@@ -401,7 +402,7 @@ angular.module('event').controller(
                 $scope.tournaments = data['multi_division_tournaments'];
                 $scope.event = data['event'];
             };
-            $scope.player = {};
+            $scope.player = {};            
             if($state.params.player_id!=undefined){                                
                 //FIXME : get_wrapper_with_loading() can not run concurrently - due to ionicloading promises
                 var prom2 = resourceWrapperService.get_wrapper_without_loading('get_player',on_player_load_success,{player_id:$state.params.player_id},{});

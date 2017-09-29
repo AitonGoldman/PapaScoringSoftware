@@ -1,14 +1,14 @@
 
-  <div class="item-input-inset">
-    <label class="item-input-wrapper">
-      <i class="icon ion-ios-search placeholder-icon"></i>
-      <input type="search" placeholder="Search" ng-model='filter_for'>
-    </label>
-  </div>
-  <ion-item ui-sref='.create_tournament' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Create Tournament</ion-item>
+  <!-- <div class="item-input-inset"> -->
+  <!--   <label class="item-input-wrapper"> -->
+  <!--     <i class="icon ion-ios-search placeholder-icon"></i> -->
+  <!--     <input type="search" placeholder="Search" ng-model='filter_for'> -->
+  <!--   </label> -->
+  <!-- </div> -->
+  <ion-item ui-sref='.create_tournament' class='item item-icon-left item-icon-right'> <i class='icon ion-plus-circled'></i>Create Tournament     <i class='icon material-icons'>chevron_right</i>   </ion-item>
 
   <div class='padding'> </div>  
-  <span ng-if='items.length > 0'>Tournaments</span>
+  <ion-item class='item-borderless' ng-if='items.length > 0'><b>Tournaments</b></ion-item>
   <pss-generic-binding-list items-to-list='items' filter-to-apply="filter"> </pss-generic-binding-list>
 
 

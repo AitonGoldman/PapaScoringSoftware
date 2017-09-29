@@ -1,22 +1,24 @@
 <div>
   <div class='item item-borderless'>
     <center>
-      {{post_results.title}} <!--Logged In --> <i class="icon ion-checkmark-circled balanced" style='font-size:26px'></i>
-      <hr>
+      <b>{{post_results.title}}</b> <!--Logged In --> <i class="icon ion-checkmark-circled balanced" style='font-size:26px'></i>
     </center>
   </div>
-  <div class='row' ng-repeat="result in post_results.results" >
-    <div class='col-50'>
-      <span style='float:right'>
-        {{result[0]}}<!--User Name--> :
-      </span>
-    </div>
-    <div class='col'>
-    </div>
-    <div class='col-50'>
-      <span style='float:left'>
-        {{result[1]}}<!--{{logged_in_user.username}}-->
-      </span>
-    </div>        
+  <div class='card' ng-repeat="result in post_results.results" >
+    <div class="item item-divider">{{result[0]}}</div>
+    <div class="item item-text-wrap"><center>{{result[1]}}</center></div>
+  </div>
+    <!-- <div class='col-50'> -->
+    <!--   <span style='float:right'> -->
+    <!--     {{result[0]}}<\!--User Name-\-> : -->
+    <!--   </span> -->
+    <!-- </div> -->
+    <!-- <div class='col'> -->
+    <!-- </div> -->
+    <!-- <div class='col-50'> -->
+    <!--   <span style='float:left'> -->
+    <!--     {{result[1]}}<\!--{{logged_in_user.username}}-\-> -->
+    <!--   </span> -->
+    <!-- </div>         -->
   </div>
 </div>

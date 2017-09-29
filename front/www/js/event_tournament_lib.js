@@ -38,10 +38,12 @@ angular.module('event_tournament_lib')
                      var on_success = function(data){
                          item.active=data['item'].active;
                          if(item.active == true){                        
-                             item.icon='ion-play';
+                             //item.icon='ion-play';
+                             item.material_icon='play_circle_outline';
                              item.icon_color='green';
                          } else {                        
-                             item.icon='ion-stop';
+                             //item.icon='ion-stop';
+                             item.material_icon='pause_circle_filled';
                              item.icon_color='red';                             
                          }                                              
                      };

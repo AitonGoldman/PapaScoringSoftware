@@ -80,10 +80,12 @@ angular.module('list_generation')
                         return;                        
                     }
                     if(i.active == true){                        
-                        i.icon='ion-play';
+                        //i.icon='ion-play';
+                        i.material_icon='play_circle_outline';
                         i.icon_color='green';
                     } else {                        
-                        i.icon='ion-stop';
+                        //i.icon='ion-stop';
+                        i.material_icon='pause_circle_filled';
                         i.icon_color='red';
                     }                     
                  };

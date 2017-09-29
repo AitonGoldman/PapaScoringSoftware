@@ -1,12 +1,12 @@
 <div>
-  <ion-item ui-sref='{{item.ui_sref}}' class='item item-icon-left' ng-repeat='item in fake_scope_lookup(itemsToList,subItemsToList)|useFilter:filter_to_apply:filter_for as srefcount' ng-if='item.ui_sref!=undefined'>
+  <ion-item ui-sref='{{item.ui_sref}}' class='item item-icon-left' ng-repeat='item in items_to_list|useFilter:filter_to_apply:filter_for as srefcount' ng-if='item.ui_sref!=undefined'>
     <i class='icon ion-edit'></i>
     {{item.label_to_display}}
   </ion-item>
   <ion-item ng-if='srefcount==0' class='item-borderless'>
     {{not_found_message}}
   </ion-item>
-  <div class='card' style='margin:0;margin-top:2px' ng-repeat='item in fake_scope_lookup(itemsToList,subItemsToList)|useFilter:filter_to_apply:filter_for as actioncount' ng-if='item.actions_ui_sref_list!=undefined'>
+  <div class='card' style='margin:0;margin-top:2px' ng-repeat='item in items_to_list|useFilter:filter_to_apply:filter_for as actioncount' ng-if='item.actions_ui_sref_list!=undefined'>
     <div class='row'>
       <div class='col'>
         <div class='item item-divider item-icon-left' ng-click='toggle_view_item_actions(item)'>

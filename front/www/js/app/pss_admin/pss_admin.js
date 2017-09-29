@@ -5,7 +5,6 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
         function($scope, $state,resourceWrapperService,listGeneration, eventTournamentLib) {
             $scope.bootstrap({back_button:false});            
-            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;            
             var on_success = function(data){                
                 $scope.items=data['events'];                
                 $scope.wizard_mode_pop();                
@@ -34,11 +33,6 @@ angular.module('pss_admin').controller(
                 var on_success = function(data){
                     $scope.logged_in_user=data['pss_user'];
                     credentialsService.set_pss_user_credentials(event,data);
-                    //$scope.post_results={};
-                    //$scope.post_results.title="Logged In!";
-                    //$scope.post_results.results=[['User Name',data['pss_user'].username]];                    
-                    //$scope.post_success = true;                    
-                    //$scope.disable_back_button();
                     $scope.post_success_handler("Logged In!",[['User Name',data['pss_user'].username]],$scope);
 
                 };
@@ -59,22 +53,14 @@ angular.module('pss_admin').controller(
             $scope.item={};            
             $scope.create_event_func = function(){                
                 var on_success = function(data){
-                    // $scope.logged_in_user=data['new_event'];
-                    //$scope.post_results={};
-                    //$scope.post_results.title="Event Created!";
-                    //$scope.post_results.results=[['Event Name',data['new_event'].name]];                                        
-                    ///$scope.disable_back_button();
-                    //$scope.post_success = true;                    
-                    $scope.post_success_handler("Event Created!",[['Event Name',data['new_event'].name]],$scope);                    
+                    $scope.post_success_handler("Event Created!",[['Event Name',data['new_event'].name]],$scope);
                 };                                
-                var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,{},$scope.item);            
-
+                var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,{},$scope.item);
             };
             var on_get_success = function(data){
                 $scope.descriptions=data['descriptions'];
             };                        
-            var prom =resourceWrapperService.get_wrapper_with_loading('get_event_descriptions',on_get_success,{},{});                        
-            
+            var prom =resourceWrapperService.get_wrapper_with_loading('get_event_descriptions',on_get_success,{},{});
         }
     ]);
 

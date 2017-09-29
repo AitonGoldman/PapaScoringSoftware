@@ -39,7 +39,7 @@ angular.module('event').controller(
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$cookies) {
             $scope.bootstrap({back_button:true});
             $scope.check_for_hiding_based_on_wizard();            
-            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
+            //$scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
             $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
             var on_success = function(data){
                 //$scope.items=data['tournaments'];
@@ -80,26 +80,26 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$timeout','$ionicActionSheet',
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$timeout,$ionicActionSheet) {            
             $scope.bootstrap();
-            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
+            //$scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
                        
-            $scope.remove_item = function(item){
-            var hideSheet = $ionicActionSheet.show({
-                destructiveText: 'Remove Machine',
-                titleText: 'Are you SURE you want to remove this machine?',
-                cancelText: 'Cancel',
-                cancel: function() {
-                    // add cancel code..
-                },
-                buttonClicked: function(index) {                    
-                    return true;
-                },
-                destructiveButtonClicked: function(index){
-                    eventTournamentLib.remove_item(item,$state.params.event_name);
-                    hideSheet();
-                }
-            });
+            // $scope.remove_item = function(item){
+            // var hideSheet = $ionicActionSheet.show({
+            //     destructiveText: 'Remove Machine',
+            //     titleText: 'Are you SURE you want to remove this machine?',
+            //     cancelText: 'Cancel',
+            //     cancel: function() {
+            //         // add cancel code..
+            //     },
+            //     buttonClicked: function(index) {                    
+            //         return true;
+            //     },
+            //     destructiveButtonClicked: function(index){
+            //         eventTournamentLib.remove_item(item,$state.params.event_name);
+            //         hideSheet();
+            //     }
+            // });
 
-            };
+            // };
             
             var on_success = function(data){                
                 $scope.items=data['tournaments'];
@@ -277,7 +277,7 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
             $scope.bootstrap({back_button:true});
-            $scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
+            //$scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
 
             var set_list_items_ui_sref_and_args = listGeneration.generate_set_list_items_ui_sref_and_args(".add_existing_player_to_event({player_id:item.player_id})","player_name");
             

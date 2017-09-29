@@ -13,7 +13,7 @@
         <h1>{{tournament.tournament_name}}</h1>
       </div>
       <div ui-sref='.add_tournament_machine({tournament_id:tournament.tournament_id})' class='item item-icon-left'><i class='icon ion-plus-circled'></i> &nbsp; Add Machine</div>      
-      <pss-generic-list items-to-list='tournament' sub-items-to-list='tournament_machines' filter-to-apply="filter"> </pss-generic-list>
+      <pss-generic-binding-list items-to-list='tournament.tournament_machines'  filter-to-apply="filter"> </pss-generic-binding-list>
     </div>
   </div>
 

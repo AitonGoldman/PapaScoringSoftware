@@ -264,37 +264,25 @@ angular.module('app').directive('postSuccessSingleButton', function($state) {
   };
 });
 
-
-angular.module('app').directive('pssGenericList', function($state) {
+angular.module('app').directive('pssGenericBindingList', function($state,listGeneration,eventTournamentLib) {
   return {
       restrict: 'AE',
       replace: 'true',
-      scope:true,
-      templateUrl: 'templates/directives/generic_list_directive.html',
+      scope:{items_to_list: "=itemsToList",filter_to_apply:"@filterToApply",not_found_message:"@notFoundMessage"},
+      templateUrl: 'templates/directives/generic_binding_list_directive.html',
       link: function(scope, elem, attrs) {          
-          scope.itemsToList=attrs.itemsToList;
-          scope.subItemsToList=attrs.subItemsToList;          
-          scope.fake_scope=scope;
-          scope.filter_to_apply = attrs.filterToApply;          
-          scope.not_found_message=attrs.notFoundMessage;
-          scope.list_title = attrs.listTitle;
-          
-          scope.fake_scope_lookup = function(field,sub_field){              
-              if(sub_field != undefined){                                    
-                  return scope[field][sub_field];
-              }              
-              return scope[field];              
-          };          
+          scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
+          scope.toggle_item_active = eventTournamentLib.toggle_item_active;
+          scope.remove_item = eventTournamentLib.remove_item;
+
+          console.log(scope.items_to_list);
+          //scope.buttonsInfo = scope.$eval(attrs.buttonsInfo);          
+          //scope.buttonsInfo = scope.$eval(scope.myValue);
+          //console.log(scope.buttonsInfo);
+          //scope.num_buttons = scope.buttonsInfo.length;          
       }      
   };
 });
-
-
-//REMEMBER ME : for later
-// angular.module('app').filter('genericSearch', function () {
-//   return function (items) {
-//   };
-// });
 
 angular.module('app').controller(
     'test_controller',[

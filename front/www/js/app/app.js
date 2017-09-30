@@ -63,7 +63,8 @@ angular.module('app').controller(
                 $scope.credentials_for_event = credentialsService.get_credentials()[$scope.event_name];                
                 $rootScope.is_logged_in=credentialsService.is_logged_in($scope.event_name);
                 //var parent_state =                
-                $rootScope.back_button_title=$state.get('^').data.back_title;                
+                $rootScope.back_button_title=$state.get('^').data.back_title;
+                $rootScope.is_android = ionic.Platform.isAndroid();
             };
 
             $scope.add_header_links = function(links){

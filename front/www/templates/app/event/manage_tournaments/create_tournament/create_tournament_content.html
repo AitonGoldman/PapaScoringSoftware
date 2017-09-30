@@ -25,14 +25,14 @@
   </label>
   <div class="card">
     <div class="item item-divider">
-      Select type of tournament. <span style='float:right'> <a ng-click='openFreestandingHelpPopover($event)'>Help</a> </span>
+      Select type of tournament <!--<a ng-click='openFreestandingHelpPopover($event)'>Help</a>-->
     </div>      
     <ion-list>
       <ion-radio ng-model="item.finals_style" ng-value="'PAPA'">Single Division</ion-radio>
       <ion-radio ng-model="item.finals_style" ng-value="'PPO'">Single Division With A/B Finals</ion-radio>      
       <ion-radio ng-model="item.finals_style" ng-value="'MULTI'" ng-if='state != "app.event.quick_create_tournament"'>Multiple Divisions</ion-radio>
     </ion-list>
-    <div class="list" ng-if='tournament.finals_style=="MULTI"'>
+    <div class="list" ng-if='item.finals_style=="MULTI"'>
       <label class="item item-input item-select">
         <div class="input-label">
           Number of divisions
@@ -87,6 +87,6 @@
       <div class='col'>
       </div>    
     </div>
-    <div ng-class='{bottom_spacer:is_android==true}'></div>    
+        
 </form>
 </div>

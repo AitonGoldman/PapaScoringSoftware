@@ -86,7 +86,7 @@ angular.module('resource_wrapper')
                   };
                   
                   var rest_api = {};
-                  var rest_server = "http://192.168.1.178:8000";
+                  var rest_server = "http://"+backend_ip+":"+backend_port;
                   //var rest_server = "http://0.0.0.0:8000";                  
                   //var rest_server = "http://192.168.2.13:8000";
                   var timeout=5000;

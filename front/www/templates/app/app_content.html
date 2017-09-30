@@ -4,6 +4,7 @@
     <div style='margin:auto;margin-top:55px' class="list desktop-50-width selectable-text">
       <div class="chatitem" ui-view='pssAdminContent'></div>
     </div>
+    <div ng-class='{bottom_spacer:is_android==true}'></div>    
   </ion-content>
   <div class="chatitem tabs tabs-icon-top mobile-only" ui-view='pssAdminFooter'>
   </div>

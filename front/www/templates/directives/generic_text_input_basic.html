@@ -2,9 +2,15 @@
   <div class="item item-divider" ng-if='basic=="true"'>
     {{descriptions.short_descriptions[field]}}
   </div>      
-  <div>
-    <label class="item item-input">
-      <input class='center-aligned-placeholder' type="{{type}}" placeholder="{{descriptions.short_descriptions[field]}}" ng-model="item[field]"/>
+  <!-- <div> -->
+  <!--   <label class="item item-input"> -->
+  <!--     <input class='center-aligned-placeholder' type="{{type}}" placeholder="{{descriptions.short_descriptions[field]}}" ng-model="item[field]"/> -->
+  <!--   </label> -->
+  <!-- </div> -->
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-edit placeholder-icon"></i>
+      <input type="{{type}}" placeholder="{{descriptions.short_descriptions[field]}}" ng-model="item[field]">
     </label>
   </div>
   <div>

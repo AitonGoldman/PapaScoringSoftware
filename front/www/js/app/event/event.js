@@ -327,7 +327,7 @@ angular.module('event').controller(
             };
             $scope.showConfirm = function() {
                 var confirmPopup = $ionicPopup.confirm({
-                    title: 'Consume Ice Cream',
+                    title: 'Select player',
                     templateUrl: 'templates/ifpa_select.html',
                     scope:$scope
                 });

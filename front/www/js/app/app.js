@@ -1,8 +1,8 @@
 angular.module('app',['event_select','pss_admin','event','shared','register']);
 angular.module('app').controller(
     'app_controller',[
-        '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup','$http','toaster','$ionicScrollDelegate',
-        function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory,$ionicPopover,$ionicPopup,$http,toaster,$ionicScrollDelegate) {
+        '$scope','$state','credentialsService','$ionicNavBarDelegate','$rootScope','$cookies','$ionicHistory','$ionicPopover','$ionicPopup','$http','toaster','$ionicScrollDelegate','$location',
+        function($scope, $state,credentialsService,$ionicNavBarDelegate,$rootScope,$cookies,$ionicHistory,$ionicPopover,$ionicPopup,$http,toaster,$ionicScrollDelegate,$location) {
             if ($rootScope.credentials == undefined){
                 $rootScope.credentials=credentialsService;
             }
@@ -97,17 +97,14 @@ angular.module('app').controller(
                 $state.go('.^');                
             };
 
-            $rootScope.openHelpPopover = function($event) {                                
-                //                $ionicPopover.fromTemplateUrl('templates/'+$state.current.name+'-help.html', {
-                $ionicPopover.fromTemplateUrl('templates/help.html', {                
-                    scope: $scope
-                }).then(function(popover){
-                    $scope.popover.hide();
-                    $scope.popover.remove();                    
-                    $scope.popover = popover;
-                    $scope.popover.show($scope.popover_event);
-                });
-                
+            $rootScope.openHelpPopover = function($event) {                                                
+                $scope.popover.hide();
+                $scope.popover.remove();
+                var confirmPopup = $ionicPopup.alert({
+                    title: 'Help',
+                    templateUrl: 'templates/help_alert_'+$state.current.name+'.html',
+                    scope:$scope
+                });                    
             };
             $rootScope.openFreestandingHelpPopover = function($event) {                                
                 $ionicPopover.fromTemplateUrl('templates/help.html', {                
@@ -134,8 +131,24 @@ angular.module('app').controller(
                 $scope.popover.hide();
                 $scope.popover.remove();                
                 $state.go(sref);                
-            };
+            };            
             
+            $rootScope.popoverOtherSiteClick = function(site) {                                
+                $scope.popover.hide();
+                $scope.popover.remove();
+                if (site =='admin'){
+                    if ($scope.is_event_dns()){
+                        window.location="http://admin.inchglue.com/";
+                    }
+                    if ($scope.is_event_html()){
+                        window.location="/admin.html";                        
+                    }                    
+                }
+                
+                
+            };            
+            
+
             $scope.uploadedFile = function(element) {                
                 $scope.$apply(function($scope) {                    
                     $scope.files = element.files;         
@@ -176,7 +189,19 @@ angular.module('app').controller(
             };
             $scope.pop = function(text){
 	        toaster.pop({type:'info',title:'title',body:text,timeout:0});
-	    };            
+	    };
+            $scope.is_admin_dns = function(){
+                return $location.host().indexOf('admin') == 0;
+            };
+            $scope.is_event_dns = function(){
+                return $location.host().indexOf('event') == 0;            
+            };
+            $scope.is_admin_html = function(){
+                return $location.absUrl().indexOf('admin.html#') >=0;
+            };
+            $scope.is_event_html = function(){
+                return $location.absUrl().indexOf('event.html#') >=0;
+            };
         }
     ]
 );

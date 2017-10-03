@@ -56,16 +56,16 @@ def get_events(tables):
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        
     #FIXME : pss_admin should not be hard coded here    
     response = jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})    
-    if current_user.is_anonymous() is False and len(current_user.admin_roles) > 0 and current_user.admin_roles[0].name == roles_constants.PSS_USER:        
-        user_events = [event for event in events if event.event_creator_pss_user_id==current_user.pss_user_id]
-        print len(user_events)
-        if len(user_events) == 0:
-            print "here we go"
-            response.set_cookie('wizard_mode','0')            
-        if len(user_events) == 1 and user_events[0].wizard_configured is not True:
-            response.set_cookie('wizard_mode','1')
-        if len(user_events) == 1 and user_events[0].wizard_configured == True:
-            response.set_cookie('wizard_mode','666')        
+    # if current_user.is_anonymous() is False and len(current_user.admin_roles) > 0 and current_user.admin_roles[0].name == roles_constants.PSS_USER:        
+    #     user_events = [event for event in events if event.event_creator_pss_user_id==current_user.pss_user_id]
+    #     print len(user_events)
+    #     if len(user_events) == 0:
+    #         print "here we go"
+    #         response.set_cookie('wizard_mode','0')            
+    #     if len(user_events) == 1 and user_events[0].wizard_configured is not True:
+    #         response.set_cookie('wizard_mode','1')
+    #     if len(user_events) == 1 and user_events[0].wizard_configured == True:
+    #         response.set_cookie('wizard_mode','666')        
         
     return response
 

@@ -5,7 +5,8 @@ angular.module('event').controller(
         function($scope, $state,resourceWrapperService,listGeneration ) {
             $scope.bootstrap({back_button:true});
             $scope.check_for_hiding_based_on_wizard();            
-            $scope.wizard_mode_pop();                            
+            //$scope.wizard_mode_pop();
+            $scope.tournament_create_wizard_pop();
         }]);
 
 angular.module('event').controller(
@@ -140,12 +141,10 @@ angular.module('event').controller(
                     _.forEach(filtered_values, function(machine) {
                         results.push(["Machine Name",machine.machine_name]);
                     });
-                    $scope.post_success_handler("Machines Added!",results,$scope);
-                    if(parseInt($cookies.get('wizard_mode'))<555){
-                        $cookies.put('wizard_mode','555');
+                    $scope.post_success_handler("Machines Added!",results,$scope);                    
+                    if($cookies.get('tournament_wizard_mode') == '"0 tournaments"'){
+                       $cookies.put('tournament_wizard_mode','1 tournament unconfigured');
                     }
-                    
-
                     //$scope.post_success = true;
                     //$scope.disable_back_button();
                     

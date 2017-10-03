@@ -97,13 +97,25 @@ def pss_logout(tables):
 @load_tables
 def pss_event_user_login(tables):    
     pss_event_user = pss_login_route(request,tables,is_pss_admin_event=False)
+    event = tables.Events.query.filter_by(name=current_app.name).first()
+    tournaments = tables.Tournaments.query.all()
     if login_user(pss_event_user) is False:
         raise Unauthorized('User is not active')
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_event_user.pss_user_id))
     pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
     user_dict=pss_user_serializer(pss_event_user)
-    return jsonify({'pss_user':user_dict})
 
+    if len(tournaments) == 0:
+        wizard_mode="0 tournaments"
+    if len(tournaments) == 1:
+        wizard_mode="1 tournament"
+    if len(tournaments) > 1:
+        wizard_mode="1+ tournament"    
+        
+    response = jsonify({'pss_user':user_dict})
+    response.set_cookie('tournament_wizard_mode',wizard_mode)
+    return response
+    
 @blueprints.event_blueprint.route('/auth/player/login',methods=['POST'])
 @load_tables
 def player_login(tables):    

@@ -15,25 +15,51 @@ angular.module('app').controller(
                     $rootScope.hide_based_on_cookie=false;
                 }
             };
-
+            $scope.tournament_create_wizard_pop = function(tournaments){                                
+                console.log($cookies.get("tournament_wizard_mode"));                
+                if($rootScope.is_logged_in==true && $cookies.get('tournament_wizard_mode') == '"0 tournaments"'){                                        
+                    $scope.pop("Click QuickCreate tournaments");
+                }
+                if($rootScope.is_logged_in==true && $cookies.get('tournament_wizard_mode') == "1 tournament unconfigured"){                    
+                    $scope.pop("You have finished setting up your event and tournament.  More text here about what to do next!");
+                    $cookies.put('tournament_wizard_mode','1 tournament configured');                                            
+                }                
+            };
+            
+            $scope.event_create_wizard_pop = function(events,pss_user_id){                
+                var creds=credentialsService.get_credentials()[$state.params.event_name];
+                var filtered_events = _.filter(events, function(item) {
+                    if(item.event_creator_pss_user_id==creds.pss_user_id){                
+                        return true;
+                    } else {
+                        return false;
+                    }            
+                });                
+                if(filtered_events.length == 0  && $rootScope.is_logged_in==true){                    
+                    $scope.pop("Wizard mode activated!  You will now be guided through an initial setup.  Click 'Create Event'");
+                }
+                if(filtered_events.length == 1 && $rootScope.is_logged_in==true && filtered_events[0].wizard_configured == false){
+                    $scope.pop("Event created.  Now goto the 'Login to Events' page (the link is in the quick links), login to your event, and create a tournament");                    
+                }
+            };
             $scope.wizard_mode_pop = function(){
-                var wizard_mode = $cookies.get('wizard_mode');                
+                var wizard_mode = $cookies.get('wizard_mode');
                 //need to check if logged in before toasting                                
                 if(wizard_mode != undefined && wizard_mode != '666' && $rootScope.is_logged_in==true){
-                    if($state.current.name=='app.pss_admin' && wizard_mode == '0'){
-                        $scope.pop("Wizard mode activated!  You will now be guided through an initial setup.  Click 'Create Event'");
-                    }
-                    if($state.current.name=='app.pss_admin' && wizard_mode == '1'){
-                        $scope.pop("Event created.  Now goto the 'Event Select' page (the link is in the quick links), login to your event, and create a tournament");
-                    }
-                    if($state.current.name=='app.event' && (wizard_mode == '1' || wizard_mode == '2')){
-                        $scope.pop("Click QuickCreate tournaments");
-                        return false;
-                    }
-                    if($state.current.name=='app.event' && wizard_mode == '555'){
-                        $scope.pop("You have finished setting up your event and tournament.  More text here about what to do next!");
-                        $cookies.put('wizard_mode','666');                        
-                    }                                                                                
+                    // if($state.current.name=='app.pss_admin' && wizard_mode == '0'){
+                    //     $scope.pop("Wizard mode activated!  You will now be guided through an initial setup.  Click 'Create Event'");
+                    // }
+                    // if($state.current.name=='app.pss_admin' && wizard_mode == '1'){
+                    //     $scope.pop("Event created.  Now goto the 'Event Select' page (the link is in the quick links), login to your event, and create a tournament");
+                    // }
+                    // if($state.current.name=='app.event' && (wizard_mode == '1' || wizard_mode == '2')){
+                    // $scope.pop("Click QuickCreate tournaments");
+                    //     return false;
+                    // }
+                    // if($state.current.name=='app.event' && wizard_mode == '555'){
+                    //     $scope.pop("You have finished setting up your event and tournament.  More text here about what to do next!");
+                    //     $cookies.put('wizard_mode','666');                        
+                    // }                                                                                
                 }                
                 return true;
             };

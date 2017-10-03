@@ -10,7 +10,7 @@
   <i class="icon ion-ios-photos-outline" ></i>
   Quick Links
 </a>
-<a ng-repeat='header_link in header_links' ui-sref='{{header_link.link}}' class="tab-item">
+<a ng-repeat='header_link in header_links' ui-sref='.^{{header_link.link}}' class="tab-item">
   <i class="icon {{header_link.icon}}" ></i>
   {{header_link.label}}
 </a>

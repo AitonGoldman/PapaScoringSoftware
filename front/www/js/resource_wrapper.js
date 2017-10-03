@@ -89,7 +89,7 @@ angular.module('resource_wrapper')
                   var rest_server = "http://"+backend_ip+":"+backend_port;
                   //var rest_server = "http://0.0.0.0:8000";                  
                   //var rest_server = "http://192.168.2.13:8000";
-                  var timeout=5000;
+                  var timeout=8000;
                   rest_api['get_events'] = $resource(rest_server+'/pss_admin/event',
                                                      {},
                                                      {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});

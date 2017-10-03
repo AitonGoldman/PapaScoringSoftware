@@ -38,6 +38,7 @@ def get_event_field_descriptions():
     short_descriptions['wizard_configured']='wizard configured (ignore this)'
     short_descriptions['force_ifpa_lookup']='Force IFPA lookup for players'
     short_descriptions['has_pic']='Event picture'
+    short_descriptions['require_pic']='Require player pictures to be taken'
 
     long_descriptions['queue_bump_amount']='The number of spots a player will be "bumped" down a queue if they are not present when it is their turn to play.'
     long_descriptions['player_id_seq_start']='The starting player id.  All player ids will follow this id.  I.e. if this is set to 100, the first player that registers will be player 100, then player 101, etc.'
@@ -45,6 +46,8 @@ def get_event_field_descriptions():
     long_descriptions['number_unused_tickets_allowed']='The maximum number of unused tickets a player is allowed to have at one time.  Note that this includes a ticket currently being played by a player.'
     long_descriptions['stripe_public_key']='Stripe public key.  If you do not set this, you can not use stripe for player ticket purchases.'
     long_descriptions['stripe_api_key']='Stripe private/api key. If you do not set this, you can not use stripe for player ticket purchases.'    
+    long_descriptions['require_pic']='Require player pictures to be taken.  Note that player if this is set to true then a player can not buy tickets or play games until their picture is taken.'    
+
     return {'long_descriptions':long_descriptions,'short_descriptions':short_descriptions}
     
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['GET'])

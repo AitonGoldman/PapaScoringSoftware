@@ -18,7 +18,7 @@
         </label>
       </div>
       <div ng-class={'col-20':player.player_id!=undefined} style='margin:auto'>
-        <img ng-if='player.player_id!=undefined' src='/123.jpg' class='padding circular--square' style='opacity:.5;height:130px;width:130px'>
+        <img ng-if='player.player_id!=undefined' src='{{player.img_url}}' class='padding circular--square' style='opacity:.5;height:130px;width:130px'>
       </div>
     </div>
       <div class="list" ng-if="event.force_ifpa_lookup==true">

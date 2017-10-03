@@ -22,6 +22,7 @@ def generate_events_class(db_handle):
         force_ifpa_lookup=db_handle.Column(db_handle.Boolean,default=False)
         wizard_configured=db_handle.Column(db_handle.Boolean,default=False)
         has_pic=db_handle.Column(db_handle.Boolean,default=False)
-        img_url=db_handle.Column(db_handle.String(100))        
+        img_url=db_handle.Column(db_handle.String(100))
+        require_pics=db_handle.Column(db_handle.Boolean,default=False)
     return Events
     

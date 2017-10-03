@@ -87,7 +87,7 @@ angular.module('shared').controller(
             }                                    
                                     
             $scope.edit_event_func = function(old_event,result_fields){                
-                old_event.wizard_configured=true;
+                //old_event.wizard_configured=true;
                 var prom =resourceWrapperService.get_wrapper_with_loading(edit_route,on_edit_success,{id:$state.params.id,event_name:$state.params.event_name},old_event);
             };
             

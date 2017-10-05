@@ -113,7 +113,7 @@ def pss_event_user_login(tables):
         wizard_mode="1+ tournament"    
         
     response = jsonify({'pss_user':user_dict})
-    response.set_cookie('tournament_wizard_mode',wizard_mode)
+    #response.set_cookie('tournament_wizard_mode',wizard_mode)
     return response
     
 @blueprints.event_blueprint.route('/auth/player/login',methods=['POST'])

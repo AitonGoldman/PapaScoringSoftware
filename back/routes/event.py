@@ -84,7 +84,7 @@ def get_event(tables,event_id):
 
     #return jsonify({'item':event_serializer(event),'descriptions':get_event_field_descriptions()})
     response =  jsonify({'item':event_serializer(event),'descriptions':get_event_field_descriptions()})
-    response.set_cookie('wizard_mode',"")
+    #response.set_cookie('wizard_mode',"")
     return response
 
 

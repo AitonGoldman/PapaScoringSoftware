@@ -166,17 +166,17 @@ def get_tournaments(tables):
 
     response = jsonify({'tournaments':[tournament_serializer(tournament) for tournament in tournaments],
                         'meta_tournaments':[meta_tournament_serializer(meta_tournament) for meta_tournament in meta_tournaments]})
-    if len(tournaments) == 0:
-        response.set_cookie('wizard_mode','2')        
-    #if len(tournaments) == 1 and len(tournaments[0].tournament_machines)==0:        
-    #    response.set_cookie('wizard_mode','3')
-    print request.cookies.get('wizard_mode')
-    if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '2':        
-        response.set_cookie('wizard_mode','4')
-    if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '5':        
-        response.set_cookie('wizard_mode','666')
-    #if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '3':        
-    #    response.set_cookie('wizard_mode','4')
+    # if len(tournaments) == 0:
+    #     response.set_cookie('wizard_mode','2')        
+    # #if len(tournaments) == 1 and len(tournaments[0].tournament_machines)==0:        
+    # #    response.set_cookie('wizard_mode','3')
+    # print request.cookies.get('wizard_mode')
+    # if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '2':        
+    #     response.set_cookie('wizard_mode','4')
+    # if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '5':        
+    #     response.set_cookie('wizard_mode','666')
+    # #if len(tournaments) == 1 and len(tournaments[0].tournament_machines) > 0 and request.cookies.get('wizard_mode') == '3':        
+    # #    response.set_cookie('wizard_mode','4')
         
     return response
 

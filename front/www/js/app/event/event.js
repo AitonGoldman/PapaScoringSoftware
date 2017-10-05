@@ -4,9 +4,8 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration',
         function($scope, $state,resourceWrapperService,listGeneration ) {
             $scope.bootstrap({back_button:true});
-            $scope.check_for_hiding_based_on_wizard();            
-            //$scope.wizard_mode_pop();
-            $scope.tournament_create_wizard_pop();
+            $scope.check_for_hiding_based_on_wizard();                        
+            //$scope.tournament_create_wizard_pop();
         }]);
 
 angular.module('event').controller(

@@ -6,9 +6,8 @@ angular.module('pss_admin').controller(
         function($scope, $state,resourceWrapperService,listGeneration, eventTournamentLib) {
             $scope.bootstrap({back_button:false});            
             var on_success = function(data){                
-                $scope.items=data['events'];                
-                //$scope.wizard_mode_pop();
-                $scope.event_create_wizard_pop($scope.items);
+                $scope.items=data['events'];                                
+                //$scope.event_create_wizard_pop($scope.items);
                 var basic_sref='.edit_event_basic({id:item.event_id})';
                 var advanced_sref='.edit_event_advanced({id:item.event_id})';                
                 var set_list_items_actions_and_args=listGeneration.generate_set_list_items_actions_and_args('event_name',

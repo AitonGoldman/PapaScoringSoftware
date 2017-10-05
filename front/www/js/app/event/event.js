@@ -121,7 +121,12 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$cookies',
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$cookies) {
             $scope.bootstrap();            
+            $scope.filter_for={filter_for:""};
             $scope.tournament_machines={tournament_id:$state.params.tournament_id};            
+            $scope.filter_single_machine = function(machine_name){
+                console.log(machine_name);
+                $scope.filter_for.filter_for=machine_name;
+            };
             $scope.add_machine_func = function(){                
                 var filtered_values =  _.filter($scope.items, function(item) {                                
                     if(item.checked==true){                    
@@ -130,7 +135,7 @@ angular.module('event').controller(
                     return false;
                 });
 
-                $scope.tournament_machines.tournament_machines=filtered_values;
+                $scope.tournament_machines.tournament_machines=filtered_values;                
                 
                 var on_submit_success = function(data){                    
                     $scope.item=data['item'];

@@ -55,7 +55,8 @@ angular.module('pss_admin').controller(
             $scope.create_event_func = function(){                
                 var on_success = function(data){
                     $scope.post_success_handler("Event Created!",[['Event Name',data['new_event'].name]],$scope);
-                };                                
+                };
+                $scope.item.active=true;
                 var prom =resourceWrapperService.get_wrapper_with_loading('post_create_event',on_success,{},$scope.item);
             };
             var on_get_success = function(data){

@@ -30,7 +30,7 @@ def request_pss_user_creations(tables):
     s = URLSafeSerializer(flask_secret_key)
 
     print input_data['email']
-    msg = Message("Hello",
+    msg = Message("PSS user account activation",
                   sender="papa.scoring.software@gmail.com",
                   recipients=[input_data['email']]
                   )

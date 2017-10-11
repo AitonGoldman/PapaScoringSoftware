@@ -45,7 +45,9 @@ def generate_pss_users_class(db_handle,event_name):
         
         password_crypt = db_handle.Column(db_handle.String(134))
         has_picture = db_handle.Column(db_handle.Boolean(),default=False)
-        ioniccloud_push_token=db_handle.Column(db_handle.String(500))        
+        ioniccloud_push_token=db_handle.Column(db_handle.String(500))
+        cookie_counts=db_handle.Column(db_handle.String(1500),default='{}')
+        
         admin_roles = db_handle.relationship(
             'AdminRoles',
             secondary=AdminRole_PssUser_mapping

@@ -37,6 +37,19 @@ angular.module('credentials')
                  var get_credentials = function(){
                      return credentials;
                  };
+
+                 var get_cookie_count = function(event,cookie_key){
+                     if(credentials[event].cookie_counts[cookie_key]==undefined){
+                         credentials[event].cookie_counts[cookie_key]=1;
+                         $cookies.putObject('credentials_cookie',credentials);                         
+                     }
+                     return credentials[event].cookie_counts[cookie_key];
+                 };
+                 
+                 var increment_cookie_count = function(event,cookie_key){
+                     credentials[event].cookie_counts[cookie_key] = credentials[event].cookie_counts[cookie_key] + 1;
+                     $cookies.putObject('credentials_cookie',credentials);                     
+                 };
                  
                  var set_pss_user_credentials = function(event,credential_to_set){                     
                      credentials[event] = {};
@@ -55,6 +68,7 @@ angular.module('credentials')
                          event_roles=[];
                      }
                      credentials[event].roles=_.concat(event_roles,admin_roles);
+                     credentials[event].cookie_counts = JSON.parse(credential_to_set.pss_user.cookie_counts);
                      $cookies.putObject('credentials_cookie',credentials);
                      logged_in[event] = true;
                      //$cookies.put('session_user_id',credentials[event].pss_user_id);
@@ -82,7 +96,9 @@ angular.module('credentials')
                          set_pss_user_credentials_from_cookies:set_pss_user_credentials_from_cookies,
                          set_pss_user_credentials:set_pss_user_credentials,
                          remove_credentials_on_logout:remove_credentials_on_logout,
-                         is_logged_in:is_logged_in
+                         is_logged_in:is_logged_in,
+                         increment_cookie_count:increment_cookie_count,
+                         get_cookie_count:get_cookie_count
                          };
                  }
              ]

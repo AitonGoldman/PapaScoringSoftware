@@ -10,7 +10,10 @@ from lib.serializer import generic
 from lib import serializer, roles_constants
 from lib.serializer.deserialize import deserialize_json
 from lib.route_decorators.db_decorators import load_tables
+from lib.route_decorators.cookie_decorators import process_cookie_counts
+
 from lib.route_decorators.auth_decorators import check_current_user_is_active
+
 
 from pss_models.PssUsers import generate_pss_user_event_role_mapping
 import os
@@ -53,9 +56,9 @@ def get_event_field_descriptions():
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['GET'])
 @blueprints.event_blueprint.route('/event',methods=['GET'])
 @load_tables
+@process_cookie_counts
 def get_events(tables):                    
     events = tables.Events.query.all()
-    
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        
     #FIXME : pss_admin should not be hard coded here    
     response = jsonify({'events':[event_serializer(event) for event in events if event.name != 'pss_admin']})    

@@ -15,10 +15,23 @@ angular.module('app').controller(
                     $rootScope.hide_based_on_cookie=false;
                 }
             };
+            $scope.event_create_wizard_pop = function(site,key,increment){
+                var pop_messages = {'no_events':'Wizard mode enabled!  Click on the Create Event button',
+                                    '1_event_no_tournaments':'Event created!  Now click your event and the click QuickCreate Tournament',
+                                    '1_event_and_tournaments':'Tournaments created!  You can now click on all the buttons to do stuff'};                                
+                if(credentialsService.get_cookie_count(site,key)==1){
+                    $scope.pop(pop_messages[key]);
+                };                
+                if(increment == true){
+                    credentialsService.increment_cookie_count(site,key);
+                }
+            
+
+            };
             // $scope.tournament_create_wizard_pop = function(tournaments){                                
             //     console.log($cookies.get("tournament_wizard_mode"));                
             //     if($rootScope.is_logged_in==true && $cookies.get('tournament_wizard_mode') == '"0 tournaments"'){                                        
-            //         $scope.pop("Click QuickCreate tournaments");
+            // $scope.pop("Click QuickCreate tournaments");
             //     }
             //     if($rootScope.is_logged_in==true && $cookies.get('tournament_wizard_mode') == "1 tournament unconfigured"){                    
             //         $scope.pop("You have finished setting up your event and tournament.  More text here about what to do next!");
@@ -261,8 +274,7 @@ angular.module('app').directive('postSuccessMultipleButtons', function($state) {
       templateUrl: 'templates/directives/generic_multi_button_post_success_buttons.html',
       link: function(scope, elem, attrs) {          
           //scope.buttonsInfo = scope.$eval(attrs.buttonsInfo);
-          scope.buttonsInfo = scope.$eval(scope.myValue);
-          console.log(scope.buttonsInfo);
+          scope.buttonsInfo = scope.$eval(scope.myValue);          
           scope.num_buttons = scope.buttonsInfo.length;          
       }      
   };
@@ -289,8 +301,7 @@ angular.module('app').directive('pssGenericBindingList', function($state,listGen
           scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
           scope.toggle_item_active = eventTournamentLib.toggle_item_active;
           scope.remove_item = eventTournamentLib.remove_item;
-
-          console.log(scope.items_to_list);
+          
           //scope.buttonsInfo = scope.$eval(attrs.buttonsInfo);          
           //scope.buttonsInfo = scope.$eval(scope.myValue);
           //console.log(scope.buttonsInfo);

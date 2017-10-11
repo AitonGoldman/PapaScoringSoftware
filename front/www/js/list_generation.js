@@ -49,6 +49,25 @@ angular.module('list_generation')
                      };
                      return set_actions;
                  };
+
+                 var generate_set_items_actions_and_args = function(display_label_field,
+                                                                       actions) {
+                     var set_items_actions_and_args = function(i) {                                                              
+                         i.label_to_display=i[display_label_field];
+                         _.forEach(actions, function(action) {
+                             if(action.ng_click!=undefined){
+                                 add_action_ng_click_to_item(i,
+                                                             build_action_ng_click(action.label,action.ng_click));
+
+                             }
+                             if(action.ui_sref!=undefined){
+                                 add_action_ui_sref_to_item(i,
+                                                            build_action_ui_sref(action.label,action.ui_sref));
+                             }                             
+                         });
+                     };             
+                     return set_items_actions_and_args;
+                 };
                  
                  //needs some cleaning up
                  var generate_set_list_items_actions_and_args = function(display_label_field,
@@ -92,8 +111,10 @@ angular.module('list_generation')
 
                  return {
                      generate_set_list_items_ui_sref_and_args:generate_set_list_items_ui_sref_and_args,
+                     generate_set_list_items_ui_sref_and_args:generate_set_list_items_ui_sref_and_args,                     
                      toggle_view_item_actions:toggle_view_item_actions,
                      generate_set_list_items_actions_and_args:generate_set_list_items_actions_and_args,
+                     generate_set_items_actions_and_args:generate_set_items_actions_and_args,
                      set_active_inactive_icon:set_active_inactive_icon,
                      generate_tournament_machine_actions:generate_tournament_machine_actions,
                      set_add_machine_action:set_add_machine_action

@@ -105,15 +105,8 @@ def pss_event_user_login(tables):
     pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
     user_dict=pss_user_serializer(pss_event_user)
 
-    if len(tournaments) == 0:
-        wizard_mode="0 tournaments"
-    if len(tournaments) == 1:
-        wizard_mode="1 tournament"
-    if len(tournaments) > 1:
-        wizard_mode="1+ tournament"    
-        
     response = jsonify({'pss_user':user_dict})
-    #response.set_cookie('tournament_wizard_mode',wizard_mode)
+    response.set_cookie('tournament_wizard_mode',wizard_mode)
     return response
     
 @blueprints.event_blueprint.route('/auth/player/login',methods=['POST'])

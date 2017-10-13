@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine.reflection import Inspector
 from pss_models import ImportedTables
 import os
+from flask import Flask
 
 POSTGRES_TYPE='postgres'
 SQLITE_TYPE='sqlite'
@@ -42,6 +43,12 @@ class DbInfo():
         if not database_exists(db_url):        
             raise Exception('You are trying to access a database that does not exist')
 
+    def getImportedTablesForEvent(self, event_name):
+        app=Flask(event_name)
+        db_handle=self.create_db_handle(app)
+        app.tables = ImportedTables(db_handle,event_name,"pss_admin")
+        return app        
+    
     def create_db_handle(self,flask_app):
         flask_app.config['SQLALCHEMY_DATABASE_URI'] = self.generate_db_url()    
         db_handle = SQLAlchemy(flask_app)

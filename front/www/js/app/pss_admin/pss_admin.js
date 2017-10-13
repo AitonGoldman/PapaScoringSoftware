@@ -4,9 +4,17 @@ angular.module('pss_admin').controller(
     'app.pss_admin_controller',[
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','credentialsService','$ionicScrollDelegate',
         function($scope, $state,resourceWrapperService,listGeneration, eventTournamentLib, credentialsService, $ionicScrollDelegate) {
-            $scope.bootstrap({back_button:false});            
+            $scope.bootstrap({back_button:false});
+            $scope.active_tab=1;
+            $scope.toggle_tab = function(){
+                $scope.active_tab=$scope.active_tab*-1;
+            };
+            var on_tournament_success = function(data){
+                console.log(data);
+                $scope.tournaments=data.tournaments;
+            };
             var on_success = function(data){                
-                $scope.items=data['events'];                                
+                $scope.items=data['events'];                                                                
                 //$scope.event_create_wizard_pop($scope.items);
                 var basic_sref='.edit_event_basic({id:item.event_id})';
                 var advanced_sref='.edit_event_advanced({id:item.event_id})';                
@@ -40,12 +48,21 @@ angular.module('pss_admin').controller(
             };
             ionic.DomUtil.ready(function(){
                 $scope.scrollAmount = $ionicScrollDelegate.$getByHandle('tournamentlist').getScrollPosition().left;                
-                console.log($scope.scrollAmount);
                 var myElement = angular.element( document.querySelector( '.pooping' ) );
-                console.log(myElement[0].scrollWidth);
-                console.log(ionic.DomUtil.getTextBounds(myElement));
+                                
             });
-            var prom =resourceWrapperService.get_wrapper_with_loading('get_events',on_success,{},{});
+
+            var prom = resourceWrapperService.get_wrapper_with_loading('get_events',on_success,{},{});
+            prom.then(function(data){
+                if(data['events'].length==0){
+                    return;
+                }
+                var tourney_prom = resourceWrapperService.get_wrapper_with_loading('get_tournaments',
+                                                                                   on_tournament_success,
+                                                                                   {event_name:data['events'][0].event_name},
+                                                                                   {});
+            });
+
             $scope.scrollCheck=function(){
                 $scope.scrollAmount = $ionicScrollDelegate.$getByHandle('tournamentlist').getScrollPosition().left;
             };

@@ -63,6 +63,7 @@ def get_tournament_field_descriptions():
     return {'long_descriptions':long_descriptions,'short_descriptions':short_descriptions}
 
 @blueprints.event_blueprint.route('/tournament_description',methods=['GET'])
+@blueprints.pss_admin_event_blueprint.route('/tournament_description',methods=['GET'])
 def get_tournament_descriptions():    
     return jsonify({'descriptions':get_tournament_field_descriptions()})
 

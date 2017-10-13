@@ -8,9 +8,11 @@ from lib.serializer.generic import generate_generic_serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
 from lib.serializer.deserialize import deserialize_json
-from lib.flask_lib.permissions import create_tournament_permissions
+from lib.flask_lib.permissions import create_tournament_permissions,create_pss_event_permissions
 from lib.route_decorators.auth_decorators import check_current_user_is_active
 from lib import orm_factories
+from flask_login import current_user
+from lib.PssConfig import PssConfig
 
 def edit_tournament_machine_route(tournament_machine_id,request,app):
     if request.data:        
@@ -59,6 +61,39 @@ def create_tournament_machine_route(machine_id,tournament_id,app):
 
     return new_tournament_machine
 
+
+@blueprints.pss_admin_event_blueprint.route('/tournament_machine',methods=['POST'])
+@create_pss_event_permissions.require(403)
+@check_current_user_is_active
+@load_tables
+def create_event_tournament_machine(tables):    
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('info not specified')
+    if 'event_id' not in input_data:
+        raise BadRequest('Missing information')
+    event_id = int(input_data['event_id'])
+    matching_user_events = [event for event in current_user.events if event.event_id==event_id]
+    if len(matching_user_events)!=1:
+        raise BadRequest('Trying to create tournament for an event you do not own')
+    event = tables.Events.query.filter_by(event_id=event_id).first()
+
+    pss_config = PssConfig()
+    app = pss_config.get_db_info().getImportedTablesForEvent(event.name)            
+
+    tournament_id = input_data['tournament_id']    
+    new_tournament_machines = []
+    serialized_new_tournament_machines = []
+    tournament_machine_serializer = generate_generic_serializer(serializer.generic.ALL)
+    for tournament_machine in input_data['tournament_machines']:            
+        new_tournament_machine = create_tournament_machine_route(tournament_machine['machine_id'],tournament_id,app)            
+        new_tournament_machines.append(new_tournament_machine)
+    app.tables.db_handle.session.commit()
+    for tournament_machine in new_tournament_machines:
+        serialized_new_tournament_machines.append(tournament_machine_serializer(tournament_machine))    
+    return jsonify({'new_tournament_machines':serialized_new_tournament_machines})
+
 @blueprints.event_blueprint.route('/tournament_machine',methods=['POST'])
 @create_tournament_permissions.require(403)
 @check_current_user_is_active
@@ -69,8 +104,7 @@ def create_tournament_machine(tables):
     else:
         raise BadRequest('info not specified')
     
-    tournament_id = input_data['tournament_id']
-    print "tournament id is %s" % tournament_id
+    tournament_id = input_data['tournament_id']    
     new_tournament_machines = []
     serialized_new_tournament_machines = []
     tournament_machine_serializer = generate_generic_serializer(serializer.generic.ALL)

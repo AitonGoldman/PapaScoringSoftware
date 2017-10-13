@@ -1,5 +1,5 @@
 from lib.flask_lib import blueprints
-from flask import jsonify,current_app,request
+from flask import jsonify,current_app,request,Flask
 from werkzeug.exceptions import BadRequest,Unauthorized
 import json
 from lib.serializer.generic import  generate_generic_serializer
@@ -8,10 +8,13 @@ from lib import serializer,stripe_lib
 from lib import serializer
 from lib.route_decorators.db_decorators import load_tables
 from sqlalchemy.orm import joinedload
-from lib.flask_lib.permissions import create_tournament_permissions
+from lib.flask_lib.permissions import create_tournament_permissions,create_pss_event_permissions
 from lib.serializer.deserialize import deserialize_json
 from lib import orm_factories
 from lib.route_decorators.auth_decorators import check_current_user_is_active
+from flask_login import current_user
+from lib.PssConfig import PssConfig
+from pss_models import ImportedTables
 
 def get_tournament_field_descriptions():
     long_descriptions={}
@@ -130,6 +133,29 @@ def create_tournament_route(request,app):
 @load_tables
 def create_tournament(tables):    
     new_tournament = create_tournament_route(request,current_app)
+    tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
+    return jsonify({'new_tournament':tournament_serializer(new_tournament)})
+
+
+@blueprints.pss_admin_event_blueprint.route('/tournament',methods=['POST'])
+@create_pss_event_permissions.require(403)
+@check_current_user_is_active
+@load_tables
+def create_event_tournament(tables):    
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Missing information')
+    if 'event_id' not in input_data:
+        raise BadRequest('Missing information')
+    event_id = int(input_data['event_id'])
+    matching_user_events = [event for event in current_user.events if event.event_id==event_id]
+    if len(matching_user_events)!=1:
+        raise BadRequest('Trying to create tournament for an event you do not own')        
+    event = tables.Events.query.filter_by(event_id=event_id).first()
+    pss_config = PssConfig()
+    app = pss_config.get_db_info().getImportedTablesForEvent(event.name)
+    new_tournament = create_tournament_route(request,app)
     tournament_serializer = generate_tournament_to_dict_serializer(serializer.tournament.ALL)
     return jsonify({'new_tournament':tournament_serializer(new_tournament)})
 

@@ -12,6 +12,7 @@ from lib.route_decorators.auth_decorators import check_current_user_is_active
 from lib import orm_factories
 
 @blueprints.event_blueprint.route('/machine',methods=['GET'])
+@blueprints.pss_admin_event_blueprint.route('/machine',methods=['GET'])
 @load_tables
 def get_machines(tables):    
     machines = tables.Machines.query.all()

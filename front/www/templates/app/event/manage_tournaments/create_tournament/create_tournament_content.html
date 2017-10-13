@@ -6,8 +6,8 @@
 </div>
 <div class='chatitemup' ng-if="post_success==undefined">
 <center>
-  <span ng-if='state != "app.event.quick_create_tournament"'>Choose a tournament name, a type of tournament to create, and set initial configuration paramters</span>
-  <span ng-if='state == "app.event.quick_create_tournament"'><h2>You must enter the following info :</h2><b>
+  <span ng-if='quick_create != true'>Choose a tournament name, a type of tournament to create, and set initial configuration paramters</span>
+  <span ng-if='quick_create == true'><h2>You must enter the following info :</h2><b>
     <ul>
       <li> A name for the tournament.
       <li> Select the type of tournament. 
@@ -30,7 +30,7 @@
     <ion-list>
       <ion-radio ng-model="item.finals_style" ng-value="'PAPA'">Single Division</ion-radio>
       <ion-radio ng-model="item.finals_style" ng-value="'PPO'">Single Division With A/B Finals</ion-radio>      
-      <ion-radio ng-model="item.finals_style" ng-value="'MULTI'" ng-if='state != "app.event.quick_create_tournament"'>Multiple Divisions</ion-radio>
+      <ion-radio ng-model="item.finals_style" ng-value="'MULTI'" ng-if='quick_create != true'>Multiple Divisions</ion-radio>
     </ion-list>
     <div class="list" ng-if='item.finals_style=="MULTI"'>
       <label class="item item-input item-select">

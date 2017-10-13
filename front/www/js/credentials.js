@@ -71,6 +71,8 @@ angular.module('credentials')
                      credentials[event].cookie_counts = JSON.parse(credential_to_set.pss_user.cookie_counts);
                      $cookies.putObject('credentials_cookie',credentials);
                      logged_in[event] = true;
+                     console.log('in credentials...');
+                     console.log(credential_to_set);
                      //$cookies.put('session_user_id',credentials[event].pss_user_id);
                      //$cookies.put('session_user',credentials[event].username);
                      //$cookies.put('session_roles',credentials[event].roles);                     

@@ -7,50 +7,40 @@
   
 </div>      
 <div ng-if='credentials.is_logged_in("pss_admin")==true'>
-<ion-item ui-sref='app.pss_admin.create_event' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Create Event</ion-item>
+  <ion-item ui-sref='app.pss_admin.create_event' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Create Event</ion-item>
 </div>
 
-<div class="chatitem list" ng-if='credentials.is_logged_in("pss_admin")==true'>
-<div class="tabs-top tabs-striped">
-  <div class="tabs">
-    <a class="tab-item active">
-      Current Event
-    </a>
-    <a class="tab-item">
-      Previous Events
-    </a>
+<div class="chatitem list" ng-if='credentials.is_logged_in("pss_admin")==true' ng-if='items.length>0'>
+  <div class="tabs-top tabs-striped">
+    <div class="tabs">
+      <a ng-click="toggle_tab()" ng-class='{"tab-item":true,"active":active_tab>0}'>
+        {{items[0].event_name}}
+      </a>
+      <a ng-click="toggle_tab()" ng-class="{'tab-item':true,'active':active_tab<0}">
+        Previous Events
+      </a>
+    </div>
+    <div class='padding'></div>
+    <div class='padding'></div>
+    <div class='padding'></div>
+    <div class='padding'></div>
+    <div class='padding'></div>
+    <div ng-if='active_tab==1'>
+      <center>
+        <img src='{{items[0].img_url}}' class='padding circular--square' style='opacity:.5;height:110px;width:110px' ng-if='items[0].img_url!=undefined'>
+      </center>
+      <div class='card'>  
+        <ion-item ui-sref='app.pss_admin.quick_create_tournament({event_id:items[0].event_id})' class='item item-icon-left'><i class='icon ion-plus-circled'></i>QuickCreate Tournament</ion-item>
+        <ion-item class='item item-icon-left'><i class='icon ion-plus-circled'></i>Register Users</ion-item>
+        <ion-item class='item item-icon-left' ui-sref='app.pss_admin.edit_event_basic({id:items[0].event_id})'><i class='icon ion-plus-circled'></i>Edit Event</ion-item>  
+        <ion-item class='item item-icon-left'><i class='icon ion-plus-circled'></i>Login to Event</ion-item>
+        <ion-content delegate-handle="tournamentlist" scrollbar-y="false" scrollbar-x="true" direction="x" class='item item-divider pooping'>
+          <button style='margin:5px' ng-click='scrollCheck()' class='button button-small button-clear button-dark'> Tournaments :  </button>
+          <button ng-repeat='tournament in tournaments' style='margin:5px' ng-click='scrollCheck()' class='button button-small'>{{tournament.tournament_name}}</button>        
+        </ion-content>
+      </div>
+    </div>
   </div>
 </div>  
-<div class='padding'></div>
-<div class='padding'></div>
-<div class='padding'></div>
-<div class='padding'></div>
-<div class='padding'></div>
-  <!---->
-  <center>
-    <img src='/img/papa.png' class='padding circular--square' style='opacity:.5;height:110px;width:110px'>
-  </center>
-  <div class='card'>  
-  <ion-item class='item item-icon-left'><i class='icon ion-plus-circled'></i>QuickCreate Tournament</ion-item>
-  <ion-item class='item item-icon-left'><i class='icon ion-plus-circled'></i>Register Users</ion-item>
-  <ion-item class='item item-icon-left'><i class='icon ion-plus-circled'></i>Edit Event</ion-item>  
-  <ion-item class='item item-icon-left'><i class='icon ion-plus-circled'></i>Login to Event</ion-item>
-  <div class='row'>
-    <ion-content delegate-handle="tournamentlist" scrollbar-y="false" scrollbar-x="true" direction="x" class='col-90 item item-divider pooping'>      
-      <button style='margin:5px' ng-click='scrollCheck()' class='button button-small button-clear button-dark'> Tournaments :  </button>
-      <button style='margin:5px' ng-click='scrollCheck()' class='button button-small'> Main </button>
-      <button style='margin:5px' ng-click='scrollCheck()' class='button button-small'> Womens </button>
-      <button style='margin:5px' ng-click='scrollCheck()' class='button button-small'> Main </button>
-      <button style='margin:5px' ng-click='scrollCheck()' class='button button-small'> Womens </button>
-    </ion-content>
-    <div class='col-10 item item-borderless'>
-      <span ng-if="scrollAmount==undefined"> > </span>
-    </div>
-  <!--<pss-generic-binding-list items-to-list='items' filter-to-apply="eventSearch" poop="one" poop="two"> </pss-generic-binding-list>-->
-</div>
 
-</div>      
-
-
-
-
+<!--<pss-generic-binding-list items-to-list='items' filter-to-apply="eventSearch" poop="one" poop="two"> </pss-generic-binding-list>-->

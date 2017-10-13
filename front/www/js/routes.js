@@ -124,6 +124,49 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },params: {
             item: {value:{}}
         }
+    }).state('app.pss_admin.quick_create_tournament', {
+        cache:false,
+        url: '/quick_create_tournament/:event_id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/app/event/manage_tournaments/create_tournament/create_tournament_content.html',
+                controller: 'app.event.manage_tournaments.create_tournament_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html' // check
+            },
+            'post_success@app.pss_admin.quick_create_tournament':{
+                templateUrl: 'templates/generic_post_success.html'
+            },
+            'post_success_buttons@app.pss_admin.quick_create_tournament':{
+                templateUrl: 'templates/quick_create_event_tournament_post_success_buttons.html'                
+            }
+        },data: {
+            title: "Create Tournament",
+            quick_links_url: 'templates/pss_admin_quick_links.html'            
+        }
+    }).state('app.pss_admin.quick_add_tournament_machine', {
+        cache:false,
+        url: '/quick_add_tournament_machine/:tournament_id/:event_id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/app/event/manage_tournament_machines/add_tournament_machine/add_tournament_machine_content.html',
+                controller: 'app.event.manage_tournament_machines.add_tournament_machine_controller'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html' // check
+            },
+            'post_success@app.pss_admin.quick_add_tournament_machine':{
+                templateUrl: 'templates/generic_post_success.html'                
+            },
+            'post_success_buttons@app.pss_admin.quick_add_tournament_machine':{
+                templateUrl: 'templates/quick_add_tournament_machine_post_success_buttons.html'                
+            }            
+        },data: {
+            title: "Add Machine",
+            back_title: "Add Machine",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
     }).state('app.event', {
         cache:false,
         url: '/event/:event_name',

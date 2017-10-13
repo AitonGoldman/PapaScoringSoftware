@@ -55,6 +55,7 @@ angular.module('app').controller(
                 if($state.current.name.indexOf('pss_admin')!=-1){
                     $state.params.event_name='pss_admin';
                 }
+                console.log($state.current);
                 $scope.event_name = $state.params.event_name;
                 $rootScope.event_name = $state.params.event_name;
                 $ionicNavBarDelegate.title($state.current.data.title);                                

@@ -120,10 +120,14 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$cookies',
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$cookies) {
             $scope.bootstrap();            
+            //$scope.event_name = $state.params.event_name;
+            console.log($state.params);
             $scope.filter_for={filter_for:""};
             $scope.tournament_machines={tournament_id:$state.params.tournament_id};            
-            $scope.filter_single_machine = function(machine_name){
-                console.log(machine_name);
+            if($state.params.event_id!=undefined){
+                $scope.tournament_machines.event_id=$state.params.event_id;
+            }
+            $scope.filter_single_machine = function(machine_name){                
                 $scope.filter_for.filter_for=machine_name;
             };
             $scope.add_machine_func = function(){                
@@ -173,8 +177,13 @@ angular.module('event').controller(
             $scope.bootstrap({back_button:true});
             $scope.item={};
             $scope.state = $state.current.name;
-            if($scope.state == "app.event.quick_create_tournament"){                
+            $scope.event_id = $state.params.event_id;
+            if($scope.state.match(/quick_create_tournament/)!=null){                
                 $scope.item.active=true;
+                $scope.quick_create=true;
+            }
+            if($scope.event_id != undefined){
+                $scope.item.event_id = $scope.event_id;
             }
             $scope.create_tournament_func = function(tournament){
                 if($scope.item["finals_style"]=="MULTI"){
@@ -229,7 +238,7 @@ angular.module('event').controller(
                     $scope.post_success_handler("Tournament Created!",results,$scope);
                     
                 };
-                console.log($scope.item);
+                
                 var prom = resourceWrapperService.get_wrapper_with_loading('post_create_tournament',
                                                                            on_success,
                                                                            {event_name:$scope.event_name},
@@ -293,7 +302,7 @@ angular.module('event').controller(
                     return true;
                 });                
                 _.map($scope.items, set_list_items_ui_sref_and_args);
-                console.log($scope.items);
+                
             };                        
             var prom =resourceWrapperService.get_wrapper_with_loading('get_players',on_success,{event_name:$scope.event_name},{});                        
         }]);

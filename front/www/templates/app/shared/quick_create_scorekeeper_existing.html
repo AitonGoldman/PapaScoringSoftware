@@ -1,0 +1,48 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div class='chatitemup' ng-if="post_success==undefined">
+<div class="card">
+  <div class="item item-divider">
+    Register scorekeepers
+  </div>
+  <div>
+    <center class='padding'>
+      Below is a list of people who have previously scorekept/deskworked/TD'd. <br>
+      Search for the people you want to be scorekeepers for your event, select them,  and click "Register Scorekeepers".<br>
+      If people are not on this list, click <a ui-sref='app.pss_admin.quick_create_scorekeepers_new({event_id:event_id,event_role_name:event_role_name})'>here</a>
+    </center>
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model='filter_for.filter_for'>
+    </label>
+  </div>
+
+  <div class='padding'> </div>
+  <div class='row'>
+    <div class='col'>
+    </div>
+    <button ng-click='add_existing_users_func()' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Register Scorekeepers  </button>
+    <div class='col'>
+    </div>    
+  </div>
+  
+  <div class='padding'> </div>
+  <button ng-click='filter_single_user(item)' style='margin:5px' class='button button-small' ng-repeat='item in items|filter:{checked:true}'> {{item.username}} </button>
+  <div class='padding'> </div>  
+ 
+  <ion-list>
+    <ion-checkbox ng-repeat='item in items|userSearch:filter_for.filter_for|limitTo:45 as count' ng-model="item.checked">{{item.full_user_name}}</ion-checkbox>
+    <ion-item ng-if='count.length > 44 && filter_for.filter_for.length > 0'> More than 45 machines not being shown ...</ion-item>
+    <ion-item ng-if='count.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length}} machines not being shown </ion-item>
+
+  </ion-list>
+
+  </div>
+  <div class="item item-divider">
+  </div>
+</div>
+</div>

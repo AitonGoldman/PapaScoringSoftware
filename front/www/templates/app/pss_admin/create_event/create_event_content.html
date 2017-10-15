@@ -4,9 +4,14 @@
   <post-success-single-button></post-success-single-button>
 </div>
 <div ng-if="post_success==undefined">
-  <label class="item item-input">
-    <input type="text" placeholder="Event Name" ng-model="item.name"/>        
-  </label>
+  <div class="card">
+    <div class="item item-divider">
+      Enter name of event
+    </div>      
+    <label class="item item-input">
+      <input type="text" placeholder="Event Name" ng-model="item.name"/>        
+    </label>
+  </div>
   <div class="card">
     <pss-text-input-basic field='queue_bump_amount' basic='true' type='number' />
   </div>

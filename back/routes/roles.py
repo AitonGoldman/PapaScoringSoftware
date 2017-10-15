@@ -18,7 +18,8 @@ def get_roles(tables):
     #FIXME : should be admin_roles
     return jsonify({'roles':roles_list})
 
-@blueprints.event_blueprint.route('/roles',methods=['GET'])
+@blueprints.pss_admin_event_blueprint.route('/event_roles',methods=['GET'])
+@blueprints.event_blueprint.route('/event_roles',methods=['GET'])
 @load_tables
 def get_event_roles(tables):    
     roles_list = []

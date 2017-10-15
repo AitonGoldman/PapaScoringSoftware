@@ -44,7 +44,7 @@ angular.module('event').controller(
             var on_success = function(data){
                 //$scope.items=data['tournaments'];
                 $scope.items=data['tournaments'];
-                $scope.wizard_mode_pop();                                
+                //$scope.wizard_mode_pop();                                
                 var wizard_mode = $cookies.get('wizard_mode');
                 if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '3' && $scope.items.length==1 && $scope.items[0].tournament_machines.length > 0){
                     $scope.pop("all done");
@@ -117,11 +117,11 @@ angular.module('event').controller(
 
 angular.module('event').controller(
     'app.event.manage_tournament_machines.add_tournament_machine_controller',[
-        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$cookies',
-        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$cookies) {
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$cookies','credentialsService',
+        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$cookies,credentialsService) {
             $scope.bootstrap();            
             //$scope.event_name = $state.params.event_name;
-            console.log($state.params);
+            
             $scope.filter_for={filter_for:""};
             $scope.tournament_machines={tournament_id:$state.params.tournament_id};            
             if($state.params.event_id!=undefined){
@@ -149,7 +149,12 @@ angular.module('event').controller(
                     _.forEach(filtered_values, function(machine) {
                         results.push(["Machine Name",machine.machine_name]);
                     });
-                    $scope.post_success_handler("Machines Added!",results,$scope);                    
+                    var attention = undefined;
+                    if($state.current.name.match(/quick/)){
+                        attention={'title':'Attention',text:"You have successfully finished creating your tournament!  Players can purchase tickets and and start playing immediately."};
+                        credentialsService.increment_cookie_count('pss_admin','1_event_no_tournaments');
+                    }
+                    $scope.post_success_handler("Machines Added!",results,$scope,attention);                    
                     if($cookies.get('tournament_wizard_mode') == '"0 tournaments"'){
                        $cookies.put('tournament_wizard_mode','1 tournament unconfigured');
                     }

@@ -77,7 +77,7 @@ angular.module('shared').controller(
                     if($scope.item.bobo[field_name]!=item[field_name]){
                         results.push([$scope.descriptions.short_descriptions[field_name],item[field_name]]);   
                     };                    
-                }
+                }                
                 $scope.post_success_handler("Event Edited!",results,$scope);
                 //FIXME : results page needs to say something about "these are the changed fields" on edit
             };                                
@@ -90,6 +90,47 @@ angular.module('shared').controller(
                 //old_event.wizard_configured=true;
                 var prom =resourceWrapperService.get_wrapper_with_loading(edit_route,on_edit_success,{id:$state.params.id,event_name:$state.params.event_name},old_event);
             };
+            
+        }
+    ]);
+
+angular.module('shared').controller(
+    'app.shared.quick_create_user',[
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib','$http','FileUploader','$ionicScrollDelegate',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib,$http,FileUploader,$ionicScrollDelegate ) {                        
+            $scope.bootstrap({back_button:true});
+            $scope.new_users={};
+            $scope.event_id=$state.params.event_id;
+            $scope.event_name=$scope.event_name;
+            $scope.event_role_name=$state.params.event_role_name;
+            var header_links=[{icon:'ion-edit',label:'Advanced Edit'}];            
+            var on_get_success = function(data){                    
+                $scope.items = data['existing_pss_users'];
+                $scope.event_roles = data['event_roles'];
+                //var event_role_name=$state.params.event_role_name;
+                $scope.event_role_id = _.filter($scope.event_roles, function(o) { return o.name==$scope.event_role_name; })[0].event_role_id;
+                $scope.new_users.event_id=$state.params.event_id;
+                $scope.new_users.event_role_id=$scope.event_role_id;
+            };
+            var on_post_success = function(data){                    
+                $scope.new_items = data['pss_users_added_to_event'];
+                var results = _.map($scope.new_items, function(o){return ['User Registered',o.full_user_name];});                      
+                $scope.post_success_handler("Users Registered!",results,$scope,{title:'Attention',text:'Remember!  You will need to set user passwords once they arrive at the event.'});
+                console.log($scope.new_items);                
+            };            
+            
+            $scope.add_text_area_users_func = function(){                
+                var bulk_add_prom =resourceWrapperService.get_wrapper_with_loading("post_add_event_users",on_post_success,{event_name:$scope.event_name},$scope.new_users);
+            };
+            $scope.add_existing_users_func = function(){                                
+                var users = _.filter($scope.items, function(o) { return o.checked==true; });
+                console.log(users);
+                var submit_json = {event_id:$scope.event_id,event_role_id:$scope.event_role_id,users:users};
+                
+                var bulk_add_prom =resourceWrapperService.get_wrapper_with_loading("put_add_existing_users",on_post_success,{event_name:$scope.event_name},submit_json);
+            };
+            
+            var prom =resourceWrapperService.get_wrapper_with_loading("get_users",on_get_success,{},{});
             
         }
     ]);

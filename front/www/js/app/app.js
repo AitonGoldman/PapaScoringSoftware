@@ -39,27 +39,28 @@ angular.module('app').controller(
             //     }                
             // };
             
-            $scope.post_success_handler = function(title,post_results_rows,scope){
+            $scope.post_success_handler = function(title,post_results_rows,scope,attention){
                 var post_results={};
                 post_results.title=title;
                 post_results.results=post_results_rows;
+                post_results.attention=attention;
                 scope.post_results=post_results;
                 scope.post_success = true;
-                $ionicScrollDelegate.scrollTop();
+                $ionicScrollDelegate.scrollTop();                
                 return post_results;
             };
             $scope.bootstrap = function(options){               
+                
                 //FIXME : rely on cookies to tell us if we are logged in after page reload                                
                 $ionicScrollDelegate.scrollTop();
                 $scope.state = $state;
                 if($state.current.name.indexOf('pss_admin')!=-1){
                     $state.params.event_name='pss_admin';
                 }
-                console.log($state.current);
+                
                 $scope.event_name = $state.params.event_name;
                 $rootScope.event_name = $state.params.event_name;
-                $ionicNavBarDelegate.title($state.current.data.title);                                
-                $ionicNavBarDelegate.align('right');
+                $ionicNavBarDelegate.title($state.current.data.title);                                                
                 $rootScope.header_links=$state.current.data.header_links;
                 //$rootScope.back_button=options.back_button==true;
                 credentialsService.set_pss_user_credentials_from_cookies($scope.event_name);
@@ -68,10 +69,20 @@ angular.module('app').controller(
                 //var parent_state =                
                 $rootScope.back_button_title=$state.get('^').data.back_title;
                 $rootScope.is_android = ionic.Platform.isAndroid();
+                if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
+                    $ionicNavBarDelegate.align('right');
+                } else {
+                    $ionicNavBarDelegate.align('center');
+                }
+                
+                //$scope.append_header_links({icon:'ion-edit',label:'poop',link:'.'});                
             };
 
             $scope.add_header_links = function(links){
                 $rootScope.header_links=links;                
+            };
+            $scope.append_header_links = function(links){
+                $rootScope.header_links.push(links);                
             };
             
             $rootScope.pss_admin_logout = function(event){
@@ -136,19 +147,23 @@ angular.module('app').controller(
                 $state.go(sref);                
             };            
             
-            $rootScope.popoverOtherSiteClick = function(site) {                                
-                $scope.popover.hide();
-                $scope.popover.remove();
+            $rootScope.popoverOtherSiteClick = function(site,event_name) {                                
+                if(event_name==undefined){
+                    $scope.popover.hide();
+                    $scope.popover.remove();
+                }
                 if (site =='admin'){
                     if ($scope.is_event_dns()){
                         window.location="http://admin.inchglue.com/";
                     }
                     if ($scope.is_event_html()){
-                        window.location="/admin.html";                        
+                        if(event_name!=undefined){                            
+                            window.location="/admin.html#/app/event/"+event_name;                            
+                        } else {
+                            window.location="/admin.html";
+                        }
                     }                    
                 }
-                
-                
             };            
             
 
@@ -366,6 +381,25 @@ angular.module('app').filter('playerSearch', function() {
             if(item.player_id==str_to_search_for){                    
                 return true;
             }                        
+            return false;
+        });
+    };
+});
+
+angular.module('app').filter('userSearch', function() {
+
+  // Create the return function
+  // set the required parameter name to **number**
+    return function(items,str_to_search_for) {                 
+        var regex = str_to_search_for;
+        if(regex!=undefined){
+            regex=regex.toLowerCase();
+        }
+        var re = new RegExp(regex,"g");
+        return _.filter(items, function(item) {                                
+            if(item.full_user_name.toLowerCase().match(re)!=null){                    
+                return true;
+            }
             return false;
         });
     };

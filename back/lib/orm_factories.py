@@ -10,6 +10,7 @@ import datetime
 
 ACTIONS_TO_ADD_TICKET_SUMMARY_TO = ["Score Recorded","Ticket Purchase","Player Ticket Purchase Complete"]
 
+
 def create_event(user_creating_event, tables, input_data, new_event_tables,event_owner_pss_user_id,commit=False):
     secret_key=b64encode(os.urandom(24)).decode('utf-8')        
     new_event = tables.Events(name=input_data['name'],flask_secret_key=secret_key)    
@@ -84,6 +85,22 @@ def create_user(flask_app,username,
 
     return user
 
+def check_user_exists(user_dict,app):
+    if 'extra_title' in user_dict:
+        extra_title = user_dict['extra_title']
+    else:
+        extra_title = None    
+    existing_user=app.tables.PssUsers.query.filter_by(first_name=user_dict['first_name'],
+                                                      last_name=user_dict['last_name'],
+                                                      extra_title=extra_title).first()
+    if existing_user is not None:
+        raise Conflict('User with name %s already created. Try again with a different name.' % existing_user)
+
+    existing_user=app.tables.PssUsers.query.filter_by(username=user_dict['username']).first()    
+    if existing_user is not None:
+        raise Conflict('Username %s already used.  Try again with a different username.' % existing_user.username)
+
+    
 def check_user_create_is_valid(input_data, app):            
     tables = app.tables
     

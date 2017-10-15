@@ -4,17 +4,21 @@ angular.module('pss_admin').controller(
     'app.pss_admin_controller',[
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','credentialsService','$ionicScrollDelegate',
         function($scope, $state,resourceWrapperService,listGeneration, eventTournamentLib, credentialsService, $ionicScrollDelegate) {
-            $scope.bootstrap({back_button:false});
+            $scope.bootstrap({back_button:false});                        
+            $scope.pss_user_id = credentialsService.get_credentials()['pss_admin'].pss_user_id;
+            var test_event_creator = function (o) { return o.event_creator_pss_user_id==$scope.pss_user_id; };
+
             $scope.active_tab=1;
             $scope.toggle_tab = function(){
                 $scope.active_tab=$scope.active_tab*-1;
             };
-            var on_tournament_success = function(data){
-                console.log(data);
+            var on_tournament_success = function(data){                
                 $scope.tournaments=data.tournaments;
             };
             var on_success = function(data){                
-                $scope.items=data['events'];                                                                
+                $scope.items=_.filter(data['events'], test_event_creator);
+                console.log($scope.items);
+                //$scope.items=data['events'];                                                                
                 //$scope.event_create_wizard_pop($scope.items);
                 var basic_sref='.edit_event_basic({id:item.event_id})';
                 var advanced_sref='.edit_event_advanced({id:item.event_id})';                
@@ -36,14 +40,17 @@ angular.module('pss_admin').controller(
                 _.map($scope.items, set_items_actions_and_args);
                 _.map($scope.items, listGeneration.set_active_inactive_icon);
                 $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
-                var pss_user_id = credentialsService.get_credentials()['pss_admin'].pss_user_id;
-                var test_event_creator = function (o) { return o.event_creator_pss_user_id==pss_user_id; };
                 if(_.filter($scope.items, test_event_creator).length == 0){
                     $scope.event_create_wizard_pop('pss_admin','no_events');
                 };
-                if(_.filter($scope.items, test_event_creator).length > 0){
+                if(_.filter($scope.items, test_event_creator).length > 0 && credentialsService.get_cookie_count('pss_admin','1_event_no_tournaments')==1){                    
                     $scope.event_create_wizard_pop('pss_admin','1_event_no_tournaments');
+                };
+                if(_.filter($scope.items, test_event_creator).length > 0 && credentialsService.get_cookie_count('pss_admin','1_event_no_tournaments')>1){                                        
+                    $scope.event_create_wizard_pop('pss_admin','1_event_and_tournaments',true);
+                    credentialsService.increment_cookie_count('pss_admin','1_event_and_tournaments');                    
                 };                
+                
                 
             };
             ionic.DomUtil.ready(function(){
@@ -57,9 +64,10 @@ angular.module('pss_admin').controller(
                 if(data['events'].length==0){
                     return;
                 }
+                //FIXME : need a better way of handling looking for tournaments based on events found
                 var tourney_prom = resourceWrapperService.get_wrapper_with_loading('get_tournaments',
                                                                                    on_tournament_success,
-                                                                                   {event_name:data['events'][0].event_name},
+                                                                                   {event_name:$scope.items[0].event_name},
                                                                                    {});
             });
 

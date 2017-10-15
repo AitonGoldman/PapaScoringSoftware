@@ -36,8 +36,8 @@
  
   <ion-list>
     <ion-checkbox ng-repeat='item in items|userSearch:filter_for.filter_for|limitTo:45 as count' ng-model="item.checked">{{item.full_user_name}}</ion-checkbox>
-    <ion-item ng-if='count.length > 44 && filter_for.filter_for.length > 0'> More than 45 machines not being shown ...</ion-item>
-    <ion-item ng-if='count.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length}} machines not being shown </ion-item>
+    <ion-item ng-if='count.length > 44 && filter_for.filter_for.length > 0'> More than 45 users not being shown ...</ion-item>
+    <ion-item ng-if='count.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length}} users not being shown </ion-item>
 
   </ion-list>
 

@@ -127,13 +127,13 @@ def create_pss_event_users(tables):
         if len(user_name_tokens)<2:
             raise BadRequest('User %s does not have a last name specified' % user)
         parsed_user = {
-            "username":user_name_tokens[0]+user_name_tokens[1][0],
+            "username":user_name_tokens[0]+user_name_tokens[1],
             "password":"1234",
             "first_name":user_name_tokens[0],
             "last_name":user_name_tokens[1],
             "event_role_id":input_data['event_role_id']
         }                
-        orm_factories.check_user_exists(parsed_user,app)        
+        orm_factories.check_user_exists(parsed_user,app)                    
         parsed_user_names.append(parsed_user)
         
     for user in parsed_user_names:

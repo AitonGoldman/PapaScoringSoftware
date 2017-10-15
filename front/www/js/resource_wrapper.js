@@ -185,7 +185,7 @@ angular.module('resource_wrapper')
                                                                        {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   rest_api['post_add_event_users'] = $resource(rest_server+'/:event_name/pss_event_users',
                                                                {},
-                                                               {'post':{method:"POST",timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                                                               {'post':{method:"POST",timeout:600000,interceptor:generate_response_interceptor('.')}});
 
                   rest_api['put_edit_event'] = $resource(rest_server+'/pss_admin/event/:id',
                                                             {},

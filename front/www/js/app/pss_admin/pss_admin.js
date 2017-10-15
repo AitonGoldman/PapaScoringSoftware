@@ -5,7 +5,12 @@ angular.module('pss_admin').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','credentialsService','$ionicScrollDelegate',
         function($scope, $state,resourceWrapperService,listGeneration, eventTournamentLib, credentialsService, $ionicScrollDelegate) {
             $scope.bootstrap({back_button:false});                        
-            $scope.pss_user_id = credentialsService.get_credentials()['pss_admin'].pss_user_id;
+            if(credentialsService.get_credentials()['pss_admin']!=undefined){
+                $scope.pss_user_id = credentialsService.get_credentials()['pss_admin'].pss_user_id;
+            } else {
+                $scope.pss_user_id = -1;
+            }
+            
             var test_event_creator = function (o) { return o.event_creator_pss_user_id==$scope.pss_user_id; };
 
             $scope.active_tab=1;

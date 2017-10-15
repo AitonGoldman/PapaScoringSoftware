@@ -65,9 +65,9 @@ angular.module('app').controller(
                 //$rootScope.back_button=options.back_button==true;
                 credentialsService.set_pss_user_credentials_from_cookies($scope.event_name);
                 $scope.credentials_for_event = credentialsService.get_credentials()[$scope.event_name];                
-                if($scope.credentials_for_event==undefined){
-                    credentialsService.initialize_event_credentials($scope.event_name);
-                }
+                //if($scope.credentials_for_event==undefined){
+                //    credentialsService.initialize_event_credentials($scope.event_name);
+                //}
                 $rootScope.is_logged_in=credentialsService.is_logged_in($scope.event_name);
                 //var parent_state =                
                 $rootScope.back_button_title=$state.get('^').data.back_title;

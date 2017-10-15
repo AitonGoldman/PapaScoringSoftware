@@ -1,14 +1,15 @@
 <div>
-  <ion-item ui-sref='{{item.ui_sref}}' class='item item-icon-left item-icon-right' ng-repeat='item in items_to_list|useFilter:filter_to_apply:filter_for as srefcount' ng-if='item.ui_sref!=undefined'>
+  <ion-item ui-sref='{{item.ui_sref}}' class='item item-icon-left item-icon-right' ng-repeat='item in items_to_list|useFilter:filter_to_apply:filter_for_string as srefcount' ng-if='item.ui_sref!=undefined'>
     <i class='icon ion-edit'></i>
     {{item.label_to_display}}
     <i class='icon material-icons'>chevron_right</i>   
   </ion-item>
-  <ion-item ng-if='srefcount==0' class='item-borderless'>
+  <ion-item class='item-borderless' ng-if='not_found_sref==undefined && srefcount.length==0'>
     {{not_found_message}}
   </ion-item>
-  <!-- <div class='card' style='margin:0;margin-top:2px' ng-repeat='item in items_to_list|useFilter:filter_to_apply:filter_for as actioncount' ng-if='item.actions_ui_sref_list!=undefined'> -->
-  <ion-item ng-click='toggle_view_item_actions(item)' ng-repeat-start='item in items_to_list|useFilter:filter_to_apply:filter_for as actioncount' ng-if='item.actions_ui_sref_list!=undefined'' class='item-icon-left item-icon-right'>
+  <ion-item ng-if="not_found_sref!=undefined && srefcount.length==0" ui-sref='{{not_found_sref}}' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>{{not_found_message}}</ion-item>  
+  <!-- <div class='card' style='margin:0;margin-top:2px' ng-repeat='item in items_to_list|useFilter:filter_to_apply:filter_for_string as actioncount' ng-if='item.actions_ui_sref_list!=undefined'> -->
+  <ion-item ng-click='toggle_view_item_actions(item)' ng-repeat-start='item in items_to_list|useFilter:filter_to_apply:filter_for_string as actioncount' ng-if='item.actions_ui_sref_list!=undefined'' class='item-icon-left item-icon-right'>
     <i class='icon {{item.icon}} {{item.icon_color}}' ng-if='item.material_icon==undefined'></i>
     <i class='icon {{item.icon_color}} material-icons' ng-if='item.material_icon!=undefined'>{{item.material_icon}}</i>   
     {{item.label_to_display}}

@@ -314,7 +314,7 @@ angular.module('app').directive('pssGenericBindingList', function($state,listGen
   return {
       restrict: 'AE',
       replace: 'true',
-      scope:{items_to_list: "=itemsToList",filter_to_apply:"@filterToApply",not_found_message:"@notFoundMessage"},
+      scope:{items_to_list: "=itemsToList",filter_to_apply:"@filterToApply",not_found_message:"@notFoundMessage",not_found_sref:"@notFoundSref",filter_for_string:"=filterForString"},
       templateUrl: 'templates/directives/generic_binding_list_directive.html',
       link: function(scope, elem, attrs) {          
           scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;

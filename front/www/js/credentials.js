@@ -37,7 +37,9 @@ angular.module('credentials')
                  var get_credentials = function(){
                      return credentials;
                  };
-
+                 var initialize_event_credentials = function(event_name){
+                     credentials[event_name]={};
+                 };
                  var get_cookie_count = function(event,cookie_key){
                      if(credentials[event].cookie_counts[cookie_key]==undefined){
                          credentials[event].cookie_counts[cookie_key]=1;
@@ -100,7 +102,8 @@ angular.module('credentials')
                          remove_credentials_on_logout:remove_credentials_on_logout,
                          is_logged_in:is_logged_in,
                          increment_cookie_count:increment_cookie_count,
-                         get_cookie_count:get_cookie_count
+                         get_cookie_count:get_cookie_count,
+                         initialize_event_credentials:initialize_event_credentials
                          };
                  }
              ]

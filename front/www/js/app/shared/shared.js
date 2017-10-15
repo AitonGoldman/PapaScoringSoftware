@@ -105,7 +105,9 @@ angular.module('shared').controller(
             $scope.event_role_name=$state.params.event_role_name;
             var header_links=[{icon:'ion-edit',label:'Advanced Edit'}];            
             var on_get_success = function(data){                    
-                $scope.items = data['existing_pss_users'];
+                var items = data['existing_pss_users'];
+                var pss_user_id = credentialsService.get_credentials()[$scope.event_name].pss_user_id;
+                $scope.items = _.filter(items, function(o) { return o.pss_user_id!=pss_user_id; });
                 $scope.event_roles = data['event_roles'];
                 //var event_role_name=$state.params.event_role_name;
                 $scope.event_role_id = _.filter($scope.event_roles, function(o) { return o.name==$scope.event_role_name; })[0].event_role_id;

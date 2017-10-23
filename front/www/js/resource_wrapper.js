@@ -93,7 +93,7 @@ angular.module('resource_wrapper')
                   rest_api['get_events'] = $resource(rest_server+'/pss_admin/event',
                                                      {},
                                                      {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
-                  rest_api['get_users'] = $resource(rest_server+'/pss_admin/pss_user',
+                  rest_api['get_users'] = $resource(rest_server+'/:event_name/pss_user',
                                                      {},
                                                      {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   rest_api['get_event'] = $resource(rest_server+'/pss_admin/event/:id',

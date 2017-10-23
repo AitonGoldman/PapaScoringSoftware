@@ -102,17 +102,48 @@ angular.module('shared').controller(
             $scope.new_users={};
             $scope.event_id=$state.params.event_id;
             $scope.event_name=$scope.event_name;
+            $scope.target_event_name=$state.params.target_event_name;
+            
             $scope.event_role_name=$state.params.event_role_name;
             var header_links=[{icon:'ion-edit',label:'Advanced Edit'}];            
+            var mark_users_in_event = function(u){
+                var user_is_in_event = _.filter(u.events,function(e){
+                    var u_in_event = e.event_id==$scope.event_id;
+                    var role_in_event = _.filter(u.event_roles,function(r){
+                        return r.event_role_id==$scope.event_role_id;                        
+                    }).length>0;
+                    return u_in_event==true && role_in_event==true;
+                }).length>0;
+                
+                if(user_is_in_event==true){
+                    u.already_checked=true;
+                    u.checked=true;
+                }
+            };
             var on_get_success = function(data){                    
-                var items = data['existing_pss_users'];
-                var pss_user_id = credentialsService.get_credentials()[$scope.event_name].pss_user_id;
-                $scope.items = _.filter(items, function(o) { return o.pss_user_id!=pss_user_id; });
                 $scope.event_roles = data['event_roles'];
                 //var event_role_name=$state.params.event_role_name;
+                if($scope.event_role_name=='scorekeeper'){
+                    $scope.type_of_user=$scope.event_role_name;
+                }
+                if($scope.event_role_name=='deskworker'){
+                    $scope.type_of_user="desk worker";
+                }
+                if($scope.event_role_name=='tournament_director'){
+                    $scope.type_of_user='tournament director';
+                }
+                
                 $scope.event_role_id = _.filter($scope.event_roles, function(o) { return o.name==$scope.event_role_name; })[0].event_role_id;
                 $scope.new_users.event_id=$state.params.event_id;
                 $scope.new_users.event_role_id=$scope.event_role_id;
+
+                var items = data['existing_pss_users'];
+                var pss_user_id = credentialsService.get_credentials()[$scope.event_name].pss_user_id;
+                $scope.items = _.filter(items, function(o) { return o.pss_user_id!=pss_user_id; });
+                //$scope.bobo_items = _.filter(items, function(o) { return o.checked==true; });
+                _.map(items, mark_users_in_event);
+                //$scope.checked_items = _.filter(items, function(o) { return o.checked==true; });
+                console.log($scope.items);
             };
             var on_post_success = function(data){                    
                 $scope.new_items = data['pss_users_added_to_event'];
@@ -132,7 +163,7 @@ angular.module('shared').controller(
                 var bulk_add_prom =resourceWrapperService.get_wrapper_with_loading("put_add_existing_users",on_post_success,{event_name:$scope.event_name},submit_json);
             };
             
-            var prom =resourceWrapperService.get_wrapper_with_loading("get_users",on_get_success,{},{});
+            var prom =resourceWrapperService.get_wrapper_with_loading("get_users",on_get_success,{event_name:$scope.target_event_name},{});
             
         }
     ]);

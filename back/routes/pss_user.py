@@ -63,16 +63,21 @@ def get_user_and_event_role_from_input_data(user_dict,app):
         raise BadRequest('Naughty Naughty')
     pss_user = app.tables.PssUsers.query.filter_by(pss_user_id=user_dict['pss_user_id']).first()
     if pss_user is None:
-        raise BadRequest('Bad pss user id')        
-    event_role = app.tables.EventRoles.query.filter_by(event_role_id=user_dict['event_role_id']).first()
+        raise BadRequest('Bad pss user id')    
+    event_role = app.tables.EventRoles.query.filter_by(event_role_id=user_dict['event_role_id']).first()    
     if event_role is None:
         raise BadRequest('Bad event role id')                
     return pss_user,event_role
 
 def add_existing_user_to_event_route(password,pss_user,event_role,app):
     tables = app.tables
-    orm_factories.populate_event_user(app,password,
-                                      pss_user,[event_role])
+    existing_event_user = tables.EventUsers.query.filter_by(pss_user_id=pss_user.pss_user_id).first()
+    if existing_event_user:
+        print "%s %s" % (event_role.event_role_id,pss_user)
+        pss_user.event_roles.append(event_role)
+    else:
+        event_user = orm_factories.populate_event_user(app,password,
+                                                       pss_user,[event_role])    
     tables.db_handle.session.commit()
     return pss_user
 
@@ -164,7 +169,7 @@ def create_pss_event_user(tables):
 @load_tables
 @check_current_user_is_active
 @create_pss_event_user_permissions.require(403)
-def add_existing_user_to_event(tables):                
+def add_existing_user_to_event(tables):                    
     input_data = json.loads(request.data)
     if 'event_id' in input_data:
         event_id = int(input_data['event_id'])
@@ -181,16 +186,16 @@ def add_existing_user_to_event(tables):
     new_users=[]
     for user in input_data['users']:
         if 'password' not in user:
-            user['password']="1234"
+            user['password']="1234"        
         user['event_role_id']=input_data['event_role_id']
-        pss_user, event_role = get_user_and_event_role_from_input_data(user,app)    
-        if event.name not in [event.name for event in pss_user.events]:            
-            modified_pss_user = add_existing_user_to_event_route(user['password'],pss_user,event_role,app)        
-        else:
-            modified_pss_user = pss_user
-        pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
-        user_dict=pss_user_serializer(modified_pss_user)
-        new_users.append(user_dict)
+        pss_user, event_role = get_user_and_event_role_from_input_data(user,app)                    
+        in_event_already = event.name in [uevent.name for uevent in pss_user.events]
+        in_role_already = int(user['event_role_id'] in [p_event_role.event_role_id for p_event_role in pss_user.event_roles])
+        if  not in_event_already or not in_role_already:            
+            modified_pss_user = add_existing_user_to_event_route(user['password'],pss_user,event_role,app)
+            pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
+            user_dict=pss_user_serializer(modified_pss_user)
+            new_users.append(user_dict)            
     return jsonify({'pss_users_added_to_event':new_users})
 
 @blueprints.event_blueprint.route('/pss_user',methods=['GET'])

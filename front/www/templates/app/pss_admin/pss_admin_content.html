@@ -31,7 +31,9 @@
       </center>
       <div class='card'>  
         <ion-item ui-sref='app.pss_admin.quick_create_tournament({event_id:items[0].event_id})' class='item item-icon-left'><i class='icon ion-plus-circled'></i>QuickCreate Tournament</ion-item>
-        <ion-item ui-sref='app.pss_admin.quick_create_scorekeepers_existing({event_id:items[0].event_id,event_role_name:"scorekeeper"})' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Register Scorekeepers</ion-item>
+        <ion-item ui-sref='app.pss_admin.quick_create_users_existing({event_id:items[0].event_id,target_event_name:items[0].event_name,event_role_name:"scorekeeper"})' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Register scorekeepers</ion-item>
+        <ion-item ui-sref='app.pss_admin.quick_create_users_existing({event_id:items[0].event_id,target_event_name:items[0].event_name,event_role_name:"deskworker"})' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Register desk workers</ion-item>
+        <ion-item ui-sref='app.pss_admin.quick_create_users_existing({event_id:items[0].event_id,target_event_name:items[0].event_name,event_role_name:"tournament_director"})' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Register tournament directors</ion-item>        
         <ion-item class='item item-icon-left' ui-sref='app.pss_admin.edit_event_basic({id:items[0].event_id})'><i class='icon ion-plus-circled'></i>Edit Event</ion-item>  
         <ion-item ng-click='popoverOtherSiteClick("admin",items[0].event_name)' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Login to Event</ion-item>
         <ion-content delegate-handle="tournamentlist" scrollbar-y="false" scrollbar-x="true" direction="x" class='item item-divider pooping'>

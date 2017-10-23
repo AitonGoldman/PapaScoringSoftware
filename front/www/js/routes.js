@@ -202,37 +202,37 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },data: {
             title: "Login"
         }
-    }).state('app.pss_admin.quick_create_scorekeepers_existing', {
+    }).state('app.pss_admin.quick_create_users_existing', {
         cache:false,
-        url: '/quick_create_scorekeepers_existing/:event_id/:event_role_name',
+        url: '/quick_create_users_existing/:event_id/:event_role_name/:target_event_name',
         views: {
             'pssAdminContent@app':{
-                templateUrl: 'templates/app/shared/quick_create_scorekeeper_existing.html',
+                templateUrl: 'templates/app/shared/quick_create_user_existing.html',
                 controller: 'app.shared.quick_create_user'
                 
             },
-            'post_success@app.pss_admin.quick_create_scorekeepers_existing':{
+            'post_success@app.pss_admin.quick_create_users_existing':{
                 templateUrl: 'templates/generic_post_success.html'// check                
             }
             
         },data: {
-            title: "QuickAdd Scorekeepers"
+            title: "QuickAdd"
         }
-    }).state('app.pss_admin.quick_create_scorekeepers_new', {
+    }).state('app.pss_admin.quick_create_users_new', {
         cache:false,
-        url: '/quick_create_scorekeepers_new/:event_id/:event_role_name',
+        url: '/quick_create_users_new/:event_id/:event_role_name',
         views: {
             'pssAdminContent@app':{
-                templateUrl: 'templates/app/shared/quick_create_scorekeeper_new.html',
+                templateUrl: 'templates/app/shared/quick_create_user_new.html',
                 controller: 'app.shared.quick_create_user'
                 
             },
-            'post_success@app.pss_admin.quick_create_scorekeepers_new':{
+            'post_success@app.pss_admin.quick_create_users_new':{
                 templateUrl: 'templates/generic_post_success.html'// check                
             }
             
         },data: {
-            title: "QuickAdd Scorekeepers"
+            title: "QuickAdd"
         }
     }).state('app.event.manage_tournaments', {
         cache:false,

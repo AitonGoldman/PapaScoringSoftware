@@ -220,7 +220,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         }
     }).state('app.pss_admin.quick_create_users_new', {
         cache:false,
-        url: '/quick_create_users_new/:event_id/:event_role_name',
+        url: '/quick_create_users_new/:event_id/:event_role_name/:target_event_name',
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/app/shared/quick_create_user_new.html',

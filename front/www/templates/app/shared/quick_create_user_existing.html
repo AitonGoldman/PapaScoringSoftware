@@ -11,7 +11,7 @@
   <div>
     <center class='padding'>      
       Select everyone you want to be a {{type_of_user}},  and click "Register {{type_of_user}}s".<br>
-      If people are not on this list, click <a ui-sref='app.pss_admin.quick_create_users_new({event_id:event_id,event_role_name:event_role_name})'>here</a>
+      If people are not on this list, click <a ui-sref='app.pss_admin.quick_create_users_new({event_id:event_id,event_role_name:event_role_name,target_event_name:target_event_name})'>here</a>
     </center>
   <div class="item-input-inset">
     <label class="item-input-wrapper">
@@ -21,22 +21,29 @@
   </div>
 
   <div class='padding'> </div>
-  <div class='row'>
-    <div class='col'>
-    </div>
-    <button ng-click='add_existing_users_func()' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Register {{type_of_user}}s  </button>
-    <div class='col'>
-    </div>    
-  </div>
-  
+  <!-- <div class='row'> -->
+  <!--   <div class='col'> -->
+  <!--   </div> -->
+  <center>
+    <button ng-click='add_existing_users_func()' type="button" class="padding button-pagraph col-90 button button-block button-positive" > Register {{type_of_user}}s  </button>
+  </center>
+    <div class='padding'> </div>
+  <!--   <div class='col'> -->
+  <!--   </div>     -->
+  <!-- </div> -->
+  <ion-content delegate-handle="tournamentlist" scrollbar-y="false" scrollbar-x="true" direction="x" class='item item-divider pooping'>
+    <button style='margin:5px' class='button button-small button-clear button-dark'>Registered {{type_of_user}}:</button>
+    <button ng-click='filter_single_user(item)' style='margin:5px' class='button button-small' ng-repeat='item in items|filter:{checked:true} as checked_count' ng-if='$index<25'> {{item.username}} </button> <button style='margin:5px' class='button button-small button-dark button-clear' ng-if='checked_count.length > 24 '>{{checked_count.length-24}} {{type_of_user}}s not shown...</button>
+  </ion-content>
+  <button ng-click='scroll_left()'>scroll</button>
   <div class='padding'> </div>
-  <button ng-click='filter_single_user(item)' style='margin:5px' class='button button-small' ng-repeat='item in items|filter:{checked:true} as checked_count' ng-if='$index<25'> {{item.username}} </button> <button style='margin:5px' class='button button-small button-dark button-clear' ng-if='checked_count.length > 24 '>{{checked_count.length-24}} {{type_of_user}}s not shown...</button>
+<!--  <button ng-click='filter_single_user(item)' style='margin:5px' class='button button-small' ng-repeat='item in items|filter:{checked:true} as checked_count' ng-if='$index<25'> {{item.username}} </button> <button style='margin:5px' class='button button-small button-dark button-clear' ng-if='checked_count.length > 24 '>{{checked_count.length-24}} {{type_of_user}}s not shown...</button>-->
   <div class='padding'> </div>  
  
   <ion-list>
     <ion-checkbox ng-disabled='item.already_checked==true' ng-repeat='item in items|userSearch:filter_for.filter_for|limitTo:45 as count' ng-model="item.checked">{{item.full_user_name}}</ion-checkbox>
     <ion-item ng-if='count.length > 44 && filter_for.filter_for.length > 0'> More than 45 people not being shown ...</ion-item>
-    <ion-item ng-if='count.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length}} users not being shown </ion-item>
+    <ion-item ng-if='count.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length-count.length}} users not being shown </ion-item>
 
   </ion-list>
 

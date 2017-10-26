@@ -61,7 +61,8 @@ angular.module('pss_admin').controller(
             ionic.DomUtil.ready(function(){
                 $scope.scrollAmount = $ionicScrollDelegate.$getByHandle('tournamentlist').getScrollPosition().left;                
                 var myElement = angular.element( document.querySelector( '.pooping' ) );
-                                
+                console.log('poop');
+                console.log(myElement);                
             });
 
             var prom = resourceWrapperService.get_wrapper_with_loading('get_events',on_success,{},{});

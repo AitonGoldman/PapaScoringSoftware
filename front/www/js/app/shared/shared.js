@@ -103,7 +103,15 @@ angular.module('shared').controller(
             $scope.event_id=$state.params.event_id;
             $scope.event_name=$scope.event_name;
             $scope.target_event_name=$state.params.target_event_name;
-            
+            ionic.DomUtil.ready(function(){
+                 $ionicScrollDelegate.$getByHandle('tournamentlist').getScrollPosition().left;
+                var myElement = angular.element( document.querySelector( '.pooping' ) );
+                console.log('poop');
+                $scope.scrollAmount = myElement[0].clientWidth;                
+            });
+            $scope.scroll_left = function(){
+                $ionicScrollDelegate.$getByHandle('tournamentlist').scrollBy($scope.scrollAmount-($scope.scrollAmount/4),undefined,true);
+            };
             $scope.event_role_name=$state.params.event_role_name;
             var header_links=[{icon:'ion-edit',label:'Advanced Edit'}];            
             var mark_users_in_event = function(u){

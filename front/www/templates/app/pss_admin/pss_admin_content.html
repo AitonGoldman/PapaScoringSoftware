@@ -40,6 +40,12 @@
           <button style='margin:5px' ng-click='scrollCheck()' class='button button-small button-clear button-dark'> Tournaments :  </button>
           <button ng-repeat='tournament in tournaments' style='margin:5px' ng-click='scrollCheck()' class='button button-small' ng-if='items[0].event_id==tournament.event_id' >{{tournament.tournament_name}}</button>        
         </ion-content>
+        <ion-item class='item item-divider'>
+          <a style='margin:5px' class='button button-small button-clear button-dark'>Scorekeeper Link : http://0.0.0.0:8100/app/event/{{items[0].event_name}}</a>
+        </ion-item>
+        <ion-item class='item item-divider'>
+          <a style='margin:5px' class='button button-small button-clear button-dark'>Player Link : http://0.0.0.0:8100</a>
+        </ion-item>
       </div>
     </div>
   </div>

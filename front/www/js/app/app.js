@@ -9,25 +9,71 @@ angular.module('app').controller(
             $scope.test_alert = function(message){
                 alert(message);
             };
-            $scope.check_for_hiding_based_on_wizard = function(){
-                var wizard_mode = $cookies.get('wizard_mode');                
-                if(wizard_mode != '666'){
-                    $rootScope.hide_based_on_cookie=false;
+            $scope.wizard_stack = [
+                {
+                    state:'app.pss_admin',
+                    message:'Wizard mode enabled!  Click on the Create Event button',
+                    title:'Wizard Mode',
+                    oneOff:false       
+                },
+                {
+                    state:'app.pss_admin',
+                    message:'Event created!  Now click your event and the click QuickCreate Tournament',
+                    title:'Wizard Mode',
+                    oneOff:false                    
+                },
+                {
+                    state:'app.pss_admin',
+                    message:'Tournaments created!  But you didnt add any machines.  See the online help for instructions',
+                    title:'Wizard Mode',
+                    oneOff:false
+                },
+                {
+                    state:'app.pss_admin',
+                    message:'Tournaments created!  You can now click on all the buttons to do stuff',
+                    title:'Wizard Mode',
+                    oneOff:true
+                }                                
+
+            ];
+            // $scope.check_for_hiding_based_on_wizard = function(){
+            //     var wizard_mode = $cookies.get('wizard_mode');                
+            //     if(wizard_mode != '666'){
+            //         $rootScope.hide_based_on_cookie=false;
+            //     }
+            // };
+            $scope.display_wizard_toast = function(){
+                var stack_index = credentialsService.get_wizard_stack_index($scope.event_name,'event_create');                
+                console.log("stack index is "+stack_index);
+                if(stack_index >= $scope.wizard_stack.length){
+                    return;
                 }
+                //var stack_items = _.filter($scope.wizard_stack, function(i){return i.state==$state.current.name;});
+                var stack_item = $scope.wizard_stack[stack_index];
+                if(stack_item.state!=$state.current.name){
+                    return;
+                }
+                $scope.pop(stack_item.message,stack_item.title);
+                if(stack_item.oneOff==true){                    
+                    credentialsService.increment_wizard_stack_index($scope.event_name,'event_create');
+                }
+
+                
             };
-            $scope.event_create_wizard_pop = function(site,key,increment){
-                var pop_messages = {'no_events':'Wizard mode enabled!  Click on the Create Event button',
-                                    '1_event_no_tournaments':'Event created!  Now click your event and the click QuickCreate Tournament',
-                                    '1_event_and_tournaments':'Tournaments created!  You can now click on all the buttons to do stuff'};                                
-                if(credentialsService.get_cookie_count(site,key)==1){
-                    $scope.pop(pop_messages[key]);
-                };                
-                if(increment == true){
-                    credentialsService.increment_cookie_count(site,key);
-                }
+            
+            // $scope.event_create_wizard_pop = function(site,key,increment){
+            //     var pop_messages = {'no_events':'Wizard mode enabled!  Click on the Create Event button',
+            //                         '1_event_no_tournaments':'Event created!  Now click your event and the click QuickCreate Tournament',
+            //                         '1_event_and_tournaments':'Tournaments created!  You can now click on all the buttons to do stuff'};                                
+            //     if(credentialsService.get_cookie_count(site,key)==1){
+            // $scope.pop(pop_messages[key]);
+            //     };                
+            //     if(increment == true){
+            //         credentialsService.increment_cookie_count(site,key);
+            //     }
             
 
-            };
+            // };
             // $scope.tournament_create_wizard_pop = function(tournaments){                                
             //     console.log($cookies.get("tournament_wizard_mode"));                
             //     if($rootScope.is_logged_in==true && $cookies.get('tournament_wizard_mode') == '"0 tournaments"'){                                        
@@ -77,7 +123,9 @@ angular.module('app').controller(
                 } else {
                     $ionicNavBarDelegate.align('center');
                 }
-                
+                if($rootScope.is_logged_in){
+                    $scope.display_wizard_toast();
+                }
                 //$scope.append_header_links({icon:'ion-edit',label:'poop',link:'.'});                
             };
 
@@ -208,8 +256,8 @@ angular.module('app').controller(
                     });
                 }
             };
-            $scope.pop = function(text){
-	        toaster.pop({type:'info',title:'title',body:text,timeout:0});
+            $scope.pop = function(text,title){
+	        toaster.pop({type:'info',title:title,body:text,timeout:0});
 	    };
             $scope.is_admin_dns = function(){
                 return $location.host().indexOf('admin') == 0;

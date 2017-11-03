@@ -44,17 +44,18 @@ angular.module('pss_admin').controller(
                 //_.map($scope.items, set_list_items_actions_and_args);
                 _.map($scope.items, set_items_actions_and_args);
                 _.map($scope.items, listGeneration.set_active_inactive_icon);
-                $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
-                if(_.filter($scope.items, test_event_creator).length == 0){
-                    $scope.event_create_wizard_pop('pss_admin','no_events');
-                };
-                if(_.filter($scope.items, test_event_creator).length > 0 && credentialsService.get_cookie_count('pss_admin','1_event_no_tournaments')==1){                    
-                    $scope.event_create_wizard_pop('pss_admin','1_event_no_tournaments');
-                };
-                if(_.filter($scope.items, test_event_creator).length > 0 && credentialsService.get_cookie_count('pss_admin','1_event_no_tournaments')>1){                                        
-                    $scope.event_create_wizard_pop('pss_admin','1_event_and_tournaments',true);
-                    credentialsService.increment_cookie_count('pss_admin','1_event_and_tournaments');                    
-                };                
+                $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                                
+
+                // if(_.filter($scope.items, test_event_creator).length == 0){
+                //     $scope.event_create_wizard_pop('pss_admin','no_events');
+                // };
+                // if(_.filter($scope.items, test_event_creator).length > 0 && credentialsService.get_cookie_count('pss_admin','1_event_no_tournaments')==1){                    
+                //     $scope.event_create_wizard_pop('pss_admin','1_event_no_tournaments');
+                // };
+                // if(_.filter($scope.items, test_event_creator).length > 0 && credentialsService.get_cookie_count('pss_admin','1_event_no_tournaments')>1){                                        
+                //     //$scope.event_create_wizard_pop('pss_admin','1_event_and_tournaments',true);
+                //     //credentialsService.increment_cookie_count('pss_admin','1_event_and_tournaments');                    
+                // };                
                 
                 
             };

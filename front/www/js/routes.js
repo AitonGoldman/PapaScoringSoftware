@@ -364,7 +364,7 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         }
     }).state('app.event.select_players_to_add_to_event.add_player_to_event', {
         cache:false,
-        url: '/add_players_to_event',
+        url: '/add_players_to_event/:player_name',
         views: {
             'pssAdminContent@app':{
                 templateUrl: 'templates/app/event/select_players_to_add_to_event/add_player_to_event/add_players_to_event_content.html',
@@ -606,6 +606,22 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
         },data: {
             title: "Add Machine",
             back_title: "Add Machine",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
+    }).state('app.event.manage_users', {
+        cache:false,
+        url: '/manage_users',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/app/event/manage_users/manage_users.html',
+                controller: 'app.event.manage_users'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'// check
+            }            
+        },data: {
+            title: "Manage Users",
+            back_title: "Manage Users",
             quick_links_url: 'templates/event_quick_links.html'
         }
     })

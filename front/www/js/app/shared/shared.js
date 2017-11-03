@@ -33,16 +33,16 @@ angular.module('shared').controller(
             };            
 
             
-            if($scope.wizard_step == undefined){                
-                basic_or_advanced_edit=true;
-            }
-            if(_.isEmpty($state.params.item) && $scope.wizard_step > 1){
-                $state.go('^');
-            }
-            if($scope.wizard_step>1){                
-                $scope.item=$state.params.item;
-                $scope.descriptions=$state.params.descriptions;
-            }
+            //if($scope.wizard_step == undefined){                
+            //    basic_or_advanced_edit=true;
+            //}
+            // if(_.isEmpty($state.params.item) && $scope.wizard_step > 1){
+            //     $state.go('^');
+            // }
+            // if($scope.wizard_step>1){                
+            //     $scope.item=$state.params.item;
+            //     $scope.descriptions=$state.params.descriptions;
+            // }
             var on_get_success = function(data){                    
                 $scope.item=data['item'];
                 var orig_item_fields=[];
@@ -62,7 +62,7 @@ angular.module('shared').controller(
 
             var on_edit_success = function(data){                    
                 var results = [];
-                
+                credentialsService.increment_wizard_stack_index($scope.event_name,'event_create');
                 var item = data['item'];                    
                 for(field_name in item){
                     if(field_name=="bobo"){continue;}
@@ -82,9 +82,9 @@ angular.module('shared').controller(
                 //FIXME : results page needs to say something about "these are the changed fields" on edit
             };                                
             
-            if(basic_or_advanced_edit == true || $scope.wizard_step == 1) {
+            //if(basic_or_advanced_edit == true || $scope.wizard_step == 1) {
                 var prom =resourceWrapperService.get_wrapper_with_loading(get_route,on_get_success,{event_name:$state.params.event_name,id:$state.params.id},{});                
-            }                                    
+            //}                                    
                                     
             $scope.edit_event_func = function(old_event,result_fields){                
                 //old_event.wizard_configured=true;
@@ -96,22 +96,44 @@ angular.module('shared').controller(
 
 angular.module('shared').controller(
     'app.shared.quick_create_user',[
-        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib','$http','FileUploader','$ionicScrollDelegate',
-        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib,$http,FileUploader,$ionicScrollDelegate ) {                        
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib','$http','FileUploader','$ionicScrollDelegate','$ionicPopup',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib,$http,FileUploader,$ionicScrollDelegate,$ionicPopup ) {                        
             $scope.bootstrap({back_button:true});
+            $scope.filter_for={};
             $scope.new_users={};
             $scope.event_id=$state.params.event_id;
             $scope.event_name=$scope.event_name;
             $scope.target_event_name=$state.params.target_event_name;
-            ionic.DomUtil.ready(function(){
-                 $ionicScrollDelegate.$getByHandle('tournamentlist').getScrollPosition().left;
-                var myElement = angular.element( document.querySelector( '.pooping' ) );
-                console.log('poop');
-                $scope.scrollAmount = myElement[0].clientWidth;                
-            });
+            $scope.add_new_player_to_list = function(new_player_name){
+                var full_name = new_player_name.split(" ");
+                console.log(full_name);
+                $scope.filter_for.filter_for="";
+                $scope.items.push({
+                    first_name:full_name[0],
+                    last_name:full_name[1],
+                    full_user_name:full_name[0]+" "+full_name[1],
+                    checked:true,
+                    already_checked:false
+                });
+                
+            };
+            // ionic.DomUtil.ready(function(){
+            //     $ionicScrollDelegate.$getByHandle('tournamentlist').getScrollPosition().left;
+            //     var myElement = angular.element( document.querySelector( '.pooping' ) );
+            //     console.log('poop');
+            //     $scope.scrollAmount = myElement[0].clientWidth;                
+            // });
             $scope.scroll_left = function(){
                 $ionicScrollDelegate.$getByHandle('tournamentlist').scrollBy($scope.scrollAmount-($scope.scrollAmount/4),undefined,true);
             };
+            $scope.showConfirm = function(user_type) {
+                var confirmPopup = $ionicPopup.alert({
+                    title: 'Users to register as '+user_type+'s',
+                    templateUrl: 'templates/registered_users_list.html',
+                    scope:$scope
+                });
+            };            
+
             $scope.event_role_name=$state.params.event_role_name;
             var header_links=[{icon:'ion-edit',label:'Advanced Edit'}];            
             var mark_users_in_event = function(u){
@@ -126,6 +148,8 @@ angular.module('shared').controller(
                 if(user_is_in_event==true){
                     u.already_checked=true;
                     u.checked=true;
+                }else{
+                    u.already_checked=false;
                 }
             };
             var on_get_success = function(data){                    

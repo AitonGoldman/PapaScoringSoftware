@@ -4,7 +4,7 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration',
         function($scope, $state,resourceWrapperService,listGeneration ) {
             $scope.bootstrap({back_button:true});
-            $scope.check_for_hiding_based_on_wizard();                        
+            //$scope.check_for_hiding_based_on_wizard();                        
             //$scope.tournament_create_wizard_pop();
         }]);
 
@@ -38,17 +38,17 @@ angular.module('event').controller(
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$cookies',
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$cookies) {
             $scope.bootstrap({back_button:true});
-            $scope.check_for_hiding_based_on_wizard();            
+            //$scope.check_for_hiding_based_on_wizard();            
             //$scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
             $scope.toggle_item_active=eventTournamentLib.toggle_item_active;                
             var on_success = function(data){
                 //$scope.items=data['tournaments'];
                 $scope.items=data['tournaments'];
                 //$scope.wizard_mode_pop();                                
-                var wizard_mode = $cookies.get('wizard_mode');
-                if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '3' && $scope.items.length==1 && $scope.items[0].tournament_machines.length > 0){
-                    $scope.pop("all done");
-                }
+                //var wizard_mode = $cookies.get('wizard_mode');
+                // if($state.current.name=='app.event.manage_tournaments' && wizard_mode == '3' && $scope.items.length==1 && $scope.items[0].tournament_machines.length > 0){
+                //     $scope.pop("all done");
+                // }
 
                 var basic_sref='.edit_tournament_basic({id:item.tournament_id})';
                 var advanced_sref='.edit_tournament_advanced({id:item.tournament_id})';                
@@ -141,6 +141,7 @@ angular.module('event').controller(
                 $scope.tournament_machines.tournament_machines=filtered_values;                
                 
                 var on_submit_success = function(data){                    
+                    credentialsService.increment_wizard_stack_index($scope.event_name,'event_create');
                     $scope.item=data['item'];
                     //$scope.post_results={};
                     //$scope.post_results.title="Machines Added!";                    
@@ -152,12 +153,12 @@ angular.module('event').controller(
                     var attention = undefined;
                     if($state.current.name.match(/quick/)){
                         attention={'title':'Attention',text:"You have successfully finished creating your tournament!  Players can purchase tickets and and start playing immediately."};
-                        credentialsService.increment_cookie_count('pss_admin','1_event_no_tournaments');
+                        //credentialsService.increment_cookie_count('pss_admin','1_event_no_tournaments');
                     }
                     $scope.post_success_handler("Machines Added!",results,$scope,attention);                    
-                    if($cookies.get('tournament_wizard_mode') == '"0 tournaments"'){
-                       $cookies.put('tournament_wizard_mode','1 tournament unconfigured');
-                    }
+                    // if($cookies.get('tournament_wizard_mode') == '"0 tournaments"'){
+                    //    $cookies.put('tournament_wizard_mode','1 tournament unconfigured');
+                    // }
                     //$scope.post_success = true;
                     //$scope.disable_back_button();
                     
@@ -177,8 +178,8 @@ angular.module('event').controller(
 
 angular.module('event').controller(
     'app.event.manage_tournaments.create_tournament_controller',[
-        '$scope','$state','resourceWrapperService','listGeneration',
-        function($scope, $state,resourceWrapperService,listGeneration ) {
+        '$scope','$state','resourceWrapperService','listGeneration','credentialsService',
+        function($scope, $state,resourceWrapperService,listGeneration,credentialsService ) {
             $scope.bootstrap({back_button:true});
             $scope.item={};
             $scope.state = $state.current.name;
@@ -225,6 +226,7 @@ angular.module('event').controller(
                     //$scope.post_results={};
                     //$scope.post_results.title="Tournament Created!";
                     //FIXME : this should use descriptions we got from backend
+                    credentialsService.increment_wizard_stack_index($scope.event_name,'event_create');
                     var results = [];                                        
                     var item = data['new_tournament'];
                     $scope.tournament_id=item.tournament_id;
@@ -291,18 +293,30 @@ angular.module('event').controller(
 
 angular.module('event').controller(
     'app.event.select_players_to_add_to_event_controller',[
-        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib',
-        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib) {
+        '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$ionicPopup',
+        function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$ionicPopup) {
             $scope.bootstrap({back_button:true});
             //$scope.toggle_view_item_actions = listGeneration.toggle_view_item_actions;
 
             var set_list_items_ui_sref_and_args = listGeneration.generate_set_list_items_ui_sref_and_args(".add_existing_player_to_event({player_id:item.player_id})","player_name");
+            $scope.showConfirm = function(user_type) {
+                var confirmPopup = $ionicPopup.alert({
+                    title: 'Registered '+user_type+'s',
+                    templateUrl: 'templates/registered_players_list.html',
+                    scope:$scope
+                });
+            };            
             
             var on_success = function(data){
                 var raw_items=data['existing_players'];
+                $scope.already_registered = [];
                 $scope.items = _.filter(raw_items, function(n) {
                     if(n.event_player){
-                        return false;
+                        $scope.already_registered.push(n);
+                        n.already_checked=true;                        
+                        //return false;
+                    } else {
+                        n.already_checked=false;
                     };
                     return true;
                 });                
@@ -316,7 +330,7 @@ angular.module('event').controller(
     'app.event.select_players_to_add_to_event.add_players_to_event_controller',[
         '$scope','$state','resourceWrapperService','listGeneration','eventTournamentLib','$ionicPopup',
         function($scope, $state,resourceWrapperService,listGeneration,eventTournamentLib,$ionicPopup) {
-            $scope.bootstrap({back_button:true});            
+            $scope.bootstrap({back_button:true});                        
             
             $scope.disable_submit = function(){
                 if($scope.event && $scope.event.force_ifpa_lookup==true){
@@ -563,3 +577,19 @@ angular.module('event').controller(
                                                                              {});                                    
         }
     ]);
+angular.module('event').controller(
+    'app.event.manage_users',[
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','listGeneration',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,listGeneration) {                        
+            $scope.bootstrap({back_button:true});                        
+            var set_list_items_ui_sref_and_args = listGeneration.generate_set_list_items_ui_sref_and_args(".edit_user({pss_user_id:item.pss_user_id})","full_user_name");
+            var on_get_success = function(data){
+                var raw_items = data['existing_pss_event_users'];               
+                _.map(raw_items, set_list_items_ui_sref_and_args);
+                $scope.items = raw_items;
+                console.log($scope.items);
+            };
+            var prom =resourceWrapperService.get_wrapper_with_loading("get_event_users",on_get_success,{event_name:$scope.event_name},{});
+            
+            
+        }]);

@@ -175,7 +175,7 @@ def add_existing_user_to_event(tables):
         event_id = int(input_data['event_id'])
         matching_user_events = [event for event in current_user.events if event.event_id==event_id]
         if len(matching_user_events)!=1:
-            raise BadRequest('Trying to create tournament for an event you do not own')
+            raise BadRequest('Trying to operate on an event you do not own')
         event = tables.Events.query.filter_by(event_id=event_id).first()
         pss_config = PssConfig()
         app = pss_config.get_db_info().getImportedTablesForEvent(event.name)        
@@ -195,7 +195,9 @@ def add_existing_user_to_event(tables):
             modified_pss_user = add_existing_user_to_event_route(user['password'],pss_user,event_role,app)
             pss_user_serializer = generate_pss_user_to_dict_serializer(serializer.pss_user.ALL)
             user_dict=pss_user_serializer(modified_pss_user)
-            new_users.append(user_dict)            
+            new_users.append(user_dict)
+        if 'pss_user_id' not in user:
+            print "found new user"
     return jsonify({'pss_users_added_to_event':new_users})
 
 @blueprints.event_blueprint.route('/pss_user',methods=['GET'])

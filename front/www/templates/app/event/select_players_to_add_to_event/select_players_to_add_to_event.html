@@ -6,6 +6,15 @@
     </label>
   </div>
 <!--  <ion-item ui-sref='.add_player_to_event' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Add New Player To PSS</ion-item>-->
-  
-  <div class='padding'></div>
-  <pss-generic-binding-list items-to-list='items' filter-to-apply="playerSearch" not-found-message="Player Not Found" not-found-sref=".add_player_to_event" filter-for-string="filter_for"> </pss-generic-binding-list>
+<center>
+  Registered Players : <a ng-click='showConfirm("player")'>{{already_registered.length}}</a>
+</center>
+<div class='padding'></div>
+<ion-item class='item item-icon-left item-icon-right' ng-repeat='item in items|filter:filter_for as srefcount'>
+  <i class='icon ion-edit'></i>
+  <!--<button ng-disabled='item.already_checked==true' class='button button-clear button-dark' ui-sref='.add_existing_player_to_event({player_id:item.player_id})'>{{item.player_name}}</button>-->
+  {{item.player_name}}
+  <i class='icon material-icons'>chevron_right</i>   
+</ion-item>
+
+<!--  <pss-generic-binding-list items-to-list='items' filter-to-apply="playerSearch" not-found-message="Register Player" not-found-sref=".add_player_to_event" filter-for-string="filter_for"> </pss-generic-binding-list>-->

@@ -10,10 +10,8 @@ def process_cookie_counts(f):
         raw_cookie = request.cookies.get('credentials_cookie')
         if raw_cookie:
             cookie_credentials = json.loads(urllib.unquote(raw_cookie))
-            if 'pss_admin' in cookie_credentials and 'cookie_counts' in cookie_credentials['pss_admin']:
-                cookie_counts = cookie_credentials['pss_admin']['cookie_counts']
-                current_user.cookie_counts=json.dumps(cookie_counts)
-                print current_user.cookie_counts
+            if 'pss_admin' in cookie_credentials and 'wizard_stack_indexes' in cookie_credentials['pss_admin']:                
+                current_user.wizard_stack_indexes = json.dumps(cookie_credentials['pss_admin']['wizard_stack_indexes'])
                 current_app.tables.db_handle.session.commit()
         return f(*args,**kwargs)
     return new_f

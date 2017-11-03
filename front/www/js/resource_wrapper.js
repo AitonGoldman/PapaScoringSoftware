@@ -147,6 +147,9 @@ angular.module('resource_wrapper')
                   rest_api['get_event_roles'] = $resource(rest_server+'/pss_admin/event_roles',
                                                           {},
                                                           {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_event_users'] = $resource(rest_server+'/:event_name/pss_event_user',
+                                                          {},
+                                                          {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   
                   rest_api['post_pss_admin_login'] = $resource(rest_server+'/pss_admin/auth/pss_user/login',
                                                                {},

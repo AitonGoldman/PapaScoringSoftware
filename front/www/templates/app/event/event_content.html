@@ -5,7 +5,7 @@
 </div>      
 <div class="chatitem list" ng-if='credentials.is_logged_in(event_name)==true'>
   <ion-item class='item-borderless'> <b>Basic Tournament Management</b> </ion-item>
-  <ion-item class='item item-icon-left'><i class='icon ion-plus-circled'></i>Manage Users</ion-item>
+  <ion-item ui-sref='.manage_users' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Manage Users</ion-item>
   <ion-item ui-sref='.manage_tournament_machines' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Manage Tournament Machines</ion-item>
   <br>
   <ion-item class='item-borderless'> <b>Additional Tournament Configuration</b> </ion-item>  

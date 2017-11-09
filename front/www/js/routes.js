@@ -624,6 +624,44 @@ angular.module('pss').config(['$stateProvider', '$urlRouterProvider',function($s
             back_title: "Manage Users",
             quick_links_url: 'templates/event_quick_links.html'
         }
+    }).state('app.event.manage_users.edit_user', {
+        cache:false,
+        url: '/edit_user/:pss_user_id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/app/event/manage_users/edit_user/edit_user.html',
+                controller: 'app.event.manage_users.edit_user'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'// check
+            },
+            'post_success@app.event.manage_users.edit_user':{
+                templateUrl: 'templates/generic_post_success.html'// check                
+            }            
+        },data: {
+            title: "Edit User",
+            back_title: "Edit User",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
+    }).state('app.event.manage_users.register_existing_user', {
+        cache:false,
+        url: '/register_existing_user/:namestring/:pss_user_id',
+        views: {
+            'pssAdminContent@app':{
+                templateUrl: 'templates/app/event/manage_users/register_existing_user/register_existing_user.html',
+                controller: 'app.event.manage_users.register_existing_user'
+            },
+            'pssAdminFooter@app':{
+                templateUrl: 'templates/event_footer.html'// check
+            },
+            'post_success@app.event.manage_users.register_existing_user':{
+                templateUrl: 'templates/generic_post_success.html'// check                
+            }            
+        },data: {
+            title: "Edit User",
+            back_title: "Edit User",
+            quick_links_url: 'templates/event_quick_links.html'
+        }
     })
 
     ;}]);

@@ -1,0 +1,35 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div ng-if="post_success==undefined">
+  <form name="myForm">
+  <div class="card">
+    <div class="item item-divider">
+      Select role for user 
+    </div>
+    <ion-radio ng-repeat="role in roles" ng-model="item.event_role_id" ng-value="role.event_role_id">{{role.name}}</ion-radio>
+  </div>
+  <div class='card'>
+    <pss-text-input-basic field='first_name' basic='true'>  </pss-text-input-basic>
+  </div>
+  <div class='card'>
+    <pss-text-input-basic field='last_name' basic='true'>  </pss-text-input-basic>
+  </div>
+  <div class='card'>
+    <pss-text-input-basic field='extra_title' basic='true'>  </pss-text-input-basic>
+  </div>
+  
+  <div class='card'>
+    <pss-text-input-basic field='password' basic='true'>  </pss-text-input-basic>
+  </div>
+  <div class='row'>
+    <div class='col'>
+    </div>
+    <button ng-click='add_existing_user_func()' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
+    <div class='col'>
+    </div>    
+  </div>
+  </form>
+</div>

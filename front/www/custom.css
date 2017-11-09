@@ -59,3 +59,37 @@
     -ms-transform: rotate(-90deg);
     transform: rotate(-90deg);
 }
+
+@keyframes zoomInNew {
+  from {
+    opacity: 0;
+    transform: scale3d(.3, .3, .3);
+  }
+
+  50% {
+      opacity: 1;
+      transform: scale3d(4.3, 4.3, 4.3);      
+  }
+
+  to {
+      transform: scale3d(1, 1, 1);      
+  }
+}
+
+.zoomInNew {
+  animation-name: zoomInNew;
+}
+
+.css-class-add,.css-class-remove {
+    animation: zoomInNew 2s;
+}
+
+.css-class,
+.css-class-add.css-class-add-active {
+  font-size: 1em;
+}
+
+.css-class-remove.css-class-remove-active {
+  font-size: 1em;
+}
+

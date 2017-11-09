@@ -583,13 +583,132 @@ angular.module('event').controller(
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,listGeneration) {                        
             $scope.bootstrap({back_button:true});                        
             var set_list_items_ui_sref_and_args = listGeneration.generate_set_list_items_ui_sref_and_args(".edit_user({pss_user_id:item.pss_user_id})","full_user_name");
-            var on_get_success = function(data){
-                var raw_items = data['existing_pss_event_users'];               
-                _.map(raw_items, set_list_items_ui_sref_and_args);
-                $scope.items = raw_items;
-                console.log($scope.items);
+            var mark_users_in_event = function(u){
+                var user_is_in_event = _.filter(u.events,function(e){                    
+                    return e.event_name==$scope.event_name;
+                }).length>0;
+                
+                if(user_is_in_event==true){
+                    u.already_checked=true;                    
+                }else{
+                    u.already_checked=false;
+                }
             };
-            var prom =resourceWrapperService.get_wrapper_with_loading("get_event_users",on_get_success,{event_name:$scope.event_name},{});
+
+            var on_get_success = function(data){
+                var raw_items = data['existing_pss_users'];               
+                _.map(raw_items, mark_users_in_event);
+                $scope.items = raw_items;                
+            };
+
+            $scope.deal_with_user = function(item){                
+                if(item == undefined){
+                    $state.go('.register_existing_user',{namestring:$scope.filter_for.filter_for});
+                    return;
+                }
+                if(item.already_checked==true){
+                    $state.go('.edit_user',{pss_user_id:item.pss_user_id});
+                }
+                if(item.already_checked==false){                    
+                    $state.go('.register_existing_user',{pss_user_id:item.pss_user_id});
+                }
+                    
+            };
+            
+            var prom =resourceWrapperService.get_wrapper_with_loading("get_users",on_get_success,{event_name:$scope.event_name},{});
+            
+            
+        }]);
+
+angular.module('event').controller(
+    'app.event.manage_users.edit_user',[
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','listGeneration',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,listGeneration) {                        
+            $scope.bootstrap({back_button:true});                        
+            $scope.pss_user_id=$state.params.pss_user_id;            
+            var on_post_success = function(data){
+                var select_role = _.filter($scope.roles, function(o) { return o.event_role_id == $scope.item.event_role_id; });
+                var results =[["user",$scope.item['full_user_name']]];
+                $scope.post_success_handler("User Updated!",results,$scope);                
+            };                        
+            $scope.add_existing_user_func = function(){                                                
+                var bulk_add_prom =resourceWrapperService.get_wrapper_with_loading("put_add_existing_users",on_post_success,{event_name:$scope.event_name},{'users':[$scope.item]});
+            };
+
+            var on_get_success = function(data){                
+                $scope.item  = data['existing_pss_user'];
+                $scope.item.event_role_id = $scope.item.event_roles[0].event_role_id;
+                $scope.roles = data['event_roles'];                
+                $scope.descriptions={
+                    short_descriptions:{
+                        first_name:'User first name',
+                        last_name:'User last name',
+                        extra_title:'User extra title',
+                        password:'User Password'
+                    }                                        
+                };                
+            };
+            var prom =resourceWrapperService.get_wrapper_with_loading("get_event_user",on_get_success,{event_name:$scope.event_name,pss_user_id:$scope.pss_user_id},{});
+            
+            
+        }]);
+
+angular.module('event').controller(
+    'app.event.manage_users.register_existing_user',[
+        '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','listGeneration',
+        function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,listGeneration) {                        
+            $scope.bootstrap({back_button:true});                        
+            $scope.item={};
+            $scope.pss_user_id=$state.params.pss_user_id;
+            console.log("-"+$scope.pss_user_id+"-");
+            var namestring = $state.params.namestring.split(" ");
+            if(namestring.length==1){
+                $scope.item.first_name=namestring[0];
+            }
+            if(namestring.length==2){
+                $scope.item.first_name=namestring[0];
+                $scope.item.last_name=namestring[1];
+
+            }
+            if(namestring.length==3){                
+                $scope.item.first_name=namestring[0];
+                $scope.item.last_name=namestring[1];
+                $scope.item.extra_title=namestring[2];
+            }
+            
+            var on_post_success = function(data){
+                var select_role = _.filter($scope.roles, function(o) { return o.event_role_id == $scope.item.event_role_id; });                
+                var results =[["user",data['pss_users_added_to_event'][0]['full_user_name']]];
+
+                $scope.post_success_handler("User Updated!",results,$scope);                
+            };                        
+            $scope.add_existing_user_func = function(){                                                
+                if($scope.pss_user_id!=undefined&&$scope.pss_user_id!=""){
+                    $scope.item.username=$scope.item.first_name+$scope.item.last_name;
+                }                
+                var bulk_add_prom =resourceWrapperService.get_wrapper_with_loading("put_add_existing_users",on_post_success,{event_name:$scope.event_name},{'users':[$scope.item]});
+            };
+
+            var on_get_success = function(data){                
+                $scope.roles = data['event_roles'];
+                if(data.existing_pss_user!=undefined){
+                    $scope.item = data['existing_pss_user'];
+                }
+            };
+            
+            if($scope.pss_user_id==undefined || $scope.pss_user_id == ""){
+                resourceWrapperService.get_wrapper_with_loading("get_event_roles",on_get_success,{event_name:$scope.event_name},{});
+            } else {
+                resourceWrapperService.get_wrapper_with_loading("get_user",on_get_success,{event_name:$scope.event_name,pss_user_id:$scope.pss_user_id},{});
+            }
+            $scope.descriptions={
+                short_descriptions:{
+                    first_name:'User first name',
+                    last_name:'User last name',
+                    extra_title:'User extra title',
+                    password:'User Password'
+                }                                        
+            };
             
             
         }]);

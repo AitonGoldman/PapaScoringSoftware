@@ -25,15 +25,16 @@
   <!--   <div class='col'> -->
   <!--   </div> -->
   <center>
-    <button ng-click='add_existing_users_func()' type="button" class="padding button-pagraph col-90 button button-block button-positive" > Register {{type_of_user}}s  </button>
+    <button ng-click='add_existing_users_func()' type="button" class="padding button-pagraph col-90 button button-block button-positive" > Register selected {{type_of_user}}s  </button>
   </center>
     <div class='padding'> </div>
   <!--   <div class='col'> -->
   <!--   </div>     -->
   <!-- </div> -->
+  
   <div class='item item-divider'>
     <center>
-      # Selected {{type_of_user}}s : <a ng-click='showConfirm(type_of_user)'> {{(items|filter:{already_checked:false,checked:true}).length}} </a>
+      # Selected {{type_of_user}}s : <span style="display:inline-block;" ng-class="{'css-class':signal_added_user}"> <a ng-click='showConfirm(type_of_user)'> {{(items|filter:{already_checked:false,checked:true}).length}} </a> </span>
     </center>
   </div>
 <!--  <ion-content delegate-handle="tournamentlist" scrollbar-y="false" scrollbar-x="true" direction="x" class='item item-divider pooping'>
@@ -47,7 +48,7 @@
  
   <ion-list ng-if='filter_for.filter_for!="" && filter_for.filter_for!=undefined'>
     <ion-checkbox ng-disabled='item.already_checked==true' ng-repeat='item in items|userSearch:filter_for.filter_for|limitTo:45 as count' ng-model="item.checked">{{item.full_user_name}} <span class='desktop-only' ng-if='item.already_checked==true'>(Registered)</span></ion-checkbox>
-    <ion-item ng-click='add_new_player_to_list(filter_for.filter_for)' ng-if='count.length == 0 && filter_for.filter_for.length > 0'> Register {{filter_for.filter_for}}</ion-item>
+    <ion-item class='item-icon-left item-icon-right' ng-click='add_new_player_to_list(filter_for.filter_for)' ng-if='count.length == 0 && filter_for.filter_for.length > 0'> <i class="icon material-icons">assignment</i> Add {{filter_for.filter_for}} to list to be registered <i class="icon ion-chevron-right"></i></ion-item>
     <ion-item ng-if='count.length > 44 && filter_for.filter_for.length > 0'> More than 45 people not being shown ...</ion-item>
     <ion-item ng-if='count.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length-count.length}} users not being shown </ion-item>
 

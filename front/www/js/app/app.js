@@ -43,8 +43,7 @@ angular.module('app').controller(
             //     }
             // };
             $scope.display_wizard_toast = function(){
-                var stack_index = credentialsService.get_wizard_stack_index($scope.event_name,'event_create');                
-                console.log("stack index is "+stack_index);
+                var stack_index = credentialsService.get_wizard_stack_index($scope.event_name,'event_create');                                
                 if(stack_index >= $scope.wizard_stack.length){
                     return;
                 }

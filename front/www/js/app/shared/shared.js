@@ -98,24 +98,27 @@ angular.module('shared').controller(
     'app.shared.quick_create_user',[
         '$scope','$state','resourceWrapperService','credentialsService','$ionicNavBarDelegate','$rootScope','eventTournamentLib','$http','FileUploader','$ionicScrollDelegate','$ionicPopup',
         function($scope, $state,resourceWrapperService,credentialsService,$ionicNavBarDelegate,$rootScope,eventTournamentLib,$http,FileUploader,$ionicScrollDelegate,$ionicPopup ) {                        
-            $scope.bootstrap({back_button:true});
+            $scope.bootstrap({back_button:true});            
             $scope.filter_for={};
             $scope.new_users={};
+            $scope.signal_added_user=false;
             $scope.event_id=$state.params.event_id;
             $scope.event_name=$scope.event_name;
             $scope.target_event_name=$state.params.target_event_name;
-            $scope.add_new_player_to_list = function(new_player_name){
+            $scope.add_new_player_to_list = function(new_player_name){                
+                $scope.signal_added_user= $scope.signal_added_user==false;
+                
                 var full_name = new_player_name.split(" ");
-                console.log(full_name);
+                console.log(full_name);                
                 $scope.filter_for.filter_for="";
                 $scope.items.push({
                     first_name:full_name[0],
                     last_name:full_name[1],
                     full_user_name:full_name[0]+" "+full_name[1],
                     checked:true,
+                    username: full_name[0]+full_name[1],
                     already_checked:false
                 });
-                
             };
             // ionic.DomUtil.ready(function(){
             //     $ionicScrollDelegate.$getByHandle('tournamentlist').getScrollPosition().left;

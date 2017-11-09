@@ -95,7 +95,10 @@ angular.module('resource_wrapper')
                                                      {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   rest_api['get_users'] = $resource(rest_server+'/:event_name/pss_user',
                                                      {},
-                                                     {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                                                    {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_user'] = $resource(rest_server+'/:event_name/pss_user/:pss_user_id',
+                                                   {},
+                                                   {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
                   rest_api['get_event'] = $resource(rest_server+'/pss_admin/event/:id',
                                                     {},
                                                     {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});                  
@@ -148,6 +151,9 @@ angular.module('resource_wrapper')
                                                           {},
                                                           {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   rest_api['get_event_users'] = $resource(rest_server+'/:event_name/pss_event_user',
+                                                          {},
+                                                          {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
+                  rest_api['get_event_user'] = $resource(rest_server+'/:event_name/pss_event_user/:pss_user_id',
                                                           {},
                                                           {'get':{timeout:timeout,interceptor:generate_response_interceptor('.')}});
                   

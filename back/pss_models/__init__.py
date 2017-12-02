@@ -17,7 +17,7 @@ from Tokens import generate_tokens_class
 from TokenPurchases import generate_token_purchases_class
 from TokenPurchaseSummaries import generate_token_purchase_summaries_class
 from Queues import generate_queues_class
-
+from TestMapping import generate_test_class
 from AuditLogs import generate_audit_logs_class
 
 
@@ -43,7 +43,7 @@ class ImportedTables():
         self.TokenPurchaseSummaries = generate_token_purchase_summaries_class(db_handle,event_name)        
         self.AuditLogs = generate_audit_logs_class(db_handle,event_name)        
         self.Queues = generate_queues_class(db_handle,event_name)        
-        
+        self.TestMapping = generate_test_class(db_handle,event_name)
         self.db_handle=db_handle
     def get_list_of_event_specific_tables(self):
         #FIXME : make this do something

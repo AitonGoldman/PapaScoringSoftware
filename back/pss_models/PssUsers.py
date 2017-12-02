@@ -32,7 +32,6 @@ def generate_pss_users_class(db_handle,event_name):
     AdminRole_PssUser_mapping = generate_pss_user_admin_role_mapping(db_handle)
     Event_PssUser_mapping = generate_pss_user_event_mapping(db_handle)
     EventRole_PssUser_mapping = generate_pss_user_event_role_mapping(db_handle,event_name)
-    
     class PssUsers(db_handle.Model):
         """Model object for Pss Users"""
         # pylint: disable=no-init
@@ -48,6 +47,9 @@ def generate_pss_users_class(db_handle,event_name):
         ioniccloud_push_token=db_handle.Column(db_handle.String(500))
         #cookie_counts=db_handle.Column(db_handle.String(1500),default='{}')
         wizard_stack_indexes=db_handle.Column(db_handle.String(1500),default='{}')
+        test_mapping = db_handle.relationship(
+            'TestClass'
+        )
         admin_roles = db_handle.relationship(
             'AdminRoles',
             secondary=AdminRole_PssUser_mapping

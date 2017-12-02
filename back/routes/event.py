@@ -56,7 +56,7 @@ def get_event_field_descriptions():
 @blueprints.pss_admin_event_blueprint.route('/event',methods=['GET'])
 @blueprints.event_blueprint.route('/event',methods=['GET'])
 @load_tables
-@process_cookie_counts
+#@process_cookie_counts
 def get_events(tables):                    
     events = tables.Events.query.all()    
     event_serializer = serializer.event.generate_event_to_dict_serializer(serializer.event.MINIMUM_EVENT)        

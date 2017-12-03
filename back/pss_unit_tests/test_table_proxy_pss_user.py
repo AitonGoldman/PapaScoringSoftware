@@ -7,7 +7,7 @@ from passlib.hash import sha512_crypt
 
 class TablesProxyPssUserTest(PssUnitTestBase):        
     def setUp(self):
-        self.sqlalchemy_pss_user_class = generate_pss_users_class(SQLAlchemy())()
+        self.sqlalchemy_pss_user = generate_pss_users_class(SQLAlchemy())()
         self.tables_proxy.PssUsers = MagicMock()
         
     def test_get_pss_by_username(self):                

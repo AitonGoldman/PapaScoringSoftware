@@ -35,7 +35,7 @@ class RouteAuthTest(PssUnitTestBase):
             
         self.sqlalchemy_pss_user.event_creator=False        
         self.set_mock_single_user_query(self.tables_proxy,self.sqlalchemy_pss_user)        
-        with self.assertRaises(BadRequest) as cm:        
+        with self.assertRaises(Unauthorized) as cm:        
             auth.pss_login_route(mock_request,self.tables_proxy,True)
 
 

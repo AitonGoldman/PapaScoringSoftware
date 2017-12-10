@@ -7,8 +7,9 @@ import json
 
 def get_username_that_does_not_already_exist(new_username,new_pss_users,tables_proxy):
     for i in range(2,10):
-        if not tables_proxy.get_user_by_username(new_username) and new_username not in new_pss_users:
-            return "%s%d"%(new_username,i)
+        new_username_with_digit=new_username+"%d"%i
+        if not tables_proxy.get_user_by_username(new_username_with_digit) and new_username_with_digit not in new_pss_users:
+            return "%s%d"%(new_username_with_digit,i)
 
 def get_password_for_new_user():
     return '1234'
@@ -31,29 +32,31 @@ def create_event_user_route(request,tables_proxy,event_id):
         if 'pss_user_id' in event_user_to_create:            
             pss_user = tables_proxy.get_user_by_id(event_user_to_create['pss_user_id'])
             if pss_user is None:
-                raise BadRequest('Tried to submit a user with an invalid pss_user_id')                            
+                raise BadRequest('Tried to submit a user with an invalid pss_user_id')            
             new_event_user = tables_proxy.create_event_user(pss_user, event_id, event_user_to_create.get('password',None))            
             tables_proxy.update_event_user_roles(event_role_ids,event_id, pss_user)
             pss_users_added_to_event.append(pss_user)
             continue                
         new_username=pss_user_helpers.generate_username(event_user_to_create)
-        if tables_proxy.get_user_by_username(new_username) or new_username in new_pss_users:
+        if tables_proxy.get_user_by_username(new_username) or new_username in new_pss_users:            
             new_username=get_username_that_does_not_already_exist(new_username,new_pss_users,tables_proxy)        
         new_pss_user = tables_proxy.create_user(new_username,event_user_to_create['first_name'],
-                                                            event_user_to_create['last_name'],get_password_for_new_user(),
-                                                            extra_title=event_user_to_create.get('extra_title',None))
+                                                event_user_to_create['last_name'],get_password_for_new_user(),
+                                                extra_title=event_user_to_create.get('extra_title',None))
         tables_proxy.update_event_user_roles(event_role_ids,event_id, new_pss_user)
-        new_event_user = tables_proxy.create_event_user(new_pss_user,event_role_ids)
+        new_event_user = tables_proxy.create_event_user(new_pss_user,event_id, event_user_to_create.get('password',None))
         pss_users_added_to_event.append(new_pss_user)
     return pss_users_added_to_event
 
 
-@blueprints.test_blueprint.route('/<event_id>/event_user',methods=['POST'])
-def event_user_create(event_id):
-    permission = permissions.CreateEventUserPermission(int(event_id))    
+@blueprints.test_blueprint.route('/<int:event_id>/event_user',methods=['POST'])
+def event_user_create(event_id):            
+
+    permission = permissions.CreateEventUserPermission(event_id)    
     if not permission.can():
         raise Unauthorized('You are not authorized to register users for this event')        
     #event = pss_event_edit_route(request,current_app.table_proxy)        
     #return jsonify({'data':generic.serialize_event_public(event)})
-    new_event_users=create_event_user_route(request,current_app.table_proxy,event_id)
-    return jsonify({'data':""})
+    new_event_users=[generic.serialize_pss_user_public(pss_user) for pss_user in create_event_user_route(request,current_app.table_proxy,event_id)]
+    current_app.table_proxy.commit_changes()
+    return jsonify({'data':new_event_users})

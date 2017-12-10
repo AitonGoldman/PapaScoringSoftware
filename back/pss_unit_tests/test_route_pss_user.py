@@ -21,7 +21,8 @@ class RoutePssUserTest(PssUnitTestBase):
         pss_users_added_to_event = pss_user.create_event_user_route(mock_request,self.tables_proxy,1)
         self.assertTrue(len(pss_users_added_to_event)==1)
         self.assertTrue(len(pss_users_added_to_event[0].event_roles)==1)
-
+        self.tables_proxy.EventUsers.assert_called_once()
+        
     def test_create_event_user_route_with_existing_user(self):
         self.mock_event_role.event_role_id=2        
         self.mock_pss_users[0].pss_user_id=5        
@@ -37,6 +38,7 @@ class RoutePssUserTest(PssUnitTestBase):
         self.assertEquals(pss_users_added_to_event[0].event_roles[0].event_role_id,2)        
         self.assertEquals(pss_users_added_to_event[1].pss_user_id,None)
         self.assertEquals(pss_users_added_to_event[0].event_roles[0].event_role_id,2)        
+        self.assertEquals(self.tables_proxy.EventUsers.call_count,2)
         
         
         

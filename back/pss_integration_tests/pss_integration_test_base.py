@@ -31,14 +31,12 @@ class PssIntegrationTestBase(unittest.TestCase):
                                                   'test_last',
                                                   'password',
                                                   event_creator=True,
-                                                  commit=commit,
-                                                  add_user_to_session=add_user_to_session)
+                                                  commit=True)
             self.test_app.table_proxy.create_user(self.normal_pss_username,
                                                   'test_first',
                                                   'test_last',
                                                   'password',
-                                                  commit=commit,
-                                                  add_user_to_session=add_user_to_session)        
+                                                  commit=True)        
             
     def setUp(self):                
         os.environ['pss_db_name']='test_db'        

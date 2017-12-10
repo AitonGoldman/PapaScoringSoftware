@@ -3,6 +3,9 @@ from flask_restless.helpers import to_dict
 PSS_USER_PRIVATE_FIELDS=['password_crypt']
 EVENT_PRIVATE_FIELDS=['stripe_api_key','stripe_public_key','ionic_profile','ionic_api_key','ifpa_api_key']
 
+PSS_USER_ONLY='pss_user_only'
+PSS_USER_WITH_ROLES='pss_user_with_roles'
+
 class serializer_v2():
     def __init__(self, private_fields):
         self.private_fields=private_fields                
@@ -17,13 +20,14 @@ class serializer_v2():
             generic_model_dict[c.name]=getattr(model,c.name)
         return generic_model_dict
 
-def serialize_pss_user_public(model):
+def serialize_pss_user_public(model,type=PSS_USER_ONLY):
     pss_user_dict=serializer_v2(PSS_USER_PRIVATE_FIELDS).serialize_model(model)
     pss_user_dict['full_user_name']=pss_user_dict['first_name']+' '+pss_user_dict['last_name']
     if model.extra_title:
         pss_user_dict['full_user_name']=pss_user_dict['full_user_name']+' '+pss_user_dict['extra_title']
-    return pss_user_dict
-
+    if type==PSS_USER_ONLY:
+        return pss_user_dict
+        
 def serialize_event_public(model):
     event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model)    
     return event_dict

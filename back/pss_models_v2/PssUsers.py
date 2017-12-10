@@ -33,10 +33,6 @@ def generate_pss_users_class(db_handle):
         #     'TestClass',
         #     cascade='all'
         # )
-        #events = db_handle.relationship(
-        #    'Events',
-        #    secondary=Event_PssUser_mapping
-        #)
     
         
         def crypt_password(self, password):
@@ -45,7 +41,10 @@ def generate_pss_users_class(db_handle):
         
         def verify_password(self, password):
             """Check to see if a plaintext password matches our crypt"""
-            return sha512_crypt.verify(password, self.password_crypt)
+            if self.password_crypt is None:
+                return False
+            else:
+                return sha512_crypt.verify(password, self.password_crypt)
     
         def __repr__(self):
             #return '<User %r>' % self.username
@@ -70,7 +69,7 @@ def generate_pss_users_class(db_handle):
         def is_anonymous():
             """No anon users"""
             return False
-    
+
         def get_id(self):
             """Get the user's id"""
             return self.pss_user_id

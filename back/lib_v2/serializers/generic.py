@@ -10,8 +10,6 @@ class serializer_v2():
     def serialize_model(self,model,show_private_fields=False):
         generic_model_dict = {}
         for c in model.__table__.columns:
-            if c.primary_key:
-                continue            
             if len(c.foreign_keys) > 0:
                 continue
             if c.name in self.private_fields and show_private_fields is False:

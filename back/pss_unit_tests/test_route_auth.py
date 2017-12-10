@@ -10,9 +10,9 @@ class RouteAuthTest(PssUnitTestBase):
     BAD_CRYPT_PASSWORD="$6$rounds=100000$zvtKLLYyw7v5gGK6$zYSOyslGbz3mLFRfAN/9dCwqvvvT6yO1K1j8J7JB0DchX1ln.juSSIU5GWt3pbfCUTjaA7VJemktG9eQIvFMM."
 
     def setUp(self):
-        self.sqlalchemy_pss_user = generate_pss_users_class(SQLAlchemy())()
+        self.sqlalchemy_pss_user=self.initialize_single_mock_pss_user(self.tables_proxy)        
         self.sqlalchemy_pss_user.password_crypt="$6$rounds=100000$zvtKLLYyw7v5gGK6$zYSOyslGbz3mLFRfAN/9dCwqvvvT6yO1K1j8J7JB0DchX1ln.juSSIU5GWt3pbfCUTjgA7VJemktG9eQIvFMM."
-        self.tables_proxy.PssUsers = MagicMock()        
+        #self.tables_proxy.PssUsers = MagicMock()        
         
     def test_pss_login_route_for_event_creator(self):                
         mock_request=MockRequest('{"username":"test_user","password":"password"}')        

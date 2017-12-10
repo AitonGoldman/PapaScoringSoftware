@@ -1,1 +1,2 @@
-EVENT_CREATOR_LOGIN="event_creator_login"
+EVENT_CREATOR="event_creator_login"
+TOURNAMENT_DIRECTOR="tournament_director"

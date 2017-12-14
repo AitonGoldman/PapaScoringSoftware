@@ -1,10 +1,9 @@
 import os 
 from pss_models_v2.PssUsers import generate_pss_users_class
 from pss_models_v2.Events import generate_events_class
-from pss_models_v2.EventUsers import generate_event_users_class
 from pss_models_v2.EventRoles import generate_event_roles_class
 from pss_models_v2.EventRoleMappings import generate_event_role_mappings_class
-
+from lib_v2 import roles_constants
 from lib_v2.serializers import deserializer
 #from pss_models_v2.TestMapping import generate_test_class
 
@@ -15,8 +14,7 @@ class TableProxy():
         self.db_handle=db_handle                
         self.PssUsers = generate_pss_users_class(self.db_handle)
         self.Events = generate_events_class(self.db_handle)
-        self.EventRoles = generate_event_roles_class(self.db_handle)        
-        self.EventUsers = generate_event_users_class(self.db_handle)        
+        self.EventRoles = generate_event_roles_class(self.db_handle)                
         self.EventRoleMappings = generate_event_role_mappings_class(self.db_handle)
         
         self.PssUsers.event_roles = self.db_handle.relationship(
@@ -25,9 +23,6 @@ class TableProxy():
         self.PssUsers.events_created = self.db_handle.relationship(
             'Events', cascade='all'            
         )
-        self.PssUsers.event_users = self.db_handle.relationship(
-            'EventUsers', cascade='all'            
-        )        
     def commit_changes(self):
         self.db_handle.session.commit()
         
@@ -73,37 +68,27 @@ class TableProxy():
             self.db_handle.session.commit()
         return event_role
 
-    def get_event_user_by_username_and_event_id(self,username,event_id):        
-        pss_user = self.get_user_by_username(username)
-        return self.EventUsers.query.filter_by(event_id=event_id,pss_user_id=int(pss_user.pss_user_id)).first()        
-
     def update_event_user_roles(self, event_role_ids,
                                 event_id, pss_user,
                                 commit=False):
-        
+        if pss_user.pss_user_id:            
+            event_role_mappings_for_event = self.EventRoleMappings.query.filter_by(event_id=event_id,pss_user_id=pss_user.pss_user_id).all()                        
+            for event_role_mapping in event_role_mappings_for_event:                
+                pss_user.event_roles.remove(event_role_mapping)
+                self.db_handle.session.delete(event_role_mapping)                
         for event_role_id in event_role_ids:            
             event_role = self.EventRoles.query.filter_by(event_role_id=event_role_id).first()                                                            
+            if event_role is None:
+                continue
             event_role_mapping = self.EventRoleMappings()
             event_role_mapping.event_id=event_id
             event_role_mapping.pss_user_id=pss_user.pss_user_id
             event_role_mapping.event_role_id=event_role.event_role_id
+            event_role_mapping.event_role_name=event_role.event_role_name
             pss_user.event_roles.append(event_role_mapping)        
         if commit:
             self.db_handle.session.commit()
-    
-    def create_event_user(self,pss_user,
-                          event_id,                          
-                          password=None,
-                          commit=False):
-        new_event_user = self.EventUsers()                
-        new_event_user.pss_user_id=pss_user.pss_user_id
-        new_event_user.event_id=event_id
-        self.db_handle.session.add(new_event_user)        
-        if password:
-            new_event_user.crypt_password(password)
-        if commit:
-            self.db_handle.session.commit()
-        return new_event_user
+        return pss_user
     
     def edit_event_user(self,pss_user_id,
                         event_id,input_data):

@@ -37,7 +37,23 @@ class PssIntegrationTestBase(unittest.TestCase):
                                                   'test_last',
                                                   'password',
                                                   commit=True)        
-            
+    def login_and_create_event_and_create_event_user(self,login_dict, post_dict):
+        with self.test_app.test_client() as c:
+
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)
+            event_name = 'test_event_'+self.create_uniq_id()
+            rv = c.post('/event',
+                        data=json.dumps({'name':event_name}))
+            self.assertHttpCodeEquals(rv,200)
+            results = json.loads(rv.data)
+            event_id = results['data']['event_id']            
+            rv = c.post('/%s/event_user' % event_id,
+                        data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return [event_id,json.loads(rv.data)]
+           
     def setUp(self):                
         os.environ['pss_db_name']='test_db'        
         pss_integration_tests.static_setup('test_db')
@@ -46,9 +62,12 @@ class PssIntegrationTestBase(unittest.TestCase):
         self.bootstrap_pss_users()                
         #FIXME : bootstrapping of users and roles should come from a standard bootstraping function
         if self.count_roles_in_database()==0:
-            self.td_event_role_id=self.test_app.table_proxy.create_role(roles_constants.TOURNAMENT_DIRECTOR,True).event_role_id
-        else:
-            self.td_event_role_id=self.test_app.table_proxy.EventRoles.query.filter_by(event_role_name=roles_constants.TOURNAMENT_DIRECTOR).first().event_role_id
+            self.test_app.table_proxy.create_role(roles_constants.TOURNAMENT_DIRECTOR,True)
+            self.test_app.table_proxy.create_role(roles_constants.SCOREKEEPER,True)
+        
+        self.td_event_role_id=self.test_app.table_proxy.EventRoles.query.filter_by(event_role_name=roles_constants.TOURNAMENT_DIRECTOR).first().event_role_id
+        self.scorekeeper_role_id=self.test_app.table_proxy.EventRoles.query.filter_by(event_role_name=roles_constants.SCOREKEEPER).first().event_role_id
+        #self.event_creator_role_id=self.test_app.table_proxy.EventRoles.query.filter_by(event_role_name=roles_constants.EVENT_CREATOR).first().event_role_id
             
     def assertHttpCodeEquals(self,http_response, http_response_code_expected,http_error_message=None):
         if http_error_message:

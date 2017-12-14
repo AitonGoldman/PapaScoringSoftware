@@ -35,11 +35,11 @@ class PssUnitTestBase(unittest.TestCase):
         mock_objects=[]
         for i in range(0,count):
             mock_object = MagicMock()        
-            if mock_relationship_map.get(attribute,None):            
-                setattr(mock_object,mock_relationship_map.get(attribute),[])
-            setattr(tables_proxy,attribute,mock_object)                        
-            getattr(tables_proxy,attribute).return_value=mock_object
             mock_objects.append(mock_object)
+        if mock_relationship_map.get(attribute,None):            
+            setattr(mock_object,mock_relationship_map.get(attribute),[])
+        setattr(tables_proxy,attribute,mock_objects[0])                        
+        getattr(tables_proxy,attribute).return_value=mock_objects[0]
         return mock_objects
     
     def initialize_single_mock_pss_user(self,tables_proxy,mock_user_create=False):        
@@ -74,7 +74,10 @@ class PssUnitTestBase(unittest.TestCase):
     def set_mock_single_query(self,tables_proxy,attribute,mock_to_return):
         getattr(tables_proxy,attribute).query.filter_by().first.return_value=mock_to_return
     def set_mock_multiple_query(self,tables_proxy,attribute,mocks_to_return):
-        getattr(tables_proxy,attribute).query.filter_by().first.side_effect=mocks_to_return        
+        getattr(tables_proxy,attribute).query.filter_by().first.side_effect=mocks_to_return
+    def set_mock_all_query(self,tables_proxy,attribute,mocks_to_return):
+        getattr(tables_proxy,attribute).query.filter_by().all.side_effect=mocks_to_return        
+        
     def set_mock_single_user_query(self,tables_proxy,pss_user_to_return):
         tables_proxy.PssUsers.query.filter_by().first.return_value=pss_user_to_return
     def set_mock_single_event_query(self,tables_proxy,event_to_return):

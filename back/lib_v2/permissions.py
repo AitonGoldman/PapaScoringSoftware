@@ -17,3 +17,9 @@ class CreateEventUserPermission(Permission):
         event_editor_need = needs.EventEditNeed(event_id)        
         super(CreateEventUserPermission, self).__init__(create_event_user_need,event_editor_need)
         
+class CreateTournamentPermission(Permission):
+    def __init__(self,event_id):        
+        create_tournament_need = needs.TournamentDirectorRoleNeed(event_id)
+        event_editor_need = needs.EventEditNeed(event_id)        
+        super(CreateTournamentPermission, self).__init__(create_tournament_need,event_editor_need)
+        

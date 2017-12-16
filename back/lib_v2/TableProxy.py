@@ -3,6 +3,8 @@ from pss_models_v2.PssUsers import generate_pss_users_class
 from pss_models_v2.Events import generate_events_class
 from pss_models_v2.EventRoles import generate_event_roles_class
 from pss_models_v2.EventRoleMappings import generate_event_role_mappings_class
+from pss_models_v2.Tournaments import generate_tournaments_class
+from pss_models_v2.MultiDivisionTournaments import generate_multi_division_tournaments_class
 from lib_v2 import roles_constants
 from lib_v2.serializers import deserializer
 #from pss_models_v2.TestMapping import generate_test_class
@@ -16,10 +18,17 @@ class TableProxy():
         self.Events = generate_events_class(self.db_handle)
         self.EventRoles = generate_event_roles_class(self.db_handle)                
         self.EventRoleMappings = generate_event_role_mappings_class(self.db_handle)
+        self.Tournaments = generate_tournaments_class(self.db_handle)
+        self.MultiDivisionTournaments = generate_multi_division_tournaments_class(db_handle)        
+
+        self.Tournaments.multi_division_tournament = self.db_handle.relationship(
+            'MultiDivisionTournaments', uselist=False, cascade='all'
+        )
         
         self.PssUsers.event_roles = self.db_handle.relationship(
             'EventRoleMappings', cascade='all'
         )
+        
         self.PssUsers.events_created = self.db_handle.relationship(
             'Events', cascade='all'            
         )
@@ -55,6 +64,8 @@ class TableProxy():
     def edit_event(self, event_info,
                      commit=False):                    
         event = self.Events.query.filter_by(event_id=event_info['event_id']).first()
+        if event is None:
+            raise Exception('No event with the specified id')
         deserializer.deserialize_json(event,event_info)
         #event edit logic goes here        
         if commit:
@@ -79,7 +90,7 @@ class TableProxy():
         for event_role_id in event_role_ids:            
             event_role = self.EventRoles.query.filter_by(event_role_id=event_role_id).first()                                                            
             if event_role is None:
-                continue
+                raise Exception('Naughty Naughty')
             event_role_mapping = self.EventRoleMappings()
             event_role_mapping.event_id=event_id
             event_role_mapping.pss_user_id=pss_user.pss_user_id
@@ -117,3 +128,56 @@ class TableProxy():
             self.db_handle.session.commit()
         return user
     
+    def get_tournament_by_tournament_id(self,tournament_id):
+        return self.Tournaments.query.filter_by(tournament_id=tournament_id).first()            
+
+    def create_multi_division_tournament(self, multi_division_tournament_name,                                         
+                                         division_count, tournament_info,
+                                         event_id, commit=False):
+        new_tournaments=[]
+        multi_division_names=['A','B','C','D']
+        multi_division_names_to_use=multi_division_names[0:division_count]
+        multi_div = self.MultiDivisionTournaments()
+        multi_div.multi_division_tournament_name=multi_division_tournament_name
+        for division_name in multi_division_names_to_use:
+            new_tournament=self.create_tournament(tournament_info,event_id)
+            new_tournament.tournament_name=division_name
+            new_tournament.multi_division_tournament=multi_div
+            self.db_handle.session.add(new_tournament)
+            new_tournaments.append(new_tournament)
+        if commit:
+            self.db_handle.session.commit()
+        return new_tournaments
+    
+    def create_tournament(self,tournament_info,
+                          event_id,commit=False):        
+        event = self.get_event_by_event_id(event_id)
+        if event is None:
+            raise Exception('Event specified does not exist')
+        new_tournament = self.Tournaments()        
+        deserializer.deserialize_json(new_tournament,tournament_info)
+        new_tournament.event_id=event_id
+        #tournament creation logic goes here
+        self.db_handle.session.add(new_tournament)
+        if commit:
+            self.db_handle.session.commit()
+        return new_tournament
+
+    def edit_tournament(self, tournament_info,
+                        commit=False):                    
+        tournament = self.Tournaments.query.filter_by(tournament_id=tournament_info['tournament_id']).first()
+        if tournament is None:
+            raise Exception('No tournament with the specified id')
+        deserializer.deserialize_json(tournament,tournament_info)
+        #event edit logic goes here        
+        if commit:
+            self.db_handle.session.commit()
+        return tournament
+    
+    def clear_stripe_prices_from_tournament(self,tournament,commit=False):
+        tournament.stripe_price = None
+        tournament.stripe_sku = None
+        tournament.discount_stripe_price = None
+        tournament.discount_stripe_sku = None
+        if commit:
+            self.db_handle.session.commit()

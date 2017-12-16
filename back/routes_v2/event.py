@@ -22,8 +22,10 @@ def pss_event_edit_route(request,tables_proxy):
     else:
         raise BadRequest('Submitted information is missing required fields')    
     # don't allow duplicate names
-    if tables_proxy.get_event_by_eventname(input_data['name']) is not None:
-        raise BadRequest('Event name already exists')    
+    event = tables_proxy.get_event_by_eventname(input_data['name'])
+    if event and event.event_id != int(input_data['event_id']):
+        if tables_proxy.get_event_by_eventname(input_data['name']) is not None:
+            raise BadRequest('Event name already exists')    
     return tables_proxy.edit_event(input_data,True)            
         
 @blueprints.test_blueprint.route('/event',methods=['POST'])

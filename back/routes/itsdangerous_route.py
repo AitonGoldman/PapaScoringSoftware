@@ -29,6 +29,9 @@ def request_pss_user_creations(tables):
     
     s = URLSafeSerializer(flask_secret_key)
 
+    #https://stackoverflow.com/questions/37058567/configure-flask-mail-to-use-gmail
+    #
+    #Important part from link : https://security.google.com/settings/security/apppasswords
     print input_data['email']
     msg = Message("PSS user account activation",
                   sender="papa.scoring.software@gmail.com",

@@ -39,8 +39,27 @@ class PssUnitTestBase(unittest.TestCase):
         if mock_relationship_map.get(attribute,None):            
             setattr(mock_object,mock_relationship_map.get(attribute),[])
         setattr(tables_proxy,attribute,mock_objects[0])                        
-        getattr(tables_proxy,attribute).return_value=mock_objects[0]
+        #getattr(tables_proxy,attribute).return_value=mock_objects[0]
+        getattr(tables_proxy,attribute).side_effect=mock_objects
         return mock_objects
+
+    def initialize_single_sqlalchemy(self,tables_proxy,attribute,generate_sqlalchemy_class,set_create_return_value=False):        
+        mock_object = MagicMock()        
+        setattr(tables_proxy,attribute,mock_object)                                
+        sqlalchemy_object = generate_sqlalchemy_class(SQLAlchemy())() 
+        if set_create_return_value:
+            getattr(tables_proxy,attribute).return_value=sqlalchemy_object           
+        return sqlalchemy_object
+
+    def initialize_multiple_sqlalchemy(self,tables_proxy,attribute,generate_sqlalchemy_class,count,set_create_return_value=False):        
+        sqlalchemy_objects=[]        
+        for i in range(0,count):
+            sqlalchemy_object = generate_sqlalchemy_class(SQLAlchemy())()            
+            sqlalchemy_objects.append(sqlalchemy_object)        
+        setattr(tables_proxy,attribute,MagicMock())                                        
+        if set_create_return_value:
+            getattr(tables_proxy,attribute).side_effect=sqlalchemy_objects           
+        return sqlalchemy_objects
     
     def initialize_single_mock_pss_user(self,tables_proxy,mock_user_create=False):        
         tables_proxy.PssUsers = MagicMock()

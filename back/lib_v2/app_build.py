@@ -13,6 +13,7 @@ from lib_v2 import blueprints, needs, permissions,principal_identity_funcs
 from lib_v2.PssConfig import PssConfig
 from lib_v2.TableProxy import TableProxy
 from werkzeug.wsgi import pop_path_info, peek_path_info
+from StripeProxy import StripeProxy
 
 def configure_base_app(app):    
     app.config['DEBUG']=True
@@ -65,17 +66,25 @@ def get_event_name_from_request():
     pop_path_info(request.environ)
     #print request.environ    
 
+def generate_event_settings_hash_setter(app):
+    def event_settings_hash_setter():
+        app.event_settings={}
+        events = app.table_proxy.Events.query.all()
+        for event in events:
+            app.event_settings[event.event_id]=event
+    return event_settings_hash_setter
+
 def build_app(app):    
     pss_config = PssConfig()
     pss_config.get_db_info().check_database_exists()
-    #app = Flask(__name__)
-    #pss_config.set_event_config_from_db(app)
     app.db_handle = pss_config.get_db_info().create_db_handle(app)
     app.register_blueprint(blueprints.test_blueprint)
     app.table_proxy=TableProxy()
-    app.table_proxy.initialize_tables(app.db_handle)
-    app.before_request(get_event_name_from_request)
+    app.table_proxy.initialize_tables(app.db_handle)    
+    app.before_request(generate_event_settings_hash_setter(app))
     configure_base_app(app)
     principal_identity_funcs.generate_pss_user_loader(app)
     principal_identity_funcs.generate_pss_user_identity_loaded(app)
+    app.stripe_proxy=StripeProxy(app.table_proxy)
     return app
+

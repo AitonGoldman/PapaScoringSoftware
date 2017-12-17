@@ -12,7 +12,8 @@ class MockRequest():
         self.data=data
 
 mock_relationship_map={
-    'PssUsers':'event_roles'
+    'PssUsers':'event_roles',
+    'Tournaments':'tournament_machines'
 }
 
 class PssUnitTestBase(unittest.TestCase):    
@@ -47,6 +48,8 @@ class PssUnitTestBase(unittest.TestCase):
         mock_object = MagicMock()        
         setattr(tables_proxy,attribute,mock_object)                                
         sqlalchemy_object = generate_sqlalchemy_class(SQLAlchemy())() 
+        if mock_relationship_map.get(attribute,None):            
+            setattr(sqlalchemy_object,mock_relationship_map.get(attribute),[])
         if set_create_return_value:
             getattr(tables_proxy,attribute).return_value=sqlalchemy_object           
         return sqlalchemy_object

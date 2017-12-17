@@ -11,6 +11,7 @@ PSS_USER_WITH_ROLES='pss_user_with_roles'
 PLAYER_ONLY='player_only'
 
 TOURNAMENT_ONLY='tournament_only'
+META_TOURNAMENT_ONLY='meta_tournament_only'
 TOURNAMENT_MACHINE_ONLY='tournament_machine_only'
 
 class serializer_v2():
@@ -40,6 +41,11 @@ def serialize_tournament_public(model,type=TOURNAMENT_ONLY):
     if type==TOURNAMENT_ONLY:
         return tournament_dict
 
+def serialize_meta_tournament_public(model,type=META_TOURNAMENT_ONLY):
+    meta_tournament_dict=serializer_v2([]).serialize_model(model)
+    if type==META_TOURNAMENT_ONLY:
+        return meta_tournament_dict
+    
 def serialize_player_public(model,type=PLAYER_ONLY):
     player_dict=serializer_v2(PLAYER_PRIVATE_FIELDS).serialize_model(model)
     if type==PLAYER_ONLY:

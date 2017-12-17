@@ -8,6 +8,7 @@ from pss_models_v2.EventRoleMappings import generate_event_role_mappings_class
 from pss_models_v2.EventPlayersRoleMappings import generate_event_player_role_mappings_class
 
 from pss_models_v2.Tournaments import generate_tournaments_class
+from pss_models_v2.MetaTournaments import generate_meta_tournaments_class
 from pss_models_v2.Machines import generate_machines_class
 from pss_models_v2.TournamentMachines import generate_tournament_machines_class
 from pss_models_v2.MultiDivisionTournaments import generate_multi_division_tournaments_class
@@ -16,6 +17,7 @@ from lib_v2.serializers import deserializer
 from sqlalchemy.orm import foreign, remote
 import warnings
 from sqlalchemy import exc as sa_exc
+
 #from pss_models_v2.TestMapping import generate_test_class
 
 
@@ -33,7 +35,7 @@ class TableProxy():
         self.MultiDivisionTournaments = generate_multi_division_tournaments_class(db_handle)        
         self.Machines = generate_machines_class(db_handle)        
         self.TournamentMachines = generate_tournament_machines_class(db_handle)        
-
+        self.MetaTournaments = generate_meta_tournaments_class(db_handle)
         self.Tournaments.multi_division_tournament = self.db_handle.relationship(
             'MultiDivisionTournaments', uselist=False, cascade='all'
         )
@@ -47,13 +49,16 @@ class TableProxy():
         )        
         self.PssUsers.event_roles = self.db_handle.relationship(
             'EventRoleMappings', cascade='all'
-        )
-        
+        )        
         self.PssUsers.events_created = self.db_handle.relationship(
             'Events', cascade='all'            
         )
-        #primaryjoin="and_(User.id==Address.user_id, "
-        #                "Address.city=='Boston')"
+        self.Tournaments.tournament_machines = self.db_handle.relationship(
+            'TournamentMachines', cascade='all'
+        )        
+        self.MetaTournaments.tournaments = self.db_handle.relationship(
+            'Tournaments', cascade='all'
+        )
         
     def initialize_event_specific_relationship(self,poop_event_id):
         with warnings.catch_warnings():
@@ -200,6 +205,26 @@ class TableProxy():
             self.db_handle.session.commit()
         return user
 
+    def create_meta_tournament(self, tournaments,
+                               input_data,commit=False):        
+        new_meta_tournament = self.MetaTournaments()
+        deserializer.deserialize_json(new_meta_tournament,input_data)
+        self.db_handle.session.add(new_meta_tournament)
+        for tournament in tournaments:
+            new_meta_tournament.tournaments.append(tournament)
+        if commit:            
+            self.db_handle.session.commit()
+        return new_meta_tournament
+
+    def edit_meta_tournament(self, meta_tournament,
+                             input_data,commit=False):                
+        #for tournament in meta_tournament.tournaments:
+        #    meta_tournament.tournaments.remove(tournament)
+        deserializer.deserialize_json(meta_tournament,input_data)
+        if commit:            
+            self.db_handle.session.commit()
+        return meta_tournament
+    
     def get_player_by_id(self,player_id):
         return self.Players.query.filter_by(player_id=player_id).first()            
 
@@ -283,6 +308,9 @@ class TableProxy():
     def get_machine_by_id(self,machine_id):
         return self.Machines.query.filter_by(machine_id=machine_id).first()
 
+    def get_meta_tournament_by_id(self,meta_tournament_id):
+        return self.MetaTournaments.query.filter_by(meta_tournament_id=meta_tournament_id).first()
+    
     def get_tournament_machines(self,tournament_id):
         return self.TournamentMachines.query.filter_by(tournament_id=tournament_id,removed=False).all()
 
@@ -305,7 +333,8 @@ class TableProxy():
         new_tournament_machine.tournament_machine_name=machine.machine_name
         new_tournament_machine.abbreviation=machine.abbreviation
         new_tournament_machine.active=True
-        new_tournament_machine.tournament_id=tournament.tournament_id
+        #new_tournament_machine.tournament_id=tournament.tournament_id
+        tournament.tournament_machines.append(new_tournament_machine)
         self.db_handle.session.add(new_tournament_machine)
         # CREATE QUEUES HERE
         if commit:

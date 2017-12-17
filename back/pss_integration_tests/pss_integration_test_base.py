@@ -80,6 +80,34 @@ class PssIntegrationTestBase(unittest.TestCase):
             self.assertHttpCodeEquals(rv,200)
             return json.loads(rv.data)
 
+    def login_and_create_meta_tournament(self,login_dict, post_dict, event_id, event_user=False):
+        with self.test_app.test_client() as c:
+            if event_user:
+                login_endpoint='/auth/pss_event_user/login'
+            else:
+                login_endpoint='/auth/pss_user/login'
+            rv = c.post(login_endpoint,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.post('/%s/meta_tournament' % event_id,
+                        data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
+        
+    def login_and_edit_meta_tournament(self,login_dict, post_dict, event_id, event_user=False):
+        with self.test_app.test_client() as c:
+            if event_user:
+                login_endpoint='/auth/pss_event_user/login'
+            else:
+                login_endpoint='/auth/pss_user/login'
+            rv = c.post(login_endpoint,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.put('/%s/meta_tournament' % (event_id),
+                        data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
+
     def login_and_edit_tournament(self,login_dict, post_dict, event_id, tournament_id, event_user=False):
         with self.test_app.test_client() as c:
             if event_user:

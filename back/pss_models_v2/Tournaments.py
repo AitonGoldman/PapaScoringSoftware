@@ -7,7 +7,7 @@ def generate_tournaments_class(db_handle):
         event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
         multi_division_tournament_name=db_handle.Column(db_handle.String(100))
         multi_division_tournament_id=db_handle.Column('multi_division_tournament_id', db_handle.Integer, db_handle.ForeignKey('multi_division_tournaments.multi_division_tournament_id'))
-        #meta_tournament_id=db_handle.Column('meta_tournament_id', db_handle.Integer, db_handle.ForeignKey('meta_tournaments_'+event_name+'.meta_tournament_id'))        
+        meta_tournament_id=db_handle.Column('meta_tournament_id', db_handle.Integer, db_handle.ForeignKey('meta_tournaments.meta_tournament_id'))        
         
         queuing=db_handle.Column(db_handle.Boolean,default=False)
         queue_size=db_handle.Column(db_handle.Integer,default=15)

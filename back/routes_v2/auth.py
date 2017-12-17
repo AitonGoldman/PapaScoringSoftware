@@ -24,6 +24,20 @@ def pss_login_route(request,tables_proxy,event_creator=False,event_id=None):
         
     return pss_user
 
+def player_login_route(request,tables_proxy,event_id):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Submitted information is missing required fields')
+    if 'player_id_for_event' not in input_data or 'player_pin' not in input_data:
+        raise BadRequest('Missing player number or pin')
+    player = tables_proxy.get_player_by_player_id_for_event(input_data['player_id_for_event'],event_id)    
+    if player is None:
+        raise Unauthorized('Bad player number')
+    if not player.verify_pin(input_data['player_pin']):        
+        raise Unauthorized('Bad pin')        
+    return player
+
 
 @blueprints.test_blueprint.route('/auth/pss_user/login',methods=['POST'])
 def event_creator_login():
@@ -40,3 +54,11 @@ def event_user_login():
         raise Unauthorized('User is not active')
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_user.pss_user_id))            
     return jsonify({'data':generic.serialize_pss_user_public(pss_user)})        
+
+@blueprints.test_blueprint.route('/auth/player/login/<int:event_id>',methods=['POST'])
+def event_player_login(event_id):
+    player = player_login_route(request,current_app.table_proxy,event_id)
+    if login_user(player) is False:
+        raise Unauthorized('Player is not active')
+    identity_changed.send(current_app._get_current_object(), identity=Identity("player_%s"%player.player_id))            
+    return jsonify({'data':generic.serialize_player_public(player)})        

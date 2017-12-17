@@ -95,7 +95,7 @@ class PssUnitTestBase(unittest.TestCase):
     def set_mock_multiple_query(self,tables_proxy,attribute,mocks_to_return):
         getattr(tables_proxy,attribute).query.filter_by().first.side_effect=mocks_to_return
     def set_mock_all_query(self,tables_proxy,attribute,mocks_to_return):
-        getattr(tables_proxy,attribute).query.filter_by().all.side_effect=mocks_to_return        
+        getattr(tables_proxy,attribute).query.filter_by().all.return_value=mocks_to_return        
         
     def set_mock_single_user_query(self,tables_proxy,pss_user_to_return):
         tables_proxy.PssUsers.query.filter_by().first.return_value=pss_user_to_return

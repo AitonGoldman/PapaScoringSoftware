@@ -53,14 +53,14 @@ def create_event_user_route(request,tables_proxy,event_id):
             tables_proxy.update_event_user_roles(event_role_ids,event_id, pss_user)
             pss_users_added_to_event.append(pss_user)
             continue                
-        new_username=pss_user_helpers.generate_username(event_user_to_create)
+        new_username=pss_user_helpers.generate_username(event_user_to_create)        
         if tables_proxy.get_user_by_username(new_username) or new_username in new_pss_users:            
             new_username=get_username_that_does_not_already_exist(new_username,new_pss_users,tables_proxy)        
         new_pss_user = tables_proxy.create_user(new_username,event_user_to_create['first_name'],
                                                 event_user_to_create['last_name'],get_password_for_new_user(event_user_to_create.get('password',None)),
                                                 extra_title=event_user_to_create.get('extra_title',None))
         tables_proxy.update_event_user_roles(event_role_ids,event_id, new_pss_user)        
-        pss_users_added_to_event.append(new_pss_user)
+        pss_users_added_to_event.append(new_pss_user)    
     return pss_users_added_to_event
 
 

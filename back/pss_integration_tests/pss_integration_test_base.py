@@ -10,7 +10,7 @@ class PssIntegrationTestBase(unittest.TestCase):
     def create_uniq_id(self):
         random_string = ""
         for x in range(5):
-            random_string = random_string+chr(random.randrange(97,122))        
+            random_string = random_string+chr(random.randrange(97,122))                
         return random_string
 
     def count_users_in_database(self):
@@ -38,6 +38,34 @@ class PssIntegrationTestBase(unittest.TestCase):
                                                   'password',
                                                   commit=True)
             
+    def login_and_create_tournament_machine(self,login_dict, post_dict, event_id, event_user=False):
+        with self.test_app.test_client() as c:
+            if event_user:
+                login_endpoint='/auth/pss_event_user/login'
+            else:
+                login_endpoint='/auth/pss_user/login'
+            rv = c.post(login_endpoint,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.post('/%s/tournament_machine' % event_id,
+                        data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
+
+    def login_and_edit_tournament_machine(self,login_dict, post_dict, event_id, event_user=False):
+        with self.test_app.test_client() as c:
+            if event_user:
+                login_endpoint='/auth/pss_event_user/login'
+            else:
+                login_endpoint='/auth/pss_user/login'
+            rv = c.post(login_endpoint,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.put('/%s/tournament_machine' % event_id,
+                       data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
+        
     def login_and_create_tournament(self,login_dict, post_dict, event_id, event_user=False):
         with self.test_app.test_client() as c:
             if event_user:
@@ -62,6 +90,34 @@ class PssIntegrationTestBase(unittest.TestCase):
                         data=json.dumps(login_dict))
             self.assertHttpCodeEquals(rv,200)            
             rv = c.put('/%s/tournament' % (event_id),
+                        data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
+
+    def login_and_create_event_and_create_event_player(self,login_dict, post_dict):
+        with self.test_app.test_client() as c:
+
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)
+            event_name = 'test_event_'+self.create_uniq_id()
+            rv = c.post('/event',
+                        data=json.dumps({'name':event_name}))
+            self.assertHttpCodeEquals(rv,200)
+            results = json.loads(rv.data)
+            event_id = results['data']['event_id']            
+            rv = c.post('/%s/player' % event_id,
+                        data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return [event_id,json.loads(rv.data)]
+
+    def login_and_create_event_player(self,login_dict, post_dict,event_id):
+        with self.test_app.test_client() as c:
+
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.post('/%s/player' % event_id,
                         data=json.dumps(post_dict))
             self.assertHttpCodeEquals(rv,200)
             return json.loads(rv.data)

@@ -3,11 +3,15 @@ from flask_restless.helpers import to_dict
 PSS_USER_PRIVATE_FIELDS=['password_crypt']
 EVENT_PRIVATE_FIELDS=['stripe_api_key','stripe_public_key','ionic_profile','ionic_api_key','ifpa_api_key']
 TOURNAMENT_PRIVATE_FIELDS=[]
-
+TOURNAMENT_MACHINE_PRIVATE_FIELDS=[]
+PLAYER_PRIVATE_FIELDS=['pin','ioniccloud_push_token']
 PSS_USER_ONLY='pss_user_only'
 PSS_USER_WITH_ROLES='pss_user_with_roles'
 
+PLAYER_ONLY='player_only'
+
 TOURNAMENT_ONLY='tournament_only'
+TOURNAMENT_MACHINE_ONLY='tournament_machine_only'
 
 class serializer_v2():
     def __init__(self, private_fields):
@@ -35,6 +39,21 @@ def serialize_tournament_public(model,type=TOURNAMENT_ONLY):
     tournament_dict=serializer_v2(TOURNAMENT_PRIVATE_FIELDS).serialize_model(model)
     if type==TOURNAMENT_ONLY:
         return tournament_dict
+
+def serialize_player_public(model,type=PLAYER_ONLY):
+    player_dict=serializer_v2(PLAYER_PRIVATE_FIELDS).serialize_model(model)
+    if type==PLAYER_ONLY:
+        return player_dict
+
+def serialize_player_private(model,type=PLAYER_ONLY):
+    player_dict=serializer_v2([]).serialize_model(model)
+    if type==PLAYER_ONLY:
+        return player_dict
+    
+def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
+    tournament_machine_dict=serializer_v2(TOURNAMENT_MACHINE_PRIVATE_FIELDS).serialize_model(model)
+    if type==TOURNAMENT_MACHINE_ONLY:
+        return tournament_machine_dict
     
 def serialize_event_public(model):
     event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model)    

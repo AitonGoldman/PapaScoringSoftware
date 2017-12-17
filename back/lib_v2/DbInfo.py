@@ -92,9 +92,9 @@ class DbInfo():
         if test:
             machines_to_load = test_machines
         for machine in machines_to_load:
-            if app.tables.Machines.query.filter_by(machine_name=machine['machine_name']).first():
+            if app.table_proxy.Machines.query.filter_by(machine_name=machine['machine_name']).first():
                 continue
-            new_machine = app.tables.Machines(
+            new_machine = app.table_proxy.Machines(
                 machine_name=machine['machine_name']
             )
             if 'abbreviation' in machine:
@@ -102,8 +102,8 @@ class DbInfo():
             else:
                 new_machine.abbreviation = machine['machine_name'][0:4]
             
-            app.tables.db_handle.session.add(new_machine)
-        app.tables.db_handle.session.commit()
+            app.table_proxy.db_handle.session.add(new_machine)
+        app.table_proxy.db_handle.session.commit()
     
     
 # def load_machines_from_json(app,test=False):    

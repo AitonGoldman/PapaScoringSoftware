@@ -7,7 +7,8 @@ import json
 class RouteAuthTest(pss_integration_test_base.PssIntegrationTestBase):
     def setUp(self):
         super(RouteAuthTest,self).setUp()
-        
+
+    #FIXME : add tests for event creation with user
     def test_event_create(self):        
         with self.test_app.test_client() as c:
             rv = c.post('/auth/pss_user/login',

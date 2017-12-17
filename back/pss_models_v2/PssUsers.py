@@ -1,15 +1,5 @@
 from passlib.hash import sha512_crypt
 
-# def generate_pss_user_event_mapping(db_handle):
-#     Event_PssUser_mapping = db_handle.Table(
-#         'event_pss_user',
-#         db_handle.Column('pss_user_id', db_handle.Integer, db_handle.ForeignKey('pss_users.pss_user_id')),
-#         db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
-#     )
-#     return Event_PssUser_mapping
-
-# FIXME : need to make it so users can change their info via email confirmation of changes
-
 """Model object for a Pss Users"""
 def generate_pss_users_class(db_handle):
     #Event_PssUser_mapping = generate_pss_user_event_mapping(db_handle)
@@ -21,8 +11,7 @@ def generate_pss_users_class(db_handle):
         username = db_handle.Column(db_handle.String(80), unique=True, nullable=False)
         first_name = db_handle.Column(db_handle.String(80), nullable=False)    
         last_name = db_handle.Column(db_handle.String(80), nullable=False)    
-        extra_title = db_handle.Column(db_handle.String(80))    
-    
+        extra_title = db_handle.Column(db_handle.String(80))            
         password_crypt = db_handle.Column(db_handle.String(134))
         has_picture = db_handle.Column(db_handle.Boolean(),default=False)
         ioniccloud_push_token=db_handle.Column(db_handle.String(500))

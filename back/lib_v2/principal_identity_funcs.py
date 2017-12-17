@@ -18,6 +18,10 @@ def generate_pss_user_identity_loaded(app):
         """Set up the Flask-Principal stuff for this user"""        
         if current_user.is_anonymous():                        
             return
+        if hasattr(current_user,'player_id'):
+            for event_role in current_user.event_roles:            
+                identity.provides.add(needs.PlayerRoleNeed(event_role.event_id))
+            return        
         if current_user.event_creator:            
             identity.provides.add(needs.EventCreatorRoleNeed())
             for event in current_user.events_created:

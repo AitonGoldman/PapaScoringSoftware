@@ -38,3 +38,18 @@ class RouteAuthTest(pss_integration_test_base.PssIntegrationTestBase):
                         data=json.dumps(login_dict))
             self.assertHttpCodeEquals(rv,401,"User is not an event creator")
 
+
+    def test_player_login(self):
+        post_dict = {"event_role_ids":[self.td_event_role_id],"event_users":[{"first_name":"poop_first"+self.create_uniq_id(),"last_name":"poop_last","password":"password"}]}
+        login_dict = {'username':self.admin_pss_username,'password':'password'}
+        event_id,results = self.login_and_create_event_and_create_event_user(login_dict, post_dict) 
+        post_dict = {"players":[{"first_name":"poop_first_2"+self.create_uniq_id(),"last_name":"poop_last", "ifpa_ranking":123}]}        
+        results = self.login_and_create_event_player(login_dict, post_dict, event_id)                                                 
+        pin = results['data'][0]['pin']        
+        player_id_for_event = results['data'][0]['event_roles'][0]['player_id_for_event']
+        login_dict = {'player_id_for_event':player_id_for_event,'player_pin':pin}
+        with self.test_app.test_client() as c:
+            rv = c.post('/auth/player/login/%s'%event_id,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)
+        

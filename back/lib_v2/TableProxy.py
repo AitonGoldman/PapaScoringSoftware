@@ -13,6 +13,9 @@ from pss_models_v2.TournamentMachines import generate_tournament_machines_class
 from pss_models_v2.MultiDivisionTournaments import generate_multi_division_tournaments_class
 from lib_v2 import roles_constants
 from lib_v2.serializers import deserializer
+from sqlalchemy.orm import foreign, remote
+import warnings
+from sqlalchemy import exc as sa_exc
 #from pss_models_v2.TestMapping import generate_test_class
 
 
@@ -35,10 +38,13 @@ class TableProxy():
             'MultiDivisionTournaments', uselist=False, cascade='all'
         )
 
+        #parent_host = relationship("HostEntry",
+        #                primaryjoin=remote(ip_address) == \
+        #                        cast(foreign(content), INET),
+        #            )        
         self.Players.event_roles = self.db_handle.relationship(
             'EventPlayerRoleMappings', cascade='all'
-        )
-        
+        )        
         self.PssUsers.event_roles = self.db_handle.relationship(
             'EventRoleMappings', cascade='all'
         )
@@ -46,6 +52,17 @@ class TableProxy():
         self.PssUsers.events_created = self.db_handle.relationship(
             'Events', cascade='all'            
         )
+        #primaryjoin="and_(User.id==Address.user_id, "
+        #                "Address.city=='Boston')"
+        
+    def initialize_event_specific_relationship(self,poop_event_id):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=sa_exc.SAWarning)
+            self.Players.event_roles = self.db_handle.relationship(
+                'EventPlayerRoleMappings', cascade='all',
+                primaryjoin="and_(EventPlayerRoleMappings.player_id==Players.player_id,EventPlayerRoleMappings.event_id==%s)"%poop_event_id
+            )
+            
     def commit_changes(self):
         self.db_handle.session.commit()
         

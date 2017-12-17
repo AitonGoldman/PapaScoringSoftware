@@ -1,5 +1,5 @@
 from werkzeug.exceptions import BadRequest, Unauthorized
-from lib_v2 import blueprints
+from lib_v2 import blueprints,TableProxy
 from flask import jsonify,current_app,request
 from flask_principal import identity_changed, Identity
 from flask_login import login_user,logout_user
@@ -56,8 +56,9 @@ def event_user_login():
     return jsonify({'data':generic.serialize_pss_user_public(pss_user)})        
 
 @blueprints.test_blueprint.route('/auth/player/login/<int:event_id>',methods=['POST'])
-def event_player_login(event_id):
-    player = player_login_route(request,current_app.table_proxy,event_id)
+def event_player_login(event_id):    
+    current_app.table_proxy.initialize_event_specific_relationship(event_id)
+    player = player_login_route(request,current_app.table_proxy,event_id)    
     if login_user(player) is False:
         raise Unauthorized('Player is not active')
     identity_changed.send(current_app._get_current_object(), identity=Identity("player_%s"%player.player_id))            

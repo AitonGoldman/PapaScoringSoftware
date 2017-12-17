@@ -43,12 +43,10 @@ def create_player_route(request,tables_proxy,event_id):
 
 @blueprints.test_blueprint.route('/<int:event_id>/player',methods=['POST'])
 def player_create(event_id):            
-
+    current_app.table_proxy.initialize_event_specific_relationship(event_id)
     permission = permissions.CreatePlayerPermission(event_id)    
     if not permission.can():
         raise Unauthorized('You are not authorized to register players for this event')        
-    #event = pss_event_edit_route(request,current_app.table_proxy)        
-    #return jsonify({'data':generic.serialize_event_public(event)})
     new_players=[generic.serialize_player_private(player) for player in create_player_route(request,current_app.table_proxy,event_id)]
     current_app.table_proxy.commit_changes()
     return jsonify({'data':new_players})

@@ -22,23 +22,24 @@ class RoutePlayerTest(pss_integration_test_base.PssIntegrationTestBase):
         player_event_info_in_db = self.test_app.table_proxy.EventPlayerRoleMappings.query.filter_by(player_id=new_player_id,event_id=self.event_id).all()
         self.assertEquals(len(player_event_info_in_db),1)
         self.assertEquals(player_event_info_in_db[0].ifpa_ranking,123)
-        pin = self.results['data'][0]['pin']
-        
-        login_dict = {'player_id_for_event':100,'player_pin':pin}
-        with self.test_app.test_client() as c:
-            rv = c.post('/auth/player/login/%s'%self.event_id,
-                        data=json.dumps(login_dict))
-            self.assertHttpCodeEquals(rv,200)
 
     def test_add_existing_player_to_event_with_event_creator(self):                        
         new_player_id=int(self.results_2['data'][0]['player_id'])        
         post_dict = {"players":[{"player_id":new_player_id,"ifpa_ranking":123}]}
         num_players_in_db = len(self.test_app.table_proxy.Players.query.filter_by(player_id=new_player_id).all())
         results = self.login_and_create_event_player(self.login_dict, post_dict, self.event_id)                
+        
         new_num_players_in_db = len(self.test_app.table_proxy.Players.query.filter_by(player_id=new_player_id).all())
         self.assertEquals(num_players_in_db,new_num_players_in_db)        
         player_event_info_in_db = self.test_app.table_proxy.EventPlayerRoleMappings.query.filter_by(player_id=new_player_id).all()
         self.assertEquals(len(player_event_info_in_db),2)
+        pin = results['data'][0]['pin']
+        player_id_for_event = results['data'][0]['event_roles'][0]['player_id_for_event']
+        login_dict = {'player_id_for_event':player_id_for_event,'player_pin':pin}
+        with self.test_app.test_client() as c:
+            rv = c.post('/auth/player/login/%s'%self.event_id,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)
         
 
     # def test_event_user_create_with_tournament_director(self):        

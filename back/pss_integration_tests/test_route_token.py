@@ -31,4 +31,4 @@ class RouteTokenTest(pss_integration_test_base.PssIntegrationTestBase):
                         data=json.dumps(post_dict))
             
 
-        print tournaments_dict['data'][0]['tournament_id']        
+        #print tournaments_dict['data'][0]['tournament_id']        

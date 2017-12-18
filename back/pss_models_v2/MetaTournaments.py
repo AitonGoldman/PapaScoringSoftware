@@ -18,7 +18,7 @@ def generate_meta_tournaments_class(db_handle):
         #tournaments = db_handle.relationship('Tournaments')
         ifpa_rank_restriction=db_handle.Column(db_handle.Integer,default=0)
         team_tournament=db_handle.Column(db_handle.Boolean,default=False)
-        #event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
+        event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
     return MetaTournaments
 
 

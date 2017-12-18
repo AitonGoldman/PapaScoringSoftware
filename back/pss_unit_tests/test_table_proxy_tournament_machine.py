@@ -42,11 +42,13 @@ class TablesProxyTournamentTest(PssUnitTestBase):
 
     def test_create_tournament_machine_with_existing_machine(self):
         #mock_tournament=MagicMock()
-        #mock_tournament.tournament_id=1
+        #mock_tournament.tournament_id=1        
         self.sqlalchemy_tournament_machine.removed=True
-        self.sqlalchemy_tournament_machine.active=False        
+        self.sqlalchemy_tournament_machine.active=False
+        self.mock_tournament.tournament_machines.append(self.sqlalchemy_tournament_machine)        
         self.set_mock_single_query(self.tables_proxy,"TournamentMachines",self.sqlalchemy_tournament_machine)
         return_value = self.tables_proxy.create_tournament_machine(self.sqlalchemy_machine,self.mock_tournament)
         self.assertEquals(self.sqlalchemy_tournament_machine,return_value)
         self.assertEquals(self.sqlalchemy_tournament_machine.removed,False)
-        self.assertEquals(self.sqlalchemy_tournament_machine.active,True)
+        self.assertEquals(self.sqlalchemy_tournament_machine.active,True)        
+        self.assertEquals(len(self.mock_tournament.tournament_machines),1)

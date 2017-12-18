@@ -14,8 +14,10 @@ def pss_event_create_route(request,tables_proxy,user):
     # don't allow duplicate names
     if tables_proxy.get_event_by_eventname(input_data['name']) is not None:
         raise BadRequest('Event already exists')
-    return tables_proxy.create_event(user,input_data,True)
-            
+    new_event = tables_proxy.create_event(user,input_data,True)
+    #tables_proxy.create_event_tables(new_event.event_id)
+    return new_event
+
 def pss_event_edit_route(request,tables_proxy):
     if request.data:        
         input_data = json.loads(request.data)

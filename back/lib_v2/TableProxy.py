@@ -12,11 +12,17 @@ from pss_models_v2.MetaTournaments import generate_meta_tournaments_class
 from pss_models_v2.Machines import generate_machines_class
 from pss_models_v2.TournamentMachines import generate_tournament_machines_class
 from pss_models_v2.MultiDivisionTournaments import generate_multi_division_tournaments_class
+from pss_models_v2.TokenPurchaseSummaries import generate_token_purchase_summaries_class
+from pss_models_v2.TokenPurchases import generate_token_purchases_class
+from pss_models_v2.Tokens import generate_tokens_class
+from pss_models_v2.Teams import generate_teams_class
 from lib_v2 import roles_constants
 from lib_v2.serializers import deserializer
 from sqlalchemy.orm import foreign, remote
 import warnings
 from sqlalchemy import exc as sa_exc
+from flask import Flask
+from lib.PssConfig import PssConfig
 
 #from pss_models_v2.TestMapping import generate_test_class
 
@@ -39,11 +45,11 @@ class TableProxy():
         self.Tournaments.multi_division_tournament = self.db_handle.relationship(
             'MultiDivisionTournaments', uselist=False, cascade='all'
         )
-
-        #parent_host = relationship("HostEntry",
-        #                primaryjoin=remote(ip_address) == \
-        #                        cast(foreign(content), INET),
-        #            )        
+        self.Teams = generate_teams_class(db_handle)
+        self.TokenPurchaseSummaries = generate_token_purchase_summaries_class(self.db_handle)
+        self.TokenPurchases = generate_token_purchases_class(self.db_handle)        
+        self.Tokens = generate_tokens_class(self.db_handle)        
+        
         self.Players.event_roles = self.db_handle.relationship(
             'EventPlayerRoleMappings', cascade='all'
         )        
@@ -59,6 +65,13 @@ class TableProxy():
         self.MetaTournaments.tournaments = self.db_handle.relationship(
             'Tournaments', cascade='all'
         )
+        self.TokenPurchases.token_purchase_summaries = self.db_handle.relationship(
+            'TokenPurchaseSummaries', cascade='all'
+        )
+        self.TokenPurchases.tokens = self.db_handle.relationship(
+            'Tokens', cascade='all'
+        )
+        
         
     def initialize_event_specific_relationship(self,poop_event_id):
         with warnings.catch_warnings():
@@ -84,6 +97,62 @@ class TableProxy():
 
     def get_event_by_event_id(self,event_id):
         return self.Events.query.filter_by(event_id=event_id).first()            
+
+    def get_query_for_available_tokens(self, event_id):
+        return self.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False,event_id=event_id)
+
+    def get_tournament_machine_player_is_playing(self,player,event_id):
+        return self.TournamentMachines.query.filter_by(player_id=player.player_id,event_id=event_id).first()
+    
+    def get_available_token_count_for_tournament(self,event_id,player, tournament=None,meta_tournament=None):
+        query = self.get_query_for_available_tokens(event_id)
+        if tournament and tournament.team_tournament and len(player.event_roles)>0 and player.event_roles[0].team_id is None:
+            return 0
+        if tournament:
+            query = query.filter_by(tournament_id=tournament.tournament_id)
+            if tournament.team_tournament:
+                return query.filter_by(team_id=player.event_roles[0].team_id).count()
+            else:
+                return query.filter_by(player_id=player.player_id).count()
+        if meta_tournament:
+            return query.filter_by(meta_tournament_id=meta_tournament.tournament_id, player_id=player.player_id).count()
+
+    def create_token_purchase(self,commit=False):
+        new_token_purchase = self.TokenPurchases()
+        self.db_handle.session.add(new_token_purchase)
+        if commit:
+            self.db_handle.session.commit()
+        return new_token_purchase
+
+    def create_token_purchase_summary(self,commit=False):
+        new_token_purchase_summary = self.TokenPurchaseSummaries()
+        self.db_handle.session.add(new_token_purchase_summary)
+        if commit:
+            self.db_handle.session.commit()
+        return new_token_purchase_summary
+
+    def create_token(self, event_id, commit=False):
+        new_token = self.Tokens()
+        new_token.event_id=event_id
+        self.db_handle.session.add(new_token)
+        if commit:
+            self.db_handle.session.commit()
+        return new_token
+    
+    def create_event_tables(self, event_id):
+        #new_event_app = Flask('dummy')
+        pss_config=PssConfig()
+        #new_db_handle = pss_config.get_db_info().create_db_handle(new_event_app)
+        token_purchase_summaries_class = generate_token_purchase_summaries_class(self.db_handle,event_id)
+        token_purchases_class = generate_token_purchases_class(self.db_handle,event_id)
+        tokens = generate_tokens_class(self.db_handle,event_id)        
+        #new_event_tables = pss_config.get_db_info().getImportedTables(new_event_app,"pss_admin")    
+        #existing_event = new_event_tables.Events.query.filter_by(name=new_event_app.name).first()
+        #if existing_event is not None:
+        #    raise Conflict('Event already exists')             
+        metadata = self.db_handle.metadata
+        metadata.create_all(self.db_handle.session.bind)
+        #return new_event_tables        
     
     def create_event(self,current_user,                     
                      event_info,
@@ -241,8 +310,18 @@ class TableProxy():
     #    return self.EventPlayerRoleMappings.query.filter_by(event_id=event_id).all()        
     
     def get_tournament_by_tournament_id(self,tournament_id):
-        return self.Tournaments.query.filter_by(tournament_id=tournament_id).first()            
+        return self.Tournaments.query.filter_by(tournament_id=tournament_id).first()
 
+    def get_tournaments(self,event_id,exclude_metatournaments=False):
+        query = self.Tournaments.query.filter_by(event_id=event_id)
+        if exclude_metatournaments is False:
+            return query.filter_by(meta_tournament_id=None).all()        
+        return query.all()
+
+    def get_meta_tournaments(self,event_id):
+        return self.MetaTournaments.query.filter_by(event_id=event_id).all()
+        
+    
     def create_multi_division_tournament(self, multi_division_tournament_name,                                         
                                          division_count, tournament_info,
                                          event_id, commit=False):

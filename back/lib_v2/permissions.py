@@ -36,3 +36,15 @@ class CreateTournamentMachinePermission(Permission):
         event_editor_need = needs.EventEditNeed(event_id)        
         super(CreateTournamentMachinePermission, self).__init__(create_tournament_need,event_editor_need)
         
+class DeskTokenPurchasePermission(Permission):
+    def __init__(self,event_id):        
+        td_token_purchase_need = needs.TournamentDirectorRoleNeed(event_id)
+        desk_token_purchase_need = needs.DeskworkerRoleNeed(event_id)        
+        event_editor_need = needs.EventEditNeed(event_id)                 
+        super(DeskTokenPurchasePermission, self).__init__(td_token_purchase_need,desk_token_purchase_need,event_editor_need)
+
+class PlayerTokenPurchasePermission(Permission):
+    def __init__(self,event_id):        
+        player_token_purchase_need = needs.PlayerRoleNeed(event_id)
+        super(PlayerTokenPurchasePermission, self).__init__(player_token_purchase_need)
+        

@@ -18,7 +18,7 @@ def create_player_route(request,tables_proxy,event_id):
     players_added_to_event=[]        
     for player_to_create in players_to_create:        
         if 'player_id' in player_to_create:            
-            player = tables_proxy.get_player_by_id(player_to_create['player_id'])
+            player = tables_proxy.get_player(event_id,player_id=player_to_create['player_id'])
             if player is None:
                 raise BadRequest('Tried to submit a player with an invalid player_id')            
             tables_proxy.update_player_roles(event_id, player,
@@ -26,9 +26,10 @@ def create_player_route(request,tables_proxy,event_id):
                                              player_to_create.get('selected_division_in_multi_division_tournament',None))
             players_added_to_event.append(player)
             continue                        
-        existing_players = tables_proxy.get_players_by_name(player_to_create['first_name'],
-                                                            player_to_create['last_name'],
-                                                            player_to_create.get('extra_title',None))
+        existing_players = tables_proxy.get_player(event_id,
+                                                   first_name=player_to_create['first_name'],
+                                                   last_name=player_to_create['last_name'],
+                                                   extra_title=player_to_create.get('extra_title',None))
         if len(existing_players)>0:            
             raise BadRequest('Oops - that player already exists')
         new_player = tables_proxy.create_player(player_to_create['first_name'],

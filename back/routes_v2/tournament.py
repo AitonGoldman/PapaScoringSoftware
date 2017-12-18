@@ -15,7 +15,7 @@ def create_tournament_route(request,tables_proxy,event_id):
         return tables_proxy.create_multi_division_tournament(input_data['multi_division_tournament_name'],input_data['division_count'],
                                                              input_data['tournament'],event_id)
     else:        
-        return [tables_proxy.create_tournament(input_data['tournament'],event_id,True)]
+        return [tables_proxy.create_tournament(input_data['tournament'],event_id)]
     
 
 def edit_tournament_route(request,app,event_id):
@@ -39,6 +39,7 @@ def create_tournament(event_id):
     if not permission.can():
         raise Unauthorized('You are not authorized to create tournaments for this event')        
     new_tournaments = create_tournament_route(request,current_app.table_proxy,event_id)
+    current_app.table_proxy.commit_changes()
     tournament_dicts = []
     for new_tournament in new_tournaments:
         tournament_dicts.append(generic.serialize_tournament_public(new_tournament))
@@ -50,5 +51,6 @@ def edit_tournament(event_id):
     if not permission.can():
         raise Unauthorized('You are not authorized to edit tournaments for this event')        
     tournament = edit_tournament_route(request,current_app,event_id)
+    current_app.table_proxy.commit_changes()
     tournament_dict=generic.serialize_tournament_public(tournament)
     return jsonify({'data':tournament_dict})

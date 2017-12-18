@@ -1,5 +1,5 @@
-def generate_event_player_role_mappings_class(db_handle):    
-    class EventPlayerRoleMappings(db_handle.Model):        
+def generate_event_players_info_class(db_handle):    
+    class EventPlayersInfo(db_handle.Model):        
         player_id=db_handle.Column('player_id', db_handle.Integer,
                                    db_handle.ForeignKey('players.player_id'),primary_key=True)
         event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'),primary_key=True)
@@ -10,7 +10,7 @@ def generate_event_player_role_mappings_class(db_handle):
                                                                         db_handle.ForeignKey('tournaments.tournament_id'))
         team_id = db_handle.Column('team_id', db_handle.Integer, db_handle.ForeignKey('teams.team_id'))
 
-    return EventPlayerRoleMappings   
+    return EventPlayersInfo
     
 
                                                      

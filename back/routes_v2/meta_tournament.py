@@ -30,7 +30,7 @@ def edit_meta_tournament_route(request,app,event_id):
     if meta_tournament is None:
         raise BadRequest('Bad metatournament id submitted')
     edited_meta_tournament = app.table_proxy.edit_meta_tournament(meta_tournament,input_data,False)
-    if input_data.get('use_stripe',None):
+    if input_data.get('use_stripe',None):        
         api_key = app.event_settings[event_id].stripe_api_key
         app.stripe_proxy.set_tournament_stripe_prices(meta_tournament,api_key,input_data.get('stripe_sku',None),
                                                       input_data.get('discount_stripe_sku',None))

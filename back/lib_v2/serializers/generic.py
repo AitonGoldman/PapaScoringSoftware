@@ -52,16 +52,13 @@ def serialize_player_public(model,type=PLAYER_ONLY):
         return player_dict
 
 def serialize_player_private(model,type=PLAYER_ONLY):
-    player_dict=serializer_v2([]).serialize_model(model)    
-    player_dict['event_roles']=[]
-    for event_role in model.event_roles:
-        player_dict['event_roles'].append(serialize_event_players_role_mapping_public(event_role))
+    player_dict=serializer_v2([]).serialize_model(model)            
+    player_dict['event_info']=serialize_event_players_info_public(model.event_info)
     if type==PLAYER_ONLY:
         return player_dict
 
-def serialize_event_players_role_mapping_public(model,type=None):
-    event_players_role_mapping=serializer_v2([]).serialize_model(model)
-    return event_players_role_mapping
+def serialize_event_players_info_public(model,type=None):
+    return serializer_v2([]).serialize_model(model)    
 
 def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
     tournament_machine_dict=serializer_v2(TOURNAMENT_MACHINE_PRIVATE_FIELDS).serialize_model(model)

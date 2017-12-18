@@ -19,7 +19,7 @@ class RoutePlayerTest(pss_integration_test_base.PssIntegrationTestBase):
         new_player_id=int(self.player_create_results['data'][0]['player_id'])
         player_in_db = self.test_app.table_proxy.Players.query.filter_by(player_id=new_player_id).first()        
         self.assertTrue(player_in_db is not None)
-        player_event_info_in_db = self.test_app.table_proxy.EventPlayerRoleMappings.query.filter_by(player_id=new_player_id,event_id=self.event_id).all()
+        player_event_info_in_db = self.test_app.table_proxy.EventPlayersInfo.query.filter_by(player_id=new_player_id,event_id=self.event_id).all()
         self.assertEquals(len(player_event_info_in_db),1)
         self.assertEquals(player_event_info_in_db[0].ifpa_ranking,123)
 
@@ -31,10 +31,10 @@ class RoutePlayerTest(pss_integration_test_base.PssIntegrationTestBase):
         
         new_num_players_in_db = len(self.test_app.table_proxy.Players.query.filter_by(player_id=new_player_id).all())
         self.assertEquals(num_players_in_db,new_num_players_in_db)        
-        player_event_info_in_db = self.test_app.table_proxy.EventPlayerRoleMappings.query.filter_by(player_id=new_player_id).all()
+        player_event_info_in_db = self.test_app.table_proxy.EventPlayersInfo.query.filter_by(player_id=new_player_id).all()
         self.assertEquals(len(player_event_info_in_db),2)
         pin = create_new_player_results['data'][0]['pin']
-        player_id_for_event = create_new_player_results['data'][0]['event_roles'][0]['player_id_for_event']
+        player_id_for_event = create_new_player_results['data'][0]['event_info']['player_id_for_event']
         player_login_dict = {'player_id_for_event':player_id_for_event,'player_pin':pin}
         with self.test_app.test_client() as c:
             rv = c.post('/auth/player/login/%s'%self.event_id,

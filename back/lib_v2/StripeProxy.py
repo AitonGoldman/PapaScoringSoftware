@@ -23,8 +23,47 @@ class StripeProxy():
         tournament.manually_set_price=None
         tournament.discount_price=None        
         if sku:
+            tournament.stripe_sku=sku
             tournament.stripe_price=self.get_sku_price(sku,api_key)
         if discount_sku:
+            tournament.discount_stripe_sku=discount_sku
             tournament.discount_stripe_price=self.get_sku_price(discount_sku,api_key)
         if commit:
-            self.table_proxy.session.commit()
+            self.table_proxy.db_handle.session.commit()
+
+    def purchase_tickets(self,stripe_items, api_key, stripe_token, email, token_purchase):
+        try:
+            stripe.api_key = api_key
+            order = stripe.Order.create(
+                currency="usd",
+                email=email,
+                items=stripe_items
+            )
+
+            #FIXME : this is for testing only
+            stripe_token = stripe.Token.create(
+                card={
+                    "number": '4242424242424242',
+                    "exp_month": 12,
+                    "exp_year": 2018,
+                    "cvc": '123'
+                },
+            ).id
+
+            #input_data['stripe_token']=stripe_token
+            
+            order_response=order.pay(
+                source=stripe_token
+            )
+            order_id_string =  "order_id %s, " % order_response.id
+            for token in token_purchase.tokens:
+                token.paid_for=True
+            token_purchase.completed_purchase=True
+            return {'order_id_string':order_id_string}        
+        except stripe.error.RateLimitError as e:
+            return {'error':'one'}        
+        except stripe.error.CardError as e:
+            return {'error':'two'}        
+        except Exception as e:        
+            print e
+            return {'error':'three'}        

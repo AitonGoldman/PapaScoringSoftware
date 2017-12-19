@@ -6,7 +6,7 @@ from pss_models_v2.Events import generate_events_class
 from pss_models_v2.EventRoles import generate_event_roles_class
 from pss_models_v2.EventRoleMappings import generate_event_role_mappings_class
 from pss_models_v2.EventPlayersInfo import generate_event_players_info_class
-
+from pss_models_v2.Queues import generate_queues_class
 from pss_models_v2.Tournaments import generate_tournaments_class
 from pss_models_v2.MetaTournaments import generate_meta_tournaments_class
 from pss_models_v2.Machines import generate_machines_class
@@ -49,6 +49,7 @@ class TableProxy():
         self.TokenPurchaseSummaries = generate_token_purchase_summaries_class(self.db_handle)
         self.TokenPurchases = generate_token_purchases_class(self.db_handle)        
         self.Tokens = generate_tokens_class(self.db_handle)        
+        self.Queues = generate_queues_class(self.db_handle)        
         
         #self.Players.event_roles = self.db_handle.relationship(
         #    'EventPlayerRoleMappings', cascade='all'
@@ -82,6 +83,9 @@ class TableProxy():
         self.TokenPurchases.tokens = self.db_handle.relationship(
             'Tokens', cascade='all'
         )
+        self.Queues.tournament_machine = db_handle.relationship(
+            'TournamentMachines', uselist=False            
+        )    
         
     def generate_player_event_mapping(self):
         Player_Event_mapping = self.db_handle.Table(
@@ -485,3 +489,76 @@ class TableProxy():
         
         return existing_tournament_machine
     
+    def create_queue_for_tournament_machine(self,tournament_machine,max_queue_length,event_id,commit=False):
+        old_queue_slot=None
+        for queue_position in range(max_queue_length,0,-1):
+            new_queue_slot=self.Queues()
+            new_queue_slot.position=queue_position
+            if old_queue_slot:            
+                new_queue_slot.queue_child=old_queue_slot
+            new_queue_slot.tournament_machine = tournament_machine
+            new_queue_slot.event_id=event_id
+            self.db_handle.session.add(new_queue_slot)
+            old_queue_slot=new_queue_slot
+    
+        if commit:
+            self.db_handle.session.commit()
+
+    def get_queue_player_is_already_in(self,player,event_id):
+        return self.Queues.query.filter_by(player_id=player.player_id,event_id=event_id).first()
+            
+    def get_queue_for_tounament_machine(self,tournament_machine):
+        return self.Queues.query.filter_by(tournament_machine_id=tournament_machine.tournament_machine_id).order_by(self.Queues.position).all()
+    
+    def get_position_of_player_in_queue(self, player,tournament_machine):
+        current_player_queue = self.Queues.query.filter_by(player_id=player.player_id,tournament_machine_id=tournament_machine.tournament_machine_id).first()
+        if current_player_queue:
+            return current_player_queue.position
+        else:
+            return None    
+
+    def get_sorted_queue_for_tournament_machine(self,tournament_machine,queues=None):    
+        if queues is None:
+            queues=self.Queues.query.filter_by(tournament_machine_id=tournament_machine.tournament_machine_id)
+        return sorted(queues, key=lambda queue: queue.position)
+
+    def bump_player_down_queue(self, player,tournament_machine):
+        queues_to_lock_for_for_removal = self.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine.tournament_machine_id).all()
+        sorted_bump_queue=self.get_sorted_queue_for_tournament_machine(tournament_machine,queues_to_lock_for_for_removal)        
+        position_2_bump=sorted_bump_queue[1].bumped
+        position_2_player_id=sorted_bump_queue[1].player_id        
+        position_1_player_id=sorted_bump_queue[0].player_id
+        sorted_bump_queue[1].bumped=True
+        sorted_bump_queue[1].player_id=position_1_player_id        
+        sorted_bump_queue[0].bumped=position_2_bump
+        sorted_bump_queue[0].player_id=position_2_player_id
+        return True
+        
+    def remove_player_from_queue(self, player,tournament_machine,position_in_queue=None):
+        queues_to_lock_for_for_removal = self.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine.tournament_machine_id).all()
+        if position_in_queue is None:
+            position_in_queue=self.get_position_of_player_in_queue(player,tournament_machine)
+            if position_in_queue is None:
+                return False
+        sorted_remove_queue=self.get_sorted_queue_for_tournament_machine(tournament_machine,queues_to_lock_for_for_removal)        
+        players_to_notify=[]
+        for index,queue in enumerate(sorted_remove_queue):                        
+            if index == len(sorted_remove_queue)-1:                
+                queue.player_id=None
+                break
+            if index >= position_in_queue-1:                
+                queue.player_id=sorted_remove_queue[index+1].player_id
+                queue.bumped=sorted_remove_queue[index+1].bumped
+                sorted_remove_queue[index+1].bumped=False
+        return True
+    
+    def add_player_to_queue(self,player,app,tournament_machine):
+        queues_to_lock_for_addition = app.table_proxy.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine.tournament_machine_id).all()
+        for index,queue in enumerate(self.get_sorted_queue_for_tournament_machine(tournament_machine,queues_to_lock_for_addition)):            
+            if queue.player_id is None:
+                break
+        if queue.player_id is not None:
+            raise BadRequest('no room left in queue')
+        if queue.player_id is None:
+            queue.player_id=player.player_id
+        return queue    

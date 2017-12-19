@@ -5,7 +5,7 @@ from flask_login import current_user
 from lib_v2.serializers import generic
 import json
 
-def create_tournament_machine_route(request,tables_proxy):
+def create_tournament_machine_route(request,tables_proxy,event_id):
     if request.data:        
         input_data = json.loads(request.data)
     else:
@@ -19,7 +19,9 @@ def create_tournament_machine_route(request,tables_proxy):
         tournament = tables_proxy.get_tournament_by_tournament_id(input_data.get('tournament_id'))
     else:
         raise BadRequest('No tournament id specified')    
-    return tables_proxy.create_tournament_machine(machine,tournament)
+    tournament_machine = tables_proxy.create_tournament_machine(machine,tournament)
+    tables_proxy.create_queue_for_tournament_machine(tournament_machine,tournament.queue_size,event_id)
+    return tournament_machine
 
 def edit_tournament_machine_route(request,app,event_id):
     if request.data:        
@@ -41,12 +43,13 @@ def create_tournament_machine(event_id):
     permission = permissions.CreateTournamentMachinePermission(event_id)    
     if not permission.can():
         raise Unauthorized('You are not authorized to manage tournament machines for this event')        
-    new_tournament_machine = create_tournament_machine_route(request,current_app.table_proxy)
+    new_tournament_machine = create_tournament_machine_route(request,current_app.table_proxy,event_id)
     current_app.table_proxy.commit_changes()
     return jsonify({'data':generic.serialize_tournament_machine_public(new_tournament_machine)})
 
 @blueprints.test_blueprint.route('/<int:event_id>/tournament_machine',methods=['PUT'])
 def edit_tournament_machine(event_id):            
+    #FIXME : need to muck with queues if queue length is changed, or queuing is turned off
     permission = permissions.CreateTournamentPermission(event_id)    
     if not permission.can():
         raise Unauthorized('You are not authorized to edit tournaments for this event')        

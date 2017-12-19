@@ -149,7 +149,50 @@ class PssIntegrationTestBase(unittest.TestCase):
                         data=json.dumps(post_dict))
             self.assertHttpCodeEquals(rv,200)
             return json.loads(rv.data)
+
+    def login_and_add_player_to_queue(self,login_dict, post_dict,event_id):
+        with self.test_app.test_client() as c:
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.post('/%s/queue' % event_id,
+                        data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
         
+    def login_and_remove_player_from_queue(self,login_dict, post_dict,event_id):
+        with self.test_app.test_client() as c:
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.delete('/%s/queue' % event_id,
+                          data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
+    def login_and_bump_player_down_queue(self,login_dict, post_dict,event_id):
+        with self.test_app.test_client() as c:
+            rv = c.post('/auth/pss_user/login',
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)
+            rv = c.put('/%s/queue' % event_id,
+                          data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
+        
+        
+    def login_and_purchase_tickets(self,login_dict,post_dict,event_id,event_user=False):
+        if event_user:
+            login_endpoint='/auth/pss_event_user/login'
+        else:
+            login_endpoint='/auth/pss_user/login'
+        with self.test_app.test_client() as c:            
+            rv = c.post(login_endpoint,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.post('/%s/token' % (event_id),
+                        data=json.dumps(post_dict))            
+        
+    
     def login_and_create_event_and_create_event_user(self,login_dict, post_dict):
         with self.test_app.test_client() as c:
 

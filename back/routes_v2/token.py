@@ -107,28 +107,11 @@ def insert_tokens_into_db(list_of_tournament_tokens, player,
     return purchase_summary
 
 
-def get_number_of_unused_tickets_for_player(player,app,event_id, meta_tournament=None,tournament=None):
-    #FIXME : explore if it makes sense to query al tokens (for all divisions) at once
-    query = app.tables.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False)
-    if player.event_info.team_id is None and tournament and tournament.team_tournament:
-        return 0
-    if tournament:
-        if tournament.team_tournament is True:
-            token_count = query.filter_by(tournament_id=tournament.tournament_id,team_id=player.event_info.team_id).count()
-        else:            
-            token_count = query.filter_by(player_id=player.player_id,tournament_id=tournament.tournament_id).count()
-    if meta_tournament:
-        token_count = query.filter_by(meta_tournament_id=meta_tournament.meta_tournament_id).count()    
-    return token_count
-
-
 def verify_tournament_and_meta_tournament_request_counts_are_valid(list_of_tournament_tokens,
                                                                    list_of_meta_tournament_tokens,
                                                                    event_id,
                                                                    player,
                                                                    app):
-
-    
     for tournament_token in list_of_tournament_tokens+list_of_meta_tournament_tokens:
         tournament=tournament_token.get('tournament',None)
         meta_tournament = tournament_token.get('meta_tournament',None)
@@ -238,7 +221,7 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
         if normal_count > 0:
             stripe_items.append({"quantity":normal_count,"type":"sku","parent":normal_sku})           
     api_key = app.event_settings[event_id].stripe_api_key    
-    return app.stripe_proxy.purchase_tickets(stripe_items,api_key,None,input_data['email'],token_purchase)
+    return app.stripe_proxy.purchase_tickets(stripe_items,api_key,None,input_data['email'],token_purchase),token_purchase
     
 @blueprints.test_blueprint.route('/<int:event_id>/token',methods=['POST'])
 def event_user_purchase_tokens(event_id):
@@ -260,8 +243,12 @@ def event_user_purchase_tokens(event_id):
 def player_complete_purchase_tokens(event_id,token_purchase_id):
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)
     if player_permission.can():                
-        complete_player_token_purchase_route(request,current_app, event_id, token_purchase_id)
-    current_app.table_proxy.commit_changes()
+        result,token_purchase = complete_player_token_purchase_route(request,current_app, event_id, token_purchase_id)
+        if result.get('error_text',None):
+            raise BadRequest(result['error_text'])
+        else:
+            token_purchase.stripe_transaction_id=result['order_id_string']
+            current_app.table_proxy.commit_changes()
     #total_cost = sum(int(summary[2]['price']) for summary in purchase_summary)
     #generic_serializer = generate_generic_serializer(serializer.generic.ALL)
     #return jsonify({'new_token_purchase':generic_serializer(new_token_purchase),

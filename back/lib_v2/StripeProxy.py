@@ -61,9 +61,9 @@ class StripeProxy():
             token_purchase.completed_purchase=True
             return {'order_id_string':order_id_string}        
         except stripe.error.RateLimitError as e:
-            return {'error':'one'}        
+            return {'error_text':'The credit card processing service is busy.  Please try again in a few minutes','exception':e}
         except stripe.error.CardError as e:
-            return {'error':'two'}        
+            return {'error_text':'The credit card processing service has rejected your card.  Please see the front desk for more details','exception':e}
         except Exception as e:        
-            print e
-            return {'error':'three'}        
+            return {'error_text':'I have no fucking idea what the fuck just happened','exception':e}
+            

@@ -51,11 +51,17 @@ class QueuePermission(Permission):
         event_editor_need = needs.EventEditNeed(event_id)                 
         super(QueuePermission, self).__init__(td_queue_need,desk_queue_need,score_queue_need,event_editor_need)
 
+class ScorekeeperPermission(Permission):
+    def __init__(self,event_id):        
+        td_need = needs.TournamentDirectorRoleNeed(event_id)        
+        score_need = needs.ScorekeeperRoleNeed(event_id)        
+        event_editor_need = needs.EventEditNeed(event_id)                 
+        super(ScorekeeperPermission, self).__init__(td_need,score_need,event_editor_need)
+        
 class PlayerQueuePermission(Permission):
     def __init__(self,event_id):        
         player_queue_need = needs.PlayerRoleNeed(event_id)
         super(PlayerQueuePermission, self).__init__(player_queue_need)
-        
         
 class PlayerTokenPurchasePermission(Permission):
     def __init__(self,event_id):        

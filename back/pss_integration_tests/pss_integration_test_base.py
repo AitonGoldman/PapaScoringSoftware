@@ -122,6 +122,20 @@ class PssIntegrationTestBase(unittest.TestCase):
             self.assertHttpCodeEquals(rv,200)
             return json.loads(rv.data)
 
+    def login_and_start_player_on_machine(self,login_dict, post_dict, event_id, event_user=False):
+        with self.test_app.test_client() as c:
+            if event_user:
+                login_endpoint='/auth/pss_event_user/login'
+            else:
+                login_endpoint='/auth/pss_user/login'
+            rv = c.post(login_endpoint,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.post('/%s/entry' % (event_id),
+                        data=json.dumps(post_dict))
+            self.assertHttpCodeEquals(rv,200)
+            return json.loads(rv.data)
+        
     def login_and_create_event_and_create_event_player(self,login_dict, post_dict):
         with self.test_app.test_client() as c:
 
@@ -191,7 +205,31 @@ class PssIntegrationTestBase(unittest.TestCase):
             self.assertHttpCodeEquals(rv,200)            
             rv = c.post('/%s/token' % (event_id),
                         data=json.dumps(post_dict))            
-        
+
+    def login_and_void_tickets(self,login_dict,post_dict,event_id,event_user=False):
+        if event_user:
+            login_endpoint='/auth/pss_event_user/login'
+        else:
+            login_endpoint='/auth/pss_user/login'
+        with self.test_app.test_client() as c:            
+            rv = c.post(login_endpoint,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.delete('/%s/entry' % (event_id),
+                          data=json.dumps(post_dict))            
+
+    def login_and_record_score(self,login_dict,post_dict,event_id,event_user=False):
+        if event_user:
+            login_endpoint='/auth/pss_event_user/login'
+        else:
+            login_endpoint='/auth/pss_user/login'
+        with self.test_app.test_client() as c:            
+            rv = c.post(login_endpoint,
+                        data=json.dumps(login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.put('/%s/entry' % (event_id),
+                       data=json.dumps(post_dict))            
+            
     
     def login_and_create_event_and_create_event_user(self,login_dict, post_dict):
         with self.test_app.test_client() as c:

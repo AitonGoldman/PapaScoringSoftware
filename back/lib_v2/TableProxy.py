@@ -18,6 +18,9 @@ from pss_models_v2.TokenPurchases import generate_token_purchases_class
 from pss_models_v2.Tokens import generate_tokens_class
 from pss_models_v2.Teams import generate_teams_class
 from pss_models_v2.AuditLogs import generate_audit_logs_class
+from pss_models_v2.Entries import generate_entries_class
+from pss_models_v2.Scores  import generate_scores_class
+
 from lib_v2 import roles_constants
 from lib_v2.serializers import deserializer
 from sqlalchemy.orm import foreign, remote
@@ -53,6 +56,8 @@ class TableProxy():
         self.Tokens = generate_tokens_class(self.db_handle)        
         self.Queues = generate_queues_class(self.db_handle)        
         self.AuditLogs = generate_audit_logs_class(self.db_handle)
+        self.Entries = generate_entries_class(self.db_handle)
+        self.Scores = generate_scores_class(self.db_handle)
         #self.Players.event_roles = self.db_handle.relationship(
         #    'EventPlayerRoleMappings', cascade='all'
         #)
@@ -90,10 +95,12 @@ class TableProxy():
         )
         self.Tokens.meta_tournament = self.db_handle.relationship(
             'MetaTournaments', cascade='all', uselist=False
-        )        
-        
+        )                
         self.Queues.tournament_machine = db_handle.relationship(
             'TournamentMachines', uselist=False            
+        )    
+        self.Entries.scores = db_handle.relationship(
+            'Scores'
         )    
         
     def generate_player_event_mapping(self):
@@ -135,7 +142,14 @@ class TableProxy():
     def get_tournament_machine_player_is_playing(self,player,event_id):
         return self.TournamentMachines.query.filter_by(player_id=player.player_id,event_id=event_id).first()
 
-    def get_available_token_count_for_tournaments(self,event_id,player, tournament=None,meta_tournament=None):                
+    def get_available_token_count_for_tournament(self,event_id,player,tournament):
+        tournament_results,meta_tournament_results = self.get_available_token_count_for_tournaments(event_id,player)
+        if tournament.meta_tournament_id:
+            return meta_tournament_results[tournament.meta_tournament_id]['count']
+        else:
+            return tournament_results[tournament.tournament_id]['count']
+
+    def get_available_token_count_for_tournaments(self,event_id,player):                
         tournament_results={}
         meta_tournament_results={}
         results = self.get_query_for_available_tokens(event_id).all()        
@@ -381,6 +395,9 @@ class TableProxy():
             
     def get_token_purchase_by_id(self,token_purchase_id):
         return self.TokenPurchases.query.filter_by(token_purchase_id=token_purchase_id).first()
+
+    def get_tokens_by_tournament_id(self,player_id,tournament_id=None,meta_tournament_id=None):
+        return self.Tokens.query.filter_by(tournament_id=tournament_id,meta_tournament_id=meta_tournament_id).all()
     
     def get_tournament_by_tournament_id(self,tournament_id):
         return self.Tournaments.query.filter_by(tournament_id=tournament_id).first()
@@ -605,3 +622,72 @@ class TableProxy():
         if commit is True:
             self.db_handle.session.commit()
 
+    def start_player_on_machine(self,event_id,tournament_machine,player,tournament=None,commit=False):
+        tournament_token_count,meta_tournament_token_count = self.get_available_token_count_for_tournaments(event_id,player)
+        if tournament is None:
+            tournament = self.get_tournament_by_tournament_id(tournament_machine.tournament_id)            
+        if tournament.meta_tournament_id:
+            tokens_available = meta_tournament_token_count.get(meta_tournament_id,None) is not None
+        else:
+            tokens_available = tournament_token_count.get(tournament.tournament_id,None) is not None
+        if tokens_available is False:
+            return False
+        tournament_machine.player_id=player.player_id
+        if commit:
+            self.db_handle.session.commit()
+        return True
+
+    def record_score(self,event_id,player,tournament_machine,score,commit=False):
+        new_entry = self.Entries()
+        new_score = self.Scores()
+        new_score.score=score
+        new_score.player_id=player.player_id
+        new_score.event_id=event_id        
+        new_score.tournament_machine_id=tournament_machine.tournament_machine_id
+        new_entry.scores.append(new_score)
+        new_entry.tournament_id=tournament_machine.tournament_id
+        new_entry.player_id=tournament_machine.player_id
+        new_entry.event_id=event_id
+        self.db_handle.session.add(new_entry)
+        if commit:
+            self.db_handle.session.commit()
+        
+    
+    def remove_player_from_machine(self,tournament_machine):
+        tournament_machine.player_id=None
+
+    def mark_token_as_used(self,event_id,player,tournament=None,meta_tournament=None,commit=False):
+        tournament_id=None
+        meta_tournament_id=None
+        if tournament.meta_tournament_id:        
+            meta_tournament_id=tournament.tournament_id
+        else:
+            tournament_id=tournament.tournament_id
+        token = self.get_tokens_by_tournament_id(player.player_id,tournament_id=tournament_id,meta_tournament_id=meta_tournament_id)[0]
+        token.used=True                
+        if commit:
+            self.db_handle.session.commit()
+        return True
+    
+        
+    def void_ticket(self,event_id,player,tournament_machine=None,tournament=None,commit=False):
+        tournament_token_count,meta_tournament_token_count = self.get_available_token_count_for_tournaments(event_id,player)
+        tournament_id=None
+        meta_tournament_id=None
+        if tournament is None:
+            tournament = self.get_tournament_by_tournament_id(tournament_machine.tournament_id)            
+        if tournament.meta_tournament_id:
+            tokens_available = meta_tournament_token_count.get(meta_tournament_id,None) is not None
+            meta_tournament_id=tournament.meta_tournament_id
+        else:
+            tokens_available = tournament_token_count.get(tournament.tournament_id,None) is not None
+            tournament_id=tournament.tournament_id
+        if tokens_available is False:
+            return False
+        token = self.get_tokens_by_tournament_id(player.player_id,tournament_id=tournament_id,meta_tournament_id=meta_tournament_id)[0]
+        token.voided=True                
+        if commit:
+            self.db_handle.session.commit()
+        return True
+    
+    

@@ -118,6 +118,7 @@ def verify_tournament_and_meta_tournament_request_counts_are_valid(list_of_tourn
                                                                    app):
     tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,player)    
     for tournament_token in list_of_tournament_tokens+list_of_meta_tournament_tokens:
+        #FIXME : just query for the tournament/meta_tournament here
         tournament=tournament_token.get('tournament',None)
         meta_tournament = tournament_token.get('meta_tournament',None)
         

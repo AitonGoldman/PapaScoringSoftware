@@ -1,3 +1,4 @@
+import datetime
 import random
 import os 
 from pss_models_v2.PssUsers import generate_pss_users_class
@@ -16,17 +17,18 @@ from pss_models_v2.TokenPurchaseSummaries import generate_token_purchase_summari
 from pss_models_v2.TokenPurchases import generate_token_purchases_class
 from pss_models_v2.Tokens import generate_tokens_class
 from pss_models_v2.Teams import generate_teams_class
+from pss_models_v2.AuditLogs import generate_audit_logs_class
 from lib_v2 import roles_constants
 from lib_v2.serializers import deserializer
 from sqlalchemy.orm import foreign, remote
 import warnings
-from sqlalchemy import exc as sa_exc
+from sqlalchemy import exc as sa_exc,func
 from flask import Flask
 from lib.PssConfig import PssConfig
 
 #from pss_models_v2.TestMapping import generate_test_class
 
-
+ACTIONS_TO_ADD_TICKET_SUMMARY_TO = ["Score Recorded","Ticket Purchase","Player Ticket Purchase Complete"]
 
 class TableProxy():
     def initialize_tables(self,db_handle):
@@ -50,7 +52,7 @@ class TableProxy():
         self.TokenPurchases = generate_token_purchases_class(self.db_handle)        
         self.Tokens = generate_tokens_class(self.db_handle)        
         self.Queues = generate_queues_class(self.db_handle)        
-        
+        self.AuditLogs = generate_audit_logs_class(self.db_handle)
         #self.Players.event_roles = self.db_handle.relationship(
         #    'EventPlayerRoleMappings', cascade='all'
         #)
@@ -83,6 +85,13 @@ class TableProxy():
         self.TokenPurchases.tokens = self.db_handle.relationship(
             'Tokens', cascade='all'
         )
+        self.Tokens.tournament = self.db_handle.relationship(
+            'Tournaments', cascade='all', uselist=False
+        )
+        self.Tokens.meta_tournament = self.db_handle.relationship(
+            'MetaTournaments', cascade='all', uselist=False
+        )        
+        
         self.Queues.tournament_machine = db_handle.relationship(
             'TournamentMachines', uselist=False            
         )    
@@ -125,20 +134,28 @@ class TableProxy():
 
     def get_tournament_machine_player_is_playing(self,player,event_id):
         return self.TournamentMachines.query.filter_by(player_id=player.player_id,event_id=event_id).first()
-    
-    def get_available_token_count_for_tournament(self,event_id,player, tournament=None,meta_tournament=None):
-        query = self.get_query_for_available_tokens(event_id)
-        if tournament and tournament.team_tournament and player.event_info and player.event_info.team_id is None:
-            return 0
-        if tournament:
-            query = query.filter_by(tournament_id=tournament.tournament_id)
-            if tournament.team_tournament:
-                return query.filter_by(team_id=player.event_info.team_id).count()
-            else:
-                return query.filter_by(player_id=player.player_id).count()
-        if meta_tournament:
-            return query.filter_by(meta_tournament_id=meta_tournament.meta_tournament_id, player_id=player.player_id).count()
 
+    def get_available_token_count_for_tournaments(self,event_id,player, tournament=None,meta_tournament=None):                
+        tournament_results={}
+        meta_tournament_results={}
+        results = self.get_query_for_available_tokens(event_id).all()        
+        for result in results:            
+            if result.tournament_id:
+                if result.tournament_id in tournament_results:
+                    count = tournament_results[result.tournament_id]['count']
+                    tournament_results[result.tournament_id]={"tournament_name":result.tournament.tournament_name,"count":count+1}                
+                else:
+                    tournament_results[result.tournament_id]={"tournament_name":result.tournament.tournament_name,"count":1}
+                
+            if result.meta_tournament_id:
+                if result.meta_tournament_id in meta_tournament_results:                    
+                    count = meta_tournament_results[result.meta_tournament_id]['count']
+                    meta_tournament_results[result.meta_tournament_id]={"meta_tournament_name":result.meta_tournament.meta_tournament_name,"count":count+1}
+                else:
+                    meta_tournament_results[result.meta_tournament_id]={"meta_tournament_name":result.meta_tournament.meta_tournament_name,"count":1}
+        return tournament_results,meta_tournament_results
+    
+    
     def create_token_purchase(self,player_initiated=False,commit=False):
         new_token_purchase = self.TokenPurchases()
         if player_initiated:
@@ -562,3 +579,29 @@ class TableProxy():
         if queue.player_id is None:
             queue.player_id=player.player_id
         return queue    
+
+    def create_audit_log(self, audit_log_params, event_id, player=None, commit=False):
+        global ACTIONS_TO_ADD_TICKET_SUMMARY_TO        
+        audit_log = self.AuditLogs()
+        audit_log.action_date=datetime.datetime.now()
+
+        deserializer.deserialize_json(audit_log,audit_log_params,allow_foreign_keys=True)
+        self.db_handle.session.add(audit_log)
+        if commit is True:
+            self.db_handle.session.commit()    
+        if audit_log_params['action'] not in ACTIONS_TO_ADD_TICKET_SUMMARY_TO:
+            return
+        if player is None:
+            player = self.get_player(event_id, player_id=audit_log_params['player_id'])        
+        tournament_token_count,meta_tournament_token_count = self.get_available_token_count_for_tournaments(event_id,player)
+        list_of_token_counts = [token_count['tournament_name']+':'+str(token_count['count']) for tournament_id,token_count in tournament_token_count.iteritems()]+[token_count['meta_tournament_name']+':'+str(token_count['count']) for meta_tournament_id,token_count in meta_tournament_token_count.iteritems()]
+        token_count_string = "ticket summary - " + ", ".join(list_of_token_counts)        
+        audit_log_ticket_summary = self.AuditLogs()
+        audit_log_ticket_summary.player_id=player.player_id
+        audit_log_ticket_summary.action_date=datetime.datetime.now()
+        audit_log_ticket_summary.description=token_count_string    
+        audit_log_ticket_summary.summary=True
+        self.db_handle.session.add(audit_log_ticket_summary)
+        if commit is True:
+            self.db_handle.session.commit()
+

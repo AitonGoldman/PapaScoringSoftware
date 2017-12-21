@@ -82,16 +82,20 @@ def insert_tokens_into_db(list_of_tournament_tokens, player,
     purchase_summary = []
     for token_count in list_of_tournament_tokens:
         tournament = token_count.get('tournament',None)
-        meta_tournament = token_count.get('meta_tournament',None)        
+        meta_tournament = token_count.get('meta_tournament',None)                
         if tournament and tournament.team_tournament and player.event_info.team_id is None:
             continue
         ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,event_id, tournament=tournament,meta_tournament=meta_tournament)          
-        purchase_summary_dict = {"tournament_name":getattr(tournament,'tournament_name',None),
-                                 "meta_tournament_name":getattr(meta_tournament,'meta_tournament_name',None),
-                                 "tournament_id":getattr(tournament,'tournament_id',None),
-                                 "meta_tournament_id":getattr(meta_tournament,'meta_tournament_id',None),                                 
+        purchase_summary_dict = {                                 
                                  "token_count":token_count['token_count'],
-                                 "ticket_cost":ticket_cost,}
+                                 "ticket_cost":ticket_cost
+        }
+        if tournament:
+            purchase_summary_dict["tournament_id"]=tournament.tournament_id
+            purchase_summary_dict["tournament_name"]=tournament.tournament_name
+        if meta_tournament:            
+            purchase_summary_dict["meta_tournament_id"]=meta_tournament.meta_tournament_id
+            purchase_summary_dict["meta_tournament_name"]=meta_tournament.meta_tournament_name
         purchase_summary.append(purchase_summary_dict)
             
         for count in range(int(token_count['token_count'])):            
@@ -112,15 +116,21 @@ def verify_tournament_and_meta_tournament_request_counts_are_valid(list_of_tourn
                                                                    event_id,
                                                                    player,
                                                                    app):
+    tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,player)    
     for tournament_token in list_of_tournament_tokens+list_of_meta_tournament_tokens:
         tournament=tournament_token.get('tournament',None)
         meta_tournament = tournament_token.get('meta_tournament',None)
+        
         if tournament:
-            request_token_count = app.table_proxy.get_available_token_count_for_tournament(event_id,player,tournament=tournament)
-            max_tokens_player_is_allowed_to_buy = tournament.number_of_unused_tickets_allowed - request_token_count
-        else:            
-            request_token_count = app.table_proxy.get_available_token_count_for_tournament(event_id,player,meta_tournament=meta_tournament)
-            max_tokens_player_is_allowed_to_buy = meta_tournament.number_of_unused_tickets_allowed - request_token_count
+            max_tokens_player_is_allowed_to_buy = tournament.number_of_unused_tickets_allowed
+            if tournament_counts.get(tournament.tournament_id,None):
+                request_token_count = tournament_counts[tournament.tournament_id]['count']
+                max_tokens_player_is_allowed_to_buy = max_tokens_player_is_allowed_to_buy - request_token_count
+        if meta_tournament:
+            max_tokens_player_is_allowed_to_buy = meta_tournament.number_of_unused_tickets_allowed
+            if meta_tournament_counts.get(meta_tournament.meta_tournament_id,None):
+                request_token_count = meta_tournament_counts[meta_tournament.meta_tournament_id]['count']
+                max_tokens_player_is_allowed_to_buy = max_tokens_player_is_allowed_to_buy - request_token_count
     
         if app.table_proxy.get_tournament_machine_player_is_playing(player, event_id):
             max_tokens_player_is_allowed_to_buy=max_tokens_player_is_allowed_to_buy-1
@@ -130,7 +140,7 @@ def verify_tournament_and_meta_tournament_request_counts_are_valid(list_of_tourn
             raise BadRequest('Ifpa restrictions have been violated')    
                     
 
-def purchase_tickets_route(request, app, event_id, player_initiated=False, logged_in_player=None):
+def purchase_tickets_route(request, app, event_id, player_initiated=False, logged_in_player=None, current_user=None):
     if request.data:        
         input_data = json.loads(request.data)
     else:
@@ -141,9 +151,6 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
         player = app.table_proxy.get_player(event_id, player_id=input_data['player_id'])
     list_of_tournament_tokens=[]
     list_of_meta_tournament_tokens=[]
-
-    comped = input_data.get('comped',False)
-    
     # input format
     # {"tournament_counts":[{"tournament_id":1,"count":1}],"meta_tournament_counts":[]}    
     for tournament in app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):        
@@ -158,9 +165,6 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
                 if int(meta_tournament_count.get('token_count',0)) > 0:
                     meta_tournament_count['meta_tournament']=meta_tournament
                     list_of_meta_tournament_tokens.append(meta_tournament_count)
-
-                
-                
     verify_tournament_and_meta_tournament_request_counts_are_valid(list_of_tournament_tokens,list_of_meta_tournament_tokens, event_id, player, app)
 
     new_token_purchase = app.table_proxy.create_token_purchase(player_initiated=player_initiated)
@@ -168,32 +172,32 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
                                                player,
                                                app, new_token_purchase,
                                                event_id,
-                                               player_initiated=player_initiated, comped=comped)
-    for purchase_summary in purchase_summaries:
+                                               player_initiated=player_initiated, comped=input_data.get('comped',False))
+    for purchase_summary in purchase_summaries:        
         token_purchase_summary = app.table_proxy.create_token_purchase_summary(new_token_purchase)                
-        if purchase_summary['tournament_id']:
+        if purchase_summary.get('tournament_id',None):
             token_purchase_summary.tournament_id=purchase_summary['tournament_id']
         else:
             token_purchase_summary.meta_tournament_id=purchase_summary['meta_tournament_id']
-        token_purchase_summary.token_count=purchase_summary['token_count']    
+        token_purchase_summary.token_count=purchase_summary['token_count']            
+                
+    new_token_purchase.total_cost=sum(int(summary['ticket_cost']['price']) for summary in purchase_summaries)
+    purchase_summary_string = ", ".join([" : ".join([str(summary.get('tournament_name',summary.get('meta_tournament_name'))),
+                                                     str(summary['token_count'])]) for summary in purchase_summaries])    
+    audit_log_params={'player_id':player.player_id,                      
+                      'player_initiated':player_initiated,
+                      'event_id':event_id}
     if player_initiated is not True:
         new_token_purchase.completed_purchase=True
-            
-    total_cost = sum(int(summary['ticket_cost']['price']) for summary in purchase_summaries)
-    new_token_purchase.total_cost=total_cost
-    audit_log={'player_id':player.player_id,
-               'action':'Ticket Purchase',
-               'player_initiated':player_initiated}
-    #purchase_summary_string = ", ".join([" : ".join([str(summary[0]),str(summary[1])]) for summary in purchase_summary+meta_purchase_summary])    
-
-    #if player_initiated is False:
-    #    audit_log_description_string='tickets purchased - %s ' % (purchase_summary_string)
-    #else:
-    #    audit_log_description_string='started purchase (token_purchase_id : %s) - %s' % (new_token_purchase.token_purchase_id,purchase_summary_string)
+        audit_log_params['pss_user_id']=current_user.pss_user_id
+        audit_log_params['action']='Ticket Purchase'
+        audit_log_description_string='tickets purchased - %s ' % (purchase_summary_string)        
+    else:
+        audit_log_params['action']='Player Ticket Purchase started'            
+        audit_log_description_string='started purchase (token_purchase_id : %s) - %s' % (new_token_purchase.token_purchase_id,purchase_summary_string)        
         
-    #audit_log['description']=audit_log_description_string
-    #orm_factories.create_audit_log(app,audit_log)    
-    #app.tables.db_handle.session.commit()
+    audit_log_params['description']=audit_log_description_string
+    app.table_proxy.create_audit_log(audit_log_params,event_id)    
     return new_token_purchase,purchase_summaries
 
 def complete_player_token_purchase_route(request,app, event_id, token_purchase_id):
@@ -202,6 +206,7 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
     else:
         raise BadRequest('No info in request')        
     token_purchase = app.table_proxy.get_token_purchase_by_id(token_purchase_id)
+    player_id = token_purchase.tokens[0].player_id
     if token_purchase.completed_purchase:
         raise BadRequest('You are trying to pay for something that is already paid for')                
     stripe_items=[]
@@ -221,13 +226,23 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
         if normal_count > 0:
             stripe_items.append({"quantity":normal_count,"type":"sku","parent":normal_sku})           
     api_key = app.event_settings[event_id].stripe_api_key    
-    return app.stripe_proxy.purchase_tickets(stripe_items,api_key,None,input_data['email'],token_purchase),token_purchase
-    
+    result = app.stripe_proxy.purchase_tickets(stripe_items,api_key,None,input_data['email'],token_purchase)    
+    token_purchase.stripe_transaction_id=result['order_id_string']    
+    audit_log_params={
+        'action':'Player Ticket Purchase Complete',
+        'player_id':player_id,                      
+        'player_initiated':True,        
+        'description':token_purchase.stripe_transaction_id,
+        'event_id':event_id
+    }
+    app.table_proxy.create_audit_log(audit_log_params,event_id)    
+    return result,token_purchase
+
 @blueprints.test_blueprint.route('/<int:event_id>/token',methods=['POST'])
 def event_user_purchase_tokens(event_id):
     desk_permission = permissions.DeskTokenPurchasePermission(event_id)
     if desk_permission.can():                
-        new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=False)            
+        new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=False,current_user=current_user)            
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)
     if player_permission.can():        
         new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=True,logged_in_player=current_user)            
@@ -246,8 +261,7 @@ def player_complete_purchase_tokens(event_id,token_purchase_id):
         result,token_purchase = complete_player_token_purchase_route(request,current_app, event_id, token_purchase_id)
         if result.get('error_text',None):
             raise BadRequest(result['error_text'])
-        else:
-            token_purchase.stripe_transaction_id=result['order_id_string']
+        else:            
             current_app.table_proxy.commit_changes()
     #total_cost = sum(int(summary[2]['price']) for summary in purchase_summary)
     #generic_serializer = generate_generic_serializer(serializer.generic.ALL)

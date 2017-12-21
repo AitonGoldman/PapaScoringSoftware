@@ -83,7 +83,7 @@ class RouteTournamentTest(pss_integration_test_base.PssIntegrationTestBase):
         tournament_id=tournaments_dict['data'][0]['tournament_id']
         post_dict={"tournament_id":tournament_id,"tournament_name":"new_tournament_name"}
         login_dict = {'username':self.results['data'][0]['username'],'password':'password'}                
-        tournament_dict = self.login_and_edit_tournament(login_dict,post_dict,self.event_id,tournament_id,True)
+        tournament_dict = self.login_and_edit_tournament(login_dict,post_dict,self.event_id,True)
 
     def test_tournament_edit_fails_with_scorekeeper(self):        
         post_dict = {"event_role_ids":[self.scorekeeper_role_id],"event_users":[{"first_name":"poop_firsta"+self.create_uniq_id(),"last_name":"poop_lasta","password":"password"}]}

@@ -55,7 +55,7 @@ class StripeProxy():
             order_response=order.pay(
                 source=stripe_token
             )
-            order_id_string =  "order_id %s, " % order_response.id
+            order_id_string =  "order_id %s " % order_response.id
             for token in token_purchase.tokens:
                 token.paid_for=True
             token_purchase.completed_purchase=True

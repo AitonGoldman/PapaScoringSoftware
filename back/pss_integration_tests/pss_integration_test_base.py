@@ -108,7 +108,7 @@ class PssIntegrationTestBase(unittest.TestCase):
             self.assertHttpCodeEquals(rv,200)
             return json.loads(rv.data)
 
-    def login_and_edit_tournament(self,login_dict, post_dict, event_id, tournament_id, event_user=False):
+    def login_and_edit_tournament(self,login_dict, post_dict, event_id, event_user=False):
         with self.test_app.test_client() as c:
             if event_user:
                 login_endpoint='/auth/pss_event_user/login'

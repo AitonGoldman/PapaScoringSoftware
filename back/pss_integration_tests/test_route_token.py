@@ -21,6 +21,16 @@ class RouteTokenTest(pss_integration_test_base.PssIntegrationTestBase):
         tournaments_dict = self.login_and_create_tournament(self.admin_login_dict,post_dict,self.event_id)                
         tournament_id=tournaments_dict['data'][0]['tournament_id']
 
+        test_tournament_name="test_tournament"+self.create_uniq_id()
+        post_dict = {"tournament":{"tournament_name":test_tournament_name}}        
+        tournaments_dict_2 = self.login_and_create_tournament(self.admin_login_dict,post_dict,self.event_id)                
+        tournament_id_2=tournaments_dict_2['data'][0]['tournament_id']
+
+        test_tournament_name="test_tournament"+self.create_uniq_id()
+        post_dict = {"tournament":{"tournament_name":test_tournament_name}}        
+        tournaments_dict_3 = self.login_and_create_tournament(self.admin_login_dict,post_dict,self.event_id)                
+        tournament_id_3=tournaments_dict_2['data'][0]['tournament_id']
+        
         test_sku = os.environ['TEST_STRIPE_SKU']
         test_discount_sku = os.environ['TEST_STRIPE_DISCOUNT_SKU']
 
@@ -28,14 +38,14 @@ class RouteTokenTest(pss_integration_test_base.PssIntegrationTestBase):
         test_meta_discount_sku = os.environ['TEST_STRIPE_META_DISCOUNT_SKU']
         
         post_dict={"tournament_id":tournament_id,"use_stripe":True,"stripe_sku":test_sku,"discount_stripe_sku":test_discount_sku,"discount":True,"number_of_tickets_for_discount":2}
-        tournament_dict = self.login_and_edit_tournament(self.admin_login_dict,post_dict,self.event_id,tournament_id)         
+        tournament_dict = self.login_and_edit_tournament(self.admin_login_dict,post_dict,self.event_id)         
 
-        post_dict = {"meta_tournament_name":"test_meta_tournament_name"+self.create_uniq_id(),"tournament_ids":[tournament_id]}        
+        post_dict = {"meta_tournament_name":"test_meta_tournament_name"+self.create_uniq_id(),"tournament_ids":[tournament_id_2]}        
         meta_tournament = self.login_and_create_meta_tournament(self.admin_login_dict,post_dict,self.event_id)        
         meta_tournament_id = meta_tournament['data']["meta_tournament_id"]
 
         post_dict={"meta_tournament_id":meta_tournament_id,"use_stripe":True,"stripe_sku":test_meta_sku,"discount_stripe_sku":test_meta_discount_sku,"discount":True,"number_of_tickets_for_discount":2}
-        self.login_and_edit_meta_tournament(self.admin_login_dict,post_dict,self.event_id,tournament_id)         
+        self.login_and_edit_meta_tournament(self.admin_login_dict,post_dict,self.event_id)         
         
         player_id=self.results['data'][0]['player_id']
         post_dict={"player_id":player_id,
@@ -47,12 +57,24 @@ class RouteTokenTest(pss_integration_test_base.PssIntegrationTestBase):
                         data=json.dumps(self.admin_login_dict))
             self.assertHttpCodeEquals(rv,200)            
             rv = c.post('/%s/token' % (self.event_id),
+                        data=json.dumps(post_dict))
+
+        post_dict={"player_id":player_id,
+                   "tournament_token_counts":[{"token_count":2,"tournament_id":tournament_id_3}],
+                   "meta_tournament_token_counts":[{"token_count":2,"meta_tournament_id":meta_tournament['data']['meta_tournament_id']}]}        
+        with self.test_app.test_client() as c:
+            login_endpoint='/auth/pss_user/login'
+            rv = c.post(login_endpoint,
+                        data=json.dumps(self.admin_login_dict))
+            self.assertHttpCodeEquals(rv,200)            
+            rv = c.post('/%s/token' % (self.event_id),
                         data=json.dumps(post_dict))            
+             
         pin = self.results['data'][0]['pin']        
         player_id_for_event = self.results['data'][0]['event_info']['player_id_for_event']
         login_dict = {'player_id_for_event':player_id_for_event,'player_pin':pin}        
-        post_dict={"tournament_token_counts":[{"token_count":1,"tournament_id":tournament_id}],
-                   "meta_tournament_token_counts":[{"token_count":1,"meta_tournament_id":meta_tournament['data']['meta_tournament_id']}]}
+        post_dict={"tournament_token_counts":[{"token_count":5,"tournament_id":tournament_id}],
+                   "meta_tournament_token_counts":[{"token_count":7,"meta_tournament_id":meta_tournament['data']['meta_tournament_id']}]}
         
         with self.test_app.test_client() as c:
             rv = c.post('/auth/player/login/%s'%self.event_id,

@@ -30,15 +30,15 @@ class PssConfig():
         return None
     
     def set_event_config_from_db(self, app):            
-        config_dict = self.get_event_config_from_db(app)            
-        if config_dict is None:
-            raise Exception('event %s does not exist' % app.name)    
-        app.event_config = config_dict        
-        if 'flask_secret_key' not in app.event_config or app.event_config['flask_secret_key'] is None:
-            raise Exception("You didn't configure your flask secret key!")    
-        app.secret_key = app.event_config['flask_secret_key']
-        for key,value in app.event_config.iteritems():
-            if os.getenv(key,None):
-                app.event_config[key]=os.getenv(key)        
-        return config_dict
+        #config_dict = self.get_event_config_from_db(app)            
+        #if config_dict is None:
+        #    raise Exception('event %s does not exist' % app.name)    
+        #app.event_config = config_dict        
+        #if 'flask_secret_key' not in app.event_config or app.event_config['flask_secret_key'] is None:
+        #    raise Exception("You didn't configure your flask secret key!")    
+        app.secret_key = os.getenv('FLASK_SECRET_KEY')#app.event_config['flask_secret_key']
+        #for key,value in app.event_config.iteritems():
+        #    if os.getenv(key,None):
+        #        app.event_config[key]=os.getenv(key)        
+        #return config_dict
         

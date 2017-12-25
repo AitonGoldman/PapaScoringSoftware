@@ -214,10 +214,15 @@ class PssIntegrationTestBase(unittest.TestCase):
         with self.test_app.test_client() as c:            
             rv = c.post(login_endpoint,
                         data=json.dumps(login_dict))
-            self.assertHttpCodeEquals(rv,200)            
+            self.assertHttpCodeEquals(rv,200)
             rv = c.delete('/%s/entry' % (event_id),
                           data=json.dumps(post_dict))            
 
+    def get_machine_results(self,event_id,tournament_machine_id):
+        with self.test_app.test_client() as c:            
+            rv = c.get('/%s/results/tournament_machine/%s' % (event_id,tournament_machine_id))            
+            self.assertHttpCodeEquals(rv,200)
+            
     def login_and_record_score(self,login_dict,post_dict,event_id,event_user=False):
         if event_user:
             login_endpoint='/auth/pss_event_user/login'

@@ -18,5 +18,8 @@ def generate_scores_class(db_handle):
         
         tournament_machine_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'tournament_machines.tournament_machine_id'
-        ))                        
+        ))
+        tournament_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
+            'tournaments.tournament_id'
+        ))                                
     return Scores

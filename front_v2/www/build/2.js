@@ -1,14 +1,14 @@
 webpackJsonp([2],{
 
-/***/ 405:
+/***/ 407:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QuickLinksPageModule", function() { return QuickLinksPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabsPageModule", function() { return TabsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_links__ = __webpack_require__(414);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs__ = __webpack_require__(419);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,23 +18,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var QuickLinksPageModule = (function () {
-    function QuickLinksPageModule() {
+var TabsPageModule = (function () {
+    function TabsPageModule() {
     }
-    QuickLinksPageModule = __decorate([
+    TabsPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__quick_links__["a" /* QuickLinksPage */],
+                __WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__quick_links__["a" /* QuickLinksPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */]),
             ],
         })
-    ], QuickLinksPageModule);
-    return QuickLinksPageModule;
+    ], TabsPageModule);
+    return TabsPageModule;
 }());
 
-//# sourceMappingURL=quick-links.module.js.map
+//# sourceMappingURL=tabs.module.js.map
 
 /***/ }),
 
@@ -44,8 +44,8 @@ var QuickLinksPageModule = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(240);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(125);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -65,11 +65,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Components.
  */
 var PssPageComponent = (function () {
-    function PssPageComponent(eventAuth, navParams) {
+    function PssPageComponent(eventAuth, navParams, title) {
         this.eventAuth = eventAuth;
         this.navParams = navParams;
+        this.title = title;
         this.eventId = null;
         this.eventName = null;
+        this.hideBackButton = false;
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         console.log('Hello PssPageComponent Component');
@@ -79,12 +81,15 @@ var PssPageComponent = (function () {
         params['eventName'] = this.eventName;
         return params;
     };
+    PssPageComponent.prototype.hideTheBackButton = function () {
+        this.hideBackButton = true;
+    };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */]])
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */], String])
     ], PssPageComponent);
     return PssPageComponent;
 }());
@@ -93,15 +98,16 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 414:
+/***/ 419:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QuickLinksPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(408);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_event_auth_event_auth__ = __webpack_require__(240);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_title_service_title_service__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_event_auth_event_auth__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_pss_page_pss_page__ = __webpack_require__(408);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -125,48 +131,60 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
- * Generated class for the QuickLinksPage page.
+ * Generated class for the TabsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var QuickLinksPage = (function (_super) {
-    __extends(QuickLinksPage, _super);
-    function QuickLinksPage(navCtrl, navParams, appCtrl, eventAuth) {
+var TabsPage = (function (_super) {
+    __extends(TabsPage, _super);
+    function TabsPage(navCtrl, navParams, titleService, popoverCtrl, eventAuth) {
         var _this = _super.call(this, eventAuth, navParams) || this;
         _this.navCtrl = navCtrl;
         _this.navParams = navParams;
-        _this.appCtrl = appCtrl;
+        _this.titleService = titleService;
+        _this.popoverCtrl = popoverCtrl;
         _this.eventAuth = eventAuth;
+        _this.roleName = "blah";
+        console.log('in tabs, event id is ... ' + _this.eventId);
+        var roleName = _this.eventAuth.getRoleName(_this.eventId);
+        _this.roleName = roleName ? roleName : 'Home';
         return _this;
     }
-    QuickLinksPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad QuickLinksPage');
+    TabsPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad TabsPage');
     };
-    QuickLinksPage.prototype.goToPage = function (page, tabIndex) {
-        if (page) {
-            var params = this.buildNavParams({});
-            console.log(params);
-            this.appCtrl.getRootNav().push(page, params);
-        }
-        else {
-            this.navCtrl.parent.select(tabIndex);
+    // presentPopover(myEvent) {
+    //     let popover = this.popoverCtrl.create(QuicklinksComponent);
+    //     popover.present({
+    //         ev: myEvent     
+    //     });
+    // }
+    TabsPage.prototype.onTabChange = function (event) {
+        if (this.tabRef.getByIndex(event.index).canGoBack()) {
+            this.tabRef.getByIndex(event.index).first();
         }
     };
-    QuickLinksPage = __decorate([
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('myTabs'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Tabs */])
+    ], TabsPage.prototype, "tabRef", void 0);
+    TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-quick-links',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/quick-links/quick-links.html"*/'<ion-header>\n\n  <ion-navbar>\n    <ion-title></ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n<ion-list>\n  <ion-list-header>Ionic</ion-list-header>\n  <button ion-item (click)="goToPage(\'LoginPage\')">Login</button>\n  <button ion-item (click)="goToPage(null,1)">Results</button>\n  <button ion-item (click)="goToPage(null,2)">Queues</button>\n</ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/quick-links/quick-links.html"*/,
+            selector: 'page-tabs',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/'<!--\n  Generated template for the TabsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-tabs #myTabs (ionChange)="onTabChange($event)">\n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'HomePage\'" tabIcon="md-home" [tabTitle]="roleName"></ion-tab>  \n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'ResultsPage\'" tabIcon="md-clipboard" tabTitle="Results"></ion-tab>\n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'QueuesPage\'" tabIcon="md-git-branch" tabTitle="Queues"></ion-tab>\n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'QuickLinksPage\'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>\n</ion-tabs>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* App */],
+            __WEBPACK_IMPORTED_MODULE_2__providers_title_service_title_service__["a" /* TitleServiceProvider */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* PopoverController */],
             __WEBPACK_IMPORTED_MODULE_3__providers_event_auth_event_auth__["a" /* EventAuthProvider */]])
-    ], QuickLinksPage);
-    return QuickLinksPage;
-}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], TabsPage);
+    return TabsPage;
+}(__WEBPACK_IMPORTED_MODULE_4__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=quick-links.js.map
+//# sourceMappingURL=tabs.js.map
 
 /***/ })
 

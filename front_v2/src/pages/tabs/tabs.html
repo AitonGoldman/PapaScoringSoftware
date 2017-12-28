@@ -4,18 +4,6 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-  <ion-navbar showWhen="mobile" >
-    <ion-title>{{titleService.getTitle()}}</ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only menuToggle>
-        <ion-icon name="menu"></ion-icon>
-      </button>
-<!--<button (click)="presentPopover($event)" icon-only ion-button><ion-icon name="logo-buffer"></ion-icon></button>-->
-    </ion-buttons>    
-  </ion-navbar>
-</ion-header>
-
 <ion-tabs #myTabs (ionChange)="onTabChange($event)">
   <ion-tab [rootParams]="buildNavParams({})" [root]="'HomePage'" tabIcon="md-home" [tabTitle]="roleName"></ion-tab>  
   <ion-tab [rootParams]="buildNavParams({})" [root]="'ResultsPage'" tabIcon="md-clipboard" tabTitle="Results"></ion-tab>

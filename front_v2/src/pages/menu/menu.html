@@ -16,13 +16,13 @@
 <!-- main navigation -->
 <ion-header hideWhen="mobile">
   <ion-navbar>
-    <ion-title>Pss</ion-title><!--
+    <ion-title>Pss</ion-title>
     <ion-buttons end>
       <button icon-only ion-button [navPush]="'LoginPage'" [navParams]="buildNavParams({})" >Login</button>
       <button icon-only ion-button>Results</button>
       <button icon-only ion-button>Queues</button>
       <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button (click)="menuNav(getRolePage())">{{eventAuth.getRoleName(eventId)}}</button>
-    </ion-buttons>-->
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-nav [root]="rootPage" [rootParams]="buildNavParams({})" #content swipeBackEnabled="false">

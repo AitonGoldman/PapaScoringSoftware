@@ -9,7 +9,7 @@
 <ion-content padding>
 <ion-list>
   <ion-list-header>Ionic</ion-list-header>
-  <button ion-item (click)="goToPage('LoginPage')">Login</button>
+  <button ion-item [navPush]="'LoginPage'" [navParams]="buildNavParams({})">Login</button>
   <button ion-item (click)="goToPage(null,1)">Results</button>
   <button ion-item (click)="goToPage(null,2)">Queues</button>
 </ion-list>

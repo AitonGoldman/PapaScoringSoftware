@@ -5,11 +5,47 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton="true">
+    <ion-title>Success</ion-title>
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
+  <ion-grid>
+  <ion-row>
+    <ion-col>      
+    </ion-col>
+    <ion-col style='text-align:center'> 
+      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>
+      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>
 
+    </ion-col>
+    <ion-col>     
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col style='text-align:center'>         
+      {{successSummary ? successSummary.getTitle():'You can not reload this page'}}
+      <hr style='width:75%'>      
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col style='text-align:center'>         
+      {{successSummary ? successSummary.getFirstLine():''}}
+    </ion-col>               
+  </ion-row>
+  <ion-row>
+    <ion-col style='text-align:center'>         
+      {{successSummary ? successSummary.getSecondLine():''}}
+    </ion-col>               
+  </ion-row>
+  <ion-row>
+    <ion-col *ngFor="let button of successButtons" style='text-align:center'>
+      <!--<button ion-button [navPush]="button.getTargetPage()" [navParams]="buildNavParams(button.getParams())">{{button.getTitle()}}</button>-->
+      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams())">{{button.getTitle()}}</button>
+    </ion-col>
+  </ion-row>
+  </ion-grid>
+  
 </ion-content>

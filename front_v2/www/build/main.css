@@ -3815,6 +3815,30 @@ ion-icon::before {
   src: local("Noto Sans Bold"), local("Noto-Sans-Bold"), url("../assets/fonts/noto-sans-bold.woff") format("woff"), url("../assets/fonts/noto-sans-bold.ttf") format("truetype");
 }
 
+.fakeIos {
+  padding: 0px;
+  margin: 0px;
+  height: 65px;
+}
+
+.fakeIosTitle {
+  margin-top: 10px;
+}
+
+.dangerToast .toast-container {
+  -webkit-box-shadow: 10px 10px 5px grey;
+  box-shadow: 10px 10px 5px grey;
+  background: #f53d3d;
+}
+
+.dangerToast .toast-container .toast-message {
+  background: #f53d3d;
+}
+
+.dangerToast .toast-container button {
+  background: #32db64;
+}
+
 ion-action-sheet {
   left: 0;
   top: 0;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
  * Generated class for the EventSelectPage page.
@@ -14,12 +14,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'event-select.html',
 })
 export class EventSelectPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad EventSelectPage');
-  }
+    nextPage:string = null;
+    constructor(public navCtrl: NavController, public navParams: NavParams,
+                platform: Platform) {
+            if(platform.is('mobile') == true){          
+                this.nextPage='TabsPage';    
+            } else {          
+                this.nextPage='HomePage';         
+            }                        
+    }
+    
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad EventSelectPage');
+    }
 
 }

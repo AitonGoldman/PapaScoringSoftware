@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { PssPageComponent } from './pss-page/pss-page';
+import { CustomHeaderComponent } from './custom-header/custom-header';
 @NgModule({
 	declarations: [
-    PssPageComponent,
-    PssPageComponent],
+    PssPageComponent,    
+    CustomHeaderComponent],
 	imports: [],
 	exports: [
     PssPageComponent,
-    PssPageComponent]
+    CustomHeaderComponent]
 })
 export class ComponentsModule {}

@@ -1,6 +1,5 @@
 import { ViewChild, Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Tabs } from 'ionic-angular';
-import { TitleServiceProvider } from '../../providers/title-service/title-service';
+import { IonicPage, NavController, ViewController, NavParams, Tabs } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 
@@ -11,22 +10,24 @@ import { EventAuthProvider } from '../../providers/event-auth/event-auth';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({    
+    segment: 'HomePage/:eventId'
+})
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
 })
 export class HomePage extends PssPageComponent{
-  @ViewChild('myTabs') tabRef: Tabs;  
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public titleService:TitleServiceProvider,
-              public eventAuth: EventAuthProvider) {
-       super(eventAuth,navParams);      
-       this.titleService.setTitle("Home");
-  }
+    @ViewChild('myTabs') tabRef: Tabs;    
+    constructor(public navCtrl: NavController,
+                public navParams: NavParams,              
+                public eventAuth: EventAuthProvider,
+                public viewCtrl: ViewController) {       
+        super(eventAuth,navParams,'Home');
+        //this.hideBackButton=true;
+    }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad HomePage');
-  }
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad HomePage');        
+    }
 }

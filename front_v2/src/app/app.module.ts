@@ -10,20 +10,24 @@ import { TitleServiceProvider } from '../providers/title-service/title-service';
 import { EventAuthProvider } from '../providers/event-auth/event-auth';
 import { PssApiProvider } from '../providers/pss-api/pss-api';
 import { FormsModule }   from '@angular/forms';
+//import { ComponentsModule } from '../components/components.module'
+//import { CustomHeaderComponent } from '../components/custom-header/custom-header';
 
 @NgModule({
   declarations: [
-    MyApp
+      MyApp//,
+      //CustomHeaderComponent
   ],
   imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp),
-    HttpClientModule,
-    FormsModule
+      BrowserModule,
+      IonicModule.forRoot(MyApp),
+      HttpClientModule,
+      FormsModule//,
+      //ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+      MyApp      
   ],
   providers: [
     StatusBar,

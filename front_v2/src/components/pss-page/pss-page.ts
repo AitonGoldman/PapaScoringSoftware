@@ -13,10 +13,12 @@ import { EventAuthProvider } from '../../providers/event-auth/event-auth';
   templateUrl: 'pss-page.html'
 })
 export class PssPageComponent {
-  eventId:number = null;
-  eventName:string = null;  
+    eventId:number = null;
+    eventName:string = null;
+    hideBackButton:boolean = false;
   constructor(public eventAuth: EventAuthProvider,
-              public navParams: NavParams) {
+              public navParams: NavParams,
+              public title?:string) {
       this.eventId = navParams.get('eventId');
       this.eventName = navParams.get('eventName');
       console.log('Hello PssPageComponent Component');
@@ -26,4 +28,7 @@ export class PssPageComponent {
    params['eventName'] = this.eventName;
    return params;
   }
+    hideTheBackButton(){
+        this.hideBackButton=true;
+    }
 }

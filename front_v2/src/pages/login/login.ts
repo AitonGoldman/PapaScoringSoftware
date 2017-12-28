@@ -4,6 +4,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { SuccessSummary } from '../../classes/success-summary';
+import { SuccessButton } from '../../classes/SuccessButton';
 
 /**
  * Generated class for the LoginPage page.
@@ -12,7 +13,9 @@ import { SuccessSummary } from '../../classes/success-summary';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({
+    segment:'login/:eventId'
+})
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -33,21 +36,26 @@ export class LoginPage extends PssPageComponent {
             if(result == null){
                 return;
             }
-            console.log('got data back from loginUser...');
-            console.log(result);
-            let successSummary = new SuccessSummary(result.data.username+' has logged in',
+            this.eventAuth.setEventUserLoggedIn(this.eventId,result.data);
+            let successSummary = new SuccessSummary(result.data.username+' has logged in.',
                                                     null,
                                                     null);
-            this.appCtrl.getRootNav().push("SuccessPage",
-                                           this.buildNavParams({'successSummary':successSummary}));
+            let successButton = new SuccessButton('Go Home',
+                                                  'HomePage',
+                                                  {});
+            //            this.appCtrl.getRootNav().push("SuccessPage",
+            this.navCtrl.push("SuccessPage",            
+                                           this.buildNavParams({'successSummary':successSummary,
+                                                                'successButtons':[successButton]}));
         };
     }
     loginUser(){
-        this.pssApi.loginUser(this.eventId,this.loginInfo)
+        console.log('calling login...');
+        this.pssApi.loginUser(this.loginInfo,this.eventId)
             .subscribe(this.generateLoginUserProcessor())    
     }
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
-    this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
+    //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
   }
 }

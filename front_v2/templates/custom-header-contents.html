@@ -1,0 +1,16 @@
+<!--<bobo>-->
+<ion-header>
+<ion-navbar>  
+    <ion-title showWhen='mobile'>
+      {{title}}
+    </ion-title>    
+  <ion-title hideWhen='mobile'>Pss</ion-title>
+  <ion-buttons end hideWhen='mobile'>
+    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>
+    <button [navPush]="'ResultsPage'" icon-only ion-button>Results</button>
+    <button icon-only ion-button>Queues</button>
+    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="'HomePage'" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>
+  </ion-buttons>
+</ion-navbar>
+</ion-header>
+<!--</bobo>-->

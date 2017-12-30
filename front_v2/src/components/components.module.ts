@@ -5,21 +5,24 @@ import { CreateEditEntityComponent } from './create-edit-entity/create-edit-enti
 import { EventComponent } from './event/event';
 import { TournamentComponent } from './tournament/tournament';
 import { TournamentMachinesComponent } from './tournament-machines/tournament-machines';
+import { ExpandableComponent } from './expandable/expandable';
 @NgModule({
 	declarations: [
-    PssPageComponent,    
-    CustomHeaderComponent,
-    CreateEditEntityComponent,
-    EventComponent,
-    TournamentComponent,
-    TournamentMachinesComponent],
-	imports: [],
-	exports: [
-    PssPageComponent,
-    CustomHeaderComponent,
-    CreateEditEntityComponent,
-    EventComponent,
-    TournamentComponent,
-    TournamentMachinesComponent]
+            PssPageComponent,    
+            CustomHeaderComponent,
+            CreateEditEntityComponent,
+            EventComponent,
+            TournamentComponent,
+            TournamentMachinesComponent,
+            ExpandableComponent],
+    imports: [],
+    exports: [
+        PssPageComponent,
+        CustomHeaderComponent,
+        CreateEditEntityComponent,
+        EventComponent,
+        TournamentComponent,
+        TournamentMachinesComponent,
+        ExpandableComponent]
 })
 export class ComponentsModule {}

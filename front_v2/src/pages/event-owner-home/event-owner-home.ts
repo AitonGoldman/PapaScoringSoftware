@@ -15,6 +15,10 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 })
 export class EventOwnerHomePage extends PssPageComponent {
     eventsAndTournaments:any;
+    itemExpandHeight: number = 100;
+    expand(item){
+        item.expanded=item.expanded==false?true:false;
+    }
     generateGetAllEventsAndTournamentsProcessor(){
         return (result) => {            
             if(result == null){
@@ -22,6 +26,12 @@ export class EventOwnerHomePage extends PssPageComponent {
             }
             console.log('got back tournaments and events...');            
             this.eventsAndTournaments=result.data;
+            this.eventsAndTournaments.map((event)=>{
+                event.expanded=false;
+                event.tournaments.map((tournament)=>{
+                    tournament.expanded=false;
+                })
+            })
             console.log(this.eventsAndTournaments);
         };
     }

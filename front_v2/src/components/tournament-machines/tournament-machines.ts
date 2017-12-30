@@ -8,6 +8,7 @@ import { ToastController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
+import { NotificationsService } from 'angular2-notifications';
 
 /**
  * Generated class for the TournamentMachinesPage page.
@@ -28,7 +29,9 @@ export class TournamentMachinesComponent extends PssPageComponent {
     selectedMachine:any;
     sliding:boolean = true;
     selectedMachines:any = [];
-    @ViewChild('searchbar')  searchbar: AutoCompleteProvider;
+    @ViewChild('searchbar')  searchbar: any;
+    @ViewChild('myform')  myform: any;
+
     @ViewChild(List)  list: List;
     
     constructor(public autoCompleteProvider:AutoCompleteProvider,
@@ -39,7 +42,8 @@ export class TournamentMachinesComponent extends PssPageComponent {
                 public pssApi: PssApiProvider,
                 public platform: Platform,
                 private toastCtrl: ToastController,
-                public actionSheetCtrl: ActionSheetController){
+                public actionSheetCtrl: ActionSheetController,
+                public notificationsService: NotificationsService ){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform)
@@ -50,9 +54,7 @@ export class TournamentMachinesComponent extends PssPageComponent {
                 return;
             }
             this.autoCompleteProvider.setMachines(result.data.machines_list);
-            this.selectedMachines=result.data.tournament_machines_list;
-            console.log('got tournament machines...');
-            console.log(result);
+            this.selectedMachines=result.data.tournament_machines_list;            
         };
     }
     
@@ -76,8 +78,13 @@ export class TournamentMachinesComponent extends PssPageComponent {
                                 position: 'top',
                                 showCloseButton: true                    
                 });
-            toast.present();
-            console.log(this.list)            
+            //toast.present();
+            this.notificationsService.success("Success", message_string,{
+                timeOut:0,
+                position:["top","right"],
+                theClass:'poop'
+            })
+            
             if(action=="add"){
                 this.selectedMachines[this.selectedMachines.length-1]=result.data;
             }
@@ -137,7 +144,9 @@ export class TournamentMachinesComponent extends PssPageComponent {
             .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name+" has been removed!","edit"))            
 
     }
-        
+    onInput(event){        
+        console.log(this.searchbar.keyword)        
+    }
     onDisable(machine){
         machine.active=machine.active==false;
         if(this.wizardMode!=null){
@@ -147,7 +156,8 @@ export class TournamentMachinesComponent extends PssPageComponent {
         this.pssApi.editTournamentMachine(machine,this.eventId)
             .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name+" has been "+stringDescription,"edit"))            
     }
-    onSelect(){                
+    onSelect(){
+        
         this.selectedMachine.tournament_id=this.tournamentId;
         this.selectedMachine.tournament_machine_name=this.selectedMachine.machine_name;        
         //this.selectedMachine=result.data;
@@ -184,6 +194,7 @@ export class TournamentMachinesComponent extends PssPageComponent {
         }
         
         console.log('ionViewDidLoad TournamentMachinesPage');
+        console.log(this.constructor.name)
     }
 
 }

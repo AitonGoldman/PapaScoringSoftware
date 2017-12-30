@@ -27,6 +27,7 @@ export class PssPageComponent {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         console.log('Hello PssPageComponent Component');
+//        console.log(instance.constructor.name)
     }
     buildNavParams(params){
         if(this.eventId!=null&&this.eventId!=undefined){            

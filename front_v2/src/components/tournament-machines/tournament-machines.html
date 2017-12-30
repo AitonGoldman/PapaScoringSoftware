@@ -12,10 +12,10 @@
 
 </ion-header>
 
-
+<simple-notifications  [options]="{position:['top','right']}"></simple-notifications>
 <ion-content padding>
-  <form #myform novalidate>
-    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedMachine" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>
+  <form #myform="ngForm" novalidate>
+    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedMachine" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>
   </form>
   <br>
   <ion-list [sliding]="sliding" #list>

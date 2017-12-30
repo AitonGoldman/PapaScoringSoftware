@@ -16,3 +16,22 @@
 // automatically applied to the <body> element in the app.
 
 @import "../../node_modules/ionic2-auto-complete/auto-complete";
+simple-notifications{
+ .simple-notification-wrapper {
+  simple-notification{
+   .poop{
+    div.icon{
+      top:-10px;
+    }    
+
+    div.sn-title{
+     padding-bottom:0px;
+    }    
+    div.sn-content{
+     padding-top:10px;
+     font-size:12px;
+    }    
+   }
+  }
+ }
+}

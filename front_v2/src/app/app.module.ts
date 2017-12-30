@@ -12,7 +12,9 @@ import { PssApiProvider } from '../providers/pss-api/pss-api';
 import { FormsModule }   from '@angular/forms';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
-
+import { ExpandableModule } from '../components/expandable/expandable.module'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,10 @@ import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
       IonicModule.forRoot(MyApp),
       HttpClientModule,
       FormsModule,
-      AutoCompleteModule
+      AutoCompleteModule,
+      ExpandableModule,
+      BrowserAnimationsModule, 
+      SimpleNotificationsModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

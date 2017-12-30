@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { EventOwnerHomePage } from './event-owner-home';
+import { ExpandableModule } from '../../components/expandable/expandable.module'
 
 @NgModule({
   declarations: [
-    EventOwnerHomePage,
+      EventOwnerHomePage      
   ],
   imports: [
-      IonicPageModule.forChild(EventOwnerHomePage)      
+      IonicPageModule.forChild(EventOwnerHomePage),
+      ExpandableModule
   ],
 })
 export class EventOwnerHomePageModule {}

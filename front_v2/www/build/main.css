@@ -25795,3 +25795,25 @@ ion-auto-complete ul li:hover {
   cursor: pointer;
   background: #f1f1f1;
 }
+
+simple-notifications .simple-notification-wrapper simple-notification .poop div.icon {
+  top: -10px;
+}
+
+simple-notifications .simple-notification-wrapper simple-notification .poop div.sn-title {
+  padding-bottom: 0px;
+}
+
+simple-notifications .simple-notification-wrapper simple-notification .poop div.sn-content {
+  padding-top: 10px;
+  font-size: 12px;
+}
+
+expandable .expand-wrapper {
+  -webkit-transition: 0.2s linear;
+  transition: 0.2s linear;
+}
+
+expandable .collapsed {
+  height: 0 !important;
+}

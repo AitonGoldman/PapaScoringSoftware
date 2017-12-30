@@ -1,14 +1,14 @@
 webpackJsonp([12],{
 
-/***/ 682:
+/***/ 686:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventSelectPageModule", function() { return EventSelectPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QuickLinksPageModule", function() { return QuickLinksPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_select__ = __webpack_require__(703);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_links__ = __webpack_require__(710);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var EventSelectPageModule = (function () {
-    function EventSelectPageModule() {
+var QuickLinksPageModule = (function () {
+    function QuickLinksPageModule() {
     }
-    EventSelectPageModule = __decorate([
+    QuickLinksPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_select__["a" /* EventSelectPage */],
+                __WEBPACK_IMPORTED_MODULE_2__quick_links__["a" /* QuickLinksPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_select__["a" /* EventSelectPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__quick_links__["a" /* QuickLinksPage */]),
             ],
         })
-    ], EventSelectPageModule);
-    return EventSelectPageModule;
+    ], QuickLinksPageModule);
+    return QuickLinksPageModule;
 }());
 
-//# sourceMappingURL=event-select.module.js.map
+//# sourceMappingURL=quick-links.module.js.map
 
 /***/ }),
 
-/***/ 691:
+/***/ 692:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83,8 +83,10 @@ var PssPageComponent = (function () {
         console.log('Hello PssPageComponent Component');
     }
     PssPageComponent.prototype.buildNavParams = function (params) {
-        params['eventId'] = this.eventId;
-        params['eventName'] = this.eventName;
+        if (this.eventId != null && this.eventId != undefined) {
+            params['eventId'] = this.eventId;
+            params['eventName'] = this.eventName;
+        }
         return params;
     };
     PssPageComponent.prototype.getHomePageString = function () {
@@ -139,13 +141,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 703:
+/***/ 710:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventSelectPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QuickLinksPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(691);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(692);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(44);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -164,49 +167,44 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 
 
+
 /**
- * Generated class for the EventSelectPage page.
+ * Generated class for the QuickLinksPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EventSelectPage = (function (_super) {
-    __extends(EventSelectPage, _super);
-    function EventSelectPage() {
+var QuickLinksPage = (function (_super) {
+    __extends(QuickLinksPage, _super);
+    function QuickLinksPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.nextPage = null;
-        _this.events = [];
+        _this.reorderEnabled = false;
+        _this.items = [{ 'title': 'Results - Classics I',
+                'icon': 'md-clipboard' },
+            { 'title': 'Results - Main A',
+                'icon': 'md-clipboard' },
+            { 'title': 'Queues - Classics I',
+                'icon': 'git-branch' },
+            { 'title': 'Queues - Classics I',
+                'icon': 'git-branch' },
+        ];
         return _this;
     }
-    EventSelectPage.prototype.generateGetAllEventsProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            _this.events = result.data;
-        };
+    QuickLinksPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad QuickLinksPage');
     };
-    EventSelectPage.prototype.ionViewWillLoad = function () {
-        this.pssApi.getAllEvents({})
-            .subscribe(this.generateGetAllEventsProcessor());
-        if (this.platform.is('mobile') == true) {
-            this.nextPage = 'TabsPage';
-        }
-        else {
-            this.nextPage = this.getHomePageString();
-        }
-        console.log('ionViewDidLoad EventSelectPage');
+    QuickLinksPage.prototype.reorderItems = function (indexes) {
+        this.items = Object(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* reorderArray */])(this.items, indexes);
     };
-    EventSelectPage = __decorate([
+    QuickLinksPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-event-select',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-select/event-select.html"*/'<!--\n  Generated template for the EventSelectPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>Event Select</ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <button ion-button [navPush]="\'EventOwnerLoginPage\'">Login as event owner</button>\n  <button *ngFor="let event of events" ion-button [navPush]="nextPage" [navParams]="{\'eventId\':event.event_id,\'eventName\':event.name}">GO to event {{event.name}} </button>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-select/event-select.html"*/,
+            selector: 'page-quick-links',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/quick-links/quick-links.html"*/'<!--<bobo>-->\n<ion-header>\n<ion-navbar>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n    <button [navPush]="\'ResultsPage\'" icon-only ion-button>Results</button>\n    <button icon-only ion-button>Queues</button>\n    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>\n  </ion-buttons>\n</ion-navbar>\n</ion-header>\n<!--</bobo>-->\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<ion-content>\n\n  <ion-list>\n    <ion-list-header>Jump To...\n      <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>\n    </ion-list-header>\n      <button ion-item detail-push [navPush]="\'LoginPage\'" [navParams]="buildNavParams({})">\n        <ion-icon name="person" item-end></ion-icon>Login\n      </button>\n      <button ion-item detail-push (click)="pushRootPage(\'EventSelectPage\')">\n        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event\n      </button>      \n    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      \n    <button *ngFor="let item of items"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>\n    </ion-item-group>\n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/quick-links/quick-links.html"*/,
         })
-    ], EventSelectPage);
-    return EventSelectPage;
+    ], QuickLinksPage);
+    return QuickLinksPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=event-select.js.map
+//# sourceMappingURL=quick-links.js.map
 
 /***/ })
 

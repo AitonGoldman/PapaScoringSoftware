@@ -1,14 +1,15 @@
 webpackJsonp([7],{
 
-/***/ 689:
+/***/ 684:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TournamentDirectorHomePageModule", function() { return TournamentDirectorHomePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomePageModule", function() { return HomePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_director_home__ = __webpack_require__(710);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home__ = __webpack_require__(708);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_custom_header_custom_header__ = __webpack_require__(709);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +19,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TournamentDirectorHomePageModule = (function () {
-    function TournamentDirectorHomePageModule() {
+
+var HomePageModule = (function () {
+    function HomePageModule() {
     }
-    TournamentDirectorHomePageModule = __decorate([
+    HomePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__tournament_director_home__["a" /* TournamentDirectorHomePage */],
+                __WEBPACK_IMPORTED_MODULE_2__home__["a" /* HomePage */],
+                __WEBPACK_IMPORTED_MODULE_3__components_custom_header_custom_header__["a" /* CustomHeaderComponent */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tournament_director_home__["a" /* TournamentDirectorHomePage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__home__["a" /* HomePage */]),
             ],
         })
-    ], TournamentDirectorHomePageModule);
-    return TournamentDirectorHomePageModule;
+    ], HomePageModule);
+    return HomePageModule;
 }());
 
-//# sourceMappingURL=tournament-director-home.module.js.map
+//# sourceMappingURL=home.module.js.map
 
 /***/ }),
 
-/***/ 691:
+/***/ 692:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -83,8 +86,10 @@ var PssPageComponent = (function () {
         console.log('Hello PssPageComponent Component');
     }
     PssPageComponent.prototype.buildNavParams = function (params) {
-        params['eventId'] = this.eventId;
-        params['eventName'] = this.eventName;
+        if (this.eventId != null && this.eventId != undefined) {
+            params['eventId'] = this.eventId;
+            params['eventName'] = this.eventName;
+        }
         return params;
     };
     PssPageComponent.prototype.getHomePageString = function () {
@@ -139,13 +144,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 710:
+/***/ 708:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentDirectorHomePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(691);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(692);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -162,44 +168,97 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
 
 
 /**
- * Generated class for the TournamentDirectorHomePage page.
+ * Generated class for the HomePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var TournamentDirectorHomePage = (function (_super) {
-    __extends(TournamentDirectorHomePage, _super);
-    function TournamentDirectorHomePage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.tournaments = [];
-        return _this;
+var HomePage = (function (_super) {
+    __extends(HomePage, _super);
+    function HomePage() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    TournamentDirectorHomePage.prototype.generateGetAllTournamentsProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            _this.tournaments = result.data;
-        };
+    HomePage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad HomePage');
     };
-    TournamentDirectorHomePage.prototype.ionViewDidLoad = function () {
-        this.pssApi.getAllTournaments(this.eventId)
-            .subscribe(this.generateGetAllTournamentsProcessor());
-        console.log('ionViewDidLoad TournamentDirectorHomePage');
-    };
-    TournamentDirectorHomePage = __decorate([
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('myTabs'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Tabs */])
+    ], HomePage.prototype, "tabRef", void 0);
+    HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-tournament-director-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-director-home/tournament-director-home.html"*/'<!--\n  Generated template for the TournamentDirectorHomePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n  -->\n<!--<bobo>-->\n<ion-header>\n<ion-navbar>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n    <button [navPush]="\'ResultsPage\'" icon-only ion-button>Results</button>\n    <button icon-only ion-button>Queues</button>\n    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>\n  </ion-buttons>\n</ion-navbar>\n</ion-header>\n<!--</bobo>-->\n\n\n\n\n\n\n\n\n\n\n\n\n<ion-content padding>\n  <button margin ion-button [navPush]="\'CreateTournamentPage\'" [navParams]="buildNavParams({entityType:\'tournament\',actionType:\'create\'})" >Create Tournament</button>\n\n  <ion-list>\n    <ng-container *ngFor="let tournament of tournaments">\n    <ion-list-header>\n      <h1>{{tournament.tournament_name}}</h1>\n    </ion-list-header>\n    <ion-item>\n      <ion-icon item-start></ion-icon>\n      <button ion-button [navPush]="\'TournamentMachinesPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id})">Add Machines To Tournament</button>\n      <br>\n      <button ion-button >Edit Tournament</button>\n      <br>\n      <button ion-button ><ion-icon item-start [name]="tournament.active?\'play\':\'pause\'"></ion-icon>Toggle Tournament</button>      \n    </ion-item>    \n    </ng-container>\n  </ion-list>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-director-home/tournament-director-home.html"*/,
+            selector: 'page-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/home/home.html"*/'<!--\n  Generated template for the HomePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<!--<bobo>-->\n<ion-header>\n<ion-navbar>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n    <button [navPush]="\'ResultsPage\'" icon-only ion-button>Results</button>\n    <button icon-only ion-button>Queues</button>\n    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>\n  </ion-buttons>\n</ion-navbar>\n</ion-header>\n<!--</bobo>-->\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<ion-content padding>\n<!--  {{eventId}} --   {{eventName}}\n  Home Page\n  <br>\n  <a (click)="goToResults()">Results</a>\n  <br>\n  <button ion-button [navPush]="\'SuccessPage\'" [navParams]="buildNavParams({})">GO to success</button>-->\nThis is the standard homepage.<br>\nPlease login <span showWhen=\'mobile\'>using the <b>Quick Links</b> button</span><br>\nOther stuff goes here.<br>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/home/home.html"*/,
         })
-    ], TournamentDirectorHomePage);
-    return TournamentDirectorHomePage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], HomePage);
+    return HomePage;
+}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=tournament-director-home.js.map
+//# sourceMappingURL=home.js.map
+
+/***/ }),
+
+/***/ 709:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CustomHeaderComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_event_auth_event_auth__ = __webpack_require__(150);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(44);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+/**
+ * Generated class for the CustomHeaderComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+
+
+
+var CustomHeaderComponent = (function () {
+    function CustomHeaderComponent(eventAuth, platform) {
+        this.eventAuth = eventAuth;
+        this.platform = platform;
+        console.log('Hello CustomHeaderComponent Component');
+        this.text = 'Hello World';
+    }
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Object)
+    ], CustomHeaderComponent.prototype, "eventId", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Object)
+    ], CustomHeaderComponent.prototype, "eventName", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Object)
+    ], CustomHeaderComponent.prototype, "title", void 0);
+    CustomHeaderComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'custom-headers',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/'<!-- Generated template for the CustomHeaderComponent component -->\n<ion-navbar showWhen=\'mobile\' class=\'fakeIos\'>  \n    <ion-title class=\'fakeIosTitle\'>\n      {{title}}\n    </ion-title>    \n</ion-navbar>\n<ion-navbar hideWhen=\'mobile\'>\n  <ion-title>Pss</ion-title>\n  <ion-buttons end hideWhen=\'mobile\'>    \n    <button icon-only ion-button [navPush]="\'LoginPage\'" [navParams]="{eventId:eventId,eventName:eventName}" >Login</button>\n    <button icon-only ion-button>Results</button>\n    <button icon-only ion-button>Queues</button>\n    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button (click)="menuNav(getRolePage())">{{eventAuth.getRoleName(eventId)}}</button>\n  </ion-buttons>\n</ion-navbar>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__providers_event_auth_event_auth__["a" /* EventAuthProvider */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* Platform */]])
+    ], CustomHeaderComponent);
+    return CustomHeaderComponent;
+}());
+
+//# sourceMappingURL=custom-header.js.map
 
 /***/ })
 

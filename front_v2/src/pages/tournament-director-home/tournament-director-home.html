@@ -34,7 +34,7 @@
 
 
 <ion-content padding>
-  <button margin ion-button [navPush]="'CreateTournamentPage'" [navParams]="buildNavParams({entityType:'tournament',actionType:'create'})" >Create Tournament</button>
+  <button margin ion-button [navPush]="'CreateTournamentPage'" [navParams]="buildNavParams({actionType:'create'})" >Create Tournament</button>
 
   <ion-list>
     <ng-container *ngFor="let tournament of tournaments">

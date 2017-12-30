@@ -17,7 +17,7 @@
 
 
 <ion-content padding>
-  <button margin ion-button [navPush]="'CreateEventPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true,'wizardModeIndex':0,'wizardModeStack':'eventOwnerEventCreate'})" >Create Event</button>
+  <button margin ion-button [navPush]="'CreateEventPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})" >Create Event</button>
   <!--  <button ion-button [navPush]="'CreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create',targetEventId:1,eventName:'poop'}" >Create Tournament</button> -->
   <ion-list>
     <ng-container *ngFor="let event of eventsAndTournaments">
@@ -32,7 +32,7 @@
     <ion-item *ngFor="let tournament of event.tournaments">
       <ion-icon item-start></ion-icon>{{tournament.tournament_name}}
       <br>
-      <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id})">Add Machines To Tournament</button>
+      <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id})">Add Machines To Tournament</button>
       <br>
       <button ion-button >Edit Tournament</button>
       <br>

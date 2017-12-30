@@ -1,4 +1,4 @@
-webpackJsonp([15],{
+webpackJsonp([16],{
 
 /***/ 150:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -115,7 +115,7 @@ var map = {
 	],
 	"../pages/event-owner-home/event-owner-home.module": [
 		679,
-		13
+		14
 	],
 	"../pages/event-owner-login/event-owner-login.module": [
 		680,
@@ -123,43 +123,47 @@ var map = {
 	],
 	"../pages/event-owner-tabs/event-owner-tabs.module": [
 		681,
-		14
+		15
 	],
-	"../pages/event-select/event-select.module": [
+	"../pages/event-owner-tournament-machines/event-owner-tournament-machines.module": [
 		682,
-		12
-	],
-	"../pages/home/home.module": [
-		683,
 		5
 	],
-	"../pages/login/login.module": [
+	"../pages/event-select/event-select.module": [
+		683,
+		13
+	],
+	"../pages/home/home.module": [
 		684,
-		4
-	],
-	"../pages/quick-links/quick-links.module": [
-		685,
-		11
-	],
-	"../pages/results/results.module": [
-		686,
-		10
-	],
-	"../pages/success/success.module": [
-		687,
-		9
-	],
-	"../pages/tabs/tabs.module": [
-		688,
-		8
-	],
-	"../pages/tournament-director-home/tournament-director-home.module": [
-		689,
 		7
 	],
-	"../pages/tournament-machines/tournament-machines.module": [
-		690,
+	"../pages/login/login.module": [
+		685,
 		6
+	],
+	"../pages/quick-links/quick-links.module": [
+		686,
+		12
+	],
+	"../pages/results/results.module": [
+		687,
+		11
+	],
+	"../pages/success/success.module": [
+		688,
+		10
+	],
+	"../pages/tabs/tabs.module": [
+		689,
+		9
+	],
+	"../pages/tournament-director-home/tournament-director-home.module": [
+		690,
+		8
+	],
+	"../pages/tournament-machines/tournament-machines.module": [
+		691,
+		4
 	]
 };
 function webpackAsyncContext(req) {
@@ -276,11 +280,13 @@ var PssApiProvider = (function () {
         this.loginUser = this.generate_api_call('loginUser', this.basePssUrl + "/auth/pss_event_user/login/:arg", 'post');
         this.loginEventOwner = this.generate_api_call('loginEventOwner', this.basePssUrl + "/auth/pss_user/login", 'post');
         this.createEvent = this.generate_api_call('createEvent', this.basePssUrl + "/event", 'post');
+        this.createWizardEvent = this.generate_api_call('createWizardEvent', this.basePssUrl + "/wizard/event/tournament/tournament_machines", 'post');
         this.createTournament = this.generate_api_call('createTournament', this.basePssUrl + "/:arg/tournament", 'post');
         this.addTournamentMachine = this.generate_api_call('addTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'post');
         this.editTournamentMachine = this.generate_api_call('editTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'put');
         this.getAllEvents = this.generate_api_call('getAllEvents', this.basePssUrl + "/events", 'get');
-        this.getAllMachines = this.generate_api_call('getAllMachines', this.basePssUrl + "/:arg/:arg/tournament_machines/machines", 'get');
+        this.getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines', this.basePssUrl + "/:arg/:arg/tournament_machines/machines", 'get');
+        this.getAllMachines = this.generate_api_call('getAllMachines', this.basePssUrl + "/machines", 'get');
         this.getAllTournaments = this.generate_api_call('getAllTournaments', this.basePssUrl + "/:arg/tournaments", 'get');
         this.getAllEventsAndTournaments = this.generate_api_call('getAllEventsAndTournaments', this.basePssUrl + "/events/tournaments", 'get');
         console.log('Hello PssApiProvider Provider');
@@ -473,12 +479,13 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {}, {
                     links: [
-                        { loadChildren: '../pages/create-event/create-event.module#CreateEventPageModule', name: 'CreateEventPage', segment: 'CreateEventPage/:eventId/:actionType', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/create-tournament/create-tournament.module#CreateTournamentPageModule', name: 'CreateTournamentPage', segment: 'CreateTournament/:targetEventId/:entityType/:actionType', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/event-owner-create-tournament/event-owner-create-tournament.module#EventOwnerCreateTournamentPageModule', name: 'EventOwnerCreateTournamentPage', segment: 'EventOwnerCreateTournament/:eventId/:entityType/:actionType', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/create-event/create-event.module#CreateEventPageModule', name: 'CreateEventPage', segment: 'CreateEventPage/:actionType/:wizardMode', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/create-tournament/create-tournament.module#CreateTournamentPageModule', name: 'CreateTournamentPage', segment: 'CreateTournament/:eventId/:actionType', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-create-tournament/event-owner-create-tournament.module#EventOwnerCreateTournamentPageModule', name: 'EventOwnerCreateTournamentPage', segment: 'EventOwnerCreateTournament/:eventId/:actionType/:wizardMode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-home/event-owner-home.module#EventOwnerHomePageModule', name: 'EventOwnerHomePage', segment: 'event-owner-home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-login/event-owner-login.module#EventOwnerLoginPageModule', name: 'EventOwnerLoginPage', segment: 'event-owner-login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-tabs/event-owner-tabs.module#EventOwnerTabsPageModule', name: 'EventOwnerTabsPage', segment: 'event-owner-tabs', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-tournament-machines/event-owner-tournament-machines.module#EventOwnerTournamentMachinesPageModule', name: 'EventOwnerTournamentMachinesPage', segment: 'EventOwnerTournamentMachines/:eventId/:tournamentId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-select/event-select.module#EventSelectPageModule', name: 'EventSelectPage', segment: 'event-select', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'HomePage/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login/:eventId', priority: 'low', defaultHistory: [] },

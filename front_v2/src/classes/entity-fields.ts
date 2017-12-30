@@ -3,12 +3,13 @@ export class EntityFields  {
     fieldsArray = [];
     constructor(public entityType:string) {
     }
-    setField(fieldName,fieldType,basic,advanced){
+    setField(fieldName,fieldType,basic,advanced,description){
         let field = {
             fieldName:fieldName,
             fieldType:fieldType,
             advanced:advanced,
-            basic:basic
+            basic:basic,
+            description:description
         }
         this.fields[fieldName]=field
         //this.fieldsArray.push(field);

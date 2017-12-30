@@ -84,21 +84,21 @@ export class CreateEditEntityComponent extends PssPageComponent {
         console.log('in create/edit....'+this.eventId)
         
         if(this.entityType=="event"){            
-            this.entityFields.setField('name','text',false,true);
-            this.entityFields.setField('number_unused_tickets_allowed','text',false,true);
+            this.entityFields.setField('name','text',false,true,{short:"",long:""});
+            this.entityFields.setField('number_unused_tickets_allowed','text',false,true,{short:"",long:""});
             if (this.actionType=="edit"){
                 //get the entity
             }
         }
         if(this.entityType=="tournament"){
             console.log('in tournament create....')
-            this.entityFields.setField('tournament_name','text',false,true);
-            this.entityFields.setField('multi_division_tournament','boolean',false,true);
-            this.entityFields.setField('division_count','text',false,true);
+            this.entityFields.setField('tournament_name','text',false,true, {short:"",long:""});
+            this.entityFields.setField('multi_division_tournament','boolean',false,true, {short:"",long:""});
+            this.entityFields.setField('division_count','text',false,true, {short:"",long:""});
             this.entityFields.setDependency('division_count','multi_division_tournament',true)
-            this.entityFields.setField('queuing','boolean',false,true);
-            this.entityFields.setField('manually_set_price','text',false,true);
-            this.entityFields.setField('number_of_qualifiers','text',false,true);
+            this.entityFields.setField('queuing','boolean',false,true, {short:"",long:""});
+            this.entityFields.setField('manually_set_price','text',false,true, {short:"",long:""});
+            this.entityFields.setField('number_of_qualifiers','text',false,true, {short:"",long:""});
             
             if (this.actionType=="edit"){
                 //get the entity

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
-import { CreateEditEntityComponent } from '../../components/create-edit-entity/create-edit-entity'
+import { TournamentComponent } from '../../components/tournament/tournament'
 
 
 /**
@@ -11,14 +11,15 @@ import { CreateEditEntityComponent } from '../../components/create-edit-entity/c
  */
 
 @IonicPage({
-    segment:'CreateTournament/:targetEventId/:entityType/:actionType'
+    segment:'CreateTournament/:eventId/:actionType'
 })
 @Component({
   selector: 'page-create-tournament',
     templateUrl: '../../components/create-edit-entity/create-edit-entity.html'
 })
-export class CreateTournamentPage extends CreateEditEntityComponent {
-    entityType:string='tournament';
+export class CreateTournamentPage extends TournamentComponent {
+    destPageAfterSuccess:string="TournamentDirectorHomePage";
+    wizardModeNextPage:string="TournamentMachinesPage";        
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad CreateTournamentPage');

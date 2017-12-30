@@ -67,12 +67,14 @@ export class PssApiProvider {
     loginEventOwner = this.generate_api_call('loginEventOwner',this.basePssUrl+"/auth/pss_user/login",'post');
     
     createEvent = this.generate_api_call('createEvent',this.basePssUrl+"/event",'post');
+    createWizardEvent = this.generate_api_call('createWizardEvent',this.basePssUrl+"/wizard/event/tournament/tournament_machines",'post');    
     createTournament = this.generate_api_call('createTournament',this.basePssUrl+"/:arg/tournament",'post');
     addTournamentMachine = this.generate_api_call('addTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'post');
     editTournamentMachine = this.generate_api_call('editTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'put');
     
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
-    getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/:arg/:arg/tournament_machines/machines",'get');
+    getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines/machines",'get');
+    getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/machines",'get');    
     getAllTournaments = this.generate_api_call('getAllTournaments',this.basePssUrl+"/:arg/tournaments",'get');
     
     getAllEventsAndTournaments = this.generate_api_call('getAllEventsAndTournaments',this.basePssUrl+"/events/tournaments",'get');

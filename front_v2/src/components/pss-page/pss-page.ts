@@ -29,8 +29,10 @@ export class PssPageComponent {
         console.log('Hello PssPageComponent Component');
     }
     buildNavParams(params){
-        params['eventId'] = this.eventId;
-        params['eventName'] = this.eventName;
+        if(this.eventId!=null&&this.eventId!=undefined){            
+            params['eventId'] = this.eventId;
+            params['eventName'] = this.eventName;            
+        }        
         return params;
     }
     getHomePageString(){        

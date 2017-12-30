@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
-import { CreateEditEntityComponent } from '../../components/create-edit-entity/create-edit-entity'
+import { TournamentComponent } from '../../components/tournament/tournament'
 
 /**
  * Generated class for the EventOwnerCreateTournamentPage page.
@@ -10,15 +10,15 @@ import { CreateEditEntityComponent } from '../../components/create-edit-entity/c
  */
 
 @IonicPage({
-    segment:'EventOwnerCreateTournament/:eventId/:entityType/:actionType'
+    segment:'EventOwnerCreateTournament/:eventId/:actionType/:wizardMode'
 })
 @Component({
     selector: 'page-event-owner-create-tournament',
     templateUrl: '../../components/create-edit-entity/create-edit-entity.html'
 })
-export class EventOwnerCreateTournamentPage extends CreateEditEntityComponent{
-    entityType:string='tournament';
-    destPageAfterSuccess:string = "EventOwnerHomePage";
+export class EventOwnerCreateTournamentPage extends TournamentComponent{
+    destPageAfterSuccess:string="EventOwnerHomePage";
+    wizardModeNextPage:string="EventOwnerTournamentMachinesPage";        
     ionViewDidLoad() {
         console.log('ionViewDidLoad EventOwnerCreateTournamentPage');
     }

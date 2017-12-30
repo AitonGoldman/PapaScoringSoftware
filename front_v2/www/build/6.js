@@ -1,15 +1,14 @@
 webpackJsonp([6],{
 
-/***/ 690:
+/***/ 685:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TournamentMachinesPageModule", function() { return TournamentMachinesPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginPageModule", function() { return LoginPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_machines__ = __webpack_require__(711);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__ = __webpack_require__(348);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login__ = __webpack_require__(697);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19,29 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
-var TournamentMachinesPageModule = (function () {
-    function TournamentMachinesPageModule() {
+var LoginPageModule = (function () {
+    function LoginPageModule() {
     }
-    TournamentMachinesPageModule = __decorate([
+    LoginPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__tournament_machines__["a" /* TournamentMachinesPage */],
+                __WEBPACK_IMPORTED_MODULE_2__login__["a" /* LoginPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tournament_machines__["a" /* TournamentMachinesPage */]),
-                __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__["a" /* AutoCompleteModule */]
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__login__["a" /* LoginPage */]),
             ],
         })
-    ], TournamentMachinesPageModule);
-    return TournamentMachinesPageModule;
+    ], LoginPageModule);
+    return LoginPageModule;
 }());
 
-//# sourceMappingURL=tournament-machines.module.js.map
+//# sourceMappingURL=login.module.js.map
 
 /***/ }),
 
-/***/ 691:
+/***/ 692:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -86,8 +83,10 @@ var PssPageComponent = (function () {
         console.log('Hello PssPageComponent Component');
     }
     PssPageComponent.prototype.buildNavParams = function (params) {
-        params['eventId'] = this.eventId;
-        params['eventName'] = this.eventName;
+        if (this.eventId != null && this.eventId != undefined) {
+            params['eventId'] = this.eventId;
+            params['eventName'] = this.eventName;
+        }
         return params;
     };
     PssPageComponent.prototype.getHomePageString = function () {
@@ -142,17 +141,76 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 711:
+/***/ 693:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentMachinesPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SuccessSummary; });
+var SuccessSummary = (function () {
+    //title:string = null;
+    //firstLine:string = null;
+    //secondLine:string = null;
+    function SuccessSummary(title, firstLine, secondLine) {
+        this.title = title;
+        this.firstLine = firstLine;
+        this.secondLine = secondLine;
+    }
+    SuccessSummary.prototype.getTitle = function () {
+        return this.title;
+    };
+    SuccessSummary.prototype.getFirstLine = function () {
+        return this.firstLine;
+    };
+    SuccessSummary.prototype.getSecondLine = function () {
+        return this.secondLine;
+    };
+    return SuccessSummary;
+}());
+
+//# sourceMappingURL=success-summary.js.map
+
+/***/ }),
+
+/***/ 694:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SuccessButton; });
+var SuccessButton = (function () {
+    function SuccessButton(title, targetPage, params, targetTabIndex) {
+        this.title = title;
+        this.targetPage = targetPage;
+        this.params = params;
+        this.targetTabIndex = targetTabIndex;
+    }
+    SuccessButton.prototype.getTitle = function () {
+        return this.title;
+    };
+    SuccessButton.prototype.getTargetPage = function () {
+        return this.targetPage;
+    };
+    SuccessButton.prototype.getTargetTabIndex = function () {
+        return this.targetTabIndex;
+    };
+    SuccessButton.prototype.getParams = function () {
+        return this.params;
+    };
+    return SuccessButton;
+}());
+
+//# sourceMappingURL=SuccessButton.js.map
+
+/***/ }),
+
+/***/ 697:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(691);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(150);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(692);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(693);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(694);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -169,148 +227,68 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
 
 
 
 
 /**
- * Generated class for the TournamentMachinesPage page.
+ * Generated class for the LoginPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var TournamentMachinesPage = (function (_super) {
-    __extends(TournamentMachinesPage, _super);
-    function TournamentMachinesPage(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, toastCtrl, actionSheetCtrl) {
-        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform) || this;
-        _this.autoCompleteProvider = autoCompleteProvider;
-        _this.eventAuth = eventAuth;
-        _this.navParams = navParams;
-        _this.navCtrl = navCtrl;
-        _this.appCtrl = appCtrl;
-        _this.pssApi = pssApi;
-        _this.platform = platform;
-        _this.toastCtrl = toastCtrl;
-        _this.actionSheetCtrl = actionSheetCtrl;
-        _this.sliding = true;
-        _this.selectedMachines = [];
+var LoginPage = (function (_super) {
+    __extends(LoginPage, _super);
+    function LoginPage() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.loginInfo = { 'username': null, 'password': null };
         return _this;
     }
-    TournamentMachinesPage.prototype.generateGetAllMachinesProcessor = function () {
+    LoginPage.prototype.generateLoginUserProcessor = function (successButton) {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.autoCompleteProvider.setMachines(result.data.machines_list);
-            _this.selectedMachines = result.data.tournament_machines_list;
+            _this.eventAuth.setEventUserLoggedIn(_this.eventId, result.data);
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](result.data.username + ' has logged in.', null, null);
+            var targetPage = null;
+            var targetTabIndex = null;
+            if (_this.platform.is('mobile')) {
+                console.log('going mobile');
+                targetTabIndex = 0;
+            }
+            if (successButton == null) {
+                targetPage = _this.getHomePageString();
+                successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', targetPage, _this.buildNavParams({}), targetTabIndex);
+            }
+            //            this.appCtrl.getRootNav().push("SuccessPage",
+            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
+                'successButtons': [successButton] }));
         };
     };
-    TournamentMachinesPage.prototype.generateAddEditTournamentMachineProcessor = function (message_string, action) {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            var toast = _this.toastCtrl.create({
-                message: message_string,
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true
-            });
-            toast.present();
-            console.log(_this.list);
-            if (action == "add") {
-                _this.selectedMachine = result.data;
-                _this.selectedMachines.push(_this.selectedMachine);
-            }
-        };
+    LoginPage.prototype.loginUser = function () {
+        this.pssApi.loginUser(this.loginInfo, this.eventId)
+            .subscribe(this.generateLoginUserProcessor());
     };
-    TournamentMachinesPage.prototype.onRemove = function (machine) {
-        var _this = this;
-        var actionSheet = this.actionSheetCtrl.create({
-            title: 'Are you SURE you want to remove ' + machine.tournament_machine_name + '?',
-            buttons: [
-                {
-                    text: 'Remove',
-                    role: 'destructive',
-                    handler: function () {
-                        _this.onRemoveConfirmed(machine);
-                        console.log('Destructive clicked');
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    handler: function () {
-                        console.log('Cancel clicked');
-                    }
-                }
-            ]
-        });
-        actionSheet.present();
+    LoginPage.prototype.loginEventOwner = function () {
+        var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', 'EventOwnerHomePage', this.buildNavParams({}), null);
+        this.pssApi.loginEventOwner(this.loginInfo)
+            .subscribe(this.generateLoginUserProcessor(successButton));
     };
-    TournamentMachinesPage.prototype.onRemoveConfirmed = function (machine) {
-        machine.removed = true;
-        this.pssApi.editTournamentMachine(machine, this.eventId)
-            .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name + " has been removed!", "edit"));
+    LoginPage.prototype.ionViewWillLoad = function () {
+        console.log('ionViewDidLoad LoginPage');
+        //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
     };
-    TournamentMachinesPage.prototype.onDisable = function (machine) {
-        machine.active = machine.active == false;
-        var stringDescription = machine.active == true ? "enabled" : "disabled";
-        this.pssApi.editTournamentMachine(machine, this.eventId)
-            .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name + " has been " + stringDescription, "edit"));
-    };
-    TournamentMachinesPage.prototype.onSelect = function () {
-        console.log(this.selectedMachine);
-        this.selectedMachine.tournament_id = this.tournamentId;
-        this.selectedMachine.tournament_machine_name = this.selectedMachine.machine_name;
-        this.pssApi.addTournamentMachine(this.selectedMachine, this.eventId)
-            .subscribe(this.generateAddEditTournamentMachineProcessor(this.selectedMachine.tournament_machine_name + " has been added", "add"));
-    };
-    TournamentMachinesPage.prototype.onFocus = function () {
-        this.selectedMachine = null;
-    };
-    TournamentMachinesPage.prototype.ionViewWillLoad = function () {
-        //this.targetEventId=this.navParams.get('eventId');
-        this.tournamentId = this.navParams.get('tournamentId');
-        this.pssApi.getAllMachines(this.eventId, this.tournamentId)
-            .subscribe(this.generateGetAllMachinesProcessor());
-        console.log('ionViewDidLoad TournamentMachinesPage');
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])('searchbar'),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */])
-    ], TournamentMachinesPage.prototype, "searchbar", void 0);
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["g" /* List */]),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["g" /* List */])
-    ], TournamentMachinesPage.prototype, "list", void 0);
-    TournamentMachinesPage = __decorate([
+    LoginPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-tournament-machines',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-machines/tournament-machines.html"*/'<!--\n  Generated template for the TournamentMachinesPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>TournamentMachines</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <form #myform novalidate>\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedMachine" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n  </form>\n  <br>\n  <ion-list [sliding]="sliding" #list>\n      <ion-item-sliding *ngFor="let machine of selectedMachines">\n        <ion-item *ngIf="machine.removed!=true">\n          <ion-icon [name]="machine.active==true? \'play\' : \'pause\'" ></ion-icon>\n          <button hideWhen=\'mobile\' (click)="onRemove(machine)" ion-button item-end>Remove</button> {{machine.tournament_machine_name}}\n          <button hideWhen=\'mobile\' (click)="onDisable(machine)" ion-button item-end>{{machine.active==true?"Disable":"Enable"}}</button> \n        </ion-item>\n        <ion-item-options *ngIf="machine.removed!=true" side="right">\n          <button round ion-button color="danger">\n            <ion-icon name="archive"></ion-icon>\n            Remove\n          </button>\n          <button round ion-button>\n            <ion-icon name="archive"></ion-icon>\n            {{machine.active==true?"Disable":"Enable"}}\n          </button>\n        </ion-item-options>\n      </ion-item-sliding>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-machines/tournament-machines.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
-            __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* App */],
-            __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* ToastController */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* ActionSheetController */]])
-    ], TournamentMachinesPage);
-    return TournamentMachinesPage;
+            selector: 'page-login',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/'<!--\n  Generated template for the LoginPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n<form #loginForm="ngForm">\n  <ion-item>\n  <ion-label floating>Username</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="loginInfo.username" name="username"></ion-input>\n</ion-item>\n<ion-item>\n  <ion-label floating>Password</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="loginInfo.password" name="password"></ion-input>\n</ion-item>\n<ion-item no-lines>\n  <button [disabled]=\'!loginForm.valid\' ion-button default (click)="loginUser()">Login </button>\n</ion-item>\n</form>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/,
+        })
+    ], LoginPage);
+    return LoginPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=tournament-machines.js.map
+//# sourceMappingURL=login.js.map
 
 /***/ })
 

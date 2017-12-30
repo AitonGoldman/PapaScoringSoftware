@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
-import { EventAuthProvider } from '../../providers/event-auth/event-auth';
+import { reorderArray } from 'ionic-angular';
 
 /**
  * Generated class for the QuickLinksPage page.
@@ -16,24 +16,21 @@ import { EventAuthProvider } from '../../providers/event-auth/event-auth';
   templateUrl: 'quick-links.html',
 })
 export class QuickLinksPage extends PssPageComponent {  
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public appCtrl: App,              
-              public eventAuth: EventAuthProvider) {
-      super(eventAuth,navParams);      
-  }
+    reorderEnabled:boolean = false;
+    items=[{'title':'Results - Classics I',
+            'icon':'md-clipboard'},
+           {'title':'Results - Main A',
+            'icon':'md-clipboard'},
+           {'title':'Queues - Classics I',
+            'icon':'git-branch'},
+           {'title':'Queues - Classics I',
+            'icon':'git-branch'},           
+          ];
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad QuickLinksPage');
   }
-    goToPage(page,tabIndex) {
-        if (page){
-            let params = this.buildNavParams({});
-            console.log(params);
-            this.appCtrl.getRootNav().push(page, params);
-        } else {
-            this.navCtrl.parent.select(tabIndex);
-        }
-        
-    }
+    reorderItems(indexes) {
+        this.items = reorderArray(this.items, indexes);
+    }    
 }

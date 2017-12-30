@@ -5,9 +5,9 @@
   Ionic pages and navigation.
 -->
 <ion-tabs #myTabs (ionChange)="onTabChange($event)">
-  <ion-tab [rootParams]="buildNavParams({})" [root]="'HomePage'" tabIcon="md-home" [tabTitle]="roleName"></ion-tab>  
+  <ion-tab [rootParams]="buildNavParams({})" [root]="getHomePageString()" tabIcon="md-home" [tabTitle]="this.eventAuth.getRoleName(this.eventId)?this.eventAuth.getRoleName(this.eventId) : 'Home'"></ion-tab>  
   <ion-tab [rootParams]="buildNavParams({})" [root]="'ResultsPage'" tabIcon="md-clipboard" tabTitle="Results"></ion-tab>
   <ion-tab [rootParams]="buildNavParams({})" [root]="'QueuesPage'" tabIcon="md-git-branch" tabTitle="Queues"></ion-tab>
-  <ion-tab [rootParams]="buildNavParams({})" [root]="'QuickLinksPage'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>
+  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="'QuickLinksPage'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>
 </ion-tabs>
 

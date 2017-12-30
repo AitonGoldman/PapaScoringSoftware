@@ -10,5 +10,6 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-<button ion-button [navPush]="nextPage" [navParams]="{'eventId':1,'eventName':'poopEvent'}">GO to event 1 </button>
+  <button ion-button [navPush]="'EventOwnerLoginPage'">Login as event owner</button>
+  <button *ngFor="let event of events" ion-button [navPush]="nextPage" [navParams]="{'eventId':event.event_id,'eventName':event.name}">GO to event {{event.name}} </button>
 </ion-content>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
+import { PssPageComponent } from '../../components/pss-page/pss-page'
 
 /**
  * Generated class for the EventSelectPage page.
@@ -13,18 +14,28 @@ import { Platform, IonicPage, NavController, NavParams } from 'ionic-angular';
   selector: 'page-event-select',
   templateUrl: 'event-select.html',
 })
-export class EventSelectPage {
+export class EventSelectPage extends PssPageComponent {
     nextPage:string = null;
-    constructor(public navCtrl: NavController, public navParams: NavParams,
-                platform: Platform) {
-            if(platform.is('mobile') == true){          
-                this.nextPage='TabsPage';    
-            } else {          
-                this.nextPage='HomePage';         
-            }                        
+    events = [];
+
+    generateGetAllEventsProcessor(){
+        return (result) => {            
+            if(result == null){
+                return;
+            }
+            this.events=result.data;
+        };
     }
     
-    ionViewDidLoad() {
+    ionViewWillLoad() {
+        this.pssApi.getAllEvents({})
+            .subscribe(this.generateGetAllEventsProcessor())    
+        
+        if(this.platform.is('mobile') == true){          
+            this.nextPage='TabsPage';    
+        } else {          
+            this.nextPage=this.getHomePageString();         
+        }                                
         console.log('ionViewDidLoad EventSelectPage');
     }
 

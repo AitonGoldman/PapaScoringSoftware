@@ -9,11 +9,7 @@
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve",
-    "ionic:build:before": "cp test.txt www/test.txt",
-    "ionic:watch:before": "gulp",
-    "ionic:watch:after": "gulp alldone"
-      
+    "ionic:serve": "ionic-app-scripts serve"
   },
   "dependencies": {
     "@angular/common": "5.0.3",
@@ -39,6 +35,7 @@
     "io": "1.0.0",
     "ionic-angular": "3.9.2",
     "ionic-plugin-keyboard": "^2.2.1",
+    "ionic2-auto-complete": "^1.6.2-alpha",
     "ionicons": "3.0.0",
     "replace-in-file": "^3.1.0",
     "rxjs": "5.5.2",

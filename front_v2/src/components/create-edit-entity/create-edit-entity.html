@@ -1,0 +1,50 @@
+<!-- Generated template for the CreateEditEntityComponent component -->
+<!--<bobo>-->
+<ion-header>
+  <ion-navbar>  
+    <ion-title showWhen='mobile'>
+      {{title}}
+    </ion-title>    
+    <ion-title hideWhen='mobile'>Pss</ion-title>
+    <ion-buttons end hideWhen='mobile'>
+      <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>
+      <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
+      <button [navPush]="'ResultsPage'" icon-only ion-button>Results</button>
+      <button icon-only ion-button>Queues</button>
+      <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<!--</bobo>-->
+
+<ion-content>
+  <form #createEditForm="ngForm">
+    <ion-list>
+      <div margin>
+        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>
+      </div>
+
+      <ng-container *ngFor="let entityField of entityFields.getFieldsArray()">
+        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">
+        <ion-item-divider color="light" text-wrap>  {{entityDescriptions[entityFields.entityType][entityField.fieldName].long}} </ion-item-divider>
+        <ng-container *ngIf="entityField.fieldType=='text'" >
+          
+          <ion-item>
+            <ion-icon name="md-create" item-start></ion-icon>
+            <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">
+            </ion-input>    
+          </ion-item>
+        </ng-container>
+        <ng-container *ngIf="entityField.fieldType=='boolean'">          
+          <ion-item>
+            <ion-label>{{entityDescriptions[entityFields.entityType][entityField.fieldName].short}}</ion-label>
+            <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       
+          </ion-item>
+        </ng-container>
+      </ng-container>        
+      </ng-container>
+    </ion-list>
+    <button [disabled]='!createEditForm.valid' ion-button default (click)="processEntity()">Apply</button>
+  </form>  
+</ion-content>
+

@@ -1,17 +1,79 @@
+<!--<bobo>-->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title></ion-title>
-  </ion-navbar>
-
+<ion-navbar>  
+    <ion-title showWhen='mobile'>
+      {{title}}
+    </ion-title>    
+  <ion-title hideWhen='mobile'>Pss</ion-title>
+  <ion-buttons end hideWhen='mobile'>
+    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>
+    <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
+    <button [navPush]="'ResultsPage'" icon-only ion-button>Results</button>
+    <button icon-only ion-button>Queues</button>
+    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>
+  </ion-buttons>
+</ion-navbar>
 </ion-header>
+<!--</bobo>-->
 
-<ion-content padding>
-<ion-list>
-  <ion-list-header>Ionic</ion-list-header>
-  <button ion-item [navPush]="'LoginPage'" [navParams]="buildNavParams({})">Login</button>
-  <button ion-item (click)="goToPage(null,1)">Results</button>
-  <button ion-item (click)="goToPage(null,2)">Queues</button>
-</ion-list>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ion-content>
+
+  <ion-list>
+    <ion-list-header>Jump To...
+      <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>
+    </ion-list-header>
+      <button ion-item detail-push [navPush]="'LoginPage'" [navParams]="buildNavParams({})">
+        <ion-icon name="person" item-end></ion-icon>Login
+      </button>
+      <button ion-item detail-push (click)="pushRootPage('EventSelectPage')">
+        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event
+      </button>      
+    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      
+    <button *ngFor="let item of items"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
+    </ion-item-group>
+  </ion-list>
 
 </ion-content>

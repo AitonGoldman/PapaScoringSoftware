@@ -1,7 +1,5 @@
 import { ViewChild, Component } from '@angular/core';
-import { Tabs, PopoverController, IonicPage, NavController, NavParams } from 'ionic-angular';
-import { TitleServiceProvider } from '../../providers/title-service/title-service';
-import { EventAuthProvider } from '../../providers/event-auth/event-auth';
+import { Tabs, IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 
 /**
@@ -19,17 +17,10 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 export class TabsPage extends PssPageComponent {
     @ViewChild('myTabs') tabRef: Tabs;
     roleName:string = "blah";    
-    constructor(public navCtrl: NavController,
-                public navParams: NavParams,
-                public titleService: TitleServiceProvider,
-                public popoverCtrl: PopoverController,                
-                public eventAuth: EventAuthProvider) {
-        super(eventAuth,navParams);
-        console.log('in tabs, event id is ... '+this.eventId);
+    ionViewWillLoad() {
         let roleName = this.eventAuth.getRoleName(this.eventId);
         this.roleName = roleName ? roleName : 'Home'
-    }
-    ionViewDidLoad() {
+
         console.log('ionViewDidLoad TabsPage');
     }
     // presentPopover(myEvent) {
@@ -38,11 +29,17 @@ export class TabsPage extends PssPageComponent {
     //         ev: myEvent     
     //     });
     // }
-    
-    onTabChange(event){        
-        if (this.tabRef.getByIndex(event.index).canGoBack()){
-            this.tabRef.getByIndex(event.index).first();
-        }                
+    onTabSelect(){
+        console.log('selected a tab!');
     }
-
+    onTabChange(event){        
+        console.log('changed a tab!');
+        if (this.tabRef.getByIndex(event.index).canGoBack()){
+            this.tabRef.getByIndex(event.index).popToRoot({animate:false});
+        }
+        let previousTab = this.tabRef.previousTab(false);
+        if (previousTab && previousTab.canGoBack()){
+            this.tabRef.previousTab().popToRoot({animate:false});
+        }
+    }
 }

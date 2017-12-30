@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
-import { EventAuthProvider } from '../../providers/event-auth/event-auth';
-import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
 
@@ -17,21 +15,13 @@ import { SuccessButton } from '../../classes/SuccessButton';
     segment:'login/:eventId'
 })
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html',
+    selector: 'page-login',
+    templateUrl: 'login.html',
 })
 export class LoginPage extends PssPageComponent {    
     loginInfo:any = {'username':null,'password':null}
-    constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public appCtrl: App,
-              public eventAuth: EventAuthProvider,
-              public pssApi: PssApiProvider) {
-      super(eventAuth,navParams);
-      console.log('in login, event id is ... '+this.eventId);
-  }
 
-    generateLoginUserProcessor(){
+    generateLoginUserProcessor(successButton?){
         return (result) => {
             if(result == null){
                 return;
@@ -40,22 +30,41 @@ export class LoginPage extends PssPageComponent {
             let successSummary = new SuccessSummary(result.data.username+' has logged in.',
                                                     null,
                                                     null);
-            let successButton = new SuccessButton('Go Home',
-                                                  'HomePage',
-                                                  {});
+            let targetPage=null;
+            let targetTabIndex=null;
+            if(this.platform.is('mobile')){
+                console.log('going mobile')
+                targetTabIndex=0;
+            }            
+            if(successButton==null){
+                targetPage=this.getHomePageString();
+                successButton = new SuccessButton('Go Home',
+                                                      targetPage,
+                                                      this.buildNavParams({}),
+                                                      targetTabIndex);
+                
+            }
             //            this.appCtrl.getRootNav().push("SuccessPage",
             this.navCtrl.push("SuccessPage",            
-                                           this.buildNavParams({'successSummary':successSummary,
-                                                                'successButtons':[successButton]}));
+                              this.buildNavParams({'successSummary':successSummary,
+                                                   'successButtons':[successButton]}));
         };
-    }
+    }    
     loginUser(){
-        console.log('calling login...');
         this.pssApi.loginUser(this.loginInfo,this.eventId)
-            .subscribe(this.generateLoginUserProcessor())    
+            .subscribe(this.generateLoginUserProcessor())            
     }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
-    //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
-  }
+    loginEventOwner(){
+        let successButton = new SuccessButton('Go Home',
+                                              'EventOwnerHomePage',
+                                              this.buildNavParams({}),null);
+
+        this.pssApi.loginEventOwner(this.loginInfo)
+            .subscribe(this.generateLoginUserProcessor(successButton))            
+    }
+    
+    ionViewWillLoad() {
+        console.log('ionViewDidLoad LoginPage');
+        //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
+    }
 }

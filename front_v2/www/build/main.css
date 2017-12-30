@@ -25701,3 +25701,97 @@ ion-navbar.toolbar {
   min-height: calc(46px + constant(safe-area-inset-bottom));
   min-height: calc(46px + env(safe-area-inset-bottom));
 }
+
+ion-auto-complete {
+  overflow: hidden !important;
+  display: block;
+  width: 90vw;
+  display: inline-block;
+}
+
+ion-auto-complete ion-searchbar {
+  padding: 1px !important;
+}
+
+ion-auto-complete .hidden {
+  display: none;
+}
+
+ion-auto-complete ul {
+  position: absolute;
+  width: inherit;
+  margin-top: 0px;
+  background: #FFF;
+  list-style-type: none;
+  padding: 0px;
+  left: 16px;
+  z-index: 999;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+ion-auto-complete ul li {
+  padding: 15px;
+  border-bottom: 1px solid #c1c1c1;
+}
+
+ion-auto-complete ul ion-auto-complete-item {
+  height: 40px;
+  width: 100%;
+}
+
+ion-auto-complete ul li:last-child {
+  border: none;
+}
+
+ion-auto-complete ul li:hover {
+  cursor: pointer;
+  background: #f1f1f1;
+}
+
+ion-auto-complete {
+  overflow: hidden !important;
+  display: block;
+  width: 90vw;
+  display: inline-block;
+}
+
+ion-auto-complete ion-searchbar {
+  padding: 1px !important;
+}
+
+ion-auto-complete .hidden {
+  display: none;
+}
+
+ion-auto-complete ul {
+  position: absolute;
+  width: inherit;
+  margin-top: 0px;
+  background: #FFF;
+  list-style-type: none;
+  padding: 0px;
+  left: 16px;
+  z-index: 999;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+ion-auto-complete ul li {
+  padding: 15px;
+  border-bottom: 1px solid #c1c1c1;
+}
+
+ion-auto-complete ul ion-auto-complete-item {
+  height: 40px;
+  width: 100%;
+}
+
+ion-auto-complete ul li:last-child {
+  border: none;
+}
+
+ion-auto-complete ul li:hover {
+  cursor: pointer;
+  background: #f1f1f1;
+}

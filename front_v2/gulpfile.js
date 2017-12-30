@@ -10,7 +10,7 @@ gulp.task('alldone', function(){
 gulp.task('default', function() {
     var results = fs.readFileSync("./templates/custom-header-contents.html", "utf-8");    
     const changes = replace.sync({
-        files: ['./src/pages/**/*.html'],
+        files: ['./src/pages/**/*.html','./src/components/**/*.html'],
         from: /\<\!--\<bobo\>--\>[\w\W\n]+\<\!--\<\/bobo\>--\>/g,
         to: results
     });

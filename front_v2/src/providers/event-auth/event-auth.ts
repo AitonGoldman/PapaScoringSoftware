@@ -11,12 +11,17 @@ import { Injectable } from '@angular/core';
 export class EventAuthProvider {
     userEventRoles:any = {};  
     userLoggedInEvents:any = {};
+    eventOwner:boolean = false;
     userName:string = null;
     constructor(public http: HttpClient) {
     console.log('Hello EventAuthProvider Provider');
     }
 
     setEventUserLoggedIn(eventId,userInfo){
+        if(eventId==null){
+            this.eventOwner=true;
+            return;
+        } 
         this.userLoggedInEvents[eventId]=true;
         this.userName=userInfo.username;
         this.setEventRole(eventId,userInfo.roles[0]);
@@ -34,10 +39,16 @@ export class EventAuthProvider {
     }
     
     setEventRole(eventId,role){
-        this.userEventRoles[eventId] = role;
+        if(eventId!=null){            
+            this.userEventRoles[eventId] = role;
+        }
+        
     }
   
     getRoleName(eventId:number){
+        if (this.eventOwner==true){
+            return "eventowner";
+        }
         if (eventId in this.userEventRoles){
             return this.userEventRoles[eventId].event_role_name;
         } else {

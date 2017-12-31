@@ -5,17 +5,19 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>TournamentMachines</ion-title>
+    <ion-title></ion-title>
+    <ion-buttons end hideWhen="mobile">
+      <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
+      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]='buildNavParams({})'>Home</button>    
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 <simple-notifications  [options]="{position:['top','right']}"></simple-notifications>
 <ion-content padding>
   <form #myform="ngForm" novalidate>
-    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedMachine" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>
+    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedMachine" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>
   </form>
   <br>
   <ion-list [sliding]="sliding" #list>

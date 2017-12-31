@@ -47,28 +47,62 @@ export class TournamentComponent extends PssPageComponent{
     destPageAfterSuccess:string;
     wizardMode:any=null;
     wizardModeNextPage:string;
+    entityFieldsArray:any=null;
+    advanced:boolean=false;
     
     ionViewWillLoad() {        
         this.actionType=this.navParams.get('actionType');        
         this.entityFields = new EntityFields("tournament");
         this.wizardMode = this.navParams.get('wizardMode');
         this.eventId = this.navParams.get('eventId');
+        this.tournamentId = this.navParams.get('tournamentId');
+        
         let wizardEntity = this.navParams.get('wizardEntity');
         if(wizardEntity != null){
             this.wizardEntity = wizardEntity;
         }
 
-        this.entityFields.setField('tournament_name','text',false,true, tournamentDescriptions['tournament_name']);
-        this.entityFields.setField('multi_division_tournament','boolean',false,true, tournamentDescriptions['multi_division_tournament']);
-        this.entityFields.setField('division_count','text',false,true, tournamentDescriptions['division_count']);
+        this.entityFields.setField('tournament_name','text',true,false, tournamentDescriptions['tournament_name']);
+        this.entityFields.setField('multi_division_tournament','boolean',true,false, tournamentDescriptions['multi_division_tournament']);
+        this.entityFields.setField('division_count','text',true,false, tournamentDescriptions['division_count']);
         this.entityFields.setDependency('division_count','multi_division_tournament',true)
-        this.entityFields.setField('queuing','boolean',false,true, tournamentDescriptions['queuing']);
-        this.entityFields.setField('manually_set_price','text',false,true, tournamentDescriptions['manually_set_price']);
-        this.entityFields.setField('number_of_qualifiers','text',false,true, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFields.setField('queuing','boolean',true,false, tournamentDescriptions['queuing']);
+        this.entityFields.setField('manually_set_price','text',true,false, tournamentDescriptions['manually_set_price']);
+        this.entityFields.setField('number_of_qualifiers','text',true,false, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFieldsArray=this.entityFields.getFieldsArray(this.advanced);
         
         if (this.actionType=="edit"){
-            //get the entity
+            this.pssApi.getTournament(this.eventId,this.tournamentId)
+                .subscribe(this.generateGetTournamentProcessor())                
         }        
+    }
+    generateGetTournamentProcessor(){
+        return (result) => {            
+            if(result == null){
+                return;
+            }
+            this.entity=result.data;            
+        };
+        
+    }
+    
+    onAdvancedChange(){
+        this.entityFieldsArray=this.entityFields.getFieldsArray(this.advanced);        
+    }
+    generateEditTournamentProcessor(){
+        return (result) => {
+            if(result == null){
+                return;
+            }
+            let success_title_string='Tournament '+result.data.tournament_name+' has been edited.';
+            let successSummary = new SuccessSummary(success_title_string,null,null);            
+            let successButton = new SuccessButton('Go Home',
+                                                  this.destPageAfterSuccess,
+                                                  this.buildNavParams({wizardMode:this.wizardMode}));            
+            this.navCtrl.push("SuccessPage",            
+                              this.buildNavParams({'successSummary':successSummary,
+                                                   'successButtons':[successButton]}));
+        };
     }
     
     generateCreateTournamentProcessor(){
@@ -119,7 +153,15 @@ export class TournamentComponent extends PssPageComponent{
         if (this.actionType=="create"){
             this.pssApi.createTournament({tournament:this.entity,division_count:this.entity['division_count'],multi_division_tournament:this.entity['multi_division_tournament']},this.eventId)                
                 .subscribe(this.generateCreateTournamentProcessor())                    
-        }                    
+        }
+        if (this.actionType=="edit"){
+            this.pssApi.editTournament(this.entity,this.eventId)
+                .subscribe(this.generateEditTournamentProcessor())                                                  
+        }                                    
+    }
+    onUploadFinished(event){
+        this.entity.has_pic=true;
+        this.entity.img_file=JSON.parse(event.serverResponse._body).data;        
     }
     
 }

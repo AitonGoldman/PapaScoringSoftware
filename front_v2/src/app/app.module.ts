@@ -15,6 +15,8 @@ import { AutoCompleteProvider } from '../providers/auto-complete/auto-complete';
 import { ExpandableModule } from '../components/expandable/expandable.module'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { ImageUploadModule } from "angular2-image-upload";
+
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
       AutoCompleteModule,
       ExpandableModule,
       BrowserAnimationsModule, 
-      SimpleNotificationsModule.forRoot()
+      SimpleNotificationsModule.forRoot(),
+      ImageUploadModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

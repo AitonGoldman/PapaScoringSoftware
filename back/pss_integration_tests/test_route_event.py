@@ -49,5 +49,8 @@ class RouteAuthTest(pss_integration_test_base.PssIntegrationTestBase):
             rv = c.put('/event',
                         data=json.dumps({'name':'test_event_new','event_id':1}))
             self.assertHttpCodeEquals(rv,401,'You are not authorized to edit this event')
-            
+    def test_event_get_all_events(self):
+        pass
+    def test_event_get_all_events_and_tournaments(self):
+        pass
             

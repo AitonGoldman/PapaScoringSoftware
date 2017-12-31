@@ -46,7 +46,8 @@ export class TournamentMachinesComponent extends PssPageComponent {
                 public notificationsService: NotificationsService ){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
-              pssApi,platform)
+              pssApi,platform,
+              notificationsService)
     }
     generateGetAllTournamentMachinesProcessor(){
         return (result) => {            
@@ -145,7 +146,11 @@ export class TournamentMachinesComponent extends PssPageComponent {
 
     }
     onInput(event){        
-        console.log(this.searchbar.keyword)        
+        console.log(this.searchbar);
+        console.log(event);
+    }
+    onItemsShown(event){
+        console.log(event);        
     }
     onDisable(machine){
         machine.active=machine.active==false;
@@ -156,7 +161,7 @@ export class TournamentMachinesComponent extends PssPageComponent {
         this.pssApi.editTournamentMachine(machine,this.eventId)
             .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name+" has been "+stringDescription,"edit"))            
     }
-    onSelect(){
+    onSelect(event){
         
         this.selectedMachine.tournament_id=this.tournamentId;
         this.selectedMachine.tournament_machine_name=this.selectedMachine.machine_name;        
@@ -171,8 +176,14 @@ export class TournamentMachinesComponent extends PssPageComponent {
     }
     onSubmit(){
         this.wizardEntity['tournament_machines']=this.selectedMachines;
-        this.pssApi.createWizardEvent(this.wizardEntity)
-            .subscribe(this.generateCreateWizardProcessor())            
+        if('event' in this.wizardEntity){
+            this.pssApi.createWizardEvent(this.wizardEntity)
+                .subscribe(this.generateCreateWizardProcessor())            
+        } else {
+            this.wizardEntity['tournament']['tournament']['event_id']=this.eventId
+            this.pssApi.createWizardTournament(this.wizardEntity)
+                .subscribe(this.generateCreateWizardProcessor())            
+        }
         
     }
     onFocus(){

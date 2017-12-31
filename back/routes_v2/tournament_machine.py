@@ -3,9 +3,10 @@ from lib_v2 import blueprints,permissions
 from flask import jsonify,current_app,request
 from flask_login import current_user
 from lib_v2.serializers import generic
+from flask_restless.helpers import to_dict
 import json
 
-def create_tournament_machine_route(request,tables_proxy,event_id):
+def create_tournament_machine_route(request,tables_proxy,event_id,tournament=None):
     if request.data:        
         input_data = json.loads(request.data)
     else:
@@ -18,7 +19,9 @@ def create_tournament_machine_route(request,tables_proxy,event_id):
     if input_data.get('tournament_id',None):
         tournament = tables_proxy.get_tournament_by_tournament_id(input_data.get('tournament_id'))
     else:
-        raise BadRequest('No tournament id specified')    
+        if tournament is None:
+            raise BadRequest('No tournament id specified')
+            
     tournament_machine = tables_proxy.create_tournament_machine(machine,tournament)
     tables_proxy.create_queue_for_tournament_machine(tournament_machine,tournament.queue_size,event_id)
     return tournament_machine
@@ -57,3 +60,17 @@ def edit_tournament_machine(event_id):
     tournament_machine_dict=generic.serialize_tournament_machine_public(edited_tournament_machine)
     current_app.table_proxy.commit_changes()
     return jsonify({'data':tournament_machine_dict})
+
+@blueprints.test_blueprint.route('/<int:event_id>/<int:tournament_id>/tournament_machines/machines',methods=['GET'])
+def get_tournament_machines_and_machines(event_id,tournament_id):                
+    machines_list=[]
+    tournament_machines_list=[]
+    machines = current_app.table_proxy.get_all_machines()
+    tournament_machines = current_app.table_proxy.get_tournament_machines(tournament_id)
+    for machine in machines:        
+        machines_list.append(to_dict(machine))
+    for tournament_machine in tournament_machines:        
+        tournament_machines_list.append(to_dict(tournament_machine))        
+        
+    return jsonify({'data':{'machines_list':machines_list,'tournament_machines_list':tournament_machines_list}})
+

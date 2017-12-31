@@ -40,7 +40,13 @@ def serialize_tournament_public(model,type=TOURNAMENT_ONLY):
     tournament_dict=serializer_v2(TOURNAMENT_PRIVATE_FIELDS).serialize_model(model)
     if type==TOURNAMENT_ONLY:
         return tournament_dict
+    
+def serialize_tournament_private(model,type=TOURNAMENT_ONLY,show_private_fields=True):
+    tournament_dict=serializer_v2(TOURNAMENT_PRIVATE_FIELDS).serialize_model(model)
+    if type==TOURNAMENT_ONLY:
+        return tournament_dict
 
+    
 def serialize_meta_tournament_public(model,type=META_TOURNAMENT_ONLY):
     meta_tournament_dict=serializer_v2([]).serialize_model(model)
     if type==META_TOURNAMENT_ONLY:
@@ -67,5 +73,9 @@ def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
     
 def serialize_event_public(model):
     event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model)    
+    return event_dict
+
+def serialize_event_private(model):
+    event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model,True)    
     return event_dict
 

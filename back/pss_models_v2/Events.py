@@ -13,7 +13,7 @@ def generate_events_class(db_handle):
         number_unused_tickets_allowed = db_handle.Column(db_handle.Integer)
         ionic_profile = db_handle.Column(db_handle.String(100))
         ionic_api_key = db_handle.Column(db_handle.String(100))
-        active = db_handle.Column(db_handle.Boolean,default=False)                
+        active = db_handle.Column(db_handle.Boolean,default=True)                
         player_id_seq_start = db_handle.Column(db_handle.Integer)
         upload_folder = db_handle.Column(db_handle.String(100),default='/var/www/html/pss')
         ifpa_api_key=db_handle.Column(db_handle.String(100))

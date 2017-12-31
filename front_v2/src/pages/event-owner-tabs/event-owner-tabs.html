@@ -4,15 +4,10 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>EventOwnerTabs</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
 <ion-content padding>
+<ion-tabs #myTabs  (ionChange)="onTabChange($event)">
+  <ion-tab [root]="'EventOwnerHomePage'" tabIcon="md-home" [tabTitle]="'Home'"></ion-tab>  
+  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="'EventOwnerQuickLinksPage'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>
+</ion-tabs>
 
 </ion-content>

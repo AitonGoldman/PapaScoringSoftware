@@ -34,7 +34,7 @@ export class PssApiProvider {
         return (...restOfArgs: any[]) => {
             console.log('trying a network op 1 ...')
             let localUrl=url;            
-            let postObject={};
+            let postObject=null;
             if(method=="post" || method=="put"){
                 postObject=restOfArgs.shift();
             }
@@ -52,27 +52,37 @@ export class PssApiProvider {
                 localUrl = newUrl;
             }
             console.log('trying a network op 2...')
-            //let result_observable = this.http[method](localUrl,
-            let result_observable = this.makeHot(this.http[method](localUrl,            
-                                                                   postObject,{withCredentials:true}))
-                 .pipe(                
-                     catchError(this.handleError(apiName, null))
-                 );
             
+            let result_observable = this.makeHot(this.http.request(method,localUrl,            
+                                                               {withCredentials:true,
+                                                                body:postObject}))
+                .pipe(                
+                    catchError(this.handleError(apiName, null))
+                );
+
             result_observable.subscribe(()=>{this.loading_instance.dismiss()});
             return result_observable;            
         }
     }
     loginUser = this.generate_api_call('loginUser',this.basePssUrl+"/auth/pss_event_user/login/:arg",'post');
+    eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest',this.basePssUrl+"/pss_user_request",'post');
+    eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm',this.basePssUrl+"/pss_user_request_confirm/:arg",'post');
+    
     loginEventOwner = this.generate_api_call('loginEventOwner',this.basePssUrl+"/auth/pss_user/login",'post');
     
     createEvent = this.generate_api_call('createEvent',this.basePssUrl+"/event",'post');
-    createWizardEvent = this.generate_api_call('createWizardEvent',this.basePssUrl+"/wizard/event/tournament/tournament_machines",'post');    
+    createWizardEvent = this.generate_api_call('createWizardEvent',this.basePssUrl+"/wizard/event/tournament/tournament_machines",'post');
+    createWizardTournament = this.generate_api_call('createWizardTournament',this.basePssUrl+"/wizard/tournament/tournament_machines",'post');        
     createTournament = this.generate_api_call('createTournament',this.basePssUrl+"/:arg/tournament",'post');
     addTournamentMachine = this.generate_api_call('addTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'post');
     editTournamentMachine = this.generate_api_call('editTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'put');
+    editTournament = this.generate_api_call('editTournament',this.basePssUrl+"/:arg/tournament",'put');
+    editEvent = this.generate_api_call('editEvent',this.basePssUrl+"/event",'put');
     
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
+    getEvent = this.generate_api_call('getEvent',this.basePssUrl+"/event/:arg",'get');
+    getTournament = this.generate_api_call('getTournament',this.basePssUrl+"/:arg/tournament/:arg",'get');
+    
     getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines/machines",'get');
     getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/machines",'get');    
     getAllTournaments = this.generate_api_call('getAllTournaments',this.basePssUrl+"/:arg/tournaments",'get');

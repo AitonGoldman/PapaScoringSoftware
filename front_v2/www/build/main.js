@@ -1,4 +1,4 @@
-webpackJsonp([16],{
+webpackJsonp([22],{
 
 /***/ 151:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -31,18 +31,19 @@ var EventAuthProvider = (function () {
         this.userLoggedInEvents = {};
         this.eventOwner = false;
         this.userName = null;
+        this.pssUserId = null;
         console.log('Hello EventAuthProvider Provider');
     }
     EventAuthProvider.prototype.setEventUserLoggedIn = function (eventId, userInfo) {
+        this.userName = userInfo.username;
+        this.pssUserId = userInfo.pss_user_id;
         if (eventId == null) {
             this.eventOwner = true;
             return;
         }
         this.userLoggedInEvents[eventId] = true;
-        this.userName = userInfo.username;
         this.setEventRole(eventId, userInfo.roles[0]);
         console.log('setEventUserLoggedIn debug...');
-        console.log(userInfo);
     };
     EventAuthProvider.prototype.isEventUserLoggedIn = function (eventId) {
         if (eventId in this.userLoggedInEvents) {
@@ -57,6 +58,10 @@ var EventAuthProvider = (function () {
         if (eventId != null) {
             this.userEventRoles[eventId] = role;
         }
+    };
+    EventAuthProvider.prototype.getUserInfo = function () {
+        return { userName: this.userName,
+            pssUserId: this.pssUserId };
     };
     EventAuthProvider.prototype.getRoleName = function (eventId) {
         if (this.eventOwner == true) {
@@ -102,68 +107,92 @@ webpackEmptyAsyncContext.id = 164;
 
 var map = {
 	"../pages/create-event/create-event.module": [
-		682,
-		2
-	],
-	"../pages/create-tournament/create-tournament.module": [
-		683,
-		1
-	],
-	"../pages/event-owner-create-tournament/event-owner-create-tournament.module": [
-		684,
-		0
-	],
-	"../pages/event-owner-home/event-owner-home.module": [
-		685,
-		14
-	],
-	"../pages/event-owner-login/event-owner-login.module": [
-		686,
-		3
-	],
-	"../pages/event-owner-tabs/event-owner-tabs.module": [
-		687,
-		15
-	],
-	"../pages/event-owner-tournament-machines/event-owner-tournament-machines.module": [
 		688,
 		5
 	],
-	"../pages/event-select/event-select.module": [
+	"../pages/create-tournament/create-tournament.module": [
 		689,
-		13
+		3
 	],
-	"../pages/home/home.module": [
+	"../pages/edit-event/edit-event.module": [
 		690,
-		7
+		4
 	],
-	"../pages/login/login.module": [
+	"../pages/edit-tournament/edit-tournament.module": [
 		691,
+		2
+	],
+	"../pages/event-owner-confirm/event-owner-confirm.module": [
+		692,
+		21
+	],
+	"../pages/event-owner-create-tournament/event-owner-create-tournament.module": [
+		693,
+		1
+	],
+	"../pages/event-owner-edit-tournament/event-owner-edit-tournament.module": [
+		694,
+		0
+	],
+	"../pages/event-owner-home/event-owner-home.module": [
+		695,
+		20
+	],
+	"../pages/event-owner-login/event-owner-login.module": [
+		696,
 		6
 	],
-	"../pages/quick-links/quick-links.module": [
-		692,
-		12
+	"../pages/event-owner-quick-links/event-owner-quick-links.module": [
+		697,
+		19
 	],
-	"../pages/results/results.module": [
-		693,
+	"../pages/event-owner-request/event-owner-request.module": [
+		698,
 		11
 	],
-	"../pages/success/success.module": [
-		694,
-		10
+	"../pages/event-owner-tabs/event-owner-tabs.module": [
+		699,
+		18
 	],
-	"../pages/tabs/tabs.module": [
-		695,
-		9
-	],
-	"../pages/tournament-director-home/tournament-director-home.module": [
-		696,
+	"../pages/event-owner-tournament-machines/event-owner-tournament-machines.module": [
+		700,
 		8
 	],
+	"../pages/event-select/event-select.module": [
+		701,
+		17
+	],
+	"../pages/home/home.module": [
+		702,
+		10
+	],
+	"../pages/login/login.module": [
+		703,
+		9
+	],
+	"../pages/quick-links/quick-links.module": [
+		704,
+		16
+	],
+	"../pages/results/results.module": [
+		705,
+		15
+	],
+	"../pages/success/success.module": [
+		706,
+		14
+	],
+	"../pages/tabs/tabs.module": [
+		707,
+		13
+	],
+	"../pages/tournament-director-home/tournament-director-home.module": [
+		708,
+		12
+	],
 	"../pages/tournament-machines/tournament-machines.module": [
-		697,
-		4
+		709,
+		7
 	]
 };
 function webpackAsyncContext(req) {
@@ -182,7 +211,7 @@ module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 346:
+/***/ 349:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -230,7 +259,7 @@ var TitleServiceProvider = (function () {
 
 /***/ }),
 
-/***/ 347:
+/***/ 351:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -278,13 +307,20 @@ var PssApiProvider = (function () {
         //basePssUrl='http://0.0.0.0'
         this.loading_instance = null;
         this.loginUser = this.generate_api_call('loginUser', this.basePssUrl + "/auth/pss_event_user/login/:arg", 'post');
+        this.eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest', this.basePssUrl + "/pss_user_request", 'post');
+        this.eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm', this.basePssUrl + "/pss_user_request_confirm/:arg", 'post');
         this.loginEventOwner = this.generate_api_call('loginEventOwner', this.basePssUrl + "/auth/pss_user/login", 'post');
         this.createEvent = this.generate_api_call('createEvent', this.basePssUrl + "/event", 'post');
         this.createWizardEvent = this.generate_api_call('createWizardEvent', this.basePssUrl + "/wizard/event/tournament/tournament_machines", 'post');
+        this.createWizardTournament = this.generate_api_call('createWizardTournament', this.basePssUrl + "/wizard/tournament/tournament_machines", 'post');
         this.createTournament = this.generate_api_call('createTournament', this.basePssUrl + "/:arg/tournament", 'post');
         this.addTournamentMachine = this.generate_api_call('addTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'post');
         this.editTournamentMachine = this.generate_api_call('editTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'put');
+        this.editTournament = this.generate_api_call('editTournament', this.basePssUrl + "/:arg/tournament", 'put');
+        this.editEvent = this.generate_api_call('editEvent', this.basePssUrl + "/event", 'put');
         this.getAllEvents = this.generate_api_call('getAllEvents', this.basePssUrl + "/events", 'get');
+        this.getEvent = this.generate_api_call('getEvent', this.basePssUrl + "/event/:arg", 'get');
+        this.getTournament = this.generate_api_call('getTournament', this.basePssUrl + "/:arg/tournament/:arg", 'get');
         this.getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines', this.basePssUrl + "/:arg/:arg/tournament_machines/machines", 'get');
         this.getAllMachines = this.generate_api_call('getAllMachines', this.basePssUrl + "/machines", 'get');
         this.getAllTournaments = this.generate_api_call('getAllTournaments', this.basePssUrl + "/:arg/tournaments", 'get');
@@ -305,7 +341,7 @@ var PssApiProvider = (function () {
             }
             console.log('trying a network op 1 ...');
             var localUrl = url;
-            var postObject = {};
+            var postObject = null;
             if (method == "post" || method == "put") {
                 postObject = restOfArgs.shift();
             }
@@ -322,8 +358,8 @@ var PssApiProvider = (function () {
                 localUrl = newUrl;
             }
             console.log('trying a network op 2...');
-            //let result_observable = this.http[method](localUrl,
-            var result_observable = _this.makeHot(_this.http[method](localUrl, postObject, { withCredentials: true }))
+            var result_observable = _this.makeHot(_this.http.request(method, localUrl, { withCredentials: true,
+                body: postObject }))
                 .pipe(Object(__WEBPACK_IMPORTED_MODULE_2_rxjs_operators__["catchError"])(_this.handleError(apiName, null)));
             result_observable.subscribe(function () { _this.loading_instance.dismiss(); });
             return result_observable;
@@ -364,7 +400,7 @@ var PssApiProvider = (function () {
 
 /***/ }),
 
-/***/ 349:
+/***/ 353:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -416,14 +452,14 @@ var AutoCompleteProvider = (function () {
 
 /***/ }),
 
-/***/ 351:
+/***/ 355:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ExpandableModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__expandable__ = __webpack_require__(389);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__expandable__ = __webpack_require__(395);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -450,13 +486,13 @@ var ExpandableModule = (function () {
 
 /***/ }),
 
-/***/ 352:
+/***/ 356:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(353);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(361);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -464,34 +500,36 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 357:
+/***/ 361:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(342);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(348);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(679);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_title_service_title_service__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(685);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_title_service_title_service__ = __webpack_require__(349);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_event_auth_event_auth__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_pss_api_pss_api__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_pss_api_pss_api__ = __webpack_require__(351);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_forms__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ionic2_auto_complete__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_auto_complete_auto_complete__ = __webpack_require__(349);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_expandable_expandable_module__ = __webpack_require__(351);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__ = __webpack_require__(680);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular2_notifications__ = __webpack_require__(348);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ionic2_auto_complete__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_auto_complete_auto_complete__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_expandable_expandable_module__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__ = __webpack_require__(686);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular2_notifications__ = __webpack_require__(350);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_angular2_image_upload__ = __webpack_require__(352);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -522,9 +560,15 @@ var AppModule = (function () {
                     links: [
                         { loadChildren: '../pages/create-event/create-event.module#CreateEventPageModule', name: 'CreateEventPage', segment: 'CreateEventPage/:actionType/:wizardMode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/create-tournament/create-tournament.module#CreateTournamentPageModule', name: 'CreateTournamentPage', segment: 'CreateTournament/:eventId/:actionType', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/edit-event/edit-event.module#EditEventPageModule', name: 'EditEventPage', segment: 'EditEventPage/:actionType/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/edit-tournament/edit-tournament.module#EditTournamentPageModule', name: 'EditTournamentPage', segment: 'EditTournament/:eventId/:tournamentId/:actionType', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-confirm/event-owner-confirm.module#EventOwnerConfirmPageModule', name: 'EventOwnerConfirmPage', segment: 'EventOwnerConfirm/:itsdangerousstring', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-create-tournament/event-owner-create-tournament.module#EventOwnerCreateTournamentPageModule', name: 'EventOwnerCreateTournamentPage', segment: 'EventOwnerCreateTournament/:eventId/:actionType/:wizardMode', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-edit-tournament/event-owner-edit-tournament.module#EventOwnerEditTournamentPageModule', name: 'EventOwnerEditTournamentPage', segment: 'EventOwnerEditTournament/:eventId/:tournamentId/:actionType', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-home/event-owner-home.module#EventOwnerHomePageModule', name: 'EventOwnerHomePage', segment: 'event-owner-home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-login/event-owner-login.module#EventOwnerLoginPageModule', name: 'EventOwnerLoginPage', segment: 'event-owner-login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-quick-links/event-owner-quick-links.module#EventOwnerQuickLinksPageModule', name: 'EventOwnerQuickLinksPage', segment: 'event-owner-quick-links', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-request/event-owner-request.module#EventOwnerRequestPageModule', name: 'EventOwnerRequestPage', segment: 'event-owner-request', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-tabs/event-owner-tabs.module#EventOwnerTabsPageModule', name: 'EventOwnerTabsPage', segment: 'event-owner-tabs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-tournament-machines/event-owner-tournament-machines.module#EventOwnerTournamentMachinesPageModule', name: 'EventOwnerTournamentMachinesPage', segment: 'EventOwnerTournamentMachines/:eventId/:tournamentId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-select/event-select.module#EventSelectPageModule', name: 'EventSelectPage', segment: 'event-select', priority: 'low', defaultHistory: [] },
@@ -543,7 +587,8 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_11_ionic2_auto_complete__["a" /* AutoCompleteModule */],
                 __WEBPACK_IMPORTED_MODULE_13__components_expandable_expandable_module__["a" /* ExpandableModule */],
                 __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_15_angular2_notifications__["SimpleNotificationsModule"].forRoot()
+                __WEBPACK_IMPORTED_MODULE_15_angular2_notifications__["SimpleNotificationsModule"].forRoot(),
+                __WEBPACK_IMPORTED_MODULE_16_angular2_image_upload__["a" /* ImageUploadModule */].forRoot()
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicApp */]],
             entryComponents: [
@@ -567,7 +612,7 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 389:
+/***/ 395:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -615,16 +660,16 @@ var ExpandableComponent = (function () {
 
 /***/ }),
 
-/***/ 679:
+/***/ 685:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(345);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(342);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_title_service_title_service__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(348);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_title_service_title_service__ = __webpack_require__(349);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_event_auth_event_auth__ = __webpack_require__(151);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -666,5 +711,5 @@ var MyApp = (function () {
 
 /***/ })
 
-},[352]);
+},[356]);
 //# sourceMappingURL=main.js.map

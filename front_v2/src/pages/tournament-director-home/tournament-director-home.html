@@ -6,7 +6,7 @@
   -->
 <!--<bobo>-->
 <ion-header>
-<ion-navbar>  
+<ion-navbar hideBackButton>  
     <ion-title showWhen='mobile'>
       {{title}}
     </ion-title>    
@@ -19,37 +19,46 @@
     <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>
   </ion-buttons>
 </ion-navbar>
+<ion-navbar color="primary">
+Example of sub header
+</ion-navbar>
+
 </ion-header>
 <!--</bobo>-->
-
-
-
-
-
-
-
-
-
-
+<simple-notifications  [options]="{position:['top','right']}"></simple-notifications>
 
 
 <ion-content padding>
-  <button margin ion-button [navPush]="'CreateTournamentPage'" [navParams]="buildNavParams({actionType:'create'})" >Create Tournament</button>
+  <h1><b>Tournament Creation</b></h1>
+  <ion-list>
+    <ion-item no-lines [navPush]="'CreateTournamentPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})">
+      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament 
 
+      <!--<button item-start ion-button [navPush]="'CreateEventPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})" >Create Event</button>-->
+    </ion-item>
+  </ion-list>
+
+  <!--  <button ion-button [navPush]="'CreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create',targetEventId:1,eventName:'poop'}" >Create Tournament</button> -->
+  <h1><b>Tournaments</b></h1>
   <ion-list>
     <ng-container *ngFor="let tournament of tournaments">
-    <ion-list-header>
-      <h1>{{tournament.tournament_name}}</h1>
-    </ion-list-header>
-    <ion-item>
-      <ion-icon item-start></ion-icon>
-      <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id})">Add Machines To Tournament</button>
-      <br>
-      <button ion-button >Edit Tournament</button>
-      <br>
-      <button ion-button ><ion-icon item-start [name]="tournament.active?'play':'pause'"></ion-icon>Toggle Tournament</button>      
-    </ion-item>    
+      <ion-item-divider (click)="expand(tournament)">
+        <ion-avatar item-start *ngIf="tournament.img_url!=null">
+          <img [src]="tournament.img_url">
+        </ion-avatar>        
+        <h1>{{tournament.tournament_name}}</h1><ion-icon item-end [name]="tournament.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
+      </ion-item-divider>      
+      <ng-container *ngIf="tournament.expanded!=true?false:true">
+        <ion-item>
+          <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Add Machines To Tournament</button>
+          <br>
+            <button [navPush]="'EditTournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
+          <br>
+          <button ion-button (click)="onTournamentToggle(eventId,tournament)"><ion-icon item-start [name]="tournament.active?'play':'pause'"></ion-icon>Toggle Tournament</button>
+        </ion-item>
+      </ng-container>      
     </ng-container>
   </ion-list>
-  
 </ion-content>
+
+

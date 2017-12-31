@@ -1,14 +1,14 @@
 webpackJsonp([11],{
 
-/***/ 693:
+/***/ 698:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResultsPageModule", function() { return ResultsPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerRequestPageModule", function() { return EventOwnerRequestPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__results__ = __webpack_require__(717);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_request__ = __webpack_require__(728);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,35 +18,97 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var ResultsPageModule = (function () {
-    function ResultsPageModule() {
+var EventOwnerRequestPageModule = (function () {
+    function EventOwnerRequestPageModule() {
     }
-    ResultsPageModule = __decorate([
+    EventOwnerRequestPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_request__["a" /* EventOwnerRequestPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_request__["a" /* EventOwnerRequestPage */]),
             ],
         })
-    ], ResultsPageModule);
-    return ResultsPageModule;
+    ], EventOwnerRequestPageModule);
+    return EventOwnerRequestPageModule;
 }());
 
-//# sourceMappingURL=results.module.js.map
+//# sourceMappingURL=event-owner-request.module.js.map
 
 /***/ }),
 
-/***/ 698:
+/***/ 711:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SuccessSummary; });
+var SuccessSummary = (function () {
+    //title:string = null;
+    //firstLine:string = null;
+    //secondLine:string = null;
+    function SuccessSummary(title, firstLine, secondLine) {
+        this.title = title;
+        this.firstLine = firstLine;
+        this.secondLine = secondLine;
+    }
+    SuccessSummary.prototype.getTitle = function () {
+        return this.title;
+    };
+    SuccessSummary.prototype.getFirstLine = function () {
+        return this.firstLine;
+    };
+    SuccessSummary.prototype.getSecondLine = function () {
+        return this.secondLine;
+    };
+    return SuccessSummary;
+}());
+
+//# sourceMappingURL=success-summary.js.map
+
+/***/ }),
+
+/***/ 712:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SuccessButton; });
+var SuccessButton = (function () {
+    function SuccessButton(title, targetPage, params, targetTabIndex) {
+        this.title = title;
+        this.targetPage = targetPage;
+        this.params = params;
+        this.targetTabIndex = targetTabIndex;
+    }
+    SuccessButton.prototype.getTitle = function () {
+        return this.title;
+    };
+    SuccessButton.prototype.getTargetPage = function () {
+        return this.targetPage;
+    };
+    SuccessButton.prototype.getTargetTabIndex = function () {
+        return this.targetTabIndex;
+    };
+    SuccessButton.prototype.getParams = function () {
+        return this.params;
+    };
+    return SuccessButton;
+}());
+
+//# sourceMappingURL=SuccessButton.js.map
+
+/***/ }),
+
+/***/ 728:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerRequestPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(711);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(712);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_pss_api_pss_api__ = __webpack_require__(351);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -60,132 +122,52 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-/**
- * Generated class for the TopNavComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
-var PssPageComponent = (function () {
-    function PssPageComponent(eventAuth, navParams, navCtrl, appCtrl, pssApi, platform) {
-        this.eventAuth = eventAuth;
-        this.navParams = navParams;
-        this.navCtrl = navCtrl;
-        this.appCtrl = appCtrl;
-        this.pssApi = pssApi;
-        this.platform = platform;
-        this.eventId = null;
-        this.eventName = null;
-        this.tournamentId = null;
-        this.hideBackButton = false;
-        this.eventId = navParams.get('eventId');
-        this.eventName = navParams.get('eventName');
-        console.log('Hello PssPageComponent Component');
-        //        console.log(instance.constructor.name)
-    }
-    PssPageComponent.prototype.buildNavParams = function (params) {
-        if (this.eventId != null && this.eventId != undefined) {
-            params['eventId'] = this.eventId;
-            params['eventName'] = this.eventName;
-        }
-        return params;
-    };
-    PssPageComponent.prototype.getHomePageString = function () {
-        var role = this.eventAuth.getRoleName(this.eventId);
-        if (role == "tournamentdirector") {
-            return 'TournamentDirectorHomePage';
-        }
-        //if(role=="eventowner"){
-        //        return 'EventOwnerHomePage'            
-        //}        
-        if (role == null) {
-            return 'HomePage';
-        }
-    };
-    PssPageComponent.prototype.pushRootPage = function (page, params) {
-        if (params === void 0) { params = {}; }
-        this.appCtrl.getRootNav().push(page, params);
-    };
-    PssPageComponent.prototype.pushPageWithNoBackButton = function (pageName, navParams, tabIndex) {
-        var _this = this;
-        console.log('in push page with no back button...');
-        if (tabIndex != null) {
-            console.log(tabIndex);
-            console.log('in push page with no back button...2');
-            this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName, navParams, { animate: false });
-            console.log('in push page with no back button...3');
-            this.navCtrl.parent.select(tabIndex);
-            console.log('in push page with no back button...4');
-            return;
-        }
-        console.log('page name is ...' + pageName);
-        this.navCtrl.getActive().willLeave.subscribe(function () {
-            _this.navCtrl.last().showBackButton(false);
-        });
-        this.navCtrl.push(pageName, this.buildNavParams(navParams));
-    };
-    PssPageComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
-        }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */]) === "function" && _f || Object])
-    ], PssPageComponent);
-    return PssPageComponent;
-    var _a, _b, _c, _d, _e, _f;
-}());
-
-//# sourceMappingURL=pss-page.js.map
-
-/***/ }),
-
-/***/ 717:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ResultsPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(698);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
 
 /**
- * Generated class for the ResultsPage page.
+ * Generated class for the EventOwnerRequestPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var ResultsPage = (function (_super) {
-    __extends(ResultsPage, _super);
-    function ResultsPage() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var EventOwnerRequestPage = (function () {
+    function EventOwnerRequestPage(pssApi, navCtrl, navParams) {
+        this.pssApi = pssApi;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.userInfo = {};
+        console.log(navParams.get('itsdangerousstring'));
+        console.log('------');
     }
-    ResultsPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad ResultsPage');
+    EventOwnerRequestPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad EventOwnerRequestPage');
     };
-    ResultsPage = __decorate([
+    EventOwnerRequestPage.prototype.generateEventOwnerCreateRequestProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */]('Request has been submitted.', 'You will recieve an email shortly with instructions', 'on how to activate your account.');
+            var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', 'EventSelectPage', {}, null);
+            _this.navCtrl.push("SuccessPage", { 'successSummary': successSummary,
+                'successButtons': [successButton] });
+        };
+    };
+    EventOwnerRequestPage.prototype.submitRequest = function () {
+        this.pssApi.eventOwnerCreateRequest(this.userInfo)
+            .subscribe(this.generateEventOwnerCreateRequestProcessor());
+    };
+    EventOwnerRequestPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-results',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/'<!--\n  Generated template for the ResultsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>testing 1 2 3 </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/,
-        })
-    ], ResultsPage);
-    return ResultsPage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+            selector: 'page-event-owner-request',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-request/event-owner-request.html"*/'<!--\n  Generated template for the EventOwnerRequestPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>EventOwnerRequest</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <div text-center>\n    If you want to create new events, you will need to create an account.  <br><br>After filling out your info below and clicking "submit request", you will recieve an email with instructions on how to activate your account.\n  </div>\n  <form #loginForm="ngForm">\n  <ion-item>\n  <ion-label floating>Username</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="userInfo.username" name="username"></ion-input>\n  </ion-item>\n  <ion-item>\n  <ion-label floating>First Name</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="userInfo.first_name" name="firstname"></ion-input>\n  </ion-item>\n  <ion-item>\n  <ion-label floating>Last Name</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="userInfo.last_name" name="lastname"></ion-input>\n  </ion-item>\n  <ion-item>\n  <ion-label floating>Password</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="userInfo.password" name="password"></ion-input>\n  </ion-item>\n  <ion-item>\n  <ion-label floating>email</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="userInfo.email" name="email"></ion-input>\n  </ion-item>  \n<ion-item no-lines>\n  <button [disabled]=\'!loginForm.valid\' ion-button default (click)="submitRequest()">Submit Request</button>\n</ion-item>\n</form>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-request/event-owner-request.html"*/,
+        }),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__providers_pss_api_pss_api__["a" /* PssApiProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_pss_api_pss_api__["a" /* PssApiProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _c || Object])
+    ], EventOwnerRequestPage);
+    return EventOwnerRequestPage;
+    var _a, _b, _c;
+}());
 
-//# sourceMappingURL=results.js.map
+//# sourceMappingURL=event-owner-request.js.map
 
 /***/ })
 

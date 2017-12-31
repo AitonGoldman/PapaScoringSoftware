@@ -13,20 +13,22 @@ export class EventAuthProvider {
     userLoggedInEvents:any = {};
     eventOwner:boolean = false;
     userName:string = null;
+    pssUserId:number = null;
     constructor(public http: HttpClient) {
     console.log('Hello EventAuthProvider Provider');
     }
 
     setEventUserLoggedIn(eventId,userInfo){
+        this.userName=userInfo.username;
+        this.pssUserId=userInfo.pss_user_id;
+        
         if(eventId==null){
             this.eventOwner=true;
-            return;
-        } 
+            return
+        }        
         this.userLoggedInEvents[eventId]=true;
-        this.userName=userInfo.username;
         this.setEventRole(eventId,userInfo.roles[0]);
-        console.log('setEventUserLoggedIn debug...');
-        console.log(userInfo);
+        console.log('setEventUserLoggedIn debug...');        
     }
 
     isEventUserLoggedIn(eventId){
@@ -44,7 +46,10 @@ export class EventAuthProvider {
         }
         
     }
-  
+    getUserInfo(){
+        return {userName:this.userName,
+                pssUserId:this.pssUserId}
+    }
     getRoleName(eventId:number){
         if (this.eventOwner==true){
             return "eventowner";

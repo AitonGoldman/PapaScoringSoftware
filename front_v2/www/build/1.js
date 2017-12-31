@@ -1,14 +1,15 @@
 webpackJsonp([1],{
 
-/***/ 683:
+/***/ 693:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CreateTournamentPageModule", function() { return CreateTournamentPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerCreateTournamentPageModule", function() { return EventOwnerCreateTournamentPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_tournament__ = __webpack_require__(707);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_create_tournament__ = __webpack_require__(723);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__ = __webpack_require__(352);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +19,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var CreateTournamentPageModule = (function () {
-    function CreateTournamentPageModule() {
+
+var EventOwnerCreateTournamentPageModule = (function () {
+    function EventOwnerCreateTournamentPageModule() {
     }
-    CreateTournamentPageModule = __decorate([
+    EventOwnerCreateTournamentPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__create_tournament__["a" /* CreateTournamentPage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_create_tournament__["a" /* EventOwnerCreateTournamentPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__create_tournament__["a" /* CreateTournamentPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_create_tournament__["a" /* EventOwnerCreateTournamentPage */]),
+                __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__["a" /* ImageUploadModule */].forRoot()
             ],
         })
-    ], CreateTournamentPageModule);
-    return CreateTournamentPageModule;
+    ], EventOwnerCreateTournamentPageModule);
+    return EventOwnerCreateTournamentPageModule;
 }());
 
-//# sourceMappingURL=create-tournament.module.js.map
+//# sourceMappingURL=event-owner-create-tournament.module.js.map
 
 /***/ }),
 
-/***/ 698:
+/***/ 710:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46,7 +49,9 @@ var CreateTournamentPageModule = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(351);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -60,6 +65,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the TopNavComponent component.
  *
@@ -67,13 +73,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Components.
  */
 var PssPageComponent = (function () {
-    function PssPageComponent(eventAuth, navParams, navCtrl, appCtrl, pssApi, platform) {
+    function PssPageComponent(eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) {
         this.eventAuth = eventAuth;
         this.navParams = navParams;
         this.navCtrl = navCtrl;
         this.appCtrl = appCtrl;
         this.pssApi = pssApi;
         this.platform = platform;
+        this.notificationsService = notificationsService;
         this.eventId = null;
         this.eventName = null;
         this.tournamentId = null;
@@ -124,21 +131,48 @@ var PssPageComponent = (function () {
         });
         this.navCtrl.push(pageName, this.buildNavParams(navParams));
     };
+    PssPageComponent.prototype.expand = function (item) {
+        item.expanded = item.expanded == false ? true : false;
+    };
+    PssPageComponent.prototype.generateEditTournamentProcessor = function (message_string) {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.notificationsService.success("Success", message_string, {
+                timeOut: 0,
+                position: ["top", "right"],
+                theClass: 'poop'
+            });
+        };
+    };
+    PssPageComponent.prototype.onTournamentToggle = function (eventId, tournament) {
+        tournament.active = tournament.active != true;
+        var stringDescription = tournament.active != true ? "deactivated" : "activated";
+        this.pssApi.editTournament(tournament, eventId)
+            .subscribe(this.generateEditTournamentProcessor(tournament.tournament_name + " has been " + stringDescription));
+    };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */]) === "function" && _f || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
     ], PssPageComponent);
     return PssPageComponent;
-    var _a, _b, _c, _d, _e, _f;
 }());
 
 //# sourceMappingURL=pss-page.js.map
 
 /***/ }),
 
-/***/ 699:
+/***/ 711:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -168,7 +202,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 700:
+/***/ 712:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -199,7 +233,7 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 701:
+/***/ 713:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -230,12 +264,17 @@ var EntityFields = (function () {
     EntityFields.prototype.getFields = function () {
         return this.fields;
     };
-    EntityFields.prototype.getFieldsArray = function () {
+    EntityFields.prototype.getFieldsArray = function (advanced) {
         var fieldsArray = [];
         for (var i in this.fields) {
             fieldsArray.push(this.fields[i]);
         }
-        return fieldsArray;
+        if (advanced == false) {
+            return fieldsArray.filter(function (field) { return field.basic == true; });
+        }
+        else {
+            return fieldsArray;
+        }
     };
     return EntityFields;
 }());
@@ -244,16 +283,16 @@ var EntityFields = (function () {
 
 /***/ }),
 
-/***/ 702:
+/***/ 714:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__ = __webpack_require__(701);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pss_page_pss_page__ = __webpack_require__(698);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__ = __webpack_require__(699);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__ = __webpack_require__(700);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__ = __webpack_require__(713);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pss_page_pss_page__ = __webpack_require__(710);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__ = __webpack_require__(711);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__ = __webpack_require__(712);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -311,6 +350,8 @@ var TournamentComponent = (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.entity = {};
         _this.wizardMode = null;
+        _this.entityFieldsArray = null;
+        _this.advanced = false;
         return _this;
     }
     TournamentComponent.prototype.ionViewWillLoad = function () {
@@ -318,20 +359,48 @@ var TournamentComponent = (function (_super) {
         this.entityFields = new __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__["a" /* EntityFields */]("tournament");
         this.wizardMode = this.navParams.get('wizardMode');
         this.eventId = this.navParams.get('eventId');
+        this.tournamentId = this.navParams.get('tournamentId');
         var wizardEntity = this.navParams.get('wizardEntity');
         if (wizardEntity != null) {
             this.wizardEntity = wizardEntity;
         }
-        this.entityFields.setField('tournament_name', 'text', false, true, tournamentDescriptions['tournament_name']);
-        this.entityFields.setField('multi_division_tournament', 'boolean', false, true, tournamentDescriptions['multi_division_tournament']);
-        this.entityFields.setField('division_count', 'text', false, true, tournamentDescriptions['division_count']);
+        this.entityFields.setField('tournament_name', 'text', true, false, tournamentDescriptions['tournament_name']);
+        this.entityFields.setField('multi_division_tournament', 'boolean', true, false, tournamentDescriptions['multi_division_tournament']);
+        this.entityFields.setField('division_count', 'text', true, false, tournamentDescriptions['division_count']);
         this.entityFields.setDependency('division_count', 'multi_division_tournament', true);
-        this.entityFields.setField('queuing', 'boolean', false, true, tournamentDescriptions['queuing']);
-        this.entityFields.setField('manually_set_price', 'text', false, true, tournamentDescriptions['manually_set_price']);
-        this.entityFields.setField('number_of_qualifiers', 'text', false, true, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFields.setField('queuing', 'boolean', true, false, tournamentDescriptions['queuing']);
+        this.entityFields.setField('manually_set_price', 'text', true, false, tournamentDescriptions['manually_set_price']);
+        this.entityFields.setField('number_of_qualifiers', 'text', true, false, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFieldsArray = this.entityFields.getFieldsArray(this.advanced);
         if (this.actionType == "edit") {
-            //get the entity
+            this.pssApi.getTournament(this.eventId, this.tournamentId)
+                .subscribe(this.generateGetTournamentProcessor());
         }
+    };
+    TournamentComponent.prototype.generateGetTournamentProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.entity = result.data;
+        };
+    };
+    TournamentComponent.prototype.onAdvancedChange = function () {
+        this.entityFieldsArray = this.entityFields.getFieldsArray(this.advanced);
+    };
+    TournamentComponent.prototype.generateEditTournamentProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var success_title_string = 'Tournament ' + result.data.tournament_name + ' has been edited.';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
+            var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.destPageAfterSuccess, _this.buildNavParams({ wizardMode: _this.wizardMode }));
+            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
+                'successButtons': [successButton] }));
+        };
     };
     TournamentComponent.prototype.generateCreateTournamentProcessor = function () {
         var _this = this;
@@ -372,6 +441,14 @@ var TournamentComponent = (function (_super) {
             this.pssApi.createTournament({ tournament: this.entity, division_count: this.entity['division_count'], multi_division_tournament: this.entity['multi_division_tournament'] }, this.eventId)
                 .subscribe(this.generateCreateTournamentProcessor());
         }
+        if (this.actionType == "edit") {
+            this.pssApi.editTournament(this.entity, this.eventId)
+                .subscribe(this.generateEditTournamentProcessor());
+        }
+    };
+    TournamentComponent.prototype.onUploadFinished = function (event) {
+        this.entity.has_pic = true;
+        this.entity.img_file = JSON.parse(event.serverResponse._body).data;
     };
     TournamentComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -385,13 +462,13 @@ var TournamentComponent = (function (_super) {
 
 /***/ }),
 
-/***/ 707:
+/***/ 723:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateTournamentPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerCreateTournamentPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_tournament_tournament__ = __webpack_require__(702);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_tournament_tournament__ = __webpack_require__(714);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -411,31 +488,31 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the CreateTournamentPage page.
+ * Generated class for the EventOwnerCreateTournamentPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var CreateTournamentPage = (function (_super) {
-    __extends(CreateTournamentPage, _super);
-    function CreateTournamentPage() {
+var EventOwnerCreateTournamentPage = (function (_super) {
+    __extends(EventOwnerCreateTournamentPage, _super);
+    function EventOwnerCreateTournamentPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.destPageAfterSuccess = "TournamentDirectorHomePage";
-        _this.wizardModeNextPage = "TournamentMachinesPage";
+        _this.destPageAfterSuccess = "EventOwnerHomePage";
+        _this.wizardModeNextPage = "EventOwnerTournamentMachinesPage";
         return _this;
     }
-    CreateTournamentPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad CreateTournamentPage');
+    EventOwnerCreateTournamentPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad EventOwnerCreateTournamentPage');
     };
-    CreateTournamentPage = __decorate([
+    EventOwnerCreateTournamentPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-create-tournament',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/'<!-- Generated template for the CreateEditEntityComponent component -->\n<!--<bobo>-->\n<ion-header>\n</ion-header>\n<!--</bobo>-->\n\n\n<ion-content>\n  <form #createEditForm="ngForm">\n    <ion-list>\n      <div margin>\n        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>\n      </div>\n\n      <ng-container *ngFor="let entityField of entityFields.getFieldsArray()">\n        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">\n        <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>\n        <ng-container *ngIf="entityField.fieldType==\'text\'" >\n          \n          <ion-item>\n            <ion-icon name="md-create" item-start></ion-icon>\n            <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">\n            </ion-input>    \n          </ion-item>\n        </ng-container>\n        <ng-container *ngIf="entityField.fieldType==\'boolean\'">          \n          <ion-item>\n            <ion-label>{{entityField.description.short}}</ion-label>\n            <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       \n          </ion-item>\n        </ng-container>\n      </ng-container>        \n      </ng-container>\n    </ion-list>\n    <button [disabled]=\'!createEditForm.valid\' ion-button default (click)="processEntity()">Apply</button>\n  </form>  \n</ion-content>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/
+            selector: 'page-event-owner-create-tournament',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/'<!-- Generated template for the CreateEditEntityComponent component -->\n<ion-header>\n  <ion-navbar >\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]="buildNavParams({})">Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <form #createEditForm="ngForm">\n    <ion-list>\n      <div margin>\n        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>\n      </div>\n      <ion-item>\n        <ion-label>Advanced Settings</ion-label>\n        <ion-toggle (ionChange)="onAdvancedChange()" name="myadvanced" [(ngModel)]="advanced"></ion-toggle>\n      </ion-item>\n\n      <ng-container *ngFor="let entityField of entityFieldsArray">\n        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">\n        <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>\n        <ng-container *ngIf="entityField.fieldType==\'text\'" >\n          \n          <ion-item>\n            <ion-icon name="md-create" item-start></ion-icon>\n            <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">\n            </ion-input>    \n          </ion-item>\n        </ng-container>\n        <ng-container *ngIf="entityField.fieldType==\'boolean\'">          \n          <ion-item>\n            <ion-label>{{entityField.description.short}}</ion-label>\n            <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       \n          </ion-item>\n        </ng-container>\n      </ng-container>        \n      </ng-container>\n      <ng-container *ngIf="entity.img_url!=null">\n        <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>\n        <ion-item>\n          <ion-avatar item-start *ngIf="entity.img_url!=null">\n            <img [src]="entity.img_url">\n          </ion-avatar>                \n        </ion-item>\n      </ng-container>\n      \n      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>\n      <ion-item>\n        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>\n      </ion-item>\n    </ion-list>    \n    <button [disabled]=\'!createEditForm.valid\' ion-button default (click)="processEntity()">Apply</button>\n  </form>  \n</ion-content>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/
         })
-    ], CreateTournamentPage);
-    return CreateTournamentPage;
+    ], EventOwnerCreateTournamentPage);
+    return EventOwnerCreateTournamentPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_tournament_tournament__["a" /* TournamentComponent */]));
 
-//# sourceMappingURL=create-tournament.js.map
+//# sourceMappingURL=event-owner-create-tournament.js.map
 
 /***/ })
 

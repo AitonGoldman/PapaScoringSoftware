@@ -55,9 +55,16 @@ export class LoginPage extends PssPageComponent {
             .subscribe(this.generateLoginUserProcessor())            
     }
     loginEventOwner(){
+        let targetTabIndex=null;
+        if(this.platform.is('mobile')){
+            console.log('going mobile')
+            targetTabIndex=0;
+        }            
+
         let successButton = new SuccessButton('Go Home',
                                               'EventOwnerHomePage',
-                                              this.buildNavParams({}),null);
+                                              this.buildNavParams({}),
+                                              targetTabIndex);
 
         this.pssApi.loginEventOwner(this.loginInfo)
             .subscribe(this.generateLoginUserProcessor(successButton))            

@@ -23,11 +23,16 @@ export class EntityFields  {
     getFields(){
         return this.fields;
     }
-    getFieldsArray(){
+    getFieldsArray(advanced){        
         let fieldsArray=[];        
         for(let i in this.fields){            
             fieldsArray.push(this.fields[i]);
-        }        
-        return fieldsArray;
+        }
+        if(advanced==false){
+            return fieldsArray.filter((field)=>{return field.basic==true});    
+        } else {
+            return fieldsArray;
+        }
+        
     }
 }

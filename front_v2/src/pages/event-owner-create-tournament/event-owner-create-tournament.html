@@ -8,6 +8,11 @@
 
   <ion-navbar>
     <ion-title>EventOwnerCreateTournament</ion-title>
+    <ion-buttons end hideWhen="mobile">
+      <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
+      <button icon-only ion-button [navPush]="'EventOwnerHomePage'">Home</button>    
+    </ion-buttons>
+
   </ion-navbar>
 
 </ion-header>

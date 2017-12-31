@@ -25,7 +25,7 @@ def generate_pss_user_identity_loaded(app):
         if current_user.event_creator:            
             identity.provides.add(needs.EventCreatorRoleNeed())
             for event in current_user.events_created:
-                if event.event_creator_pss_user_id == current_user.pss_user_id:
+                if event.event_creator_pss_user_id == current_user.pss_user_id:                    
                     identity.provides.add(needs.EventEditNeed(event.event_id))
         else:
             for event_role in current_user.event_roles:

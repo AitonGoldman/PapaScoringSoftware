@@ -10,8 +10,8 @@ def generate_tournament_machines_class(db_handle):
         machine_id=db_handle.Column('machine_id', db_handle.Integer, db_handle.ForeignKey('machines.machine_id'))
         player_id=db_handle.Column('player_id', db_handle.Integer, db_handle.ForeignKey('players.player_id'))
         team_id=db_handle.Column('team_id', db_handle.Integer, db_handle.ForeignKey('teams.team_id'))
-        active=db_handle.Column(db_handle.Boolean,default=False)
-        removed=db_handle.Column(db_handle.Boolean)
+        active=db_handle.Column(db_handle.Boolean,default=True)
+        removed=db_handle.Column(db_handle.Boolean,default=False)
         event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
         #queue = db_handle.relationship('Queues')        
 

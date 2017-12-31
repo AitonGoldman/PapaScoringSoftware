@@ -5,13 +5,11 @@ webpackJsonp([5],{
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerTournamentMachinesPageModule", function() { return EventOwnerTournamentMachinesPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CreateEventPageModule", function() { return CreateEventPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_tournament_machines__ = __webpack_require__(712);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(348);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_event__ = __webpack_require__(718);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__ = __webpack_require__(352);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -22,30 +20,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
-var EventOwnerTournamentMachinesPageModule = (function () {
-    function EventOwnerTournamentMachinesPageModule() {
+var CreateEventPageModule = (function () {
+    function CreateEventPageModule() {
     }
-    EventOwnerTournamentMachinesPageModule = __decorate([
+    CreateEventPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_owner_tournament_machines__["a" /* EventOwnerTournamentMachinesPage */],
+                __WEBPACK_IMPORTED_MODULE_2__create_event__["a" /* CreateEventPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_tournament_machines__["a" /* EventOwnerTournamentMachinesPage */]),
-                __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__["a" /* AutoCompleteModule */],
-                __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["SimpleNotificationsModule"].forRoot()
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__create_event__["a" /* CreateEventPage */]),
+                __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__["a" /* ImageUploadModule */].forRoot()
             ],
         })
-    ], EventOwnerTournamentMachinesPageModule);
-    return EventOwnerTournamentMachinesPageModule;
+    ], CreateEventPageModule);
+    return CreateEventPageModule;
 }());
 
-//# sourceMappingURL=event-owner-tournament-machines.module.js.map
+//# sourceMappingURL=create-event.module.js.map
 
 /***/ }),
 
-/***/ 698:
+/***/ 710:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53,7 +49,9 @@ var EventOwnerTournamentMachinesPageModule = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(351);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -67,6 +65,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /**
  * Generated class for the TopNavComponent component.
  *
@@ -74,13 +73,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Components.
  */
 var PssPageComponent = (function () {
-    function PssPageComponent(eventAuth, navParams, navCtrl, appCtrl, pssApi, platform) {
+    function PssPageComponent(eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) {
         this.eventAuth = eventAuth;
         this.navParams = navParams;
         this.navCtrl = navCtrl;
         this.appCtrl = appCtrl;
         this.pssApi = pssApi;
         this.platform = platform;
+        this.notificationsService = notificationsService;
         this.eventId = null;
         this.eventName = null;
         this.tournamentId = null;
@@ -131,21 +131,48 @@ var PssPageComponent = (function () {
         });
         this.navCtrl.push(pageName, this.buildNavParams(navParams));
     };
+    PssPageComponent.prototype.expand = function (item) {
+        item.expanded = item.expanded == false ? true : false;
+    };
+    PssPageComponent.prototype.generateEditTournamentProcessor = function (message_string) {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.notificationsService.success("Success", message_string, {
+                timeOut: 0,
+                position: ["top", "right"],
+                theClass: 'poop'
+            });
+        };
+    };
+    PssPageComponent.prototype.onTournamentToggle = function (eventId, tournament) {
+        tournament.active = tournament.active != true;
+        var stringDescription = tournament.active != true ? "deactivated" : "activated";
+        this.pssApi.editTournament(tournament, eventId)
+            .subscribe(this.generateEditTournamentProcessor(tournament.tournament_name + " has been " + stringDescription));
+    };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */]) === "function" && _f || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
     ], PssPageComponent);
     return PssPageComponent;
-    var _a, _b, _c, _d, _e, _f;
 }());
 
 //# sourceMappingURL=pss-page.js.map
 
 /***/ }),
 
-/***/ 699:
+/***/ 711:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -175,7 +202,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 700:
+/***/ 712:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -206,21 +233,66 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 704:
+/***/ 713:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentMachinesComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EntityFields; });
+var EntityFields = (function () {
+    function EntityFields(entityType) {
+        this.entityType = entityType;
+        this.fields = {};
+        this.fieldsArray = [];
+    }
+    EntityFields.prototype.setField = function (fieldName, fieldType, basic, advanced, description) {
+        var field = {
+            fieldName: fieldName,
+            fieldType: fieldType,
+            advanced: advanced,
+            basic: basic,
+            description: description
+        };
+        this.fields[fieldName] = field;
+        //this.fieldsArray.push(field);
+    };
+    EntityFields.prototype.setDependency = function (fieldName, dependsOn, value) {
+        this.fields[fieldName].dependsOn = {
+            dependsOn: dependsOn,
+            value: value
+        };
+    };
+    EntityFields.prototype.getFields = function () {
+        return this.fields;
+    };
+    EntityFields.prototype.getFieldsArray = function (advanced) {
+        var fieldsArray = [];
+        for (var i in this.fields) {
+            fieldsArray.push(this.fields[i]);
+        }
+        if (advanced == false) {
+            return fieldsArray.filter(function (field) { return field.basic == true; });
+        }
+        else {
+            return fieldsArray;
+        }
+    };
+    return EntityFields;
+}());
+
+//# sourceMappingURL=entity-fields.js.map
+
+/***/ }),
+
+/***/ 715:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pss_page_pss_page__ = __webpack_require__(698);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__ = __webpack_require__(349);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__ = __webpack_require__(699);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__classes_SuccessButton__ = __webpack_require__(700);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_angular2_notifications__ = __webpack_require__(348);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__ = __webpack_require__(713);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pss_page_pss_page__ = __webpack_require__(710);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__ = __webpack_require__(711);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__ = __webpack_require__(712);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -237,214 +309,152 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
 
 
 
 
 
 /**
- * Generated class for the TournamentMachinesPage page.
+ * Generated class for the EventComponent component.
  *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
  */
-var TournamentMachinesComponent = (function (_super) {
-    __extends(TournamentMachinesComponent, _super);
-    function TournamentMachinesComponent(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, toastCtrl, actionSheetCtrl, notificationsService) {
-        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform) || this;
-        _this.autoCompleteProvider = autoCompleteProvider;
-        _this.eventAuth = eventAuth;
-        _this.navParams = navParams;
-        _this.navCtrl = navCtrl;
-        _this.appCtrl = appCtrl;
-        _this.pssApi = pssApi;
-        _this.platform = platform;
-        _this.toastCtrl = toastCtrl;
-        _this.actionSheetCtrl = actionSheetCtrl;
-        _this.notificationsService = notificationsService;
+var eventDescriptions = {
+    'name': {
+        'short': 'Name of the event.',
+        'long': 'Name of the event (i.e. PAPA 25, INDISC 2018, etc).',
+    },
+    'number_unused_tickets_allowed': {
+        'short': 'Number of unused tickets allowed.',
+        'long': 'Number of unused tickets a player is allowed to have.  This takes into account any tickets the player is currently using.',
+    },
+    'stripe_api_key': {
+        'short': 'Stripe Api key.',
+        'long': 'The private Stripe Api key.',
+    },
+    'stripe_public_key': {
+        'short': 'Stripe public Api key.',
+        'long': 'The public Stripe Api Key.',
+    },
+    'force_ifpa_lookup': {
+        'short': 'Force IFPA ranking lookup.',
+        'long': 'When registering player for events, force an IFPA ranking lookup.  This ranking will be used for IFPA ranking restrictions.',
+    }
+};
+var EventComponent = (function (_super) {
+    __extends(EventComponent, _super);
+    function EventComponent() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.entity = {};
         _this.wizardMode = null;
-        _this.wizardEntity = null;
-        _this.sliding = true;
-        _this.selectedMachines = [];
+        _this.advanced = false;
+        _this.entityFieldsArray = null;
         return _this;
     }
-    TournamentMachinesComponent.prototype.generateGetAllTournamentMachinesProcessor = function () {
+    EventComponent.prototype.ionViewWillLoad = function () {
+        this.actionType = this.navParams.get('actionType');
+        this.eventId = this.navParams.get('eventId');
+        this.wizardMode = this.navParams.get('wizardMode');
+        this.entityFields = new __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__["a" /* EntityFields */]("event");
+        this.entityFields.setField('name', 'text', true, false, eventDescriptions['name']);
+        this.entityFields.setField('number_unused_tickets_allowed', 'text', true, false, eventDescriptions['number_unused_tickets_allowed']);
+        this.entityFields.setField('stripe_api_key', 'text', false, true, eventDescriptions['stripe_api_key']);
+        this.entityFields.setField('stripe_public_key', 'text', false, true, eventDescriptions['stripe_public_key']);
+        this.entityFields.setField('force_ifpa_lookup', 'boolean', false, true, eventDescriptions['force_ifpa_lookup']);
+        this.entityFieldsArray = this.entityFields.getFieldsArray(this.advanced);
+        if (this.actionType == "edit") {
+            this.pssApi.getEvent(this.eventId)
+                .subscribe(this.generateGetEventProcessor());
+        }
+    };
+    EventComponent.prototype.onAdvancedChange = function () {
+        this.entityFieldsArray = this.entityFields.getFieldsArray(this.advanced);
+    };
+    EventComponent.prototype.generateGetEventProcessor = function () {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.autoCompleteProvider.setMachines(result.data.machines_list);
-            _this.selectedMachines = result.data.tournament_machines_list;
+            _this.entity = result.data;
         };
     };
-    TournamentMachinesComponent.prototype.generateGetAllMachinesProcessor = function () {
+    EventComponent.prototype.generateEditEventProcessor = function () {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.autoCompleteProvider.setMachines(result.data);
-        };
-    };
-    TournamentMachinesComponent.prototype.generateAddEditTournamentMachineProcessor = function (message_string, action) {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            var toast = _this.toastCtrl.create({
-                message: message_string,
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true
-            });
-            //toast.present();
-            _this.notificationsService.success("Success", message_string, {
-                timeOut: 0,
-                position: ["top", "right"],
-                theClass: 'poop'
-            });
-            if (action == "add") {
-                _this.selectedMachines[_this.selectedMachines.length - 1] = result.data;
-            }
-        };
-    };
-    TournamentMachinesComponent.prototype.generateCreateWizardProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            var successTitle = 'Fix This Message';
-            var successSummary = new __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__["a" /* SuccessSummary */](successTitle, null, null);
-            var successButton = new __WEBPACK_IMPORTED_MODULE_7__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.destPageAfterSuccess, _this.buildNavParams({}));
+            var success_title_string = 'Event ' + result.data.name + ' has been edited.';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
+            var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.destPageAfterSuccess, _this.buildNavParams({ wizardMode: _this.wizardMode }));
             _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
                 'successButtons': [successButton] }));
         };
     };
-    TournamentMachinesComponent.prototype.onRemove = function (machine) {
+    EventComponent.prototype.generateCreateEventProcessor = function () {
         var _this = this;
-        var actionSheet = this.actionSheetCtrl.create({
-            title: 'Are you SURE you want to remove ' + machine.tournament_machine_name + '?',
-            buttons: [
-                {
-                    text: 'Remove',
-                    role: 'destructive',
-                    handler: function () {
-                        _this.onRemoveConfirmed(machine);
-                        console.log('Destructive clicked');
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    role: 'cancel',
-                    handler: function () {
-                        console.log('Cancel clicked');
-                    }
-                }
-            ]
-        });
-        actionSheet.present();
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var success_title_string = 'Event ' + result.data.name + ' has been created.';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
+            var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.destPageAfterSuccess, _this.buildNavParams({ wizardMode: _this.wizardMode }));
+            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
+                'successButtons': [successButton] }));
+        };
     };
-    TournamentMachinesComponent.prototype.onRemoveConfirmed = function (machine) {
-        machine.removed = true;
+    EventComponent.prototype.wizardCreateEventSubmit = function () {
+        var success_title_string = 'Event ' + this.entity['name'] + ' has been recorded.';
+        var success_first_line = 'Click "Proceed" button to proceed.';
+        var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](success_title_string, success_first_line, null);
+        var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Proceed', this.wizardModeNextPage, this.buildNavParams({ wizardMode: this.wizardMode,
+            wizardEntity: { 'event': this.entity },
+            actionType: 'create' }));
+        this.navCtrl.push("SuccessPage", this.buildNavParams({ 'successSummary': successSummary,
+            'successButtons': [successButton] }));
+    };
+    EventComponent.prototype.processEntity = function () {
+        console.log('process entity...' + this.wizardMode);
         if (this.wizardMode != null) {
+            this.wizardCreateEventSubmit();
             return;
         }
-        this.pssApi.editTournamentMachine(machine, this.eventId)
-            .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name + " has been removed!", "edit"));
-    };
-    TournamentMachinesComponent.prototype.onInput = function (event) {
-        console.log(this.searchbar.keyword);
-    };
-    TournamentMachinesComponent.prototype.onDisable = function (machine) {
-        machine.active = machine.active == false;
-        if (this.wizardMode != null) {
-            return;
+        if (this.actionType == "create") {
+            this.pssApi.createEvent(this.entity)
+                .subscribe(this.generateCreateEventProcessor());
         }
-        var stringDescription = machine.active == true ? "enabled" : "disabled";
-        this.pssApi.editTournamentMachine(machine, this.eventId)
-            .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name + " has been " + stringDescription, "edit"));
-    };
-    TournamentMachinesComponent.prototype.onSelect = function () {
-        this.selectedMachine.tournament_id = this.tournamentId;
-        this.selectedMachine.tournament_machine_name = this.selectedMachine.machine_name;
-        //this.selectedMachine=result.data;
-        this.selectedMachines.push(this.selectedMachine);
-        if (this.wizardMode != null) {
-            return;
+        if (this.actionType == "edit") {
+            this.pssApi.editEvent(this.entity)
+                .subscribe(this.generateEditEventProcessor());
         }
-        this.pssApi.addTournamentMachine(this.selectedMachine, this.eventId)
-            .subscribe(this.generateAddEditTournamentMachineProcessor(this.selectedMachine.tournament_machine_name + " has been added", "add"));
     };
-    TournamentMachinesComponent.prototype.onSubmit = function () {
-        this.wizardEntity['tournament_machines'] = this.selectedMachines;
-        this.pssApi.createWizardEvent(this.wizardEntity)
-            .subscribe(this.generateCreateWizardProcessor());
+    //FIXME : needs to be shared between tourney and event
+    EventComponent.prototype.onUploadFinished = function (event) {
+        this.entity.has_pic = true;
+        this.entity.img_file = JSON.parse(event.serverResponse._body).data;
     };
-    TournamentMachinesComponent.prototype.onFocus = function () {
-        this.selectedMachine = null;
-    };
-    TournamentMachinesComponent.prototype.ionViewWillLoad = function () {
-        //this.targetEventId=this.navParams.get('eventId');
-        this.tournamentId = this.navParams.get('tournamentId');
-        this.eventId = this.navParams.get('eventId');
-        this.wizardMode = this.navParams.get('wizardMode');
-        this.wizardEntity = this.navParams.get('wizardEntity');
-        if (this.wizardMode == null) {
-            this.pssApi.getAllTournamentMachines(this.eventId, this.tournamentId)
-                .subscribe(this.generateGetAllTournamentMachinesProcessor());
-        }
-        else {
-            this.pssApi.getAllMachines()
-                .subscribe(this.generateGetAllMachinesProcessor());
-        }
-        console.log('ionViewDidLoad TournamentMachinesPage');
-        console.log(this.constructor.name);
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('searchbar'),
-        __metadata("design:type", Object)
-    ], TournamentMachinesComponent.prototype, "searchbar", void 0);
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myform'),
-        __metadata("design:type", Object)
-    ], TournamentMachinesComponent.prototype, "myform", void 0);
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["g" /* List */]),
-        __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["g" /* List */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["g" /* List */]) === "function" && _a || Object)
-    ], TournamentMachinesComponent.prototype, "list", void 0);
-    TournamentMachinesComponent = __decorate([
+    EventComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-tournament-machines',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/tournament-machines/tournament-machines.html"*/'<!--\n  Generated template for the TournamentMachinesPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>TournamentMachines</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n<ion-content padding>\n  <form #myform="ngForm" novalidate>\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedMachine" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n  </form>\n  <br>\n  <ion-list [sliding]="sliding" #list>\n      <ion-item-sliding *ngFor="let machine of selectedMachines">\n        <ion-item *ngIf="machine.removed!=true">\n          <ion-icon [name]="machine.active==true? \'play\' : \'pause\'" ></ion-icon>\n          <button hideWhen=\'mobile\' (click)="onRemove(machine)" ion-button item-end>Remove</button> {{machine.tournament_machine_name}}\n          <button hideWhen=\'mobile\' (click)="onDisable(machine)" ion-button item-end>{{machine.active==true?"Disable":"Enable"}}</button> \n        </ion-item>\n        <ion-item-options *ngIf="machine.removed!=true" side="right">\n          <button round ion-button color="danger">\n            <ion-icon name="archive"></ion-icon>\n            Remove\n          </button>\n          <button round ion-button>\n            <ion-icon name="archive"></ion-icon>\n            {{machine.active==true?"Disable":"Enable"}}\n          </button>\n        </ion-item-options>\n      </ion-item-sliding>\n  </ion-list>\n  <button ion-button *ngIf="wizardMode!=null" (click)="onSubmit()">Submit</button>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/tournament-machines/tournament-machines.html"*/,
-        }),
-        __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__["a" /* EventAuthProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__["a" /* EventAuthProvider */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavParams */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* NavController */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* App */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* App */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__["a" /* PssApiProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__["a" /* PssApiProvider */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* Platform */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* ToastController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* ToastController */]) === "function" && _j || Object, typeof (_k = typeof __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* ActionSheetController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* ActionSheetController */]) === "function" && _k || Object, typeof (_l = typeof __WEBPACK_IMPORTED_MODULE_8_angular2_notifications__["NotificationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8_angular2_notifications__["NotificationsService"]) === "function" && _l || Object])
-    ], TournamentMachinesComponent);
-    return TournamentMachinesComponent;
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-}(__WEBPACK_IMPORTED_MODULE_1__pss_page_pss_page__["a" /* PssPageComponent */]));
+            selector: 'event',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/event/event.html"*/'<!-- Generated template for the EventComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/event/event.html"*/
+        })
+    ], EventComponent);
+    return EventComponent;
+}(__WEBPACK_IMPORTED_MODULE_2__pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=tournament-machines.js.map
+//# sourceMappingURL=event.js.map
 
 /***/ }),
 
-/***/ 712:
+/***/ 718:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerTournamentMachinesPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateEventPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_tournament_machines_tournament_machines__ = __webpack_require__(704);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_event_event__ = __webpack_require__(715);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -464,27 +474,31 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the EventOwnerTournamentMachinesPage page.
+ * Generated class for the CreateEventPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EventOwnerTournamentMachinesPage = (function (_super) {
-    __extends(EventOwnerTournamentMachinesPage, _super);
-    function EventOwnerTournamentMachinesPage() {
+var CreateEventPage = (function (_super) {
+    __extends(CreateEventPage, _super);
+    function CreateEventPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.destPageAfterSuccess = 'EventOwnerHomePage';
+        _this.destPageAfterSuccess = "EventOwnerHomePage";
+        _this.wizardModeNextPage = "EventOwnerCreateTournamentPage";
         return _this;
     }
-    EventOwnerTournamentMachinesPage = __decorate([
+    CreateEventPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad CreateEventPage');
+    };
+    CreateEventPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-event-owner-tournament-machines',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/tournament-machines/tournament-machines.html"*/'<!--\n  Generated template for the TournamentMachinesPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>TournamentMachines</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n<ion-content padding>\n  <form #myform="ngForm" novalidate>\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedMachine" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n  </form>\n  <br>\n  <ion-list [sliding]="sliding" #list>\n      <ion-item-sliding *ngFor="let machine of selectedMachines">\n        <ion-item *ngIf="machine.removed!=true">\n          <ion-icon [name]="machine.active==true? \'play\' : \'pause\'" ></ion-icon>\n          <button hideWhen=\'mobile\' (click)="onRemove(machine)" ion-button item-end>Remove</button> {{machine.tournament_machine_name}}\n          <button hideWhen=\'mobile\' (click)="onDisable(machine)" ion-button item-end>{{machine.active==true?"Disable":"Enable"}}</button> \n        </ion-item>\n        <ion-item-options *ngIf="machine.removed!=true" side="right">\n          <button round ion-button color="danger">\n            <ion-icon name="archive"></ion-icon>\n            Remove\n          </button>\n          <button round ion-button>\n            <ion-icon name="archive"></ion-icon>\n            {{machine.active==true?"Disable":"Enable"}}\n          </button>\n        </ion-item-options>\n      </ion-item-sliding>\n  </ion-list>\n  <button ion-button *ngIf="wizardMode!=null" (click)="onSubmit()">Submit</button>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/tournament-machines/tournament-machines.html"*/
+            selector: 'page-create-event',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/'<!-- Generated template for the CreateEditEntityComponent component -->\n<ion-header>\n  <ion-navbar >\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]="buildNavParams({})">Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <form #createEditForm="ngForm">\n    <ion-list>\n      <div margin>\n        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>\n      </div>\n      <ion-item>\n        <ion-label>Advanced Settings</ion-label>\n        <ion-toggle (ionChange)="onAdvancedChange()" name="myadvanced" [(ngModel)]="advanced"></ion-toggle>\n      </ion-item>\n\n      <ng-container *ngFor="let entityField of entityFieldsArray">\n        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">\n        <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>\n        <ng-container *ngIf="entityField.fieldType==\'text\'" >\n          \n          <ion-item>\n            <ion-icon name="md-create" item-start></ion-icon>\n            <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">\n            </ion-input>    \n          </ion-item>\n        </ng-container>\n        <ng-container *ngIf="entityField.fieldType==\'boolean\'">          \n          <ion-item>\n            <ion-label>{{entityField.description.short}}</ion-label>\n            <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       \n          </ion-item>\n        </ng-container>\n      </ng-container>        \n      </ng-container>\n      <ng-container *ngIf="entity.img_url!=null">\n        <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>\n        <ion-item>\n          <ion-avatar item-start *ngIf="entity.img_url!=null">\n            <img [src]="entity.img_url">\n          </ion-avatar>                \n        </ion-item>\n      </ng-container>\n      \n      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>\n      <ion-item>\n        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>\n      </ion-item>\n    </ion-list>    \n    <button [disabled]=\'!createEditForm.valid\' ion-button default (click)="processEntity()">Apply</button>\n  </form>  \n</ion-content>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/,
         })
-    ], EventOwnerTournamentMachinesPage);
-    return EventOwnerTournamentMachinesPage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_tournament_machines_tournament_machines__["a" /* TournamentMachinesComponent */]));
+    ], CreateEventPage);
+    return CreateEventPage;
+}(__WEBPACK_IMPORTED_MODULE_1__components_event_event__["a" /* EventComponent */]));
 
-//# sourceMappingURL=event-owner-tournament-machines.js.map
+//# sourceMappingURL=create-event.js.map
 
 /***/ })
 

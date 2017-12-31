@@ -80,7 +80,10 @@ class TableProxy():
         )
         self.Tournaments.tournament_machines = self.db_handle.relationship(
             'TournamentMachines', cascade='all'
-        )        
+        )
+        self.Events.tournaments = self.db_handle.relationship(
+            'Tournaments', cascade='all'
+        )                
         self.MetaTournaments.tournaments = self.db_handle.relationship(
             'Tournaments', cascade='all'
         )
@@ -136,6 +139,9 @@ class TableProxy():
     def get_event_by_event_id(self,event_id):
         return self.Events.query.filter_by(event_id=event_id).first()            
 
+    def get_all_active_events(self,event_id):
+        return self.Events.query.filter_by(event_id=event_id).first()            
+    
     def get_query_for_available_tokens(self, event_id):
         return self.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False,event_id=event_id)
 
@@ -148,7 +154,9 @@ class TableProxy():
             return meta_tournament_results[tournament.meta_tournament_id]['count']
         else:
             return tournament_results[tournament.tournament_id]['count']
-
+    def get_all_machines(self):
+        return self.Machines.query.all()
+        
     def get_available_token_count_for_tournaments(self,event_id,player):                
         tournament_results={}
         meta_tournament_results={}
@@ -433,7 +441,9 @@ class TableProxy():
     def create_tournament(self,tournament_info,
                           event_id,commit=False):        
         event = self.get_event_by_event_id(event_id)
-        if event is None:
+        #FIXME : Guyh - we should NOT allow a non-valid event id, but
+        #        for now we do it because wizard create needs it
+        if event is None and commit is True:
             raise Exception('Event specified does not exist')
         new_tournament = self.Tournaments()        
         deserializer.deserialize_json(new_tournament,tournament_info)

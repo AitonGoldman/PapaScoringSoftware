@@ -17,7 +17,8 @@ from StripeProxy import StripeProxy
 
 def configure_base_app(app):    
     app.config['DEBUG']=True
-    app.config['SESSION_COOKIE_PATH']='/%s'%app.name
+    app.config['UPLOAD_FOLDER']='/tmp'
+    #app.config['SESSION_COOKIE_PATH']='/%s'%app.name
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 465
     app.config['MAIL_USE_SSL'] = True

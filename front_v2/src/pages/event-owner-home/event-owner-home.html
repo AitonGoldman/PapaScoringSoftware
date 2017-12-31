@@ -6,17 +6,24 @@
   -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar hideBackButton>
     <ion-title>EventOwnerHomePage</ion-title>
-    <ion-buttons end >
+    <ion-buttons end hideWhen='mobile'>
       <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
+      <button icon-only ion-button [navPush]="'EventOwnerHomePage'">Home</button>    
     </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
+<simple-notifications  [options]="{position:['top','right']}"></simple-notifications>
+
 
 <ion-content padding>
+  <div *ngIf='eventAuth.getRoleName(null)!="eventowner"'>
+    Please login ( look in quick links for the link )
+  </div>
+  <div *ngIf='eventAuth.getRoleName(null)=="eventowner"'>
   <h1><b>Event Creation</b></h1>
   <ion-list>
     <ion-item no-lines [navPush]="'CreateEventPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})">
@@ -31,13 +38,23 @@
   <ion-list>
     <ng-container *ngFor="let event of eventsAndTournaments">
       <ion-item-divider (click)="expand(event)">
-        <h1>{{event.name}}</h1><ion-icon item-end [name]="event.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
+        <ion-avatar item-start *ngIf="event.img_url!=null">
+          <img [src]="event.img_url">
+        </ion-avatar>
+        <h1>{{event.name}}</h1>
+        <ion-icon item-end [name]="event.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
       </ion-item-divider>
       <!--    <ion-item>
               <ion-icon item-start></ion-icon>
               <button item-end ion-button [navPush]="'EventOwnerCreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create'}" >Create Tournament</button>
               <b>Tournaments</b>
       </ion-item>-->
+      <ion-item no-lines *ngIf="event.expanded" [navPush]="'EditEventPage'" [navParams]="{actionType:'edit',eventId:event.event_id}">
+        <ion-icon item-start name="md-create"></ion-icon> Edit Event 
+
+<!--        <button item-start ion-button [navPush]="'EventOwnerCreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create'}" >Create Tournament</button>-->
+      </ion-item>
+      
       <ion-item no-lines *ngIf="event.expanded" [navPush]="'EventOwnerCreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create'}">
         <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament 
 
@@ -45,19 +62,23 @@
       </ion-item>
       
       <ng-container *ngFor="let tournament of event.tournaments">
-        <ion-item (click)="expand(tournament)" *ngIf="event.expanded">      
+        <ion-item (click)="expand(tournament)" *ngIf="event.expanded">
+        <ion-avatar item-start *ngIf="tournament.img_url!=null">
+          <img [src]="tournament.img_url">
+        </ion-avatar>                  
           {{tournament.tournament_name}}<ion-icon item-end [name]="tournament.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
         </ion-item>
         <ng-container *ngIf="tournament.expanded!=true?false:true">
           <ion-item>
             <button ion-button [navPush]="'EventOwnerTournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id})">Add Machines To Tournament</button>
             <br>
-            <button ion-button >Edit Tournament</button>
+            <button [navPush]="'EventOwnerEditTournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
             <br>
-            <button ion-button ><ion-icon item-start [name]="tournament.active?'play':'pause'"></ion-icon>Toggle Tournament</button>
+            <button ion-button (click)="onTournamentToggle(event.event_id,tournament)"><ion-icon item-start [name]="tournament.active==true?'play':'pause'"></ion-icon>Toggle Tournament</button>
           </ion-item>
         </ng-container>
       </ng-container>
     </ng-container>
   </ion-list>
+  </div>
 </ion-content>

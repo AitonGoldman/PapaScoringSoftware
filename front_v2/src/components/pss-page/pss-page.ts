@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
+import { NotificationsService } from 'angular2-notifications';
 
 /**
  * Generated class for the TopNavComponent component.
@@ -23,7 +24,8 @@ export class PssPageComponent {
                 public navCtrl: NavController,
                 public appCtrl: App,
                 public pssApi: PssApiProvider,
-                public platform: Platform) {
+                public platform: Platform,
+                public notificationsService: NotificationsService) {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         console.log('Hello PssPageComponent Component');
@@ -36,6 +38,7 @@ export class PssPageComponent {
         }        
         return params;
     }
+        
     getHomePageString(){        
         let role = this.eventAuth.getRoleName(this.eventId);
         if(role=="tournamentdirector"){
@@ -72,5 +75,27 @@ export class PssPageComponent {
         )        
         this.navCtrl.push(pageName,this.buildNavParams(navParams));
     }
-
+    expand(item){
+        item.expanded=item.expanded==false?true:false;
+    }
+    generateEditTournamentProcessor(message_string){
+        return (result) => {            
+            if(result == null){
+                return;
+            }
+            this.notificationsService.success("Success", message_string,{
+                timeOut:0,
+                position:["top","right"],
+                theClass:'poop'
+            })            
+        };
+        
+    }
+    
+    onTournamentToggle(eventId,tournament){
+        tournament.active=tournament.active!=true;
+        let stringDescription=tournament.active!=true?"deactivated":"activated"
+        this.pssApi.editTournament(tournament,eventId)
+            .subscribe(this.generateEditTournamentProcessor(tournament.tournament_name+" has been "+stringDescription))                
+    }
 }

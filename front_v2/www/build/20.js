@@ -1,17 +1,14 @@
 webpackJsonp([20],{
 
-/***/ 695:
+/***/ 700:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerHomePageModule", function() { return EventOwnerHomePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerTabsPageModule", function() { return EventOwnerTabsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_home__ = __webpack_require__(725);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_expandable_expandable_module__ = __webpack_require__(355);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__ = __webpack_require__(732);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,31 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
-
-var EventOwnerHomePageModule = (function () {
-    function EventOwnerHomePageModule() {
+var EventOwnerTabsPageModule = (function () {
+    function EventOwnerTabsPageModule() {
     }
-    EventOwnerHomePageModule = __decorate([
+    EventOwnerTabsPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_owner_home__["a" /* EventOwnerHomePage */]
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__["a" /* EventOwnerTabsPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_home__["a" /* EventOwnerHomePage */]),
-                __WEBPACK_IMPORTED_MODULE_3__components_expandable_expandable_module__["a" /* ExpandableModule */],
-                __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["SimpleNotificationsModule"].forRoot()
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__["a" /* EventOwnerTabsPage */]),
             ],
         })
-    ], EventOwnerHomePageModule);
-    return EventOwnerHomePageModule;
+    ], EventOwnerTabsPageModule);
+    return EventOwnerTabsPageModule;
 }());
 
-//# sourceMappingURL=event-owner-home.module.js.map
+//# sourceMappingURL=event-owner-tabs.module.js.map
 
 /***/ }),
 
-/***/ 710:
+/***/ 711:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -176,13 +169,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 725:
+/***/ 732:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerHomePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerTabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(710);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(711);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -199,55 +193,52 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
 
 
 /**
- * Generated class for the EventOwnerHomePage page.
+ * Generated class for the EventOwnerTabsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EventOwnerHomePage = (function (_super) {
-    __extends(EventOwnerHomePage, _super);
-    function EventOwnerHomePage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.itemExpandHeight = 100;
-        return _this;
+var EventOwnerTabsPage = (function (_super) {
+    __extends(EventOwnerTabsPage, _super);
+    function EventOwnerTabsPage() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    EventOwnerHomePage.prototype.generateGetAllEventsAndTournamentsProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            console.log('got back tournaments and events...');
-            _this.eventsAndTournaments = result.data.filter(function (event) {
-                return _this.eventAuth.getUserInfo().pssUserId == event.event_creator_pss_user_id;
-            });
-            _this.eventsAndTournaments.map(function (event) {
-                event.expanded = false;
-                event.tournaments.map(function (tournament) {
-                    tournament.expanded = false;
-                });
-            });
-            //           this.eventsAndTournaments=this.eventsAndTournaments
-            //            console.log(this.eventsAndTournaments);
-        };
+    EventOwnerTabsPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad EventOwnerTabsPage');
     };
-    EventOwnerHomePage.prototype.ionViewWillLoad = function () {
-        this.pssApi.getAllEventsAndTournaments()
-            .subscribe(this.generateGetAllEventsAndTournamentsProcessor());
-        console.log('ionViewDidLoad EventOwnerHomePage');
+    EventOwnerTabsPage.prototype.onTabSelect = function () {
+        console.log('selected a tab!');
     };
-    EventOwnerHomePage = __decorate([
+    EventOwnerTabsPage.prototype.onTabChange = function (event) {
+        console.log('changed a tab!');
+        if (this.tabRef.getByIndex(event.index).canGoBack()) {
+            this.tabRef.getByIndex(event.index).popToRoot({ animate: false });
+        }
+        var previousTab = this.tabRef.previousTab(false);
+        if (previousTab && previousTab.canGoBack()) {
+            this.tabRef.previousTab().popToRoot({ animate: false });
+        }
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myTabs'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Tabs */])
+    ], EventOwnerTabsPage.prototype, "tabRef", void 0);
+    EventOwnerTabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-event-owner-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-home/event-owner-home.html"*/'<!--\n    Generated template for the EventOwnerHomePage page.\n\n    See http://ionicframework.com/docs/components/#navigation for more info on\n    Ionic pages and navigation.\n  -->\n<ion-header>\n\n  <ion-navbar hideBackButton>\n    <ion-title>EventOwnerHomePage</ion-title>\n    <ion-buttons end hideWhen=\'mobile\'>\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="\'EventOwnerHomePage\'">Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n\n\n<ion-content padding>\n  <div *ngIf=\'eventAuth.getRoleName(null)!="eventowner"\'>\n    Please login ( look in quick links for the link )\n  </div>\n  <div *ngIf=\'eventAuth.getRoleName(null)=="eventowner"\'>\n  <h1><b>Event Creation</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'CreateEventPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})">\n      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Event \n\n      <!--<button item-start ion-button [navPush]="\'CreateEventPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})" >Create Event</button>-->\n    </ion-item>\n  </ion-list>\n\n  <!--  <button ion-button [navPush]="\'CreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\',targetEventId:1,eventName:\'poop\'}" >Create Tournament</button> -->\n  <h1><b>Your Events</b></h1>\n  <ion-list>\n    <ng-container *ngFor="let event of eventsAndTournaments">\n      <ion-item-divider (click)="expand(event)">\n        <ion-avatar item-start *ngIf="event.img_url!=null">\n          <img [src]="event.img_url">\n        </ion-avatar>\n        <h1>{{event.name}}</h1>\n        <ion-icon item-end [name]="event.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n      </ion-item-divider>\n      <!--    <ion-item>\n              <ion-icon item-start></ion-icon>\n              <button item-end ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>\n              <b>Tournaments</b>\n      </ion-item>-->\n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'EditEventPage\'" [navParams]="{actionType:\'edit\',eventId:event.event_id}">\n        <ion-icon item-start name="md-create"></ion-icon> Edit Event \n\n<!--        <button item-start ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>-->\n      </ion-item>\n      \n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}">\n        <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament \n\n<!--        <button item-start ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>-->\n      </ion-item>\n      \n      <ng-container *ngFor="let tournament of event.tournaments">\n        <ion-item (click)="expand(tournament)" *ngIf="event.expanded">\n        <ion-avatar item-start *ngIf="tournament.img_url!=null">\n          <img [src]="tournament.img_url">\n        </ion-avatar>                  \n          {{tournament.tournament_name}}<ion-icon item-end [name]="tournament.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n        </ion-item>\n        <ng-container *ngIf="tournament.expanded!=true?false:true">\n          <ion-item>\n            <button ion-button [navPush]="\'EventOwnerTournamentMachinesPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id})">Add Machines To Tournament</button>\n            <br>\n            <button [navPush]="\'EventOwnerEditTournamentPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id, actionType:\'edit\'})" ion-button >Edit Tournament</button>\n            <br>\n            <button ion-button (click)="onTournamentToggle(event.event_id,tournament)"><ion-icon item-start [name]="tournament.active==true?\'play\':\'pause\'"></ion-icon>Toggle Tournament</button>\n          </ion-item>\n        </ng-container>\n      </ng-container>\n    </ng-container>\n  </ion-list>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-home/event-owner-home.html"*/,
+            selector: 'page-event-owner-tabs',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-tabs/event-owner-tabs.html"*/'<!--\n  Generated template for the EventOwnerTabsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-content padding>\n<ion-tabs #myTabs  (ionChange)="onTabChange($event)">\n  <ion-tab [root]="\'EventOwnerHomePage\'" tabIcon="md-home" [tabTitle]="\'Home\'"></ion-tab>  \n  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="\'EventOwnerQuickLinksPage\'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>\n</ion-tabs>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-tabs/event-owner-tabs.html"*/,
         })
-    ], EventOwnerHomePage);
-    return EventOwnerHomePage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], EventOwnerTabsPage);
+    return EventOwnerTabsPage;
+}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=event-owner-home.js.map
+//# sourceMappingURL=event-owner-tabs.js.map
 
 /***/ })
 

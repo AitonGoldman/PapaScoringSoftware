@@ -1,4 +1,4 @@
-webpackJsonp([22],{
+webpackJsonp([23],{
 
 /***/ 151:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -122,76 +122,80 @@ var map = {
 		691,
 		2
 	],
-	"../pages/event-owner-confirm/event-owner-confirm.module": [
+	"../pages/event-owner-add-user/event-owner-add-user.module": [
 		692,
-		21
+		12
+	],
+	"../pages/event-owner-confirm/event-owner-confirm.module": [
+		693,
+		10
 	],
 	"../pages/event-owner-create-tournament/event-owner-create-tournament.module": [
-		693,
+		694,
 		1
 	],
 	"../pages/event-owner-edit-tournament/event-owner-edit-tournament.module": [
-		694,
+		695,
 		0
 	],
 	"../pages/event-owner-home/event-owner-home.module": [
-		695,
-		20
+		696,
+		22
 	],
 	"../pages/event-owner-login/event-owner-login.module": [
-		696,
+		697,
 		6
 	],
 	"../pages/event-owner-quick-links/event-owner-quick-links.module": [
-		697,
-		19
+		698,
+		21
 	],
 	"../pages/event-owner-request/event-owner-request.module": [
-		698,
-		11
+		699,
+		13
 	],
 	"../pages/event-owner-tabs/event-owner-tabs.module": [
-		699,
-		18
+		700,
+		20
 	],
 	"../pages/event-owner-tournament-machines/event-owner-tournament-machines.module": [
-		700,
+		701,
 		8
 	],
 	"../pages/event-select/event-select.module": [
-		701,
-		17
+		702,
+		19
 	],
 	"../pages/home/home.module": [
-		702,
-		10
+		703,
+		11
 	],
 	"../pages/login/login.module": [
-		703,
+		704,
 		9
 	],
 	"../pages/quick-links/quick-links.module": [
-		704,
-		16
+		705,
+		18
 	],
 	"../pages/results/results.module": [
-		705,
-		15
+		706,
+		17
 	],
 	"../pages/success/success.module": [
-		706,
-		14
+		707,
+		16
 	],
 	"../pages/tabs/tabs.module": [
-		707,
-		13
+		708,
+		15
 	],
 	"../pages/tournament-director-home/tournament-director-home.module": [
-		708,
-		12
+		709,
+		14
 	],
 	"../pages/tournament-machines/tournament-machines.module": [
-		709,
+		710,
 		7
 	]
 };
@@ -306,25 +310,27 @@ var PssApiProvider = (function () {
         this.basePssUrl = 'http://0.0.0.0:8000';
         //basePssUrl='http://0.0.0.0'
         this.loading_instance = null;
-        this.loginUser = this.generate_api_call('loginUser', this.basePssUrl + "/auth/pss_event_user/login/:arg", 'post');
-        this.eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest', this.basePssUrl + "/pss_user_request", 'post');
-        this.eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm', this.basePssUrl + "/pss_user_request_confirm/:arg", 'post');
-        this.loginEventOwner = this.generate_api_call('loginEventOwner', this.basePssUrl + "/auth/pss_user/login", 'post');
+        this.addTournamentMachine = this.generate_api_call('addTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'post');
+        this.addEventUsers = this.generate_api_call('addEventUsers', this.basePssUrl + "/:arg/event_user", 'post');
         this.createEvent = this.generate_api_call('createEvent', this.basePssUrl + "/event", 'post');
         this.createWizardEvent = this.generate_api_call('createWizardEvent', this.basePssUrl + "/wizard/event/tournament/tournament_machines", 'post');
         this.createWizardTournament = this.generate_api_call('createWizardTournament', this.basePssUrl + "/wizard/tournament/tournament_machines", 'post');
         this.createTournament = this.generate_api_call('createTournament', this.basePssUrl + "/:arg/tournament", 'post');
-        this.addTournamentMachine = this.generate_api_call('addTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'post');
         this.editTournamentMachine = this.generate_api_call('editTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'put');
         this.editTournament = this.generate_api_call('editTournament', this.basePssUrl + "/:arg/tournament", 'put');
         this.editEvent = this.generate_api_call('editEvent', this.basePssUrl + "/event", 'put');
+        this.eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest', this.basePssUrl + "/pss_user_request", 'post');
+        this.eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm', this.basePssUrl + "/pss_user_request_confirm/:arg", 'post');
         this.getAllEvents = this.generate_api_call('getAllEvents', this.basePssUrl + "/events", 'get');
         this.getEvent = this.generate_api_call('getEvent', this.basePssUrl + "/event/:arg", 'get');
         this.getTournament = this.generate_api_call('getTournament', this.basePssUrl + "/:arg/tournament/:arg", 'get');
         this.getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines', this.basePssUrl + "/:arg/:arg/tournament_machines/machines", 'get');
         this.getAllMachines = this.generate_api_call('getAllMachines', this.basePssUrl + "/machines", 'get');
+        this.getAllUsers = this.generate_api_call('getAllUsers', this.basePssUrl + "/pss_users", 'get');
         this.getAllTournaments = this.generate_api_call('getAllTournaments', this.basePssUrl + "/:arg/tournaments", 'get');
         this.getAllEventsAndTournaments = this.generate_api_call('getAllEventsAndTournaments', this.basePssUrl + "/events/tournaments", 'get');
+        this.loginEventOwner = this.generate_api_call('loginEventOwner', this.basePssUrl + "/auth/pss_user/login", 'post');
+        this.loginUser = this.generate_api_call('loginUser', this.basePssUrl + "/auth/pss_event_user/login/:arg", 'post');
         console.log('Hello PssApiProvider Provider');
     }
     PssApiProvider.prototype.makeHot = function (cold) {
@@ -432,12 +438,24 @@ var AutoCompleteProvider = (function () {
         console.log('Hello AutoCompleteProvider Provider');
     }
     AutoCompleteProvider.prototype.setMachines = function (machines) {
-        this.machines = machines;
+        //this.machines=machines;
+        this.items = machines;
+        this.itemFieldToMatch = 'machine_name';
+        this.labelAttribute = "machine_name";
     };
-    AutoCompleteProvider.prototype.getResults = function (machineName) {
-        var regex = new RegExp(machineName.toLowerCase());
-        return this.machines.filter(function (item) {
-            var matches = item.machine_name.toLowerCase().match(regex);
+    AutoCompleteProvider.prototype.addUsers = function (user) {
+        this.items.push(user);
+    };
+    AutoCompleteProvider.prototype.setUsers = function (users) {
+        this.items = users;
+        this.itemFieldToMatch = 'full_user_name';
+        this.labelAttribute = "full_user_name";
+    };
+    AutoCompleteProvider.prototype.getResults = function (name) {
+        var _this = this;
+        var regex = new RegExp(name.toLowerCase());
+        return this.items.filter(function (item) {
+            var matches = item[_this.itemFieldToMatch].toLowerCase().match(regex);
             return (matches != null && matches.length > 0);
         });
     };
@@ -459,7 +477,7 @@ var AutoCompleteProvider = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ExpandableModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__expandable__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__expandable__ = __webpack_require__(664);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -562,6 +580,7 @@ var AppModule = (function () {
                         { loadChildren: '../pages/create-tournament/create-tournament.module#CreateTournamentPageModule', name: 'CreateTournamentPage', segment: 'CreateTournament/:eventId/:actionType', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/edit-event/edit-event.module#EditEventPageModule', name: 'EditEventPage', segment: 'EditEventPage/:actionType/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/edit-tournament/edit-tournament.module#EditTournamentPageModule', name: 'EditTournamentPage', segment: 'EditTournament/:eventId/:tournamentId/:actionType', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-add-user/event-owner-add-user.module#EventOwnerAddUserPageModule', name: 'EventOwnerAddUserPage', segment: 'EventOwnerAddUser/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-confirm/event-owner-confirm.module#EventOwnerConfirmPageModule', name: 'EventOwnerConfirmPage', segment: 'EventOwnerConfirm/:itsdangerousstring', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-create-tournament/event-owner-create-tournament.module#EventOwnerCreateTournamentPageModule', name: 'EventOwnerCreateTournamentPage', segment: 'EventOwnerCreateTournament/:eventId/:actionType/:wizardMode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-edit-tournament/event-owner-edit-tournament.module#EventOwnerEditTournamentPageModule', name: 'EventOwnerEditTournamentPage', segment: 'EventOwnerEditTournament/:eventId/:tournamentId/:actionType', priority: 'low', defaultHistory: [] },
@@ -612,7 +631,7 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 395:
+/***/ 664:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

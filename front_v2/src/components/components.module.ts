@@ -6,6 +6,7 @@ import { EventComponent } from './event/event';
 import { TournamentComponent } from './tournament/tournament';
 import { TournamentMachinesComponent } from './tournament-machines/tournament-machines';
 import { ExpandableComponent } from './expandable/expandable';
+import { AddUserComponent } from './add-user/add-user';
 @NgModule({
 	declarations: [
             PssPageComponent,    
@@ -14,7 +15,8 @@ import { ExpandableComponent } from './expandable/expandable';
             EventComponent,
             TournamentComponent,
             TournamentMachinesComponent,
-            ExpandableComponent],
+            ExpandableComponent,
+    AddUserComponent],
     imports: [],
     exports: [
         PssPageComponent,
@@ -23,6 +25,7 @@ import { ExpandableComponent } from './expandable/expandable';
         EventComponent,
         TournamentComponent,
         TournamentMachinesComponent,
-        ExpandableComponent]
+        ExpandableComponent,
+    AddUserComponent]
 })
 export class ComponentsModule {}

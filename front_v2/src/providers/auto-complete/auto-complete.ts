@@ -12,18 +12,31 @@ import {AutoCompleteService} from 'ionic2-auto-complete';
 export class AutoCompleteProvider implements AutoCompleteService{
     labelAttribute:string = "machine_name";
     formValueAttribute = ""
-    machines:any;
+    //machines:any;
+    items:any;
+    itemFieldToMatch:any;
     constructor(public http: HttpClient) {
         console.log('Hello AutoCompleteProvider Provider');
     }
     setMachines(machines){
-        this.machines=machines;        
+        //this.machines=machines;
+        this.items=machines;
+        this.itemFieldToMatch='machine_name'
+        this.labelAttribute = "machine_name";        
     }
-    getResults(machineName:string){        
-        let regex = new RegExp(machineName.toLowerCase());
-        return this.machines.filter(
+    addUsers(user){
+        this.items.push(user);
+    }
+    setUsers(users){
+        this.items=users;
+        this.itemFieldToMatch='full_user_name'        
+        this.labelAttribute = "full_user_name";
+    }
+    getResults(name:string){        
+        let regex = new RegExp(name.toLowerCase());
+        return this.items.filter(
             (item) => {
-                let matches = item.machine_name.toLowerCase().match(regex);
+                let matches = item[this.itemFieldToMatch].toLowerCase().match(regex);
                 return (matches!=null && matches.length > 0)
             }
         )

@@ -1,5 +1,8 @@
+import { EventAuthProvider } from '../../providers/event-auth/event-auth';
+import { NotificationsService } from 'angular2-notifications';
+
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { App, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { SuccessSummary } from '../../classes/success-summary';
@@ -23,8 +26,16 @@ export class EventOwnerConfirmPage extends PssPageComponent{
     successSummary:any = null;
     successButtons:any = [];    
     constructor(public navCtrl: NavController,
-                public navParams: NavParams,
-                public pssApi:PssApiProvider) {
+                public navParams: NavParams,                
+                public eventAuth: EventAuthProvider,
+                public appCtrl: App,
+                public pssApi: PssApiProvider,
+                public platform: Platform,
+                public notificationsService: NotificationsService) {
+        super(eventAuth,navParams,
+              navCtrl,appCtrl,
+              pssApi,platform,
+              notificationsService);
         let encodedString:string = navParams.get('itsdangerousstring');
         this.successSummary = new SuccessSummary('Activating Account....',
                                                  null,
@@ -35,7 +46,7 @@ export class EventOwnerConfirmPage extends PssPageComponent{
                 .subscribe(this.generatePssUserConfirm())            
             
         }else{
-            this.success=false;
+            
         }
     }
     generatePssUserConfirm(){

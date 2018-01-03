@@ -1,16 +1,17 @@
 webpackJsonp([12],{
 
-/***/ 708:
+/***/ 692:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TournamentDirectorHomePageModule", function() { return TournamentDirectorHomePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerAddUserPageModule", function() { return EventOwnerAddUserPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_director_home__ = __webpack_require__(738);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_notifications__ = __webpack_require__(350);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_add_user__ = __webpack_require__(723);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,28 +22,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TournamentDirectorHomePageModule = (function () {
-    function TournamentDirectorHomePageModule() {
+
+var EventOwnerAddUserPageModule = (function () {
+    function EventOwnerAddUserPageModule() {
     }
-    TournamentDirectorHomePageModule = __decorate([
+    EventOwnerAddUserPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__tournament_director_home__["a" /* TournamentDirectorHomePage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_add_user__["a" /* EventOwnerAddUserPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tournament_director_home__["a" /* TournamentDirectorHomePage */]),
-                __WEBPACK_IMPORTED_MODULE_3_angular2_notifications__["SimpleNotificationsModule"].forRoot()
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_add_user__["a" /* EventOwnerAddUserPage */]),
+                __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__["a" /* AutoCompleteModule */],
+                __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["SimpleNotificationsModule"].forRoot()
             ],
         })
-    ], TournamentDirectorHomePageModule);
-    return TournamentDirectorHomePageModule;
+    ], EventOwnerAddUserPageModule);
+    return EventOwnerAddUserPageModule;
 }());
 
-//# sourceMappingURL=tournament-director-home.module.js.map
+//# sourceMappingURL=event-owner-add-user.module.js.map
 
 /***/ }),
 
-/***/ 710:
+/***/ 711:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -173,13 +176,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 738:
+/***/ 723:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentDirectorHomePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerAddUserPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(710);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_add_user_add_user__ = __webpack_require__(724);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -199,44 +202,212 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the TournamentDirectorHomePage page.
+ * Generated class for the EventOwnerAddUserPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var TournamentDirectorHomePage = (function (_super) {
-    __extends(TournamentDirectorHomePage, _super);
-    function TournamentDirectorHomePage() {
+var EventOwnerAddUserPage = (function (_super) {
+    __extends(EventOwnerAddUserPage, _super);
+    function EventOwnerAddUserPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.tournaments = [];
+        _this.destPageAfterSuccess = 'EventOwnerHomePage';
         return _this;
     }
-    TournamentDirectorHomePage.prototype.generateGetAllTournamentsProcessor = function () {
+    EventOwnerAddUserPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-event-owner-add-user',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/add-user/add-user.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]=\'buildNavParams({})\'>Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n<ion-content padding>\n  <form #myForm="ngForm">\n    <ion-item>\n    <ion-label>Role</ion-label>\n    <ion-select name="myeventrole" [(ngModel)]="selectedRole" required>\n      <ion-option *ngFor="let role of roles" [value]="role">{{role.event_role_name}}</ion-option>\n    </ion-select>\n    </ion-item>\n    <ion-item>\n    </ion-item>\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n  </form>\n\n  <div *ngIf=\'existingUserFound==false\' text-center padding>        \n    The system does not know about {{newUserName}}.  Click the button below to register them for the event.\n    <br>\n    <button [disabled]=\'!myForm.valid\' ion-button margin (click)="onSubmit(newUserName)">Register User</button>\n    \n  </div>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/add-user/add-user.html"*/,
+        })
+    ], EventOwnerAddUserPage);
+    return EventOwnerAddUserPage;
+}(__WEBPACK_IMPORTED_MODULE_1__components_add_user_add_user__["a" /* AddUserComponent */]));
+
+//# sourceMappingURL=event-owner-add-user.js.map
+
+/***/ }),
+
+/***/ 724:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddUserComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pss_page_pss_page__ = __webpack_require__(711);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(351);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_notifications__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_angular2_notifications__);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+/**
+ * Generated class for the AddUserComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+var AddUserComponent = (function (_super) {
+    __extends(AddUserComponent, _super);
+    function AddUserComponent(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, toastCtrl, actionSheetCtrl, notificationsService) {
+        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) || this;
+        _this.autoCompleteProvider = autoCompleteProvider;
+        _this.eventAuth = eventAuth;
+        _this.navParams = navParams;
+        _this.navCtrl = navCtrl;
+        _this.appCtrl = appCtrl;
+        _this.pssApi = pssApi;
+        _this.platform = platform;
+        _this.toastCtrl = toastCtrl;
+        _this.actionSheetCtrl = actionSheetCtrl;
+        _this.notificationsService = notificationsService;
+        _this.existingUserFound = true;
+        _this.selectedUser = {};
+        _this.newUserName = null;
+        _this.roles = [];
+        _this.selectedRole = null;
+        return _this;
+    }
+    AddUserComponent.prototype.generateGetAllUsersProcessor = function () {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.tournaments = result.data;
-            _this.tournaments.map(function (tournament) {
-                tournament.expanded = false;
-            });
+            _this.users = result.data;
+            _this.autoCompleteProvider.setUsers(result.data);
+            _this.roles = result.roles;
         };
     };
-    TournamentDirectorHomePage.prototype.ionViewDidLoad = function () {
-        this.pssApi.getAllTournaments(this.eventId)
-            .subscribe(this.generateGetAllTournamentsProcessor());
-        console.log('ionViewDidLoad TournamentDirectorHomePage');
+    AddUserComponent.prototype.generateAddEventUsersProcessor = function (user_full_name, role_name) {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var user_already_exists = _this.users.filter(function (user) {
+                return user.pss_user_id == result.data.pss_user_id;
+            }).length;
+            if (user_already_exists == 0) {
+                _this.users.push(result.data[0]);
+            }
+            var message_string = user_full_name + " is a " + role_name + " in the event.";
+            _this.notificationsService.success("Success", message_string, {
+                timeOut: 0,
+                position: ["top", "right"],
+                theClass: 'poop'
+            });
+            //toast here
+        };
     };
-    TournamentDirectorHomePage = __decorate([
+    AddUserComponent.prototype.ionViewWillLoad = function () {
+        console.log('ionViewDidLoad EventOwnerAddUserPage');
+        this.pssApi.getAllUsers()
+            .subscribe(this.generateGetAllUsersProcessor());
+    };
+    AddUserComponent.prototype.onInput = function (event) {
+        if (this.searchbar.suggestions.length == 0) {
+            this.existingUserFound = false;
+            this.newUserName = event;
+        }
+        else {
+            this.existingUserFound = true;
+        }
+        console.log(this.selectedUser);
+    };
+    AddUserComponent.prototype.onSelect = function (event) {
+        console.log('in onselect...');
+        console.log(this.eventId);
+        if (this.selectedUser.events.includes(Number(this.eventId))) {
+            this.existingUserFound = true;
+            var message_string = this.selectedUser.full_user_name + " is already registered for this event.";
+            this.notificationsService.warn("Warning", message_string, {
+                timeOut: 0,
+                position: ["top", "right"],
+                theClass: 'poop'
+            });
+            return;
+        }
+        //FIXME : need to add new user to list of users searched
+        if (!this.selectedUser.events.includes(Number(this.eventId))) {
+            this.existingUserFound = true;
+            this.pssApi.addEventUsers({ event_users: [this.selectedUser],
+                event_role_ids: [this.selectedRole.event_role_id] }, this.eventId)
+                .subscribe(this.generateAddEventUsersProcessor(this.selectedUser.full_user_name, this.selectedRole.event_role_name));
+            return;
+        }
+        this.existingUserFound = true;
+    };
+    AddUserComponent.prototype.onFocus = function () {
+        this.selectedUser = {};
+        this.existingUserFound = true;
+    };
+    AddUserComponent.prototype.onSubmit = function (name_string) {
+        this.existingUserFound = true;
+        this.pssApi.addEventUsers({ event_users: [this.parseOutFirstLastNames(name_string)], event_role_ids: [this.selectedRole.event_role_id] }, this.eventId)
+            .subscribe(this.generateAddEventUsersProcessor(name_string, this.selectedRole.event_role_name));
+    };
+    AddUserComponent.prototype.parseOutFirstLastNames = function (name_string) {
+        var name_elements = name_string.split(" ");
+        return {
+            first_name: name_elements[0],
+            last_name: name_elements[1],
+            username: name_elements[0] + name_elements[1]
+        };
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('searchbar'),
+        __metadata("design:type", Object)
+    ], AddUserComponent.prototype, "searchbar", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myForm'),
+        __metadata("design:type", Object)
+    ], AddUserComponent.prototype, "myForm", void 0);
+    AddUserComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-tournament-director-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-director-home/tournament-director-home.html"*/'<!--\n  Generated template for the TournamentDirectorHomePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n  -->\n<!--<bobo>-->\n<ion-header>\n<ion-navbar hideBackButton>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n    <button [navPush]="\'ResultsPage\'" icon-only ion-button>Results</button>\n    <button icon-only ion-button>Queues</button>\n    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>\n  </ion-buttons>\n</ion-navbar>\n<ion-navbar color="primary">\nExample of sub header\n</ion-navbar>\n\n</ion-header>\n<!--</bobo>-->\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n\n\n<ion-content padding>\n  <h1><b>Tournament Creation</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'CreateTournamentPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})">\n      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament \n\n      <!--<button item-start ion-button [navPush]="\'CreateEventPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})" >Create Event</button>-->\n    </ion-item>\n  </ion-list>\n\n  <!--  <button ion-button [navPush]="\'CreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\',targetEventId:1,eventName:\'poop\'}" >Create Tournament</button> -->\n  <h1><b>Tournaments</b></h1>\n  <ion-list>\n    <ng-container *ngFor="let tournament of tournaments">\n      <ion-item-divider (click)="expand(tournament)">\n        <ion-avatar item-start *ngIf="tournament.img_url!=null">\n          <img [src]="tournament.img_url">\n        </ion-avatar>        \n        <h1>{{tournament.tournament_name}}</h1><ion-icon item-end [name]="tournament.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n      </ion-item-divider>      \n      <ng-container *ngIf="tournament.expanded!=true?false:true">\n        <ion-item>\n          <button ion-button [navPush]="\'TournamentMachinesPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Add Machines To Tournament</button>\n          <br>\n            <button [navPush]="\'EditTournamentPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:\'edit\'})" ion-button >Edit Tournament</button>\n          <br>\n          <button ion-button (click)="onTournamentToggle(eventId,tournament)"><ion-icon item-start [name]="tournament.active?\'play\':\'pause\'"></ion-icon>Toggle Tournament</button>\n        </ion-item>\n      </ng-container>      \n    </ng-container>\n  </ion-list>\n</ion-content>\n\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-director-home/tournament-director-home.html"*/,
-        })
-    ], TournamentDirectorHomePage);
-    return TournamentDirectorHomePage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+            selector: 'add-user',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/add-user/add-user.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]=\'buildNavParams({})\'>Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n<ion-content padding>\n  <form #myForm="ngForm">\n    <ion-item>\n    <ion-label>Role</ion-label>\n    <ion-select name="myeventrole" [(ngModel)]="selectedRole" required>\n      <ion-option *ngFor="let role of roles" [value]="role">{{role.event_role_name}}</ion-option>\n    </ion-select>\n    </ion-item>\n    <ion-item>\n    </ion-item>\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n  </form>\n\n  <div *ngIf=\'existingUserFound==false\' text-center padding>        \n    The system does not know about {{newUserName}}.  Click the button below to register them for the event.\n    <br>\n    <button [disabled]=\'!myForm.valid\' ion-button margin (click)="onSubmit(newUserName)">Register User</button>\n    \n  </div>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/add-user/add-user.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
+            __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["i" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["b" /* App */],
+            __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__["a" /* PssApiProvider */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* ToastController */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* ActionSheetController */],
+            __WEBPACK_IMPORTED_MODULE_6_angular2_notifications__["NotificationsService"]])
+    ], AddUserComponent);
+    return AddUserComponent;
+}(__WEBPACK_IMPORTED_MODULE_1__pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=tournament-director-home.js.map
+//# sourceMappingURL=add-user.js.map
 
 /***/ })
 

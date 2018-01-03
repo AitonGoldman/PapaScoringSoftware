@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title></ion-title>
+    <ion-buttons end hideWhen="mobile">
+      <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
+      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]='buildNavParams({})'>Home</button>    
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<simple-notifications  [options]="{position:['top','right']}"></simple-notifications>
+<ion-content padding>
+  <form #myForm="ngForm">
+    <ion-item>
+    <ion-label>Role</ion-label>
+    <ion-select name="myeventrole" [(ngModel)]="selectedRole" required>
+      <ion-option *ngFor="let role of roles" [value]="role">{{role.event_role_name}}</ion-option>
+    </ion-select>
+    </ion-item>
+    <ion-item>
+    </ion-item>
+    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>
+  </form>
+
+  <div *ngIf='existingUserFound==false' text-center padding>        
+    The system does not know about {{newUserName}}.  Click the button below to register them for the event.
+    <br>
+    <button [disabled]='!myForm.valid' ion-button margin (click)="onSubmit(newUserName)">Register User</button>
+    
+  </div>
+  
+</ion-content>

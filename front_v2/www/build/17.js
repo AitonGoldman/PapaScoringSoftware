@@ -1,14 +1,14 @@
 webpackJsonp([17],{
 
-/***/ 701:
+/***/ 706:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventSelectPageModule", function() { return EventSelectPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResultsPageModule", function() { return ResultsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_select__ = __webpack_require__(731);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__results__ = __webpack_require__(738);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var EventSelectPageModule = (function () {
-    function EventSelectPageModule() {
+var ResultsPageModule = (function () {
+    function ResultsPageModule() {
     }
-    EventSelectPageModule = __decorate([
+    ResultsPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_select__["a" /* EventSelectPage */],
+                __WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_select__["a" /* EventSelectPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */]),
             ],
         })
-    ], EventSelectPageModule);
-    return EventSelectPageModule;
+    ], ResultsPageModule);
+    return ResultsPageModule;
 }());
 
-//# sourceMappingURL=event-select.module.js.map
+//# sourceMappingURL=results.module.js.map
 
 /***/ }),
 
-/***/ 710:
+/***/ 711:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -169,13 +169,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 731:
+/***/ 738:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventSelectPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ResultsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(710);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(711);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -195,48 +195,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the EventSelectPage page.
+ * Generated class for the ResultsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EventSelectPage = (function (_super) {
-    __extends(EventSelectPage, _super);
-    function EventSelectPage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.nextPage = null;
-        _this.events = [];
-        return _this;
+var ResultsPage = (function (_super) {
+    __extends(ResultsPage, _super);
+    function ResultsPage() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    EventSelectPage.prototype.generateGetAllEventsProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            _this.events = result.data;
-        };
+    ResultsPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad ResultsPage');
     };
-    EventSelectPage.prototype.ionViewWillLoad = function () {
-        this.pssApi.getAllEvents({})
-            .subscribe(this.generateGetAllEventsProcessor());
-        if (this.platform.is('mobile') == true) {
-            this.nextPage = 'TabsPage';
-        }
-        else {
-            this.nextPage = this.getHomePageString();
-        }
-        console.log('ionViewDidLoad EventSelectPage');
-    };
-    EventSelectPage = __decorate([
+    ResultsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-event-select',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-select/event-select.html"*/'<!--\n  Generated template for the EventSelectPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>Event Select</ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <button showWhen=\'mobile\' ion-button (click)="pushRootPage(\'EventOwnerTabsPage\')">Login as event owner</button>\n  <button hideWhen=\'mobile\' ion-button (click)="pushRootPage(\'EventOwnerLoginPage\')">Login as event owner</button>\n  \n  <button *ngFor="let event of events" ion-button [navPush]="nextPage" [navParams]="{\'eventId\':event.event_id,\'eventName\':event.name}">GO to event {{event.name}} </button>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-select/event-select.html"*/,
+            selector: 'page-results',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/'<!--\n  Generated template for the ResultsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>testing 1 2 3 </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/,
         })
-    ], EventSelectPage);
-    return EventSelectPage;
+    ], ResultsPage);
+    return ResultsPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=event-select.js.map
+//# sourceMappingURL=results.js.map
 
 /***/ })
 

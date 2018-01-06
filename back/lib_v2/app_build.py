@@ -34,7 +34,7 @@ def configure_base_app(app):
         app,
         headers=['Content-Type', 'Accept'],
         send_wildcard=False,
-        supports_credentials=True,
+        supports_credentials=True
     )    
     LoginManager().init_app(app)
     for code in default_exceptions.iterkeys():

@@ -13,5 +13,5 @@
   <button showWhen='mobile' ion-button (click)="pushRootPage('EventOwnerTabsPage')">Login as event owner</button>
   <button hideWhen='mobile' ion-button (click)="pushRootPage('EventOwnerLoginPage')">Login as event owner</button>
   
-  <button *ngFor="let event of events" ion-button [navPush]="nextPage" [navParams]="{'eventId':event.event_id,'eventName':event.name}">GO to event {{event.name}} </button>
+  <button *ngFor="let event of events" ion-button (click)="gotoEvent(event.event_id)">GO to event {{event.name}} </button>
 </ion-content>

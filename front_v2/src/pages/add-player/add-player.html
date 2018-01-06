@@ -1,0 +1,37 @@
+<ion-header>
+<custom-headers [eventId]="eventId" [homePage]="getHomePageString()"></custom-headers>
+</ion-header>
+
+<ion-content padding>
+    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
+    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+    <form #myForm="ngForm" *ngIf="existingPlayerFound==false && loading==false">
+      <ion-item>
+        <ion-label floating>First Name</ion-label>
+        <ion-input type="text" required
+                   [(ngModel)]="selectedPlayer.first_name" name="first_name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Last Name</ion-label>
+        <ion-input type="text" required
+                   [(ngModel)]="selectedPlayer.last_name" name="last_name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Ifpa Ranking</ion-label>
+        <ion-input type="text" required
+                   [(ngModel)]="selectedPlayer.ifpa_ranking" name="ifpa_ranking"></ion-input>
+      </ion-item>
+      
+      <button ion-button (click)='getIfpaRanking(selectedPlayer.first_name+" "+selectedPlayer.last_name)'>
+        Lookup Ifpa Ranking
+      </button>
+      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>
+      <ion-item>
+        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>
+      </ion-item>
+      <button ion-button (click)="onSubmit()">
+        register player
+      </button>
+    </form>
+    
+</ion-content>

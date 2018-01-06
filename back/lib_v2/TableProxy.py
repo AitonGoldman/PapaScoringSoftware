@@ -62,10 +62,10 @@ class TableProxy():
         #    'EventPlayerRoleMappings', cascade='all'
         #)
 
-        
-        self.Players.event_info = self.db_handle.relationship(
-           'EventPlayersInfo', cascade='all'
-        )
+        self.initialize_all_event_relationship()
+        #self.Players.event_info = self.db_handle.relationship(
+        #    'EventPlayersInfo', cascade='all', uselist=True
+        #)
         
         self.Players.events = db_handle.relationship(
             'Events',
@@ -118,9 +118,16 @@ class TableProxy():
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=sa_exc.SAWarning)
             self.Players.event_info = self.db_handle.relationship(
-                'EventPlayersInfo', cascade='all', uselist=False, 
+                'EventPlayersInfo', cascade='all', uselist=True, 
                 primaryjoin="and_(EventPlayersInfo.player_id==Players.player_id,EventPlayersInfo.event_id==%s)"%target_event_id
             )
+            
+    def initialize_all_event_relationship(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=sa_exc.SAWarning)
+            self.Players.event_info = self.db_handle.relationship(
+                'EventPlayersInfo', cascade='all', uselist=True
+            )                        
             
     def commit_changes(self):
         self.db_handle.session.commit()
@@ -129,6 +136,9 @@ class TableProxy():
         #return self.PssUsers.query.options(joinedload("admin_roles"),joinedload("event_roles"),joinedload("events"),joinedload("event_user")).filter_by(username=input_data['username']).first()
         return self.PssUsers.query.filter_by(username=username).first()
 
+    def get_all_users(self):
+        return self.PssUsers.query.all()
+    
     def get_user_by_id(self,id):
         #return self.PssUsers.query.options(joinedload("admin_roles"),joinedload("event_roles"),joinedload("events"),joinedload("event_user")).filter_by(username=input_data['username']).first()
         return self.PssUsers.query.filter_by(pss_user_id=id).first()
@@ -156,6 +166,9 @@ class TableProxy():
             return tournament_results[tournament.tournament_id]['count']
     def get_all_machines(self):
         return self.Machines.query.all()
+    
+    def get_all_event_roles(self):
+        return self.EventRoles.query.all()
         
     def get_available_token_count_for_tournaments(self,event_id,player):                
         tournament_results={}
@@ -280,7 +293,8 @@ class TableProxy():
                 pss_user.event_roles.remove(event_role_mapping)
                 self.db_handle.session.delete(event_role_mapping)                
         for event_role_id in event_role_ids:            
-            event_role = self.EventRoles.query.filter_by(event_role_id=event_role_id).first()                                                            
+            event_role = self.EventRoles.query.filter_by(event_role_id=event_role_id).first()
+            
             if event_role is None:
                 raise Exception('Naughty Naughty')
             event_role_mapping = self.EventRoleMappings()
@@ -311,8 +325,8 @@ class TableProxy():
             event_player_info.player_id_for_event=100
         else:
             event_player_info.player_id_for_event=existing_player_ids_for_event[0]+1                
-        player.event_info=event_player_info        
         player.events.append(event)
+        self.db_handle.session.add(event_player_info)
         if commit:
             self.db_handle.session.commit()
         return player
@@ -325,6 +339,7 @@ class TableProxy():
                       first_name,last_name,
                       pin=None,
                       extra_title=None,
+                      img_url=None,
                       commit=False):        
         player = self.Players()
         player.first_name=first_name
@@ -335,6 +350,8 @@ class TableProxy():
             player.pin=pin
         else:
             player.pin=random.randrange(1234,9999)
+        if img_url:
+            player.img_url=img_url
         self.db_handle.session.add(player)
         if commit:            
             self.db_handle.session.commit()
@@ -385,12 +402,23 @@ class TableProxy():
         if commit:            
             self.db_handle.session.commit()
         return meta_tournament
+    
+    def search_player(self, player_string):
+        return self.Players.query.filter((self.Players.first_name+" "+self.Players.last_name).like(player_string+"%")).all()
+    
+    def get_all_players(self):
+        return self.Players.query.all()
 
+    
     def get_player(self,event_id,player_id=None,
                    player_id_for_event=None,
                    first_name=None,last_name=None,
-                   extra_title=None):
-        self.initialize_event_specific_relationship(event_id)
+                   extra_title=None,
+                   initialize_event_specific_relationship=False):
+        if initialize_event_specific_relationship:
+            self.initialize_event_specific_relationship(event_id)
+        else:
+            self.initialize_all_event_relationship()
         if player_id:
             return self.Players.query.filter_by(player_id=player_id).first()
         if player_id_for_event:

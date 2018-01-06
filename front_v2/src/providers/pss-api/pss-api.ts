@@ -16,8 +16,8 @@ import { ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class PssApiProvider {
-    basePssUrl='http://0.0.0.0:8000'
-    //basePssUrl='http://0.0.0.0'
+    basePssUrl='http://192.168.1.178:8000'
+    //basePssUrl='http://0.0.0.0:8000'
     loading_instance = null;   
     constructor(public http: HttpClient,public loadingCtrl: LoadingController,
                 private toastCtrl: ToastController) {
@@ -34,7 +34,7 @@ export class PssApiProvider {
         return (...restOfArgs: any[]) => {
             console.log('trying a network op 1 ...')
             let localUrl=url;            
-            let postObject=null;
+            let postObject=null;            
             if(method=="post" || method=="put"){
                 postObject=restOfArgs.shift();
             }
@@ -54,8 +54,8 @@ export class PssApiProvider {
             console.log('trying a network op 2...')
             
             let result_observable = this.makeHot(this.http.request(method,localUrl,            
-                                                               {withCredentials:true,
-                                                                body:postObject}))
+                                                                   {withCredentials:true,
+                                                                    body:postObject}))
                 .pipe(                
                     catchError(this.handleError(apiName, null))
                 );
@@ -65,7 +65,8 @@ export class PssApiProvider {
         }
     }    
     addTournamentMachine = this.generate_api_call('addTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'post');
-    addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');    
+    addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');
+    addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');    
     createEvent = this.generate_api_call('createEvent',this.basePssUrl+"/event",'post');
     createWizardEvent = this.generate_api_call('createWizardEvent',this.basePssUrl+"/wizard/event/tournament/tournament_machines",'post');
     createWizardTournament = this.generate_api_call('createWizardTournament',this.basePssUrl+"/wizard/tournament/tournament_machines",'post');        
@@ -73,12 +74,17 @@ export class PssApiProvider {
 
     editTournamentMachine = this.generate_api_call('editTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'put');
     editTournament = this.generate_api_call('editTournament',this.basePssUrl+"/:arg/tournament",'put');
-    editEvent = this.generate_api_call('editEvent',this.basePssUrl+"/event",'put');    
+    editEvent = this.generate_api_call('editEvent',this.basePssUrl+"/event",'put');
+    editEventUserRole = this.generate_api_call('editEventUser',this.basePssUrl+"/:arg/event_role_mapping",'put');    
+    
     eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest',this.basePssUrl+"/pss_user_request",'post');
     eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm',this.basePssUrl+"/pss_user_request_confirm/:arg",'post');
     
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
+    getAllPlayers = this.generate_api_call('getAllPlayers',this.basePssUrl+"/players",'get');    
     getEvent = this.generate_api_call('getEvent',this.basePssUrl+"/event/:arg",'get');
+    getIfpaRanking = this.generate_api_call('getIfpaRanking',this.basePssUrl+"/ifpa/:arg",'get');
+    
     getTournament = this.generate_api_call('getTournament',this.basePssUrl+"/:arg/tournament/:arg",'get');
     
     getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines/machines",'get');
@@ -90,6 +96,8 @@ export class PssApiProvider {
     
     loginEventOwner = this.generate_api_call('loginEventOwner',this.basePssUrl+"/auth/pss_user/login",'post');
     loginUser = this.generate_api_call('loginUser',this.basePssUrl+"/auth/pss_event_user/login/:arg",'post');
+    searchPlayers = this.generate_api_call('searchPlayers',this.basePssUrl+"/players/:arg",'get');        
+    
     private handleError<T> (operation = 'operation', result?: T) {        
         let debouncer=false;        
         return (error: any): Observable<T> => {

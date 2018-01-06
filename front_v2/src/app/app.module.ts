@@ -16,7 +16,8 @@ import { ExpandableModule } from '../components/expandable/expandable.module'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ImageUploadModule } from "angular2-image-upload";
-
+import { CookieModule } from 'ngx-cookie';
+import { CustomComponentsModule } from '../components/custom-components.module';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,9 @@ import { ImageUploadModule } from "angular2-image-upload";
       ExpandableModule,
       BrowserAnimationsModule, 
       SimpleNotificationsModule.forRoot(),
-      ImageUploadModule.forRoot()
+      ImageUploadModule.forRoot(),
+      CookieModule.forRoot(),
+      CustomComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

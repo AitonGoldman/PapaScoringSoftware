@@ -5,7 +5,6 @@
  * Components.
  */
 import { Component, Input } from '@angular/core';
-import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { Platform } from 'ionic-angular';
 
 @Component({
@@ -13,18 +12,15 @@ import { Platform } from 'ionic-angular';
   templateUrl: 'custom-header.html'
 })
 export class CustomHeaderComponent {
-    text: string;  
-
-    constructor(public eventAuth: EventAuthProvider,public platform: Platform) {
-        console.log('Hello CustomHeaderComponent Component');
-        this.text = 'Hello World';
+    goGoCustomHeader(){
+        
     }
-    
+    @Input() homePage;
     @Input() eventId;
         
-    @Input() eventName;
+    // @Input() eventName;
 
-    @Input() title;
+    // @Input() title;
     
     
 }

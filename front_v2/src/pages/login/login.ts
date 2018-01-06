@@ -26,6 +26,8 @@ export class LoginPage extends PssPageComponent {
             if(result == null){
                 return;
             }
+            console.log('in generateLoginUserProcessor');
+            console.log(result);
             this.eventAuth.setEventUserLoggedIn(this.eventId,result.data);
             let successSummary = new SuccessSummary(result.data.username+' has logged in.',
                                                     null,

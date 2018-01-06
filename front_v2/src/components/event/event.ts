@@ -154,4 +154,7 @@ export class EventComponent  extends PssPageComponent {
         this.entity.has_pic=true;
         this.entity.img_file=JSON.parse(event.serverResponse._body).data;        
     }
+    onSubmit(){
+
+    }
 }

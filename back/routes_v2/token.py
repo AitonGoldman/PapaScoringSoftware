@@ -83,7 +83,7 @@ def insert_tokens_into_db(list_of_tournament_tokens, player,
     for token_count in list_of_tournament_tokens:
         tournament = token_count.get('tournament',None)
         meta_tournament = token_count.get('meta_tournament',None)                
-        if tournament and tournament.team_tournament and player.event_info.team_id is None:
+        if tournament and tournament.team_tournament and player.event_info[0].team_id is None:
             continue
         ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,event_id, tournament=tournament,meta_tournament=meta_tournament)          
         purchase_summary_dict = {                                 
@@ -105,7 +105,7 @@ def insert_tokens_into_db(list_of_tournament_tokens, player,
                                                    player=player,
                                                    tournament=tournament,
                                                    meta_tournament=meta_tournament,
-                                                   team_id=player.event_info.team_id)
+                                                   team_id=player.event_info[0].team_id)
             
             new_token_purchase.tokens.append(new_token)
     return purchase_summary
@@ -137,7 +137,7 @@ def verify_tournament_and_meta_tournament_request_counts_are_valid(list_of_tourn
             max_tokens_player_is_allowed_to_buy=max_tokens_player_is_allowed_to_buy-1
         if max_tokens_player_is_allowed_to_buy-int(tournament_token['token_count'])<0:
             raise BadRequest('Fuck off, Ass Wipe')
-        if tournament and tournament.ifpa_rank_restriction and player.event_info.ifpa_ranking and player.event_info.ifpa_ranking < tournament.ifpa_rank_restriction:
+        if tournament and tournament.ifpa_rank_restriction and player.event_info[0].ifpa_ranking and player.event_info[0].ifpa_ranking < tournament.ifpa_rank_restriction:
             raise BadRequest('Ifpa restrictions have been violated')    
                     
 
@@ -147,9 +147,9 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
     else:
         raise BadRequest('No info in request')        
     if player_initiated:
-        player = app.table_proxy.get_player(event_id, player_id=logged_in_player.player_id)
+        player = app.table_proxy.get_player(event_id, player_id=logged_in_player.player_id,initialize_event_specific_relationship=True)
     else:
-        player = app.table_proxy.get_player(event_id, player_id=input_data['player_id'])
+        player = app.table_proxy.get_player(event_id, player_id=input_data['player_id'],initialize_event_specific_relationship=True)
     list_of_tournament_tokens=[]
     list_of_meta_tournament_tokens=[]
     # input format

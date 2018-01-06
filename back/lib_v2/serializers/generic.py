@@ -9,6 +9,7 @@ PSS_USER_ONLY='pss_user_only'
 PSS_USER_WITH_ROLES='pss_user_with_roles'
 
 PLAYER_ONLY='player_only'
+PLAYER_AND_EVENTS='player_and_events'
 
 TOURNAMENT_ONLY='tournament_only'
 META_TOURNAMENT_ONLY='meta_tournament_only'
@@ -33,6 +34,8 @@ def serialize_pss_user_public(model,type=PSS_USER_ONLY):
     pss_user_dict['full_user_name']=pss_user_dict['first_name']+' '+pss_user_dict['last_name']
     if model.extra_title:
         pss_user_dict['full_user_name']=pss_user_dict['full_user_name']+' '+pss_user_dict['extra_title']
+    #FIXME : event_roles should be controlled by type arg
+    pss_user_dict['event_roles']=[to_dict(event_role) for event_role in model.event_roles]
     if type==PSS_USER_ONLY:
         return pss_user_dict
 
@@ -52,19 +55,30 @@ def serialize_meta_tournament_public(model,type=META_TOURNAMENT_ONLY):
     if type==META_TOURNAMENT_ONLY:
         return meta_tournament_dict
     
-def serialize_player_public(model,type=PLAYER_ONLY):
+def serialize_player_public(model,type_of=PLAYER_ONLY):
     player_dict=serializer_v2(PLAYER_PRIVATE_FIELDS).serialize_model(model)
-    if type==PLAYER_ONLY:
+    player_dict['player_full_name']=model.__repr__()
+    
+    if type_of==PLAYER_ONLY:
+        return player_dict
+    if type_of==PLAYER_AND_EVENTS:
+        print model.__repr__()
+        player_dict['events']=[serialize_event_players_info_public(event_info_instance) for event_info_instance in model.event_info]
         return player_dict
 
-def serialize_player_private(model,type=PLAYER_ONLY):
-    player_dict=serializer_v2([]).serialize_model(model)            
-    player_dict['event_info']=serialize_event_players_info_public(model.event_info)
-    if type==PLAYER_ONLY:
-        return player_dict
+def serialize_player_private(model,type_of=PLAYER_ONLY):
+    player_dict=serializer_v2([]).serialize_model(model)
+    if type_of==PLAYER_AND_EVENTS:            
+        if model.event_info:
+            player_dict['events']=[serialize_event_players_info_public(event_info_instance) for event_info_instance in model.event_info]
+    player_dict['player_full_name']=model.__repr__()
+    return player_dict
 
-def serialize_event_players_info_public(model,type=None):
-    return serializer_v2([]).serialize_model(model)    
+
+def serialize_event_players_info_public(model,type=None):    
+    event_info = serializer_v2([]).serialize_model(model)
+    event_info['event_id']=model.event_id
+    return event_info
 
 def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
     tournament_machine_dict=serializer_v2(TOURNAMENT_MACHINE_PRIVATE_FIELDS).serialize_model(model)

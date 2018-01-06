@@ -4,7 +4,7 @@ import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complet
 import { Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
-import { ToastController } from 'ionic-angular';
+
 import { ActionSheetController } from 'ionic-angular'
 import { NotificationsService } from 'angular2-notifications';
 
@@ -36,7 +36,7 @@ export class AddUserComponent extends PssPageComponent{
                 public appCtrl: App,
                 public pssApi: PssApiProvider,
                 public platform: Platform,
-                private toastCtrl: ToastController,
+                
                 public actionSheetCtrl: ActionSheetController,
                 public notificationsService: NotificationsService ){
         super(eventAuth,navParams,
@@ -92,10 +92,13 @@ export class AddUserComponent extends PssPageComponent{
         }
         console.log(this.selectedUser);
     }
+    doesEventRolesMatchEvent(eventId,roles){
+        return roles.filter((role)=>{return Number(eventId)==role.event_id}).length>0
+    }
     onSelect(event){
         console.log('in onselect...');
         console.log(this.eventId);
-        if(this.selectedUser.events.includes(Number(this.eventId))){
+        if(this.doesEventRolesMatchEvent(this.eventId,this.selectedUser.event_roles)){
             this.existingUserFound=true;
             let message_string=this.selectedUser.full_user_name+" is already registered for this event."
             this.notificationsService.warn("Warning", message_string,{
@@ -107,7 +110,7 @@ export class AddUserComponent extends PssPageComponent{
             return;
         }
         //FIXME : need to add new user to list of users searched
-        if(!this.selectedUser.events.includes(Number(this.eventId))){
+        if(!this.doesEventRolesMatchEvent(this.eventId,this.selectedUser.event_roles)){
             this.existingUserFound=true;
             this.pssApi.addEventUsers({event_users:[this.selectedUser],
                                        event_role_ids:[this.selectedRole.event_role_id]},

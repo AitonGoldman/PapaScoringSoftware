@@ -4,7 +4,6 @@ import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complet
 import { List, Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
-import { ToastController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
@@ -41,7 +40,7 @@ export class TournamentMachinesComponent extends PssPageComponent {
                 public appCtrl: App,
                 public pssApi: PssApiProvider,
                 public platform: Platform,
-                private toastCtrl: ToastController,
+                
                 public actionSheetCtrl: ActionSheetController,
                 public notificationsService: NotificationsService ){
         super(eventAuth,navParams,
@@ -73,12 +72,6 @@ export class TournamentMachinesComponent extends PssPageComponent {
             if(result == null){
                 return;
             }
-                            let toast = this.toastCtrl.create({
-                                message: message_string,
-                                duration: 99000,
-                                position: 'top',
-                                showCloseButton: true                    
-                });
             //toast.present();
             this.notificationsService.success("Success", message_string,{
                 timeOut:0,

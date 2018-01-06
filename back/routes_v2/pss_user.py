@@ -4,6 +4,7 @@ from flask import jsonify,current_app,request
 from flask_login import current_user
 from lib_v2.serializers import generic
 import json
+from flask_restless.helpers import to_dict
 
 def get_username_that_does_not_already_exist(new_username,new_pss_users,tables_proxy):
     for i in range(2,10):
@@ -49,7 +50,10 @@ def create_event_user_route(request,tables_proxy,event_id):
         if 'pss_user_id' in event_user_to_create:            
             pss_user = tables_proxy.get_user_by_id(event_user_to_create['pss_user_id'])
             if pss_user is None:
-                raise BadRequest('Tried to submit a user with an invalid pss_user_id')                        
+                raise BadRequest('Tried to submit a user with an invalid pss_user_id')                
+            if len([event_info for event_info in pss_user.events if event_info.event_id==int(event_id)])>0:
+                raise BadRequest('User already added to event')                
+            #FIXME : need to silently fail when user is already registered
             tables_proxy.update_event_user_roles(event_role_ids,event_id, pss_user)
             pss_users_added_to_event.append(pss_user)
             continue                
@@ -84,3 +88,13 @@ def event_role_mapping_update(event_id):
     update_event_user_roles_route(request,current_app.table_proxy,event_id)
     current_app.table_proxy.commit_changes()
     return jsonify({'data':True})
+
+@blueprints.test_blueprint.route('/pss_users',methods=['GET'])
+def get_all_pss_users():            
+    all_users = current_app.table_proxy.get_all_users()
+    all_users_list=[]
+    for user in all_users:
+        all_users_list.append(generic.serialize_pss_user_public(user))
+    roles = current_app.table_proxy.get_all_event_roles()
+    roles_list = [to_dict(role) for role in roles]
+    return jsonify({'data':all_users_list,'roles':roles_list})

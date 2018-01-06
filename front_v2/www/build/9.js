@@ -1,14 +1,15 @@
 webpackJsonp([9],{
 
-/***/ 704:
+/***/ 705:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginPageModule", function() { return LoginPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerEditUserPageModule", function() { return EventOwnerEditUserPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login__ = __webpack_require__(717);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic2_auto_complete__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__event_owner_edit_user__ = __webpack_require__(739);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,36 +19,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var LoginPageModule = (function () {
-    function LoginPageModule() {
+
+var EventOwnerEditUserPageModule = (function () {
+    function EventOwnerEditUserPageModule() {
     }
-    LoginPageModule = __decorate([
+    EventOwnerEditUserPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__login__["a" /* LoginPage */],
+                __WEBPACK_IMPORTED_MODULE_3__event_owner_edit_user__["a" /* EventOwnerEditUserPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__login__["a" /* LoginPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_3__event_owner_edit_user__["a" /* EventOwnerEditUserPage */]),
+                __WEBPACK_IMPORTED_MODULE_2_ionic2_auto_complete__["a" /* AutoCompleteModule */]
             ],
         })
-    ], LoginPageModule);
-    return LoginPageModule;
+    ], EventOwnerEditUserPageModule);
+    return EventOwnerEditUserPageModule;
 }());
 
-//# sourceMappingURL=login.module.js.map
+//# sourceMappingURL=event-owner-edit-user.module.js.map
 
 /***/ }),
 
-/***/ 711:
+/***/ 721:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(351);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -94,8 +97,11 @@ var PssPageComponent = (function () {
         }
         return params;
     };
-    PssPageComponent.prototype.getHomePageString = function () {
-        var role = this.eventAuth.getRoleName(this.eventId);
+    PssPageComponent.prototype.getHomePageString = function (eventId) {
+        if (eventId == null) {
+            eventId = this.eventId;
+        }
+        var role = this.eventAuth.getRoleName(eventId);
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -155,11 +161,11 @@ var PssPageComponent = (function () {
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* App */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */],
             __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
     ], PssPageComponent);
     return PssPageComponent;
@@ -169,7 +175,7 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 712:
+/***/ 722:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -199,7 +205,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 713:
+/***/ 723:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -230,15 +236,19 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 717:
+/***/ 739:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerEditUserPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(711);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(712);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(713);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_auto_complete_auto_complete__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_event_auth_event_auth__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_angular2_notifications__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_edit_user_edit_user__ = __webpack_require__(740);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -255,73 +265,213 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
 
 
 
 
 /**
- * Generated class for the LoginPage page.
+ * Generated class for the EventOwnerEditUserPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var LoginPage = (function (_super) {
-    __extends(LoginPage, _super);
-    function LoginPage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.loginInfo = { 'username': null, 'password': null };
+var EventOwnerEditUserPage = (function (_super) {
+    __extends(EventOwnerEditUserPage, _super);
+    function EventOwnerEditUserPage(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, actionSheetCtrl, notificationsService) {
+        var _this = _super.call(this, autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, actionSheetCtrl, notificationsService) || this;
+        _this.autoCompleteProvider = autoCompleteProvider;
+        _this.eventAuth = eventAuth;
+        _this.navParams = navParams;
+        _this.navCtrl = navCtrl;
+        _this.appCtrl = appCtrl;
+        _this.pssApi = pssApi;
+        _this.platform = platform;
+        _this.actionSheetCtrl = actionSheetCtrl;
+        _this.notificationsService = notificationsService;
+        _this.destPageAfterSuccess = 'EventOwnerHomePage';
         return _this;
     }
-    LoginPage.prototype.generateLoginUserProcessor = function (successButton) {
+    EventOwnerEditUserPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad EventOwnerEditUserPage');
+    };
+    EventOwnerEditUserPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-event-owner-edit-user',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/edit-user/edit-user.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]=\'buildNavParams({})\'>Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <form #myForm="ngForm">\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n    <ion-item>\n    </ion-item>\n    <ion-item>\n    <ion-label>Role</ion-label>\n    <ion-select name="myeventrole" #myeventrole="ngModel" [(ngModel)]="selectedRole" required>\n      <ion-option *ngFor="let role of roles" [value]="role.event_role_id">{{role.event_role_name}}</ion-option>\n    </ion-select>\n    </ion-item>\n\n    \n    <button [disabled]="!myeventrole.dirty" ion-button (click)="onSubmit(false)"> Modify User Role </button>\n    <br>\n    <button ion-button (click)="onSubmit(true)">  Remove User From Event </button>    \n  </form>  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/edit-user/edit-user.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* App */],
+            __WEBPACK_IMPORTED_MODULE_4__providers_pss_api_pss_api__["a" /* PssApiProvider */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["a" /* ActionSheetController */],
+            __WEBPACK_IMPORTED_MODULE_5_angular2_notifications__["NotificationsService"]])
+    ], EventOwnerEditUserPage);
+    return EventOwnerEditUserPage;
+}(__WEBPACK_IMPORTED_MODULE_6__components_edit_user_edit_user__["a" /* EditUserComponent */]));
+
+//# sourceMappingURL=event-owner-edit-user.js.map
+
+/***/ }),
+
+/***/ 740:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EditUserComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pss_page_pss_page__ = __webpack_require__(721);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_notifications__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__classes_success_summary__ = __webpack_require__(722);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__classes_SuccessButton__ = __webpack_require__(723);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+/**
+ * Generated class for the EditUserComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+var EditUserComponent = (function (_super) {
+    __extends(EditUserComponent, _super);
+    function EditUserComponent(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, actionSheetCtrl, notificationsService) {
+        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) || this;
+        _this.autoCompleteProvider = autoCompleteProvider;
+        _this.eventAuth = eventAuth;
+        _this.navParams = navParams;
+        _this.navCtrl = navCtrl;
+        _this.appCtrl = appCtrl;
+        _this.pssApi = pssApi;
+        _this.platform = platform;
+        _this.actionSheetCtrl = actionSheetCtrl;
+        _this.notificationsService = notificationsService;
+        _this.destPageAfterSuccess = null;
+        _this.roles = [];
+        _this.selectedRole = null;
+        _this.selectedUser = null;
+        _this.filterUsersForEvent = function (user) {
+            if (user.event_roles.length == 0) {
+                return false;
+            }
+            var valid_roles = user.event_roles.filter(function (event_role) {
+                return event_role.event_id == _this.eventId;
+            });
+            if (valid_roles.length == 0) {
+                return false;
+            }
+            return true;
+        };
+        return _this;
+    }
+    EditUserComponent.prototype.generateEditEventUserRoleProcessor = function (removedEventUserFromEvent) {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.eventAuth.setEventUserLoggedIn(_this.eventId, result.data);
-            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](result.data.username + ' has logged in.', null, null);
-            var targetPage = null;
-            var targetTabIndex = null;
-            if (_this.platform.is('mobile')) {
-                console.log('going mobile');
-                targetTabIndex = 0;
-            }
-            if (successButton == null) {
-                targetPage = _this.getHomePageString();
-                successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', targetPage, _this.buildNavParams({}), targetTabIndex);
-            }
-            //            this.appCtrl.getRootNav().push("SuccessPage",
+            var success_title_string = 'User ' + _this.selectedUser.full_user_name + ' has been changed.';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_7__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
+            var successButton = new __WEBPACK_IMPORTED_MODULE_8__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.destPageAfterSuccess, _this.buildNavParams({}));
             _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
                 'successButtons': [successButton] }));
         };
     };
-    LoginPage.prototype.loginUser = function () {
-        this.pssApi.loginUser(this.loginInfo, this.eventId)
-            .subscribe(this.generateLoginUserProcessor());
+    EditUserComponent.prototype.generateGetAllUsersProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.users = result.data.filter(_this.filterUsersForEvent);
+            _this.autoCompleteProvider.setUsers(_this.users);
+            _this.roles = result.roles;
+        };
     };
-    LoginPage.prototype.loginEventOwner = function () {
-        var targetTabIndex = null;
-        if (this.platform.is('mobile')) {
-            console.log('going mobile');
-            targetTabIndex = 0;
+    EditUserComponent.prototype.ionViewWillLoad = function () {
+        console.log('ionViewDidLoad EventOwnerAddUserPage');
+        this.pssApi.getAllUsers()
+            .subscribe(this.generateGetAllUsersProcessor());
+    };
+    EditUserComponent.prototype.onSelect = function (event) {
+        console.log(this.selectedUser);
+        this.selectedRole = this.selectedUser.event_roles[0].event_role_id;
+        //this.pssApi.getEventUser(this.eventId,this.selectedUser.pss_user_id)
+        //    .subscribe(this.generateGetEventUserProcessor());            
+    };
+    EditUserComponent.prototype.onSubmit = function (removeEventUserFromEvent) {
+        var modifiedRoles = [];
+        if (removeEventUserFromEvent != true) {
+            modifiedRoles.push(this.selectedRole);
         }
-        var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', 'EventOwnerHomePage', this.buildNavParams({}), targetTabIndex);
-        this.pssApi.loginEventOwner(this.loginInfo)
-            .subscribe(this.generateLoginUserProcessor(successButton));
+        console.log(modifiedRoles);
+        this.pssApi.editEventUserRole({ 'event_user': this.selectedUser, 'event_role_ids': modifiedRoles }, this.eventId)
+            .subscribe(this.generateEditEventUserRoleProcessor(removeEventUserFromEvent));
     };
-    LoginPage.prototype.ionViewWillLoad = function () {
-        console.log('ionViewDidLoad LoginPage');
-        //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
+    EditUserComponent.prototype.onFocus = function () {
+        this.selectedUser = null;
     };
-    LoginPage = __decorate([
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('searchbar'),
+        __metadata("design:type", Object)
+    ], EditUserComponent.prototype, "searchbar", void 0);
+    EditUserComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-login',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/'<!--\n  Generated template for the LoginPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n<form #loginForm="ngForm">\n  <ion-item>\n  <ion-label floating>Username</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="loginInfo.username" name="username"></ion-input>\n</ion-item>\n<ion-item>\n  <ion-label floating>Password</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="loginInfo.password" name="password"></ion-input>\n</ion-item>\n<ion-item no-lines>\n  <button [disabled]=\'!loginForm.valid\' ion-button default (click)="loginUser()">Login </button>\n</ion-item>\n</form>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/,
-        })
-    ], LoginPage);
-    return LoginPage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+            selector: 'edit-user',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/edit-user/edit-user.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]=\'buildNavParams({})\'>Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <form #myForm="ngForm">\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n    <ion-item>\n    </ion-item>\n    <ion-item>\n    <ion-label>Role</ion-label>\n    <ion-select name="myeventrole" #myeventrole="ngModel" [(ngModel)]="selectedRole" required>\n      <ion-option *ngFor="let role of roles" [value]="role.event_role_id">{{role.event_role_name}}</ion-option>\n    </ion-select>\n    </ion-item>\n\n    \n    <button [disabled]="!myeventrole.dirty" ion-button (click)="onSubmit(false)"> Modify User Role </button>\n    <br>\n    <button ion-button (click)="onSubmit(true)">  Remove User From Event </button>    \n  </form>  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/edit-user/edit-user.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
+            __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* App */],
+            __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__["a" /* PssApiProvider */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* ActionSheetController */],
+            __WEBPACK_IMPORTED_MODULE_6_angular2_notifications__["NotificationsService"]])
+    ], EditUserComponent);
+    return EditUserComponent;
+}(__WEBPACK_IMPORTED_MODULE_1__pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=login.js.map
+//# sourceMappingURL=edit-user.js.map
 
 /***/ })
 

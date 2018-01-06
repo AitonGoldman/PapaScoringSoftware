@@ -26,6 +26,21 @@ export class EventSelectPage extends PssPageComponent {
             this.events=result.data;
         };
     }
+
+    gotoEvent(eventId){
+        let nextPage = '';
+        let tabIndex=null;
+        if(this.platform.is('mobile') == true){
+            nextPage = 'TabsPage';
+            tabIndex = 0;
+        } else {
+            nextPage = this.getHomePageString(eventId);
+        }          
+        
+        this.pushRootPage(nextPage,{'eventId':eventId});
+
+    }
+    
     
     ionViewWillLoad() {
         this.pssApi.getAllEvents({})

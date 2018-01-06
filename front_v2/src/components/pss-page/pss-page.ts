@@ -39,8 +39,11 @@ export class PssPageComponent {
         return params;
     }
         
-    getHomePageString(){        
-        let role = this.eventAuth.getRoleName(this.eventId);
+    getHomePageString(eventId?){
+        if(eventId==null){
+            eventId=this.eventId;
+        }
+        let role = this.eventAuth.getRoleName(eventId);
         if(role=="tournamentdirector"){
                 return 'TournamentDirectorHomePage'            
         }

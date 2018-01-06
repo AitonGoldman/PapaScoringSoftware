@@ -12,7 +12,7 @@ def generate_players_class(db_handle):
         extra_title = db_handle.Column(db_handle.String(80))    
         ifpa_id = db_handle.Column(db_handle.Integer)                
         has_pic = db_handle.Column(db_handle.Boolean(),default=True)
-        img_url=db_handle.Column(db_handle.String(150),default='/img/players/1.png')                
+        img_url=db_handle.Column(db_handle.String(150))                
         ioniccloud_push_token=db_handle.Column(db_handle.String(500))                
         pin=db_handle.Column(db_handle.Integer)
         

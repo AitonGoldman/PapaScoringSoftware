@@ -46,7 +46,7 @@ def player_login_route(request,tables_proxy,event_id):
     if 'player_id_for_event' not in input_data or 'player_pin' not in input_data:
         raise BadRequest('Missing player number or pin')
     #player = tables_proxy.get_player_by_player_id_for_event(input_data['player_id_for_event'],event_id)
-    player = tables_proxy.get_player(event_id,player_id_for_event=input_data['player_id_for_event'])    
+    player = tables_proxy.get_player(event_id,player_id_for_event=input_data['player_id_for_event'],initialize_event_specific_relationship=True)    
     if player is None:
         raise Unauthorized('Bad player number')
     if not player.verify_pin(input_data['player_pin']):        

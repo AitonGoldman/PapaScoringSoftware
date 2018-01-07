@@ -6,6 +6,8 @@ from lib_v2.serializers import generic
 import json
 from time import sleep
 from shutil import copyfile
+from flask_restless.helpers import to_dict
+from routes_v2.token import calculate_list_of_tickets_and_prices_for_player
 
 def handle_img_upload(input_data):
     event_img_folders='/Users/agoldma/git/github/TD/front_v2/www/assets/imgs/'
@@ -68,9 +70,34 @@ def player_create(event_id):
     return jsonify({'data':new_players_serialized})
     #return jsonify({'data':[{'player_full_name':'poop'}]})
 
+@blueprints.test_blueprint.route('/<int:event_id>/event_player/<int:event_player_id>',methods=['GET'])
+def get_event_player(event_id,event_player_id):                
+    event_player = current_app.table_proxy.get_event_player(event_id,event_player_id)
+    tournament_calculated_lists=[]
+    if event_player:
+        tournament_counts, meta_tournament_counts = current_app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)                
+        player_dict=generic.serialize_player_public(event_player)
+        for tournament in current_app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):
+            if tournament_counts.get(tournament.tournament_id,None):
+                max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed-tournament_counts[tournament.tournament_id]['count']
+            else:
+                max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed
+            calculated_list = calculate_list_of_tickets_and_prices_for_player(0,event_player,current_app,event_id,tournament)
+            if tournament_counts.get(tournament.tournament_id,None):                
+                pruned_calculated_list = [price for price in calculated_list if price['amount'] <= max_amount_allowed_for_player]
+            else:
+                pruned_calculated_list = calculated_list            
+            tournament_calculated_lists.append({'tournament_name':tournament.tournament_name,
+                                                'tournament_id':tournament.tournament_id,
+                                                'calculated_price_list':pruned_calculated_list})
+        return jsonify({'data':player_dict,
+                        'tournament_calculated_lists':to_dict(tournament_calculated_lists),
+                        'tournament_counts':tournament_counts})
+    else:
+        raise BadRequest('That player number does not exist')
+
 @blueprints.test_blueprint.route('/players/<string:query_string>',methods=['GET'])
-def search_all_players(query_string):            
-    sleep(1)
+def search_all_players(query_string):                
     
     players = current_app.table_proxy.search_player(query_string)
     if len(players)>25:

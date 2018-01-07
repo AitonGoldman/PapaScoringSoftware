@@ -25,6 +25,13 @@ Example of sub header
 
 
 <ion-content padding>
+  <h1><b>Purchase Tickets</b></h1>
+  <ion-list>
+    <ion-item no-lines [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({})">
+      <ion-icon item-start name="ios-cash-outline"></ion-icon> Ticket Purchase
+    </ion-item>
+  </ion-list>
+
   <h1><b>Add Players</b></h1>
   <ion-list>
     <ion-item no-lines [navPush]="'AddPlayerPage'" [navParams]="buildNavParams({})">

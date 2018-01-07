@@ -4,7 +4,8 @@ import { CookieService } from 'ngx-cookie';
 
 const roleToHomePageMap ={
     'eventowner':'EventOwnerHomePage',
-    'tournamentdirector':'TournamentDirectorHomePage'
+    'tournamentdirector':'TournamentDirectorHomePage',
+    'player':'PlayerHomePage'
 }
 /*
   Generated class for the EventAuthProvider provider.
@@ -40,14 +41,20 @@ export class EventAuthProvider {
 
     setEventUserLoggedIn(eventId,userInfo){
         console.log('in setEventUserLoggedIn');                        
-        if(eventId==null){
+        if(eventId==null && userInfo.event_creator==true){
             this.eventOwnerUserInfo=userInfo;            
             this._cookieService.putObject("eventOwnerUserInfo",userInfo);
             return
         }        
         //this.userLoggedInEvents[eventId]=true;
         this.userLoggedInEvents[eventId]=userInfo;
-        this.setEventRole(eventId,userInfo.roles[0]);
+        if(userInfo.player_id!=null){
+            this.setEventRole(eventId,{event_role_name:'player'});
+        }
+        if(userInfo.pss_user_id!=null){
+            this.setEventRole(eventId,userInfo.roles[0]);            
+        }
+        
         this._cookieService.putObject("userLoggedInEvents", this.userLoggedInEvents, {path:'/'});
         this._cookieService.putObject("userEventRoles", this.userEventRoles, {path:'/'});        
         console.log('setEventUserLoggedIn debug...');        
@@ -101,7 +108,7 @@ export class EventAuthProvider {
         if(this.eventOwnerUserInfo!=null){
             return roleToHomePageMap['eventowner'];
         }
-        if(this.userEventRoles[eventId]){
+        if(this.userEventRoles[eventId]){            
             return roleToHomePageMap[this.userEventRoles[eventId].event_role_name]
         }
     }

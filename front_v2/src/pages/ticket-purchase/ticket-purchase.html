@@ -1,18 +1,32 @@
-<!--
-  Generated template for the TicketPurchasePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>TicketPurchase</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
 <ion-content padding>
-
+  <ion-searchbar
+     [(ngModel)]="player_id_for_event"
+     (ionInput)="onInput($event)">
+  </ion-searchbar>
+  <ng-container *ngIf="eventPlayer.first_name!=null ">
+    <ion-item>
+      Player Name : {{eventPlayer.player_full_name}}
+    </ion-item>
+    <form #myForm="ngForm">
+    
+    <ng-container *ngFor="let ticketPriceList of ticketPriceLists">
+      <ion-item no-lines>
+        Existing Count : {{ticketCounts[ticketPriceList.tournament_id]==null?0:ticketCounts[ticketPriceList.tournament_id].count}}
+      </ion-item>
+      <ion-item>
+        <ion-label>{{ticketPriceList.tournament_name}}</ion-label>
+        <ion-select [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:'poop'}" (ionChange)="onSelect($event)">
+          <ion-option *ngFor="let calculatedPrice of ticketPriceList.calculated_price_list" [value]="calculatedPrice">{{calculatedPrice.amount}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ng-container>
+    <ion-item>
+      Total Cost : {{totalCost}}
+    </ion-item>
+    <ion-item>
+      <button [disabled]="!myForm.dirty" ion-button (click)="ticketPurchase()"> Purchase Tickets </button>
+    </ion-item>
+    </form>
+    
+  </ng-container>
 </ion-content>

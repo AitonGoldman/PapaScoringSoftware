@@ -1,14 +1,14 @@
 webpackJsonp([22],{
 
-/***/ 710:
+/***/ 712:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerTabsPageModule", function() { return EventOwnerTabsPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventSelectPageModule", function() { return EventSelectPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__ = __webpack_require__(745);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_select__ = __webpack_require__(748);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var EventOwnerTabsPageModule = (function () {
-    function EventOwnerTabsPageModule() {
+var EventSelectPageModule = (function () {
+    function EventSelectPageModule() {
     }
-    EventOwnerTabsPageModule = __decorate([
+    EventSelectPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__["a" /* EventOwnerTabsPage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_select__["a" /* EventSelectPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__["a" /* EventOwnerTabsPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_select__["a" /* EventSelectPage */]),
             ],
         })
-    ], EventOwnerTabsPageModule);
-    return EventOwnerTabsPageModule;
+    ], EventSelectPageModule);
+    return EventSelectPageModule;
 }());
 
-//# sourceMappingURL=event-owner-tabs.module.js.map
+//# sourceMappingURL=event-select.module.js.map
 
 /***/ }),
 
-/***/ 721:
+/***/ 722:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -172,14 +172,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 745:
+/***/ 748:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerTabsPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventSelectPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(721);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(722);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -196,52 +195,63 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
 
 
 /**
- * Generated class for the EventOwnerTabsPage page.
+ * Generated class for the EventSelectPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EventOwnerTabsPage = (function (_super) {
-    __extends(EventOwnerTabsPage, _super);
-    function EventOwnerTabsPage() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var EventSelectPage = (function (_super) {
+    __extends(EventSelectPage, _super);
+    function EventSelectPage() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.nextPage = null;
+        _this.events = [];
+        return _this;
     }
-    EventOwnerTabsPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad EventOwnerTabsPage');
+    EventSelectPage.prototype.generateGetAllEventsProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.events = result.data;
+        };
     };
-    EventOwnerTabsPage.prototype.onTabSelect = function () {
-        console.log('selected a tab!');
-    };
-    EventOwnerTabsPage.prototype.onTabChange = function (event) {
-        console.log('changed a tab!');
-        if (this.tabRef.getByIndex(event.index).canGoBack()) {
-            this.tabRef.getByIndex(event.index).popToRoot({ animate: false });
+    EventSelectPage.prototype.gotoEvent = function (eventId) {
+        var nextPage = '';
+        var tabIndex = null;
+        if (this.platform.is('mobile') == true) {
+            nextPage = 'TabsPage';
+            tabIndex = 0;
         }
-        var previousTab = this.tabRef.previousTab(false);
-        if (previousTab && previousTab.canGoBack()) {
-            this.tabRef.previousTab().popToRoot({ animate: false });
+        else {
+            nextPage = this.getHomePageString(eventId);
         }
+        this.pushRootPage(nextPage, { 'eventId': eventId });
     };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myTabs'),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Tabs */])
-    ], EventOwnerTabsPage.prototype, "tabRef", void 0);
-    EventOwnerTabsPage = __decorate([
+    EventSelectPage.prototype.ionViewWillLoad = function () {
+        this.pssApi.getAllEvents({})
+            .subscribe(this.generateGetAllEventsProcessor());
+        if (this.platform.is('mobile') == true) {
+            this.nextPage = 'TabsPage';
+        }
+        else {
+            this.nextPage = this.getHomePageString();
+        }
+        console.log('ionViewDidLoad EventSelectPage');
+    };
+    EventSelectPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-event-owner-tabs',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-tabs/event-owner-tabs.html"*/'<!--\n  Generated template for the EventOwnerTabsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-content padding>\n<ion-tabs #myTabs  (ionChange)="onTabChange($event)">\n  <ion-tab [root]="\'EventOwnerHomePage\'" tabIcon="md-home" [tabTitle]="\'Home\'"></ion-tab>  \n  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="\'EventOwnerQuickLinksPage\'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>\n</ion-tabs>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-tabs/event-owner-tabs.html"*/,
+            selector: 'page-event-select',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-select/event-select.html"*/'<!--\n  Generated template for the EventSelectPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>Event Select</ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <button showWhen=\'mobile\' ion-button (click)="pushRootPage(\'EventOwnerTabsPage\')">Login as event owner</button>\n  <button hideWhen=\'mobile\' ion-button (click)="pushRootPage(\'EventOwnerLoginPage\')">Login as event owner</button>\n  \n  <button *ngFor="let event of events" ion-button (click)="gotoEvent(event.event_id)">GO to event {{event.name}} </button>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-select/event-select.html"*/,
         })
-    ], EventOwnerTabsPage);
-    return EventOwnerTabsPage;
-}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], EventSelectPage);
+    return EventSelectPage;
+}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=event-owner-tabs.js.map
+//# sourceMappingURL=event-select.js.map
 
 /***/ })
 

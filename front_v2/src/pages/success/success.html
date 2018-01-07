@@ -30,6 +30,15 @@
     </ion-col>
   </ion-row>
 
+  <ng-container *ngIf="successSummary.summaryTable.length>0">      
+    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">
+      <ion-col style='text-align:center'>         
+        {{summaryTableRow}}
+      </ion-col>                     
+    </ion-row>
+    <hr style='width:75%' text-center>
+  </ng-container>
+
   <ion-row>
     <ion-col style='text-align:center'>         
       {{successSummary ? successSummary.getFirstLine():''}}

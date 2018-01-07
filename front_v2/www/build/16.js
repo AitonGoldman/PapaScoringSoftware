@@ -1,14 +1,16 @@
 webpackJsonp([16],{
 
-/***/ 718:
+/***/ 720:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabsPageModule", function() { return TabsPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TournamentDirectorHomePageModule", function() { return TournamentDirectorHomePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs__ = __webpack_require__(752);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_director_home__ = __webpack_require__(755);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_notifications__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +20,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TabsPageModule = (function () {
-    function TabsPageModule() {
+
+var TournamentDirectorHomePageModule = (function () {
+    function TournamentDirectorHomePageModule() {
     }
-    TabsPageModule = __decorate([
+    TournamentDirectorHomePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */],
+                __WEBPACK_IMPORTED_MODULE_2__tournament_director_home__["a" /* TournamentDirectorHomePage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tournament_director_home__["a" /* TournamentDirectorHomePage */]),
+                __WEBPACK_IMPORTED_MODULE_3_angular2_notifications__["SimpleNotificationsModule"].forRoot()
             ],
         })
-    ], TabsPageModule);
-    return TabsPageModule;
+    ], TournamentDirectorHomePageModule);
+    return TournamentDirectorHomePageModule;
 }());
 
-//# sourceMappingURL=tabs.module.js.map
+//# sourceMappingURL=tournament-director-home.module.js.map
 
 /***/ }),
 
-/***/ 721:
+/***/ 722:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -172,14 +176,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 752:
+/***/ 755:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentDirectorHomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(721);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(722);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -196,62 +199,47 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
 
 
 /**
- * Generated class for the TabsPage page.
+ * Generated class for the TournamentDirectorHomePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var TabsPage = (function (_super) {
-    __extends(TabsPage, _super);
-    function TabsPage() {
+var TournamentDirectorHomePage = (function (_super) {
+    __extends(TournamentDirectorHomePage, _super);
+    function TournamentDirectorHomePage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.roleName = "blah";
+        _this.tournaments = [];
         return _this;
     }
-    TabsPage.prototype.ionViewWillLoad = function () {
-        var roleName = this.eventAuth.getRoleName(this.eventId);
-        this.roleName = roleName ? roleName : 'Home';
-        console.log('ionViewDidLoad TabsPage');
+    TournamentDirectorHomePage.prototype.generateGetAllTournamentsProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.tournaments = result.data;
+            _this.tournaments.map(function (tournament) {
+                tournament.expanded = false;
+            });
+        };
     };
-    // presentPopover(myEvent) {
-    //     let popover = this.popoverCtrl.create(QuicklinksComponent);
-    //     popover.present({
-    //         ev: myEvent     
-    //     });
-    // }
-    TabsPage.prototype.onTabSelect = function () {
-        console.log('selected a tab!');
+    TournamentDirectorHomePage.prototype.ionViewDidLoad = function () {
+        this.pssApi.getAllTournaments(this.eventId)
+            .subscribe(this.generateGetAllTournamentsProcessor());
+        console.log('ionViewDidLoad TournamentDirectorHomePage');
     };
-    TabsPage.prototype.onTabChange = function (event) {
-        console.log('changed a tab!');
-        if (this.tabRef.getByIndex(event.index).canGoBack()) {
-            this.tabRef.getByIndex(event.index).popToRoot({ animate: false });
-        }
-        var previousTab = this.tabRef.previousTab(false);
-        if (previousTab && previousTab.canGoBack()) {
-            this.tabRef.previousTab().popToRoot({ animate: false });
-        }
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myTabs'),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Tabs */])
-    ], TabsPage.prototype, "tabRef", void 0);
-    TabsPage = __decorate([
+    TournamentDirectorHomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-tabs',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/'<!--\n  Generated template for the TabsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-tabs #myTabs (ionChange)="onTabChange($event)">\n  <ion-tab [rootParams]="buildNavParams({})" [root]="getHomePageString()" tabIcon="md-home" [tabTitle]="this.eventAuth.getRoleName(this.eventId)?this.eventAuth.getRoleName(this.eventId) : \'Home\'"></ion-tab>  \n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'ResultsPage\'" tabIcon="md-clipboard" tabTitle="Results"></ion-tab>\n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'QueuesPage\'" tabIcon="md-git-branch" tabTitle="Queues"></ion-tab>\n  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="\'QuickLinksPage\'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>\n</ion-tabs>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/,
+            selector: 'page-tournament-director-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-director-home/tournament-director-home.html"*/'<!--\n  Generated template for the TournamentDirectorHomePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n  -->\n<!--<bobo>-->\n<ion-header>\n<ion-navbar hideBackButton>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end>\n<!--    <button icon-only menuToggle ion-button>Queues</button>-->\n  </ion-buttons>\n</ion-navbar>\n<ion-navbar color="primary">\nExample of sub header\n</ion-navbar>\n\n</ion-header>\n<!--</bobo>-->\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n\n\n<ion-content padding>\n  <h1><b>Purchase Tickets</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'TicketPurchasePage\'" [navParams]="buildNavParams({})">\n      <ion-icon item-start name="ios-cash-outline"></ion-icon> Ticket Purchase\n    </ion-item>\n  </ion-list>\n\n  <h1><b>Add Players</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'AddPlayerPage\'" [navParams]="buildNavParams({})">\n      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Add Player\n    </ion-item>\n  </ion-list>\n  \n  <h1><b>Tournament Creation</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'CreateTournamentPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})">\n      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament \n\n      <!--<button item-start ion-button [navPush]="\'CreateEventPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})" >Create Event</button>-->\n    </ion-item>\n  </ion-list>\n\n  <!--  <button ion-button [navPush]="\'CreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\',targetEventId:1,eventName:\'poop\'}" >Create Tournament</button> -->\n  <h1><b>Tournaments</b></h1>\n  <ion-list>\n    <ng-container *ngFor="let tournament of tournaments">\n      <ion-item-divider (click)="expand(tournament)">\n        <ion-avatar item-start *ngIf="tournament.img_url!=null">\n          <img [src]="tournament.img_url">\n        </ion-avatar>        \n        <h1>{{tournament.tournament_name}}</h1><ion-icon item-end [name]="tournament.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n      </ion-item-divider>      \n      <ng-container *ngIf="tournament.expanded!=true?false:true">\n        <ion-item>\n          <button ion-button [navPush]="\'TournamentMachinesPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Add Machines To Tournament</button>\n          <br>\n            <button [navPush]="\'EditTournamentPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:\'edit\'})" ion-button >Edit Tournament</button>\n          <br>\n          <button ion-button (click)="onTournamentToggle(eventId,tournament)"><ion-icon item-start [name]="tournament.active?\'play\':\'pause\'"></ion-icon>Toggle Tournament</button>\n        </ion-item>\n      </ng-container>      \n    </ng-container>\n  </ion-list>\n</ion-content>\n\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-director-home/tournament-director-home.html"*/,
         })
-    ], TabsPage);
-    return TabsPage;
-}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], TournamentDirectorHomePage);
+    return TournamentDirectorHomePage;
+}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=tabs.js.map
+//# sourceMappingURL=tournament-director-home.js.map
 
 /***/ })
 

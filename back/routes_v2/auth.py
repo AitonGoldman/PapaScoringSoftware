@@ -49,7 +49,7 @@ def player_login_route(request,tables_proxy,event_id):
     player = tables_proxy.get_player(event_id,player_id_for_event=input_data['player_id_for_event'],initialize_event_specific_relationship=True)    
     if player is None:
         raise Unauthorized('Bad player number')
-    if not player.verify_pin(input_data['player_pin']):        
+    if not player.verify_pin(int(input_data['player_pin'])):        
         raise Unauthorized('Bad pin')        
     return player
 

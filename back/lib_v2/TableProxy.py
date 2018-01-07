@@ -152,8 +152,11 @@ class TableProxy():
     def get_all_active_events(self,event_id):
         return self.Events.query.filter_by(event_id=event_id).first()            
     
-    def get_query_for_available_tokens(self, event_id):
-        return self.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False,event_id=event_id)
+    def get_query_for_available_tokens(self, event_id, player=None, team=None):
+        query = self.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False,event_id=event_id)
+        if player:
+            query = query.filter_by(player_id=player.player_id)
+        return query
 
     def get_tournament_machine_player_is_playing(self,player,event_id):
         return self.TournamentMachines.query.filter_by(player_id=player.player_id,event_id=event_id).first()
@@ -173,7 +176,7 @@ class TableProxy():
     def get_available_token_count_for_tournaments(self,event_id,player):                
         tournament_results={}
         meta_tournament_results={}
-        results = self.get_query_for_available_tokens(event_id).all()        
+        results = self.get_query_for_available_tokens(event_id,player=player).all()        
         for result in results:            
             if result.tournament_id:
                 if result.tournament_id in tournament_results:
@@ -409,7 +412,10 @@ class TableProxy():
     def get_all_players(self):
         return self.Players.query.all()
 
-    
+    def get_event_player(self,event_id,event_player_id):        
+        return self.Players.query.filter(self.Players.event_info.any(self.EventPlayersInfo.event_id==event_id)).filter(self.Players.event_info.any(self.EventPlayersInfo.player_id_for_event==event_player_id)).first()
+    #, 
+
     def get_player(self,event_id,player_id=None,
                    player_id_for_event=None,
                    first_name=None,last_name=None,

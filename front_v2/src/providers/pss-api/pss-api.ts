@@ -82,6 +82,7 @@ export class PssApiProvider {
     
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
     getAllPlayers = this.generate_api_call('getAllPlayers',this.basePssUrl+"/players",'get');    
+    getEventPlayer = this.generate_api_call('getEventPlayer',this.basePssUrl+"/:arg/event_player/:arg",'get');
     getEvent = this.generate_api_call('getEvent',this.basePssUrl+"/event/:arg",'get');
     getIfpaRanking = this.generate_api_call('getIfpaRanking',this.basePssUrl+"/ifpa/:arg",'get');
     
@@ -96,7 +97,10 @@ export class PssApiProvider {
     
     loginEventOwner = this.generate_api_call('loginEventOwner',this.basePssUrl+"/auth/pss_user/login",'post');
     loginUser = this.generate_api_call('loginUser',this.basePssUrl+"/auth/pss_event_user/login/:arg",'post');
+    loginPlayer = this.generate_api_call('loginPlayer',this.basePssUrl+"/auth/player/login/:arg",'post');
+    
     searchPlayers = this.generate_api_call('searchPlayers',this.basePssUrl+"/players/:arg",'get');        
+    purchaseTicket = this.generate_api_call('purchaseTicket',this.basePssUrl+"/:arg/token",'post');
     
     private handleError<T> (operation = 'operation', result?: T) {        
         let debouncer=false;        

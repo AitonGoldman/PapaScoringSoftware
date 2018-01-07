@@ -19,8 +19,8 @@ import { SuccessButton } from '../../classes/SuccessButton';
     templateUrl: 'login.html',
 })
 export class LoginPage extends PssPageComponent {    
-    loginInfo:any = {'username':null,'password':null}
-
+    loginInfo:any = {'username':null,'password':null,'player_id_for_event':null,'player_pin':null}
+    loginType:string = 'player';
     generateLoginUserProcessor(successButton?){
         return (result) => {
             if(result == null){
@@ -29,7 +29,15 @@ export class LoginPage extends PssPageComponent {
             console.log('in generateLoginUserProcessor');
             console.log(result);
             this.eventAuth.setEventUserLoggedIn(this.eventId,result.data);
-            let successSummary = new SuccessSummary(result.data.username+' has logged in.',
+            let name=null;
+            if(result.data.full_user_name!=null){
+                name=result.data.full_user_name;
+            }
+            if(result.data.player_full_name!=null){
+                name=result.data.player_full_name;
+            }
+            
+            let successSummary = new SuccessSummary(name+' has logged in.',
                                                     null,
                                                     null);
             let targetPage=null;
@@ -56,6 +64,11 @@ export class LoginPage extends PssPageComponent {
         this.pssApi.loginUser(this.loginInfo,this.eventId)
             .subscribe(this.generateLoginUserProcessor())            
     }
+    loginPlayer(){
+        this.pssApi.loginPlayer(this.loginInfo,this.eventId)
+            .subscribe(this.generateLoginUserProcessor())            
+    }    
+    
     loginEventOwner(){
         let targetTabIndex=null;
         if(this.platform.is('mobile')){

@@ -44,12 +44,14 @@ export class PssPageComponent {
             eventId=this.eventId;
         }
         let role = this.eventAuth.getRoleName(eventId);
+        console.log('in getHomePageString...')
+        console.log(role);
         if(role=="tournamentdirector"){
                 return 'TournamentDirectorHomePage'            
         }
-        //if(role=="eventowner"){
-        //        return 'EventOwnerHomePage'            
-        //}        
+        if(role=="eventowner"){
+                return 'EventOwnerHomePage'            
+        }        
         if (role == null){
             return 'HomePage';
         }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {AutoCompleteService} from 'ionic2-auto-complete';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
-import { Http } from '@angular/http';
+
 
 /*
   Generated class for the AutoCompleteProvider provider.

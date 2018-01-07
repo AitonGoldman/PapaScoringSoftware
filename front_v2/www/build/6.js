@@ -1,14 +1,14 @@
 webpackJsonp([6],{
 
-/***/ 714:
+/***/ 709:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TicketPurchasePageModule", function() { return TicketPurchasePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginPageModule", function() { return LoginPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ticket_purchase__ = __webpack_require__(743);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login__ = __webpack_require__(723);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,23 +18,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TicketPurchasePageModule = (function () {
-    function TicketPurchasePageModule() {
+var LoginPageModule = (function () {
+    function LoginPageModule() {
     }
-    TicketPurchasePageModule = __decorate([
+    LoginPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__ticket_purchase__["a" /* TicketPurchasePage */],
+                __WEBPACK_IMPORTED_MODULE_2__login__["a" /* LoginPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__ticket_purchase__["a" /* TicketPurchasePage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__login__["a" /* LoginPage */]),
             ],
         })
-    ], TicketPurchasePageModule);
-    return TicketPurchasePageModule;
+    ], LoginPageModule);
+    return LoginPageModule;
 }());
 
-//# sourceMappingURL=ticket-purchase.module.js.map
+//# sourceMappingURL=login.module.js.map
 
 /***/ }),
 
@@ -99,12 +99,14 @@ var PssPageComponent = (function () {
             eventId = this.eventId;
         }
         var role = this.eventAuth.getRoleName(eventId);
+        console.log('in getHomePageString...');
+        console.log(role);
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
-        //if(role=="eventowner"){
-        //        return 'EventOwnerHomePage'            
-        //}        
+        if (role == "eventowner") {
+            return 'EventOwnerHomePage';
+        }
         if (role == null) {
             return 'HomePage';
         }
@@ -157,15 +159,10 @@ var PssPageComponent = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */],
-            __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]) === "function" && _g || Object])
     ], PssPageComponent);
     return PssPageComponent;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 
 //# sourceMappingURL=pss-page.js.map
@@ -240,11 +237,11 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 743:
+/***/ 723:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TicketPurchasePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(718);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(719);
@@ -270,108 +267,82 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the TicketPurchasePage page.
+ * Generated class for the LoginPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var TicketPurchasePage = (function (_super) {
-    __extends(TicketPurchasePage, _super);
-    function TicketPurchasePage() {
+var LoginPage = (function (_super) {
+    __extends(LoginPage, _super);
+    function LoginPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.ticketPriceLists = null;
-        _this.ticketCounts = null;
-        _this.eventPlayer = {};
-        _this.player_id_for_event = null;
-        _this.totalCost = 0;
+        _this.loginInfo = { 'username': null, 'password': null, 'player_id_for_event': null, 'player_pin': null };
+        _this.loginType = 'player';
         return _this;
     }
-    TicketPurchasePage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad TicketPurchasePage');
-    };
-    TicketPurchasePage.prototype.generateGetEventPlayerProcessor = function () {
+    LoginPage.prototype.generateLoginUserProcessor = function (successButton) {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.eventPlayer = result.data != null ? result.data : {};
-            _this.ticketPriceLists = result.tournament_calculated_lists;
-            _this.ticketCounts = result.tournament_counts;
+            console.log('in generateLoginUserProcessor');
             console.log(result);
-        };
-    };
-    TicketPurchasePage.prototype.generatePurchaseTicketProcessor = function (purchaseSummary) {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
+            _this.eventAuth.setEventUserLoggedIn(_this.eventId, result.data);
+            var name = null;
+            if (result.data.full_user_name != null) {
+                name = result.data.full_user_name;
             }
-            var success_title_string = 'Tickets Purchased!';
-            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](success_title_string, purchaseSummary.pop(), null);
-            successSummary.setSummaryTable(purchaseSummary);
-            var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.getHomePageString(_this.eventId), _this.buildNavParams({}));
+            if (result.data.player_full_name != null) {
+                name = result.data.player_full_name;
+            }
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](name + ' has logged in.', null, null);
+            var targetPage = null;
+            var targetTabIndex = null;
+            if (_this.platform.is('mobile')) {
+                console.log('going mobile');
+                targetTabIndex = 0;
+            }
+            if (successButton == null) {
+                targetPage = _this.getHomePageString();
+                successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', targetPage, _this.buildNavParams({}), targetTabIndex);
+            }
+            //            this.appCtrl.getRootNav().push("SuccessPage",
             _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
                 'successButtons': [successButton] }));
         };
     };
-    TicketPurchasePage.prototype.clearValues = function () {
-        this.ticketPriceLists = null;
-        this.ticketCounts = null;
-        this.eventPlayer = {};
-        //this.player_id_for_event=null;
-        this.totalCost = 0;
+    LoginPage.prototype.loginUser = function () {
+        this.pssApi.loginUser(this.loginInfo, this.eventId)
+            .subscribe(this.generateLoginUserProcessor());
     };
-    TicketPurchasePage.prototype.onInput = function (event) {
-        if (this.player_id_for_event != null && this.player_id_for_event > 99 && this.player_id_for_event < 1000) {
-            console.log('in onInput');
-            this.pssApi.getEventPlayer(this.eventId, this.player_id_for_event)
-                .subscribe(this.generateGetEventPlayerProcessor());
-        }
-        else {
-            this.clearValues();
-        }
+    LoginPage.prototype.loginPlayer = function () {
+        this.pssApi.loginPlayer(this.loginInfo, this.eventId)
+            .subscribe(this.generateLoginUserProcessor());
     };
-    TicketPurchasePage.prototype.onSelect = function (event) {
-        this.totalCost = 0;
-        console.log('in onSelect');
-        for (var _i = 0, _a = this.ticketPriceLists; _i < _a.length; _i++) {
-            var ticketPrice = _a[_i];
-            if (ticketPrice.selectedCount != null) {
-                this.totalCost = this.totalCost + ticketPrice.selectedCount.price;
-            }
+    LoginPage.prototype.loginEventOwner = function () {
+        var targetTabIndex = null;
+        if (this.platform.is('mobile')) {
+            console.log('going mobile');
+            targetTabIndex = 0;
         }
+        var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', 'EventOwnerHomePage', this.buildNavParams({}), targetTabIndex);
+        this.pssApi.loginEventOwner(this.loginInfo)
+            .subscribe(this.generateLoginUserProcessor(successButton));
     };
-    TicketPurchasePage.prototype.ticketPurchase = function () {
-        var ticketsToBuy = {};
-        ticketsToBuy['player_id'] = this.eventPlayer.player_id;
-        ticketsToBuy['tournament_token_counts'] = [];
-        var purchaseSummary = [];
-        for (var _i = 0, _a = this.ticketPriceLists; _i < _a.length; _i++) {
-            var ticketsSelected = _a[_i];
-            if (ticketsSelected.selectedCount != null) {
-                ticketsToBuy['tournament_token_counts'].push({ token_count: ticketsSelected.selectedCount.amount,
-                    tournament_id: ticketsSelected.tournament_id });
-                purchaseSummary.push(ticketsSelected.tournament_name + " : " + ticketsSelected.selectedCount.amount);
-            }
-        }
-        purchaseSummary.push("total cost : " + this.totalCost);
-        console.log(ticketsToBuy);
-        this.pssApi.purchaseTicket(ticketsToBuy, this.eventId)
-            .subscribe(this.generatePurchaseTicketProcessor(purchaseSummary));
-        //        post_dict={"player_id":player_id,
-        //                   "tournament_token_counts":[{"token_count":1,"tournament_id":tournament_id}],
-        //                   "meta_tournament_token_counts":[{"token_count":1,"meta_tournament_id":meta_tournament['data']['meta_tournament_id']}]}        
+    LoginPage.prototype.ionViewWillLoad = function () {
+        console.log('ionViewDidLoad LoginPage');
+        //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
     };
-    TicketPurchasePage = __decorate([
+    LoginPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-ticket-purchase',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/ticket-purchase/ticket-purchase.html"*/'<ion-content padding>\n  <ion-searchbar\n     [(ngModel)]="player_id_for_event"\n     (ionInput)="onInput($event)">\n  </ion-searchbar>\n  <ng-container *ngIf="eventPlayer.first_name!=null ">\n    <ion-item>\n      Player Name : {{eventPlayer.player_full_name}}\n    </ion-item>\n    <form #myForm="ngForm">\n    \n    <ng-container *ngFor="let ticketPriceList of ticketPriceLists">\n      <ion-item no-lines>\n        Existing Count : {{ticketCounts[ticketPriceList.tournament_id]==null?0:ticketCounts[ticketPriceList.tournament_id].count}}\n      </ion-item>\n      <ion-item>\n        <ion-label>{{ticketPriceList.tournament_name}}</ion-label>\n        <ion-select [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:\'poop\'}" (ionChange)="onSelect($event)">\n          <ion-option *ngFor="let calculatedPrice of ticketPriceList.calculated_price_list" [value]="calculatedPrice">{{calculatedPrice.amount}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ng-container>\n    <ion-item>\n      Total Cost : {{totalCost}}\n    </ion-item>\n    <ion-item>\n      <button [disabled]="!myForm.dirty" ion-button (click)="ticketPurchase()"> Purchase Tickets </button>\n    </ion-item>\n    </form>\n    \n  </ng-container>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/ticket-purchase/ticket-purchase.html"*/,
+            selector: 'page-login',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/'<!--\n    Generated template for the LoginPage page.\n\n    See http://ionicframework.com/docs/components/#navigation for more info on\n    Ionic pages and navigation.\n  -->\n\n<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <div>\n  <ion-segment [(ngModel)]="loginType">\n    <ion-segment-button value="player">\n      <ion-icon item-start name="person"></ion-icon> Tournament Player\n    </ion-segment-button>\n    <ion-segment-button value="official">\n            <ion-icon item-start name="clipboard"></ion-icon> Tournament Official\n    </ion-segment-button>\n  </ion-segment>\n  </div>\n  <ng-container [ngSwitch]="loginType">\n    <form #loginForm="ngForm" *ngSwitchCase="\'official\'">\n      <ion-item>\n        <ion-label floating>Username</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.username" name="username"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Password</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.password" name="password"></ion-input>\n      </ion-item>\n      <ion-item no-lines>\n        <button [disabled]=\'!loginForm.valid\' ion-button default (click)="loginUser()">Login </button>\n      </ion-item>\n    </form>\n    <form #playerLoginForm="ngForm" *ngSwitchCase="\'player\'">\n      <ion-item>\n        <ion-label floating>Player Number</ion-label>\n        <ion-input type="number" required\n                   [(ngModel)]="loginInfo.player_id_for_event" name="player_id_for_event"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Pin</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.player_pin" name="player_pin"></ion-input>\n      </ion-item>\n      <ion-item no-lines>\n        <button [disabled]=\'!playerLoginForm.valid\' ion-button default (click)="loginPlayer()">Login </button>\n      </ion-item>\n    </form>\n    \n  </ng-container>\n<!--  <ng-container *ngIf=\'loginType=="player"\'>\n  </ng-container>-->\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/,
         })
-    ], TicketPurchasePage);
-    return TicketPurchasePage;
+    ], LoginPage);
+    return LoginPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=ticket-purchase.js.map
+//# sourceMappingURL=login.js.map
 
 /***/ })
 

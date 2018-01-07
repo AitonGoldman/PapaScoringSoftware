@@ -311,29 +311,29 @@ var map = {
 		696,
 		9
 	],
-	"../pages/create-event/create-event.module": [
+	"../pages/add-user/add-user.module": [
 		697,
+		21
+	],
+	"../pages/create-event/create-event.module": [
+		698,
 		1
 	],
 	"../pages/edit-event/edit-event.module": [
-		698,
+		699,
 		0
 	],
-	"../pages/event-owner-add-user/event-owner-add-user.module": [
-		699,
-		10
-	],
-	"../pages/event-owner-confirm/event-owner-confirm.module": [
+	"../pages/edit-user/edit-user.module": [
 		700,
 		8
 	],
-	"../pages/event-owner-edit-user/event-owner-edit-user.module": [
+	"../pages/event-owner-confirm/event-owner-confirm.module": [
 		701,
-		3
+		7
 	],
 	"../pages/event-owner-home/event-owner-home.module": [
 		702,
-		21
+		20
 	],
 	"../pages/event-owner-login/event-owner-login.module": [
 		703,
@@ -341,59 +341,59 @@ var map = {
 	],
 	"../pages/event-owner-quick-links/event-owner-quick-links.module": [
 		704,
-		20
+		19
 	],
 	"../pages/event-owner-request/event-owner-request.module": [
 		705,
-		11
+		10
 	],
 	"../pages/event-owner-tabs/event-owner-tabs.module": [
 		706,
-		19
+		18
 	],
 	"../pages/event-select/event-select.module": [
 		707,
-		18
+		17
 	],
 	"../pages/home/home.module": [
 		708,
-		17
+		16
 	],
 	"../pages/login/login.module": [
 		709,
-		7
+		6
 	],
 	"../pages/quick-links/quick-links.module": [
 		710,
-		16
+		15
 	],
 	"../pages/results/results.module": [
 		711,
-		15
+		14
 	],
 	"../pages/success/success.module": [
 		712,
-		14
+		13
 	],
 	"../pages/tabs/tabs.module": [
 		713,
-		13
+		12
 	],
 	"../pages/ticket-purchase/ticket-purchase.module": [
-		714,
-		6
+		715,
+		5
 	],
 	"../pages/tournament-director-home/tournament-director-home.module": [
-		715,
-		12
+		714,
+		11
 	],
 	"../pages/tournament-machines/tournament-machines.module": [
 		716,
-		5
+		4
 	],
 	"../pages/tournament/tournament.module": [
 		717,
-		4
+		3
 	]
 };
 function webpackAsyncContext(req) {
@@ -700,11 +700,11 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {}, {
                     links: [
                         { loadChildren: '../pages/add-player/add-player.module#AddPlayerPageModule', name: 'AddPlayerPage', segment: 'AddPlyer/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/add-user/add-user.module#AddUserPageModule', name: 'AddUserPage', segment: 'AddUser/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/create-event/create-event.module#CreateEventPageModule', name: 'CreateEventPage', segment: 'CreateEventPage/:actionType/:wizardMode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/edit-event/edit-event.module#EditEventPageModule', name: 'EditEventPage', segment: 'EditEventPage/:actionType/:eventId', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/event-owner-add-user/event-owner-add-user.module#EventOwnerAddUserPageModule', name: 'EventOwnerAddUserPage', segment: 'EventOwnerAddUser/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/edit-user/edit-user.module#EditUserPageModule', name: 'EditUserPage', segment: 'EditUser/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-confirm/event-owner-confirm.module#EventOwnerConfirmPageModule', name: 'EventOwnerConfirmPage', segment: 'EventOwnerConfirm/:itsdangerousstring', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/event-owner-edit-user/event-owner-edit-user.module#EventOwnerEditUserPageModule', name: 'EventOwnerEditUserPage', segment: 'EventOwnerEditUser/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-home/event-owner-home.module#EventOwnerHomePageModule', name: 'EventOwnerHomePage', segment: 'event-owner-home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-login/event-owner-login.module#EventOwnerLoginPageModule', name: 'EventOwnerLoginPage', segment: 'event-owner-login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-quick-links/event-owner-quick-links.module#EventOwnerQuickLinksPageModule', name: 'EventOwnerQuickLinksPage', segment: 'event-owner-quick-links', priority: 'low', defaultHistory: [] },
@@ -717,8 +717,8 @@ var AppModule = (function () {
                         { loadChildren: '../pages/results/results.module#ResultsPageModule', name: 'ResultsPage', segment: 'results', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/success/success.module#SuccessPageModule', name: 'SuccessPage', segment: 'Success/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/ticket-purchase/ticket-purchase.module#TicketPurchasePageModule', name: 'TicketPurchasePage', segment: 'TicketPurchasePage/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tournament-director-home/tournament-director-home.module#TournamentDirectorHomePageModule', name: 'TournamentDirectorHomePage', segment: 'TournamentDirectorHomePage/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/ticket-purchase/ticket-purchase.module#TicketPurchasePageModule', name: 'TicketPurchasePage', segment: 'TicketPurchasePage/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tournament-machines/tournament-machines.module#TournamentMachinesPageModule', name: 'TournamentMachinesPage', segment: 'TournamentMachines/:eventId/:tournamentId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tournament/tournament.module#TournamentPageModule', name: 'TournamentPage', segment: 'Tournament/:eventId/:actionType/:wizardMode', priority: 'low', defaultHistory: [] }
                     ]

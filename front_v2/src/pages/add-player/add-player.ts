@@ -11,7 +11,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
 import { IonicPage } from 'ionic-angular';
-import { Observable} from 'rxjs/Observable';
+
 
 
 /**

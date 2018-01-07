@@ -51,7 +51,7 @@ def create_event_user_route(request,tables_proxy,event_id):
             pss_user = tables_proxy.get_user_by_id(event_user_to_create['pss_user_id'])
             if pss_user is None:
                 raise BadRequest('Tried to submit a user with an invalid pss_user_id')                
-            if len([event_info for event_info in pss_user.events if event_info.event_id==int(event_id)])>0:
+            if len([event_info for event_info in pss_user.event_roles if event_info.event_id==int(event_id)])>0:
                 raise BadRequest('User already added to event')                
             #FIXME : need to silently fail when user is already registered
             tables_proxy.update_event_user_roles(event_role_ids,event_id, pss_user)

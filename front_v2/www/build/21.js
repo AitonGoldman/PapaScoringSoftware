@@ -1,15 +1,15 @@
 webpackJsonp([21],{
 
-/***/ 702:
+/***/ 697:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerHomePageModule", function() { return EventOwnerHomePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddUserPageModule", function() { return AddUserPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_home__ = __webpack_require__(732);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_expandable_expandable_module__ = __webpack_require__(361);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__add_user__ = __webpack_require__(725);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__ = __webpack_require__(358);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -23,25 +23,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var EventOwnerHomePageModule = (function () {
-    function EventOwnerHomePageModule() {
+var AddUserPageModule = (function () {
+    function AddUserPageModule() {
     }
-    EventOwnerHomePageModule = __decorate([
+    AddUserPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_owner_home__["a" /* EventOwnerHomePage */]
+                __WEBPACK_IMPORTED_MODULE_2__add_user__["a" /* AddUserPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_home__["a" /* EventOwnerHomePage */]),
-                __WEBPACK_IMPORTED_MODULE_3__components_expandable_expandable_module__["a" /* ExpandableModule */],
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__add_user__["a" /* AddUserPage */]),
+                __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__["a" /* AutoCompleteModule */],
                 __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["SimpleNotificationsModule"].forRoot()
             ],
         })
-    ], EventOwnerHomePageModule);
-    return EventOwnerHomePageModule;
+    ], AddUserPageModule);
+    return AddUserPageModule;
 }());
 
-//# sourceMappingURL=event-owner-home.module.js.map
+//# sourceMappingURL=add-user.module.js.map
 
 /***/ }),
 
@@ -106,12 +106,14 @@ var PssPageComponent = (function () {
             eventId = this.eventId;
         }
         var role = this.eventAuth.getRoleName(eventId);
+        console.log('in getHomePageString...');
+        console.log(role);
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
-        //if(role=="eventowner"){
-        //        return 'EventOwnerHomePage'            
-        //}        
+        if (role == "eventowner") {
+            return 'EventOwnerHomePage';
+        }
         if (role == null) {
             return 'HomePage';
         }
@@ -164,28 +166,29 @@ var PssPageComponent = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */],
-            __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]) === "function" && _g || Object])
     ], PssPageComponent);
     return PssPageComponent;
+    var _a, _b, _c, _d, _e, _f, _g;
 }());
 
 //# sourceMappingURL=pss-page.js.map
 
 /***/ }),
 
-/***/ 732:
+/***/ 725:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerHomePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddUserPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(718);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_notifications__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_angular2_notifications__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -202,57 +205,159 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
 
 
 /**
- * Generated class for the EventOwnerHomePage page.
+ * Generated class for the AddUserPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EventOwnerHomePage = (function (_super) {
-    __extends(EventOwnerHomePage, _super);
-    function EventOwnerHomePage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.itemExpandHeight = 100;
+var AddUserPage = (function (_super) {
+    __extends(AddUserPage, _super);
+    function AddUserPage(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, actionSheetCtrl, notificationsService) {
+        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) || this;
+        _this.autoCompleteProvider = autoCompleteProvider;
+        _this.eventAuth = eventAuth;
+        _this.navParams = navParams;
+        _this.navCtrl = navCtrl;
+        _this.appCtrl = appCtrl;
+        _this.pssApi = pssApi;
+        _this.platform = platform;
+        _this.actionSheetCtrl = actionSheetCtrl;
+        _this.notificationsService = notificationsService;
+        _this.existingUserFound = true;
+        _this.selectedUser = {};
+        _this.newUserName = null;
+        _this.roles = [];
+        _this.selectedRole = null;
         return _this;
     }
-    EventOwnerHomePage.prototype.generateGetAllEventsAndTournamentsProcessor = function () {
+    AddUserPage.prototype.generateGetAllUsersProcessor = function () {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            console.log('got back tournaments and events...');
-            _this.eventsAndTournaments = result.data.filter(function (event) {
-                console.log('in getAllEventsAndTournamentsProcessor');
-                console.log(event);
-                return _this.eventAuth.getEventOwnerPssUserId() == event.event_creator_pss_user_id;
-            });
-            _this.eventsAndTournaments.map(function (event) {
-                event.expanded = false;
-                event.tournaments.map(function (tournament) {
-                    tournament.expanded = false;
-                });
-            });
-            //           this.eventsAndTournaments=this.eventsAndTournaments
-            //            console.log(this.eventsAndTournaments);
+            _this.users = result.data;
+            _this.autoCompleteProvider.setUsers(result.data);
+            _this.roles = result.roles;
         };
     };
-    EventOwnerHomePage.prototype.ionViewWillLoad = function () {
-        this.pssApi.getAllEventsAndTournaments()
-            .subscribe(this.generateGetAllEventsAndTournamentsProcessor());
-        console.log('ionViewDidLoad EventOwnerHomePage');
+    AddUserPage.prototype.generateAddEventUsersProcessor = function (user_full_name, role_name) {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var user_already_exists = _this.users.filter(function (user) {
+                return user.pss_user_id == result.data.pss_user_id;
+            }).length;
+            if (user_already_exists == 0) {
+                _this.users.push(result.data[0]);
+            }
+            var message_string = user_full_name + " is a " + role_name + " in the event.";
+            _this.notificationsService.success("Success", message_string, {
+                timeOut: 0,
+                position: ["top", "right"],
+                theClass: 'poop'
+            });
+            //toast here
+        };
     };
-    EventOwnerHomePage = __decorate([
+    AddUserPage.prototype.ionViewWillLoad = function () {
+        console.log('ionViewDidLoad EventOwnerAddUserPage');
+        this.pssApi.getAllUsers()
+            .subscribe(this.generateGetAllUsersProcessor());
+    };
+    AddUserPage.prototype.onInput = function (event) {
+        if (this.searchbar.suggestions.length == 0) {
+            this.existingUserFound = false;
+            this.newUserName = event;
+        }
+        else {
+            this.existingUserFound = true;
+        }
+        console.log(this.selectedUser);
+    };
+    AddUserPage.prototype.doesEventRolesMatchEvent = function (eventId, roles) {
+        return roles.filter(function (role) { return Number(eventId) == role.event_id; }).length > 0;
+    };
+    AddUserPage.prototype.onSelect = function (event) {
+        console.log('in onselect...');
+        console.log(this.eventId);
+        if (this.doesEventRolesMatchEvent(this.eventId, this.selectedUser.event_roles)) {
+            this.existingUserFound = true;
+            var message_string = this.selectedUser.full_user_name + " is already registered for this event.";
+            this.notificationsService.warn("Warning", message_string, {
+                timeOut: 0,
+                position: ["top", "right"],
+                theClass: 'poop'
+            });
+            return;
+        }
+        //FIXME : need to add new user to list of users searched
+        if (!this.doesEventRolesMatchEvent(this.eventId, this.selectedUser.event_roles)) {
+            this.existingUserFound = true;
+            this.pssApi.addEventUsers({ event_users: [this.selectedUser],
+                event_role_ids: [this.selectedRole.event_role_id] }, this.eventId)
+                .subscribe(this.generateAddEventUsersProcessor(this.selectedUser.full_user_name, this.selectedRole.event_role_name));
+            return;
+        }
+        this.existingUserFound = true;
+    };
+    AddUserPage.prototype.onFocus = function () {
+        this.selectedUser = {};
+        this.existingUserFound = true;
+    };
+    AddUserPage.prototype.onSubmit = function (name_string) {
+        this.existingUserFound = true;
+        this.pssApi.addEventUsers({ event_users: [this.parseOutFirstLastNames(name_string)], event_role_ids: [this.selectedRole.event_role_id] }, this.eventId)
+            .subscribe(this.generateAddEventUsersProcessor(name_string, this.selectedRole.event_role_name));
+    };
+    AddUserPage.prototype.parseOutFirstLastNames = function (name_string) {
+        var name_elements = name_string.split(" ");
+        return {
+            first_name: name_elements[0],
+            last_name: name_elements[1],
+            username: name_elements[0] + name_elements[1]
+        };
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('searchbar'),
+        __metadata("design:type", Object)
+    ], AddUserPage.prototype, "searchbar", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myForm'),
+        __metadata("design:type", Object)
+    ], AddUserPage.prototype, "myForm", void 0);
+    AddUserPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-event-owner-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-home/event-owner-home.html"*/'<!--\n    Generated template for the EventOwnerHomePage page.\n\n    See http://ionicframework.com/docs/components/#navigation for more info on\n    Ionic pages and navigation.\n  -->\n<ion-header>\n\n  <ion-navbar hideBackButton>\n    <ion-title>EventOwnerHomePage</ion-title>\n    <ion-buttons end hideWhen=\'mobile\'>\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="\'EventOwnerHomePage\'">Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n\n\n<ion-content padding >\n<!--  <div style=\'width:50%;margin-left:auto;margin-right:auto\' text-center>-->\n  <div *ngIf=\'eventAuth.getRoleName(null)!="eventowner"\'>\n    Please login ( look in quick links for the link )\n  </div>\n  <div *ngIf=\'eventAuth.getRoleName(null)=="eventowner"\'>\n  <h1><b>Event Creation</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'CreateEventPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})">\n      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Event \n    </ion-item>\n  </ion-list>\n\n  <!--  <button ion-button [navPush]="\'CreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\',targetEventId:1,eventName:\'poop\'}" >Create Tournament</button> -->\n  <h1><b>Your Events</b></h1>\n  <ion-list>\n    <ng-container *ngFor="let event of eventsAndTournaments">\n      <ion-item-divider (click)="expand(event)">\n        <ion-avatar item-start *ngIf="event.img_url!=null">\n          <img [src]="event.img_url">\n        </ion-avatar>\n        <h1>{{event.name}}</h1>\n        <ion-icon item-end [name]="event.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n      </ion-item-divider>\n      <!--    <ion-item>\n              <ion-icon item-start></ion-icon>\n              <button item-end ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>\n              <b>Tournaments</b>\n      </ion-item>-->\n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'EditEventPage\'" [navParams]="{actionType:\'edit\',eventId:event.event_id}">\n        <ion-icon item-start name="md-create"></ion-icon> Edit Event \n\n<!--        <button item-start ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>-->\n      </ion-item>\n\n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'EventOwnerAddUserPage\'" [navParams]="{eventId:event.event_id}">\n<ion-icon item-start name="ios-add-circle-outline"></ion-icon>  Add User\n      </ion-item>\n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'EventOwnerEditUserPage\'" [navParams]="{eventId:event.event_id}">\n<ion-icon item-start name="ios-add-circle-outline"></ion-icon>  Edit User\n      </ion-item>\n      \n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'TournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\', eventId:event.event_id, wizardMode:true}">\n        <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament \n\n<!--        <button item-start ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>-->\n      </ion-item>\n      \n      <ng-container *ngFor="let tournament of event.tournaments">\n        <ion-item (click)="expand(tournament)" *ngIf="event.expanded">\n        <ion-avatar item-start *ngIf="tournament.img_url!=null">\n          <img [src]="tournament.img_url">\n        </ion-avatar>                  \n          {{tournament.tournament_name}}<ion-icon item-end [name]="tournament.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n        </ion-item>\n        <ng-container *ngIf="tournament.expanded!=true?false:true">\n          <ion-item>\n            <button ion-button [navPush]="\'TournamentMachinesPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id})">Add Machines To Tournament</button>\n            <br>\n            <button [navPush]="\'EventOwnerEditTournamentPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id, actionType:\'edit\'})" ion-button >Edit Tournament</button>\n            <br>\n            <button ion-button (click)="onTournamentToggle(event.event_id,tournament)"><ion-icon item-start [name]="tournament.active==true?\'play\':\'pause\'"></ion-icon>Toggle Tournament</button>\n          </ion-item>\n        </ng-container>\n      </ng-container>\n    </ng-container>\n  </ion-list>\n  </div>\n<!--  </div> -->\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-home/event-owner-home.html"*/,
-        })
-    ], EventOwnerHomePage);
-    return EventOwnerHomePage;
+            selector: 'page-add-user',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/add-user/add-user.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]=\'buildNavParams({})\'>Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n<ion-content padding>\n  <form #myForm="ngForm">\n    <ion-item>\n    <ion-label>Role</ion-label>\n    <ion-select name="myeventrole" [(ngModel)]="selectedRole" required>\n      <ion-option *ngFor="let role of roles" [value]="role">{{role.event_role_name}}</ion-option>\n    </ion-select>\n    </ion-item>\n    <ion-item>\n    </ion-item>\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n  </form>\n\n  <div *ngIf=\'existingUserFound==false\' text-center padding>        \n    The system does not know about {{newUserName}}.  Click the button below to register them for the event.\n    <br>\n    <button [disabled]=\'!myForm.valid\' ion-button margin (click)="onSubmit(newUserName)">Register User</button>\n    \n  </div>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/add-user/add-user.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
+            __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* App */],
+            __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__["a" /* PssApiProvider */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* ActionSheetController */],
+            __WEBPACK_IMPORTED_MODULE_6_angular2_notifications__["NotificationsService"]])
+    ], AddUserPage);
+    return AddUserPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=event-owner-home.js.map
+//# sourceMappingURL=add-user.js.map
 
 /***/ })
 

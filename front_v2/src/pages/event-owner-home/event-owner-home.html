@@ -54,10 +54,10 @@
 <!--        <button item-start ion-button [navPush]="'EventOwnerCreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create'}" >Create Tournament</button>-->
       </ion-item>
 
-      <ion-item no-lines *ngIf="event.expanded" [navPush]="'EventOwnerAddUserPage'" [navParams]="{eventId:event.event_id}">
+      <ion-item no-lines *ngIf="event.expanded" [navPush]="'AddUserPage'" [navParams]="{eventId:event.event_id}">
 <ion-icon item-start name="ios-add-circle-outline"></ion-icon>  Add User
       </ion-item>
-      <ion-item no-lines *ngIf="event.expanded" [navPush]="'EventOwnerEditUserPage'" [navParams]="{eventId:event.event_id}">
+      <ion-item no-lines *ngIf="event.expanded" [navPush]="'EditUserPage'" [navParams]="{eventId:event.event_id}">
 <ion-icon item-start name="ios-add-circle-outline"></ion-icon>  Edit User
       </ion-item>
       

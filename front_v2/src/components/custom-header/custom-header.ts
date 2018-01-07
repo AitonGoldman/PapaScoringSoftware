@@ -5,7 +5,7 @@
  * Components.
  */
 import { Component, Input } from '@angular/core';
-import { Platform } from 'ionic-angular';
+
 
 @Component({
   selector: 'custom-headers',

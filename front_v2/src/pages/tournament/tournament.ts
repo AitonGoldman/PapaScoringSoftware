@@ -34,12 +34,27 @@ const tournamentDescriptions={
         },'number_of_qualifiers':{
             'short':'Top X players will qualify for finals',
             'long':'Top X players will qualify for finals'
-        }        
+        },'use_stripe':{
+            'short':'Use Stripe',
+            'long':'Use Stripe'
+        },'stripe_sku':{
+            'short':'Single Ticket Stripe SKU',
+            'long':'Single Ticket Stripe SKU'
+        },'discount_stripe_sku':{
+            'short':'Discount Ticket Stripe SKU',
+            'long':'Discount Ticket Stripe SKU'
+        },'discount':{
+            'short':'Discount',
+            'long':'Offer a discount on X number of tickets. '
+        },'number_of_tickets_for_discount':{
+            'short':'Discount Ticket Amount',
+            'long':'Number of tickets to offer a discount on.'            
+        }         
 }
 
 
 @IonicPage({
-    segment:'Tournament/:eventId/:actionType/:wizardMode'
+    segment:'Tournament/:eventId/:actionType'
 })
 @Component({
   selector: 'page-tournament',
@@ -74,8 +89,20 @@ export class TournamentPage extends PssPageComponent {
         this.entityFields.setField('division_count','text',true,false, tournamentDescriptions['division_count']);
         this.entityFields.setDependency('division_count','multi_division_tournament',true)
         this.entityFields.setField('queuing','boolean',true,false, tournamentDescriptions['queuing']);
+        this.entityFields.setField('discount','boolean',true,false, tournamentDescriptions['discount']);
+        this.entityFields.setField('number_of_tickets_for_discount','text',true,false, tournamentDescriptions['number_of_tickets_for_discount']);
+        this.entityFields.setDependency('number_of_tickets_for_discount','discount',true)
+
         this.entityFields.setField('manually_set_price','text',true,false, tournamentDescriptions['manually_set_price']);
+        this.entityFields.setDependency('manually_set_price','use_stripe',false)
         this.entityFields.setField('number_of_qualifiers','text',true,false, tournamentDescriptions['number_of_qualifiers']);
+
+        this.entityFields.setField('use_stripe','boolean',false,true, tournamentDescriptions['use_stripe']);
+        this.entityFields.setField('stripe_sku','text',false,true, tournamentDescriptions['stripe_sku']);
+        this.entityFields.setDependency('stripe_sku','use_stripe',true)
+        this.entityFields.setField('discount_stripe_sku','text',false,true, tournamentDescriptions['discount_stripe_sku']);
+        this.entityFields.setDependency('discount_stripe_sku','use_stripe',true)        
+
         this.entityFieldsArray=this.entityFields.getFieldsArray(this.advanced);
         
         if (this.actionType=="edit"){

@@ -3,7 +3,7 @@ import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
-
+declare var StripeCheckout: any;
 /**
  * Generated class for the TicketPurchasePage page.
  *
@@ -24,8 +24,19 @@ export class TicketPurchasePage extends PssPageComponent{
     eventPlayer:any={};
     player_id_for_event:number=null;
     totalCost:number=0;
-    ionViewDidLoad() {
+    hideSearchbar:boolean=false;
+    
+    ionViewWillLoad() {
         console.log('ionViewDidLoad TicketPurchasePage');
+        let player_id_for_event = this.navParams.get('player_id_for_event');
+        if(player_id_for_event==null){
+            return;            
+        }
+        this.hideSearchbar=true;
+        this.player_id_for_event=player_id_for_event
+        this.pssApi.getEventPlayer(this.eventId,this.player_id_for_event)
+            .subscribe(this.generateGetEventPlayerProcessor())                                                  
+        
     }
     generateGetEventPlayerProcessor(){
         return (result)=>{
@@ -39,12 +50,7 @@ export class TicketPurchasePage extends PssPageComponent{
             console.log(result);
         }
     }
-    generatePurchaseTicketProcessor(purchaseSummary){
-        return (result) => {
-            if(result == null){
-                return;
-            }
-            
+    gotoSuccessPage(purchaseSummary){
             let success_title_string='Tickets Purchased!';
             let successSummary = new SuccessSummary(success_title_string,purchaseSummary.pop(),null);
             successSummary.setSummaryTable(purchaseSummary);
@@ -54,6 +60,31 @@ export class TicketPurchasePage extends PssPageComponent{
             this.navCtrl.push("SuccessPage",            
                               this.buildNavParams({'successSummary':successSummary,
                                                    'successButtons':[successButton]}));
+
+    }
+    generatePurchaseTicketProcessor(purchaseSummary){
+        return (result) => {
+            if(result == null){
+                return;
+            }
+            console.log('in generatePurchaseTicketProccesor')            
+            if(result.new_token_purchase.completed_purchase==true){
+                this.gotoSuccessPage(purchaseSummary)
+                return
+            } 
+            this.launchStripe(result.new_token_purchase.token_purchase_id,purchaseSummary)
+            
+            
+
+        };
+    }
+    generateCompleteTicketPurchaseProcessor(purchaseSummary){
+        return (result) => {
+            if(result == null){
+                return;
+            }
+            console.log('in result')            
+            this.gotoSuccessPage(purchaseSummary)
         };
     }
     
@@ -86,6 +117,27 @@ export class TicketPurchasePage extends PssPageComponent{
             
         }       
     }
+    launchStripe(tokenPurchaseId, purchaseSummary){
+        let handler = StripeCheckout.configure({
+            key: 'pk_test_ogpldo01jdDiemTfT8MMTtMU',
+            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+            locale: 'auto',
+            //            token: function(token) {
+            token : (token)=>{
+                this.pssApi.completeTicketPurchase({stripe_token:token.id,email:token.email},this.eventId,tokenPurchaseId)
+                    .subscribe(this.generateCompleteTicketPurchaseProcessor(purchaseSummary))                                                  
+
+                // You can access the token ID with `token.id`.
+                // Get the token ID to your server-side code for use.
+            }
+        });
+        handler.open({
+            name: 'Stripe.com',
+            description: '2 widgets',
+            zipCode: true,
+            amount: this.totalCost*100
+        });
+    }
     ticketPurchase(){
         let ticketsToBuy={}
         ticketsToBuy['player_id']=this.eventPlayer.player_id;
@@ -103,8 +155,5 @@ export class TicketPurchasePage extends PssPageComponent{
         this.pssApi.purchaseTicket(ticketsToBuy,this.eventId)
             .subscribe(this.generatePurchaseTicketProcessor(purchaseSummary))                                                  
         
-//        post_dict={"player_id":player_id,
-//                   "tournament_token_counts":[{"token_count":1,"tournament_id":tournament_id}],
-//                   "meta_tournament_token_counts":[{"token_count":1,"meta_tournament_id":meta_tournament['data']['meta_tournament_id']}]}        
     }
 }

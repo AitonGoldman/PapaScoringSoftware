@@ -23,22 +23,24 @@
 
       <ng-container *ngFor="let entityField of entityFieldsArray">
         <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">
-        <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>
-        <ng-container *ngIf="entityField.fieldType=='text'" >
-          
-          <ion-item>
-            <ion-icon name="md-create" item-start></ion-icon>
-            <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">
-            </ion-input>    
+          <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>
+          <ng-container *ngIf="entityField.fieldType=='text'" >
+            
+            <ion-item>
+              <ion-icon name="md-create" item-start></ion-icon>
+              <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">
+              </ion-input>    
+            </ion-item>
+          </ng-container>
+          <ng-container *ngIf="entityField.fieldType=='boolean'">          
+            <ion-item>
+              <ion-label>{{entityField.description.short}}</ion-label>
+              <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       
+            </ion-item>
+          </ng-container>
+          <ion-item no-lines text-center>
           </ion-item>
-        </ng-container>
-        <ng-container *ngIf="entityField.fieldType=='boolean'">          
-          <ion-item>
-            <ion-label>{{entityField.description.short}}</ion-label>
-            <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       
-          </ion-item>
-        </ng-container>
-      </ng-container>        
+        </ng-container>        
       </ng-container>
       <ng-container *ngIf="entity.img_url!=null">
         <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>

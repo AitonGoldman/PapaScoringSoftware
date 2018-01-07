@@ -51,7 +51,10 @@ export class PssPageComponent {
         }
         if(role=="eventowner"){
                 return 'EventOwnerHomePage'            
-        }        
+        }
+        if(role=="player"){
+            return 'PlayerHomePage'
+        }
         if (role == null){
             return 'HomePage';
         }

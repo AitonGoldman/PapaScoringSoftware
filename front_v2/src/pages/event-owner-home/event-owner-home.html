@@ -78,7 +78,7 @@
           <ion-item>
             <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id})">Add Machines To Tournament</button>
             <br>
-            <button [navPush]="'EventOwnerEditTournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
+            <button [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
             <br>
             <button ion-button (click)="onTournamentToggle(event.event_id,tournament)"><ion-icon item-start [name]="tournament.active==true?'play':'pause'"></ion-icon>Toggle Tournament</button>
           </ion-item>

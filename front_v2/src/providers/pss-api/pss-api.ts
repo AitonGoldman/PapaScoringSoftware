@@ -67,6 +67,8 @@ export class PssApiProvider {
     addTournamentMachine = this.generate_api_call('addTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'post');
     addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');
     addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');    
+    completeTicketPurchase = this.generate_api_call('completeTicketPurchase',this.basePssUrl+"/:arg/token/:arg",'put');
+
     createEvent = this.generate_api_call('createEvent',this.basePssUrl+"/event",'post');
     createWizardEvent = this.generate_api_call('createWizardEvent',this.basePssUrl+"/wizard/event/tournament/tournament_machines",'post');
     createWizardTournament = this.generate_api_call('createWizardTournament',this.basePssUrl+"/wizard/tournament/tournament_machines",'post');        

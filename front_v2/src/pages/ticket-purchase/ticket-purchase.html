@@ -1,5 +1,5 @@
-<ion-content padding>
-  <ion-searchbar
+<ion-content>
+  <ion-searchbar *ngIf='hideSearchbar!=true'
      [(ngModel)]="player_id_for_event"
      (ionInput)="onInput($event)">
   </ion-searchbar>

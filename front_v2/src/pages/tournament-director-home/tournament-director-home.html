@@ -62,7 +62,7 @@ Example of sub header
         <ion-item>
           <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Add Machines To Tournament</button>
           <br>
-            <button [navPush]="'EditTournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
+            <button [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
           <br>
           <button ion-button (click)="onTournamentToggle(eventId,tournament)"><ion-icon item-start [name]="tournament.active?'play':'pause'"></ion-icon>Toggle Tournament</button>
         </ion-item>

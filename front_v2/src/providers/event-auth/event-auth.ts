@@ -40,7 +40,8 @@ export class EventAuthProvider {
     }
 
     setEventUserLoggedIn(eventId,userInfo){
-        console.log('in setEventUserLoggedIn');                        
+        console.log('in setEventUserLoggedIn');
+        console.log(userInfo);
         if(eventId==null && userInfo.event_creator==true){
             this.eventOwnerUserInfo=userInfo;            
             this._cookieService.putObject("eventOwnerUserInfo",userInfo);
@@ -84,6 +85,9 @@ export class EventAuthProvider {
         }
         
     }
+    getEventPlayerId(eventId){
+        return this.userLoggedInEvents[eventId].events[0].player_id_for_event;
+    }
     
     getPssUserId(eventId){
         if(this.userLoggedInEvents[eventId]!=null){
@@ -99,7 +103,12 @@ export class EventAuthProvider {
             return "eventowner";
         }
         if (eventId in this.userEventRoles){
-            return this.userEventRoles[eventId].event_role_name;
+            if(this.userEventRoles[eventId].event_role_name!=null){
+                return this.userEventRoles[eventId].event_role_name;
+            } else {
+                return 'player';
+            }
+            
         } else {
             return null;
         }

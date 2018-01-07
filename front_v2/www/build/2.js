@@ -1,15 +1,14 @@
 webpackJsonp([2],{
 
-/***/ 699:
+/***/ 703:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditTournamentPageModule", function() { return EditTournamentPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerLoginPageModule", function() { return EventOwnerLoginPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__edit_tournament__ = __webpack_require__(733);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__ = __webpack_require__(357);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_login__ = __webpack_require__(733);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19,29 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
-var EditTournamentPageModule = (function () {
-    function EditTournamentPageModule() {
+var EventOwnerLoginPageModule = (function () {
+    function EventOwnerLoginPageModule() {
     }
-    EditTournamentPageModule = __decorate([
+    EventOwnerLoginPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__edit_tournament__["a" /* EditTournamentPage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_login__["a" /* EventOwnerLoginPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__edit_tournament__["a" /* EditTournamentPage */]),
-                __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__["a" /* ImageUploadModule */].forRoot()
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_login__["a" /* EventOwnerLoginPage */]),
             ],
         })
-    ], EditTournamentPageModule);
-    return EditTournamentPageModule;
+    ], EventOwnerLoginPageModule);
+    return EventOwnerLoginPageModule;
 }());
 
-//# sourceMappingURL=edit-tournament.module.js.map
+//# sourceMappingURL=event-owner-login.module.js.map
 
 /***/ }),
 
-/***/ 722:
+/***/ 718:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -175,7 +172,7 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 723:
+/***/ 719:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -212,7 +209,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 724:
+/***/ 720:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -243,66 +240,15 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 725:
+/***/ 723:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EntityFields; });
-var EntityFields = (function () {
-    function EntityFields(entityType) {
-        this.entityType = entityType;
-        this.fields = {};
-        this.fieldsArray = [];
-    }
-    EntityFields.prototype.setField = function (fieldName, fieldType, basic, advanced, description) {
-        var field = {
-            fieldName: fieldName,
-            fieldType: fieldType,
-            advanced: advanced,
-            basic: basic,
-            description: description
-        };
-        this.fields[fieldName] = field;
-        //this.fieldsArray.push(field);
-    };
-    EntityFields.prototype.setDependency = function (fieldName, dependsOn, value) {
-        this.fields[fieldName].dependsOn = {
-            dependsOn: dependsOn,
-            value: value
-        };
-    };
-    EntityFields.prototype.getFields = function () {
-        return this.fields;
-    };
-    EntityFields.prototype.getFieldsArray = function (advanced) {
-        var fieldsArray = [];
-        for (var i in this.fields) {
-            fieldsArray.push(this.fields[i]);
-        }
-        if (advanced == false) {
-            return fieldsArray.filter(function (field) { return field.basic == true; });
-        }
-        else {
-            return fieldsArray;
-        }
-    };
-    return EntityFields;
-}());
-
-//# sourceMappingURL=entity-fields.js.map
-
-/***/ }),
-
-/***/ 726:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__ = __webpack_require__(725);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pss_page_pss_page__ = __webpack_require__(722);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__ = __webpack_require__(723);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__ = __webpack_require__(724);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(718);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(719);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(720);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -323,152 +269,83 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
-var tournamentDescriptions = {
-    'tournament_name': {
-        'short': 'Name of the tournament.',
-        'long': 'Name of the tournament (i.e. Classics I, Main A, etc).'
-    },
-    'multi_division_tournament': {
-        'short': 'Multiple divisions.',
-        'long': 'Create a tournament with multiple divisions (i.e. Main A, Main B, Main C, etc).'
-    },
-    'division_count': {
-        'short': 'Number of divisions in multi-division tournament',
-        'long': 'Number of divisions in multi-division tournament'
-    },
-    'queuing': {
-        'short': 'Queuing',
-        'long': 'Enable/Disable queues'
-    }, 'manually_set_price': {
-        'short': 'Price of single ticket',
-        'long': 'Price of single ticket'
-    }, 'number_of_qualifiers': {
-        'short': 'Top X players will qualify for finals',
-        'long': 'Top X players will qualify for finals'
-    }
-};
 /**
- * Generated class for the TournamentComponent component.
+ * Generated class for the LoginPage page.
  *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
  */
-var TournamentComponent = (function (_super) {
-    __extends(TournamentComponent, _super);
-    function TournamentComponent() {
+var LoginPage = (function (_super) {
+    __extends(LoginPage, _super);
+    function LoginPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.entity = {};
-        _this.wizardMode = null;
-        _this.entityFieldsArray = null;
-        _this.advanced = false;
+        _this.loginInfo = { 'username': null, 'password': null, 'player_id_for_event': null, 'player_pin': null };
+        _this.loginType = 'player';
         return _this;
     }
-    TournamentComponent.prototype.ionViewWillLoad = function () {
-        this.actionType = this.navParams.get('actionType');
-        this.entityFields = new __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__["a" /* EntityFields */]("tournament");
-        this.wizardMode = this.navParams.get('wizardMode');
-        this.eventId = this.navParams.get('eventId');
-        this.tournamentId = this.navParams.get('tournamentId');
-        var wizardEntity = this.navParams.get('wizardEntity');
-        if (wizardEntity != null) {
-            this.wizardEntity = wizardEntity;
-        }
-        this.entityFields.setField('tournament_name', 'text', true, false, tournamentDescriptions['tournament_name']);
-        this.entityFields.setField('multi_division_tournament', 'boolean', true, false, tournamentDescriptions['multi_division_tournament']);
-        this.entityFields.setField('division_count', 'text', true, false, tournamentDescriptions['division_count']);
-        this.entityFields.setDependency('division_count', 'multi_division_tournament', true);
-        this.entityFields.setField('queuing', 'boolean', true, false, tournamentDescriptions['queuing']);
-        this.entityFields.setField('manually_set_price', 'text', true, false, tournamentDescriptions['manually_set_price']);
-        this.entityFields.setField('number_of_qualifiers', 'text', true, false, tournamentDescriptions['number_of_qualifiers']);
-        this.entityFieldsArray = this.entityFields.getFieldsArray(this.advanced);
-        if (this.actionType == "edit") {
-            this.pssApi.getTournament(this.eventId, this.tournamentId)
-                .subscribe(this.generateGetTournamentProcessor());
-        }
-    };
-    TournamentComponent.prototype.generateGetTournamentProcessor = function () {
+    LoginPage.prototype.generateLoginUserProcessor = function (successButton) {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.entity = result.data;
-        };
-    };
-    TournamentComponent.prototype.onAdvancedChange = function () {
-        this.entityFieldsArray = this.entityFields.getFieldsArray(this.advanced);
-    };
-    TournamentComponent.prototype.generateEditTournamentProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
+            console.log('in generateLoginUserProcessor');
+            console.log(result);
+            _this.eventAuth.setEventUserLoggedIn(_this.eventId, result.data);
+            var name = null;
+            if (result.data.full_user_name != null) {
+                name = result.data.full_user_name;
             }
-            var success_title_string = 'Tournament ' + result.data.tournament_name + ' has been edited.';
-            var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
-            var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.destPageAfterSuccess, _this.buildNavParams({ wizardMode: _this.wizardMode }));
+            if (result.data.player_full_name != null) {
+                name = result.data.player_full_name;
+            }
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](name + ' has logged in.', null, null);
+            var targetPage = null;
+            var targetTabIndex = null;
+            if (_this.platform.is('mobile')) {
+                console.log('going mobile');
+                targetTabIndex = 0;
+            }
+            if (successButton == null) {
+                targetPage = _this.getHomePageString();
+                successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', targetPage, _this.buildNavParams({}), targetTabIndex);
+            }
+            //            this.appCtrl.getRootNav().push("SuccessPage",
             _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
                 'successButtons': [successButton] }));
         };
     };
-    TournamentComponent.prototype.generateCreateTournamentProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            var successTitle = 'Tournament ' + result.data[0].tournament_name + ' has been created.';
-            var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](successTitle, null, null);
-            var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.destPageAfterSuccess, _this.buildNavParams({}));
-            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
-                'successButtons': [successButton] }));
-        };
+    LoginPage.prototype.loginUser = function () {
+        this.pssApi.loginUser(this.loginInfo, this.eventId)
+            .subscribe(this.generateLoginUserProcessor());
     };
-    TournamentComponent.prototype.wizardCreateTournamentSubmit = function () {
-        var success_title_string = 'Tournament ' + this.entity['tournament_name'] + ' has been recorded.';
-        var success_first_line = 'Click "Proceed" button to proceed.';
-        var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](success_title_string, success_first_line, null);
-        if (this.wizardEntity != null) {
-            this.wizardEntity['tournament'] = this.entity;
-        }
-        else {
-            this.wizardEntity = { tournament: this.entity };
-        }
-        this.wizardEntity['tournament'] = { tournament: this.entity, division_count: this.entity['division_count'], multi_division_tournament: this.entity['multi_division_tournament'] };
-        var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Proceed', this.wizardModeNextPage, this.buildNavParams({ wizardMode: this.wizardMode,
-            wizardEntity: this.wizardEntity }));
-        this.navCtrl.push("SuccessPage", this.buildNavParams({ 'successSummary': successSummary,
-            'successButtons': [successButton] }));
+    LoginPage.prototype.loginPlayer = function () {
+        this.pssApi.loginPlayer(this.loginInfo, this.eventId)
+            .subscribe(this.generateLoginUserProcessor());
     };
-    TournamentComponent.prototype.processEntity = function () {
-        console.log('process entity...' + this.wizardMode);
-        if (this.wizardMode != null) {
-            this.wizardCreateTournamentSubmit();
-            return;
+    LoginPage.prototype.loginEventOwner = function () {
+        var targetTabIndex = null;
+        if (this.platform.is('mobile')) {
+            console.log('going mobile');
+            targetTabIndex = 0;
         }
-        if (this.actionType == "create") {
-            this.pssApi.createTournament({ tournament: this.entity, division_count: this.entity['division_count'], multi_division_tournament: this.entity['multi_division_tournament'] }, this.eventId)
-                .subscribe(this.generateCreateTournamentProcessor());
-        }
-        if (this.actionType == "edit") {
-            this.pssApi.editTournament(this.entity, this.eventId)
-                .subscribe(this.generateEditTournamentProcessor());
-        }
+        var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', 'EventOwnerHomePage', this.buildNavParams({}), targetTabIndex);
+        this.pssApi.loginEventOwner(this.loginInfo)
+            .subscribe(this.generateLoginUserProcessor(successButton));
     };
-    TournamentComponent.prototype.onUploadFinished = function (event) {
-        this.entity.has_pic = true;
-        this.entity.img_file = JSON.parse(event.serverResponse._body).data;
+    LoginPage.prototype.ionViewWillLoad = function () {
+        console.log('ionViewDidLoad LoginPage');
+        //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
     };
-    TournamentComponent = __decorate([
+    LoginPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'tournament',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/tournament/tournament.html"*/'<!-- Generated template for the TournamentComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/tournament/tournament.html"*/
+            selector: 'page-login',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/'<!--\n    Generated template for the LoginPage page.\n\n    See http://ionicframework.com/docs/components/#navigation for more info on\n    Ionic pages and navigation.\n  -->\n\n<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <div>\n  <ion-segment [(ngModel)]="loginType">\n    <ion-segment-button value="player">\n      <ion-icon item-start name="person"></ion-icon> Tournament Player\n    </ion-segment-button>\n    <ion-segment-button value="official">\n            <ion-icon item-start name="clipboard"></ion-icon> Tournament Official\n    </ion-segment-button>\n  </ion-segment>\n  </div>\n  <ng-container [ngSwitch]="loginType">\n    <form #loginForm="ngForm" *ngSwitchCase="\'official\'">\n      <ion-item>\n        <ion-label floating>Username</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.username" name="username"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Password</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.password" name="password"></ion-input>\n      </ion-item>\n      <ion-item no-lines>\n        <button [disabled]=\'!loginForm.valid\' ion-button default (click)="loginUser()">Login </button>\n      </ion-item>\n    </form>\n    <form #playerLoginForm="ngForm" *ngSwitchCase="\'player\'">\n      <ion-item>\n        <ion-label floating>Player Number</ion-label>\n        <ion-input type="number" required\n                   [(ngModel)]="loginInfo.player_id_for_event" name="player_id_for_event"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Pin</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.player_pin" name="player_pin"></ion-input>\n      </ion-item>\n      <ion-item no-lines>\n        <button [disabled]=\'!playerLoginForm.valid\' ion-button default (click)="loginPlayer()">Login </button>\n      </ion-item>\n    </form>\n    \n  </ng-container>\n<!--  <ng-container *ngIf=\'loginType=="player"\'>\n  </ng-container>-->\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/,
         })
-    ], TournamentComponent);
-    return TournamentComponent;
-}(__WEBPACK_IMPORTED_MODULE_2__pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], LoginPage);
+    return LoginPage;
+}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=tournament.js.map
+//# sourceMappingURL=login.js.map
 
 /***/ }),
 
@@ -476,9 +353,9 @@ var TournamentComponent = (function (_super) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EditTournamentPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerLoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_tournament_tournament__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__login_login__ = __webpack_require__(723);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -498,31 +375,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the EditTournamentPage page.
+ * Generated class for the EventOwnerLoginPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EditTournamentPage = (function (_super) {
-    __extends(EditTournamentPage, _super);
-    function EditTournamentPage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.destPageAfterSuccess = "TournamentDirectorHomePage";
-        _this.entityType = "tournament";
-        return _this;
+var EventOwnerLoginPage = (function (_super) {
+    __extends(EventOwnerLoginPage, _super);
+    function EventOwnerLoginPage() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    EditTournamentPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad EditTournamentPage');
+    EventOwnerLoginPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad EventOwnerLoginPage');
     };
-    EditTournamentPage = __decorate([
+    EventOwnerLoginPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-edit-tournament',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/'<!-- Generated template for the CreateEditEntityComponent component -->\n<ion-header>\n  <ion-navbar >\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]="buildNavParams({})">Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <form #createEditForm="ngForm">\n    <ion-list>\n      <div margin>\n        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>\n      </div>\n      <ion-item>\n        <ion-label>Advanced Settings</ion-label>\n        <ion-toggle (ionChange)="onAdvancedChange()" name="myadvanced" [(ngModel)]="advanced"></ion-toggle>\n      </ion-item>\n\n      <ng-container *ngFor="let entityField of entityFieldsArray">\n        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">\n        <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>\n        <ng-container *ngIf="entityField.fieldType==\'text\'" >\n          \n          <ion-item>\n            <ion-icon name="md-create" item-start></ion-icon>\n            <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">\n            </ion-input>    \n          </ion-item>\n        </ng-container>\n        <ng-container *ngIf="entityField.fieldType==\'boolean\'">          \n          <ion-item>\n            <ion-label>{{entityField.description.short}}</ion-label>\n            <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       \n          </ion-item>\n        </ng-container>\n      </ng-container>        \n      </ng-container>\n      <ng-container *ngIf="entity.img_url!=null">\n        <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>\n        <ion-item>\n          <ion-avatar item-start *ngIf="entity.img_url!=null">\n            <img [src]="entity.img_url">\n          </ion-avatar>                \n        </ion-item>\n      </ng-container>\n      \n      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>\n      <ion-item>\n        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>\n      </ion-item>\n    </ion-list>    \n    <button [disabled]=\'!createEditForm.valid\' ion-button default (click)="processEntity()">Apply</button>\n  </form>  \n</ion-content>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/,
+            selector: 'page-event-owner-login',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-login/event-owner-login.html"*/'<!--\n  Generated template for the EventOwnerLoginPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<!--\n  Generated template for the LoginPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n<form #loginForm="ngForm">\n  <ion-item>\n  <ion-label floating>Username</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="loginInfo.username" name="username"></ion-input>\n</ion-item>\n<ion-item>\n  <ion-label floating>Password</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="loginInfo.password" name="password"></ion-input>\n</ion-item>\n<ion-item no-lines>\n  <button [disabled]=\'!loginForm.valid\' ion-button default (click)="loginEventOwner()">Login </button>\n</ion-item>\n</form>\n\n<ion-item no-lines text-center>\n  OR\n</ion-item>\n<ion-item no-lines text-center>\n  If you want to create an account, follow <a href="/#/event-owner-request">this link.</a>\n</ion-item>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-login/event-owner-login.html"*/,
         })
-    ], EditTournamentPage);
-    return EditTournamentPage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_tournament_tournament__["a" /* TournamentComponent */]));
+    ], EventOwnerLoginPage);
+    return EventOwnerLoginPage;
+}(__WEBPACK_IMPORTED_MODULE_1__login_login__["a" /* LoginPage */]));
 
-//# sourceMappingURL=edit-tournament.js.map
+//# sourceMappingURL=event-owner-login.js.map
 
 /***/ })
 

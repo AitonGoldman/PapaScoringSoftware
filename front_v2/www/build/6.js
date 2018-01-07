@@ -1,14 +1,14 @@
 webpackJsonp([6],{
 
-/***/ 707:
+/***/ 714:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerLoginPageModule", function() { return EventOwnerLoginPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TicketPurchasePageModule", function() { return TicketPurchasePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_login__ = __webpack_require__(743);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ticket_purchase__ = __webpack_require__(743);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var EventOwnerLoginPageModule = (function () {
-    function EventOwnerLoginPageModule() {
+var TicketPurchasePageModule = (function () {
+    function TicketPurchasePageModule() {
     }
-    EventOwnerLoginPageModule = __decorate([
+    TicketPurchasePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_owner_login__["a" /* EventOwnerLoginPage */],
+                __WEBPACK_IMPORTED_MODULE_2__ticket_purchase__["a" /* TicketPurchasePage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_login__["a" /* EventOwnerLoginPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__ticket_purchase__["a" /* TicketPurchasePage */]),
             ],
         })
-    ], EventOwnerLoginPageModule);
-    return EventOwnerLoginPageModule;
+    ], TicketPurchasePageModule);
+    return TicketPurchasePageModule;
 }());
 
-//# sourceMappingURL=event-owner-login.module.js.map
+//# sourceMappingURL=ticket-purchase.module.js.map
 
 /***/ }),
 
-/***/ 722:
+/***/ 718:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -172,7 +172,7 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 723:
+/***/ 719:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -209,7 +209,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 724:
+/***/ 720:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -240,15 +240,15 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 728:
+/***/ 743:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TicketPurchasePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(722);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(723);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(724);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(718);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(719);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(720);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -270,133 +270,108 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the LoginPage page.
+ * Generated class for the TicketPurchasePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var LoginPage = (function (_super) {
-    __extends(LoginPage, _super);
-    function LoginPage() {
+var TicketPurchasePage = (function (_super) {
+    __extends(TicketPurchasePage, _super);
+    function TicketPurchasePage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.loginInfo = { 'username': null, 'password': null, 'player_id_for_event': null, 'player_pin': null };
-        _this.loginType = 'player';
+        _this.ticketPriceLists = null;
+        _this.ticketCounts = null;
+        _this.eventPlayer = {};
+        _this.player_id_for_event = null;
+        _this.totalCost = 0;
         return _this;
     }
-    LoginPage.prototype.generateLoginUserProcessor = function (successButton) {
+    TicketPurchasePage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad TicketPurchasePage');
+    };
+    TicketPurchasePage.prototype.generateGetEventPlayerProcessor = function () {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            console.log('in generateLoginUserProcessor');
+            _this.eventPlayer = result.data != null ? result.data : {};
+            _this.ticketPriceLists = result.tournament_calculated_lists;
+            _this.ticketCounts = result.tournament_counts;
             console.log(result);
-            _this.eventAuth.setEventUserLoggedIn(_this.eventId, result.data);
-            var name = null;
-            if (result.data.full_user_name != null) {
-                name = result.data.full_user_name;
+        };
+    };
+    TicketPurchasePage.prototype.generatePurchaseTicketProcessor = function (purchaseSummary) {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
             }
-            if (result.data.player_full_name != null) {
-                name = result.data.player_full_name;
-            }
-            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](name + ' has logged in.', null, null);
-            var targetPage = null;
-            var targetTabIndex = null;
-            if (_this.platform.is('mobile')) {
-                console.log('going mobile');
-                targetTabIndex = 0;
-            }
-            if (successButton == null) {
-                targetPage = _this.getHomePageString();
-                successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', targetPage, _this.buildNavParams({}), targetTabIndex);
-            }
-            //            this.appCtrl.getRootNav().push("SuccessPage",
+            var success_title_string = 'Tickets Purchased!';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](success_title_string, purchaseSummary.pop(), null);
+            successSummary.setSummaryTable(purchaseSummary);
+            var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.getHomePageString(_this.eventId), _this.buildNavParams({}));
             _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
                 'successButtons': [successButton] }));
         };
     };
-    LoginPage.prototype.loginUser = function () {
-        this.pssApi.loginUser(this.loginInfo, this.eventId)
-            .subscribe(this.generateLoginUserProcessor());
+    TicketPurchasePage.prototype.clearValues = function () {
+        this.ticketPriceLists = null;
+        this.ticketCounts = null;
+        this.eventPlayer = {};
+        //this.player_id_for_event=null;
+        this.totalCost = 0;
     };
-    LoginPage.prototype.loginPlayer = function () {
-        this.pssApi.loginPlayer(this.loginInfo, this.eventId)
-            .subscribe(this.generateLoginUserProcessor());
-    };
-    LoginPage.prototype.loginEventOwner = function () {
-        var targetTabIndex = null;
-        if (this.platform.is('mobile')) {
-            console.log('going mobile');
-            targetTabIndex = 0;
+    TicketPurchasePage.prototype.onInput = function (event) {
+        if (this.player_id_for_event != null && this.player_id_for_event > 99 && this.player_id_for_event < 1000) {
+            console.log('in onInput');
+            this.pssApi.getEventPlayer(this.eventId, this.player_id_for_event)
+                .subscribe(this.generateGetEventPlayerProcessor());
         }
-        var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', 'EventOwnerHomePage', this.buildNavParams({}), targetTabIndex);
-        this.pssApi.loginEventOwner(this.loginInfo)
-            .subscribe(this.generateLoginUserProcessor(successButton));
+        else {
+            this.clearValues();
+        }
     };
-    LoginPage.prototype.ionViewWillLoad = function () {
-        console.log('ionViewDidLoad LoginPage');
-        //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
+    TicketPurchasePage.prototype.onSelect = function (event) {
+        this.totalCost = 0;
+        console.log('in onSelect');
+        for (var _i = 0, _a = this.ticketPriceLists; _i < _a.length; _i++) {
+            var ticketPrice = _a[_i];
+            if (ticketPrice.selectedCount != null) {
+                this.totalCost = this.totalCost + ticketPrice.selectedCount.price;
+            }
+        }
     };
-    LoginPage = __decorate([
+    TicketPurchasePage.prototype.ticketPurchase = function () {
+        var ticketsToBuy = {};
+        ticketsToBuy['player_id'] = this.eventPlayer.player_id;
+        ticketsToBuy['tournament_token_counts'] = [];
+        var purchaseSummary = [];
+        for (var _i = 0, _a = this.ticketPriceLists; _i < _a.length; _i++) {
+            var ticketsSelected = _a[_i];
+            if (ticketsSelected.selectedCount != null) {
+                ticketsToBuy['tournament_token_counts'].push({ token_count: ticketsSelected.selectedCount.amount,
+                    tournament_id: ticketsSelected.tournament_id });
+                purchaseSummary.push(ticketsSelected.tournament_name + " : " + ticketsSelected.selectedCount.amount);
+            }
+        }
+        purchaseSummary.push("total cost : " + this.totalCost);
+        console.log(ticketsToBuy);
+        this.pssApi.purchaseTicket(ticketsToBuy, this.eventId)
+            .subscribe(this.generatePurchaseTicketProcessor(purchaseSummary));
+        //        post_dict={"player_id":player_id,
+        //                   "tournament_token_counts":[{"token_count":1,"tournament_id":tournament_id}],
+        //                   "meta_tournament_token_counts":[{"token_count":1,"meta_tournament_id":meta_tournament['data']['meta_tournament_id']}]}        
+    };
+    TicketPurchasePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-login',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/'<!--\n    Generated template for the LoginPage page.\n\n    See http://ionicframework.com/docs/components/#navigation for more info on\n    Ionic pages and navigation.\n  -->\n\n<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <div>\n  <ion-segment [(ngModel)]="loginType">\n    <ion-segment-button value="player">\n      <ion-icon item-start name="person"></ion-icon> Tournament Player\n    </ion-segment-button>\n    <ion-segment-button value="official">\n            <ion-icon item-start name="clipboard"></ion-icon> Tournament Official\n    </ion-segment-button>\n  </ion-segment>\n  </div>\n  <ng-container [ngSwitch]="loginType">\n    <form #loginForm="ngForm" *ngSwitchCase="\'official\'">\n      <ion-item>\n        <ion-label floating>Username</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.username" name="username"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Password</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.password" name="password"></ion-input>\n      </ion-item>\n      <ion-item no-lines>\n        <button [disabled]=\'!loginForm.valid\' ion-button default (click)="loginUser()">Login </button>\n      </ion-item>\n    </form>\n    <form #playerLoginForm="ngForm" *ngSwitchCase="\'player\'">\n      <ion-item>\n        <ion-label floating>Player Number</ion-label>\n        <ion-input type="number" required\n                   [(ngModel)]="loginInfo.player_id_for_event" name="player_id_for_event"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Pin</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.player_pin" name="player_pin"></ion-input>\n      </ion-item>\n      <ion-item no-lines>\n        <button [disabled]=\'!playerLoginForm.valid\' ion-button default (click)="loginPlayer()">Login </button>\n      </ion-item>\n    </form>\n    \n  </ng-container>\n<!--  <ng-container *ngIf=\'loginType=="player"\'>\n  </ng-container>-->\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/,
+            selector: 'page-ticket-purchase',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/ticket-purchase/ticket-purchase.html"*/'<ion-content padding>\n  <ion-searchbar\n     [(ngModel)]="player_id_for_event"\n     (ionInput)="onInput($event)">\n  </ion-searchbar>\n  <ng-container *ngIf="eventPlayer.first_name!=null ">\n    <ion-item>\n      Player Name : {{eventPlayer.player_full_name}}\n    </ion-item>\n    <form #myForm="ngForm">\n    \n    <ng-container *ngFor="let ticketPriceList of ticketPriceLists">\n      <ion-item no-lines>\n        Existing Count : {{ticketCounts[ticketPriceList.tournament_id]==null?0:ticketCounts[ticketPriceList.tournament_id].count}}\n      </ion-item>\n      <ion-item>\n        <ion-label>{{ticketPriceList.tournament_name}}</ion-label>\n        <ion-select [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:\'poop\'}" (ionChange)="onSelect($event)">\n          <ion-option *ngFor="let calculatedPrice of ticketPriceList.calculated_price_list" [value]="calculatedPrice">{{calculatedPrice.amount}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ng-container>\n    <ion-item>\n      Total Cost : {{totalCost}}\n    </ion-item>\n    <ion-item>\n      <button [disabled]="!myForm.dirty" ion-button (click)="ticketPurchase()"> Purchase Tickets </button>\n    </ion-item>\n    </form>\n    \n  </ng-container>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/ticket-purchase/ticket-purchase.html"*/,
         })
-    ], LoginPage);
-    return LoginPage;
+    ], TicketPurchasePage);
+    return TicketPurchasePage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=login.js.map
-
-/***/ }),
-
-/***/ 743:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerLoginPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__login_login__ = __webpack_require__(728);
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-/**
- * Generated class for the EventOwnerLoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var EventOwnerLoginPage = (function (_super) {
-    __extends(EventOwnerLoginPage, _super);
-    function EventOwnerLoginPage() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    EventOwnerLoginPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad EventOwnerLoginPage');
-    };
-    EventOwnerLoginPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-event-owner-login',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-login/event-owner-login.html"*/'<!--\n  Generated template for the EventOwnerLoginPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<!--\n  Generated template for the LoginPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n\n<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n<form #loginForm="ngForm">\n  <ion-item>\n  <ion-label floating>Username</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="loginInfo.username" name="username"></ion-input>\n</ion-item>\n<ion-item>\n  <ion-label floating>Password</ion-label>\n  <ion-input type="text" required\n         [(ngModel)]="loginInfo.password" name="password"></ion-input>\n</ion-item>\n<ion-item no-lines>\n  <button [disabled]=\'!loginForm.valid\' ion-button default (click)="loginEventOwner()">Login </button>\n</ion-item>\n</form>\n\n<ion-item no-lines text-center>\n  OR\n</ion-item>\n<ion-item no-lines text-center>\n  If you want to create an account, follow <a href="/#/event-owner-request">this link.</a>\n</ion-item>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-login/event-owner-login.html"*/,
-        })
-    ], EventOwnerLoginPage);
-    return EventOwnerLoginPage;
-}(__WEBPACK_IMPORTED_MODULE_1__login_login__["a" /* LoginPage */]));
-
-//# sourceMappingURL=event-owner-login.js.map
+//# sourceMappingURL=ticket-purchase.js.map
 
 /***/ })
 

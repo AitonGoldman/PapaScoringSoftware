@@ -61,7 +61,7 @@
 <ion-icon item-start name="ios-add-circle-outline"></ion-icon>  Edit User
       </ion-item>
       
-      <ion-item no-lines *ngIf="event.expanded" [navPush]="'EventOwnerCreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create'}">
+      <ion-item no-lines *ngIf="event.expanded" [navPush]="'TournamentPage'" [navParams]="{entityType:'tournament',actionType:'create', eventId:event.event_id, wizardMode:true}">
         <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament 
 
 <!--        <button item-start ion-button [navPush]="'EventOwnerCreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create'}" >Create Tournament</button>-->
@@ -76,7 +76,7 @@
         </ion-item>
         <ng-container *ngIf="tournament.expanded!=true?false:true">
           <ion-item>
-            <button ion-button [navPush]="'EventOwnerTournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id})">Add Machines To Tournament</button>
+            <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id})">Add Machines To Tournament</button>
             <br>
             <button [navPush]="'EventOwnerEditTournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
             <br>

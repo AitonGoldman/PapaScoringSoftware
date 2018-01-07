@@ -1,14 +1,14 @@
 webpackJsonp([17],{
 
-/***/ 717:
+/***/ 708:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabsPageModule", function() { return TabsPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomePageModule", function() { return HomePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs__ = __webpack_require__(752);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home__ = __webpack_require__(738);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TabsPageModule = (function () {
-    function TabsPageModule() {
+var HomePageModule = (function () {
+    function HomePageModule() {
     }
-    TabsPageModule = __decorate([
+    HomePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */],
+                __WEBPACK_IMPORTED_MODULE_2__home__["a" /* HomePage */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__home__["a" /* HomePage */]),
             ],
         })
-    ], TabsPageModule);
-    return TabsPageModule;
+    ], HomePageModule);
+    return HomePageModule;
 }());
 
-//# sourceMappingURL=tabs.module.js.map
+//# sourceMappingURL=home.module.js.map
 
 /***/ }),
 
-/***/ 722:
+/***/ 718:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -172,14 +172,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 752:
+/***/ 738:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(722);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(718);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -203,55 +203,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 /**
- * Generated class for the TabsPage page.
+ * Generated class for the HomePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var TabsPage = (function (_super) {
-    __extends(TabsPage, _super);
-    function TabsPage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.roleName = "blah";
-        return _this;
+var HomePage = (function (_super) {
+    __extends(HomePage, _super);
+    function HomePage() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    TabsPage.prototype.ionViewWillLoad = function () {
-        var roleName = this.eventAuth.getRoleName(this.eventId);
-        this.roleName = roleName ? roleName : 'Home';
-        console.log('ionViewDidLoad TabsPage');
-    };
-    // presentPopover(myEvent) {
-    //     let popover = this.popoverCtrl.create(QuicklinksComponent);
-    //     popover.present({
-    //         ev: myEvent     
-    //     });
-    // }
-    TabsPage.prototype.onTabSelect = function () {
-        console.log('selected a tab!');
-    };
-    TabsPage.prototype.onTabChange = function (event) {
-        console.log('changed a tab!');
-        if (this.tabRef.getByIndex(event.index).canGoBack()) {
-            this.tabRef.getByIndex(event.index).popToRoot({ animate: false });
-        }
-        var previousTab = this.tabRef.previousTab(false);
-        if (previousTab && previousTab.canGoBack()) {
-            this.tabRef.previousTab().popToRoot({ animate: false });
-        }
+    HomePage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad HomePage');
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myTabs'),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Tabs */])
-    ], TabsPage.prototype, "tabRef", void 0);
-    TabsPage = __decorate([
+    ], HomePage.prototype, "tabRef", void 0);
+    HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-tabs',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/'<!--\n  Generated template for the TabsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-tabs #myTabs (ionChange)="onTabChange($event)">\n  <ion-tab [rootParams]="buildNavParams({})" [root]="getHomePageString()" tabIcon="md-home" [tabTitle]="this.eventAuth.getRoleName(this.eventId)?this.eventAuth.getRoleName(this.eventId) : \'Home\'"></ion-tab>  \n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'ResultsPage\'" tabIcon="md-clipboard" tabTitle="Results"></ion-tab>\n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'QueuesPage\'" tabIcon="md-git-branch" tabTitle="Queues"></ion-tab>\n  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="\'QuickLinksPage\'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>\n</ion-tabs>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/,
+            selector: 'page-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/home/home.html"*/'<!--\n  Generated template for the HomePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<!--<bobo>-->\n<ion-header>\n<ion-navbar>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n    <button [navPush]="\'ResultsPage\'" icon-only ion-button>Results</button>\n    <button icon-only ion-button>Queues</button>\n    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>\n  </ion-buttons>\n</ion-navbar>\n</ion-header>\n<!--</bobo>-->\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<ion-content padding>\n<!--  {{eventId}} --   {{eventName}}\n  Home Page\n  <br>\n  <a (click)="goToResults()">Results</a>\n  <br>\n  <button ion-button [navPush]="\'SuccessPage\'" [navParams]="buildNavParams({})">GO to success</button>-->\nThis is the standard homepage.<br>\nPlease login <span showWhen=\'mobile\'>using the <b>Quick Links</b> button</span><br>\nOther stuff goes here.<br>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/home/home.html"*/,
         })
-    ], TabsPage);
-    return TabsPage;
+    ], HomePage);
+    return HomePage;
 }(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=tabs.js.map
+//# sourceMappingURL=home.js.map
 
 /***/ })
 

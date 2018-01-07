@@ -1,14 +1,14 @@
 webpackJsonp([18],{
 
-/***/ 715:
+/***/ 707:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SuccessPageModule", function() { return SuccessPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventSelectPageModule", function() { return EventSelectPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__success__ = __webpack_require__(750);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_select__ = __webpack_require__(737);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var SuccessPageModule = (function () {
-    function SuccessPageModule() {
+var EventSelectPageModule = (function () {
+    function EventSelectPageModule() {
     }
-    SuccessPageModule = __decorate([
+    EventSelectPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__success__["a" /* SuccessPage */]
+                __WEBPACK_IMPORTED_MODULE_2__event_select__["a" /* EventSelectPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__success__["a" /* SuccessPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_select__["a" /* EventSelectPage */]),
             ],
         })
-    ], SuccessPageModule);
-    return SuccessPageModule;
+    ], EventSelectPageModule);
+    return EventSelectPageModule;
 }());
 
-//# sourceMappingURL=success.module.js.map
+//# sourceMappingURL=event-select.module.js.map
 
 /***/ }),
 
-/***/ 722:
+/***/ 718:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -172,13 +172,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 750:
+/***/ 737:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SuccessPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventSelectPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(722);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(718);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -198,41 +198,60 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the SuccessPage page.
+ * Generated class for the EventSelectPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var SuccessPage = (function (_super) {
-    __extends(SuccessPage, _super);
-    function SuccessPage() {
+var EventSelectPage = (function (_super) {
+    __extends(EventSelectPage, _super);
+    function EventSelectPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.successSummary = null;
-        _this.successButtons = null;
+        _this.nextPage = null;
+        _this.events = [];
         return _this;
     }
-    // pushPageWithNoBackButton(pageName,navParams){        
-    //     this.navCtrl.getActive().willLeave.subscribe(
-    //         ()=>{
-    //             this.navCtrl.last().showBackButton(false);
-    //         }
-    //     )        
-    //     this.navCtrl.push(pageName,this.buildNavParams(navParams));
-    // }
-    SuccessPage.prototype.ionViewWillLoad = function () {
-        this.successSummary = this.navParams.get('successSummary');
-        this.successButtons = this.navParams.get('successButtons');
-        console.log('ionViewDidLoad SuccessPage');
+    EventSelectPage.prototype.generateGetAllEventsProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.events = result.data;
+        };
     };
-    SuccessPage = __decorate([
+    EventSelectPage.prototype.gotoEvent = function (eventId) {
+        var nextPage = '';
+        var tabIndex = null;
+        if (this.platform.is('mobile') == true) {
+            nextPage = 'TabsPage';
+            tabIndex = 0;
+        }
+        else {
+            nextPage = this.getHomePageString(eventId);
+        }
+        this.pushRootPage(nextPage, { 'eventId': eventId });
+    };
+    EventSelectPage.prototype.ionViewWillLoad = function () {
+        this.pssApi.getAllEvents({})
+            .subscribe(this.generateGetAllEventsProcessor());
+        if (this.platform.is('mobile') == true) {
+            this.nextPage = 'TabsPage';
+        }
+        else {
+            this.nextPage = this.getHomePageString();
+        }
+        console.log('ionViewDidLoad EventSelectPage');
+    };
+    EventSelectPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-success',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/'<!--\n  Generated template for the SuccessPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <ion-title>Success</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n  <ion-row>\n    <ion-col>      \n    </ion-col>\n    <ion-col style=\'text-align:center\'> \n      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>\n      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>\n\n    </ion-col>\n    <ion-col>     \n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getTitle():\'You can not reload this page\'}}\n      <hr style=\'width:75%\'>      \n    </ion-col>\n  </ion-row>\n\n  <ng-container *ngIf="successSummary.summaryTable.length>0">      \n    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">\n      <ion-col style=\'text-align:center\'>         \n        {{summaryTableRow}}\n      </ion-col>                     \n    </ion-row>\n    <hr style=\'width:75%\' text-center>\n  </ng-container>\n\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getFirstLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getSecondLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col *ngFor="let button of successButtons" style=\'text-align:center\'>\n      <!--<button ion-button [navPush]="button.getTargetPage()" [navParams]="buildNavParams(button.getParams())">{{button.getTitle()}}</button>-->\n      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>\n    </ion-col>\n  </ion-row>\n  </ion-grid>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/,
+            selector: 'page-event-select',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-select/event-select.html"*/'<!--\n  Generated template for the EventSelectPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>Event Select</ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <button showWhen=\'mobile\' ion-button (click)="pushRootPage(\'EventOwnerTabsPage\')">Login as event owner</button>\n  <button hideWhen=\'mobile\' ion-button (click)="pushRootPage(\'EventOwnerLoginPage\')">Login as event owner</button>\n  \n  <button *ngFor="let event of events" ion-button (click)="gotoEvent(event.event_id)">GO to event {{event.name}} </button>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-select/event-select.html"*/,
         })
-    ], SuccessPage);
-    return SuccessPage;
+    ], EventSelectPage);
+    return EventSelectPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=success.js.map
+//# sourceMappingURL=event-select.js.map
 
 /***/ })
 

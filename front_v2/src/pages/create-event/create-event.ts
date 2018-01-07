@@ -18,7 +18,7 @@ import { EventComponent } from '../../components/event/event'
 })
 export class CreateEventPage extends EventComponent{    
     destPageAfterSuccess:string="EventOwnerHomePage";
-    wizardModeNextPage:string="EventOwnerCreateTournamentPage";
+    wizardModeNextPage:string="TournamentPage";
     
     ionViewDidLoad() {
         console.log('ionViewDidLoad CreateEventPage');

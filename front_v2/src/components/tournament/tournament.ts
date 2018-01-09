@@ -145,7 +145,7 @@ export class TournamentComponent extends PssPageComponent{
         
     }
     processEntity(){
-        console.log('process entity...'+this.wizardMode);
+        
         if(this.wizardMode!=null){
             this.wizardCreateTournamentSubmit();
             return

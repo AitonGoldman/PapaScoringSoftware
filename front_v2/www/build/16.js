@@ -1,14 +1,14 @@
 webpackJsonp([16],{
 
-/***/ 710:
+/***/ 716:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlayerHomePageModule", function() { return PlayerHomePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResultsPageModule", function() { return ResultsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__player_home__ = __webpack_require__(738);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__results__ = __webpack_require__(749);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,35 +18,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var PlayerHomePageModule = (function () {
-    function PlayerHomePageModule() {
+var ResultsPageModule = (function () {
+    function ResultsPageModule() {
     }
-    PlayerHomePageModule = __decorate([
+    ResultsPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__player_home__["a" /* PlayerHomePage */],
+                __WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__player_home__["a" /* PlayerHomePage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */]),
             ],
         })
-    ], PlayerHomePageModule);
-    return PlayerHomePageModule;
+    ], ResultsPageModule);
+    return ResultsPageModule;
 }());
 
-//# sourceMappingURL=player-home.module.js.map
+//# sourceMappingURL=results.module.js.map
 
 /***/ }),
 
-/***/ 719:
+/***/ 724:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -100,7 +100,6 @@ var PssPageComponent = (function () {
         }
         var role = this.eventAuth.getRoleName(eventId);
         console.log('in getHomePageString...');
-        console.log(role);
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -109,6 +108,9 @@ var PssPageComponent = (function () {
         }
         if (role == "player") {
             return 'PlayerHomePage';
+        }
+        if (role == "scorekeeper") {
+            return 'ScorekeeperHomePage';
         }
         if (role == null) {
             return 'HomePage';
@@ -122,15 +124,10 @@ var PssPageComponent = (function () {
         var _this = this;
         console.log('in push page with no back button...');
         if (tabIndex != null) {
-            console.log(tabIndex);
-            console.log('in push page with no back button...2');
             this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName, navParams, { animate: false });
-            console.log('in push page with no back button...3');
             this.navCtrl.parent.select(tabIndex);
-            console.log('in push page with no back button...4');
             return;
         }
-        console.log('page name is ...' + pageName);
         this.navCtrl.getActive().willLeave.subscribe(function () {
             _this.navCtrl.last().showBackButton(false);
         });
@@ -163,11 +160,11 @@ var PssPageComponent = (function () {
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */],
             __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
     ], PssPageComponent);
     return PssPageComponent;
@@ -177,13 +174,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 738:
+/***/ 749:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PlayerHomePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ResultsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(719);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(724);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -203,28 +200,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the PlayerHomePage page.
+ * Generated class for the ResultsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var PlayerHomePage = (function (_super) {
-    __extends(PlayerHomePage, _super);
-    function PlayerHomePage() {
+var ResultsPage = (function (_super) {
+    __extends(ResultsPage, _super);
+    function ResultsPage() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    PlayerHomePage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad PlayerHomePage');
+    ResultsPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad ResultsPage');
     };
-    PlayerHomePage = __decorate([
+    ResultsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-player-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/player-home/player-home.html"*/'<!--\n  Generated template for the PlayerHomePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>PlayerHome</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <h1><b>Purchase Tickets</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'TicketPurchasePage\'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">\n      <ion-icon item-start name="ios-cash-outline"></ion-icon> Ticket Purchase\n    </ion-item>\n  </ion-list>\n \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/player-home/player-home.html"*/,
+            selector: 'page-results',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/'<!--\n  Generated template for the ResultsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>testing 1 2 3 </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/,
         })
-    ], PlayerHomePage);
-    return PlayerHomePage;
+    ], ResultsPage);
+    return ResultsPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=player-home.js.map
+//# sourceMappingURL=results.js.map
 
 /***/ })
 

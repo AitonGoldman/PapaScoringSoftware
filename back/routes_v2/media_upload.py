@@ -42,6 +42,9 @@ def upload_event_pic():
     if file:
         print "uploading....finally"
         filename = secure_filename(file.filename)
+        print "filename is ..."+filename
         random_file_name = datetime.datetime.now().strftime("%s")+filename
+        print "random file name is ..."+random_file_name
         file.save(upload_folder+"/"+random_file_name)
+        print "done saving..."
     return jsonify({'data':"%s"%random_file_name})

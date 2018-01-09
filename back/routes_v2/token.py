@@ -166,6 +166,8 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
                 if int(meta_tournament_count.get('token_count',0)) > 0:
                     meta_tournament_count['meta_tournament']=meta_tournament
                     list_of_meta_tournament_tokens.append(meta_tournament_count)
+    if len(list_of_tournament_tokens)==0 and len(list_of_meta_tournament_tokens)==0:
+        raise BadRequest('0 tickets were requested')
     verify_tournament_and_meta_tournament_request_counts_are_valid(list_of_tournament_tokens,list_of_meta_tournament_tokens, event_id, player, app)
 
     new_token_purchase = app.table_proxy.create_token_purchase(player_initiated=player_initiated)
@@ -207,6 +209,8 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
     else:
         raise BadRequest('No info in request')        
     token_purchase = app.table_proxy.get_token_purchase_by_id(token_purchase_id)
+    if len(token_purchase.tokens)==0:
+        raise BadRequest('0 tickets were specified')
     player_id = token_purchase.tokens[0].player_id
     if token_purchase.completed_purchase:
         raise BadRequest('You are trying to pay for something that is already paid for')                
@@ -227,8 +231,8 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
         if normal_count > 0:
             stripe_items.append({"quantity":normal_count,"type":"sku","parent":normal_sku})           
     api_key = app.event_settings[event_id].stripe_api_key    
-    result = app.stripe_proxy.purchase_tickets(stripe_items,api_key,None,input_data['email'],token_purchase)    
-    token_purchase.stripe_transaction_id=result['order_id_string']    
+    result = app.stripe_proxy.purchase_tickets(stripe_items,api_key,input_data['stripe_token'],input_data['email'],token_purchase)    
+    token_purchase.stripe_transaction_id=result.get('order_id_string',None)    
     audit_log_params={
         'action':'Player Ticket Purchase Complete',
         'player_id':player_id,                      

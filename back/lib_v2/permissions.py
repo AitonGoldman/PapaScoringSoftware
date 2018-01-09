@@ -23,6 +23,13 @@ class CreatePlayerPermission(Permission):
         desk_create_player_need = needs.DeskworkerRoleNeed(event_id)        
         event_editor_need = needs.EventEditNeed(event_id)        
         super(CreatePlayerPermission, self).__init__(td_create_player_need,event_editor_need,desk_create_player_need)
+
+class EditPlayerPermission(Permission):
+    def __init__(self,event_id):        
+        td_edit_player_need = needs.TournamentDirectorRoleNeed(event_id)
+        desk_edit_player_need = needs.DeskworkerRoleNeed(event_id)        
+        event_editor_need = needs.EventEditNeed(event_id)        
+        super(EditPlayerPermission, self).__init__(td_edit_player_need,event_editor_need,desk_edit_player_need)
         
 class CreateTournamentPermission(Permission):
     def __init__(self,event_id):        

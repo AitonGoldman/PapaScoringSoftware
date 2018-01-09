@@ -134,7 +134,7 @@ export class EventComponent  extends PssPageComponent {
     }
     
     processEntity(){
-        console.log('process entity...'+this.wizardMode);
+        
         if(this.wizardMode!=null){
             this.wizardCreateEventSubmit();
             return

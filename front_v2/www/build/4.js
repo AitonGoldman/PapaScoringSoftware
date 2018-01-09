@@ -1,14 +1,14 @@
 webpackJsonp([4],{
 
-/***/ 717:
+/***/ 722:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TournamentMachinesPageModule", function() { return TournamentMachinesPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_machines__ = __webpack_require__(745);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_machines__ = __webpack_require__(754);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__ = __webpack_require__(358);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
@@ -45,15 +45,15 @@ var TournamentMachinesPageModule = (function () {
 
 /***/ }),
 
-/***/ 719:
+/***/ 724:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -107,7 +107,6 @@ var PssPageComponent = (function () {
         }
         var role = this.eventAuth.getRoleName(eventId);
         console.log('in getHomePageString...');
-        console.log(role);
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -116,6 +115,9 @@ var PssPageComponent = (function () {
         }
         if (role == "player") {
             return 'PlayerHomePage';
+        }
+        if (role == "scorekeeper") {
+            return 'ScorekeeperHomePage';
         }
         if (role == null) {
             return 'HomePage';
@@ -129,15 +131,10 @@ var PssPageComponent = (function () {
         var _this = this;
         console.log('in push page with no back button...');
         if (tabIndex != null) {
-            console.log(tabIndex);
-            console.log('in push page with no back button...2');
             this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName, navParams, { animate: false });
-            console.log('in push page with no back button...3');
             this.navCtrl.parent.select(tabIndex);
-            console.log('in push page with no back button...4');
             return;
         }
-        console.log('page name is ...' + pageName);
         this.navCtrl.getActive().willLeave.subscribe(function () {
             _this.navCtrl.last().showBackButton(false);
         });
@@ -170,11 +167,11 @@ var PssPageComponent = (function () {
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */],
             __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
     ], PssPageComponent);
     return PssPageComponent;
@@ -184,7 +181,7 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 720:
+/***/ 725:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -221,7 +218,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 721:
+/***/ 726:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -252,19 +249,19 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 745:
+/***/ 754:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentMachinesPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(719);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(724);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__ = __webpack_require__(720);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__classes_SuccessButton__ = __webpack_require__(721);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__ = __webpack_require__(725);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__classes_SuccessButton__ = __webpack_require__(726);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_angular2_notifications__);
 var __extends = (this && this.__extends) || (function () {
@@ -403,11 +400,8 @@ var TournamentMachinesPage = (function (_super) {
             .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name + " has been removed!", "edit"));
     };
     TournamentMachinesPage.prototype.onInput = function (event) {
-        console.log(this.searchbar);
-        console.log(event);
     };
     TournamentMachinesPage.prototype.onItemsShown = function (event) {
-        console.log(event);
     };
     TournamentMachinesPage.prototype.onDisable = function (machine) {
         machine.active = machine.active == false;
@@ -459,7 +453,6 @@ var TournamentMachinesPage = (function (_super) {
                 .subscribe(this.generateGetAllMachinesProcessor());
         }
         console.log('ionViewDidLoad TournamentMachinesPage');
-        console.log(this.constructor.name);
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('searchbar'),
@@ -479,11 +472,11 @@ var TournamentMachinesPage = (function (_super) {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
             __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* App */],
             __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* ActionSheetController */],
             __WEBPACK_IMPORTED_MODULE_8_angular2_notifications__["NotificationsService"]])
     ], TournamentMachinesPage);

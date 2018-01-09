@@ -5,12 +5,11 @@
     Ionic pages and navigation.
   -->
 <ion-header>
-
   <ion-navbar hideBackButton>
     <ion-title>EventOwnerHomePage</ion-title>
     <ion-buttons end hideWhen='mobile'>
       <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
-      <button icon-only ion-button [navPush]="'EventOwnerHomePage'">Home</button>    
+      <button icon-only ion-button [navPush]="'EventOwnerLoginPage'">Login</button>    
     </ion-buttons>
   </ion-navbar>
 
@@ -66,9 +65,13 @@
 
 <!--        <button item-start ion-button [navPush]="'EventOwnerCreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create'}" >Create Tournament</button>-->
       </ion-item>
-      
+      <ion-item no-lines *ngIf="event.expanded">
+                <b>Tournaments</b>
+      </ion-item>
       <ng-container *ngFor="let tournament of event.tournaments">
         <ion-item (click)="expand(tournament)" *ngIf="event.expanded">
+        
+          
         <ion-avatar item-start *ngIf="tournament.img_url!=null">
           <img [src]="tournament.img_url">
         </ion-avatar>                  

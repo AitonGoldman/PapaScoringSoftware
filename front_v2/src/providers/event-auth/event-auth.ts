@@ -31,17 +31,30 @@ export class EventAuthProvider {
         if(userEventRoles!=null){
             this.userEventRoles = userEventRoles;
         }
-        if(eventOwnerUserInfo!=null){
-            console.log(eventOwnerUserInfo);
+        if(eventOwnerUserInfo!=null){            
             this.eventOwnerUserInfo=eventOwnerUserInfo;
         } else {
             console.log('not a event owner');
         }
     }
 
+    logoutEventOwner(){
+        this._cookieService.remove("eventOwnerUserInfo");
+        this.eventOwnerUserInfo={};            
+    }
+    
+    logout(eventId){
+        this.eventOwnerUserInfo={};
+        this.userLoggedInEvents[eventId]={};
+        this.userEventRoles[eventId]={};        
+        this._cookieService.remove("eventOwnerUserInfo");
+        this._cookieService.putObject("userLoggedInEvents",this.userLoggedInEvents);        
+        this._cookieService.putObject("userEventRoles",this.userEventRoles);        
+    }
+    
     setEventUserLoggedIn(eventId,userInfo){
         console.log('in setEventUserLoggedIn');
-        console.log(userInfo);
+        
         if(eventId==null && userInfo.event_creator==true){
             this.eventOwnerUserInfo=userInfo;            
             this._cookieService.putObject("eventOwnerUserInfo",userInfo);
@@ -52,7 +65,7 @@ export class EventAuthProvider {
         if(userInfo.player_id!=null){
             this.setEventRole(eventId,{event_role_name:'player'});
         }
-        if(userInfo.pss_user_id!=null){
+        if(userInfo.pss_user_id!=null && userInfo.roles !=null && userInfo.roles.length != 0){
             this.setEventRole(eventId,userInfo.roles[0]);            
         }
         
@@ -63,10 +76,13 @@ export class EventAuthProvider {
     }
 
     isEventUserLoggedIn(eventId){
-        if (eventId in this.userLoggedInEvents){
+        console.log('in isEventUserLoggedIn')
+        
+        if (this.userLoggedInEvents[eventId]!=null){
+            if(this.userLoggedInEvents[eventId].pss_user_id!=null || this.userLoggedInEvents[eventId].player_id!=null)
             return true;//this.userLoggedInEvents[eventId];
         } else {
-            return null;
+            return false;
         }       
     }
     
@@ -78,7 +94,7 @@ export class EventAuthProvider {
     }
 
     getEventOwnerPssUserId(){
-        if(this.eventOwnerUserInfo!=null){
+        if(this.eventOwnerUserInfo!=null && this.eventOwnerUserInfo.pss_user_id!=null){
             return this.eventOwnerUserInfo.pss_user_id;
         } else {
             return null;
@@ -86,7 +102,12 @@ export class EventAuthProvider {
         
     }
     getEventPlayerId(eventId){
-        return this.userLoggedInEvents[eventId].events[0].player_id_for_event;
+        if( this.userLoggedInEvents[eventId]!=null && this.userLoggedInEvents[eventId].events!=null && this.userLoggedInEvents[eventId].events.length!=0){
+            return this.userLoggedInEvents[eventId].events[0].player_id_for_event;
+        } else {
+            return null;
+        }
+        
     }
     
     getPssUserId(eventId){
@@ -99,16 +120,15 @@ export class EventAuthProvider {
     }
         
     getRoleName(eventId:number){
-        if (this.eventOwnerUserInfo!=null){
+        if (this.eventOwnerUserInfo!=null && this.eventOwnerUserInfo.pss_user_id!=null){
             return "eventowner";
         }
-        if (eventId in this.userEventRoles){
+        if (this.userEventRoles[eventId]!=null){
             if(this.userEventRoles[eventId].event_role_name!=null){
                 return this.userEventRoles[eventId].event_role_name;
-            } else {
-                return 'player';
-            }
-            
+            } else{
+                return null;
+            }            
         } else {
             return null;
         }

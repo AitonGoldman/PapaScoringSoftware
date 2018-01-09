@@ -16,6 +16,63 @@
 // automatically applied to the <body> element in the app.
 
 @import "../../node_modules/ionic2-auto-complete/auto-complete";
+
+ion-auto-complete {
+  width: 100%;
+}
+
+body {
+-webkit-user-select: text;
+-moz-user-select: text;
+-ms-user-select: text;
+user-select: text;
+}
+
+.toolbar-ios ion-title {
+  padding-left:50px;
+  padding-right:50px;
+}
+
+.customClass {
+    background-color: white;
+    border-radius: 5px;
+    margin:5px;
+}
+
+.img-ul-image {
+    margin:50px;
+}
+
+.img-ul-upload {
+    background-color: #000 !important;
+    width:100%;
+}
+
+.customClass .img-ul-clear {
+  float:right;
+}
+
+.customClass .img-ul-drag-box-msg {
+  color: white !important;
+  overflow: hidden;
+  width:0;  
+  height:0;
+}
+
+.customClass .img-ul-container{
+    background-color: white;
+}
+
+
+.desktopSlim{
+    @media screen and (min-device-width: 611px){         
+       width:50%;
+       margin-left:auto;
+       margin-right:auto;
+    }
+
+
+}
 simple-notifications{
  .simple-notification-wrapper {
   simple-notification{

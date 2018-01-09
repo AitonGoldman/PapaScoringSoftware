@@ -5,6 +5,7 @@ import { CustomComponentsModule } from '../../components/custom-components.modul
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { ImageUploadModule } from "angular2-image-upload";
 
+
 @NgModule({
   declarations: [
     AddPlayerPage,
@@ -14,6 +15,6 @@ import { ImageUploadModule } from "angular2-image-upload";
       CustomComponentsModule,
       AutoCompleteModule,
       ImageUploadModule.forRoot()
-  ],
+  ]
 })
 export class AddPlayerPageModule {}

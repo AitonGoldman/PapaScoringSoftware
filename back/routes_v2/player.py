@@ -15,6 +15,16 @@ def handle_img_upload(input_data):
         copyfile(current_app.config['UPLOAD_FOLDER']+"/"+input_data['img_file'],event_img_folders+"/"+input_data['img_file'])
         input_data['img_url']='/assets/imgs/%s'%(input_data['img_file'])
 
+def edit_player_route(request,app,event_id):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Submitted information is missing required fields')
+    #put tournament edit logic here
+    handle_img_upload(input_data)
+    player = app.table_proxy.edit_player(input_data,False)
+    
+    return player
 
 def create_player_route(request,tables_proxy,event_id):
     #FIXME : check if user is already added to event
@@ -96,6 +106,13 @@ def get_event_player(event_id,event_player_id):
     else:
         raise BadRequest('That player number does not exist')
 
+@blueprints.test_blueprint.route('/<int:event_id>/event_players/no_pics',methods=['GET'])
+def get_all_event_players_with_no_pics(event_id):                
+    all_event_players=current_app.table_proxy.get_all_event_players(event_id)
+    players_with_no_pics=[generic.serialize_player_public(player) for player in all_event_players if player.has_pic is False]    
+    return jsonify({"data":players_with_no_pics})
+    
+
 @blueprints.test_blueprint.route('/players/<string:query_string>',methods=['GET'])
 def search_all_players(query_string):                
     
@@ -117,3 +134,12 @@ def get_all_players():
     #current_app.table_proxy.commit_changes()
     return jsonify({'data':players_found_list})
 
+@blueprints.test_blueprint.route('/<int:event_id>/player',methods=['PUT'])
+def edit_player(event_id):            
+    permission = permissions.EditPlayerPermission(event_id)    
+    if not permission.can():
+        raise Unauthorized('You are not authorized to edit players for this event')        
+    player = edit_player_route(request,current_app,event_id)
+    current_app.table_proxy.commit_changes()
+    player_dict=generic.serialize_player_public(player)
+    return jsonify({'data':player_dict})

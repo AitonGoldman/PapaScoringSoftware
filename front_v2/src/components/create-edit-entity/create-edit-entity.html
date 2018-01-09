@@ -27,7 +27,7 @@
           <ng-container *ngIf="entityField.fieldType=='text'" >
             
             <ion-item>
-              <ion-icon name="md-create" item-start></ion-icon>
+              <ion-label>                              <ion-icon name="md-create" item-start></ion-icon></ion-label>
               <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">
               </ion-input>    
             </ion-item>

@@ -45,7 +45,7 @@ export class PssPageComponent {
         }
         let role = this.eventAuth.getRoleName(eventId);
         console.log('in getHomePageString...')
-        console.log(role);
+        
         if(role=="tournamentdirector"){
                 return 'TournamentDirectorHomePage'            
         }
@@ -55,6 +55,10 @@ export class PssPageComponent {
         if(role=="player"){
             return 'PlayerHomePage'
         }
+       if(role=="scorekeeper"){
+            return 'ScorekeeperHomePage'
+       }
+         
         if (role == null){
             return 'HomePage';
         }
@@ -67,15 +71,15 @@ export class PssPageComponent {
     pushPageWithNoBackButton(pageName,navParams,tabIndex?):void{
         console.log('in push page with no back button...');
         if(tabIndex!=null){            
-            console.log(tabIndex);
-            console.log('in push page with no back button...2');
+            
+            
             this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName,navParams,{animate:false});
-            console.log('in push page with no back button...3');
+            
             this.navCtrl.parent.select(tabIndex);
-            console.log('in push page with no back button...4');
+            
             return;
         }
-        console.log('page name is ...'+pageName);
+        
         this.navCtrl.getActive().willLeave.subscribe(
             ()=>{
                 this.navCtrl.last().showBackButton(false);

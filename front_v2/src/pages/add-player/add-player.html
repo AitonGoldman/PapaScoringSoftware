@@ -1,37 +1,79 @@
 <ion-header>
-<custom-headers [eventId]="eventId" [homePage]="getHomePageString()"></custom-headers>
+  <ion-navbar>
+    <custom-headers [eventId]="eventId" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>
 </ion-header>
-
 <ion-content padding>
-    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
-    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  <div class='desktopSlim'>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-1>
+        </ion-col>
+        <ion-col col-10>
+          <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
+        </ion-col>
+        <ion-col col-1>
+          <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
     <form #myForm="ngForm" *ngIf="existingPlayerFound==false && loading==false">
-      <ion-item>
+      <ion-list>
+        <ion-item no-line *ngIf="selectedPlayer.img_url!=null">
+          <!-- <ion-grid> -->
+          <!--   <ion-row> -->
+          <!--     <ion-col col-5 style='background-color:red'> -->
+          <!--     </ion-col> -->
+          <!--     <ion-col justify-content-center align-items-center> -->
+                <ion-avatar style='zoom:3.0'>
+                  <img [src]="selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
+                </ion-avatar>
+          <!--     </ion-col> -->
+          <!--     <ion-col col-5 style='background-color:red'> -->
+          <!--     </ion-col>               -->
+          <!--   </ion-row> -->
+          <!-- </ion-grid> -->
+        </ion-item>
+        <ion-item>
         <ion-label floating>First Name</ion-label>
         <ion-input type="text" required
                    [(ngModel)]="selectedPlayer.first_name" name="first_name"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>Last Name</ion-label>
+        <ion-label stacked>Last Name</ion-label>
         <ion-input type="text" required
                    [(ngModel)]="selectedPlayer.last_name" name="last_name"></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label floating>Ifpa Ranking</ion-label>
-        <ion-input type="text" required
-                   [(ngModel)]="selectedPlayer.ifpa_ranking" name="ifpa_ranking"></ion-input>
+      <ion-item-sliding #slidingItem>
+        <ion-item>
+          <ion-label stacked>Ifpa Ranking <span showWhen="mobile">(slide left to re-lookup)</span></ion-label>
+          <ion-input type="text" required
+                     [(ngModel)]="selectedPlayer.ifpa_ranking" name="ifpa_ranking">           
+          </ion-input>
+          <ion-icon (click)='getIfpaRanking(selectedPlayer.first_name+" "+selectedPlayer.last_name)' hideWhen="mobile" name='cloud-download' item-end></ion-icon>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button (click)='getIfpaRankingMobile(selectedPlayer.first_name+" "+selectedPlayer.last_name,slidingItem)'>
+            Lookup
+            <ion-icon name="cloud-download"></ion-icon>            
+          </button>
+        </ion-item-options>        
+      </ion-item-sliding>
+      <ion-item (click)="takePicture()">
+        Take a picture <span>{{selectedPlayer.has_pic==true?"(pic uploaded)":"poop"}}</span>
+           <ion-icon name='camera' item-end></ion-icon>
       </ion-item>
-      
-      <button ion-button (click)='getIfpaRanking(selectedPlayer.first_name+" "+selectedPlayer.last_name)'>
-        Lookup Ifpa Ranking
-      </button>
-      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>
-      <ion-item>
-        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>
+      <!-- <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider> -->
+      <!-- <ion-item> -->
+      <!--   <image-upload (uploadFinished)="onUploadFinished($event)" url="http://192.168.1.178:8000/media_upload"></image-upload> -->
+      <!-- </ion-item> -->      
+      <ion-item text-center>
+        <button ion-button padding (click)="onSubmit()">
+          register player 
+        </button>
       </ion-item>
-      <button ion-button (click)="onSubmit()">
-        register player
-      </button>
+      </ion-list>
     </form>
-    
+    </div>
 </ion-content>

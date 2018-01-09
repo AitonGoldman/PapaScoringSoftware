@@ -1,17 +1,14 @@
 webpackJsonp([22],{
 
-/***/ 697:
+/***/ 706:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddUserPageModule", function() { return AddUserPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerQuickLinksPageModule", function() { return EventOwnerQuickLinksPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__add_user__ = __webpack_require__(726);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__ = __webpack_require__(358);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__ = __webpack_require__(740);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,39 +18,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
-
-var AddUserPageModule = (function () {
-    function AddUserPageModule() {
+var EventOwnerQuickLinksPageModule = (function () {
+    function EventOwnerQuickLinksPageModule() {
     }
-    AddUserPageModule = __decorate([
+    EventOwnerQuickLinksPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__add_user__["a" /* AddUserPage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__["a" /* EventOwnerQuickLinksPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__add_user__["a" /* AddUserPage */]),
-                __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__["a" /* AutoCompleteModule */],
-                __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["SimpleNotificationsModule"].forRoot()
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__["a" /* EventOwnerQuickLinksPage */]),
             ],
         })
-    ], AddUserPageModule);
-    return AddUserPageModule;
+    ], EventOwnerQuickLinksPageModule);
+    return EventOwnerQuickLinksPageModule;
 }());
 
-//# sourceMappingURL=add-user.module.js.map
+//# sourceMappingURL=event-owner-quick-links.module.js.map
 
 /***/ }),
 
-/***/ 719:
+/***/ 724:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -107,7 +100,6 @@ var PssPageComponent = (function () {
         }
         var role = this.eventAuth.getRoleName(eventId);
         console.log('in getHomePageString...');
-        console.log(role);
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -116,6 +108,9 @@ var PssPageComponent = (function () {
         }
         if (role == "player") {
             return 'PlayerHomePage';
+        }
+        if (role == "scorekeeper") {
+            return 'ScorekeeperHomePage';
         }
         if (role == null) {
             return 'HomePage';
@@ -129,15 +124,10 @@ var PssPageComponent = (function () {
         var _this = this;
         console.log('in push page with no back button...');
         if (tabIndex != null) {
-            console.log(tabIndex);
-            console.log('in push page with no back button...2');
             this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName, navParams, { animate: false });
-            console.log('in push page with no back button...3');
             this.navCtrl.parent.select(tabIndex);
-            console.log('in push page with no back button...4');
             return;
         }
-        console.log('page name is ...' + pageName);
         this.navCtrl.getActive().willLeave.subscribe(function () {
             _this.navCtrl.last().showBackButton(false);
         });
@@ -170,11 +160,11 @@ var PssPageComponent = (function () {
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */],
             __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
     ], PssPageComponent);
     return PssPageComponent;
@@ -184,19 +174,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 726:
+/***/ 740:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddUserPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerQuickLinksPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(719);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(154);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_notifications__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(724);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -213,159 +198,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
 
 
 
 /**
- * Generated class for the AddUserPage page.
+ * Generated class for the EventOwnerQuickLinksPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var AddUserPage = (function (_super) {
-    __extends(AddUserPage, _super);
-    function AddUserPage(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, actionSheetCtrl, notificationsService) {
-        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) || this;
-        _this.autoCompleteProvider = autoCompleteProvider;
-        _this.eventAuth = eventAuth;
-        _this.navParams = navParams;
-        _this.navCtrl = navCtrl;
-        _this.appCtrl = appCtrl;
-        _this.pssApi = pssApi;
-        _this.platform = platform;
-        _this.actionSheetCtrl = actionSheetCtrl;
-        _this.notificationsService = notificationsService;
-        _this.existingUserFound = true;
-        _this.selectedUser = {};
-        _this.newUserName = null;
-        _this.roles = [];
-        _this.selectedRole = null;
+var EventOwnerQuickLinksPage = (function (_super) {
+    __extends(EventOwnerQuickLinksPage, _super);
+    function EventOwnerQuickLinksPage() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.reorderEnabled = false;
+        _this.items = [];
         return _this;
     }
-    AddUserPage.prototype.generateGetAllUsersProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            _this.users = result.data;
-            _this.autoCompleteProvider.setUsers(result.data);
-            _this.roles = result.roles;
-        };
+    EventOwnerQuickLinksPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad QuickLinksPage');
     };
-    AddUserPage.prototype.generateAddEventUsersProcessor = function (user_full_name, role_name) {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            var user_already_exists = _this.users.filter(function (user) {
-                return user.pss_user_id == result.data.pss_user_id;
-            }).length;
-            if (user_already_exists == 0) {
-                _this.users.push(result.data[0]);
-            }
-            var message_string = user_full_name + " is a " + role_name + " in the event.";
-            _this.notificationsService.success("Success", message_string, {
-                timeOut: 0,
-                position: ["top", "right"],
-                theClass: 'poop'
-            });
-            //toast here
-        };
+    EventOwnerQuickLinksPage.prototype.reorderItems = function (indexes) {
+        this.items = Object(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["r" /* reorderArray */])(this.items, indexes);
     };
-    AddUserPage.prototype.ionViewWillLoad = function () {
-        console.log('ionViewDidLoad EventOwnerAddUserPage');
-        this.pssApi.getAllUsers()
-            .subscribe(this.generateGetAllUsersProcessor());
-    };
-    AddUserPage.prototype.onInput = function (event) {
-        if (this.searchbar.suggestions.length == 0) {
-            this.existingUserFound = false;
-            this.newUserName = event;
-        }
-        else {
-            this.existingUserFound = true;
-        }
-        console.log(this.selectedUser);
-    };
-    AddUserPage.prototype.doesEventRolesMatchEvent = function (eventId, roles) {
-        return roles.filter(function (role) { return Number(eventId) == role.event_id; }).length > 0;
-    };
-    AddUserPage.prototype.onSelect = function (event) {
-        console.log('in onselect...');
-        console.log(this.eventId);
-        if (this.doesEventRolesMatchEvent(this.eventId, this.selectedUser.event_roles)) {
-            this.existingUserFound = true;
-            var message_string = this.selectedUser.full_user_name + " is already registered for this event.";
-            this.notificationsService.warn("Warning", message_string, {
-                timeOut: 0,
-                position: ["top", "right"],
-                theClass: 'poop'
-            });
-            return;
-        }
-        //FIXME : need to add new user to list of users searched
-        if (!this.doesEventRolesMatchEvent(this.eventId, this.selectedUser.event_roles)) {
-            this.existingUserFound = true;
-            this.pssApi.addEventUsers({ event_users: [this.selectedUser],
-                event_role_ids: [this.selectedRole.event_role_id] }, this.eventId)
-                .subscribe(this.generateAddEventUsersProcessor(this.selectedUser.full_user_name, this.selectedRole.event_role_name));
-            return;
-        }
-        this.existingUserFound = true;
-    };
-    AddUserPage.prototype.onFocus = function () {
-        this.selectedUser = {};
-        this.existingUserFound = true;
-    };
-    AddUserPage.prototype.onSubmit = function (name_string) {
-        this.existingUserFound = true;
-        this.pssApi.addEventUsers({ event_users: [this.parseOutFirstLastNames(name_string)], event_role_ids: [this.selectedRole.event_role_id] }, this.eventId)
-            .subscribe(this.generateAddEventUsersProcessor(name_string, this.selectedRole.event_role_name));
-    };
-    AddUserPage.prototype.parseOutFirstLastNames = function (name_string) {
-        var name_elements = name_string.split(" ");
-        return {
-            first_name: name_elements[0],
-            last_name: name_elements[1],
-            username: name_elements[0] + name_elements[1]
-        };
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('searchbar'),
-        __metadata("design:type", Object)
-    ], AddUserPage.prototype, "searchbar", void 0);
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myForm'),
-        __metadata("design:type", Object)
-    ], AddUserPage.prototype, "myForm", void 0);
-    AddUserPage = __decorate([
+    EventOwnerQuickLinksPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-add-user',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/add-user/add-user.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]=\'buildNavParams({})\'>Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n<ion-content padding>\n  <form #myForm="ngForm">\n    <ion-item>\n    <ion-label>Role</ion-label>\n    <ion-select name="myeventrole" [(ngModel)]="selectedRole" required>\n      <ion-option *ngFor="let role of roles" [value]="role">{{role.event_role_name}}</ion-option>\n    </ion-select>\n    </ion-item>\n    <ion-item>\n    </ion-item>\n    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>\n  </form>\n\n  <div *ngIf=\'existingUserFound==false\' text-center padding>        \n    The system does not know about {{newUserName}}.  Click the button below to register them for the event.\n    <br>\n    <button [disabled]=\'!myForm.valid\' ion-button margin (click)="onSubmit(newUserName)">Register User</button>\n    \n  </div>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/add-user/add-user.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
-            __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["k" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["j" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* App */],
-            __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["a" /* ActionSheetController */],
-            __WEBPACK_IMPORTED_MODULE_6_angular2_notifications__["NotificationsService"]])
-    ], AddUserPage);
-    return AddUserPage;
+            selector: 'page-event-owner-quick-links',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-quick-links/event-owner-quick-links.html"*/'<!--\n  Generated template for the EventOwnerQuickLinksPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-content padding>\n  <ion-list>\n    <ion-list-header>Jump To...\n      <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>\n    </ion-list-header>\n      <button ion-item detail-push [navPush]="\'EventOwnerLoginPage\'" [navParams]="buildNavParams({})">\n        <ion-icon name="person" item-end></ion-icon>Login\n      </button>\n      <button ion-item detail-push (click)="pushRootPage(\'EventSelectPage\')">\n        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event\n      </button>      \n    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      \n    <button *ngFor="let item of items"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>\n    </ion-item-group>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-quick-links/event-owner-quick-links.html"*/,
+        })
+    ], EventOwnerQuickLinksPage);
+    return EventOwnerQuickLinksPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=add-user.js.map
+//# sourceMappingURL=event-owner-quick-links.js.map
 
 /***/ })
 

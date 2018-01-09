@@ -411,7 +411,10 @@ class TableProxy():
     
     def get_all_players(self):
         return self.Players.query.all()
-
+    
+    def get_all_event_players(self,event_id):
+        return self.Players.query.join(self.EventPlayersInfo).filter_by(event_id=event_id).all()
+        
     def get_event_player(self,event_id,event_player_id):        
         return self.Players.query.filter(self.Players.event_info.any(self.EventPlayersInfo.event_id==event_id)).filter(self.Players.event_info.any(self.EventPlayersInfo.player_id_for_event==event_player_id)).first()
     #, 
@@ -487,7 +490,17 @@ class TableProxy():
         if commit:
             self.db_handle.session.commit()
         return new_tournament
-
+    
+    def edit_player(self,player_info,commit=False):
+        player = self.Players.query.filter_by(player_id=player_info['player_id']).first()
+        if player is None:
+            raise Exception('No player with the specified id')
+        deserializer.deserialize_json(player,player_info)
+        #event edit logic goes here        
+        if commit:
+            self.db_handle.session.commit()
+        return player
+    
     def edit_tournament(self, tournament_info,
                         commit=False):                    
         tournament = self.Tournaments.query.filter_by(tournament_id=tournament_info['tournament_id']).first()

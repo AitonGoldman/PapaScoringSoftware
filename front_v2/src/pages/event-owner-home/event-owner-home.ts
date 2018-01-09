@@ -24,7 +24,7 @@ export class EventOwnerHomePage extends PssPageComponent {
             console.log('got back tournaments and events...');            
             this.eventsAndTournaments=result.data.filter((event)=>{
                 console.log('in getAllEventsAndTournamentsProcessor');
-                console.log(event);
+                
                 return this.eventAuth.getEventOwnerPssUserId()==event.event_creator_pss_user_id
             });
             this.eventsAndTournaments.map((event)=>{

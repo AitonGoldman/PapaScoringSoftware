@@ -18,14 +18,18 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ImageUploadModule } from "angular2-image-upload";
 import { CookieModule } from 'ngx-cookie';
 import { CustomComponentsModule } from '../components/custom-components.module';
+import { TakePicComponent } from '../components/take-pic/take-pic'
 
 @NgModule({
   declarations: [
-      MyApp      
+      MyApp,
+      TakePicComponent
   ],
   imports: [
       BrowserModule,
-      IonicModule.forRoot(MyApp),
+      IonicModule.forRoot(MyApp,{
+          backButtonText: '',
+      }),
       HttpClientModule,
       FormsModule,
       AutoCompleteModule,
@@ -38,7 +42,8 @@ import { CustomComponentsModule } from '../components/custom-components.module';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-      MyApp      
+      MyApp,
+      TakePicComponent
   ],
   providers: [
     StatusBar,

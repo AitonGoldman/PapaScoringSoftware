@@ -47,7 +47,7 @@ export class TicketPurchasePage extends PssPageComponent{
             this.ticketPriceLists=result.tournament_calculated_lists;
             this.ticketCounts=result.tournament_counts;
             
-            console.log(result);
+            
         }
     }
     gotoSuccessPage(purchaseSummary){
@@ -151,7 +151,7 @@ export class TicketPurchasePage extends PssPageComponent{
             }
         }
         purchaseSummary.push("total cost : "+this.totalCost);
-        console.log(ticketsToBuy);
+        
         this.pssApi.purchaseTicket(ticketsToBuy,this.eventId)
             .subscribe(this.generatePurchaseTicketProcessor(purchaseSummary))                                                  
         

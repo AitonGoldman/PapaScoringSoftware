@@ -21,8 +21,7 @@ export class EventOwnerRequestPage {
   constructor(public pssApi: PssApiProvider,
               public navCtrl: NavController,
               public navParams: NavParams) {
-      console.log(navParams.get('itsdangerousstring'))
-      console.log('------')
+      
   }
     ionViewDidLoad() {
         

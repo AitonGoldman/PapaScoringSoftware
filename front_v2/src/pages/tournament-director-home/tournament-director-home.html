@@ -1,52 +1,48 @@
-<!--
-  Generated template for the TournamentDirectorHomePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
-  -->
-<!--<bobo>-->
 <ion-header>
-<ion-navbar hideBackButton>  
-    <ion-title showWhen='mobile'>
-      {{title}}
-    </ion-title>    
-  <ion-title hideWhen='mobile'>Pss</ion-title>
-  <ion-buttons end>
-<!--    <button icon-only menuToggle ion-button>Queues</button>-->
-  </ion-buttons>
-</ion-navbar>
-<ion-navbar color="primary">
-Example of sub header
-</ion-navbar>
-
+  <ion-navbar>  
+  <custom-headers title="TD Homepage" [eventId]="eventId" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>
 </ion-header>
-<!--</bobo>-->
+
 <simple-notifications  [options]="{position:['top','right']}"></simple-notifications>
 
 
 <ion-content padding>
-  <h1><b>Purchase Tickets</b></h1>
+
+  <div class='desktopSlim' >
+  <h1><b>Tournament Operations</b></h1>
   <ion-list>
     <ion-item no-lines [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({})">
-      <ion-icon item-start name="ios-cash-outline"></ion-icon> Ticket Purchase
+      <ion-icon item-end name="ios-cash-outline"></ion-icon> Ticket Purchase
     </ion-item>
-  </ion-list>
-
-  <h1><b>Add Players</b></h1>
-  <ion-list>
     <ion-item no-lines [navPush]="'AddPlayerPage'" [navParams]="buildNavParams({})">
-      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Add Player
+      <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Add Player
     </ion-item>
+    <ion-item no-lines>
+      <ion-icon item-end name="clipboard"></ion-icon> Scorekeeping
+    </ion-item>
+    <ion-item no-lines>
+      <ion-icon item-end name="git-branch"></ion-icon> Queue Player
+    </ion-item>
+    <ion-item no-lines [navPush]="'ChangePlayerPicturePage'" [navParams]="buildNavParams({})">
+      <ion-icon item-end name="camera"></ion-icon> Take Player Picture
+    </ion-item>    
+    
   </ion-list>
-  
-  <h1><b>Tournament Creation</b></h1>
-  <ion-list>
+  <h1><b>TD Operations</b></h1>
+    <ion-list>
+    <ion-item no-lines [navPush]="'AddUserPage'" [navParams]="buildNavParams({})">
+      <ion-icon item-end name="person-add"></ion-icon>  Add User
+    </ion-item>
+    <ion-item no-lines [navPush]="'EditUserPage'" [navParams]="buildNavParams({})">
+      <ion-icon item-end name="create"></ion-icon>  Edit User
+    </ion-item>
     <ion-item no-lines [navPush]="'TournamentPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})">
-      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament 
+      <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Create Tournament 
 
       <!--<button item-start ion-button [navPush]="'CreateEventPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})" >Create Event</button>-->
-    </ion-item>
-  </ion-list>
+    </ion-item>    
+  </ion-list>  
 
   <!--  <button ion-button [navPush]="'CreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create',targetEventId:1,eventName:'poop'}" >Create Tournament</button> -->
   <h1><b>Tournaments</b></h1>
@@ -60,7 +56,7 @@ Example of sub header
       </ion-item-divider>      
       <ng-container *ngIf="tournament.expanded!=true?false:true">
         <ion-item>
-          <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Add Machines To Tournament</button>
+          <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Manage Tournament Machines</button>
           <br>
             <button [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
           <br>
@@ -69,6 +65,7 @@ Example of sub header
       </ng-container>      
     </ng-container>
   </ion-list>
+  </div>
 </ion-content>
 
 

@@ -60,13 +60,12 @@
 
 
 <ion-content>
-
   <ion-list>
     <ion-list-header>Jump To...
       <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>
-    </ion-list-header>
-      <button ion-item detail-push [navPush]="'LoginPage'" [navParams]="buildNavParams({})">
-        <ion-icon name="person" item-end></ion-icon>Login
+    </ion-list-header>    
+      <button ion-item detail-push [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})">
+        <ion-icon name="person" item-end></ion-icon>{{eventAuth.isEventUserLoggedIn(eventId)==true? "Logout" : "Login"}}
       </button>
       <button ion-item detail-push (click)="pushRootPage('EventSelectPage')">
         <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event

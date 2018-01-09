@@ -30,7 +30,7 @@
     </ion-col>
   </ion-row>
 
-  <ng-container *ngIf="successSummary.summaryTable.length>0">      
+  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      
     <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">
       <ion-col style='text-align:center'>         
         {{summaryTableRow}}
@@ -50,9 +50,13 @@
     </ion-col>               
   </ion-row>
   <ion-row>
-    <ion-col *ngFor="let button of successButtons" style='text-align:center'>
-      <!--<button ion-button [navPush]="button.getTargetPage()" [navParams]="buildNavParams(button.getParams())">{{button.getTitle()}}</button>-->
+    <ion-col *ngFor="let button of successButtons" text-center>
       <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>
+    </ion-col>
+  </ion-row>
+  <ion-row justify-content-center *ngIf="successSummary == undefined" >
+    <ion-col text-center > 
+      <button ion-button (click)="goToEventSelectOnPageReload()">Select Event</button>
     </ion-col>
   </ion-row>
   </ion-grid>

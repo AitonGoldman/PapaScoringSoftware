@@ -1,4 +1,4 @@
-<ion-menu [content]="content">
+<ion-menu [content]="content" persistent>
   <ion-header>
     <ion-toolbar>
       <ion-title>Menu</ion-title>
@@ -7,8 +7,8 @@
  
   <ion-content>
     <ion-list>
-      <button ion-item menuClose>
-        hi there
+      <button ion-item  menuClose (click)="openPage('EventOwnerHomePage')">
+        Event Owner Home Page
       </button>
     </ion-list>
   </ion-content>
@@ -28,5 +28,5 @@
 </ion-header>
 -->
 
-<ion-nav [root]="'EventSelectPage'" [rootParams]="{eventId:eventId,eventName:eventName}" #content swipeBackEnabled="false">
+<ion-nav id="nav" [root]="'EventSelectPage'" [rootParams]="{eventId:eventId,eventName:eventName}" #content swipeBackEnabled="false">
 </ion-nav>

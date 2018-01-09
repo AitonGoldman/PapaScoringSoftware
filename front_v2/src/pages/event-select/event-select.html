@@ -5,13 +5,28 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton="true">
     <ion-title>Event Select</ion-title>
+    <ion-buttons end>
+      <button ion-button menuToggle><ion-icon name="menu"></ion-icon></button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <button showWhen='mobile' ion-button (click)="pushRootPage('EventOwnerTabsPage')">Login as event owner</button>
-  <button hideWhen='mobile' ion-button (click)="pushRootPage('EventOwnerLoginPage')">Login as event owner</button>
+<ion-content padding class="card-background-page">
+<ion-grid>
+  <ion-row>
+    <ion-col col-12 col-md-4 col-lg-3 col-xl-2 *ngFor="let event of events" (click)="gotoEvent(event.event_id,event.name)">
+      <ion-card >        
+        <img showWhen='mobile' src="/assets/imgs/pinball_small.jpg"/>
+        <img hideWhen='mobile' src="/assets/imgs/pinball_med.jpg"/>        
+      <div class="card-title">{{event.name}}</div>
+    </ion-card>
+    </ion-col>
+  </ion-row>
+</ion-grid>
   
-  <button *ngFor="let event of events" ion-button (click)="gotoEvent(event.event_id)">GO to event {{event.name}} </button>
+  <!--<button block ion-button (click)="pushRootPage('EventOwnerTabsPage')">Login as event owner</button>
+
+  
+  <button block *ngFor="let event of events" ion-button (click)="gotoEvent(event.event_id)">GO to event {{event.name}} </button>-->
 </ion-content>

@@ -1,13 +1,13 @@
-webpackJsonp([23],{
+webpackJsonp([27],{
 
-/***/ 154:
+/***/ 155:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssApiProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_operators__ = __webpack_require__(217);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_operators__ = __webpack_require__(218);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_operators__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__);
@@ -15,7 +15,7 @@ webpackJsonp([23],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_of__ = __webpack_require__(72);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_observable_of__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(34);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -58,12 +58,14 @@ var PssApiProvider = (function () {
         this.editTournamentMachine = this.generate_api_call('editTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'put');
         this.editTournament = this.generate_api_call('editTournament', this.basePssUrl + "/:arg/tournament", 'put');
         this.editEvent = this.generate_api_call('editEvent', this.basePssUrl + "/event", 'put');
+        this.editPlayer = this.generate_api_call('editEvent', this.basePssUrl + "/:arg/player", 'put');
         this.editEventUserRole = this.generate_api_call('editEventUser', this.basePssUrl + "/:arg/event_role_mapping", 'put');
         this.eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest', this.basePssUrl + "/pss_user_request", 'post');
         this.eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm', this.basePssUrl + "/pss_user_request_confirm/:arg", 'post');
         this.getAllEvents = this.generate_api_call('getAllEvents', this.basePssUrl + "/events", 'get');
         this.getAllPlayers = this.generate_api_call('getAllPlayers', this.basePssUrl + "/players", 'get');
         this.getEventPlayer = this.generate_api_call('getEventPlayer', this.basePssUrl + "/:arg/event_player/:arg", 'get');
+        this.getEventPlayers = this.generate_api_call('getEventPlayers', this.basePssUrl + "/:arg/event_players/:arg", 'get');
         this.getEvent = this.generate_api_call('getEvent', this.basePssUrl + "/event/:arg", 'get');
         this.getIfpaRanking = this.generate_api_call('getIfpaRanking', this.basePssUrl + "/ifpa/:arg", 'get');
         this.getTournament = this.generate_api_call('getTournament', this.basePssUrl + "/:arg/tournament/:arg", 'get');
@@ -91,7 +93,6 @@ var PssApiProvider = (function () {
             for (var _i = 0; _i < arguments.length; _i++) {
                 restOfArgs[_i] = arguments[_i];
             }
-            console.log('trying a network op 1 ...');
             var localUrl = url;
             var postObject = null;
             if (method == "post" || method == "put") {
@@ -109,7 +110,6 @@ var PssApiProvider = (function () {
                 var newUrl = localUrl.replace(":arg", restOfArgs.shift());
                 localUrl = newUrl;
             }
-            console.log('trying a network op 2...');
             var result_observable = _this.makeHot(_this.http.request(method, localUrl, { withCredentials: true,
                 body: postObject }))
                 .pipe(Object(__WEBPACK_IMPORTED_MODULE_2_rxjs_operators__["catchError"])(_this.handleError(apiName, null)));
@@ -122,7 +122,6 @@ var PssApiProvider = (function () {
         if (operation === void 0) { operation = 'operation'; }
         var debouncer = false;
         return function (error) {
-            console.log('trying a network op 3...');
             if (debouncer == false) {
                 debouncer = true;
                 console.log('error handling in progress...');
@@ -143,7 +142,7 @@ var PssApiProvider = (function () {
     PssApiProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["i" /* LoadingController */],
-            __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["n" /* ToastController */]])
+            __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["p" /* ToastController */]])
     ], PssApiProvider);
     return PssApiProvider;
 }());
@@ -152,151 +151,7 @@ var PssApiProvider = (function () {
 
 /***/ }),
 
-/***/ 155:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventAuthProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ngx_cookie__ = __webpack_require__(215);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var roleToHomePageMap = {
-    'eventowner': 'EventOwnerHomePage',
-    'tournamentdirector': 'TournamentDirectorHomePage',
-    'player': 'PlayerHomePage'
-};
-/*
-  Generated class for the EventAuthProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
-var EventAuthProvider = (function () {
-    function EventAuthProvider(http, _cookieService) {
-        this.http = http;
-        this._cookieService = _cookieService;
-        this.userEventRoles = {};
-        this.userLoggedInEvents = {};
-        this.eventOwnerUserInfo = null;
-        var userLoggedInEvents = _cookieService.getObject("userLoggedInEvents");
-        var userEventRoles = _cookieService.getObject("userEventRoles");
-        var eventOwnerUserInfo = _cookieService.getObject("eventOwnerUserInfo");
-        console.log('Hello EventAuthProvider Provider');
-        if (userLoggedInEvents != null) {
-            this.userLoggedInEvents = userLoggedInEvents;
-        }
-        if (userEventRoles != null) {
-            this.userEventRoles = userEventRoles;
-        }
-        if (eventOwnerUserInfo != null) {
-            console.log(eventOwnerUserInfo);
-            this.eventOwnerUserInfo = eventOwnerUserInfo;
-        }
-        else {
-            console.log('not a event owner');
-        }
-    }
-    EventAuthProvider.prototype.setEventUserLoggedIn = function (eventId, userInfo) {
-        console.log('in setEventUserLoggedIn');
-        console.log(userInfo);
-        if (eventId == null && userInfo.event_creator == true) {
-            this.eventOwnerUserInfo = userInfo;
-            this._cookieService.putObject("eventOwnerUserInfo", userInfo);
-            return;
-        }
-        //this.userLoggedInEvents[eventId]=true;
-        this.userLoggedInEvents[eventId] = userInfo;
-        if (userInfo.player_id != null) {
-            this.setEventRole(eventId, { event_role_name: 'player' });
-        }
-        if (userInfo.pss_user_id != null) {
-            this.setEventRole(eventId, userInfo.roles[0]);
-        }
-        this._cookieService.putObject("userLoggedInEvents", this.userLoggedInEvents, { path: '/' });
-        this._cookieService.putObject("userEventRoles", this.userEventRoles, { path: '/' });
-        console.log('setEventUserLoggedIn debug...');
-    };
-    EventAuthProvider.prototype.isEventUserLoggedIn = function (eventId) {
-        if (eventId in this.userLoggedInEvents) {
-            return true; //this.userLoggedInEvents[eventId];
-        }
-        else {
-            return null;
-        }
-    };
-    EventAuthProvider.prototype.setEventRole = function (eventId, role) {
-        if (eventId != null) {
-            this.userEventRoles[eventId] = role;
-        }
-    };
-    EventAuthProvider.prototype.getEventOwnerPssUserId = function () {
-        if (this.eventOwnerUserInfo != null) {
-            return this.eventOwnerUserInfo.pss_user_id;
-        }
-        else {
-            return null;
-        }
-    };
-    EventAuthProvider.prototype.getEventPlayerId = function (eventId) {
-        return this.userLoggedInEvents[eventId].events[0].player_id_for_event;
-    };
-    EventAuthProvider.prototype.getPssUserId = function (eventId) {
-        if (this.userLoggedInEvents[eventId] != null) {
-            return this.userLoggedInEvents[eventId].pss_user_id;
-        }
-        else {
-            return null;
-        }
-    };
-    EventAuthProvider.prototype.getRoleName = function (eventId) {
-        if (this.eventOwnerUserInfo != null) {
-            return "eventowner";
-        }
-        if (eventId in this.userEventRoles) {
-            if (this.userEventRoles[eventId].event_role_name != null) {
-                return this.userEventRoles[eventId].event_role_name;
-            }
-            else {
-                return 'player';
-            }
-        }
-        else {
-            return null;
-        }
-    };
-    EventAuthProvider.prototype.getHomePage = function (eventId) {
-        if (this.eventOwnerUserInfo != null) {
-            return roleToHomePageMap['eventowner'];
-        }
-        if (this.userEventRoles[eventId]) {
-            return roleToHomePageMap[this.userEventRoles[eventId].event_role_name];
-        }
-    };
-    EventAuthProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */],
-            __WEBPACK_IMPORTED_MODULE_2_ngx_cookie__["b" /* CookieService */]])
-    ], EventAuthProvider);
-    return EventAuthProvider;
-}());
-
-//# sourceMappingURL=event-auth.js.map
-
-/***/ }),
-
-/***/ 168:
+/***/ 169:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -309,104 +164,120 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 168;
+webpackEmptyAsyncContext.id = 169;
 
 /***/ }),
 
-/***/ 212:
+/***/ 213:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"../pages/add-player/add-player.module": [
-		696,
-		9
+		697,
+		10
 	],
 	"../pages/add-user/add-user.module": [
-		697,
-		22
+		698,
+		25
+	],
+	"../pages/change-player-picture/change-player-picture.module": [
+		699,
+		24
 	],
 	"../pages/create-event/create-event.module": [
-		698,
+		700,
 		1
 	],
 	"../pages/edit-event/edit-event.module": [
-		699,
+		701,
 		0
 	],
 	"../pages/edit-user/edit-user.module": [
-		700,
-		8
+		702,
+		9
 	],
 	"../pages/event-owner-confirm/event-owner-confirm.module": [
-		701,
-		7
+		703,
+		8
 	],
 	"../pages/event-owner-home/event-owner-home.module": [
-		702,
-		21
+		704,
+		23
 	],
 	"../pages/event-owner-login/event-owner-login.module": [
-		703,
+		705,
 		2
 	],
 	"../pages/event-owner-quick-links/event-owner-quick-links.module": [
-		704,
-		20
+		706,
+		22
 	],
 	"../pages/event-owner-request/event-owner-request.module": [
-		705,
-		10
+		707,
+		12
 	],
 	"../pages/event-owner-tabs/event-owner-tabs.module": [
-		706,
-		19
+		708,
+		21
 	],
 	"../pages/event-select/event-select.module": [
-		707,
-		18
+		709,
+		20
 	],
 	"../pages/home/home.module": [
-		708,
-		17
+		710,
+		19
 	],
 	"../pages/login/login.module": [
-		709,
+		711,
+		7
+	],
+	"../pages/logout/logout.module": [
+		712,
 		6
 	],
 	"../pages/player-home/player-home.module": [
-		710,
-		16
+		713,
+		18
+	],
+	"../pages/post-player-add-success/post-player-add-success.module": [
+		714,
+		11
 	],
 	"../pages/quick-links/quick-links.module": [
-		711,
-		15
+		715,
+		17
 	],
 	"../pages/results/results.module": [
-		712,
-		14
+		716,
+		16
+	],
+	"../pages/scorekeeper-home/scorekeeper-home.module": [
+		717,
+		26
 	],
 	"../pages/success/success.module": [
-		713,
-		13
+		718,
+		15
 	],
 	"../pages/tabs/tabs.module": [
-		714,
-		12
+		719,
+		14
 	],
 	"../pages/ticket-purchase/ticket-purchase.module": [
-		715,
+		720,
 		5
 	],
 	"../pages/tournament-director-home/tournament-director-home.module": [
-		716,
-		11
+		721,
+		13
 	],
 	"../pages/tournament-machines/tournament-machines.module": [
-		717,
+		722,
 		4
 	],
 	"../pages/tournament/tournament.module": [
-		718,
+		723,
 		3
 	]
 };
@@ -421,7 +292,7 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 212;
+webpackAsyncContext.id = 213;
 module.exports = webpackAsyncContext;
 
 /***/ }),
@@ -481,7 +352,7 @@ var TitleServiceProvider = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AutoCompleteProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_pss_api_pss_api__ = __webpack_require__(155);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -575,8 +446,8 @@ var AutoCompleteProvider = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CustomComponentsModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_header_custom_header__ = __webpack_require__(400);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_header_custom_header__ = __webpack_require__(401);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -607,10 +478,67 @@ var CustomComponentsModule = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TakePicComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+/**
+ * Generated class for the TakePicComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+var TakePicComponent = (function () {
+    function TakePicComponent(navParam, viewCtrl) {
+        this.navParam = navParam;
+        this.viewCtrl = viewCtrl;
+        this.img_file = null;
+        this.customStyle = null;
+        console.log('Hello TakePicComponent Component');
+        this.text = 'Hello World';
+    }
+    TakePicComponent.prototype.onUploadFinished = function (event) {
+        //this.selectedPlayer.has_pic=true;        
+        //console.log(event.serverResponse._body);
+        this.img_file = JSON.parse(event.serverResponse._body).data;
+    };
+    TakePicComponent.prototype.onClose = function () {
+        this.viewCtrl.dismiss(this.img_file);
+    };
+    TakePicComponent.prototype.onRemoved = function (file) {
+        this.img_file = null;
+    };
+    TakePicComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+            selector: 'take-pic',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/take-pic/take-pic.html"*/'<!-- Generated template for the TakePicComponent component -->\n<ion-content padding text-center>  \n  <h1>Upload pictures</h1>\n  <image-upload   (removed)="onRemoved($event)" margin (uploadFinished)="onUploadFinished($event)" url="http://192.168.1.178:8000/media_upload" class="customClass"></image-upload>\n  <button block ion-button (click)="onClose()">Ok</button>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/take-pic/take-pic.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["m" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["q" /* ViewController */]])
+    ], TakePicComponent);
+    return TakePicComponent;
+}());
+
+//# sourceMappingURL=take-pic.js.map
+
+/***/ }),
+
+/***/ 362:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ExpandableModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__expandable__ = __webpack_require__(672);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__expandable__ = __webpack_require__(673);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -637,13 +565,13 @@ var ExpandableModule = (function () {
 
 /***/ }),
 
-/***/ 362:
+/***/ 363:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(363);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(367);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(364);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(368);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -651,37 +579,39 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 367:
+/***/ 368:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(351);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(354);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(693);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(694);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_title_service_title_service__ = __webpack_require__(355);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_event_auth_event_auth__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_event_auth_event_auth__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_forms__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_ionic2_auto_complete__ = __webpack_require__(358);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_auto_complete_auto_complete__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_expandable_expandable_module__ = __webpack_require__(361);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__ = __webpack_require__(694);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_expandable_expandable_module__ = __webpack_require__(362);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_platform_browser_animations__ = __webpack_require__(695);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_angular2_notifications__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_angular2_image_upload__ = __webpack_require__(359);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ngx_cookie__ = __webpack_require__(215);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ngx_cookie__ = __webpack_require__(216);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_custom_components_module__ = __webpack_require__(360);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_take_pic_take_pic__ = __webpack_require__(361);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -707,14 +637,18 @@ var AppModule = (function () {
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */]
+                __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */],
+                __WEBPACK_IMPORTED_MODULE_19__components_take_pic_take_pic__["a" /* TakePicComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
-                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {}, {
+                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {
+                    backButtonText: '',
+                }, {
                     links: [
-                        { loadChildren: '../pages/add-player/add-player.module#AddPlayerPageModule', name: 'AddPlayerPage', segment: 'AddPlyer/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/add-player/add-player.module#AddPlayerPageModule', name: 'AddPlayerPage', segment: 'AddPlayer/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/add-user/add-user.module#AddUserPageModule', name: 'AddUserPage', segment: 'AddUser/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/change-player-picture/change-player-picture.module#ChangePlayerPicturePageModule', name: 'ChangePlayerPicturePage', segment: 'change-player-picture', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/create-event/create-event.module#CreateEventPageModule', name: 'CreateEventPage', segment: 'CreateEventPage/:actionType/:wizardMode', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/edit-event/edit-event.module#EditEventPageModule', name: 'EditEventPage', segment: 'EditEventPage/:actionType/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/edit-user/edit-user.module#EditUserPageModule', name: 'EditUserPage', segment: 'EditUser/:eventId', priority: 'low', defaultHistory: [] },
@@ -727,9 +661,12 @@ var AppModule = (function () {
                         { loadChildren: '../pages/event-select/event-select.module#EventSelectPageModule', name: 'EventSelectPage', segment: 'event-select', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'HomePage/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/logout/logout.module#LogoutPageModule', name: 'LogoutPage', segment: 'logout', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/player-home/player-home.module#PlayerHomePageModule', name: 'PlayerHomePage', segment: 'PlayerHomePage/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/post-player-add-success/post-player-add-success.module#PostPlayerAddSuccessPageModule', name: 'PostPlayerAddSuccessPage', segment: 'post-player-add-success', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/quick-links/quick-links.module#QuickLinksPageModule', name: 'QuickLinksPage', segment: 'quick-links', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/results/results.module#ResultsPageModule', name: 'ResultsPage', segment: 'results', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/scorekeeper-home/scorekeeper-home.module#ScorekeeperHomePageModule', name: 'ScorekeeperHomePage', segment: 'scorekeeper-home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/success/success.module#SuccessPageModule', name: 'SuccessPage', segment: 'Success/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/ticket-purchase/ticket-purchase.module#TicketPurchasePageModule', name: 'TicketPurchasePage', segment: 'TicketPurchasePage/:eventId', priority: 'low', defaultHistory: [] },
@@ -750,7 +687,8 @@ var AppModule = (function () {
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicApp */]],
             entryComponents: [
-                __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */]
+                __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */],
+                __WEBPACK_IMPORTED_MODULE_19__components_take_pic_take_pic__["a" /* TakePicComponent */]
             ],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__["a" /* StatusBar */],
@@ -770,12 +708,13 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 400:
+/***/ 401:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CustomHeaderComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__providers_event_auth_event_auth__ = __webpack_require__(87);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -792,8 +731,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Components.
  */
 
+
 var CustomHeaderComponent = (function () {
-    function CustomHeaderComponent() {
+    function CustomHeaderComponent(eventAuth) {
+        this.eventAuth = eventAuth;
     }
     CustomHeaderComponent.prototype.goGoCustomHeader = function () {
     };
@@ -805,10 +746,15 @@ var CustomHeaderComponent = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
         __metadata("design:type", Object)
     ], CustomHeaderComponent.prototype, "eventId", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+        __metadata("design:type", Object)
+    ], CustomHeaderComponent.prototype, "title", void 0);
     CustomHeaderComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'custom-headers',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/'<ion-navbar>\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="homePage" [navParams]="{eventId:eventId}" >{{homePage}}</button>\n  </ion-buttons>\n</ion-navbar>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/
-        })
+            selector: 'custom-headers',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/'  <ion-title start hideWhen=\'mobile\' style=\'float:left;margin-top:3px\'>Pss</ion-title>\n  <ion-title start showWhen=\'mobile\'>Cleaveland Pinball Show 2018</ion-title>\n\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="homePage" [navParams]="{eventId:eventId}" ><ion-icon name="home"></ion-icon> {{homePage}}</button>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="{eventId:eventId}" ><ion-icon name="log-out"></ion-icon> {{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'"><ion-icon name="git-compare"></ion-icon> Switch Events </button>\n    <button [navPush]="\'ResultsPage\'" icon-only ion-button> <ion-icon name="clipboard"></ion-icon>Results</button>\n    <button icon-only ion-button> <ion-icon name="git-branch"></ion-icon>Queues</button>\n  </ion-buttons>  \n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__providers_event_auth_event_auth__["a" /* EventAuthProvider */]])
     ], CustomHeaderComponent);
     return CustomHeaderComponent;
 }());
@@ -817,7 +763,7 @@ var CustomHeaderComponent = (function () {
 
 /***/ }),
 
-/***/ 672:
+/***/ 673:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -865,17 +811,17 @@ var ExpandableComponent = (function () {
 
 /***/ }),
 
-/***/ 693:
+/***/ 694:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(354);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(351);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_title_service_title_service__ = __webpack_require__(355);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_event_auth_event_auth__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_event_auth_event_auth__ = __webpack_require__(87);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -902,10 +848,19 @@ var MyApp = (function () {
             splashScreen.hide();
         });
     }
+    MyApp.prototype.openPage = function (page) {
+        // Reset the content nav to have just this page
+        // we wouldn't want the back button to show in this scenario
+        this.nav.setRoot(page);
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Nav */]),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* Nav */])
+    ], MyApp.prototype, "nav", void 0);
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/app/app.html"*/'<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n \n  <ion-content>\n    <ion-list>\n      <button ion-item menuClose>\n        hi there\n      </button>\n    </ion-list>\n  </ion-content>\n</ion-menu>\n<!-- main navigation -->\n<!--\n<ion-header hideWhen="mobile">\n  <ion-navbar>\n    <ion-title>Pss</ion-title>\n    <ion-buttons end>\n      <button icon-only ion-button [navPush]="\'LoginPage\'" [navParams]="getEventIdName()" >Login</button>\n      <button icon-only ion-button>Results</button>\n      <button icon-only ion-button>Queues</button>\n      <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button (click)="menuNav(getRolePage())">{{eventAuth.getRoleName(eventId)}}</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n-->\n\n<ion-nav [root]="\'EventSelectPage\'" [rootParams]="{eventId:eventId,eventName:eventName}" #content swipeBackEnabled="false">\n</ion-nav>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/app/app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/app/app.html"*/'<ion-menu [content]="content" persistent>\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n \n  <ion-content>\n    <ion-list>\n      <button ion-item  menuClose (click)="openPage(\'EventOwnerHomePage\')">\n        Event Owner Home Page\n      </button>\n    </ion-list>\n  </ion-content>\n</ion-menu>\n<!-- main navigation -->\n<!--\n<ion-header hideWhen="mobile">\n  <ion-navbar>\n    <ion-title>Pss</ion-title>\n    <ion-buttons end>\n      <button icon-only ion-button [navPush]="\'LoginPage\'" [navParams]="getEventIdName()" >Login</button>\n      <button icon-only ion-button>Results</button>\n      <button icon-only ion-button>Queues</button>\n      <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button (click)="menuNav(getRolePage())">{{eventAuth.getRoleName(eventId)}}</button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n-->\n\n<ion-nav id="nav" [root]="\'EventSelectPage\'" [rootParams]="{eventId:eventId,eventName:eventName}" #content swipeBackEnabled="false">\n</ion-nav>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/app/app.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
             __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */], __WEBPACK_IMPORTED_MODULE_4__providers_title_service_title_service__["a" /* TitleServiceProvider */],
             __WEBPACK_IMPORTED_MODULE_5__providers_event_auth_event_auth__["a" /* EventAuthProvider */]])
     ], MyApp);
@@ -914,7 +869,168 @@ var MyApp = (function () {
 
 //# sourceMappingURL=app.component.js.map
 
+/***/ }),
+
+/***/ 87:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventAuthProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ngx_cookie__ = __webpack_require__(216);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var roleToHomePageMap = {
+    'eventowner': 'EventOwnerHomePage',
+    'tournamentdirector': 'TournamentDirectorHomePage',
+    'player': 'PlayerHomePage'
+};
+/*
+  Generated class for the EventAuthProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+var EventAuthProvider = (function () {
+    function EventAuthProvider(http, _cookieService) {
+        this.http = http;
+        this._cookieService = _cookieService;
+        this.userEventRoles = {};
+        this.userLoggedInEvents = {};
+        this.eventOwnerUserInfo = null;
+        var userLoggedInEvents = _cookieService.getObject("userLoggedInEvents");
+        var userEventRoles = _cookieService.getObject("userEventRoles");
+        var eventOwnerUserInfo = _cookieService.getObject("eventOwnerUserInfo");
+        console.log('Hello EventAuthProvider Provider');
+        if (userLoggedInEvents != null) {
+            this.userLoggedInEvents = userLoggedInEvents;
+        }
+        if (userEventRoles != null) {
+            this.userEventRoles = userEventRoles;
+        }
+        if (eventOwnerUserInfo != null) {
+            this.eventOwnerUserInfo = eventOwnerUserInfo;
+        }
+        else {
+            console.log('not a event owner');
+        }
+    }
+    EventAuthProvider.prototype.logoutEventOwner = function () {
+        this._cookieService.remove("eventOwnerUserInfo");
+        this.eventOwnerUserInfo = {};
+    };
+    EventAuthProvider.prototype.logout = function (eventId) {
+        this.eventOwnerUserInfo = {};
+        this.userLoggedInEvents[eventId] = {};
+        this.userEventRoles[eventId] = {};
+        this._cookieService.remove("eventOwnerUserInfo");
+        this._cookieService.putObject("userLoggedInEvents", this.userLoggedInEvents);
+        this._cookieService.putObject("userEventRoles", this.userEventRoles);
+    };
+    EventAuthProvider.prototype.setEventUserLoggedIn = function (eventId, userInfo) {
+        console.log('in setEventUserLoggedIn');
+        if (eventId == null && userInfo.event_creator == true) {
+            this.eventOwnerUserInfo = userInfo;
+            this._cookieService.putObject("eventOwnerUserInfo", userInfo);
+            return;
+        }
+        //this.userLoggedInEvents[eventId]=true;
+        this.userLoggedInEvents[eventId] = userInfo;
+        if (userInfo.player_id != null) {
+            this.setEventRole(eventId, { event_role_name: 'player' });
+        }
+        if (userInfo.pss_user_id != null && userInfo.roles != null && userInfo.roles.length != 0) {
+            this.setEventRole(eventId, userInfo.roles[0]);
+        }
+        this._cookieService.putObject("userLoggedInEvents", this.userLoggedInEvents, { path: '/' });
+        this._cookieService.putObject("userEventRoles", this.userEventRoles, { path: '/' });
+        console.log('setEventUserLoggedIn debug...');
+    };
+    EventAuthProvider.prototype.isEventUserLoggedIn = function (eventId) {
+        console.log('in isEventUserLoggedIn');
+        if (this.userLoggedInEvents[eventId] != null) {
+            if (this.userLoggedInEvents[eventId].pss_user_id != null || this.userLoggedInEvents[eventId].player_id != null)
+                return true; //this.userLoggedInEvents[eventId];
+        }
+        else {
+            return false;
+        }
+    };
+    EventAuthProvider.prototype.setEventRole = function (eventId, role) {
+        if (eventId != null) {
+            this.userEventRoles[eventId] = role;
+        }
+    };
+    EventAuthProvider.prototype.getEventOwnerPssUserId = function () {
+        if (this.eventOwnerUserInfo != null && this.eventOwnerUserInfo.pss_user_id != null) {
+            return this.eventOwnerUserInfo.pss_user_id;
+        }
+        else {
+            return null;
+        }
+    };
+    EventAuthProvider.prototype.getEventPlayerId = function (eventId) {
+        if (this.userLoggedInEvents[eventId] != null && this.userLoggedInEvents[eventId].events != null && this.userLoggedInEvents[eventId].events.length != 0) {
+            return this.userLoggedInEvents[eventId].events[0].player_id_for_event;
+        }
+        else {
+            return null;
+        }
+    };
+    EventAuthProvider.prototype.getPssUserId = function (eventId) {
+        if (this.userLoggedInEvents[eventId] != null) {
+            return this.userLoggedInEvents[eventId].pss_user_id;
+        }
+        else {
+            return null;
+        }
+    };
+    EventAuthProvider.prototype.getRoleName = function (eventId) {
+        if (this.eventOwnerUserInfo != null && this.eventOwnerUserInfo.pss_user_id != null) {
+            return "eventowner";
+        }
+        if (this.userEventRoles[eventId] != null) {
+            if (this.userEventRoles[eventId].event_role_name != null) {
+                return this.userEventRoles[eventId].event_role_name;
+            }
+            else {
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+    };
+    EventAuthProvider.prototype.getHomePage = function (eventId) {
+        if (this.eventOwnerUserInfo != null) {
+            return roleToHomePageMap['eventowner'];
+        }
+        if (this.userEventRoles[eventId]) {
+            return roleToHomePageMap[this.userEventRoles[eventId].event_role_name];
+        }
+    };
+    EventAuthProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */],
+            __WEBPACK_IMPORTED_MODULE_2_ngx_cookie__["b" /* CookieService */]])
+    ], EventAuthProvider);
+    return EventAuthProvider;
+}());
+
+//# sourceMappingURL=event-auth.js.map
+
 /***/ })
 
-},[362]);
+},[363]);
 //# sourceMappingURL=main.js.map

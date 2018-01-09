@@ -8,6 +8,7 @@ import { TournamentMachinesComponent } from './tournament-machines/tournament-ma
 import { ExpandableComponent } from './expandable/expandable';
 import { AddUserComponent } from './add-user/add-user';
 import { EditUserComponent } from './edit-user/edit-user';
+import { TakePicComponent } from './take-pic/take-pic';
 @NgModule({
 	declarations: [
             PssPageComponent,    
@@ -17,8 +18,10 @@ import { EditUserComponent } from './edit-user/edit-user';
             TournamentComponent,
             TournamentMachinesComponent,
             ExpandableComponent,
+            TakePicComponent,
     AddUserComponent,
-    EditUserComponent],
+    EditUserComponent,
+    TakePicComponent],
     imports: [],
     exports: [
         PssPageComponent,
@@ -28,7 +31,8 @@ import { EditUserComponent } from './edit-user/edit-user';
         TournamentComponent,
         TournamentMachinesComponent,
         ExpandableComponent,
-    AddUserComponent,
-    EditUserComponent]
+        AddUserComponent,
+        EditUserComponent,
+        TakePicComponent]
 })
 export class ComponentsModule {}

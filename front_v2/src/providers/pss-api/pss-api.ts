@@ -32,7 +32,7 @@ export class PssApiProvider {
     
     generate_api_call(apiName,url,method){
         return (...restOfArgs: any[]) => {
-            console.log('trying a network op 1 ...')
+            
             let localUrl=url;            
             let postObject=null;            
             if(method=="post" || method=="put"){
@@ -51,7 +51,7 @@ export class PssApiProvider {
                 let newUrl=localUrl.replace(":arg",restOfArgs.shift())
                 localUrl = newUrl;
             }
-            console.log('trying a network op 2...')
+            
             
             let result_observable = this.makeHot(this.http.request(method,localUrl,            
                                                                    {withCredentials:true,
@@ -77,6 +77,7 @@ export class PssApiProvider {
     editTournamentMachine = this.generate_api_call('editTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'put');
     editTournament = this.generate_api_call('editTournament',this.basePssUrl+"/:arg/tournament",'put');
     editEvent = this.generate_api_call('editEvent',this.basePssUrl+"/event",'put');
+    editPlayer = this.generate_api_call('editEvent',this.basePssUrl+"/:arg/player",'put');
     editEventUserRole = this.generate_api_call('editEventUser',this.basePssUrl+"/:arg/event_role_mapping",'put');    
     
     eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest',this.basePssUrl+"/pss_user_request",'post');
@@ -85,6 +86,7 @@ export class PssApiProvider {
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
     getAllPlayers = this.generate_api_call('getAllPlayers',this.basePssUrl+"/players",'get');    
     getEventPlayer = this.generate_api_call('getEventPlayer',this.basePssUrl+"/:arg/event_player/:arg",'get');
+    getEventPlayers = this.generate_api_call('getEventPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get');
     getEvent = this.generate_api_call('getEvent',this.basePssUrl+"/event/:arg",'get');
     getIfpaRanking = this.generate_api_call('getIfpaRanking',this.basePssUrl+"/ifpa/:arg",'get');
     
@@ -107,7 +109,7 @@ export class PssApiProvider {
     private handleError<T> (operation = 'operation', result?: T) {        
         let debouncer=false;        
         return (error: any): Observable<T> => {
-            console.log('trying a network op 3...')
+            
             if (debouncer == false){
                 debouncer=true;
                 console.log('error handling in progress...');

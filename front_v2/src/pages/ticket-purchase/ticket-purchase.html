@@ -4,8 +4,13 @@
      (ionInput)="onInput($event)">
   </ion-searchbar>
   <ng-container *ngIf="eventPlayer.first_name!=null ">
-    <ion-item>
+    <ion-item text-center>
       Player Name : {{eventPlayer.player_full_name}}
+    </ion-item>
+    <ion-item *ngIf="eventPlayer.img_url!=null">
+    <ion-avatar  style='zoom:3.0'>
+      <img [src]="eventPlayer.img_url" style='margin-left:auto;margin-right:auto'>
+    </ion-avatar>
     </ion-item>
     <form #myForm="ngForm">
     
@@ -23,8 +28,8 @@
     <ion-item>
       Total Cost : {{totalCost}}
     </ion-item>
-    <ion-item>
-      <button [disabled]="!myForm.dirty" ion-button (click)="ticketPurchase()"> Purchase Tickets </button>
+    <ion-item no-lines text-center>
+      <button padding [disabled]="!myForm.dirty" ion-button (click)="ticketPurchase()"> Purchase Tickets </button>
     </ion-item>
     </form>
     

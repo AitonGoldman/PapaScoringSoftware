@@ -1,16 +1,14 @@
 webpackJsonp([11],{
 
-/***/ 716:
+/***/ 714:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TournamentDirectorHomePageModule", function() { return TournamentDirectorHomePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostPlayerAddSuccessPageModule", function() { return PostPlayerAddSuccessPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_director_home__ = __webpack_require__(744);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_notifications__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__post_player_add_success__ = __webpack_require__(747);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20,37 +18,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
-var TournamentDirectorHomePageModule = (function () {
-    function TournamentDirectorHomePageModule() {
+var PostPlayerAddSuccessPageModule = (function () {
+    function PostPlayerAddSuccessPageModule() {
     }
-    TournamentDirectorHomePageModule = __decorate([
+    PostPlayerAddSuccessPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__tournament_director_home__["a" /* TournamentDirectorHomePage */],
+                __WEBPACK_IMPORTED_MODULE_2__post_player_add_success__["a" /* PostPlayerAddSuccessPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tournament_director_home__["a" /* TournamentDirectorHomePage */]),
-                __WEBPACK_IMPORTED_MODULE_3_angular2_notifications__["SimpleNotificationsModule"].forRoot()
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__post_player_add_success__["a" /* PostPlayerAddSuccessPage */]),
             ],
         })
-    ], TournamentDirectorHomePageModule);
-    return TournamentDirectorHomePageModule;
+    ], PostPlayerAddSuccessPageModule);
+    return PostPlayerAddSuccessPageModule;
 }());
 
-//# sourceMappingURL=tournament-director-home.module.js.map
+//# sourceMappingURL=post-player-add-success.module.js.map
 
 /***/ }),
 
-/***/ 719:
+/***/ 724:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -104,7 +100,6 @@ var PssPageComponent = (function () {
         }
         var role = this.eventAuth.getRoleName(eventId);
         console.log('in getHomePageString...');
-        console.log(role);
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -113,6 +108,9 @@ var PssPageComponent = (function () {
         }
         if (role == "player") {
             return 'PlayerHomePage';
+        }
+        if (role == "scorekeeper") {
+            return 'ScorekeeperHomePage';
         }
         if (role == null) {
             return 'HomePage';
@@ -126,15 +124,10 @@ var PssPageComponent = (function () {
         var _this = this;
         console.log('in push page with no back button...');
         if (tabIndex != null) {
-            console.log(tabIndex);
-            console.log('in push page with no back button...2');
             this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName, navParams, { animate: false });
-            console.log('in push page with no back button...3');
             this.navCtrl.parent.select(tabIndex);
-            console.log('in push page with no back button...4');
             return;
         }
-        console.log('page name is ...' + pageName);
         this.navCtrl.getActive().willLeave.subscribe(function () {
             _this.navCtrl.last().showBackButton(false);
         });
@@ -167,11 +160,11 @@ var PssPageComponent = (function () {
             selector: 'pss-page',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/'<!-- Generated template for the TopNavComponent component -->\n<div>\n  {{text}}\n</div>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/pss-page/pss-page.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* NavParams */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* App */],
             __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* Platform */],
             __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["NotificationsService"]])
     ], PssPageComponent);
     return PssPageComponent;
@@ -181,13 +174,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 744:
+/***/ 730:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentDirectorHomePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SuccessPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(719);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(724);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -207,44 +200,99 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the TournamentDirectorHomePage page.
+ * Generated class for the SuccessPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var TournamentDirectorHomePage = (function (_super) {
-    __extends(TournamentDirectorHomePage, _super);
-    function TournamentDirectorHomePage() {
+var SuccessPage = (function (_super) {
+    __extends(SuccessPage, _super);
+    function SuccessPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.tournaments = [];
+        _this.successSummary = null;
+        _this.successButtons = null;
+        _this.postAddPlayerSuccess = false;
         return _this;
     }
-    TournamentDirectorHomePage.prototype.generateGetAllTournamentsProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            _this.tournaments = result.data;
-            _this.tournaments.map(function (tournament) {
-                tournament.expanded = false;
-            });
-        };
+    // pushPageWithNoBackButton(pageName,navParams){        
+    //     this.navCtrl.getActive().willLeave.subscribe(
+    //         ()=>{
+    //             this.navCtrl.last().showBackButton(false);
+    //         }
+    //     )        
+    //     this.navCtrl.push(pageName,this.buildNavParams(navParams));
+    // }
+    SuccessPage.prototype.ionViewWillLoad = function () {
+        this.successSummary = this.navParams.get('successSummary');
+        this.successButtons = this.navParams.get('successButtons');
+        console.log('ionViewDidLoad SuccessPage');
     };
-    TournamentDirectorHomePage.prototype.ionViewDidLoad = function () {
-        this.pssApi.getAllTournaments(this.eventId)
-            .subscribe(this.generateGetAllTournamentsProcessor());
-        console.log('ionViewDidLoad TournamentDirectorHomePage');
+    SuccessPage.prototype.goToEventSelectOnPageReload = function () {
+        this.appCtrl.getRootNav().push('EventSelectPage');
     };
-    TournamentDirectorHomePage = __decorate([
+    SuccessPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-tournament-director-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-director-home/tournament-director-home.html"*/'<!--\n  Generated template for the TournamentDirectorHomePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n  -->\n<!--<bobo>-->\n<ion-header>\n<ion-navbar hideBackButton>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end>\n<!--    <button icon-only menuToggle ion-button>Queues</button>-->\n  </ion-buttons>\n</ion-navbar>\n<ion-navbar color="primary">\nExample of sub header\n</ion-navbar>\n\n</ion-header>\n<!--</bobo>-->\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n\n\n<ion-content padding>\n  <h1><b>Purchase Tickets</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'TicketPurchasePage\'" [navParams]="buildNavParams({})">\n      <ion-icon item-start name="ios-cash-outline"></ion-icon> Ticket Purchase\n    </ion-item>\n  </ion-list>\n\n  <h1><b>Add Players</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'AddPlayerPage\'" [navParams]="buildNavParams({})">\n      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Add Player\n    </ion-item>\n  </ion-list>\n  \n  <h1><b>Tournament Creation</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'TournamentPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})">\n      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament \n\n      <!--<button item-start ion-button [navPush]="\'CreateEventPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})" >Create Event</button>-->\n    </ion-item>\n  </ion-list>\n\n  <!--  <button ion-button [navPush]="\'CreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\',targetEventId:1,eventName:\'poop\'}" >Create Tournament</button> -->\n  <h1><b>Tournaments</b></h1>\n  <ion-list>\n    <ng-container *ngFor="let tournament of tournaments">\n      <ion-item-divider (click)="expand(tournament)">\n        <ion-avatar item-start *ngIf="tournament.img_url!=null">\n          <img [src]="tournament.img_url">\n        </ion-avatar>        \n        <h1>{{tournament.tournament_name}}</h1><ion-icon item-end [name]="tournament.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n      </ion-item-divider>      \n      <ng-container *ngIf="tournament.expanded!=true?false:true">\n        <ion-item>\n          <button ion-button [navPush]="\'TournamentMachinesPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Add Machines To Tournament</button>\n          <br>\n            <button [navPush]="\'TournamentPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:\'edit\'})" ion-button >Edit Tournament</button>\n          <br>\n          <button ion-button (click)="onTournamentToggle(eventId,tournament)"><ion-icon item-start [name]="tournament.active?\'play\':\'pause\'"></ion-icon>Toggle Tournament</button>\n        </ion-item>\n      </ng-container>      \n    </ng-container>\n  </ion-list>\n</ion-content>\n\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tournament-director-home/tournament-director-home.html"*/,
+            selector: 'page-success',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/'<!--\n  Generated template for the SuccessPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <ion-title>Success</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n  <ion-row>\n    <ion-col>      \n    </ion-col>\n    <ion-col style=\'text-align:center\'> \n      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>\n      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>\n\n    </ion-col>\n    <ion-col>     \n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getTitle():\'You can not reload this page\'}}\n      <hr style=\'width:75%\'>      \n    </ion-col>\n  </ion-row>\n\n  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      \n    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">\n      <ion-col style=\'text-align:center\'>         \n        {{summaryTableRow}}\n      </ion-col>                     \n    </ion-row>\n    <hr style=\'width:75%\' text-center>\n  </ng-container>\n\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getFirstLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getSecondLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col *ngFor="let button of successButtons" text-center>\n      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>\n    </ion-col>\n  </ion-row>\n  <ion-row justify-content-center *ngIf="successSummary == undefined" >\n    <ion-col text-center > \n      <button ion-button (click)="goToEventSelectOnPageReload()">Select Event</button>\n    </ion-col>\n  </ion-row>\n  </ion-grid>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/,
         })
-    ], TournamentDirectorHomePage);
-    return TournamentDirectorHomePage;
+    ], SuccessPage);
+    return SuccessPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=tournament-director-home.js.map
+//# sourceMappingURL=success.js.map
+
+/***/ }),
+
+/***/ 747:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PostPlayerAddSuccessPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__success_success__ = __webpack_require__(730);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+/**
+ * Generated class for the PostPlayerAddSuccessPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var PostPlayerAddSuccessPage = (function (_super) {
+    __extends(PostPlayerAddSuccessPage, _super);
+    function PostPlayerAddSuccessPage() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.postAddPlayerSuccess = true;
+        return _this;
+    }
+    PostPlayerAddSuccessPage.prototype.ionViewWillLoad = function () {
+        _super.prototype.ionViewWillLoad.call(this);
+        console.log('ionViewDidLoad PostPlayerAddSuccessPage');
+    };
+    PostPlayerAddSuccessPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-post-player-add-success',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/'<!--\n  Generated template for the SuccessPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <ion-title>Success</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n  <ion-row>\n    <ion-col>      \n    </ion-col>\n    <ion-col style=\'text-align:center\'> \n      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>\n      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>\n\n    </ion-col>\n    <ion-col>     \n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getTitle():\'You can not reload this page\'}}\n      <hr style=\'width:75%\'>      \n    </ion-col>\n  </ion-row>\n\n  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      \n    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">\n      <ion-col style=\'text-align:center\'>         \n        {{summaryTableRow}}\n      </ion-col>                     \n    </ion-row>\n    <hr style=\'width:75%\' text-center>\n  </ng-container>\n\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getFirstLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getSecondLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col *ngFor="let button of successButtons" text-center>\n      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>\n    </ion-col>\n  </ion-row>\n  <ion-row justify-content-center *ngIf="successSummary == undefined" >\n    <ion-col text-center > \n      <button ion-button (click)="goToEventSelectOnPageReload()">Select Event</button>\n    </ion-col>\n  </ion-row>\n  </ion-grid>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/,
+        })
+    ], PostPlayerAddSuccessPage);
+    return PostPlayerAddSuccessPage;
+}(__WEBPACK_IMPORTED_MODULE_1__success_success__["a" /* SuccessPage */]));
+
+//# sourceMappingURL=post-player-add-success.js.map
 
 /***/ })
 

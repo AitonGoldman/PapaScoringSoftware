@@ -22,5 +22,6 @@ def generate_events_class(db_handle):
         has_pic=db_handle.Column(db_handle.Boolean,default=False)
         img_url=db_handle.Column(db_handle.String(100))
         require_pics=db_handle.Column(db_handle.Boolean,default=False)
+        default_password=db_handle.Column(db_handle.String(100))
     return Events
     

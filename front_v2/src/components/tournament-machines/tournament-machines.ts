@@ -140,10 +140,10 @@ export class TournamentMachinesComponent extends PssPageComponent {
     }
     onInput(event){        
         console.log(this.searchbar);
-        console.log(event);
+        
     }
     onItemsShown(event){
-        console.log(event);        
+        
     }
     onDisable(machine){
         machine.active=machine.active==false;
@@ -198,7 +198,7 @@ export class TournamentMachinesComponent extends PssPageComponent {
         }
         
         console.log('ionViewDidLoad TournamentMachinesPage');
-        console.log(this.constructor.name)
+        
     }
 
 }

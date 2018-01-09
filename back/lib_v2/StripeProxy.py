@@ -41,14 +41,14 @@ class StripeProxy():
             )
 
             #FIXME : this is for testing only
-            stripe_token = stripe.Token.create(
-                card={
-                    "number": '4242424242424242',
-                    "exp_month": 12,
-                    "exp_year": 2018,
-                    "cvc": '123'
-                },
-            ).id
+            # stripe_token = stripe.Token.create(
+            #     card={
+            #         "number": '4242424242424242',
+            #         "exp_month": 12,
+            #         "exp_year": 2018,
+            #         "cvc": '123'
+            #     },
+            # ).id
 
             #input_data['stripe_token']=stripe_token
             
@@ -64,6 +64,7 @@ class StripeProxy():
             return {'error_text':'The credit card processing service is busy.  Please try again in a few minutes','exception':e}
         except stripe.error.CardError as e:
             return {'error_text':'The credit card processing service has rejected your card.  Please see the front desk for more details','exception':e}
-        except Exception as e:        
+        except Exception as e:
+            print e
             return {'error_text':'I have no fucking idea what the fuck just happened','exception':e}
             

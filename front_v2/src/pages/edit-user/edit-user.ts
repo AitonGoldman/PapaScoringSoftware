@@ -89,13 +89,11 @@ export class EditUserPage extends PssPageComponent {
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad EditUserPage');
-        console.log(this.getHomePageString())
-        console.log(this.eventId)
         this.pssApi.getAllUsers()
             .subscribe(this.generateGetAllUsersProcessor())            
     }
     onSelect(event){
-        console.log(this.selectedUser);
+        
         this.selectedRole=this.selectedUser.event_roles[0].event_role_id
         //this.pssApi.getEventUser(this.eventId,this.selectedUser.pss_user_id)
         //    .subscribe(this.generateGetEventUserProcessor());            
@@ -106,7 +104,7 @@ export class EditUserPage extends PssPageComponent {
         if(removeEventUserFromEvent!=true){            
             modifiedRoles.push(this.selectedRole)            
         }
-        console.log(modifiedRoles);
+        
         this.pssApi.editEventUserRole({'event_user':this.selectedUser,'event_role_ids':modifiedRoles},this.eventId)
             .subscribe(this.generateEditEventUserRoleProcessor(removeEventUserFromEvent));
         

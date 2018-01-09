@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
+import { URLSearchParams } from "@angular/http";
 
 /**
  * Generated class for the EventSelectPage page.
@@ -27,7 +28,8 @@ export class EventSelectPage extends PssPageComponent {
         };
     }
 
-    gotoEvent(eventId){
+    gotoEvent(eventId,eventName){
+        this.eventAuth.logoutEventOwner();
         let nextPage = '';
         let tabIndex=null;
         if(this.platform.is('mobile') == true){
@@ -37,12 +39,16 @@ export class EventSelectPage extends PssPageComponent {
             nextPage = this.getHomePageString(eventId);
         }          
         
-        this.pushRootPage(nextPage,{'eventId':eventId});
+        this.pushRootPage(nextPage,{'eventId':eventId,'eventName':eventName});
 
     }
     
     
     ionViewWillLoad() {
+        let params = new URLSearchParams(window.location.search);
+        let someParam = params.get('user');        
+        
+        
         this.pssApi.getAllEvents({})
             .subscribe(this.generateGetAllEventsProcessor())    
         
@@ -52,6 +58,7 @@ export class EventSelectPage extends PssPageComponent {
             this.nextPage=this.getHomePageString();         
         }                                
         console.log('ionViewDidLoad EventSelectPage');
+        
     }
 
 }

@@ -72,7 +72,7 @@ export class CreateEditEntityComponent extends PssPageComponent {
     wizardModeIndex:number=null;   
     
     ionViewWillLoad() {
-        console.log('hi there');
+        
         //this.entityType=this.navParams.get('entityType');
         this.actionType=this.navParams.get('actionType');
         this.eventId = this.navParams.get('eventId');
@@ -81,7 +81,7 @@ export class CreateEditEntityComponent extends PssPageComponent {
         this.wizardModeIndex = this.navParams.get('wizardModeIndex');
         this.wizardModeStack = this.navParams.get('wizardModeStack');
         
-        console.log('in create/edit....'+this.eventId)
+        
         
         if(this.entityType=="event"){            
             this.entityFields.setField('name','text',false,true,{short:"",long:""});
@@ -148,7 +148,7 @@ export class CreateEditEntityComponent extends PssPageComponent {
         if(this.entityType=="event"){
             if (this.actionType=="create"){
                 console.log('in process entity....');
-                console.log(this.entity);
+                
                 if(this.wizardMode!=true){
                     this.pssApi.createEvent(this.entity)
                         .subscribe(this.generateCreateEventProcessor())                                      

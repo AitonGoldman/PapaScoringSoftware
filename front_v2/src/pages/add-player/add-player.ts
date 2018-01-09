@@ -1,7 +1,9 @@
 import { ViewChild, Component } from '@angular/core';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
+import { TakePicComponent } from '../../components/take-pic/take-pic'
+
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
-import { Platform, App, NavParams, NavController } from 'ionic-angular';
+import { ModalController, Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { AlertController } from 'ionic-angular';
@@ -22,7 +24,7 @@ import { IonicPage } from 'ionic-angular';
  */
 
 @IonicPage({
-    segment:'AddPlyer/:eventId'
+    segment:'AddPlayer/:eventId'
 })
 @Component({
   selector: 'page-add-player',
@@ -31,6 +33,7 @@ import { IonicPage } from 'ionic-angular';
 export class AddPlayerPage extends PssPageComponent {
     selectedPlayer:any={};
     loading:boolean=false;
+    ifpaLookup:boolean=false;
     existingPlayerFound:boolean=true;
     @ViewChild('searchbar')  searchbar: any;    
     constructor(public autoCompleteProvider:AutoCompleteProvider,
@@ -42,7 +45,8 @@ export class AddPlayerPage extends PssPageComponent {
                 public platform: Platform,                
                 public actionSheetCtrl: ActionSheetController,
                 public notificationsService: NotificationsService,
-                public alertCtrl: AlertController){
+                public alertCtrl: AlertController,
+                public modalCtrl: ModalController){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
@@ -59,33 +63,50 @@ export class AddPlayerPage extends PssPageComponent {
                 return;
             }
             console.log('in generateAddEventPlayerProcessor')
-            console.log(result);
+            
             let success_title_string='Player '+result.data[0].player_full_name+' has been added to event.';
             let success_line_one_string='Player Pin is '+result.data[0].pin;
             let success_line_two_string='Player Number is '+result.data[0].events[0].player_id_for_event;
             let successSummary = new SuccessSummary(success_title_string,success_line_one_string,success_line_two_string);            
-            let successButton = new SuccessButton('Go Home',
+            let successButtonHome = new SuccessButton('Go Home',
                                                   this.getHomePageString(this.eventId),
-                                                  this.buildNavParams({}));            
-            this.navCtrl.push("SuccessPage",            
+                                                      this.buildNavParams({}));
+            let successButtonTickets = new SuccessButton('Purchase Tickets',
+                                                         'TicketPurchasePage',
+                                                         this.buildNavParams({player_id_for_event:result.data[0].events[0].player_id_for_event}));            
+            
+            this.navCtrl.push("PostPlayerAddSuccessPage",            
                               this.buildNavParams({'successSummary':successSummary,
-                                                   'successButtons':[successButton]}));
+                                                   'successButtons':[successButtonHome,successButtonTickets]}));
         };
     }
     
     generateSearchPlayerProcessor(){
         return (result)=>{
             console.log('in generateSearchPlayerProcessor')
-            console.log(result);
+            
         }
     }
+    takePicture(){
+        let profileModal = this.modalCtrl.create(TakePicComponent, { userId: 8675309 });
+        profileModal.onDidDismiss(data => {
+            console.log('in modal...');
+            console.log(data);
+            if(data!=null){
+                this.selectedPlayer.has_pic=true;
+                this.selectedPlayer.img_file=data;
+            }
+        });
+        profileModal.present();
+    }
+    
     generateGetIfpaRankingProcessor(){
         return (result)=>{
             console.log('in generateGetIfpaRankingProcessor')
             if(result==null){
                 return;
             }            
-            console.log(result);
+            this.ifpaLookup=true;
             if(result.ifpa_ranking.search.length==0){
                 let alert = this.alertCtrl.create();
                 alert.setTitle('No IFPA Players Found');
@@ -130,20 +151,27 @@ export class AddPlayerPage extends PssPageComponent {
         this.getIfpaRanking(this.selectedPlayer.first_name+" "+this.selectedPlayer.last_name)
     }
     
+    
     getIfpaRanking(playerName){
+        this.ifpaLookup=true;
         this.pssApi.getIfpaRanking(playerName)
             .subscribe(this.generateGetIfpaRankingProcessor())                    
     }
 
+    getIfpaRankingMobile(playerName,slidingItem){
+        slidingItem.close();
+        this.getIfpaRanking(playerName);
+    }
+    
     onChange(event){
         console.log('in onChange...')
-        console.log(event)
+        
     }
     
     onInput(event){        
         console.log('in onInput...')
         this.loading=true;
-        console.log(this.searchbar)
+        
     }
     
     onItemsShown(event){
@@ -154,7 +182,7 @@ export class AddPlayerPage extends PssPageComponent {
     generateLoadingFunction(){
         return (input)=>{
             console.log('in loading function');
-            console.log(input);
+            
             if (input.length==0){
                 if(this.searchbar.keyword.length > 2){                
                     console.log(this.searchbar.suggestions.length);
@@ -170,7 +198,8 @@ export class AddPlayerPage extends PssPageComponent {
             } else {
                 this.existingPlayerFound=true;            
             }
-            this.loading=false;            
+            setTimeout(()=>{this.loading=false;},500)
+            
         }
     }
   ionViewWillLoad() {
@@ -183,13 +212,15 @@ export class AddPlayerPage extends PssPageComponent {
       //    .subscribe(this.generateSearchPlayerProcessor())            
       
   }
-    onUploadFinished(event){
-        this.selectedPlayer.has_pic=true;
-        this.selectedPlayer.img_file=JSON.parse(event.serverResponse._body).data;        
-
-        console.log(JSON.parse(event.serverResponse._body).data);
-    }
+    // onUploadFinished(event){
+    //     this.selectedPlayer.has_pic=true;        
+    //     console.log(event.serverResponse._body);
+    //     this.selectedPlayer.img_file=JSON.parse(event.serverResponse._body).data;        
+    // }
     onSubmit(){
+        if(this.selectedPlayer.ifpa_ranking=='not ranked'){
+            this.selectedPlayer.ifpa_ranking=99999;
+        }
         this.pssApi.addEventPlayers({players:[this.selectedPlayer]},this.eventId)
             .subscribe(this.generateAddEventPlayersProcessor())                                                  
 

@@ -1,6 +1,6 @@
 webpackJsonp([0],{
 
-/***/ 701:
+/***/ 702:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditEventPageModule", function() { return EditEventPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__edit_event__ = __webpack_require__(735);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__edit_event__ = __webpack_require__(738);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__ = __webpack_require__(359);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -41,7 +41,7 @@ var EditEventPageModule = (function () {
 
 /***/ }),
 
-/***/ 724:
+/***/ 726:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -177,7 +177,7 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 725:
+/***/ 727:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -214,7 +214,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 726:
+/***/ 728:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -245,7 +245,7 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 727:
+/***/ 729:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -295,16 +295,16 @@ var EntityFields = (function () {
 
 /***/ }),
 
-/***/ 728:
+/***/ 730:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__ = __webpack_require__(727);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pss_page_pss_page__ = __webpack_require__(724);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__ = __webpack_require__(725);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__ = __webpack_require__(729);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pss_page_pss_page__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__ = __webpack_require__(727);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__ = __webpack_require__(728);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -461,13 +461,13 @@ var EventComponent = (function (_super) {
 
 /***/ }),
 
-/***/ 735:
+/***/ 738:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EditEventPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_event_event__ = __webpack_require__(728);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_event_event__ = __webpack_require__(730);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -504,7 +504,7 @@ var EditEventPage = (function (_super) {
     };
     EditEventPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-edit-event',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/'<!-- Generated template for the CreateEditEntityComponent component -->\n<ion-header>\n  <ion-navbar >\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]="buildNavParams({})">Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <form #createEditForm="ngForm">\n    <ion-list>\n      <div margin>\n        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>\n      </div>\n      <ion-item>\n        <ion-label>Advanced Settings</ion-label>\n        <ion-toggle (ionChange)="onAdvancedChange()" name="myadvanced" [(ngModel)]="advanced"></ion-toggle>\n      </ion-item>\n\n      <ng-container *ngFor="let entityField of entityFieldsArray">\n        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">\n          <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>\n          <ng-container *ngIf="entityField.fieldType==\'text\'" >\n            \n            <ion-item>\n              <ion-label>                              <ion-icon name="md-create" item-start></ion-icon></ion-label>\n              <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">\n              </ion-input>    \n            </ion-item>\n          </ng-container>\n          <ng-container *ngIf="entityField.fieldType==\'boolean\'">          \n            <ion-item>\n              <ion-label>{{entityField.description.short}}</ion-label>\n              <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       \n            </ion-item>\n          </ng-container>\n          <ion-item no-lines text-center>\n          </ion-item>\n        </ng-container>        \n      </ng-container>\n      <ng-container *ngIf="entity.img_url!=null">\n        <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>\n        <ion-item>\n          <ion-avatar item-start *ngIf="entity.img_url!=null">\n            <img [src]="entity.img_url">\n          </ion-avatar>                \n        </ion-item>\n      </ng-container>\n      \n      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>\n      <ion-item>\n        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>\n      </ion-item>\n    </ion-list>    \n    <button [disabled]=\'!createEditForm.valid\' ion-button default (click)="processEntity()">Apply</button>\n  </form>  \n</ion-content>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/,
+            selector: 'page-edit-event',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/'<!-- Generated template for the CreateEditEntityComponent component -->\n<ion-header>\n  <ion-navbar >\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]="buildNavParams({})">Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <div class=\'desktopSlim\'>\n  <form #createEditForm="ngForm">\n    <ion-list>\n      <div margin>\n        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>\n      </div>\n      <ion-item>\n        <ion-label>Advanced Settings</ion-label>\n        <ion-toggle (ionChange)="onAdvancedChange()" name="myadvanced" [(ngModel)]="advanced"></ion-toggle>\n      </ion-item>\n\n      <ng-container *ngFor="let entityField of entityFieldsArray">\n        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">\n          <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>\n          <ng-container *ngIf="entityField.fieldType==\'text\'" >\n            \n            <ion-item>\n              <ion-label>                              <ion-icon name="md-create" item-start></ion-icon></ion-label>\n              <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">\n              </ion-input>    \n            </ion-item>\n          </ng-container>\n          <ng-container *ngIf="entityField.fieldType==\'boolean\'">          \n            <ion-item>\n              <ion-label>{{entityField.description.short}}</ion-label>\n              <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       \n            </ion-item>\n          </ng-container>\n          <ion-item no-lines text-center>\n          </ion-item>\n        </ng-container>        \n      </ng-container>\n      <ng-container *ngIf="entity.img_url!=null">\n        <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>\n        <ion-item>\n          <ion-avatar item-start *ngIf="entity.img_url!=null">\n            <img [src]="entity.img_url">\n          </ion-avatar>                \n        </ion-item>\n      </ng-container>\n      \n<!--      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>\n      <ion-item>\n        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>\n      </ion-item>-->\n    </ion-list>    \n    <button [disabled]=\'!createEditForm.valid\' ion-button default (click)="processEntity()">Apply</button>\n  </form>\n  </div>\n</ion-content>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/,
         })
     ], EditEventPage);
     return EditEventPage;

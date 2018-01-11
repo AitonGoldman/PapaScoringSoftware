@@ -1,0 +1,62 @@
+<!--
+  Generated template for the QueueSelectPlayerTournamentMachinePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>QueueSelectPlayerTournamentMachine</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div>    
+  <ion-list>
+    <ng-container *ngFor="let tournament of tournaments">
+      <ion-item-divider (click)="expand(tournament)">
+        <ion-avatar item-start *ngIf="tournament.img_url!=null">
+          <img [src]="tournament.img_url">
+        </ion-avatar>        
+        <h1>{{tournament.tournament_name}}</h1><ion-icon item-end [name]="tournament.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
+      </ion-item-divider>      
+      <ng-container *ngIf="tournament.expanded!=true?false:true">
+        <ion-list>
+          <ng-container *ngFor="let tournament_machine of tournament.tournament_machines">
+            <ion-item  (click)="expand(tournament_machine)">
+              {{tournament_machine.tournament_machine_name}} <span *ngIf='tournament_machine.queue_length > 0'>({{tournament_machine.queue_length}})</span><ion-icon item-end [name]="tournament_machine.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
+            </ion-item>            
+            <ion-list *ngIf="tournament_machine.expanded==true && tournament.expanded==true">
+              <ion-item>
+                <ion-icon item-start name="play" *ngIf="tournament_machine.player_id!=null"></ion-icon>
+                <ion-icon item-start *ngIf="tournament_machine.player_id==null"></ion-icon>
+                {{tournament_machine.player_id==null?"Not Being Played":tournament_machine.player.player_full_name}}
+              </ion-item>
+              <ng-container *ngFor="let queue of tournament_machine.queues" >
+                <ion-item *ngIf="queue.player!=null" (click)="queue.whatToDo(queue,tournament_machine)">
+                  <ion-icon item-start [name]="queue.icon"></ion-icon> <span>{{queue.player.player_full_name}}</span>
+                </ion-item>
+              </ng-container>
+              
+              <ng-container *ngIf="player_id_for_event==null && role != null">
+                <ion-item  [navPush]="'AddPlayerToQueuePage'" [navParams]="buildNavParams({tournamentMachine:tournament_machine})" *ngIf="tournament_machine.player_id!=null || tournament_machine.queues[0].player!=null ">
+                <ion-icon item-start name="add-circle"></ion-icon> Add To Queue
+              </ion-item>
+              </ng-container>
+              <ng-container *ngIf="player_id_for_event!=null">
+                <ion-item  (click)="addEventPlayerToQueue(tournament_machine.tournament_machine_id)">
+                <ion-icon item-start name="add-circle"></ion-icon> Add To Queue
+              </ion-item>
+              </ng-container>
+              
+            </ion-list>
+          </ng-container>
+        </ion-list>
+      </ng-container>      
+    </ng-container>
+  </ion-list>
+</div>
+</ion-content>

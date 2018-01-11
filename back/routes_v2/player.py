@@ -22,8 +22,7 @@ def edit_player_route(request,app,event_id):
         raise BadRequest('Submitted information is missing required fields')
     #put tournament edit logic here
     handle_img_upload(input_data)
-    player = app.table_proxy.edit_player(input_data,False)
-    
+    player = app.table_proxy.edit_player(input_data,False)    
     return player
 
 def create_player_route(request,tables_proxy,event_id):
@@ -68,6 +67,31 @@ def create_player_route(request,tables_proxy,event_id):
     return players_added_to_event
 
 
+def get_event_player_route(app,event_id,event_player_id):
+    event_player = app.table_proxy.get_event_player(event_id,event_player_id)
+    tournament_calculated_lists=[]
+    if event_player:
+        tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)                
+        player_dict=generic.serialize_player_public(event_player)
+        for tournament in app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):
+            if tournament_counts.get(tournament.tournament_id,None):
+                max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed-tournament_counts[tournament.tournament_id]['count']
+            else:
+                max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed
+            calculated_list = calculate_list_of_tickets_and_prices_for_player(0,event_player,app,event_id,tournament)
+            if tournament_counts.get(tournament.tournament_id,None):                
+                pruned_calculated_list = [price for price in calculated_list if price['amount'] <= max_amount_allowed_for_player]
+            else:
+                pruned_calculated_list = calculated_list            
+            tournament_calculated_lists.append({'tournament_name':tournament.tournament_name,
+                                                'tournament_id':tournament.tournament_id,
+                                                'calculated_price_list':pruned_calculated_list})
+        return {'data':player_dict,
+                'tournament_calculated_lists':to_dict(tournament_calculated_lists),
+                'tournament_counts':tournament_counts}
+    else:
+        raise BadRequest('That player number does not exist')
+    
 @blueprints.test_blueprint.route('/<int:event_id>/player',methods=['POST'])
 def player_create(event_id):            
     #current_app.table_proxy.initialize_event_specific_relationship(event_id)
@@ -82,29 +106,31 @@ def player_create(event_id):
 
 @blueprints.test_blueprint.route('/<int:event_id>/event_player/<int:event_player_id>',methods=['GET'])
 def get_event_player(event_id,event_player_id):                
-    event_player = current_app.table_proxy.get_event_player(event_id,event_player_id)
-    tournament_calculated_lists=[]
-    if event_player:
-        tournament_counts, meta_tournament_counts = current_app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)                
-        player_dict=generic.serialize_player_public(event_player)
-        for tournament in current_app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):
-            if tournament_counts.get(tournament.tournament_id,None):
-                max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed-tournament_counts[tournament.tournament_id]['count']
-            else:
-                max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed
-            calculated_list = calculate_list_of_tickets_and_prices_for_player(0,event_player,current_app,event_id,tournament)
-            if tournament_counts.get(tournament.tournament_id,None):                
-                pruned_calculated_list = [price for price in calculated_list if price['amount'] <= max_amount_allowed_for_player]
-            else:
-                pruned_calculated_list = calculated_list            
-            tournament_calculated_lists.append({'tournament_name':tournament.tournament_name,
-                                                'tournament_id':tournament.tournament_id,
-                                                'calculated_price_list':pruned_calculated_list})
-        return jsonify({'data':player_dict,
-                        'tournament_calculated_lists':to_dict(tournament_calculated_lists),
-                        'tournament_counts':tournament_counts})
-    else:
-        raise BadRequest('That player number does not exist')
+    event_player_info = get_event_player_route(current_app,event_id,event_player_id)
+    return jsonify(event_player_info)
+    # event_player = current_app.table_proxy.get_event_player(event_id,event_player_id)
+    # tournament_calculated_lists=[]
+    # if event_player:
+    #     tournament_counts, meta_tournament_counts = current_app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)                
+    #     player_dict=generic.serialize_player_public(event_player)
+    #     for tournament in current_app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):
+    #         if tournament_counts.get(tournament.tournament_id,None):
+    #             max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed-tournament_counts[tournament.tournament_id]['count']
+    #         else:
+    #             max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed
+    #         calculated_list = calculate_list_of_tickets_and_prices_for_player(0,event_player,current_app,event_id,tournament)
+    #         if tournament_counts.get(tournament.tournament_id,None):                
+    #             pruned_calculated_list = [price for price in calculated_list if price['amount'] <= max_amount_allowed_for_player]
+    #         else:
+    #             pruned_calculated_list = calculated_list            
+    #         tournament_calculated_lists.append({'tournament_name':tournament.tournament_name,
+    #                                             'tournament_id':tournament.tournament_id,
+    #                                             'calculated_price_list':pruned_calculated_list})
+    #     return jsonify({'data':player_dict,
+    #                     'tournament_calculated_lists':to_dict(tournament_calculated_lists),
+    #                     'tournament_counts':tournament_counts})
+    # else:
+    #     raise BadRequest('That player number does not exist')
 
 @blueprints.test_blueprint.route('/<int:event_id>/event_players/no_pics',methods=['GET'])
 def get_all_event_players_with_no_pics(event_id):                

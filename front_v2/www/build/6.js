@@ -1,14 +1,14 @@
 webpackJsonp([6],{
 
-/***/ 712:
+/***/ 716:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LogoutPageModule", function() { return LogoutPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QueueSelectPlayerTournamentMachinePageModule", function() { return QueueSelectPlayerTournamentMachinePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logout__ = __webpack_require__(745);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__queue_select_player_tournament_machine__ = __webpack_require__(751);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var LogoutPageModule = (function () {
-    function LogoutPageModule() {
+var QueueSelectPlayerTournamentMachinePageModule = (function () {
+    function QueueSelectPlayerTournamentMachinePageModule() {
     }
-    LogoutPageModule = __decorate([
+    QueueSelectPlayerTournamentMachinePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__logout__["a" /* LogoutPage */],
+                __WEBPACK_IMPORTED_MODULE_2__queue_select_player_tournament_machine__["a" /* QueueSelectPlayerTournamentMachinePage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__logout__["a" /* LogoutPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__queue_select_player_tournament_machine__["a" /* QueueSelectPlayerTournamentMachinePage */]),
             ],
         })
-    ], LogoutPageModule);
-    return LogoutPageModule;
+    ], QueueSelectPlayerTournamentMachinePageModule);
+    return QueueSelectPlayerTournamentMachinePageModule;
 }());
 
-//# sourceMappingURL=logout.module.js.map
+//# sourceMappingURL=queue-select-player-tournament-machine.module.js.map
 
 /***/ }),
 
-/***/ 724:
+/***/ 726:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -174,7 +174,7 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 725:
+/***/ 727:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -211,7 +211,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 726:
+/***/ 728:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -242,15 +242,15 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 745:
+/***/ 751:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogoutPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QueueSelectPlayerTournamentMachinePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(724);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(725);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(727);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(728);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -272,34 +272,146 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the LogoutPage page.
+ * Generated class for the QueueSelectPlayerTournamentMachinePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var LogoutPage = (function (_super) {
-    __extends(LogoutPage, _super);
-    function LogoutPage() {
+var QueueSelectPlayerTournamentMachinePage = (function (_super) {
+    __extends(QueueSelectPlayerTournamentMachinePage, _super);
+    function QueueSelectPlayerTournamentMachinePage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.successSummary = null;
-        _this.successButtons = null;
+        _this.tournaments = [];
+        _this.eventPlayer = {};
+        _this.player_id_for_event = null;
+        _this.hideSearchbar = false;
+        _this.ticketCounts = null;
+        _this.queueMode = "manage";
+        _this.role = null;
+        _this.loggedInPlayerId = null;
         return _this;
     }
-    LogoutPage.prototype.ionViewWillLoad = function () {
-        this.eventAuth.logout(this.eventId);
-        var success_title_string = 'Logged out!';
-        this.successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
-        this.successButtons = [new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', this.getHomePageString(this.eventId), this.buildNavParams({}))];
+    QueueSelectPlayerTournamentMachinePage.prototype.generateGetEventPlayerProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.eventPlayer = result.data != null ? result.data : {};
+            _this.ticketCounts = result.tournament_counts;
+        };
     };
-    LogoutPage = __decorate([
+    QueueSelectPlayerTournamentMachinePage.prototype.generateAddEventPlayerToQueueProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var success_title_string = _this.eventPlayer.player_full_name + ' has been added to queue.';
+            var success_line_one_string = 'Player position in the queue is ' + result.data.position + '.';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](success_title_string, success_line_one_string, null);
+            var successButtonHome = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.getHomePageString(_this.eventId), _this.buildNavParams({}));
+            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
+                'successButtons': [successButtonHome] }));
+        };
+    };
+    QueueSelectPlayerTournamentMachinePage.prototype.addEventPlayerToQueue = function (tournament_machine_id) {
+        this.pssApi.addEventPlayerToQueue({ 'player_id': this.eventPlayer.player_id, 'tournament_machine_id': tournament_machine_id }, this.eventId)
+            .subscribe(this.generateAddEventPlayerToQueueProcessor());
+    };
+    QueueSelectPlayerTournamentMachinePage.prototype.generateRemovePlayerFromQueueProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var success_title_string = result.data.player_full_name + ' has been removed from queue.';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
+            var successButtonHome = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.getHomePageString(_this.eventId), _this.buildNavParams({}));
+            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
+                'successButtons': [successButtonHome] }));
+        };
+    };
+    QueueSelectPlayerTournamentMachinePage.prototype.generateRemovePlayerFromQueue = function () {
+        var _this = this;
+        return function (queue, tournament_machine) {
+            console.log(queue);
+            _this.pssApi.removePlayerFromQueue({ player_id: queue.player.player_id, tournament_machine_id: tournament_machine.tournament_machine_id }, _this.eventId)
+                .subscribe(_this.generateRemovePlayerFromQueueProcessor());
+        };
+    };
+    QueueSelectPlayerTournamentMachinePage.prototype.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor = function (withPlayer) {
+        var _this = this;
+        if (withPlayer === void 0) { withPlayer = false; }
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            if (withPlayer == true) {
+                _this.eventPlayer = result.player;
+            }
+            _this.tournaments = result.data;
+            var role = null;
+            var loggedInPlayerId = null;
+            if (_this.eventAuth.isEventUserLoggedIn(_this.eventId)) {
+                role = _this.eventAuth.getRoleName(_this.eventId);
+                if (role == 'player') {
+                    loggedInPlayerId = _this.eventAuth.getEventPlayerId(_this.eventId);
+                }
+            }
+            _this.tournaments.map(function (tournament) {
+                tournament.expanded = false;
+                tournament.tournament_machines.map(function (tournament_machine) {
+                    tournament_machine.expanded = false;
+                    tournament_machine.queues.map(function (queue) {
+                        queue.icon = 'person';
+                        if (role == null || role == 'scorekeeper') {
+                            queue.whatToDo = function (x, y) { };
+                        }
+                        if (role == 'player') {
+                            if (queue.player != null && queue.player.player_id == loggedInPlayerId) {
+                                queue.icon = 'remove-circle';
+                                queue.allowedToRemove = true;
+                                queue.whatToDo = _this.generateRemovePlayerFromQueue();
+                            }
+                        }
+                        if (role == 'tournamentdirector' || role == 'deskworker') {
+                            queue.icon = 'remove-circle';
+                            queue.allowedToRemove = true;
+                            queue.whatToDo = _this.generateRemovePlayerFromQueue();
+                        }
+                    });
+                });
+            });
+        };
+    };
+    QueueSelectPlayerTournamentMachinePage.prototype.ionViewWillLoad = function () {
+        //this.queueMode=this.navParams.get('queueMode');
+        this.role = this.eventAuth.getRoleName(this.eventId);
+        if (this.eventAuth.getRoleName(this.eventId) == 'player') {
+            this.loggedInPlayerId = this.eventAuth.getPlayerId(this.eventId);
+            this.player_id_for_event = this.eventAuth.getEventPlayerId(this.eventId);
+        }
+        if (this.player_id_for_event == null) {
+            this.pssApi.getAllTournamentsAndMachines(this.eventId)
+                .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor());
+        }
+        else {
+            this.pssApi.getAllTournamentsAndMachinesAndEventPlayer(this.eventId, this.player_id_for_event)
+                .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(true));
+        }
+        console.log('ionViewDidLoad QueueSelectPlayerTournamentMachinePage');
+        console.log(this.role);
+    };
+    QueueSelectPlayerTournamentMachinePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-logout',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/'<!--\n  Generated template for the SuccessPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <ion-title>Success</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n  <ion-row>\n    <ion-col>      \n    </ion-col>\n    <ion-col style=\'text-align:center\'> \n      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>\n      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>\n\n    </ion-col>\n    <ion-col>     \n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getTitle():\'You can not reload this page\'}}\n      <hr style=\'width:75%\'>      \n    </ion-col>\n  </ion-row>\n\n  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      \n    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">\n      <ion-col style=\'text-align:center\'>         \n        {{summaryTableRow}}\n      </ion-col>                     \n    </ion-row>\n    <hr style=\'width:75%\' text-center>\n  </ng-container>\n\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getFirstLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getSecondLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col *ngFor="let button of successButtons" text-center>\n      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>\n    </ion-col>\n  </ion-row>\n  <ion-row justify-content-center *ngIf="successSummary == undefined" >\n    <ion-col text-center > \n      <button ion-button (click)="goToEventSelectOnPageReload()">Select Event</button>\n    </ion-col>\n  </ion-row>\n  </ion-grid>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/,
+            selector: 'page-queue-select-player-tournament-machine',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/queue-select-player-tournament-machine/queue-select-player-tournament-machine.html"*/'<!--\n  Generated template for the QueueSelectPlayerTournamentMachinePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>QueueSelectPlayerTournamentMachine</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <div>    \n  <ion-list>\n    <ng-container *ngFor="let tournament of tournaments">\n      <ion-item-divider (click)="expand(tournament)">\n        <ion-avatar item-start *ngIf="tournament.img_url!=null">\n          <img [src]="tournament.img_url">\n        </ion-avatar>        \n        <h1>{{tournament.tournament_name}}</h1><ion-icon item-end [name]="tournament.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n      </ion-item-divider>      \n      <ng-container *ngIf="tournament.expanded!=true?false:true">\n        <ion-list>\n          <ng-container *ngFor="let tournament_machine of tournament.tournament_machines">\n            <ion-item  (click)="expand(tournament_machine)">\n              {{tournament_machine.tournament_machine_name}} <span *ngIf=\'tournament_machine.queue_length > 0\'>({{tournament_machine.queue_length}})</span><ion-icon item-end [name]="tournament_machine.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n            </ion-item>            \n            <ion-list *ngIf="tournament_machine.expanded==true && tournament.expanded==true">\n              <ion-item>\n                <ion-icon item-start name="play" *ngIf="tournament_machine.player_id!=null"></ion-icon>\n                <ion-icon item-start *ngIf="tournament_machine.player_id==null"></ion-icon>\n                {{tournament_machine.player_id==null?"Not Being Played":tournament_machine.player.player_full_name}}\n              </ion-item>\n              <ng-container *ngFor="let queue of tournament_machine.queues" >\n                <ion-item *ngIf="queue.player!=null" (click)="queue.whatToDo(queue,tournament_machine)">\n                  <ion-icon item-start [name]="queue.icon"></ion-icon> <span>{{queue.player.player_full_name}}</span>\n                </ion-item>\n              </ng-container>\n              \n              <ng-container *ngIf="player_id_for_event==null && role != null">\n                <ion-item  [navPush]="\'AddPlayerToQueuePage\'" [navParams]="buildNavParams({tournamentMachine:tournament_machine})" *ngIf="tournament_machine.player_id!=null || tournament_machine.queues[0].player!=null ">\n                <ion-icon item-start name="add-circle"></ion-icon> Add To Queue\n              </ion-item>\n              </ng-container>\n              <ng-container *ngIf="player_id_for_event!=null">\n                <ion-item  (click)="addEventPlayerToQueue(tournament_machine.tournament_machine_id)">\n                <ion-icon item-start name="add-circle"></ion-icon> Add To Queue\n              </ion-item>\n              </ng-container>\n              \n            </ion-list>\n          </ng-container>\n        </ion-list>\n      </ng-container>      \n    </ng-container>\n  </ion-list>\n</div>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/queue-select-player-tournament-machine/queue-select-player-tournament-machine.html"*/,
         })
-    ], LogoutPage);
-    return LogoutPage;
+    ], QueueSelectPlayerTournamentMachinePage);
+    return QueueSelectPlayerTournamentMachinePage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=logout.js.map
+//# sourceMappingURL=queue-select-player-tournament-machine.js.map
 
 /***/ })
 

@@ -1,7 +1,12 @@
 <ion-header>
-  <ion-navbar>  
+ <ion-navbar>
   <custom-headers title="TD Homepage" [eventId]="eventId" [homePage]="getHomePageString()"></custom-headers>
-  </ion-navbar>
+ </ion-navbar>
+
+  <!-- <ion-toolbar text-center> -->
+  <!--   Cleaveland Pinball Show 2018   -->
+  <!-- </ion-toolbar> -->
+  
 </ion-header>
 
 <simple-notifications  [options]="{position:['top','right']}"></simple-notifications>
@@ -21,7 +26,7 @@
     <ion-item no-lines>
       <ion-icon item-end name="clipboard"></ion-icon> Scorekeeping
     </ion-item>
-    <ion-item no-lines>
+    <ion-item no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="git-branch"></ion-icon> Queue Player
     </ion-item>
     <ion-item no-lines [navPush]="'ChangePlayerPicturePage'" [navParams]="buildNavParams({})">

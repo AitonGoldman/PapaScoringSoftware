@@ -23,7 +23,8 @@ def create_tournament_machine_route(request,tables_proxy,event_id,tournament=Non
             raise BadRequest('No tournament id specified')
             
     tournament_machine = tables_proxy.create_tournament_machine(machine,tournament)
-    tables_proxy.create_queue_for_tournament_machine(tournament_machine,tournament.queue_size,event_id)
+    if(event_id):
+        tables_proxy.create_queue_for_tournament_machine(tournament_machine,tournament.queue_size,event_id)
     return tournament_machine
 
 def edit_tournament_machine_route(request,app,event_id):

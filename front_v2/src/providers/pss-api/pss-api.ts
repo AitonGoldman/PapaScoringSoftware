@@ -35,7 +35,7 @@ export class PssApiProvider {
             
             let localUrl=url;            
             let postObject=null;            
-            if(method=="post" || method=="put"){
+            if(method=="post" || method=="put" || method=="delete") {
                 postObject=restOfArgs.shift();
             }
             let localMatches = localUrl.match(/\:arg/g);
@@ -66,7 +66,8 @@ export class PssApiProvider {
     }    
     addTournamentMachine = this.generate_api_call('addTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'post');
     addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');
-    addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');    
+    addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');
+    addEventPlayerToQueue = this.generate_api_call('addPlayerToQueue',this.basePssUrl+"/:arg/queue",'post');
     completeTicketPurchase = this.generate_api_call('completeTicketPurchase',this.basePssUrl+"/:arg/token/:arg",'put');
 
     createEvent = this.generate_api_call('createEvent',this.basePssUrl+"/event",'post');
@@ -96,12 +97,17 @@ export class PssApiProvider {
     getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/machines",'get');
     getAllUsers = this.generate_api_call('getAllUsers',this.basePssUrl+"/pss_users",'get');        
     getAllTournaments = this.generate_api_call('getAllTournaments',this.basePssUrl+"/:arg/tournaments",'get');
-    
+
+    //fixme : can probably replace earlier calls with this call
+    getAllTournamentsAndMachines = this.generate_api_call('getAllTournamentsAndMachines',this.basePssUrl+"/:arg/tournaments/tournament_machines",'get');
+    getAllTournamentsAndMachinesAndEventPlayer = this.generate_api_call('getAllTournamentsAndMachines',this.basePssUrl+"/:arg/tournaments/tournament_machines/event_player/:arg",'get');
+
     getAllEventsAndTournaments = this.generate_api_call('getAllEventsAndTournaments',this.basePssUrl+"/events/tournaments",'get');
     
     loginEventOwner = this.generate_api_call('loginEventOwner',this.basePssUrl+"/auth/pss_user/login",'post');
     loginUser = this.generate_api_call('loginUser',this.basePssUrl+"/auth/pss_event_user/login/:arg",'post');
     loginPlayer = this.generate_api_call('loginPlayer',this.basePssUrl+"/auth/player/login/:arg",'post');
+    removePlayerFromQueue = this.generate_api_call('removePlayerFromQueue',this.basePssUrl+"/:arg/queue",'delete');
     
     searchPlayers = this.generate_api_call('searchPlayers',this.basePssUrl+"/players/:arg",'get');        
     purchaseTicket = this.generate_api_call('purchaseTicket',this.basePssUrl+"/:arg/token",'post');

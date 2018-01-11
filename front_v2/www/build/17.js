@@ -1,14 +1,14 @@
 webpackJsonp([17],{
 
-/***/ 715:
+/***/ 720:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QuickLinksPageModule", function() { return QuickLinksPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SuccessPageModule", function() { return SuccessPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_links__ = __webpack_require__(748);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__success__ = __webpack_require__(732);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var QuickLinksPageModule = (function () {
-    function QuickLinksPageModule() {
+var SuccessPageModule = (function () {
+    function SuccessPageModule() {
     }
-    QuickLinksPageModule = __decorate([
+    SuccessPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__quick_links__["a" /* QuickLinksPage */],
+                __WEBPACK_IMPORTED_MODULE_2__success__["a" /* SuccessPage */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__quick_links__["a" /* QuickLinksPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__success__["a" /* SuccessPage */]),
             ],
         })
-    ], QuickLinksPageModule);
-    return QuickLinksPageModule;
+    ], SuccessPageModule);
+    return SuccessPageModule;
 }());
 
-//# sourceMappingURL=quick-links.module.js.map
+//# sourceMappingURL=success.module.js.map
 
 /***/ }),
 
-/***/ 724:
+/***/ 726:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -174,14 +174,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 748:
+/***/ 732:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QuickLinksPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SuccessPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(724);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(726);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -200,44 +199,46 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 
 
-
 /**
- * Generated class for the QuickLinksPage page.
+ * Generated class for the SuccessPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var QuickLinksPage = (function (_super) {
-    __extends(QuickLinksPage, _super);
-    function QuickLinksPage() {
+var SuccessPage = (function (_super) {
+    __extends(SuccessPage, _super);
+    function SuccessPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.reorderEnabled = false;
-        _this.items = [{ 'title': 'Results - Classics I',
-                'icon': 'md-clipboard' },
-            { 'title': 'Results - Main A',
-                'icon': 'md-clipboard' },
-            { 'title': 'Queues - Classics I',
-                'icon': 'git-branch' },
-            { 'title': 'Queues - Classics I',
-                'icon': 'git-branch' },
-        ];
+        _this.successSummary = null;
+        _this.successButtons = null;
+        _this.postAddPlayerSuccess = false;
         return _this;
     }
-    QuickLinksPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad QuickLinksPage');
+    // pushPageWithNoBackButton(pageName,navParams){        
+    //     this.navCtrl.getActive().willLeave.subscribe(
+    //         ()=>{
+    //             this.navCtrl.last().showBackButton(false);
+    //         }
+    //     )        
+    //     this.navCtrl.push(pageName,this.buildNavParams(navParams));
+    // }
+    SuccessPage.prototype.ionViewWillLoad = function () {
+        this.successSummary = this.navParams.get('successSummary');
+        this.successButtons = this.navParams.get('successButtons');
+        console.log('ionViewDidLoad SuccessPage');
     };
-    QuickLinksPage.prototype.reorderItems = function (indexes) {
-        this.items = Object(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["r" /* reorderArray */])(this.items, indexes);
+    SuccessPage.prototype.goToEventSelectOnPageReload = function () {
+        this.appCtrl.getRootNav().push('EventSelectPage');
     };
-    QuickLinksPage = __decorate([
+    SuccessPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-quick-links',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/quick-links/quick-links.html"*/'<!--<bobo>-->\n<ion-header>\n<ion-navbar>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n    <button [navPush]="\'ResultsPage\'" icon-only ion-button>Results</button>\n    <button icon-only ion-button>Queues</button>\n    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>\n  </ion-buttons>\n</ion-navbar>\n</ion-header>\n<!--</bobo>-->\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<ion-content>\n  <ion-list>\n    <ion-list-header>Jump To...\n      <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>\n    </ion-list-header>    \n      <button ion-item detail-push [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})">\n        <ion-icon name="person" item-end></ion-icon>{{eventAuth.isEventUserLoggedIn(eventId)==true? "Logout" : "Login"}}\n      </button>\n      <button ion-item detail-push (click)="pushRootPage(\'EventSelectPage\')">\n        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event\n      </button>      \n    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      \n    <button *ngFor="let item of items"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>\n    </ion-item-group>\n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/quick-links/quick-links.html"*/,
+            selector: 'page-success',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/'<!--\n  Generated template for the SuccessPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <ion-title>Success</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n  <ion-row>\n    <ion-col>      \n    </ion-col>\n    <ion-col style=\'text-align:center\'> \n      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>\n      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>\n\n    </ion-col>\n    <ion-col>     \n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getTitle():\'You can not reload this page\'}}\n      <hr style=\'width:75%\'>      \n    </ion-col>\n  </ion-row>\n\n  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      \n    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">\n      <ion-col style=\'text-align:center\'>         \n        {{summaryTableRow}}\n      </ion-col>                     \n    </ion-row>\n    <hr style=\'width:75%\' text-center>\n  </ng-container>\n\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getFirstLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getSecondLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col *ngFor="let button of successButtons" text-center>\n      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>\n    </ion-col>\n  </ion-row>\n  <ion-row justify-content-center *ngIf="successSummary == undefined" >\n    <ion-col text-center > \n      <button ion-button (click)="goToEventSelectOnPageReload()">Select Event</button>\n    </ion-col>\n  </ion-row>\n  </ion-grid>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/,
         })
-    ], QuickLinksPage);
-    return QuickLinksPage;
+    ], SuccessPage);
+    return SuccessPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=quick-links.js.map
+//# sourceMappingURL=success.js.map
 
 /***/ })
 

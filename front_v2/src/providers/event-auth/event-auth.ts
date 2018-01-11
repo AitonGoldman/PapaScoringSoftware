@@ -102,6 +102,7 @@ export class EventAuthProvider {
         
     }
     getEventPlayerId(eventId){
+        
         if( this.userLoggedInEvents[eventId]!=null && this.userLoggedInEvents[eventId].events!=null && this.userLoggedInEvents[eventId].events.length!=0){
             return this.userLoggedInEvents[eventId].events[0].player_id_for_event;
         } else {
@@ -109,6 +110,23 @@ export class EventAuthProvider {
         }
         
     }
+    getPlayerId(eventId){
+        if( this.userLoggedInEvents[eventId]!=null){
+            return this.userLoggedInEvents[eventId].player_id;
+        } else {
+            return null;
+        }
+        
+    }
+    getPlayerName(eventId){
+        if( this.userLoggedInEvents[eventId]!=null){
+            return this.userLoggedInEvents[eventId].player_full_name;
+        } else {
+            return null;
+        }
+        
+    }
+
     
     getPssUserId(eventId){
         if(this.userLoggedInEvents[eventId]!=null){

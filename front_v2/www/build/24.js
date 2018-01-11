@@ -1,14 +1,14 @@
 webpackJsonp([24],{
 
-/***/ 699:
+/***/ 707:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ChangePlayerPicturePageModule", function() { return ChangePlayerPicturePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerQuickLinksPageModule", function() { return EventOwnerQuickLinksPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__change_player_picture__ = __webpack_require__(733);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__ = __webpack_require__(743);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var ChangePlayerPicturePageModule = (function () {
-    function ChangePlayerPicturePageModule() {
+var EventOwnerQuickLinksPageModule = (function () {
+    function EventOwnerQuickLinksPageModule() {
     }
-    ChangePlayerPicturePageModule = __decorate([
+    EventOwnerQuickLinksPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__change_player_picture__["a" /* ChangePlayerPicturePage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__["a" /* EventOwnerQuickLinksPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__change_player_picture__["a" /* ChangePlayerPicturePage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__["a" /* EventOwnerQuickLinksPage */]),
             ],
         })
-    ], ChangePlayerPicturePageModule);
-    return ChangePlayerPicturePageModule;
+    ], EventOwnerQuickLinksPageModule);
+    return EventOwnerQuickLinksPageModule;
 }());
 
-//# sourceMappingURL=change-player-picture.module.js.map
+//# sourceMappingURL=event-owner-quick-links.module.js.map
 
 /***/ }),
 
-/***/ 724:
+/***/ 726:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -174,20 +174,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 733:
+/***/ 743:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChangePlayerPicturePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerQuickLinksPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(724);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_take_pic_take_pic__ = __webpack_require__(361);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auto_complete_auto_complete__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_event_auth_event_auth__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_pss_api_pss_api__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_angular2_notifications__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_angular2_notifications__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -204,103 +198,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
 
 
 
 /**
- * Generated class for the ChangePlayerPicturePage page.
+ * Generated class for the EventOwnerQuickLinksPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var ChangePlayerPicturePage = (function (_super) {
-    __extends(ChangePlayerPicturePage, _super);
-    function ChangePlayerPicturePage(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, actionSheetCtrl, notificationsService, modalCtrl) {
-        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) || this;
-        _this.autoCompleteProvider = autoCompleteProvider;
-        _this.eventAuth = eventAuth;
-        _this.navParams = navParams;
-        _this.navCtrl = navCtrl;
-        _this.appCtrl = appCtrl;
-        _this.pssApi = pssApi;
-        _this.platform = platform;
-        _this.actionSheetCtrl = actionSheetCtrl;
-        _this.notificationsService = notificationsService;
-        _this.modalCtrl = modalCtrl;
-        _this.players = [];
-        _this.selectedPlayer = null;
+var EventOwnerQuickLinksPage = (function (_super) {
+    __extends(EventOwnerQuickLinksPage, _super);
+    function EventOwnerQuickLinksPage() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.reorderEnabled = false;
+        _this.items = [];
         return _this;
     }
-    ChangePlayerPicturePage.prototype.generateGetAllEventPlayersWithNoPicsProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            _this.players = result.data;
-        };
+    EventOwnerQuickLinksPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad QuickLinksPage');
     };
-    ChangePlayerPicturePage.prototype.ionViewWillLoad = function () {
-        this.pssApi.getEventPlayers(this.eventId, 'no_pics')
-            .subscribe(this.generateGetAllEventPlayersWithNoPicsProcessor());
-        console.log('ionViewDidLoad ChangePlayerPicturePage');
+    EventOwnerQuickLinksPage.prototype.reorderItems = function (indexes) {
+        this.items = Object(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["r" /* reorderArray */])(this.items, indexes);
     };
-    ChangePlayerPicturePage.prototype.generateEditPlayerProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            console.log('in generatedEditPlayerProcessor');
-            _this.pssApi.getEventPlayers(_this.eventId, 'no_pics')
-                .subscribe(_this.generateGetAllEventPlayersWithNoPicsProcessor());
-        };
-    };
-    ChangePlayerPicturePage.prototype.takePicture = function (player) {
-        var _this = this;
-        this.selectedPlayer = player;
-        var profileModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_2__components_take_pic_take_pic__["a" /* TakePicComponent */], { userId: 8675309 });
-        profileModal.onDidDismiss(function (data) {
-            console.log('in modal...');
-            console.log(data);
-            if (data == null) {
-                return;
-            }
-            _this.selectedPlayer.has_pic = true;
-            _this.selectedPlayer.img_file = data;
-            _this.pssApi.editPlayer(_this.selectedPlayer, _this.eventId)
-                .subscribe(_this.generateEditPlayerProcessor());
-        });
-        profileModal.present();
-    };
-    ChangePlayerPicturePage = __decorate([
+    EventOwnerQuickLinksPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-change-player-picture',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/change-player-picture/change-player-picture.html"*/'<!--\n  Generated template for the ChangePlayerPicturePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>ChangePlayerPicture</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <div class=\'slimDesktop\'>\n    <ion-item *ngFor="let player of players" (click)="takePicture(player)">\n      <ion-icon item-end name="camera"></ion-icon> Take {{player.player_full_name}} Picture      \n    </ion-item>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/change-player-picture/change-player-picture.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
-            __WEBPACK_IMPORTED_MODULE_5__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["m" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["l" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["c" /* App */],
-            __WEBPACK_IMPORTED_MODULE_6__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["n" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["a" /* ActionSheetController */],
-            __WEBPACK_IMPORTED_MODULE_7_angular2_notifications__["NotificationsService"],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["j" /* ModalController */]])
-    ], ChangePlayerPicturePage);
-    return ChangePlayerPicturePage;
+            selector: 'page-event-owner-quick-links',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-quick-links/event-owner-quick-links.html"*/'<!--\n  Generated template for the EventOwnerQuickLinksPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-content padding>\n  <ion-list>\n    <ion-list-header>Jump To...\n      <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>\n    </ion-list-header>\n      <button ion-item detail-push [navPush]="\'EventOwnerLoginPage\'" [navParams]="buildNavParams({})">\n        <ion-icon name="person" item-end></ion-icon>Login\n      </button>\n      <button ion-item detail-push (click)="pushRootPage(\'EventSelectPage\')">\n        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event\n      </button>      \n    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      \n    <button *ngFor="let item of items"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>\n    </ion-item-group>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-quick-links/event-owner-quick-links.html"*/,
+        })
+    ], EventOwnerQuickLinksPage);
+    return EventOwnerQuickLinksPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=change-player-picture.js.map
+//# sourceMappingURL=event-owner-quick-links.js.map
 
 /***/ })
 

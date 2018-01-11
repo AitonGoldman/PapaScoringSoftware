@@ -12,17 +12,23 @@ PLAYER_ONLY='player_only'
 PLAYER_AND_EVENTS='player_and_events'
 
 TOURNAMENT_ONLY='tournament_only'
+TOURNAMENT_AND_TOURNAMENT_MACHINES='tournament_and_tournament_machines'
 META_TOURNAMENT_ONLY='meta_tournament_only'
 TOURNAMENT_MACHINE_ONLY='tournament_machine_only'
+TOURNAMENT_MACHINE_AND_PLAYER='tournament_machine_and_player'
+
+QUEUE_ONLY='queue_only'
+QUEUE_AND_PLAYER='queue_and_player'
 
 class serializer_v2():
     def __init__(self, private_fields):
         self.private_fields=private_fields                
         
-    def serialize_model(self,model,show_private_fields=False):
+    def serialize_model(self,model,show_private_fields=False,show_foreign_keys=False):
         generic_model_dict = {}
         for c in model.__table__.columns:
-            if len(c.foreign_keys) > 0:
+            #FIXME : commented the following out, so need to undo any instances where I manually set foriegn keys in serializers
+            if len(c.foreign_keys) > 0 and show_foreign_keys is False:
                 continue
             if c.name in self.private_fields and show_private_fields is False:
                 continue            
@@ -39,11 +45,25 @@ def serialize_pss_user_public(model,type=PSS_USER_ONLY):
     if type==PSS_USER_ONLY:
         return pss_user_dict
 
+def serialize_queue(model,type=QUEUE_ONLY):
+    queue_dict=serializer_v2([]).serialize_model(model)
+    if type==QUEUE_ONLY:
+        return queue_dict
+    if type==QUEUE_AND_PLAYER:
+        if model.player:
+            queue_dict['player']=serialize_player_public(model.player)
+        else:
+            queue_dict['player']=None
+        return queue_dict
+    
 def serialize_tournament_public(model,type=TOURNAMENT_ONLY):
     tournament_dict=serializer_v2(TOURNAMENT_PRIVATE_FIELDS).serialize_model(model)
     if type==TOURNAMENT_ONLY:
         return tournament_dict
-    
+    if type==TOURNAMENT_AND_TOURNAMENT_MACHINES:
+        tournament_dict['tournament_machines']=[serialize_tournament_machine_public(tournament_machine,TOURNAMENT_MACHINE_AND_PLAYER) for tournament_machine in model.tournament_machines]
+        return tournament_dict
+        
 def serialize_tournament_private(model,type=TOURNAMENT_ONLY,show_private_fields=True):
     tournament_dict=serializer_v2(TOURNAMENT_PRIVATE_FIELDS).serialize_model(model)
     if type==TOURNAMENT_ONLY:
@@ -81,10 +101,15 @@ def serialize_event_players_info_public(model,type=None):
     return event_info
 
 def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
-    tournament_machine_dict=serializer_v2(TOURNAMENT_MACHINE_PRIVATE_FIELDS).serialize_model(model)
+    tournament_machine_dict=serializer_v2(TOURNAMENT_MACHINE_PRIVATE_FIELDS).serialize_model(model,show_foreign_keys=True)
     if type==TOURNAMENT_MACHINE_ONLY:
         return tournament_machine_dict
-    
+    if type==TOURNAMENT_MACHINE_AND_PLAYER:
+        if model.player:
+            tournament_machine_dict['player']=serialize_player_public(model.player)
+        else:
+            tournament_machine_dict['player']=None
+        return tournament_machine_dict
 def serialize_event_public(model):
     event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model)    
     return event_dict

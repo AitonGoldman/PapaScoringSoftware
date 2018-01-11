@@ -1,4 +1,4 @@
-webpackJsonp([27],{
+webpackJsonp([29],{
 
 /***/ 155:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -50,6 +50,7 @@ var PssApiProvider = (function () {
         this.addTournamentMachine = this.generate_api_call('addTournamentMachine', this.basePssUrl + "/:arg/tournament_machine", 'post');
         this.addEventUsers = this.generate_api_call('addEventUsers', this.basePssUrl + "/:arg/event_user", 'post');
         this.addEventPlayers = this.generate_api_call('addEventPlayers', this.basePssUrl + "/:arg/player", 'post');
+        this.addEventPlayerToQueue = this.generate_api_call('addPlayerToQueue', this.basePssUrl + "/:arg/queue", 'post');
         this.completeTicketPurchase = this.generate_api_call('completeTicketPurchase', this.basePssUrl + "/:arg/token/:arg", 'put');
         this.createEvent = this.generate_api_call('createEvent', this.basePssUrl + "/event", 'post');
         this.createWizardEvent = this.generate_api_call('createWizardEvent', this.basePssUrl + "/wizard/event/tournament/tournament_machines", 'post');
@@ -73,6 +74,9 @@ var PssApiProvider = (function () {
         this.getAllMachines = this.generate_api_call('getAllMachines', this.basePssUrl + "/machines", 'get');
         this.getAllUsers = this.generate_api_call('getAllUsers', this.basePssUrl + "/pss_users", 'get');
         this.getAllTournaments = this.generate_api_call('getAllTournaments', this.basePssUrl + "/:arg/tournaments", 'get');
+        //fixme : can probably replace earlier calls with this call
+        this.getAllTournamentsAndMachines = this.generate_api_call('getAllTournamentsAndMachines', this.basePssUrl + "/:arg/tournaments/tournament_machines", 'get');
+        this.getAllTournamentsAndMachinesAndEventPlayer = this.generate_api_call('getAllTournamentsAndMachines', this.basePssUrl + "/:arg/tournaments/tournament_machines/event_player/:arg", 'get');
         this.getAllEventsAndTournaments = this.generate_api_call('getAllEventsAndTournaments', this.basePssUrl + "/events/tournaments", 'get');
         this.loginEventOwner = this.generate_api_call('loginEventOwner', this.basePssUrl + "/auth/pss_user/login", 'post');
         this.loginUser = this.generate_api_call('loginUser', this.basePssUrl + "/auth/pss_event_user/login/:arg", 'post');
@@ -172,112 +176,120 @@ webpackEmptyAsyncContext.id = 169;
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"../pages/add-player/add-player.module": [
+	"../pages/add-player-to-queue/add-player-to-queue.module": [
 		697,
-		10
+		12
+	],
+	"../pages/add-player/add-player.module": [
+		698,
+		11
 	],
 	"../pages/add-user/add-user.module": [
-		698,
-		25
+		699,
+		27
 	],
 	"../pages/change-player-picture/change-player-picture.module": [
-		699,
-		24
+		700,
+		26
 	],
 	"../pages/create-event/create-event.module": [
-		700,
+		701,
 		1
 	],
 	"../pages/edit-event/edit-event.module": [
-		701,
+		702,
 		0
 	],
 	"../pages/edit-user/edit-user.module": [
-		702,
-		9
+		703,
+		10
 	],
 	"../pages/event-owner-confirm/event-owner-confirm.module": [
-		703,
-		8
+		704,
+		9
 	],
 	"../pages/event-owner-home/event-owner-home.module": [
-		704,
-		23
+		705,
+		25
 	],
 	"../pages/event-owner-login/event-owner-login.module": [
-		705,
+		706,
 		2
 	],
 	"../pages/event-owner-quick-links/event-owner-quick-links.module": [
-		706,
-		22
+		707,
+		24
 	],
 	"../pages/event-owner-request/event-owner-request.module": [
-		707,
-		12
-	],
-	"../pages/event-owner-tabs/event-owner-tabs.module": [
 		708,
-		21
-	],
-	"../pages/event-select/event-select.module": [
-		709,
-		20
-	],
-	"../pages/home/home.module": [
-		710,
-		19
-	],
-	"../pages/login/login.module": [
-		711,
-		7
-	],
-	"../pages/logout/logout.module": [
-		712,
-		6
-	],
-	"../pages/player-home/player-home.module": [
-		713,
-		18
-	],
-	"../pages/post-player-add-success/post-player-add-success.module": [
-		714,
-		11
-	],
-	"../pages/quick-links/quick-links.module": [
-		715,
-		17
-	],
-	"../pages/results/results.module": [
-		716,
-		16
-	],
-	"../pages/scorekeeper-home/scorekeeper-home.module": [
-		717,
-		26
-	],
-	"../pages/success/success.module": [
-		718,
-		15
-	],
-	"../pages/tabs/tabs.module": [
-		719,
 		14
 	],
-	"../pages/ticket-purchase/ticket-purchase.module": [
+	"../pages/event-owner-tabs/event-owner-tabs.module": [
+		709,
+		23
+	],
+	"../pages/event-select/event-select.module": [
+		710,
+		22
+	],
+	"../pages/home/home.module": [
+		711,
+		21
+	],
+	"../pages/login/login.module": [
+		712,
+		8
+	],
+	"../pages/logout/logout.module": [
+		713,
+		7
+	],
+	"../pages/player-home/player-home.module": [
+		714,
+		20
+	],
+	"../pages/post-player-add-success/post-player-add-success.module": [
+		715,
+		13
+	],
+	"../pages/queue-select-player-tournament-machine/queue-select-player-tournament-machine.module": [
+		716,
+		6
+	],
+	"../pages/quick-links/quick-links.module": [
+		717,
+		19
+	],
+	"../pages/results/results.module": [
+		718,
+		18
+	],
+	"../pages/scorekeeper-home/scorekeeper-home.module": [
+		719,
+		28
+	],
+	"../pages/success/success.module": [
 		720,
+		17
+	],
+	"../pages/tabs/tabs.module": [
+		721,
+		16
+	],
+	"../pages/ticket-purchase/ticket-purchase.module": [
+		722,
 		5
 	],
 	"../pages/tournament-director-home/tournament-director-home.module": [
-		721,
-		13
+		723,
+		15
 	],
 	"../pages/tournament-machines/tournament-machines.module": [
-		722,
+		724,
 		4
 	],
 	"../pages/tournament/tournament.module": [
-		723,
+		725,
 		3
 	]
 };
@@ -646,6 +658,7 @@ var AppModule = (function () {
                     backButtonText: '',
                 }, {
                     links: [
+                        { loadChildren: '../pages/add-player-to-queue/add-player-to-queue.module#AddPlayerToQueuePageModule', name: 'AddPlayerToQueuePage', segment: 'add-player-to-queue', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/add-player/add-player.module#AddPlayerPageModule', name: 'AddPlayerPage', segment: 'AddPlayer/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/add-user/add-user.module#AddUserPageModule', name: 'AddUserPage', segment: 'AddUser/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/change-player-picture/change-player-picture.module#ChangePlayerPicturePageModule', name: 'ChangePlayerPicturePage', segment: 'change-player-picture', priority: 'low', defaultHistory: [] },
@@ -664,6 +677,7 @@ var AppModule = (function () {
                         { loadChildren: '../pages/logout/logout.module#LogoutPageModule', name: 'LogoutPage', segment: 'logout', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/player-home/player-home.module#PlayerHomePageModule', name: 'PlayerHomePage', segment: 'PlayerHomePage/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/post-player-add-success/post-player-add-success.module#PostPlayerAddSuccessPageModule', name: 'PostPlayerAddSuccessPage', segment: 'post-player-add-success', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/queue-select-player-tournament-machine/queue-select-player-tournament-machine.module#QueueSelectPlayerTournamentMachinePageModule', name: 'QueueSelectPlayerTournamentMachinePage', segment: 'QueueSelectPlayerTournamentMachine/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/quick-links/quick-links.module#QuickLinksPageModule', name: 'QuickLinksPage', segment: 'quick-links', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/results/results.module#ResultsPageModule', name: 'ResultsPage', segment: 'results', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/scorekeeper-home/scorekeeper-home.module#ScorekeeperHomePageModule', name: 'ScorekeeperHomePage', segment: 'scorekeeper-home', priority: 'low', defaultHistory: [] },
@@ -752,7 +766,7 @@ var CustomHeaderComponent = (function () {
     ], CustomHeaderComponent.prototype, "title", void 0);
     CustomHeaderComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'custom-headers',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/'  <ion-title start hideWhen=\'mobile\' style=\'float:left;margin-top:3px\'>Pss</ion-title>\n  <ion-title start showWhen=\'mobile\'>Cleaveland Pinball Show 2018</ion-title>\n\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="homePage" [navParams]="{eventId:eventId}" ><ion-icon name="home"></ion-icon> {{homePage}}</button>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="{eventId:eventId}" ><ion-icon name="log-out"></ion-icon> {{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'"><ion-icon name="git-compare"></ion-icon> Switch Events </button>\n    <button [navPush]="\'ResultsPage\'" icon-only ion-button> <ion-icon name="clipboard"></ion-icon>Results</button>\n    <button icon-only ion-button> <ion-icon name="git-branch"></ion-icon>Queues</button>\n  </ion-buttons>  \n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/
+            selector: 'custom-headers',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/'  <ion-title start hideWhen=\'mobile\' style=\'float:left;margin-top:3px\'>Pss</ion-title>\n  <ion-title start showWhen=\'mobile\'>Cleaveland Pinball Show 2018</ion-title>\n\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="homePage" [navParams]="{eventId:eventId}" ><ion-icon name="home"></ion-icon> {{homePage}}</button>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="{eventId:eventId}" ><ion-icon name="log-out"></ion-icon> {{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'"><ion-icon name="git-compare"></ion-icon> Switch Events </button>\n    <button [navPush]="\'ResultsPage\'" icon-only ion-button> <ion-icon name="clipboard"></ion-icon>Results</button>\n    <button icon-only ion-button> <ion-icon name="git-branch"></ion-icon>Queues</button>\n  </ion-buttons>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/custom-header/custom-header.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__providers_event_auth_event_auth__["a" /* EventAuthProvider */]])
     ], CustomHeaderComponent);
@@ -982,7 +996,24 @@ var EventAuthProvider = (function () {
     };
     EventAuthProvider.prototype.getEventPlayerId = function (eventId) {
         if (this.userLoggedInEvents[eventId] != null && this.userLoggedInEvents[eventId].events != null && this.userLoggedInEvents[eventId].events.length != 0) {
+            console.log(this.userLoggedInEvents[eventId]);
             return this.userLoggedInEvents[eventId].events[0].player_id_for_event;
+        }
+        else {
+            return null;
+        }
+    };
+    EventAuthProvider.prototype.getPlayerId = function (eventId) {
+        if (this.userLoggedInEvents[eventId] != null) {
+            return this.userLoggedInEvents[eventId].player_id;
+        }
+        else {
+            return null;
+        }
+    };
+    EventAuthProvider.prototype.getPlayerName = function (eventId) {
+        if (this.userLoggedInEvents[eventId] != null) {
+            return this.userLoggedInEvents[eventId].player_full_name;
         }
         else {
             return null;

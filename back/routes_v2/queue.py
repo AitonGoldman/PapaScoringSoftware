@@ -45,7 +45,7 @@ def bump_player_down_queue_route(request,app,event_id,current_user):
             raise e            
     app.table_proxy.create_audit_log(audit_log_params,event_id)    
 
-def remove_player_route(request,app,event_id,current_user,player_initiated=True):
+def remove_player_route(request,app,event_id,current_user,player_initiated=False):
     if request.data:        
         input_data = json.loads(request.data)
     else:
@@ -56,6 +56,7 @@ def remove_player_route(request,app,event_id,current_user,player_initiated=True)
     tournament_machine_id=input_data.get('tournament_machine_id',None)
     player = app.table_proxy.get_player(event_id, player_id=player_id)
     tournament_machine = app.table_proxy.get_tournament_machine_by_id(tournament_machine_id)
+    print tournament_machine.tournament_machine_id
     with app.table_proxy.db_handle.session.no_autoflush:                
         try:
             remove_player_with_notification(player,app,tournament_machine,event_id)
@@ -73,7 +74,7 @@ def remove_player_route(request,app,event_id,current_user,player_initiated=True)
     if player_initiated is not True:
         audit_log_params['pss_user_id']=current_user.pss_user_id
     app.table_proxy.create_audit_log(audit_log_params,event_id)    
-        
+    return player
 
 # def remove_player_with_notification(player,app,tournament_machine, event_id):
 #     with app.table_proxy.db_handle.session.no_autoflush:                
@@ -146,31 +147,31 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
     if player_initiated is not True:
         audit_log_params['pss_user_id']=current_user.pss_user_id
     app.table_proxy.create_audit_log(audit_log_params,event_id)    
+    return updated_queue
     
-    pass
 
 @blueprints.test_blueprint.route('/<int:event_id>/queue',methods=['POST'])
 def add_player_to_queue(event_id):
     queue_permission = permissions.QueuePermission(event_id)
     if queue_permission.can():
-        add_player_to_tournament_machine_queue_route(request,current_app,event_id,current_user)
+        updated_queue = add_player_to_tournament_machine_queue_route(request,current_app,event_id,current_user)
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)
     if player_permission.can():        
-        add_player_to_tournament_machine_queue_route(request,current_app,event_id,current_user,player_initiated=True)
+        updated_queue = add_player_to_tournament_machine_queue_route(request,current_app,event_id,current_user,player_initiated=True)
     current_app.table_proxy.commit_changes()
-    return jsonify({})
+    return jsonify({'data':to_dict(updated_queue)})
     pass
 
 @blueprints.test_blueprint.route('/<int:event_id>/queue',methods=['DELETE'])
 def remove_player_to_queue(event_id):
-    queue_permission = permissions.QueuePermission(event_id)
-    if queue_permission.can():
-        remove_player_route(request,current_app,event_id,current_user)
+    queue_permission = permissions.QueuePermission(event_id)    
+    if queue_permission.can():        
+        player = remove_player_route(request,current_app,event_id,current_user)
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)
     if player_permission.can():        
-        remove_player_route(request,current_app,event_id,current_user,player_initiated=True)
+        player = remove_player_route(request,current_app,event_id,current_user,player_initiated=True)
     current_app.table_proxy.commit_changes()
-    return jsonify({})
+    return jsonify({'data':generic.serialize_player_public(player)})
     pass
 
 @blueprints.test_blueprint.route('/<int:event_id>/queue',methods=['PUT'])

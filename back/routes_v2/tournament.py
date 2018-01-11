@@ -4,6 +4,7 @@ from flask import jsonify,current_app,request
 from flask_login import current_user
 from lib_v2.serializers import generic
 from routes_v2.tournament_machine import create_tournament_machine_route
+from routes_v2.player import get_event_player_route
 #from routes_v2.event import handle_img_upload
 from shutil import copyfile
 
@@ -108,6 +109,32 @@ def get_all_tournaments(event_id):
         tournaments_list.append(tournament_dict)
     return jsonify({'data':tournaments_list})
 
+def get_all_tournaments_and_tournament_machines_route(event_id,app):
+    tournaments_list=[]    
+    tournaments = app.table_proxy.get_tournaments(event_id)
+
+    queues = app.table_proxy.get_all_queues(event_id)
+    for tournament in tournaments:        
+        tournament_dict=generic.serialize_tournament_public(tournament,generic.TOURNAMENT_AND_TOURNAMENT_MACHINES)            
+        for tournament_machine in tournament_dict['tournament_machines']:                        
+            tournament_machine['queues']=[generic.serialize_queue(queue,generic.QUEUE_AND_PLAYER) for queue in queues[tournament_machine['tournament_machine_id']]]
+            tournament_machine['queue_length']=len([queue for queue in tournament_machine['queues'] if queue.get('player',None)])
+        tournaments_list.append(tournament_dict)
+    return tournaments_list
+
+@blueprints.test_blueprint.route('/<int:event_id>/tournaments/tournament_machines',methods=['GET'])
+def get_all_tournaments_and_tournament_machines(event_id):                
+    tournaments_list=get_all_tournaments_and_tournament_machines_route(event_id,current_app)
+    return jsonify({'data':tournaments_list})
+
+@blueprints.test_blueprint.route('/<int:event_id>/tournaments/tournament_machines/event_player/<int:event_player_id>',methods=['GET'])
+def get_all_tournaments_and_tournament_machines_and_event_player(event_id,event_player_id):                
+    tournaments_list=get_all_tournaments_and_tournament_machines_route(event_id,current_app)
+    event_player_info = get_event_player_route(current_app,event_id,event_player_id)    
+    return jsonify({'data':tournaments_list,
+                    'player':event_player_info['data'],
+                    'tournament_calculated_price_lists_for_player':event_player_info['tournament_calculated_lists'],
+                    'player_ticket_counts':event_player_info['tournament_counts']})
 
 @blueprints.test_blueprint.route('/<int:event_id>/tournament/<int:tournament_id>',methods=['GET'])
 def get_tournament(event_id,tournament_id):

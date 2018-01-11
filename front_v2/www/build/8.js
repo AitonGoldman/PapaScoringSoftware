@@ -1,14 +1,14 @@
 webpackJsonp([8],{
 
-/***/ 703:
+/***/ 712:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerConfirmPageModule", function() { return EventOwnerConfirmPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginPageModule", function() { return LoginPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_confirm__ = __webpack_require__(737);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__login__ = __webpack_require__(731);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var EventOwnerConfirmPageModule = (function () {
-    function EventOwnerConfirmPageModule() {
+var LoginPageModule = (function () {
+    function LoginPageModule() {
     }
-    EventOwnerConfirmPageModule = __decorate([
+    LoginPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_owner_confirm__["a" /* EventOwnerConfirmPage */],
+                __WEBPACK_IMPORTED_MODULE_2__login__["a" /* LoginPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_confirm__["a" /* EventOwnerConfirmPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__login__["a" /* LoginPage */]),
             ],
         })
-    ], EventOwnerConfirmPageModule);
-    return EventOwnerConfirmPageModule;
+    ], LoginPageModule);
+    return LoginPageModule;
 }());
 
-//# sourceMappingURL=event-owner-confirm.module.js.map
+//# sourceMappingURL=login.module.js.map
 
 /***/ }),
 
-/***/ 724:
+/***/ 726:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -174,7 +174,7 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 725:
+/***/ 727:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -211,7 +211,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 726:
+/***/ 728:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -242,20 +242,15 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 737:
+/***/ 731:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerConfirmPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__providers_event_auth_event_auth__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular2_notifications__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_angular2_notifications__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_pss_api_pss_api__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_pss_page_pss_page__ = __webpack_require__(724);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__ = __webpack_require__(725);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__classes_SuccessButton__ = __webpack_require__(726);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(727);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(728);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -272,75 +267,86 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
 
 
 
 
 /**
- * Generated class for the EventOwnerConfirmPage page.
+ * Generated class for the LoginPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EventOwnerConfirmPage = (function (_super) {
-    __extends(EventOwnerConfirmPage, _super);
-    function EventOwnerConfirmPage(navCtrl, navParams, eventAuth, appCtrl, pssApi, platform, notificationsService) {
-        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) || this;
-        _this.navCtrl = navCtrl;
-        _this.navParams = navParams;
-        _this.eventAuth = eventAuth;
-        _this.appCtrl = appCtrl;
-        _this.pssApi = pssApi;
-        _this.platform = platform;
-        _this.notificationsService = notificationsService;
-        _this.successSummary = null;
-        _this.successButtons = [];
-        var encodedString = navParams.get('itsdangerousstring');
-        _this.successSummary = new __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__["a" /* SuccessSummary */]('Activating Account....', null, null);
-        if (encodedString) {
-            _this.pssApi.eventOwnerCreateConfirm({}, encodedString)
-                .subscribe(_this.generatePssUserConfirm());
-        }
-        else {
-        }
+var LoginPage = (function (_super) {
+    __extends(LoginPage, _super);
+    function LoginPage() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.loginInfo = { 'username': null, 'password': null, 'player_id_for_event': null, 'player_pin': null };
+        _this.loginType = 'player';
         return _this;
     }
-    EventOwnerConfirmPage.prototype.generatePssUserConfirm = function () {
+    LoginPage.prototype.generateLoginUserProcessor = function (successButton) {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.successSummary = new __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__["a" /* SuccessSummary */]('Account Activated!', 'Click on the button below to go to the login screen', null);
-            _this.successButtons = [new __WEBPACK_IMPORTED_MODULE_7__classes_SuccessButton__["a" /* SuccessButton */]('Go To Login Page', 'EventOwnerLoginPage', {}, null)];
+            console.log('in generateLoginUserProcessor');
+            _this.eventAuth.setEventUserLoggedIn(_this.eventId, result.data);
+            var name = null;
+            if (result.data.full_user_name != null) {
+                name = result.data.full_user_name;
+            }
+            if (result.data.player_full_name != null) {
+                name = result.data.player_full_name;
+            }
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](name + ' has logged in.', null, null);
+            var targetPage = null;
+            var targetTabIndex = null;
+            if (_this.platform.is('mobile')) {
+                console.log('going mobile');
+                targetTabIndex = 0;
+            }
+            if (successButton == null) {
+                targetPage = _this.getHomePageString();
+                successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', targetPage, _this.buildNavParams({}), targetTabIndex);
+            }
+            //            this.appCtrl.getRootNav().push("SuccessPage",
+            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
+                'successButtons': [successButton] }));
         };
     };
-    EventOwnerConfirmPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad EventOwnerConfirmPage');
+    LoginPage.prototype.loginUser = function () {
+        this.pssApi.loginUser(this.loginInfo, this.eventId)
+            .subscribe(this.generateLoginUserProcessor());
     };
-    EventOwnerConfirmPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["Component"])({
-            selector: 'page-event-owner-confirm',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/'<!--\n  Generated template for the SuccessPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <ion-title>Success</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n  <ion-row>\n    <ion-col>      \n    </ion-col>\n    <ion-col style=\'text-align:center\'> \n      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>\n      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>\n\n    </ion-col>\n    <ion-col>     \n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getTitle():\'You can not reload this page\'}}\n      <hr style=\'width:75%\'>      \n    </ion-col>\n  </ion-row>\n\n  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      \n    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">\n      <ion-col style=\'text-align:center\'>         \n        {{summaryTableRow}}\n      </ion-col>                     \n    </ion-row>\n    <hr style=\'width:75%\' text-center>\n  </ng-container>\n\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getFirstLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getSecondLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col *ngFor="let button of successButtons" text-center>\n      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>\n    </ion-col>\n  </ion-row>\n  <ion-row justify-content-center *ngIf="successSummary == undefined" >\n    <ion-col text-center > \n      <button ion-button (click)="goToEventSelectOnPageReload()">Select Event</button>\n    </ion-col>\n  </ion-row>\n  </ion-grid>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3_ionic_angular__["l" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["m" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_0__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["c" /* App */],
-            __WEBPACK_IMPORTED_MODULE_4__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_1_angular2_notifications__["NotificationsService"]])
-    ], EventOwnerConfirmPage);
-    return EventOwnerConfirmPage;
-}(__WEBPACK_IMPORTED_MODULE_5__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    LoginPage.prototype.loginPlayer = function () {
+        this.pssApi.loginPlayer(this.loginInfo, this.eventId)
+            .subscribe(this.generateLoginUserProcessor());
+    };
+    LoginPage.prototype.loginEventOwner = function () {
+        var targetTabIndex = null;
+        if (this.platform.is('mobile')) {
+            console.log('going mobile');
+            targetTabIndex = 0;
+        }
+        var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', 'EventOwnerHomePage', this.buildNavParams({}), targetTabIndex);
+        this.pssApi.loginEventOwner(this.loginInfo)
+            .subscribe(this.generateLoginUserProcessor(successButton));
+    };
+    LoginPage.prototype.ionViewWillLoad = function () {
+        console.log('ionViewDidLoad LoginPage');
+        //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
+    };
+    LoginPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-login',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/'<!--\n    Generated template for the LoginPage page.\n\n    See http://ionicframework.com/docs/components/#navigation for more info on\n    Ionic pages and navigation.\n  -->\n\n<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Login\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <div>\n  <ion-segment [(ngModel)]="loginType">\n    <ion-segment-button value="player">\n      <ion-icon item-start name="person"></ion-icon> Tournament Player\n    </ion-segment-button>\n    <ion-segment-button value="official">\n            <ion-icon item-start name="clipboard"></ion-icon> Tournament Official\n    </ion-segment-button>\n  </ion-segment>\n  </div>\n  <ng-container [ngSwitch]="loginType">\n    <form #loginForm="ngForm" *ngSwitchCase="\'official\'">\n      <ion-item>\n        <ion-label floating>Username</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.username" name="username"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Password</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.password" name="password"></ion-input>\n      </ion-item>\n      <ion-item no-lines>\n        <button [disabled]=\'!loginForm.valid\' ion-button default (click)="loginUser()">Login </button>\n      </ion-item>\n    </form>\n    <form #playerLoginForm="ngForm" *ngSwitchCase="\'player\'">\n      <ion-item>\n        <ion-label floating>Player Number</ion-label>\n        <ion-input type="number" required\n                   [(ngModel)]="loginInfo.player_id_for_event" name="player_id_for_event"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Pin</ion-label>\n        <ion-input type="text" required\n                   [(ngModel)]="loginInfo.player_pin" name="player_pin"></ion-input>\n      </ion-item>\n      <ion-item no-lines>\n        <button [disabled]=\'!playerLoginForm.valid\' ion-button default (click)="loginPlayer()">Login </button>\n      </ion-item>\n    </form>\n    \n  </ng-container>\n<!--  <ng-container *ngIf=\'loginType=="player"\'>\n  </ng-container>-->\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/login/login.html"*/,
+        })
+    ], LoginPage);
+    return LoginPage;
+}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=event-owner-confirm.js.map
+//# sourceMappingURL=login.js.map
 
 /***/ })
 

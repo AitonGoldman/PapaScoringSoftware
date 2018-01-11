@@ -1,14 +1,14 @@
 webpackJsonp([16],{
 
-/***/ 716:
+/***/ 721:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResultsPageModule", function() { return ResultsPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabsPageModule", function() { return TabsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__results__ = __webpack_require__(749);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs__ = __webpack_require__(755);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var ResultsPageModule = (function () {
-    function ResultsPageModule() {
+var TabsPageModule = (function () {
+    function TabsPageModule() {
     }
-    ResultsPageModule = __decorate([
+    TabsPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */],
+                __WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */]),
             ],
         })
-    ], ResultsPageModule);
-    return ResultsPageModule;
+    ], TabsPageModule);
+    return TabsPageModule;
 }());
 
-//# sourceMappingURL=results.module.js.map
+//# sourceMappingURL=tabs.module.js.map
 
 /***/ }),
 
-/***/ 724:
+/***/ 726:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -174,13 +174,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 749:
+/***/ 755:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ResultsPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(724);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(726);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -197,31 +198,62 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
 
 
 /**
- * Generated class for the ResultsPage page.
+ * Generated class for the TabsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var ResultsPage = (function (_super) {
-    __extends(ResultsPage, _super);
-    function ResultsPage() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var TabsPage = (function (_super) {
+    __extends(TabsPage, _super);
+    function TabsPage() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.roleName = "blah";
+        return _this;
     }
-    ResultsPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad ResultsPage');
+    TabsPage.prototype.ionViewWillLoad = function () {
+        var roleName = this.eventAuth.getRoleName(this.eventId);
+        this.roleName = roleName ? roleName : 'Home';
+        console.log('ionViewDidLoad TabsPage');
     };
-    ResultsPage = __decorate([
+    // presentPopover(myEvent) {
+    //     let popover = this.popoverCtrl.create(QuicklinksComponent);
+    //     popover.present({
+    //         ev: myEvent     
+    //     });
+    // }
+    TabsPage.prototype.onTabSelect = function () {
+        console.log('selected a tab!');
+    };
+    TabsPage.prototype.onTabChange = function (event) {
+        console.log('changed a tab!');
+        if (this.tabRef.getByIndex(event.index).canGoBack()) {
+            this.tabRef.getByIndex(event.index).popToRoot({ animate: false });
+        }
+        var previousTab = this.tabRef.previousTab(false);
+        if (previousTab && previousTab.canGoBack()) {
+            this.tabRef.previousTab().popToRoot({ animate: false });
+        }
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myTabs'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["o" /* Tabs */])
+    ], TabsPage.prototype, "tabRef", void 0);
+    TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-results',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/'<!--\n  Generated template for the ResultsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>testing 1 2 3 </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/,
+            selector: 'page-tabs',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/'<!--\n  Generated template for the TabsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-tabs #myTabs (ionChange)="onTabChange($event)">\n  <ion-tab [rootParams]="buildNavParams({})" [root]="getHomePageString()" tabIcon="md-home" [tabTitle]="this.eventAuth.getRoleName(this.eventId)?this.eventAuth.getRoleName(this.eventId) : \'Home\'"></ion-tab>  \n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'ResultsPage\'" tabIcon="md-clipboard" tabTitle="Results"></ion-tab>\n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'QueuesPage\'" tabIcon="md-git-branch" tabTitle="Queues"></ion-tab>\n  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="\'QuickLinksPage\'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>\n</ion-tabs>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/,
         })
-    ], ResultsPage);
-    return ResultsPage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], TabsPage);
+    return TabsPage;
+}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=results.js.map
+//# sourceMappingURL=tabs.js.map
 
 /***/ })
 

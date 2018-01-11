@@ -81,6 +81,9 @@ class TableProxy():
         self.Tournaments.tournament_machines = self.db_handle.relationship(
             'TournamentMachines', cascade='all'
         )
+        self.TournamentMachines.player = db_handle.relationship(
+            'Players', uselist=False            
+        )                    
         self.Events.tournaments = self.db_handle.relationship(
             'Tournaments', cascade='all'
         )                
@@ -101,7 +104,10 @@ class TableProxy():
         )                
         self.Queues.tournament_machine = db_handle.relationship(
             'TournamentMachines', uselist=False            
-        )    
+        )
+        self.Queues.player = db_handle.relationship(
+            'Players', uselist=False            
+        )            
         self.Entries.scores = db_handle.relationship(
             'Scores'
         )    
@@ -164,9 +170,15 @@ class TableProxy():
     def get_available_token_count_for_tournament(self,event_id,player,tournament):
         tournament_results,meta_tournament_results = self.get_available_token_count_for_tournaments(event_id,player)
         if tournament.meta_tournament_id:
-            return meta_tournament_results[tournament.meta_tournament_id]['count']
+            if meta_tournament_results.get(tournament.meta_tournament_id,None):
+                return meta_tournament_results[tournament.meta_tournament_id]['count']
+            else:
+                return 0
         else:
-            return tournament_results[tournament.tournament_id]['count']
+            if tournament_results.get(tournament.tournament_id,None):            
+                return tournament_results[tournament.tournament_id]['count']
+            else:
+                return 0
     def get_all_machines(self):
         return self.Machines.query.all()
     
@@ -539,7 +551,7 @@ class TableProxy():
     
     def get_tournament_machines(self,tournament_id):
         return self.TournamentMachines.query.filter_by(tournament_id=tournament_id,removed=False).all()
-
+    
     def get_tournament_machine_by_id(self,tournament_machine_id):
         return self.TournamentMachines.query.filter_by(tournament_machine_id=tournament_machine_id).first()
     
@@ -595,6 +607,15 @@ class TableProxy():
         if commit:
             self.db_handle.session.commit()
 
+    def get_all_queues(self,event_id):
+        return_dict={}
+        queues = self.Queues.query.filter_by(event_id=event_id).order_by(self.Queues.position).all()        
+        for queue in queues:            
+            if return_dict.get(queue.tournament_machine_id,None) is None:
+                return_dict[queue.tournament_machine_id]=[]
+            return_dict[queue.tournament_machine_id].append(queue)
+        return return_dict
+    
     def get_queue_player_is_already_in(self,player,event_id):
         return self.Queues.query.filter_by(player_id=player.player_id,event_id=event_id).first()
             

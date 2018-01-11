@@ -11,6 +11,7 @@
 
 
 <ion-content>
+  <div class='desktopSlim'>
   <form #createEditForm="ngForm">
     <ion-list>
       <div margin>
@@ -51,12 +52,13 @@
         </ion-item>
       </ng-container>
       
-      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>
+<!--      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>
       <ion-item>
         <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>
-      </ion-item>
+      </ion-item>-->
     </ion-list>    
     <button [disabled]='!createEditForm.valid' ion-button default (click)="processEntity()">Apply</button>
-  </form>  
+  </form>
+  </div>
 </ion-content>
 

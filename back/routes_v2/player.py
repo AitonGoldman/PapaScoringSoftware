@@ -72,7 +72,7 @@ def get_event_player_route(app,event_id,event_player_id):
     tournament_calculated_lists=[]
     if event_player:
         tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)                
-        player_dict=generic.serialize_player_public(event_player)
+        player_dict=generic.serialize_player_public(event_player,generic.PLAYER_AND_EVENTS)
         for tournament in app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):
             if tournament_counts.get(tournament.tournament_id,None):
                 max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed-tournament_counts[tournament.tournament_id]['count']
@@ -107,6 +107,9 @@ def player_create(event_id):
 @blueprints.test_blueprint.route('/<int:event_id>/event_player/<int:event_player_id>',methods=['GET'])
 def get_event_player(event_id,event_player_id):                
     event_player_info = get_event_player_route(current_app,event_id,event_player_id)
+    event_player_info['data']['tournament_calculated_lists']=event_player_info['tournament_calculated_lists']
+    event_player_info['data']['tournament_counts']=event_player_info['tournament_counts']
+
     return jsonify(event_player_info)
     # event_player = current_app.table_proxy.get_event_player(event_id,event_player_id)
     # tournament_calculated_lists=[]
@@ -137,21 +140,45 @@ def get_all_event_players_with_no_pics(event_id):
     all_event_players=current_app.table_proxy.get_all_event_players(event_id)
     players_with_no_pics=[generic.serialize_player_public(player) for player in all_event_players if player.has_pic is False]    
     return jsonify({"data":players_with_no_pics})
+
+def search_for_players(query_string, event_id=None):
+    players = current_app.table_proxy.search_player(query_string,event_id)
+    if len(players)>25:
+        player_max_index=2
+    else:
+        player_max_index=len(players)
+    return [generic.serialize_player_public(player,generic.PLAYER_AND_EVENTS) for player in players[0:player_max_index]]    
+    #current_app.table_proxy.commit_changes()
     
 
 @blueprints.test_blueprint.route('/players/<string:query_string>',methods=['GET'])
 def search_all_players(query_string):                
     
-    players = current_app.table_proxy.search_player(query_string)
-    if len(players)>25:
-        player_max_index=2
-    else:
-        player_max_index=len(players)
-    players_found_list=[generic.serialize_player_public(player,generic.PLAYER_AND_EVENTS) for player in players[0:player_max_index]]    
-    #current_app.table_proxy.commit_changes()
+    # players = current_app.table_proxy.search_player(query_string)
+    # if len(players)>25:
+    #     player_max_index=2
+    # else:
+    #     player_max_index=len(players)
+    # players_found_list=[generic.serialize_player_public(player,generic.PLAYER_AND_EVENTS) for player in players[0:player_max_index]]    
+    # #current_app.table_proxy.commit_changes()
+    players_found_list = search_for_players(query_string)
     return jsonify({'data':players_found_list})
     #return jsonify(players_found_list)
 
+
+@blueprints.test_blueprint.route('/<int:event_id>/event_players/<string:query_string>',methods=['GET'])
+def search_all_event_players(event_id,query_string):                    
+    # players = current_app.table_proxy.search_player(query_string,event_id)
+    # if len(players)>25:
+    #     player_max_index=2
+    # else:
+    #     player_max_index=len(players)
+    # players_found_list=[generic.serialize_player_public(player,generic.PLAYER_AND_EVENTS) for player in players[0:player_max_index]]    
+    # #current_app.table_proxy.commit_changes()
+    players_found_list = search_for_players(query_string,event_id) 
+    return jsonify({'data':players_found_list})
+    #return jsonify(players_found_list)
+    
 @blueprints.test_blueprint.route('/players',methods=['GET'])
 def get_all_players():            
     

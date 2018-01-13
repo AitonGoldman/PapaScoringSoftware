@@ -95,11 +95,6 @@ export class PssPageComponent {
             if(result == null){
                 return;
             }
-            this.notificationsService.success("Success", message_string,{
-                timeOut:0,
-                position:["top","right"],
-                theClass:'poop'
-            })            
         };
         
     }
@@ -110,4 +105,41 @@ export class PssPageComponent {
         this.pssApi.editTournament(tournament,eventId)
             .subscribe(this.generateEditTournamentProcessor(tournament.tournament_name+" has been "+stringDescription))                
     }
+
+    // auto complete stuff
+    generateAutoCompleteGetEventPlayerProcessor(){
+        return (result)=>{
+            if(result==null){                
+                return
+            }
+            this['selectedPlayer']=result.data;
+            this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);            
+        }
+    }
+    onAutoCompletePlayerSelected(){        
+        this.pssApi.getEventPlayer(this.eventId,this['selectedPlayer'].player_id_for_event)
+            .subscribe(this.generateAutoCompleteGetEventPlayerProcessor())
+    }
+    generatePlayerLoadingFunction(){
+        return (input?)=>{            
+            if(input!=null){                
+                this['selectedPlayer']=input.data;                
+                this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);
+            }            
+            setTimeout(()=>{this['loading']=false;},500)            
+        }
+    }
+    
+    generateListFromObj(obj){
+        if(obj==null){
+            return []
+        }
+        return Object.keys(obj).map(function(key){
+            let objValue =obj[key];
+            // do something with person
+            return objValue
+        });
+    }
+    
+
 }

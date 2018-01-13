@@ -47,6 +47,7 @@ $colors: (
 // --------------------------------------------------
 // iOS only Sass variables can go here
 
+$toast-ios-background: rgba(150, 150, 150, .95);
 
 
 
@@ -97,16 +98,4 @@ $colors: (
  margin-top:10px;
 }
 
-.dangerToast {
-  .toast-container {
-   box-shadow: 10px 10px 5px grey;
-   background: color($colors, danger);
-  .toast-message {    
-    background: color($colors, danger);
-  }
-   button {
-     background: color($colors, secondary);
-   }
-  }
-}
 

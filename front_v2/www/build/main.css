@@ -3825,20 +3825,6 @@ ion-icon::before {
   margin-top: 10px;
 }
 
-.dangerToast .toast-container {
-  -webkit-box-shadow: 10px 10px 5px grey;
-  box-shadow: 10px 10px 5px grey;
-  background: #f53d3d;
-}
-
-.dangerToast .toast-container .toast-message {
-  background: #f53d3d;
-}
-
-.dangerToast .toast-container button {
-  background: #32db64;
-}
-
 ion-action-sheet {
   left: 0;
   top: 0;
@@ -21324,7 +21310,7 @@ ion-toast {
   z-index: 10;
   display: block;
   max-width: 700px;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(150, 150, 150, 0.95);
 }
 
 .toast-ios .toast-wrapper.toast-top {
@@ -28155,6 +28141,27 @@ simple-notifications .simple-notification-wrapper simple-notification .poop div.
 simple-notifications .simple-notification-wrapper simple-notification .poop div.sn-content {
   padding-top: 10px;
   font-size: 12px;
+}
+
+.toast-container button .button-inner::after {
+  padding-left: 20px;
+  font-family: "Ionicons";
+  font-size: 32px;
+  content: "\f406";
+}
+
+.toast-container button .button-inner::before {
+  font-family: "Ionicons";
+  font-size: 32px;
+  color: white;
+}
+
+.dangerToast > div {
+  background-color: red !important;
+}
+
+.dangerToast .toast-container .button-inner::before {
+  content: "\f18f";
 }
 
 expandable .expand-wrapper {

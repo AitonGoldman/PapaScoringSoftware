@@ -1,14 +1,14 @@
 webpackJsonp([17],{
 
-/***/ 720:
+/***/ 722:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SuccessPageModule", function() { return SuccessPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabsPageModule", function() { return TabsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__success__ = __webpack_require__(732);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tabs__ = __webpack_require__(758);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var SuccessPageModule = (function () {
-    function SuccessPageModule() {
+var TabsPageModule = (function () {
+    function TabsPageModule() {
     }
-    SuccessPageModule = __decorate([
+    TabsPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__success__["a" /* SuccessPage */]
+                __WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__success__["a" /* SuccessPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tabs__["a" /* TabsPage */]),
             ],
         })
-    ], SuccessPageModule);
-    return SuccessPageModule;
+    ], TabsPageModule);
+    return TabsPageModule;
 }());
 
-//# sourceMappingURL=success.module.js.map
+//# sourceMappingURL=tabs.module.js.map
 
 /***/ }),
 
-/***/ 726:
+/***/ 727:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -137,16 +137,10 @@ var PssPageComponent = (function () {
         item.expanded = item.expanded == false ? true : false;
     };
     PssPageComponent.prototype.generateEditTournamentProcessor = function (message_string) {
-        var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.notificationsService.success("Success", message_string, {
-                timeOut: 0,
-                position: ["top", "right"],
-                theClass: 'poop'
-            });
         };
     };
     PssPageComponent.prototype.onTournamentToggle = function (eventId, tournament) {
@@ -154,6 +148,41 @@ var PssPageComponent = (function () {
         var stringDescription = tournament.active != true ? "deactivated" : "activated";
         this.pssApi.editTournament(tournament, eventId)
             .subscribe(this.generateEditTournamentProcessor(tournament.tournament_name + " has been " + stringDescription));
+    };
+    // auto complete stuff
+    PssPageComponent.prototype.generateAutoCompleteGetEventPlayerProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this['selectedPlayer'] = result.data;
+            _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
+        };
+    };
+    PssPageComponent.prototype.onAutoCompletePlayerSelected = function () {
+        this.pssApi.getEventPlayer(this.eventId, this['selectedPlayer'].player_id_for_event)
+            .subscribe(this.generateAutoCompleteGetEventPlayerProcessor());
+    };
+    PssPageComponent.prototype.generatePlayerLoadingFunction = function () {
+        var _this = this;
+        return function (input) {
+            if (input != null) {
+                _this['selectedPlayer'] = input.data;
+                _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
+            }
+            setTimeout(function () { _this['loading'] = false; }, 500);
+        };
+    };
+    PssPageComponent.prototype.generateListFromObj = function (obj) {
+        if (obj == null) {
+            return [];
+        }
+        return Object.keys(obj).map(function (key) {
+            var objValue = obj[key];
+            // do something with person
+            return objValue;
+        });
     };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -174,13 +203,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 732:
+/***/ 758:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SuccessPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(727);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -197,48 +227,62 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
 
 
 /**
- * Generated class for the SuccessPage page.
+ * Generated class for the TabsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var SuccessPage = (function (_super) {
-    __extends(SuccessPage, _super);
-    function SuccessPage() {
+var TabsPage = (function (_super) {
+    __extends(TabsPage, _super);
+    function TabsPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.successSummary = null;
-        _this.successButtons = null;
-        _this.postAddPlayerSuccess = false;
+        _this.roleName = "blah";
         return _this;
     }
-    // pushPageWithNoBackButton(pageName,navParams){        
-    //     this.navCtrl.getActive().willLeave.subscribe(
-    //         ()=>{
-    //             this.navCtrl.last().showBackButton(false);
-    //         }
-    //     )        
-    //     this.navCtrl.push(pageName,this.buildNavParams(navParams));
+    TabsPage.prototype.ionViewWillLoad = function () {
+        var roleName = this.eventAuth.getRoleName(this.eventId);
+        this.roleName = roleName ? roleName : 'Home';
+        console.log('ionViewDidLoad TabsPage');
+    };
+    // presentPopover(myEvent) {
+    //     let popover = this.popoverCtrl.create(QuicklinksComponent);
+    //     popover.present({
+    //         ev: myEvent     
+    //     });
     // }
-    SuccessPage.prototype.ionViewWillLoad = function () {
-        this.successSummary = this.navParams.get('successSummary');
-        this.successButtons = this.navParams.get('successButtons');
-        console.log('ionViewDidLoad SuccessPage');
+    TabsPage.prototype.onTabSelect = function () {
+        console.log('selected a tab!');
     };
-    SuccessPage.prototype.goToEventSelectOnPageReload = function () {
-        this.appCtrl.getRootNav().push('EventSelectPage');
+    TabsPage.prototype.onTabChange = function (event) {
+        console.log('changed a tab!');
+        if (this.tabRef.getByIndex(event.index).canGoBack()) {
+            this.tabRef.getByIndex(event.index).popToRoot({ animate: false });
+        }
+        var previousTab = this.tabRef.previousTab(false);
+        if (previousTab && previousTab.canGoBack()) {
+            this.tabRef.previousTab().popToRoot({ animate: false });
+        }
     };
-    SuccessPage = __decorate([
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myTabs'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["o" /* Tabs */])
+    ], TabsPage.prototype, "tabRef", void 0);
+    TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-success',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/'<!--\n  Generated template for the SuccessPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <ion-title>Success</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n  <ion-row>\n    <ion-col>      \n    </ion-col>\n    <ion-col style=\'text-align:center\'> \n      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>\n      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>\n\n    </ion-col>\n    <ion-col>     \n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getTitle():\'You can not reload this page\'}}\n      <hr style=\'width:75%\'>      \n    </ion-col>\n  </ion-row>\n\n  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      \n    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">\n      <ion-col style=\'text-align:center\'>         \n        {{summaryTableRow}}\n      </ion-col>                     \n    </ion-row>\n    <hr style=\'width:75%\' text-center>\n  </ng-container>\n\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getFirstLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getSecondLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col *ngFor="let button of successButtons" text-center>\n      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>\n    </ion-col>\n  </ion-row>\n  <ion-row justify-content-center *ngIf="successSummary == undefined" >\n    <ion-col text-center > \n      <button ion-button (click)="goToEventSelectOnPageReload()">Select Event</button>\n    </ion-col>\n  </ion-row>\n  </ion-grid>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/,
+            selector: 'page-tabs',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/'<!--\n  Generated template for the TabsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-tabs #myTabs (ionChange)="onTabChange($event)">\n  <ion-tab [rootParams]="buildNavParams({})" [root]="getHomePageString()" tabIcon="md-home" [tabTitle]="this.eventAuth.getRoleName(this.eventId)?this.eventAuth.getRoleName(this.eventId) : \'Home\'"></ion-tab>  \n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'ResultsPage\'" tabIcon="md-clipboard" tabTitle="Results"></ion-tab>\n  <ion-tab [rootParams]="buildNavParams({})" [root]="\'QueuesPage\'" tabIcon="md-git-branch" tabTitle="Queues"></ion-tab>\n  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="\'QuickLinksPage\'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>\n</ion-tabs>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/tabs/tabs.html"*/,
         })
-    ], SuccessPage);
-    return SuccessPage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], TabsPage);
+    return TabsPage;
+}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=success.js.map
+//# sourceMappingURL=tabs.js.map
 
 /***/ })
 

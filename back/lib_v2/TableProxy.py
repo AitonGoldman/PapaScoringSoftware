@@ -418,8 +418,11 @@ class TableProxy():
             self.db_handle.session.commit()
         return meta_tournament
     
-    def search_player(self, player_string):
-        return self.Players.query.filter((self.Players.first_name+" "+self.Players.last_name).like(player_string+"%")).all()
+    def search_player(self, player_string,event_id=None):
+        query = self.Players.query.filter((self.Players.first_name+" "+self.Players.last_name).like(player_string+"%"))
+        if(event_id):
+            query=query.join(self.EventPlayersInfo).filter_by(event_id=event_id)
+        return query.all()
     
     def get_all_players(self):
         return self.Players.query.all()

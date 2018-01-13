@@ -40,6 +40,7 @@
     "ionic-plugin-keyboard": "^2.2.1",
     "ionic2-auto-complete": "^1.6.2-alpha",
     "ionicons": "3.0.0",
+    "ng2-toastr": "^4.1.2",
     "ngx-cookie": "^2.0.1",
     "replace-in-file": "^3.1.0",
     "rxjs": "5.5.2",

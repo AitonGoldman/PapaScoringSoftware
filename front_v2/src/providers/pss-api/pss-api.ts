@@ -7,7 +7,6 @@ import { of }         from 'rxjs/observable/of';
 import { LoadingController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 
-
 /*
   Generated class for the PssApiProvider provider.
 
@@ -20,7 +19,8 @@ export class PssApiProvider {
     //basePssUrl='http://0.0.0.0:8000'
     loading_instance = null;   
     constructor(public http: HttpClient,public loadingCtrl: LoadingController,
-                private toastCtrl: ToastController) {
+                private toastCtrl: ToastController,
+               ){
         console.log('Hello PssApiProvider Provider');
     }
 
@@ -30,7 +30,7 @@ export class PssApiProvider {
         return new Observable((observer) => subject.subscribe(observer));
     }
     
-    generate_api_call(apiName,url,method){
+    generate_api_call(apiName,url,method,hideLoading?){
         return (...restOfArgs: any[]) => {
             
             let localUrl=url;            
@@ -41,11 +41,13 @@ export class PssApiProvider {
             let localMatches = localUrl.match(/\:arg/g);
             if (restOfArgs!=null && localMatches!=null && localMatches.length!=restOfArgs.length){
                 throw new Error("Oops - number of args in url and args given do not match");
-            }            
-            this.loading_instance = this.loadingCtrl.create({
-                content: 'Please wait...'
-            });
-            this.loading_instance.present();        
+            }
+            if(hideLoading==null){
+                this.loading_instance = this.loadingCtrl.create({
+                    content: 'Please wait...'                
+                });
+                this.loading_instance.present();        
+            }
             
             while (localUrl.indexOf(':arg')>=0) {
                 let newUrl=localUrl.replace(":arg",restOfArgs.shift())
@@ -60,7 +62,7 @@ export class PssApiProvider {
                     catchError(this.handleError(apiName, null))
                 );
 
-            result_observable.subscribe(()=>{this.loading_instance.dismiss()});
+            result_observable.subscribe(()=>{if(hideLoading==null){this.loading_instance.dismiss()}});
             return result_observable;            
         }
     }    
@@ -87,6 +89,8 @@ export class PssApiProvider {
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
     getAllPlayers = this.generate_api_call('getAllPlayers',this.basePssUrl+"/players",'get');    
     getEventPlayer = this.generate_api_call('getEventPlayer',this.basePssUrl+"/:arg/event_player/:arg",'get');
+    getEventPlayerHidden = this.generate_api_call('getEventPlayer',this.basePssUrl+"/:arg/event_player/:arg",'get',true);
+
     getEventPlayers = this.generate_api_call('getEventPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get');
     getEvent = this.generate_api_call('getEvent',this.basePssUrl+"/event/:arg",'get');
     getIfpaRanking = this.generate_api_call('getIfpaRanking',this.basePssUrl+"/ifpa/:arg",'get');
@@ -110,21 +114,28 @@ export class PssApiProvider {
     removePlayerFromQueue = this.generate_api_call('removePlayerFromQueue',this.basePssUrl+"/:arg/queue",'delete');
     
     searchPlayers = this.generate_api_call('searchPlayers',this.basePssUrl+"/players/:arg",'get');        
+    searchPlayersHidden = this.generate_api_call('searchPlayers',this.basePssUrl+"/players/:arg",'get',true);        
+
+    searchEventPlayers = this.generate_api_call('searchPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get');           searchEventPlayersHidden = this.generate_api_call('searchPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get',true);        
+
     purchaseTicket = this.generate_api_call('purchaseTicket',this.basePssUrl+"/:arg/token",'post');
     
-    private handleError<T> (operation = 'operation', result?: T) {        
-        let debouncer=false;        
+    //    private handleError<T> (operation = 'operation', result?: T) {
+    private handleError<T> (operation = 'operation', result?: T) {            
+        let debouncer=false;
+        
         return (error: any): Observable<T> => {
             
             if (debouncer == false){
                 debouncer=true;
                 console.log('error handling in progress...');
-                console.error(error); // log to console instead
+                console.error(error); // log to console instead                
                 let toast = this.toastCtrl.create({
-                    message: error.error.message,
+                    message:  error.error.message,
                     duration: 99000,
                     position: 'top',
                     showCloseButton: true,
+                    closeButtonText: " ",
                     cssClass: "dangerToast"
                 });
                 toast.present();                

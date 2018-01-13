@@ -84,6 +84,8 @@ def serialize_player_public(model,type_of=PLAYER_ONLY):
     if type_of==PLAYER_AND_EVENTS:
         print model.__repr__()
         player_dict['events']=[serialize_event_players_info_public(event_info_instance) for event_info_instance in model.event_info]
+        if len(player_dict['events'])==1:
+            player_dict['player_id_for_event']="%s" % player_dict['events'][0]['player_id_for_event']
         return player_dict
 
 def serialize_player_private(model,type_of=PLAYER_ONLY):

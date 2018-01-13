@@ -57,7 +57,7 @@ export class TournamentMachinesPage extends PssPageComponent {
         return (result) => {            
             if(result == null){
                 return;
-            }
+            }            
             this.autoCompleteProvider.setMachines(result.data.machines_list);
             this.selectedMachines=result.data.tournament_machines_list;            
         };

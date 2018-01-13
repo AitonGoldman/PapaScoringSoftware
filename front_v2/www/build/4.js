@@ -1,6 +1,6 @@
 webpackJsonp([4],{
 
-/***/ 724:
+/***/ 725:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8,7 +8,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TournamentMachinesPageModule", function() { return TournamentMachinesPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_machines__ = __webpack_require__(758);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament_machines__ = __webpack_require__(761);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic2_auto_complete__ = __webpack_require__(358);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
@@ -45,7 +45,7 @@ var TournamentMachinesPageModule = (function () {
 
 /***/ }),
 
-/***/ 726:
+/***/ 727:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -144,16 +144,10 @@ var PssPageComponent = (function () {
         item.expanded = item.expanded == false ? true : false;
     };
     PssPageComponent.prototype.generateEditTournamentProcessor = function (message_string) {
-        var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.notificationsService.success("Success", message_string, {
-                timeOut: 0,
-                position: ["top", "right"],
-                theClass: 'poop'
-            });
         };
     };
     PssPageComponent.prototype.onTournamentToggle = function (eventId, tournament) {
@@ -161,6 +155,41 @@ var PssPageComponent = (function () {
         var stringDescription = tournament.active != true ? "deactivated" : "activated";
         this.pssApi.editTournament(tournament, eventId)
             .subscribe(this.generateEditTournamentProcessor(tournament.tournament_name + " has been " + stringDescription));
+    };
+    // auto complete stuff
+    PssPageComponent.prototype.generateAutoCompleteGetEventPlayerProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this['selectedPlayer'] = result.data;
+            _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
+        };
+    };
+    PssPageComponent.prototype.onAutoCompletePlayerSelected = function () {
+        this.pssApi.getEventPlayer(this.eventId, this['selectedPlayer'].player_id_for_event)
+            .subscribe(this.generateAutoCompleteGetEventPlayerProcessor());
+    };
+    PssPageComponent.prototype.generatePlayerLoadingFunction = function () {
+        var _this = this;
+        return function (input) {
+            if (input != null) {
+                _this['selectedPlayer'] = input.data;
+                _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
+            }
+            setTimeout(function () { _this['loading'] = false; }, 500);
+        };
+    };
+    PssPageComponent.prototype.generateListFromObj = function (obj) {
+        if (obj == null) {
+            return [];
+        }
+        return Object.keys(obj).map(function (key) {
+            var objValue = obj[key];
+            // do something with person
+            return objValue;
+        });
     };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -181,7 +210,7 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 727:
+/***/ 728:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -218,7 +247,7 @@ var SuccessSummary = (function () {
 
 /***/ }),
 
-/***/ 728:
+/***/ 729:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -249,19 +278,19 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 758:
+/***/ 761:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentMachinesPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(727);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_auto_complete_auto_complete__ = __webpack_require__(357);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_event_auth_event_auth__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_pss_api_pss_api__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__ = __webpack_require__(727);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__classes_SuccessButton__ = __webpack_require__(728);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__classes_success_summary__ = __webpack_require__(728);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__classes_SuccessButton__ = __webpack_require__(729);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_angular2_notifications__);
 var __extends = (this && this.__extends) || (function () {

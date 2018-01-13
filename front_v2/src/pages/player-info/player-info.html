@@ -1,0 +1,56 @@
+<!--
+  Generated template for the PlayerInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+  -->
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>PlayerInfo</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+
+<ion-content padding>
+  <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
+  <!--
+      Player name
+      player event number
+      player pic
+      
+      Available Tickets
+      - tournament/metatournament name : count
+      
+      Results (when they are available)
+
+    -->
+  <ion-list *ngIf="selectedPlayer!=null">
+    <ion-item-divider text-center color="light">
+      Player Name
+    </ion-item-divider>
+    <ion-item no-lines text-center>
+      {{selectedPlayer.player_full_name}}
+    </ion-item>
+    <ion-item-divider text-center color="light">
+      Player Number
+    </ion-item-divider>
+    <ion-item text-center no-lines>
+      {{selectedPlayer.player_id_for_event}}
+    </ion-item>
+    <ion-item-divider text-center color="light">
+      Available Tickets
+    </ion-item-divider>
+    <ion-item no-lines text-center *ngFor="let ticketCount of ticketCounts">
+      {{ticketCount.tournament_name}} : {{ticketCount.count}}
+    </ion-item>
+  </ion-list>
+  <!--   {{selectedPlayer!=null?selectedPlayer.player_id_for_event:""}}-- -->
+  <!--   <div *ngFor="let ticketCount of ticketCounts"> -->
+  <!--     {{ticketCount.tournament_name}} : {{ticketCount.count}} -->
+  <!--   </div> -->
+  <!-- </div>   -->
+</ion-content>

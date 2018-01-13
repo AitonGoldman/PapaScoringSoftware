@@ -9,6 +9,7 @@ import { ExpandableComponent } from './expandable/expandable';
 import { AddUserComponent } from './add-user/add-user';
 import { EditUserComponent } from './edit-user/edit-user';
 import { TakePicComponent } from './take-pic/take-pic';
+import { AutoCompleteComponent } from './auto-complete/auto-complete';
 @NgModule({
 	declarations: [
             PssPageComponent,    
@@ -21,7 +22,8 @@ import { TakePicComponent } from './take-pic/take-pic';
             TakePicComponent,
     AddUserComponent,
     EditUserComponent,
-    TakePicComponent],
+    TakePicComponent,
+    AutoCompleteComponent],
     imports: [],
     exports: [
         PssPageComponent,
@@ -33,6 +35,7 @@ import { TakePicComponent } from './take-pic/take-pic';
         ExpandableComponent,
         AddUserComponent,
         EditUserComponent,
-        TakePicComponent]
+        TakePicComponent,
+    AutoCompleteComponent]
 })
 export class ComponentsModule {}

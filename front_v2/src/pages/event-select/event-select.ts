@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
-import { URLSearchParams } from "@angular/http";
 
 /**
  * Generated class for the EventSelectPage page.
@@ -44,10 +43,7 @@ export class EventSelectPage extends PssPageComponent {
     }
     
     
-    ionViewWillLoad() {
-        let params = new URLSearchParams(window.location.search);
-        let someParam = params.get('user');        
-        
+    ionViewWillLoad() {                
         
         this.pssApi.getAllEvents({})
             .subscribe(this.generateGetAllEventsProcessor())    

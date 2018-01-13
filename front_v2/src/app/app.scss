@@ -90,3 +90,30 @@ simple-notifications{
   }
  }
 }
+
+.toast-container {
+ button {
+  .button-inner::after {
+     padding-left: 20px;
+     font-family: "Ionicons";
+     font-size:32px;
+     content: "\f406";
+  }
+  .button-inner::before {
+     font-family: "Ionicons";
+     font-size:32px;
+     color:white;
+   }
+ }
+}
+
+.dangerToast {
+  > div {
+     background-color:red!important;
+  }
+  .toast-container {
+    .button-inner::before {
+     content: "\f18f";
+    }
+  }  
+}

@@ -1,14 +1,14 @@
 webpackJsonp([24],{
 
-/***/ 707:
+/***/ 709:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerQuickLinksPageModule", function() { return EventOwnerQuickLinksPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerTabsPageModule", function() { return EventOwnerTabsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__ = __webpack_require__(743);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__ = __webpack_require__(746);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,27 +18,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var EventOwnerQuickLinksPageModule = (function () {
-    function EventOwnerQuickLinksPageModule() {
+var EventOwnerTabsPageModule = (function () {
+    function EventOwnerTabsPageModule() {
     }
-    EventOwnerQuickLinksPageModule = __decorate([
+    EventOwnerTabsPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__["a" /* EventOwnerQuickLinksPage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__["a" /* EventOwnerTabsPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_quick_links__["a" /* EventOwnerQuickLinksPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_tabs__["a" /* EventOwnerTabsPage */]),
             ],
         })
-    ], EventOwnerQuickLinksPageModule);
-    return EventOwnerQuickLinksPageModule;
+    ], EventOwnerTabsPageModule);
+    return EventOwnerTabsPageModule;
 }());
 
-//# sourceMappingURL=event-owner-quick-links.module.js.map
+//# sourceMappingURL=event-owner-tabs.module.js.map
 
 /***/ }),
 
-/***/ 726:
+/***/ 727:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -137,16 +137,10 @@ var PssPageComponent = (function () {
         item.expanded = item.expanded == false ? true : false;
     };
     PssPageComponent.prototype.generateEditTournamentProcessor = function (message_string) {
-        var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.notificationsService.success("Success", message_string, {
-                timeOut: 0,
-                position: ["top", "right"],
-                theClass: 'poop'
-            });
         };
     };
     PssPageComponent.prototype.onTournamentToggle = function (eventId, tournament) {
@@ -154,6 +148,41 @@ var PssPageComponent = (function () {
         var stringDescription = tournament.active != true ? "deactivated" : "activated";
         this.pssApi.editTournament(tournament, eventId)
             .subscribe(this.generateEditTournamentProcessor(tournament.tournament_name + " has been " + stringDescription));
+    };
+    // auto complete stuff
+    PssPageComponent.prototype.generateAutoCompleteGetEventPlayerProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this['selectedPlayer'] = result.data;
+            _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
+        };
+    };
+    PssPageComponent.prototype.onAutoCompletePlayerSelected = function () {
+        this.pssApi.getEventPlayer(this.eventId, this['selectedPlayer'].player_id_for_event)
+            .subscribe(this.generateAutoCompleteGetEventPlayerProcessor());
+    };
+    PssPageComponent.prototype.generatePlayerLoadingFunction = function () {
+        var _this = this;
+        return function (input) {
+            if (input != null) {
+                _this['selectedPlayer'] = input.data;
+                _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
+            }
+            setTimeout(function () { _this['loading'] = false; }, 500);
+        };
+    };
+    PssPageComponent.prototype.generateListFromObj = function (obj) {
+        if (obj == null) {
+            return [];
+        }
+        return Object.keys(obj).map(function (key) {
+            var objValue = obj[key];
+            // do something with person
+            return objValue;
+        });
     };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -174,14 +203,14 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 743:
+/***/ 746:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerQuickLinksPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerTabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(726);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(727);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -198,38 +227,52 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 
 
 
 /**
- * Generated class for the EventOwnerQuickLinksPage page.
+ * Generated class for the EventOwnerTabsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var EventOwnerQuickLinksPage = (function (_super) {
-    __extends(EventOwnerQuickLinksPage, _super);
-    function EventOwnerQuickLinksPage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.reorderEnabled = false;
-        _this.items = [];
-        return _this;
+var EventOwnerTabsPage = (function (_super) {
+    __extends(EventOwnerTabsPage, _super);
+    function EventOwnerTabsPage() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    EventOwnerQuickLinksPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad QuickLinksPage');
+    EventOwnerTabsPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad EventOwnerTabsPage');
     };
-    EventOwnerQuickLinksPage.prototype.reorderItems = function (indexes) {
-        this.items = Object(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["r" /* reorderArray */])(this.items, indexes);
+    EventOwnerTabsPage.prototype.onTabSelect = function () {
+        console.log('selected a tab!');
     };
-    EventOwnerQuickLinksPage = __decorate([
+    EventOwnerTabsPage.prototype.onTabChange = function (event) {
+        console.log('changed a tab!');
+        if (this.tabRef.getByIndex(event.index).canGoBack()) {
+            this.tabRef.getByIndex(event.index).popToRoot({ animate: false });
+        }
+        var previousTab = this.tabRef.previousTab(false);
+        if (previousTab && previousTab.canGoBack()) {
+            this.tabRef.previousTab().popToRoot({ animate: false });
+        }
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('myTabs'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["o" /* Tabs */])
+    ], EventOwnerTabsPage.prototype, "tabRef", void 0);
+    EventOwnerTabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-event-owner-quick-links',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-quick-links/event-owner-quick-links.html"*/'<!--\n  Generated template for the EventOwnerQuickLinksPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-content padding>\n  <ion-list>\n    <ion-list-header>Jump To...\n      <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>\n    </ion-list-header>\n      <button ion-item detail-push [navPush]="\'EventOwnerLoginPage\'" [navParams]="buildNavParams({})">\n        <ion-icon name="person" item-end></ion-icon>Login\n      </button>\n      <button ion-item detail-push (click)="pushRootPage(\'EventSelectPage\')">\n        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event\n      </button>      \n    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      \n    <button *ngFor="let item of items"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>\n    </ion-item-group>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-quick-links/event-owner-quick-links.html"*/,
+            selector: 'page-event-owner-tabs',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-tabs/event-owner-tabs.html"*/'<!--\n  Generated template for the EventOwnerTabsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-content padding>\n<ion-tabs #myTabs  (ionChange)="onTabChange($event)">\n  <ion-tab [root]="\'EventOwnerHomePage\'" tabIcon="md-home" [tabTitle]="\'Home\'"></ion-tab>  \n  <ion-tab  (ionSelect)="onTabSelect()"  [rootParams]="buildNavParams({})" [root]="\'EventOwnerQuickLinksPage\'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>\n</ion-tabs>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-tabs/event-owner-tabs.html"*/,
         })
-    ], EventOwnerQuickLinksPage);
-    return EventOwnerQuickLinksPage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], EventOwnerTabsPage);
+    return EventOwnerTabsPage;
+}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=event-owner-quick-links.js.map
+//# sourceMappingURL=event-owner-tabs.js.map
 
 /***/ })
 

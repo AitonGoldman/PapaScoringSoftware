@@ -1,4 +1,4 @@
-webpackJsonp([29],{
+webpackJsonp([30],{
 
 /***/ 155:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -7,7 +7,7 @@ webpackJsonp([29],{
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssApiProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_operators__ = __webpack_require__(218);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_operators__ = __webpack_require__(217);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_operators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_operators__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__);
@@ -66,6 +66,7 @@ var PssApiProvider = (function () {
         this.getAllEvents = this.generate_api_call('getAllEvents', this.basePssUrl + "/events", 'get');
         this.getAllPlayers = this.generate_api_call('getAllPlayers', this.basePssUrl + "/players", 'get');
         this.getEventPlayer = this.generate_api_call('getEventPlayer', this.basePssUrl + "/:arg/event_player/:arg", 'get');
+        this.getEventPlayerHidden = this.generate_api_call('getEventPlayer', this.basePssUrl + "/:arg/event_player/:arg", 'get', true);
         this.getEventPlayers = this.generate_api_call('getEventPlayers', this.basePssUrl + "/:arg/event_players/:arg", 'get');
         this.getEvent = this.generate_api_call('getEvent', this.basePssUrl + "/event/:arg", 'get');
         this.getIfpaRanking = this.generate_api_call('getIfpaRanking', this.basePssUrl + "/ifpa/:arg", 'get');
@@ -81,7 +82,11 @@ var PssApiProvider = (function () {
         this.loginEventOwner = this.generate_api_call('loginEventOwner', this.basePssUrl + "/auth/pss_user/login", 'post');
         this.loginUser = this.generate_api_call('loginUser', this.basePssUrl + "/auth/pss_event_user/login/:arg", 'post');
         this.loginPlayer = this.generate_api_call('loginPlayer', this.basePssUrl + "/auth/player/login/:arg", 'post');
+        this.removePlayerFromQueue = this.generate_api_call('removePlayerFromQueue', this.basePssUrl + "/:arg/queue", 'delete');
         this.searchPlayers = this.generate_api_call('searchPlayers', this.basePssUrl + "/players/:arg", 'get');
+        this.searchPlayersHidden = this.generate_api_call('searchPlayers', this.basePssUrl + "/players/:arg", 'get', true);
+        this.searchEventPlayers = this.generate_api_call('searchPlayers', this.basePssUrl + "/:arg/event_players/:arg", 'get');
+        this.searchEventPlayersHidden = this.generate_api_call('searchPlayers', this.basePssUrl + "/:arg/event_players/:arg", 'get', true);
         this.purchaseTicket = this.generate_api_call('purchaseTicket', this.basePssUrl + "/:arg/token", 'post');
         console.log('Hello PssApiProvider Provider');
     }
@@ -90,7 +95,7 @@ var PssApiProvider = (function () {
         cold.subscribe(subject);
         return new __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"](function (observer) { return subject.subscribe(observer); });
     };
-    PssApiProvider.prototype.generate_api_call = function (apiName, url, method) {
+    PssApiProvider.prototype.generate_api_call = function (apiName, url, method, hideLoading) {
         var _this = this;
         return function () {
             var restOfArgs = [];
@@ -99,17 +104,19 @@ var PssApiProvider = (function () {
             }
             var localUrl = url;
             var postObject = null;
-            if (method == "post" || method == "put") {
+            if (method == "post" || method == "put" || method == "delete") {
                 postObject = restOfArgs.shift();
             }
             var localMatches = localUrl.match(/\:arg/g);
             if (restOfArgs != null && localMatches != null && localMatches.length != restOfArgs.length) {
                 throw new Error("Oops - number of args in url and args given do not match");
             }
-            _this.loading_instance = _this.loadingCtrl.create({
-                content: 'Please wait...'
-            });
-            _this.loading_instance.present();
+            if (hideLoading == null) {
+                _this.loading_instance = _this.loadingCtrl.create({
+                    content: 'Please wait...'
+                });
+                _this.loading_instance.present();
+            }
             while (localUrl.indexOf(':arg') >= 0) {
                 var newUrl = localUrl.replace(":arg", restOfArgs.shift());
                 localUrl = newUrl;
@@ -117,10 +124,13 @@ var PssApiProvider = (function () {
             var result_observable = _this.makeHot(_this.http.request(method, localUrl, { withCredentials: true,
                 body: postObject }))
                 .pipe(Object(__WEBPACK_IMPORTED_MODULE_2_rxjs_operators__["catchError"])(_this.handleError(apiName, null)));
-            result_observable.subscribe(function () { _this.loading_instance.dismiss(); });
+            result_observable.subscribe(function () { if (hideLoading == null) {
+                _this.loading_instance.dismiss();
+            } });
             return result_observable;
         };
     };
+    //    private handleError<T> (operation = 'operation', result?: T) {
     PssApiProvider.prototype.handleError = function (operation, result) {
         var _this = this;
         if (operation === void 0) { operation = 'operation'; }
@@ -129,12 +139,13 @@ var PssApiProvider = (function () {
             if (debouncer == false) {
                 debouncer = true;
                 console.log('error handling in progress...');
-                console.error(error); // log to console instead
+                console.error(error); // log to console instead                
                 var toast = _this.toastCtrl.create({
                     message: error.error.message,
                     duration: 99000,
                     position: 'top',
                     showCloseButton: true,
+                    closeButtonText: " ",
                     cssClass: "dangerToast"
                 });
                 toast.present();
@@ -155,7 +166,7 @@ var PssApiProvider = (function () {
 
 /***/ }),
 
-/***/ 169:
+/***/ 168:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -168,11 +179,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 169;
+webpackEmptyAsyncContext.id = 168;
 
 /***/ }),
 
-/***/ 213:
+/***/ 212:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -186,11 +197,11 @@ var map = {
 	],
 	"../pages/add-user/add-user.module": [
 		699,
-		27
+		28
 	],
 	"../pages/change-player-picture/change-player-picture.module": [
 		700,
-		26
+		27
 	],
 	"../pages/create-event/create-event.module": [
 		701,
@@ -210,31 +221,31 @@ var map = {
 	],
 	"../pages/event-owner-home/event-owner-home.module": [
 		705,
-		25
+		26
 	],
 	"../pages/event-owner-login/event-owner-login.module": [
-		706,
+		707,
 		2
 	],
 	"../pages/event-owner-quick-links/event-owner-quick-links.module": [
-		707,
-		24
+		706,
+		25
 	],
 	"../pages/event-owner-request/event-owner-request.module": [
 		708,
-		14
+		15
 	],
 	"../pages/event-owner-tabs/event-owner-tabs.module": [
 		709,
-		23
+		24
 	],
 	"../pages/event-select/event-select.module": [
 		710,
-		22
+		23
 	],
 	"../pages/home/home.module": [
 		711,
-		21
+		22
 	],
 	"../pages/login/login.module": [
 		712,
@@ -246,50 +257,54 @@ var map = {
 	],
 	"../pages/player-home/player-home.module": [
 		714,
-		20
+		21
+	],
+	"../pages/player-info/player-info.module": [
+		715,
+		14
 	],
 	"../pages/post-player-add-success/post-player-add-success.module": [
-		715,
+		716,
 		13
 	],
 	"../pages/queue-select-player-tournament-machine/queue-select-player-tournament-machine.module": [
-		716,
+		717,
 		6
 	],
 	"../pages/quick-links/quick-links.module": [
-		717,
-		19
+		718,
+		20
 	],
 	"../pages/results/results.module": [
-		718,
-		18
+		720,
+		19
 	],
 	"../pages/scorekeeper-home/scorekeeper-home.module": [
 		719,
-		28
+		29
 	],
 	"../pages/success/success.module": [
-		720,
-		17
+		721,
+		18
 	],
 	"../pages/tabs/tabs.module": [
-		721,
-		16
+		722,
+		17
 	],
 	"../pages/ticket-purchase/ticket-purchase.module": [
-		722,
+		723,
 		5
 	],
 	"../pages/tournament-director-home/tournament-director-home.module": [
-		723,
-		15
+		724,
+		16
 	],
 	"../pages/tournament-machines/tournament-machines.module": [
-		724,
+		725,
 		4
 	],
 	"../pages/tournament/tournament.module": [
-		725,
+		726,
 		3
 	]
 };
@@ -304,7 +319,7 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 213;
+webpackAsyncContext.id = 212;
 module.exports = webpackAsyncContext;
 
 /***/ }),
@@ -383,28 +398,56 @@ var __metadata = (this && this.__metadata) || function (k, v) {
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
+// make initilialize function, handles seting up/cleaning up previous
+// rename observable, make it able to set loading without passing info around
+// fix player-info
+// - move common elements to psspage - check
+// fix add-users
+// fix add-machines
+// fix add-players
+// add to ticket-purchase
 var AutoCompleteProvider = (function () {
     function AutoCompleteProvider(http, pssApi) {
         this.http = http;
         this.pssApi = pssApi;
-        this.labelAttribute = "machine_name";
+        this.labelAttribute = "";
         this.formValueAttribute = "";
-        this.players = null;
         this.url = null;
+        this.allPlayersUrl = "http://192.168.1.178:8000/players/";
+        this.eventId = null;
+        //itemFieldToMatch:any;
+        //loadingObservable:any;
+        this.loadingCompleteFunc = null;
+        this.autocompleteType = null;
+        this.currentValue = null;
         console.log('Hello AutoCompleteProvider Provider');
     }
+    AutoCompleteProvider.prototype.initializeAutoComplete = function (labelAttribute, items, loadingCompleteFunc, eventId) {
+        this.autocompleteType = items == null ? "remote" : "local";
+        this.items = items;
+        this.eventId = eventId;
+        this.labelAttribute = labelAttribute;
+        this.loadingCompleteFunc = loadingCompleteFunc;
+        console.log(this.autocompleteType);
+    };
+    // getItemLabel(returnedItem){
+    //     console.log('in getItemLabel')
+    //     console.log(returnedItem)        
+    //     return returnedItem
+    // }
     AutoCompleteProvider.prototype.setMachines = function (machines) {
-        //this.machines=machines;        
+        this.url = null;
         this.items = machines;
-        this.itemFieldToMatch = 'machine_name';
+        //this.itemFieldToMatch='machine_name'
         this.labelAttribute = "machine_name";
     };
     AutoCompleteProvider.prototype.addUsers = function (user) {
         this.items.push(user);
     };
     AutoCompleteProvider.prototype.setUsers = function (users) {
+        this.url = null;
         this.items = users;
-        this.itemFieldToMatch = 'full_user_name';
+        //this.itemFieldToMatch='full_user_name'        
         this.labelAttribute = "full_user_name";
     };
     AutoCompleteProvider.prototype.setEndpoint = function (typeOfEndpoint) {
@@ -412,32 +455,81 @@ var AutoCompleteProvider = (function () {
         }
     };
     AutoCompleteProvider.prototype.setPlayerSearchType = function (typeOfSearch, observable) {
-        var url = "";
-        if (typeOfSearch == "allPlayers") {
-            url = "http://192.168.1.178:8000/players/";
-        }
-        this.itemFieldToMatch = 'player_full_name';
-        this.labelAttribute = "player_full_name";
-        this.url = url;
-        this.loadingObservable = observable;
+        this.items = null;
+        //        this.loadingObservable=observable
     };
-    AutoCompleteProvider.prototype.setPlayers = function (allPlayers) {
+    // setPlayers(allPlayers){
+    //     this.url=null;
+    //     if(allPlayers==true){
+    //         this.pssApi.getAllPlayers()
+    //             .subscribe((result)=>{this.players=result.data;this.items=this.players})            
+    //     }
+    // }
+    AutoCompleteProvider.prototype.processSearchResults = function () {
         var _this = this;
-        if (allPlayers == true) {
-            this.pssApi.getAllPlayers()
-                .subscribe(function (result) { _this.players = result.data; _this.items = _this.players; });
-        }
+        return function (result) {
+            if (result == null) {
+                _this.loadingCompleteFunc();
+                return "";
+            }
+            ;
+            if (Array.isArray(result.data)) {
+                _this.loadingCompleteFunc();
+                return result.data;
+            }
+            else {
+                _this.loadingCompleteFunc(result);
+                return "";
+            }
+        };
     };
     AutoCompleteProvider.prototype.getResults = function (name) {
         var _this = this;
-        if (this.url != null) {
+        if (this.currentValue != name) {
+            this.currentValue = name;
+        }
+        else {
+            return [];
+        }
+        if (name.length < 3) {
+            return [];
+        }
+        var eventPlayerId = parseInt(name);
+        if (Number.isNaN(eventPlayerId) == true && this.autocompleteType == "remote") {
+            //this.itemFieldToMatch='player_full_name'        
+            this.labelAttribute = "player_full_name";
+            if (this.eventId) {
+                console.log('going to event player search....');
+                return this.pssApi.searchEventPlayersHidden(this.eventId, name)['map'](this.processSearchResults());
+            }
+            else {
+                return this.pssApi.searchPlayersHidden(name)['map'](this.processSearchResults());
+            }
+        }
+        if (Number.isNaN(eventPlayerId) == false && this.autocompleteType == "remote") {
+            //this.itemFieldToMatch='player_id_for_event'        
+            this.labelAttribute = "player_id_for_event";
+            return this.pssApi.getEventPlayerHidden(this.eventId, name)['map'](this.processSearchResults());
+        }
+        if (this.autocompleteType == "remote") {
             console.log('in getResults...');
-            return this.http.get(this.url + name)['map'](function (result) { return result.data; })['do'](function (input) { _this.loadingObservable(input); });
+            // return this.http.get(this.url+name)['map'](result=>{if(Array.isArray(result.data)){
+            //     this.loadingCompleteFunc()
+            //     return result.data
+            // } else {
+            //     this.loadingCompleteFunc(result)
+            //     return ""//[result.data]
+            // }})
+            //
+            // ['do']((input)=>{
+            // this.loadingObservable(input)
+            // });
             //return this.pssApi.searchPlayers(name)
         }
         var regex = new RegExp(name.toLowerCase());
         return this.items.filter(function (item) {
-            var matches = item[_this.itemFieldToMatch].toLowerCase().match(regex);
+            //let matches = item[this.itemFieldToMatch].toLowerCase().match(regex);
+            var matches = item[_this.labelAttribute].toLowerCase().match(regex);
             return (matches != null && matches.length > 0);
         });
     };
@@ -614,7 +706,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular2_notifications__ = __webpack_require__(356);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_angular2_notifications__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_angular2_image_upload__ = __webpack_require__(359);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ngx_cookie__ = __webpack_require__(216);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17_ngx_cookie__ = __webpack_require__(215);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_custom_components_module__ = __webpack_require__(360);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_take_pic_take_pic__ = __webpack_require__(361);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -643,6 +735,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+//import {ToastModule} from 'ng2-toastr/ng2-toastr';
 var AppModule = (function () {
     function AppModule() {
     }
@@ -667,8 +760,8 @@ var AppModule = (function () {
                         { loadChildren: '../pages/edit-user/edit-user.module#EditUserPageModule', name: 'EditUserPage', segment: 'EditUser/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-confirm/event-owner-confirm.module#EventOwnerConfirmPageModule', name: 'EventOwnerConfirmPage', segment: 'EventOwnerConfirm/:itsdangerousstring', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-home/event-owner-home.module#EventOwnerHomePageModule', name: 'EventOwnerHomePage', segment: 'event-owner-home', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/event-owner-login/event-owner-login.module#EventOwnerLoginPageModule', name: 'EventOwnerLoginPage', segment: 'event-owner-login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-quick-links/event-owner-quick-links.module#EventOwnerQuickLinksPageModule', name: 'EventOwnerQuickLinksPage', segment: 'event-owner-quick-links', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-login/event-owner-login.module#EventOwnerLoginPageModule', name: 'EventOwnerLoginPage', segment: 'event-owner-login', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-request/event-owner-request.module#EventOwnerRequestPageModule', name: 'EventOwnerRequestPage', segment: 'event-owner-request', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-tabs/event-owner-tabs.module#EventOwnerTabsPageModule', name: 'EventOwnerTabsPage', segment: 'event-owner-tabs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-select/event-select.module#EventSelectPageModule', name: 'EventSelectPage', segment: 'event-select', priority: 'low', defaultHistory: [] },
@@ -676,11 +769,12 @@ var AppModule = (function () {
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/logout/logout.module#LogoutPageModule', name: 'LogoutPage', segment: 'logout', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/player-home/player-home.module#PlayerHomePageModule', name: 'PlayerHomePage', segment: 'PlayerHomePage/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/player-info/player-info.module#PlayerInfoPageModule', name: 'PlayerInfoPage', segment: 'PlayerInfo/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/post-player-add-success/post-player-add-success.module#PostPlayerAddSuccessPageModule', name: 'PostPlayerAddSuccessPage', segment: 'post-player-add-success', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/queue-select-player-tournament-machine/queue-select-player-tournament-machine.module#QueueSelectPlayerTournamentMachinePageModule', name: 'QueueSelectPlayerTournamentMachinePage', segment: 'QueueSelectPlayerTournamentMachine/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/quick-links/quick-links.module#QuickLinksPageModule', name: 'QuickLinksPage', segment: 'quick-links', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/results/results.module#ResultsPageModule', name: 'ResultsPage', segment: 'results', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/scorekeeper-home/scorekeeper-home.module#ScorekeeperHomePageModule', name: 'ScorekeeperHomePage', segment: 'scorekeeper-home', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/results/results.module#ResultsPageModule', name: 'ResultsPage', segment: 'results', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/success/success.module#SuccessPageModule', name: 'SuccessPage', segment: 'Success/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/ticket-purchase/ticket-purchase.module#TicketPurchasePageModule', name: 'TicketPurchasePage', segment: 'TicketPurchasePage/:eventId', priority: 'low', defaultHistory: [] },
@@ -697,7 +791,7 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_15_angular2_notifications__["SimpleNotificationsModule"].forRoot(),
                 __WEBPACK_IMPORTED_MODULE_16_angular2_image_upload__["a" /* ImageUploadModule */].forRoot(),
                 __WEBPACK_IMPORTED_MODULE_17_ngx_cookie__["a" /* CookieModule */].forRoot(),
-                __WEBPACK_IMPORTED_MODULE_18__components_custom_components_module__["a" /* CustomComponentsModule */]
+                __WEBPACK_IMPORTED_MODULE_18__components_custom_components_module__["a" /* CustomComponentsModule */],
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicApp */]],
             entryComponents: [
@@ -892,7 +986,7 @@ var MyApp = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventAuthProvider; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ngx_cookie__ = __webpack_require__(216);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ngx_cookie__ = __webpack_require__(215);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -996,7 +1090,6 @@ var EventAuthProvider = (function () {
     };
     EventAuthProvider.prototype.getEventPlayerId = function (eventId) {
         if (this.userLoggedInEvents[eventId] != null && this.userLoggedInEvents[eventId].events != null && this.userLoggedInEvents[eventId].events.length != 0) {
-            console.log(this.userLoggedInEvents[eventId]);
             return this.userLoggedInEvents[eventId].events[0].player_id_for_event;
         }
         else {

@@ -19,6 +19,7 @@ import { ImageUploadModule } from "angular2-image-upload";
 import { CookieModule } from 'ngx-cookie';
 import { CustomComponentsModule } from '../components/custom-components.module';
 import { TakePicComponent } from '../components/take-pic/take-pic'
+//import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { TakePicComponent } from '../components/take-pic/take-pic'
       SimpleNotificationsModule.forRoot(),
       ImageUploadModule.forRoot(),
       CookieModule.forRoot(),
-      CustomComponentsModule
+      CustomComponentsModule,
+  //    ToastModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [

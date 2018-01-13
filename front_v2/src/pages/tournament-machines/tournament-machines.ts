@@ -2,6 +2,8 @@ import { ViewChild, Component } from '@angular/core';
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
 import { IonicPage } from 'ionic-angular';
 import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
+import { SuccessSummary } from '../../classes/success-summary';
+import { SuccessButton } from '../../classes/SuccessButton';
 
 /**
  * Generated class for the TournamentMachinesPage page.

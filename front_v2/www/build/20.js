@@ -1,14 +1,14 @@
 webpackJsonp([20],{
 
-/***/ 718:
+/***/ 719:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QuickLinksPageModule", function() { return QuickLinksPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResultsPageModule", function() { return ResultsPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__quick_links__ = __webpack_require__(755);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__results__ = __webpack_require__(756);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,23 +18,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var QuickLinksPageModule = (function () {
-    function QuickLinksPageModule() {
+var ResultsPageModule = (function () {
+    function ResultsPageModule() {
     }
-    QuickLinksPageModule = __decorate([
+    ResultsPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__quick_links__["a" /* QuickLinksPage */],
+                __WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__quick_links__["a" /* QuickLinksPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__results__["a" /* ResultsPage */]),
             ],
         })
-    ], QuickLinksPageModule);
-    return QuickLinksPageModule;
+    ], ResultsPageModule);
+    return ResultsPageModule;
 }());
 
-//# sourceMappingURL=quick-links.module.js.map
+//# sourceMappingURL=results.module.js.map
 
 /***/ }),
 
@@ -44,7 +44,7 @@ var QuickLinksPageModule = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
@@ -99,7 +99,7 @@ var PssPageComponent = (function () {
             eventId = this.eventId;
         }
         var role = this.eventAuth.getRoleName(eventId);
-        console.log('in getHomePageString...');
+        //console.log('in getHomePageString...')
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -166,11 +166,17 @@ var PssPageComponent = (function () {
     };
     PssPageComponent.prototype.generatePlayerLoadingFunction = function () {
         var _this = this;
-        return function (input) {
-            if (input != null) {
-                _this['selectedPlayer'] = input.data;
+        return function (searchResults) {
+            if (searchResults.typeOfSearch == "single") {
+                _this['selectedPlayer'] = searchResults.individualResult.data;
                 _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
             }
+            setTimeout(function () { _this['loading'] = false; }, 500);
+        };
+    };
+    PssPageComponent.prototype.generateItemsLoadingFunction = function () {
+        var _this = this;
+        return function (input) {
             setTimeout(function () { _this['loading'] = false; }, 500);
         };
     };
@@ -183,6 +189,16 @@ var PssPageComponent = (function () {
             // do something with person
             return objValue;
         });
+    };
+    PssPageComponent.prototype.onAutocompleteInput = function (event) {
+        console.log('in oninput...');
+        if (this['searchbar'].suggestions.length == 0) {
+            this['displayExistingUserNotFound'] = true;
+            //this.newUserName=event;
+        }
+        else {
+            this['displayExistingUserNotFound'] = false;
+        }
     };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -203,14 +219,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 755:
+/***/ 756:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QuickLinksPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ResultsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(727);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -229,44 +244,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 
 
-
 /**
- * Generated class for the QuickLinksPage page.
+ * Generated class for the ResultsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var QuickLinksPage = (function (_super) {
-    __extends(QuickLinksPage, _super);
-    function QuickLinksPage() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.reorderEnabled = false;
-        _this.items = [{ 'title': 'Results - Classics I',
-                'icon': 'md-clipboard' },
-            { 'title': 'Results - Main A',
-                'icon': 'md-clipboard' },
-            { 'title': 'Queues - Classics I',
-                'icon': 'git-branch' },
-            { 'title': 'Queues - Classics I',
-                'icon': 'git-branch' },
-        ];
-        return _this;
+var ResultsPage = (function (_super) {
+    __extends(ResultsPage, _super);
+    function ResultsPage() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    QuickLinksPage.prototype.ionViewDidLoad = function () {
-        console.log('ionViewDidLoad QuickLinksPage');
+    ResultsPage.prototype.ionViewDidLoad = function () {
+        console.log('ionViewDidLoad ResultsPage');
     };
-    QuickLinksPage.prototype.reorderItems = function (indexes) {
-        this.items = Object(__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["r" /* reorderArray */])(this.items, indexes);
-    };
-    QuickLinksPage = __decorate([
+    ResultsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-quick-links',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/quick-links/quick-links.html"*/'<!--<bobo>-->\n<ion-header>\n<ion-navbar>  \n    <ion-title showWhen=\'mobile\'>\n      {{title}}\n    </ion-title>    \n  <ion-title hideWhen=\'mobile\'>Pss</ion-title>\n  <ion-buttons end hideWhen=\'mobile\'>\n    <button icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})" >{{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>\n    <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n    <button [navPush]="\'ResultsPage\'" icon-only ion-button>Results</button>\n    <button icon-only ion-button>Queues</button>\n    <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button [navPush]="getHomePageString()" [navParams]="buildNavParams({})">{{eventAuth.getRoleName(eventId)}}</button>\n  </ion-buttons>\n</ion-navbar>\n</ion-header>\n<!--</bobo>-->\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<ion-content>\n  <ion-list>\n    <ion-list-header>Jump To...\n      <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>\n    </ion-list-header>    \n      <button ion-item detail-push [navPush]="eventAuth.isEventUserLoggedIn(eventId)? \'LogoutPage\' : \'LoginPage\'" [navParams]="buildNavParams({})">\n        <ion-icon name="person" item-end></ion-icon>{{eventAuth.isEventUserLoggedIn(eventId)==true? "Logout" : "Login"}}\n      </button>\n      <button ion-item detail-push (click)="pushRootPage(\'EventSelectPage\')">\n        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event\n      </button>      \n    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      \n    <button *ngFor="let item of items"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>\n    </ion-item-group>\n  </ion-list>\n\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/quick-links/quick-links.html"*/,
+            selector: 'page-results',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/'<!--\n  Generated template for the ResultsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar>\n    <ion-title>testing 1 2 3 </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/results/results.html"*/,
         })
-    ], QuickLinksPage);
-    return QuickLinksPage;
+    ], ResultsPage);
+    return ResultsPage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=quick-links.js.map
+//# sourceMappingURL=results.js.map
 
 /***/ })
 

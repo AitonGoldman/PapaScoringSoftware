@@ -1,14 +1,7 @@
 import { ViewChild, Component } from '@angular/core';
-import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
-import { List, Platform, App, NavParams, NavController } from 'ionic-angular';
-import { EventAuthProvider } from '../../providers/event-auth/event-auth';
-import { PssApiProvider } from '../../providers/pss-api/pss-api';
-import { ActionSheetController } from 'ionic-angular'
-import { SuccessSummary } from '../../classes/success-summary';
-import { SuccessButton } from '../../classes/SuccessButton';
-import { NotificationsService } from 'angular2-notifications';
 import { IonicPage } from 'ionic-angular';
+import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
 
 /**
  * Generated class for the TournamentMachinesPage page.
@@ -25,7 +18,7 @@ import { IonicPage } from 'ionic-angular';
     templateUrl: '../../components/tournament-machines/tournament-machines.html',
 })
 
-export class TournamentMachinesPage extends PssPageComponent {
+export class TournamentMachinesPage extends AutoCompleteComponent {
     destPageAfterSuccess:string;
     wizardMode:any=null;
     wizardEntity:any=null;        
@@ -34,31 +27,17 @@ export class TournamentMachinesPage extends PssPageComponent {
     sliding:boolean = true;
     selectedMachines:any = [];
     @ViewChild('searchbar')  searchbar: any;
-    @ViewChild('myform')  myform: any;
-
-    @ViewChild(List)  list: List;
+    @ViewChild('myform')  myform: any;    
     
-    constructor(public autoCompleteProvider:AutoCompleteProvider,
-                public eventAuth: EventAuthProvider,
-                public navParams: NavParams,
-                public navCtrl: NavController,
-                public appCtrl: App,
-                public pssApi: PssApiProvider,
-                public platform: Platform,
-                
-                public actionSheetCtrl: ActionSheetController,
-                public notificationsService: NotificationsService ){
-        super(eventAuth,navParams,
-              navCtrl,appCtrl,
-              pssApi,platform,
-              notificationsService)
-    }
     generateGetAllTournamentMachinesProcessor(){
         return (result) => {            
             if(result == null){
                 return;
             }            
-            this.autoCompleteProvider.setMachines(result.data.machines_list);
+            //this.autoCompleteProvider.setMachines(result.data.machines_list);
+            this.autoCompleteProvider.initializeAutoComplete('machine_name',
+                                                             result.data.machines_list);      
+            
             this.selectedMachines=result.data.tournament_machines_list;            
         };
     }
@@ -68,7 +47,10 @@ export class TournamentMachinesPage extends PssPageComponent {
             if(result == null){
                 return;
             }
-            this.autoCompleteProvider.setMachines(result.data);            
+            // this.autoCompleteProvider.setMachines(result.data);
+            this.autoCompleteProvider.initializeAutoComplete('machine_name',
+                                                             result.data);      
+            
         };
     }
     

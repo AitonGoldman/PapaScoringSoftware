@@ -1,14 +1,15 @@
 webpackJsonp([5],{
 
-/***/ 723:
+/***/ 726:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TicketPurchasePageModule", function() { return TicketPurchasePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TournamentPageModule", function() { return TournamentPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ticket_purchase__ = __webpack_require__(759);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tournament__ = __webpack_require__(762);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__ = __webpack_require__(359);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,23 +19,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var TicketPurchasePageModule = (function () {
-    function TicketPurchasePageModule() {
+
+var TournamentPageModule = (function () {
+    function TournamentPageModule() {
     }
-    TicketPurchasePageModule = __decorate([
+    TournamentPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__ticket_purchase__["a" /* TicketPurchasePage */],
+                __WEBPACK_IMPORTED_MODULE_2__tournament__["a" /* TournamentPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__ticket_purchase__["a" /* TicketPurchasePage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__tournament__["a" /* TournamentPage */]),
+                __WEBPACK_IMPORTED_MODULE_3_angular2_image_upload__["a" /* ImageUploadModule */].forRoot()
             ],
         })
-    ], TicketPurchasePageModule);
-    return TicketPurchasePageModule;
+    ], TournamentPageModule);
+    return TournamentPageModule;
 }());
 
-//# sourceMappingURL=ticket-purchase.module.js.map
+//# sourceMappingURL=tournament.module.js.map
 
 /***/ }),
 
@@ -44,7 +47,7 @@ var TicketPurchasePageModule = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
@@ -99,7 +102,7 @@ var PssPageComponent = (function () {
             eventId = this.eventId;
         }
         var role = this.eventAuth.getRoleName(eventId);
-        console.log('in getHomePageString...');
+        //console.log('in getHomePageString...')
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -166,11 +169,17 @@ var PssPageComponent = (function () {
     };
     PssPageComponent.prototype.generatePlayerLoadingFunction = function () {
         var _this = this;
-        return function (input) {
-            if (input != null) {
-                _this['selectedPlayer'] = input.data;
+        return function (searchResults) {
+            if (searchResults.typeOfSearch == "single") {
+                _this['selectedPlayer'] = searchResults.individualResult.data;
                 _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
             }
+            setTimeout(function () { _this['loading'] = false; }, 500);
+        };
+    };
+    PssPageComponent.prototype.generateItemsLoadingFunction = function () {
+        var _this = this;
+        return function (input) {
             setTimeout(function () { _this['loading'] = false; }, 500);
         };
     };
@@ -183,6 +192,16 @@ var PssPageComponent = (function () {
             // do something with person
             return objValue;
         });
+    };
+    PssPageComponent.prototype.onAutocompleteInput = function (event) {
+        console.log('in oninput...');
+        if (this['searchbar'].suggestions.length == 0) {
+            this['displayExistingUserNotFound'] = true;
+            //this.newUserName=event;
+        }
+        else {
+            this['displayExistingUserNotFound'] = false;
+        }
     };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -271,15 +290,66 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 759:
+/***/ 731:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TicketPurchasePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EntityFields; });
+var EntityFields = (function () {
+    function EntityFields(entityType) {
+        this.entityType = entityType;
+        this.fields = {};
+        this.fieldsArray = [];
+    }
+    EntityFields.prototype.setField = function (fieldName, fieldType, basic, advanced, description) {
+        var field = {
+            fieldName: fieldName,
+            fieldType: fieldType,
+            advanced: advanced,
+            basic: basic,
+            description: description
+        };
+        this.fields[fieldName] = field;
+        //this.fieldsArray.push(field);
+    };
+    EntityFields.prototype.setDependency = function (fieldName, dependsOn, value) {
+        this.fields[fieldName].dependsOn = {
+            dependsOn: dependsOn,
+            value: value
+        };
+    };
+    EntityFields.prototype.getFields = function () {
+        return this.fields;
+    };
+    EntityFields.prototype.getFieldsArray = function (advanced) {
+        var fieldsArray = [];
+        for (var i in this.fields) {
+            fieldsArray.push(this.fields[i]);
+        }
+        if (advanced == false) {
+            return fieldsArray.filter(function (field) { return field.basic == true; });
+        }
+        else {
+            return fieldsArray;
+        }
+    };
+    return EntityFields;
+}());
+
+//# sourceMappingURL=entity-fields.js.map
+
+/***/ }),
+
+/***/ 762:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TournamentPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(727);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(728);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__ = __webpack_require__(729);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__ = __webpack_require__(731);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__ = __webpack_require__(727);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__ = __webpack_require__(728);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__ = __webpack_require__(729);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -300,152 +370,177 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 /**
- * Generated class for the TicketPurchasePage page.
+ * Generated class for the TournamentPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var TicketPurchasePage = (function (_super) {
-    __extends(TicketPurchasePage, _super);
-    function TicketPurchasePage() {
+var tournamentDescriptions = {
+    'tournament_name': {
+        'short': 'Name of the tournament.',
+        'long': 'Name of the tournament (i.e. Classics I, Main A, etc).'
+    },
+    'multi_division_tournament': {
+        'short': 'Multiple divisions.',
+        'long': 'Create a tournament with multiple divisions (i.e. Main A, Main B, Main C, etc).'
+    },
+    'division_count': {
+        'short': 'Number of divisions in multi-division tournament',
+        'long': 'Number of divisions in multi-division tournament'
+    },
+    'queuing': {
+        'short': 'Queuing',
+        'long': 'Enable/Disable queues'
+    }, 'manually_set_price': {
+        'short': 'Price of single ticket',
+        'long': 'Price of single ticket'
+    }, 'number_of_qualifiers': {
+        'short': 'Top X players will qualify for finals',
+        'long': 'Top X players will qualify for finals'
+    }, 'use_stripe': {
+        'short': 'Use Stripe',
+        'long': 'Use Stripe'
+    }, 'stripe_sku': {
+        'short': 'Single Ticket Stripe SKU',
+        'long': 'Single Ticket Stripe SKU'
+    }, 'discount_stripe_sku': {
+        'short': 'Discount Ticket Stripe SKU',
+        'long': 'Discount Ticket Stripe SKU'
+    }, 'discount': {
+        'short': 'Discount',
+        'long': 'Offer a discount on X number of tickets. '
+    }, 'number_of_tickets_for_discount': {
+        'short': 'Discount Ticket Amount',
+        'long': 'Number of tickets to offer a discount on.'
+    }
+};
+var TournamentPage = (function (_super) {
+    __extends(TournamentPage, _super);
+    function TournamentPage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.ticketPriceLists = null;
-        _this.ticketCounts = null;
-        _this.eventPlayer = {};
-        _this.player_id_for_event = null;
-        _this.totalCost = 0;
-        _this.hideSearchbar = false;
+        _this.entity = {};
+        _this.wizardMode = null;
+        _this.wizardModeNextPage = 'TournamentMachinesPage';
+        _this.entityFieldsArray = null;
+        _this.advanced = false;
         return _this;
     }
-    TicketPurchasePage.prototype.ionViewWillLoad = function () {
-        console.log('ionViewDidLoad TicketPurchasePage');
-        var player_id_for_event = this.navParams.get('player_id_for_event');
-        if (player_id_for_event == null) {
-            return;
+    TournamentPage.prototype.ionViewWillLoad = function () {
+        this.actionType = this.navParams.get('actionType');
+        this.entityFields = new __WEBPACK_IMPORTED_MODULE_1__classes_entity_fields__["a" /* EntityFields */]("tournament");
+        this.wizardMode = this.navParams.get('wizardMode');
+        this.eventId = this.navParams.get('eventId');
+        this.tournamentId = this.navParams.get('tournamentId');
+        var wizardEntity = this.navParams.get('wizardEntity');
+        if (wizardEntity != null) {
+            this.wizardEntity = wizardEntity;
         }
-        this.hideSearchbar = true;
-        this.player_id_for_event = player_id_for_event;
-        this.pssApi.getEventPlayer(this.eventId, this.player_id_for_event)
-            .subscribe(this.generateGetEventPlayerProcessor());
+        this.entityFields.setField('tournament_name', 'text', true, false, tournamentDescriptions['tournament_name']);
+        this.entityFields.setField('multi_division_tournament', 'boolean', true, false, tournamentDescriptions['multi_division_tournament']);
+        this.entityFields.setField('division_count', 'text', true, false, tournamentDescriptions['division_count']);
+        this.entityFields.setDependency('division_count', 'multi_division_tournament', true);
+        this.entityFields.setField('queuing', 'boolean', true, false, tournamentDescriptions['queuing']);
+        this.entityFields.setField('discount', 'boolean', true, false, tournamentDescriptions['discount']);
+        this.entityFields.setField('number_of_tickets_for_discount', 'text', true, false, tournamentDescriptions['number_of_tickets_for_discount']);
+        this.entityFields.setDependency('number_of_tickets_for_discount', 'discount', true);
+        this.entityFields.setField('manually_set_price', 'text', true, false, tournamentDescriptions['manually_set_price']);
+        this.entityFields.setDependency('manually_set_price', 'use_stripe', false);
+        this.entityFields.setField('number_of_qualifiers', 'text', true, false, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFields.setField('use_stripe', 'boolean', false, true, tournamentDescriptions['use_stripe']);
+        this.entityFields.setField('stripe_sku', 'text', false, true, tournamentDescriptions['stripe_sku']);
+        this.entityFields.setDependency('stripe_sku', 'use_stripe', true);
+        this.entityFields.setField('discount_stripe_sku', 'text', false, true, tournamentDescriptions['discount_stripe_sku']);
+        this.entityFields.setDependency('discount_stripe_sku', 'use_stripe', true);
+        this.entityFieldsArray = this.entityFields.getFieldsArray(this.advanced);
+        if (this.actionType == "edit") {
+            this.pssApi.getTournament(this.eventId, this.tournamentId)
+                .subscribe(this.generateGetTournamentProcessor());
+        }
     };
-    TicketPurchasePage.prototype.generateGetEventPlayerProcessor = function () {
+    TournamentPage.prototype.generateGetTournamentProcessor = function () {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.eventPlayer = result.data != null ? result.data : {};
-            _this.ticketPriceLists = result.tournament_calculated_lists;
-            _this.ticketCounts = result.tournament_counts;
+            _this.entity = result.data;
         };
     };
-    TicketPurchasePage.prototype.gotoSuccessPage = function (purchaseSummary) {
-        var success_title_string = 'Tickets Purchased!';
-        var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](success_title_string, purchaseSummary.pop(), null);
-        successSummary.setSummaryTable(purchaseSummary);
-        var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', this.getHomePageString(this.eventId), this.buildNavParams({}));
+    TournamentPage.prototype.onAdvancedChange = function () {
+        this.entityFieldsArray = this.entityFields.getFieldsArray(this.advanced);
+    };
+    TournamentPage.prototype.generateEditTournamentProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var success_title_string = 'Tournament ' + result.data.tournament_name + ' has been edited.';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
+            var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.getHomePageString(), _this.buildNavParams({ wizardMode: _this.wizardMode }));
+            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
+                'successButtons': [successButton] }));
+        };
+    };
+    TournamentPage.prototype.generateCreateTournamentProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            var successTitle = 'Tournament ' + result.data[0].tournament_name + ' has been created.';
+            var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](successTitle, null, null);
+            var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', _this.getHomePageString(), _this.buildNavParams({}));
+            _this.navCtrl.push("SuccessPage", _this.buildNavParams({ 'successSummary': successSummary,
+                'successButtons': [successButton] }));
+        };
+    };
+    TournamentPage.prototype.wizardCreateTournamentSubmit = function () {
+        var success_title_string = 'Tournament ' + this.entity['tournament_name'] + ' has been recorded.';
+        var success_first_line = 'Click "Proceed" button to proceed.';
+        var successSummary = new __WEBPACK_IMPORTED_MODULE_3__classes_success_summary__["a" /* SuccessSummary */](success_title_string, success_first_line, null);
+        if (this.wizardEntity != null) {
+            this.wizardEntity['tournament'] = this.entity;
+        }
+        else {
+            this.wizardEntity = { tournament: this.entity };
+        }
+        this.wizardEntity['tournament'] = { tournament: this.entity, division_count: this.entity['division_count'], multi_division_tournament: this.entity['multi_division_tournament'] };
+        var successButton = new __WEBPACK_IMPORTED_MODULE_4__classes_SuccessButton__["a" /* SuccessButton */]('Proceed', this.wizardModeNextPage, this.buildNavParams({ wizardMode: this.wizardMode,
+            wizardEntity: this.wizardEntity }));
         this.navCtrl.push("SuccessPage", this.buildNavParams({ 'successSummary': successSummary,
             'successButtons': [successButton] }));
     };
-    TicketPurchasePage.prototype.generatePurchaseTicketProcessor = function (purchaseSummary) {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            console.log('in generatePurchaseTicketProccesor');
-            if (result.new_token_purchase.completed_purchase == true) {
-                _this.gotoSuccessPage(purchaseSummary);
-                return;
-            }
-            _this.launchStripe(result.new_token_purchase.token_purchase_id, purchaseSummary);
-        };
-    };
-    TicketPurchasePage.prototype.generateCompleteTicketPurchaseProcessor = function (purchaseSummary) {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            console.log('in result');
-            _this.gotoSuccessPage(purchaseSummary);
-        };
-    };
-    TicketPurchasePage.prototype.clearValues = function () {
-        this.ticketPriceLists = null;
-        this.ticketCounts = null;
-        this.eventPlayer = {};
-        //this.player_id_for_event=null;
-        this.totalCost = 0;
-    };
-    TicketPurchasePage.prototype.onInput = function (event) {
-        if (this.player_id_for_event != null && this.player_id_for_event > 99 && this.player_id_for_event < 1000) {
-            console.log('in onInput');
-            this.pssApi.getEventPlayer(this.eventId, this.player_id_for_event)
-                .subscribe(this.generateGetEventPlayerProcessor());
+    TournamentPage.prototype.processEntity = function () {
+        console.log('process entity...' + this.wizardMode);
+        if (this.wizardMode != null) {
+            this.wizardCreateTournamentSubmit();
+            return;
         }
-        else {
-            this.clearValues();
+        if (this.actionType == "create") {
+            this.pssApi.createTournament({ tournament: this.entity, division_count: this.entity['division_count'], multi_division_tournament: this.entity['multi_division_tournament'] }, this.eventId)
+                .subscribe(this.generateCreateTournamentProcessor());
+        }
+        if (this.actionType == "edit") {
+            this.pssApi.editTournament(this.entity, this.eventId)
+                .subscribe(this.generateEditTournamentProcessor());
         }
     };
-    TicketPurchasePage.prototype.onSelect = function (event) {
-        this.totalCost = 0;
-        console.log('in onSelect');
-        for (var _i = 0, _a = this.ticketPriceLists; _i < _a.length; _i++) {
-            var ticketPrice = _a[_i];
-            if (ticketPrice.selectedCount != null) {
-                this.totalCost = this.totalCost + ticketPrice.selectedCount.price;
-            }
-        }
+    TournamentPage.prototype.onUploadFinished = function (event) {
+        this.entity.has_pic = true;
+        this.entity.img_file = JSON.parse(event.serverResponse._body).data;
     };
-    TicketPurchasePage.prototype.launchStripe = function (tokenPurchaseId, purchaseSummary) {
-        var _this = this;
-        var handler = StripeCheckout.configure({
-            key: 'pk_test_ogpldo01jdDiemTfT8MMTtMU',
-            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
-            locale: 'auto',
-            //            token: function(token) {
-            token: function (token) {
-                _this.pssApi.completeTicketPurchase({ stripe_token: token.id, email: token.email }, _this.eventId, tokenPurchaseId)
-                    .subscribe(_this.generateCompleteTicketPurchaseProcessor(purchaseSummary));
-                // You can access the token ID with `token.id`.
-                // Get the token ID to your server-side code for use.
-            }
-        });
-        handler.open({
-            name: 'Stripe.com',
-            description: '2 widgets',
-            zipCode: true,
-            amount: this.totalCost * 100
-        });
-    };
-    TicketPurchasePage.prototype.ticketPurchase = function () {
-        var ticketsToBuy = {};
-        ticketsToBuy['player_id'] = this.eventPlayer.player_id;
-        ticketsToBuy['tournament_token_counts'] = [];
-        var purchaseSummary = [];
-        for (var _i = 0, _a = this.ticketPriceLists; _i < _a.length; _i++) {
-            var ticketsSelected = _a[_i];
-            if (ticketsSelected.selectedCount != null) {
-                ticketsToBuy['tournament_token_counts'].push({ token_count: ticketsSelected.selectedCount.amount,
-                    tournament_id: ticketsSelected.tournament_id });
-                purchaseSummary.push(ticketsSelected.tournament_name + " : " + ticketsSelected.selectedCount.amount);
-            }
-        }
-        purchaseSummary.push("total cost : " + this.totalCost);
-        this.pssApi.purchaseTicket(ticketsToBuy, this.eventId)
-            .subscribe(this.generatePurchaseTicketProcessor(purchaseSummary));
-    };
-    TicketPurchasePage = __decorate([
+    TournamentPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-ticket-purchase',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/ticket-purchase/ticket-purchase.html"*/'<ion-content>\n  <ion-searchbar *ngIf=\'hideSearchbar!=true\'\n     [(ngModel)]="player_id_for_event"\n     (ionInput)="onInput($event)">\n  </ion-searchbar>\n  <ng-container *ngIf="eventPlayer.first_name!=null ">\n    <ion-item text-center>\n      Player Name : {{eventPlayer.player_full_name}}\n    </ion-item>\n    <ion-item *ngIf="eventPlayer.img_url!=null">\n    <ion-avatar  style=\'zoom:3.0\'>\n      <img [src]="eventPlayer.img_url" style=\'margin-left:auto;margin-right:auto\'>\n    </ion-avatar>\n    </ion-item>\n    <form #myForm="ngForm">\n    \n    <ng-container *ngFor="let ticketPriceList of ticketPriceLists">\n      <ion-item no-lines>\n        Existing Count : {{ticketCounts[ticketPriceList.tournament_id]==null?0:ticketCounts[ticketPriceList.tournament_id].count}}\n      </ion-item>\n      <ion-item>\n        <ion-label>{{ticketPriceList.tournament_name}}</ion-label>\n        <ion-select [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:\'poop\'}" (ionChange)="onSelect($event)">\n          <ion-option *ngFor="let calculatedPrice of ticketPriceList.calculated_price_list" [value]="calculatedPrice">{{calculatedPrice.amount}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ng-container>\n    <ion-item>\n      Total Cost : {{totalCost}}\n    </ion-item>\n    <ion-item no-lines text-center>\n      <button padding [disabled]="!myForm.dirty" ion-button (click)="ticketPurchase()"> Purchase Tickets </button>\n    </ion-item>\n    </form>\n    \n  </ng-container>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/ticket-purchase/ticket-purchase.html"*/,
+            selector: 'page-tournament',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/'<!-- Generated template for the CreateEditEntityComponent component -->\n<ion-header>\n  <ion-navbar >\n    <ion-title></ion-title>\n    <ion-buttons end hideWhen="mobile">\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]="buildNavParams({})">Home</button>    \n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content>\n  <div class=\'desktopSlim\'>\n  <form #createEditForm="ngForm">\n    <ion-list>\n      <div margin>\n        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>\n      </div>\n      <ion-item>\n        <ion-label>Advanced Settings</ion-label>\n        <ion-toggle (ionChange)="onAdvancedChange()" name="myadvanced" [(ngModel)]="advanced"></ion-toggle>\n      </ion-item>\n\n      <ng-container *ngFor="let entityField of entityFieldsArray">\n        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">\n          <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>\n          <ng-container *ngIf="entityField.fieldType==\'text\'" >\n            \n            <ion-item>\n              <ion-label>                              <ion-icon name="md-create" item-start></ion-icon></ion-label>\n              <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">\n              </ion-input>    \n            </ion-item>\n          </ng-container>\n          <ng-container *ngIf="entityField.fieldType==\'boolean\'">          \n            <ion-item>\n              <ion-label>{{entityField.description.short}}</ion-label>\n              <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       \n            </ion-item>\n          </ng-container>\n          <ion-item no-lines text-center>\n          </ion-item>\n        </ng-container>        \n      </ng-container>\n      <ng-container *ngIf="entity.img_url!=null">\n        <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>\n        <ion-item>\n          <ion-avatar item-start *ngIf="entity.img_url!=null">\n            <img [src]="entity.img_url">\n          </ion-avatar>                \n        </ion-item>\n      </ng-container>\n      \n<!--      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>\n      <ion-item>\n        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>\n      </ion-item>-->\n    </ion-list>    \n    <button [disabled]=\'!createEditForm.valid\' ion-button default (click)="processEntity()">Apply</button>\n  </form>\n  </div>\n</ion-content>\n\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/components/create-edit-entity/create-edit-entity.html"*/,
         })
-    ], TicketPurchasePage);
-    return TicketPurchasePage;
-}(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
+    ], TournamentPage);
+    return TournamentPage;
+}(__WEBPACK_IMPORTED_MODULE_2__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=ticket-purchase.js.map
+//# sourceMappingURL=tournament.js.map
 
 /***/ })
 

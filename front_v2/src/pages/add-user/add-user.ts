@@ -1,13 +1,14 @@
 import { ViewChild, Component } from '@angular/core';
-import { PssPageComponent } from '../../components/pss-page/pss-page'
-import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
-import { Platform, App, NavParams, NavController } from 'ionic-angular';
-import { EventAuthProvider } from '../../providers/event-auth/event-auth';
-import { PssApiProvider } from '../../providers/pss-api/pss-api';
+// import { PssPageComponent } from '../../components/pss-page/pss-page'
+// import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
+// import { Platform, App, NavParams, NavController } from 'ionic-angular';
+// import { EventAuthProvider } from '../../providers/event-auth/event-auth';
+// import { PssApiProvider } from '../../providers/pss-api/pss-api';
 
-import { ActionSheetController } from 'ionic-angular'
-import { NotificationsService } from 'angular2-notifications';
+// import { ActionSheetController } from 'ionic-angular'
+// import { NotificationsService } from 'angular2-notifications';
 import { IonicPage } from 'ionic-angular';
+import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
 
 /**
  * Generated class for the AddUserPage page.
@@ -23,39 +24,31 @@ import { IonicPage } from 'ionic-angular';
   selector: 'page-add-user',
   templateUrl: '../../components/add-user/add-user.html',
 })
-export class AddUserPage extends PssPageComponent {
-  
+export class AddUserPage extends AutoCompleteComponent {
+    
     @ViewChild('searchbar')  searchbar: any;
     @ViewChild('myForm')  myForm: any;
-    existingUserFound:boolean = true;
-    selectedUser:any = {};
+    displayExistingUserNotFound:boolean = null;
+    selectedUser:any = null;
     newUserName:string=null;    
     users:any;
     roles:any=[];
     selectedRole:any=null;
+    loading:boolean = false;
     
-    constructor(public autoCompleteProvider:AutoCompleteProvider,
-                public eventAuth: EventAuthProvider,
-                public navParams: NavParams,
-                public navCtrl: NavController,
-                public appCtrl: App,
-                public pssApi: PssApiProvider,
-                public platform: Platform,
-                
-                public actionSheetCtrl: ActionSheetController,
-                public notificationsService: NotificationsService ){
-        super(eventAuth,navParams,
-              navCtrl,appCtrl,
-              pssApi,platform,
-              notificationsService)
-    }
     generateGetAllUsersProcessor(){
         return (result) => {            
             if(result == null){
                 return;
             }
             this.users=result.data;
-            this.autoCompleteProvider.setUsers(result.data);
+            console.log('in GetAllUsersProcessor...');
+            console.log(result);
+            this.autoCompleteProvider.initializeAutoComplete('full_user_name',
+                                                             this.users,
+                                                             this.generateItemsLoadingFunction());      
+
+            //this.autoCompleteProvider.setUsers(result.data);
             this.roles=result.roles;
         };
     }
@@ -72,29 +65,32 @@ export class AddUserPage extends PssPageComponent {
                 this.users.push(result.data[0]);                
             }
             let message_string=user_full_name+" is a "+role_name+" in the event."
-            this.notificationsService.success("Success", message_string,{
-                timeOut:0,
-                position:["top","right"],
-                theClass:'poop'
-            })
+                let toast = this.toastCtrl.create({
+                    message:  message_string,
+                    duration: 99000,
+                    position: 'top',
+                    showCloseButton: true,
+                    closeButtonText: " ",
+                    cssClass: "successToast"
+                });
+                toast.present();                
+
             
             //toast here
         };
     }
     
     ionViewWillLoad() {
-        console.log('ionViewDidLoad EventOwnerAddUserPage');
+        console.log('ionViewDidLoad EventOwnerAddUserPage');        
         this.pssApi.getAllUsers()
-            .subscribe(this.generateGetAllUsersProcessor())            
+            .subscribe(this.generateGetAllUsersProcessor())        
     }
     onInput(event){        
-        
-        if(this.searchbar.suggestions.length==0){
-            this.existingUserFound=false;
+        console.log('in oninput...')
+        this.onAutocompleteInput(event);
+        if(this.searchbar.suggestions.length==0){                        
             this.newUserName=event;
-        } else {
-            this.existingUserFound=true;
-        }
+        } 
         
     }
     doesEventRolesMatchEvent(eventId,roles){
@@ -104,19 +100,25 @@ export class AddUserPage extends PssPageComponent {
         console.log('in onselect...');
         
         if(this.doesEventRolesMatchEvent(this.eventId,this.selectedUser.event_roles)){
-            this.existingUserFound=true;
+            this.displayExistingUserNotFound=false;
+            console.log('already there...');
             let message_string=this.selectedUser.full_user_name+" is already registered for this event."
-            this.notificationsService.warn("Warning", message_string,{
-                timeOut:0,
-                position:["top","right"],
-                theClass:'poop'
-            })
+                let toast = this.toastCtrl.create({
+                    message:  message_string,
+                    duration: 99000,
+                    position: 'top',
+                    showCloseButton: true,
+                    closeButtonText: " ",
+                    cssClass: "dangerToast"
+                });
+                toast.present();                
+
 
             return;
         }
         //FIXME : need to add new user to list of users searched
         if(!this.doesEventRolesMatchEvent(this.eventId,this.selectedUser.event_roles)){
-            this.existingUserFound=true;
+            this.displayExistingUserNotFound=false;
             this.pssApi.addEventUsers({event_users:[this.selectedUser],
                                        event_role_ids:[this.selectedRole.event_role_id]},
                                       this.eventId)
@@ -124,16 +126,16 @@ export class AddUserPage extends PssPageComponent {
             return;
         }             
 
-        this.existingUserFound=true
+        this.displayExistingUserNotFound=false;
         
         
     }
     onFocus(){
-        this.selectedUser={};        
-        this.existingUserFound=true;
+        this.selectedUser=null;        
+        //this.existingUserFound=true;
     }
     onSubmit(name_string){
-        this.existingUserFound=true;
+        this['existingUserFound']=true;
         this.pssApi.addEventUsers({event_users:[this.parseOutFirstLastNames(name_string)],event_role_ids:[this.selectedRole.event_role_id]},this.eventId)
            .subscribe(this.generateAddEventUsersProcessor(name_string,this.selectedRole.event_role_name))
             

@@ -3,6 +3,7 @@ import { Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { NotificationsService } from 'angular2-notifications';
+import { SearchResults } from '../../classes/search-results';
 
 /**
  * Generated class for the TopNavComponent component.
@@ -44,7 +45,7 @@ export class PssPageComponent {
             eventId=this.eventId;
         }
         let role = this.eventAuth.getRoleName(eventId);
-        console.log('in getHomePageString...')
+        //console.log('in getHomePageString...')
         
         if(role=="tournamentdirector"){
                 return 'TournamentDirectorHomePage'            
@@ -121,11 +122,17 @@ export class PssPageComponent {
             .subscribe(this.generateAutoCompleteGetEventPlayerProcessor())
     }
     generatePlayerLoadingFunction(){
-        return (input?)=>{            
-            if(input!=null){                
-                this['selectedPlayer']=input.data;                
+        return (searchResults:SearchResults)=>{                        
+            if(searchResults.typeOfSearch=="single"){                
+                this['selectedPlayer']=searchResults.individualResult.data;                
                 this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);
-            }            
+            }
+            
+            setTimeout(()=>{this['loading']=false;},500)            
+        }
+    }
+    generateItemsLoadingFunction(){
+        return (input?)=>{            
             setTimeout(()=>{this['loading']=false;},500)            
         }
     }
@@ -139,6 +146,16 @@ export class PssPageComponent {
             // do something with person
             return objValue
         });
+    }
+    onAutocompleteInput(event){        
+        console.log('in oninput...')
+        if(this['searchbar'].suggestions.length==0){            
+            this['displayExistingUserNotFound']=true;
+            //this.newUserName=event;
+        } else {
+            this['displayExistingUserNotFound']=false;
+        }
+        
     }
     
 

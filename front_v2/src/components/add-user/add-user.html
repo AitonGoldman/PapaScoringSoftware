@@ -18,10 +18,14 @@
     </ion-item>
     <ion-item>
     </ion-item>
-    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>
-  </form>
+    <ion-auto-complete [disabled]="selectedRole==null" name="myautocomplete" [(ngModel)]="selectedUser" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemSelected)="onSelect($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter name', debounce:500}"></ion-auto-complete>
 
-  <div *ngIf='existingUserFound==false' text-center padding>        
+    <!-- <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete> -->
+  </form>
+  <div *ngIf='selectedRole==null' text-center padding>
+    Please select a role!
+  </div>
+  <div *ngIf='displayExistingUserNotFound==true && selectedRole!=null' text-center padding>        
     The system does not know about {{newUserName}}.  Click the button below to register them for the event.
     <br>
     <button [disabled]='!myForm.valid' ion-button margin (click)="onSubmit(newUserName)">Register User</button>

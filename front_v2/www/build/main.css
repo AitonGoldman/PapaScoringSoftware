@@ -28080,6 +28080,11 @@ ion-auto-complete {
   width: 100%;
 }
 
+ion-auto-complete .searchbar-input-container {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
 body {
   -webkit-user-select: text;
   -moz-user-select: text;
@@ -28162,6 +28167,14 @@ simple-notifications .simple-notification-wrapper simple-notification .poop div.
 
 .dangerToast .toast-container .button-inner::before {
   content: "\f18f";
+}
+
+.successToast > div {
+  background-color: green !important;
+}
+
+.successToast .toast-container .button-inner::before {
+  content: "\f255";
 }
 
 expandable .expand-wrapper {

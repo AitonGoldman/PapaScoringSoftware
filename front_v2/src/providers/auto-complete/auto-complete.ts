@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {AutoCompleteService} from 'ionic2-auto-complete';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
+import { SearchResults } from '../../classes/search-results';
+import { Events } from 'ionic-angular';
 
 
 /*
@@ -11,10 +13,14 @@ import { PssApiProvider } from '../../providers/pss-api/pss-api';
   and Angular DI.
 */
 
-// make initilialize function, handles seting up/cleaning up previous
-// rename observable, make it able to set loading without passing info around
-// fix player-info
-// - move common elements to psspage - check
+// need a playerSearchResults object
+// players list
+// indiv player
+// type of request
+
+// items : don't care
+// search for player num or players : need to pass back player (or null) to loading func
+
 // fix add-users
 // fix add-machines
 // fix add-players
@@ -33,7 +39,7 @@ export class AutoCompleteProvider implements AutoCompleteService{
     loadingCompleteFunc:any=null;
     autocompleteType:string=null;
     currentValue:string=null;    
-    constructor(public http: HttpClient, public pssApi: PssApiProvider) {
+    constructor(public http: HttpClient, public pssApi: PssApiProvider,public events: Events) {
         console.log('Hello AutoCompleteProvider Provider');
     }
     
@@ -86,72 +92,88 @@ export class AutoCompleteProvider implements AutoCompleteService{
     //     }
     // }
 
-    processSearchResults(){
+    processSearchResults(typeOfSearch){
         return (result)=>{
-
-        if(result==null){
-            this.loadingCompleteFunc()
-            return ""
-        };
-        if(Array.isArray(result.data)){
-            this.loadingCompleteFunc()
-            return result.data
-        } else {
-            this.loadingCompleteFunc(result)
-            return ""
+            this.events.publish('autocomplete:done', {type:typeOfSearch, state:'DONE', data: result}, Date.now());
+            if(result==null){
+                return "";
+            }
+            if(typeOfSearch=="SEARCH_LIST"){
+                return result.data;
+            }
+            if(typeOfSearch=="SEARCH_SINGLE"){
+                return "";
+            }
         }
+        // return (result)=>{
+            
+        //     if(result==null){
+        //         this.loadingCompleteFunc(searchResults)
+        //         return ""
+        //     };
+        //     if(typeOfSearch=="list"){
+        //         //            if(Array.isArray(result.data)){
+        //         searchResults.resultList=result.data;
+        //         this.loadingCompleteFunc(searchResults)
+        //         return result.data
+        //     } else {
+        //         searchResults.individualResult=result;
+        //         this.loadingCompleteFunc(searchResults)
+        //         return ""
+        //     }
+        // }
     }
-        }
     
     getResults(name:string){
+        //let searchResults = new SearchResults([],null,null);
+        console.log(1);        
         if(this.currentValue!=name){
-            this.currentValue=name;
+            this.currentValue=name;            
         }else{
+            this.events.publish('autocomplete:done', {state:'SAME_INPUT'}, Date.now());
+            //this.loadingCompleteFunc(searchResults)
             return [];
         }
-
+        console.log(2);
         if(name.length<3){
+            this.events.publish('autocomplete:done', {state:'NOT_ENOUGH_INPUT'}, Date.now());
+            //this.loadingCompleteFunc(searchResults)
             return [];
         }
+        console.log(3);
         let eventPlayerId:number = parseInt(name);
         if (Number.isNaN(eventPlayerId)==true && this.autocompleteType=="remote"){
             //this.itemFieldToMatch='player_full_name'        
             this.labelAttribute = "player_full_name";        
+            //searchResults.typeOfSearch="list";
+            console.log(4);
             if(this.eventId){
+                console.log(5);
                 console.log('going to event player search....')
-                return this.pssApi.searchEventPlayersHidden(this.eventId,name)['map'](this.processSearchResults())                            
+                return this.pssApi.searchEventPlayers(this.eventId,name)['map'](this.processSearchResults('SEARCH_LIST'))                            
             } else {
-                return this.pssApi.searchPlayersHidden(name)['map'](this.processSearchResults())            
+                console.log(6);
+                return this.pssApi.searchPlayers(name)['map'](this.processSearchResults('SEARCH_LIST'))
 
             }
             
         } 
         if (Number.isNaN(eventPlayerId)==false && this.autocompleteType=="remote"){
-            
+            console.log(7);
             //this.itemFieldToMatch='player_id_for_event'        
             this.labelAttribute = "player_id_for_event";
-            return this.pssApi.getEventPlayerHidden(this.eventId,name)['map'](this.processSearchResults())            
+            //searchResults.typeOfSearch="single";            
+            return this.pssApi.getEventPlayer(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
         } 
 
         if(this.autocompleteType=="remote"){
             console.log('in getResults...');
 
-            // return this.http.get(this.url+name)['map'](result=>{if(Array.isArray(result.data)){
-            //     this.loadingCompleteFunc()
-            //     return result.data
-            // } else {
-            //     this.loadingCompleteFunc(result)
-            //     return ""//[result.data]
-            // }})
-            //
-
-            // ['do']((input)=>{
-            // this.loadingObservable(input)
-            // });
-            
-            //return this.pssApi.searchPlayers(name)
         }
-        let regex = new RegExp(name.toLowerCase());
+        let regex = new RegExp(name.toLowerCase());        
+        //this.loadingCompleteFunc(searchResults);
+        console.log('filtering items for ... '+name);
+        this.events.publish('autocomplete:done', {type:'ITEMS_LIST', state:'DONE'}, Date.now());
         return this.items.filter(
             (item) => {
                 //let matches = item[this.itemFieldToMatch].toLowerCase().match(regex);

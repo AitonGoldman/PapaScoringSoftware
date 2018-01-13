@@ -1,19 +1,10 @@
 import { ViewChild, Component } from '@angular/core';
-import { PssPageComponent } from '../../components/pss-page/pss-page'
-import { TakePicComponent } from '../../components/take-pic/take-pic'
-
-import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
-import { ModalController, Platform, App, NavParams, NavController } from 'ionic-angular';
-import { EventAuthProvider } from '../../providers/event-auth/event-auth';
-import { PssApiProvider } from '../../providers/pss-api/pss-api';
-import { AlertController } from 'ionic-angular';
-
-import { ActionSheetController } from 'ionic-angular'
-import { NotificationsService } from 'angular2-notifications';
+import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
+import { IonicPage } from 'ionic-angular';
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
-import { IonicPage } from 'ionic-angular';
-
+import { TakePicComponent } from '../../components/take-pic/take-pic'
+import { SearchResults } from '../../classes/search-results';
 
 
 /**
@@ -30,29 +21,13 @@ import { IonicPage } from 'ionic-angular';
   selector: 'page-add-player',
   templateUrl: 'add-player.html',
 })
-export class AddPlayerPage extends PssPageComponent {
-    selectedPlayer:any={};
+export class AddPlayerPage extends AutoCompleteComponent {
+    selectedPlayer:any={player_full_name:""};
     loading:boolean=false;
     ifpaLookup:boolean=false;
     existingPlayerFound:boolean=true;
     @ViewChild('searchbar')  searchbar: any;    
-    constructor(public autoCompleteProvider:AutoCompleteProvider,
-                public eventAuth: EventAuthProvider,
-                public navParams: NavParams,
-                public navCtrl: NavController,
-                public appCtrl: App,
-                public pssApi: PssApiProvider,
-                public platform: Platform,                
-                public actionSheetCtrl: ActionSheetController,
-                public notificationsService: NotificationsService,
-                public alertCtrl: AlertController,
-                public modalCtrl: ModalController){
-        super(eventAuth,navParams,
-              navCtrl,appCtrl,
-              pssApi,platform,
-              notificationsService);
-    }
-
+    displayNewPlayerForm:boolean=false;
     ionViewDidLoad() {
         console.log('ionViewDidLoad AddPlayerPage');
     }
@@ -142,13 +117,16 @@ export class AddPlayerPage extends PssPageComponent {
         }
     }
     
-    onFocus(){
-        this.selectedPlayer={first_name:null,last_name:null};
+    onFocus(){        
+        this.selectedPlayer={first_name:null,last_name:null,player_full_name:null};
+        this.existingPlayerFound=true;
+        this.displayNewPlayerForm=false;                
     }
 
     onSelected(){
         this.existingPlayerFound=false;
         this.getIfpaRanking(this.selectedPlayer.first_name+" "+this.selectedPlayer.last_name)
+        this.displayNewPlayerForm=true;                
     }
     
     
@@ -169,9 +147,16 @@ export class AddPlayerPage extends PssPageComponent {
     }
     
     onInput(event){        
+        //if(this.searchbar.suggestions.length==0 && event.length > 2){            
+        //    this['existingPlayerFound']=false;
+            //this.newUserName=event;
+        //} else {
+        //    this['existingPlayerFound']=true;
+        //}
+
         console.log('in onInput...')
-        this.loading=true;
-        
+        this.displayNewPlayerForm=false;
+        //this.loading=true;        
     }
     
     onItemsShown(event){
@@ -180,13 +165,15 @@ export class AddPlayerPage extends PssPageComponent {
     }
 
     generateLoadingFunction(){
-        return (input)=>{
+        return (searchResults)=>{
             console.log('in loading function');
             
-            if (input.length==0){
-                if(this.searchbar.keyword.length > 2){                
-                    console.log(this.searchbar.suggestions.length);
+            if (searchResults.typeOfSearch=="list" && searchResults.resultList.length==0){
+                if(this.searchbar.keyword.length > 2){
+                    //this.selectedPlayer={};
+//                    console.log(input);
                     this.existingPlayerFound=false;
+                    console.log(this.searchbar.keyword)
                     let nameElements=this.searchbar.keyword.split(' ');
                     if(nameElements.length>0){
                         this.selectedPlayer.first_name=nameElements[0];
@@ -205,8 +192,30 @@ export class AddPlayerPage extends PssPageComponent {
   ionViewWillLoad() {
       console.log('ionViewDidLoad AddPlayerPage');
       this.eventId = this.navParams.get('eventId')
-      this.autoCompleteProvider.setPlayerSearchType("allPlayers",
-                                                    this.generateLoadingFunction());      
+      //this.autoCompleteProvider.setPlayerSearchType("allPlayers",
+      //                                             this.generateLoadingFunction());
+       this.autoCompleteProvider.initializeAutoComplete("player-full-name",
+                                                        null,
+                                                        this.generateLoadingFunction());
+
+        this.events.subscribe('autocomplete:done', (autocompleteInfo, time) => {
+            // user and time are the same arguments passed in `events.publish(user, time)`
+            this.loading=false;
+            if(autocompleteInfo.state=='DONE' && autocompleteInfo.data.data.length==0){
+                console.log(autocompleteInfo);
+                let nameElements=this.searchbar.keyword.split(' ');
+                if(nameElements.length>0){
+                    this.selectedPlayer.first_name=nameElements[0];
+                }
+                if(nameElements.length>1){
+                    this.selectedPlayer.last_name=nameElements[1];
+                }                
+                this.displayNewPlayerForm=true;
+                
+            }
+        });
+      
+      
       //this.autoCompleteProvider.setPlayers(true);
       //this.pssApi.searchPlayers('poop2')
       //    .subscribe(this.generateSearchPlayerProcessor())            

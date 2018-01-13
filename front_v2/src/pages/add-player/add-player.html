@@ -3,22 +3,25 @@
     <custom-headers [eventId]="eventId" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <div class='desktopSlim'>
-    <ion-grid>
-      <ion-row>
-        <ion-col col-1>
-        </ion-col>
-        <ion-col col-10>
-          <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
-        </ion-col>
-        <ion-col col-1>
-          <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+<ion-content>
+  <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500 }"></ion-auto-complete>
+  <div class='desktopSlim' padding>
 
-    <form #myForm="ngForm" *ngIf="existingPlayerFound==false && loading==false">
+    <!-- <ion-grid> -->
+    <!--   <ion-row> -->
+    <!--     <ion-col col-1> -->
+    <!--     </ion-col> -->
+    <!--     <ion-col col-10>           -->
+    <!--       <ion-auto-complete  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete> -->
+    <!--     </ion-col> -->
+    <!--     <ion-col col-1> -->
+    <!--       <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner> -->
+    <!--     </ion-col> -->
+    <!--   </ion-row> -->
+    <!-- </ion-grid> -->
+
+    <!--    <form #myForm="ngForm" *ngIf="existingPlayerFound==false && loading==false">-->
+    <form #myForm="ngForm" *ngIf="displayNewPlayerForm==true">    
       <ion-list>
         <ion-item no-line *ngIf="selectedPlayer.img_url!=null">
           <!-- <ion-grid> -->

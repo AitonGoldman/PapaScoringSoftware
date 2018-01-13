@@ -1,14 +1,17 @@
 webpackJsonp([27],{
 
-/***/ 700:
+/***/ 705:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ChangePlayerPicturePageModule", function() { return ChangePlayerPicturePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventOwnerHomePageModule", function() { return EventOwnerHomePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__change_player_picture__ = __webpack_require__(737);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__event_owner_home__ = __webpack_require__(743);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_expandable_expandable_module__ = __webpack_require__(362);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_notifications__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,23 +21,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var ChangePlayerPicturePageModule = (function () {
-    function ChangePlayerPicturePageModule() {
+
+
+var EventOwnerHomePageModule = (function () {
+    function EventOwnerHomePageModule() {
     }
-    ChangePlayerPicturePageModule = __decorate([
+    EventOwnerHomePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__change_player_picture__["a" /* ChangePlayerPicturePage */],
+                __WEBPACK_IMPORTED_MODULE_2__event_owner_home__["a" /* EventOwnerHomePage */]
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__change_player_picture__["a" /* ChangePlayerPicturePage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__event_owner_home__["a" /* EventOwnerHomePage */]),
+                __WEBPACK_IMPORTED_MODULE_3__components_expandable_expandable_module__["a" /* ExpandableModule */],
+                __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__["SimpleNotificationsModule"].forRoot()
             ],
         })
-    ], ChangePlayerPicturePageModule);
-    return ChangePlayerPicturePageModule;
+    ], EventOwnerHomePageModule);
+    return EventOwnerHomePageModule;
 }());
 
-//# sourceMappingURL=change-player-picture.module.js.map
+//# sourceMappingURL=event-owner-home.module.js.map
 
 /***/ }),
 
@@ -44,7 +51,7 @@ var ChangePlayerPicturePageModule = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
@@ -99,7 +106,7 @@ var PssPageComponent = (function () {
             eventId = this.eventId;
         }
         var role = this.eventAuth.getRoleName(eventId);
-        console.log('in getHomePageString...');
+        //console.log('in getHomePageString...')
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -166,11 +173,17 @@ var PssPageComponent = (function () {
     };
     PssPageComponent.prototype.generatePlayerLoadingFunction = function () {
         var _this = this;
-        return function (input) {
-            if (input != null) {
-                _this['selectedPlayer'] = input.data;
+        return function (searchResults) {
+            if (searchResults.typeOfSearch == "single") {
+                _this['selectedPlayer'] = searchResults.individualResult.data;
                 _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
             }
+            setTimeout(function () { _this['loading'] = false; }, 500);
+        };
+    };
+    PssPageComponent.prototype.generateItemsLoadingFunction = function () {
+        var _this = this;
+        return function (input) {
             setTimeout(function () { _this['loading'] = false; }, 500);
         };
     };
@@ -183,6 +196,16 @@ var PssPageComponent = (function () {
             // do something with person
             return objValue;
         });
+    };
+    PssPageComponent.prototype.onAutocompleteInput = function (event) {
+        console.log('in oninput...');
+        if (this['searchbar'].suggestions.length == 0) {
+            this['displayExistingUserNotFound'] = true;
+            //this.newUserName=event;
+        }
+        else {
+            this['displayExistingUserNotFound'] = false;
+        }
     };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -203,20 +226,13 @@ var PssPageComponent = (function () {
 
 /***/ }),
 
-/***/ 737:
+/***/ 743:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChangePlayerPicturePage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventOwnerHomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(727);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_take_pic_take_pic__ = __webpack_require__(361);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_auto_complete_auto_complete__ = __webpack_require__(357);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_event_auth_event_auth__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_pss_api_pss_api__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_angular2_notifications__ = __webpack_require__(356);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_angular2_notifications___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_angular2_notifications__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -233,103 +249,56 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
 
 
 /**
- * Generated class for the ChangePlayerPicturePage page.
+ * Generated class for the EventOwnerHomePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var ChangePlayerPicturePage = (function (_super) {
-    __extends(ChangePlayerPicturePage, _super);
-    function ChangePlayerPicturePage(autoCompleteProvider, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, actionSheetCtrl, notificationsService, modalCtrl) {
-        var _this = _super.call(this, eventAuth, navParams, navCtrl, appCtrl, pssApi, platform, notificationsService) || this;
-        _this.autoCompleteProvider = autoCompleteProvider;
-        _this.eventAuth = eventAuth;
-        _this.navParams = navParams;
-        _this.navCtrl = navCtrl;
-        _this.appCtrl = appCtrl;
-        _this.pssApi = pssApi;
-        _this.platform = platform;
-        _this.actionSheetCtrl = actionSheetCtrl;
-        _this.notificationsService = notificationsService;
-        _this.modalCtrl = modalCtrl;
-        _this.players = [];
-        _this.selectedPlayer = null;
+var EventOwnerHomePage = (function (_super) {
+    __extends(EventOwnerHomePage, _super);
+    function EventOwnerHomePage() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.itemExpandHeight = 100;
         return _this;
     }
-    ChangePlayerPicturePage.prototype.generateGetAllEventPlayersWithNoPicsProcessor = function () {
+    EventOwnerHomePage.prototype.generateGetAllEventsAndTournamentsProcessor = function () {
         var _this = this;
         return function (result) {
             if (result == null) {
                 return;
             }
-            _this.players = result.data;
+            console.log('got back tournaments and events...');
+            _this.eventsAndTournaments = result.data.filter(function (event) {
+                console.log('in getAllEventsAndTournamentsProcessor');
+                return _this.eventAuth.getEventOwnerPssUserId() == event.event_creator_pss_user_id;
+            });
+            _this.eventsAndTournaments.map(function (event) {
+                event.expanded = false;
+                event.tournaments.map(function (tournament) {
+                    tournament.expanded = false;
+                });
+            });
+            //           this.eventsAndTournaments=this.eventsAndTournaments
+            //            console.log(this.eventsAndTournaments);
         };
     };
-    ChangePlayerPicturePage.prototype.ionViewWillLoad = function () {
-        this.pssApi.getEventPlayers(this.eventId, 'no_pics')
-            .subscribe(this.generateGetAllEventPlayersWithNoPicsProcessor());
-        console.log('ionViewDidLoad ChangePlayerPicturePage');
+    EventOwnerHomePage.prototype.ionViewWillLoad = function () {
+        this.pssApi.getAllEventsAndTournaments()
+            .subscribe(this.generateGetAllEventsAndTournamentsProcessor());
+        console.log('ionViewDidLoad EventOwnerHomePage');
     };
-    ChangePlayerPicturePage.prototype.generateEditPlayerProcessor = function () {
-        var _this = this;
-        return function (result) {
-            if (result == null) {
-                return;
-            }
-            console.log('in generatedEditPlayerProcessor');
-            _this.pssApi.getEventPlayers(_this.eventId, 'no_pics')
-                .subscribe(_this.generateGetAllEventPlayersWithNoPicsProcessor());
-        };
-    };
-    ChangePlayerPicturePage.prototype.takePicture = function (player) {
-        var _this = this;
-        this.selectedPlayer = player;
-        var profileModal = this.modalCtrl.create(__WEBPACK_IMPORTED_MODULE_2__components_take_pic_take_pic__["a" /* TakePicComponent */], { userId: 8675309 });
-        profileModal.onDidDismiss(function (data) {
-            console.log('in modal...');
-            console.log(data);
-            if (data == null) {
-                return;
-            }
-            _this.selectedPlayer.has_pic = true;
-            _this.selectedPlayer.img_file = data;
-            _this.pssApi.editPlayer(_this.selectedPlayer, _this.eventId)
-                .subscribe(_this.generateEditPlayerProcessor());
-        });
-        profileModal.present();
-    };
-    ChangePlayerPicturePage = __decorate([
+    EventOwnerHomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-change-player-picture',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/change-player-picture/change-player-picture.html"*/'<!--\n  Generated template for the ChangePlayerPicturePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>ChangePlayerPicture</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <div class=\'slimDesktop\'>\n    <ion-item *ngFor="let player of players" (click)="takePicture(player)">\n      <ion-icon item-end name="camera"></ion-icon> Take {{player.player_full_name}} Picture      \n    </ion-item>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/change-player-picture/change-player-picture.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__providers_auto_complete_auto_complete__["a" /* AutoCompleteProvider */],
-            __WEBPACK_IMPORTED_MODULE_5__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["m" /* NavParams */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["l" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["c" /* App */],
-            __WEBPACK_IMPORTED_MODULE_6__providers_pss_api_pss_api__["a" /* PssApiProvider */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["n" /* Platform */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["a" /* ActionSheetController */],
-            __WEBPACK_IMPORTED_MODULE_7_angular2_notifications__["NotificationsService"],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["j" /* ModalController */]])
-    ], ChangePlayerPicturePage);
-    return ChangePlayerPicturePage;
+            selector: 'page-event-owner-home',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-home/event-owner-home.html"*/'<!--\n    Generated template for the EventOwnerHomePage page.\n\n    See http://ionicframework.com/docs/components/#navigation for more info on\n    Ionic pages and navigation.\n  -->\n<ion-header>\n  <ion-navbar hideBackButton>\n    <ion-title>EventOwnerHomePage</ion-title>\n    <ion-buttons end hideWhen=\'mobile\'>\n      <button icon-only ion-button [navPush]="\'EventSelectPage\'">Switch Events</button>    \n      <button icon-only ion-button [navPush]="\'EventOwnerLoginPage\'">Login</button>    \n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n<simple-notifications  [options]="{position:[\'top\',\'right\']}"></simple-notifications>\n\n\n<ion-content padding >\n<!--  <div style=\'width:50%;margin-left:auto;margin-right:auto\' text-center>-->\n  <div *ngIf=\'eventAuth.getRoleName(null)!="eventowner"\'>\n    Please login ( look in quick links for the link )\n  </div>\n  <div *ngIf=\'eventAuth.getRoleName(null)=="eventowner"\'>\n  <h1><b>Event Creation</b></h1>\n  <ion-list>\n    <ion-item no-lines [navPush]="\'CreateEventPage\'" [navParams]="buildNavParams({actionType:\'create\',\'wizardMode\':true})">\n      <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Event \n    </ion-item>\n  </ion-list>\n\n  <!--  <button ion-button [navPush]="\'CreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\',targetEventId:1,eventName:\'poop\'}" >Create Tournament</button> -->\n  <h1><b>Your Events</b></h1>\n  <ion-list>\n    <ng-container *ngFor="let event of eventsAndTournaments">\n      <ion-item-divider (click)="expand(event)">\n        <ion-avatar item-start *ngIf="event.img_url!=null">\n          <img [src]="event.img_url">\n        </ion-avatar>\n        <h1>{{event.name}}</h1>\n        <ion-icon item-end [name]="event.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n      </ion-item-divider>\n      <!--    <ion-item>\n              <ion-icon item-start></ion-icon>\n              <button item-end ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>\n              <b>Tournaments</b>\n      </ion-item>-->\n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'EditEventPage\'" [navParams]="{actionType:\'edit\',eventId:event.event_id}">\n        <ion-icon item-start name="md-create"></ion-icon> Edit Event \n\n<!--        <button item-start ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>-->\n      </ion-item>\n\n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'AddUserPage\'" [navParams]="{eventId:event.event_id}">\n<ion-icon item-start name="ios-add-circle-outline"></ion-icon>  Add User\n      </ion-item>\n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'EditUserPage\'" [navParams]="{eventId:event.event_id}">\n<ion-icon item-start name="ios-add-circle-outline"></ion-icon>  Edit User\n      </ion-item>\n      \n      <ion-item no-lines *ngIf="event.expanded" [navPush]="\'TournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\', eventId:event.event_id, wizardMode:true}">\n        <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Tournament \n\n<!--        <button item-start ion-button [navPush]="\'EventOwnerCreateTournamentPage\'" [navParams]="{entityType:\'tournament\',actionType:\'create\'}" >Create Tournament</button>-->\n      </ion-item>\n      <ion-item no-lines *ngIf="event.expanded">\n                <b>Tournaments</b>\n      </ion-item>\n      <ng-container *ngFor="let tournament of event.tournaments">\n        <ion-item (click)="expand(tournament)" *ngIf="event.expanded">\n        \n          \n        <ion-avatar item-start *ngIf="tournament.img_url!=null">\n          <img [src]="tournament.img_url">\n        </ion-avatar>                  \n          {{tournament.tournament_name}}<ion-icon item-end [name]="tournament.expanded==false?\'ios-arrow-dropdown\':\'ios-arrow-dropup\'"></ion-icon>\n        </ion-item>\n        <ng-container *ngIf="tournament.expanded!=true?false:true">\n          <ion-item>\n            <button ion-button [navPush]="\'TournamentMachinesPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id})">Add Machines To Tournament</button>\n            <br>\n            <button [navPush]="\'TournamentPage\'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:event.event_id, actionType:\'edit\'})" ion-button >Edit Tournament</button>\n            <br>\n            <button ion-button (click)="onTournamentToggle(event.event_id,tournament)"><ion-icon item-start [name]="tournament.active==true?\'play\':\'pause\'"></ion-icon>Toggle Tournament</button>\n          </ion-item>\n        </ng-container>\n      </ng-container>\n    </ng-container>\n  </ion-list>\n  </div>\n<!--  </div> -->\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/event-owner-home/event-owner-home.html"*/,
+        })
+    ], EventOwnerHomePage);
+    return EventOwnerHomePage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=change-player-picture.js.map
+//# sourceMappingURL=event-owner-home.js.map
 
 /***/ })
 

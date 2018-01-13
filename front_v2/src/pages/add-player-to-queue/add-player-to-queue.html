@@ -14,12 +14,14 @@
 
 
 <ion-content padding>
-  <ion-searchbar *ngIf='hideSearchbar!=true'
-     [(ngModel)]="player_id_for_event"
-     (ionInput)="onInput($event)">
-  </ion-searchbar>
-  <div text-center *ngIf='eventPlayer!=null'>
-    Add player {{eventPlayer.player_full_name}} to queue for {{tournamentMachine.tournament_machine_name}}
+  <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()"  (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
+
+  <!-- <ion-searchbar *ngIf='hideSearchbar!=true' -->
+  <!--    [(ngModel)]="player_id_for_event" -->
+  <!--    (ionInput)="onInput($event)"> -->
+  <!-- </ion-searchbar> -->
+  <div text-center *ngIf='selectedPlayer!=null'>
+    Add player {{selectedPlayer.player_full_name}} to queue for {{tournamentMachine.tournament_machine_name}}
     <br>
     <button ion-button (click)="addEventPlayerToQueue(tournamentMachine.tournament_machine_id)"> Add To Queue </button>
   </div>

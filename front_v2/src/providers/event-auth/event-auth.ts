@@ -76,7 +76,7 @@ export class EventAuthProvider {
     }
 
     isEventUserLoggedIn(eventId){
-        console.log('in isEventUserLoggedIn')
+//        console.log('in isEventUserLoggedIn')
         
         if (this.userLoggedInEvents[eventId]!=null){
             if(this.userLoggedInEvents[eventId].pss_user_id!=null || this.userLoggedInEvents[eventId].player_id!=null)

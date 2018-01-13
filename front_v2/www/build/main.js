@@ -15,7 +15,7 @@ webpackJsonp([30],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_of__ = __webpack_require__(72);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_observable_of__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(30);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -189,19 +189,19 @@ webpackEmptyAsyncContext.id = 168;
 var map = {
 	"../pages/add-player-to-queue/add-player-to-queue.module": [
 		697,
-		12
+		4
 	],
 	"../pages/add-player/add-player.module": [
 		698,
-		11
+		3
 	],
 	"../pages/add-user/add-user.module": [
 		699,
-		28
+		15
 	],
 	"../pages/change-player-picture/change-player-picture.module": [
 		700,
-		27
+		28
 	],
 	"../pages/create-event/create-event.module": [
 		701,
@@ -213,51 +213,51 @@ var map = {
 	],
 	"../pages/edit-user/edit-user.module": [
 		703,
-		10
+		12
 	],
 	"../pages/event-owner-confirm/event-owner-confirm.module": [
 		704,
-		9
+		11
 	],
 	"../pages/event-owner-home/event-owner-home.module": [
 		705,
-		26
+		27
 	],
 	"../pages/event-owner-login/event-owner-login.module": [
-		707,
+		706,
 		2
 	],
 	"../pages/event-owner-quick-links/event-owner-quick-links.module": [
-		706,
-		25
+		707,
+		26
 	],
 	"../pages/event-owner-request/event-owner-request.module": [
 		708,
-		15
+		16
 	],
 	"../pages/event-owner-tabs/event-owner-tabs.module": [
 		709,
-		24
+		25
 	],
 	"../pages/event-select/event-select.module": [
 		710,
-		23
+		24
 	],
 	"../pages/home/home.module": [
 		711,
-		22
+		23
 	],
 	"../pages/login/login.module": [
 		712,
-		8
+		10
 	],
 	"../pages/logout/logout.module": [
 		713,
-		7
+		9
 	],
 	"../pages/player-home/player-home.module": [
 		714,
-		21
+		22
 	],
 	"../pages/player-info/player-info.module": [
 		715,
@@ -269,43 +269,43 @@ var map = {
 	],
 	"../pages/queue-select-player-tournament-machine/queue-select-player-tournament-machine.module": [
 		717,
-		6
+		8
 	],
 	"../pages/quick-links/quick-links.module": [
 		718,
-		20
+		21
 	],
 	"../pages/results/results.module": [
-		720,
-		19
+		719,
+		20
 	],
 	"../pages/scorekeeper-home/scorekeeper-home.module": [
-		719,
+		721,
 		29
 	],
 	"../pages/success/success.module": [
-		721,
-		18
+		720,
+		19
 	],
 	"../pages/tabs/tabs.module": [
 		722,
-		17
+		18
 	],
 	"../pages/ticket-purchase/ticket-purchase.module": [
 		723,
-		5
+		7
 	],
 	"../pages/tournament-director-home/tournament-director-home.module": [
 		724,
-		16
+		17
 	],
 	"../pages/tournament-machines/tournament-machines.module": [
 		725,
-		4
+		6
 	],
 	"../pages/tournament/tournament.module": [
 		726,
-		3
+		5
 	]
 };
 function webpackAsyncContext(req) {
@@ -380,6 +380,7 @@ var TitleServiceProvider = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_pss_api_pss_api__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(30);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -392,24 +393,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 /*
   Generated class for the AutoCompleteProvider provider.
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
-// make initilialize function, handles seting up/cleaning up previous
-// rename observable, make it able to set loading without passing info around
-// fix player-info
-// - move common elements to psspage - check
+// need a playerSearchResults object
+// players list
+// indiv player
+// type of request
+// items : don't care
+// search for player num or players : need to pass back player (or null) to loading func
 // fix add-users
 // fix add-machines
 // fix add-players
 // add to ticket-purchase
 var AutoCompleteProvider = (function () {
-    function AutoCompleteProvider(http, pssApi) {
+    function AutoCompleteProvider(http, pssApi, events) {
         this.http = http;
         this.pssApi = pssApi;
+        this.events = events;
         this.labelAttribute = "";
         this.formValueAttribute = "";
         this.url = null;
@@ -465,68 +470,86 @@ var AutoCompleteProvider = (function () {
     //             .subscribe((result)=>{this.players=result.data;this.items=this.players})            
     //     }
     // }
-    AutoCompleteProvider.prototype.processSearchResults = function () {
+    AutoCompleteProvider.prototype.processSearchResults = function (typeOfSearch) {
         var _this = this;
         return function (result) {
+            _this.events.publish('autocomplete:done', { type: typeOfSearch, state: 'DONE', data: result }, Date.now());
             if (result == null) {
-                _this.loadingCompleteFunc();
                 return "";
             }
-            ;
-            if (Array.isArray(result.data)) {
-                _this.loadingCompleteFunc();
+            if (typeOfSearch == "SEARCH_LIST") {
                 return result.data;
             }
-            else {
-                _this.loadingCompleteFunc(result);
+            if (typeOfSearch == "SEARCH_SINGLE") {
                 return "";
             }
         };
+        // return (result)=>{
+        //     if(result==null){
+        //         this.loadingCompleteFunc(searchResults)
+        //         return ""
+        //     };
+        //     if(typeOfSearch=="list"){
+        //         //            if(Array.isArray(result.data)){
+        //         searchResults.resultList=result.data;
+        //         this.loadingCompleteFunc(searchResults)
+        //         return result.data
+        //     } else {
+        //         searchResults.individualResult=result;
+        //         this.loadingCompleteFunc(searchResults)
+        //         return ""
+        //     }
+        // }
     };
     AutoCompleteProvider.prototype.getResults = function (name) {
         var _this = this;
+        //let searchResults = new SearchResults([],null,null);
+        console.log(1);
         if (this.currentValue != name) {
             this.currentValue = name;
         }
         else {
+            this.events.publish('autocomplete:done', { state: 'SAME_INPUT' }, Date.now());
+            //this.loadingCompleteFunc(searchResults)
             return [];
         }
+        console.log(2);
         if (name.length < 3) {
+            this.events.publish('autocomplete:done', { state: 'NOT_ENOUGH_INPUT' }, Date.now());
+            //this.loadingCompleteFunc(searchResults)
             return [];
         }
+        console.log(3);
         var eventPlayerId = parseInt(name);
         if (Number.isNaN(eventPlayerId) == true && this.autocompleteType == "remote") {
             //this.itemFieldToMatch='player_full_name'        
             this.labelAttribute = "player_full_name";
+            //searchResults.typeOfSearch="list";
+            console.log(4);
             if (this.eventId) {
+                console.log(5);
                 console.log('going to event player search....');
-                return this.pssApi.searchEventPlayersHidden(this.eventId, name)['map'](this.processSearchResults());
+                return this.pssApi.searchEventPlayers(this.eventId, name)['map'](this.processSearchResults('SEARCH_LIST'));
             }
             else {
-                return this.pssApi.searchPlayersHidden(name)['map'](this.processSearchResults());
+                console.log(6);
+                return this.pssApi.searchPlayers(name)['map'](this.processSearchResults('SEARCH_LIST'));
             }
         }
         if (Number.isNaN(eventPlayerId) == false && this.autocompleteType == "remote") {
+            console.log(7);
             //this.itemFieldToMatch='player_id_for_event'        
             this.labelAttribute = "player_id_for_event";
-            return this.pssApi.getEventPlayerHidden(this.eventId, name)['map'](this.processSearchResults());
+            //searchResults.typeOfSearch="single";            
+            return this.pssApi.getEventPlayer(this.eventId, name)['map'](this.processSearchResults('SEARCH_SINGLE'));
         }
         if (this.autocompleteType == "remote") {
             console.log('in getResults...');
-            // return this.http.get(this.url+name)['map'](result=>{if(Array.isArray(result.data)){
-            //     this.loadingCompleteFunc()
-            //     return result.data
-            // } else {
-            //     this.loadingCompleteFunc(result)
-            //     return ""//[result.data]
-            // }})
-            //
-            // ['do']((input)=>{
-            // this.loadingObservable(input)
-            // });
-            //return this.pssApi.searchPlayers(name)
         }
         var regex = new RegExp(name.toLowerCase());
+        //this.loadingCompleteFunc(searchResults);
+        console.log('filtering items for ... ' + name);
+        this.events.publish('autocomplete:done', { type: 'ITEMS_LIST', state: 'DONE' }, Date.now());
         return this.items.filter(function (item) {
             //let matches = item[this.itemFieldToMatch].toLowerCase().match(regex);
             var matches = item[_this.labelAttribute].toLowerCase().match(regex);
@@ -535,7 +558,7 @@ var AutoCompleteProvider = (function () {
     };
     AutoCompleteProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_2__providers_pss_api_pss_api__["a" /* PssApiProvider */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_2__providers_pss_api_pss_api__["a" /* PssApiProvider */], __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["d" /* Events */]])
     ], AutoCompleteProvider);
     return AutoCompleteProvider;
 }());
@@ -550,8 +573,8 @@ var AutoCompleteProvider = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CustomComponentsModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_header_custom_header__ = __webpack_require__(401);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__custom_header_custom_header__ = __webpack_require__(670);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(30);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -567,7 +590,7 @@ var CustomComponentsModule = (function () {
     CustomComponentsModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [__WEBPACK_IMPORTED_MODULE_1__custom_header_custom_header__["a" /* CustomHeaderComponent */]],
-            imports: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */]],
+            imports: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* IonicModule */]],
             exports: [__WEBPACK_IMPORTED_MODULE_1__custom_header_custom_header__["a" /* CustomHeaderComponent */]]
         })
     ], CustomComponentsModule);
@@ -583,7 +606,7 @@ var CustomComponentsModule = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TakePicComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -641,7 +664,7 @@ var TakePicComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ExpandableModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__expandable__ = __webpack_require__(673);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -657,7 +680,7 @@ var ExpandableModule = (function () {
     }
     ExpandableModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
-            imports: [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__expandable__["a" /* ExpandableComponent */])],
+            imports: [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__expandable__["a" /* ExpandableComponent */])],
             declarations: [__WEBPACK_IMPORTED_MODULE_2__expandable__["a" /* ExpandableComponent */]],
             exports: [__WEBPACK_IMPORTED_MODULE_2__expandable__["a" /* ExpandableComponent */]]
         })
@@ -688,9 +711,9 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(351);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(354);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_common_http__ = __webpack_require__(54);
@@ -747,7 +770,7 @@ var AppModule = (function () {
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
-                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {
+                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {
                     backButtonText: '',
                 }, {
                     links: [
@@ -760,8 +783,8 @@ var AppModule = (function () {
                         { loadChildren: '../pages/edit-user/edit-user.module#EditUserPageModule', name: 'EditUserPage', segment: 'EditUser/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-confirm/event-owner-confirm.module#EventOwnerConfirmPageModule', name: 'EventOwnerConfirmPage', segment: 'EventOwnerConfirm/:itsdangerousstring', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-home/event-owner-home.module#EventOwnerHomePageModule', name: 'EventOwnerHomePage', segment: 'event-owner-home', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/event-owner-quick-links/event-owner-quick-links.module#EventOwnerQuickLinksPageModule', name: 'EventOwnerQuickLinksPage', segment: 'event-owner-quick-links', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-login/event-owner-login.module#EventOwnerLoginPageModule', name: 'EventOwnerLoginPage', segment: 'event-owner-login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/event-owner-quick-links/event-owner-quick-links.module#EventOwnerQuickLinksPageModule', name: 'EventOwnerQuickLinksPage', segment: 'event-owner-quick-links', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-request/event-owner-request.module#EventOwnerRequestPageModule', name: 'EventOwnerRequestPage', segment: 'event-owner-request', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-owner-tabs/event-owner-tabs.module#EventOwnerTabsPageModule', name: 'EventOwnerTabsPage', segment: 'event-owner-tabs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/event-select/event-select.module#EventSelectPageModule', name: 'EventSelectPage', segment: 'event-select', priority: 'low', defaultHistory: [] },
@@ -773,9 +796,9 @@ var AppModule = (function () {
                         { loadChildren: '../pages/post-player-add-success/post-player-add-success.module#PostPlayerAddSuccessPageModule', name: 'PostPlayerAddSuccessPage', segment: 'post-player-add-success', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/queue-select-player-tournament-machine/queue-select-player-tournament-machine.module#QueueSelectPlayerTournamentMachinePageModule', name: 'QueueSelectPlayerTournamentMachinePage', segment: 'QueueSelectPlayerTournamentMachine/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/quick-links/quick-links.module#QuickLinksPageModule', name: 'QuickLinksPage', segment: 'quick-links', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/scorekeeper-home/scorekeeper-home.module#ScorekeeperHomePageModule', name: 'ScorekeeperHomePage', segment: 'scorekeeper-home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/results/results.module#ResultsPageModule', name: 'ResultsPage', segment: 'results', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/success/success.module#SuccessPageModule', name: 'SuccessPage', segment: 'Success/:eventId', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/scorekeeper-home/scorekeeper-home.module#ScorekeeperHomePageModule', name: 'ScorekeeperHomePage', segment: 'scorekeeper-home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/ticket-purchase/ticket-purchase.module#TicketPurchasePageModule', name: 'TicketPurchasePage', segment: 'TicketPurchasePage/:eventId', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/tournament-director-home/tournament-director-home.module#TournamentDirectorHomePageModule', name: 'TournamentDirectorHomePage', segment: 'TournamentDirectorHomePage/:eventId', priority: 'low', defaultHistory: [] },
@@ -793,7 +816,7 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_17_ngx_cookie__["a" /* CookieModule */].forRoot(),
                 __WEBPACK_IMPORTED_MODULE_18__components_custom_components_module__["a" /* CustomComponentsModule */],
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["d" /* IonicApp */]],
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicApp */]],
             entryComponents: [
                 __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */],
                 __WEBPACK_IMPORTED_MODULE_19__components_take_pic_take_pic__["a" /* TakePicComponent */]
@@ -801,7 +824,7 @@ var AppModule = (function () {
             providers: [
                 __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__["a" /* StatusBar */],
                 __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
-                { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["ErrorHandler"], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["e" /* IonicErrorHandler */] },
+                { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["ErrorHandler"], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicErrorHandler */] },
                 __WEBPACK_IMPORTED_MODULE_7__providers_title_service_title_service__["a" /* TitleServiceProvider */],
                 __WEBPACK_IMPORTED_MODULE_8__providers_event_auth_event_auth__["a" /* EventAuthProvider */],
                 __WEBPACK_IMPORTED_MODULE_9__providers_pss_api_pss_api__["a" /* PssApiProvider */],
@@ -816,7 +839,7 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 401:
+/***/ 670:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -925,7 +948,7 @@ var ExpandableComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(354);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(351);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_title_service_title_service__ = __webpack_require__(355);
@@ -1066,7 +1089,7 @@ var EventAuthProvider = (function () {
         console.log('setEventUserLoggedIn debug...');
     };
     EventAuthProvider.prototype.isEventUserLoggedIn = function (eventId) {
-        console.log('in isEventUserLoggedIn');
+        //        console.log('in isEventUserLoggedIn')
         if (this.userLoggedInEvents[eventId] != null) {
             if (this.userLoggedInEvents[eventId].pss_user_id != null || this.userLoggedInEvents[eventId].player_id != null)
                 return true; //this.userLoggedInEvents[eventId];

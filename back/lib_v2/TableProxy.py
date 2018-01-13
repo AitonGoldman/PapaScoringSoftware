@@ -317,7 +317,7 @@ class TableProxy():
             event_role_mapping.pss_user_id=pss_user.pss_user_id
             event_role_mapping.event_role_id=event_role.event_role_id
             event_role_mapping.event_role_name=event_role.event_role_name
-            pss_user.event_roles.append(event_role_mapping)        
+            pss_user.event_roles.append(event_role_mapping)            
         if commit:
             self.db_handle.session.commit()
         return pss_user

@@ -19,6 +19,10 @@
 
 ion-auto-complete {
   width: 100%;
+  .searchbar-input-container {
+    padding-left:5px;
+    padding-right:5px;
+  }
 }
 
 body {
@@ -114,6 +118,17 @@ simple-notifications{
   .toast-container {
     .button-inner::before {
      content: "\f18f";
+    }
+  }  
+}
+
+.successToast {
+  > div {
+     background-color:green!important;
+  }
+  .toast-container {
+    .button-inner::before {
+     content: "\f255";
     }
   }  
 }

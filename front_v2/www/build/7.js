@@ -1,14 +1,14 @@
 webpackJsonp([7],{
 
-/***/ 713:
+/***/ 723:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LogoutPageModule", function() { return LogoutPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TicketPurchasePageModule", function() { return TicketPurchasePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logout__ = __webpack_require__(749);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ticket_purchase__ = __webpack_require__(759);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,23 +18,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var LogoutPageModule = (function () {
-    function LogoutPageModule() {
+var TicketPurchasePageModule = (function () {
+    function TicketPurchasePageModule() {
     }
-    LogoutPageModule = __decorate([
+    TicketPurchasePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__logout__["a" /* LogoutPage */],
+                __WEBPACK_IMPORTED_MODULE_2__ticket_purchase__["a" /* TicketPurchasePage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__logout__["a" /* LogoutPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__ticket_purchase__["a" /* TicketPurchasePage */]),
             ],
         })
-    ], LogoutPageModule);
-    return LogoutPageModule;
+    ], TicketPurchasePageModule);
+    return TicketPurchasePageModule;
 }());
 
-//# sourceMappingURL=logout.module.js.map
+//# sourceMappingURL=ticket-purchase.module.js.map
 
 /***/ }),
 
@@ -44,7 +44,7 @@ var LogoutPageModule = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PssPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_event_auth_event_auth__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_pss_api_pss_api__ = __webpack_require__(155);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_notifications__ = __webpack_require__(356);
@@ -99,7 +99,7 @@ var PssPageComponent = (function () {
             eventId = this.eventId;
         }
         var role = this.eventAuth.getRoleName(eventId);
-        console.log('in getHomePageString...');
+        //console.log('in getHomePageString...')
         if (role == "tournamentdirector") {
             return 'TournamentDirectorHomePage';
         }
@@ -166,11 +166,17 @@ var PssPageComponent = (function () {
     };
     PssPageComponent.prototype.generatePlayerLoadingFunction = function () {
         var _this = this;
-        return function (input) {
-            if (input != null) {
-                _this['selectedPlayer'] = input.data;
+        return function (searchResults) {
+            if (searchResults.typeOfSearch == "single") {
+                _this['selectedPlayer'] = searchResults.individualResult.data;
                 _this['ticketCounts'] = _this.generateListFromObj(_this['selectedPlayer'].tournament_counts);
             }
+            setTimeout(function () { _this['loading'] = false; }, 500);
+        };
+    };
+    PssPageComponent.prototype.generateItemsLoadingFunction = function () {
+        var _this = this;
+        return function (input) {
             setTimeout(function () { _this['loading'] = false; }, 500);
         };
     };
@@ -183,6 +189,16 @@ var PssPageComponent = (function () {
             // do something with person
             return objValue;
         });
+    };
+    PssPageComponent.prototype.onAutocompleteInput = function (event) {
+        console.log('in oninput...');
+        if (this['searchbar'].suggestions.length == 0) {
+            this['displayExistingUserNotFound'] = true;
+            //this.newUserName=event;
+        }
+        else {
+            this['displayExistingUserNotFound'] = false;
+        }
     };
     PssPageComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -271,11 +287,11 @@ var SuccessButton = (function () {
 
 /***/ }),
 
-/***/ 749:
+/***/ 759:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogoutPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TicketPurchasePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__ = __webpack_require__(727);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__ = __webpack_require__(728);
@@ -301,34 +317,151 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 /**
- * Generated class for the LogoutPage page.
+ * Generated class for the TicketPurchasePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var LogoutPage = (function (_super) {
-    __extends(LogoutPage, _super);
-    function LogoutPage() {
+var TicketPurchasePage = (function (_super) {
+    __extends(TicketPurchasePage, _super);
+    function TicketPurchasePage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.successSummary = null;
-        _this.successButtons = null;
+        _this.ticketPriceLists = null;
+        _this.ticketCounts = null;
+        _this.eventPlayer = {};
+        _this.player_id_for_event = null;
+        _this.totalCost = 0;
+        _this.hideSearchbar = false;
         return _this;
     }
-    LogoutPage.prototype.ionViewWillLoad = function () {
-        this.eventAuth.logout(this.eventId);
-        var success_title_string = 'Logged out!';
-        this.successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](success_title_string, null, null);
-        this.successButtons = [new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', this.getHomePageString(this.eventId), this.buildNavParams({}))];
+    TicketPurchasePage.prototype.ionViewWillLoad = function () {
+        console.log('ionViewDidLoad TicketPurchasePage');
+        var player_id_for_event = this.navParams.get('player_id_for_event');
+        if (player_id_for_event == null) {
+            return;
+        }
+        this.hideSearchbar = true;
+        this.player_id_for_event = player_id_for_event;
+        this.pssApi.getEventPlayer(this.eventId, this.player_id_for_event)
+            .subscribe(this.generateGetEventPlayerProcessor());
     };
-    LogoutPage = __decorate([
+    TicketPurchasePage.prototype.generateGetEventPlayerProcessor = function () {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            _this.eventPlayer = result.data != null ? result.data : {};
+            _this.ticketPriceLists = result.tournament_calculated_lists;
+            _this.ticketCounts = result.tournament_counts;
+        };
+    };
+    TicketPurchasePage.prototype.gotoSuccessPage = function (purchaseSummary) {
+        var success_title_string = 'Tickets Purchased!';
+        var successSummary = new __WEBPACK_IMPORTED_MODULE_2__classes_success_summary__["a" /* SuccessSummary */](success_title_string, purchaseSummary.pop(), null);
+        successSummary.setSummaryTable(purchaseSummary);
+        var successButton = new __WEBPACK_IMPORTED_MODULE_3__classes_SuccessButton__["a" /* SuccessButton */]('Go Home', this.getHomePageString(this.eventId), this.buildNavParams({}));
+        this.navCtrl.push("SuccessPage", this.buildNavParams({ 'successSummary': successSummary,
+            'successButtons': [successButton] }));
+    };
+    TicketPurchasePage.prototype.generatePurchaseTicketProcessor = function (purchaseSummary) {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            console.log('in generatePurchaseTicketProccesor');
+            if (result.new_token_purchase.completed_purchase == true) {
+                _this.gotoSuccessPage(purchaseSummary);
+                return;
+            }
+            _this.launchStripe(result.new_token_purchase.token_purchase_id, purchaseSummary);
+        };
+    };
+    TicketPurchasePage.prototype.generateCompleteTicketPurchaseProcessor = function (purchaseSummary) {
+        var _this = this;
+        return function (result) {
+            if (result == null) {
+                return;
+            }
+            console.log('in result');
+            _this.gotoSuccessPage(purchaseSummary);
+        };
+    };
+    TicketPurchasePage.prototype.clearValues = function () {
+        this.ticketPriceLists = null;
+        this.ticketCounts = null;
+        this.eventPlayer = {};
+        //this.player_id_for_event=null;
+        this.totalCost = 0;
+    };
+    TicketPurchasePage.prototype.onInput = function (event) {
+        if (this.player_id_for_event != null && this.player_id_for_event > 99 && this.player_id_for_event < 1000) {
+            console.log('in onInput');
+            this.pssApi.getEventPlayer(this.eventId, this.player_id_for_event)
+                .subscribe(this.generateGetEventPlayerProcessor());
+        }
+        else {
+            this.clearValues();
+        }
+    };
+    TicketPurchasePage.prototype.onSelect = function (event) {
+        this.totalCost = 0;
+        console.log('in onSelect');
+        for (var _i = 0, _a = this.ticketPriceLists; _i < _a.length; _i++) {
+            var ticketPrice = _a[_i];
+            if (ticketPrice.selectedCount != null) {
+                this.totalCost = this.totalCost + ticketPrice.selectedCount.price;
+            }
+        }
+    };
+    TicketPurchasePage.prototype.launchStripe = function (tokenPurchaseId, purchaseSummary) {
+        var _this = this;
+        var handler = StripeCheckout.configure({
+            key: 'pk_test_ogpldo01jdDiemTfT8MMTtMU',
+            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+            locale: 'auto',
+            //            token: function(token) {
+            token: function (token) {
+                _this.pssApi.completeTicketPurchase({ stripe_token: token.id, email: token.email }, _this.eventId, tokenPurchaseId)
+                    .subscribe(_this.generateCompleteTicketPurchaseProcessor(purchaseSummary));
+                // You can access the token ID with `token.id`.
+                // Get the token ID to your server-side code for use.
+            }
+        });
+        handler.open({
+            name: 'Stripe.com',
+            description: '2 widgets',
+            zipCode: true,
+            amount: this.totalCost * 100
+        });
+    };
+    TicketPurchasePage.prototype.ticketPurchase = function () {
+        var ticketsToBuy = {};
+        ticketsToBuy['player_id'] = this.eventPlayer.player_id;
+        ticketsToBuy['tournament_token_counts'] = [];
+        var purchaseSummary = [];
+        for (var _i = 0, _a = this.ticketPriceLists; _i < _a.length; _i++) {
+            var ticketsSelected = _a[_i];
+            if (ticketsSelected.selectedCount != null) {
+                ticketsToBuy['tournament_token_counts'].push({ token_count: ticketsSelected.selectedCount.amount,
+                    tournament_id: ticketsSelected.tournament_id });
+                purchaseSummary.push(ticketsSelected.tournament_name + " : " + ticketsSelected.selectedCount.amount);
+            }
+        }
+        purchaseSummary.push("total cost : " + this.totalCost);
+        this.pssApi.purchaseTicket(ticketsToBuy, this.eventId)
+            .subscribe(this.generatePurchaseTicketProcessor(purchaseSummary));
+    };
+    TicketPurchasePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-logout',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/'<!--\n  Generated template for the SuccessPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <ion-title>Success</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-grid>\n  <ion-row>\n    <ion-col>      \n    </ion-col>\n    <ion-col style=\'text-align:center\'> \n      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>\n      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>\n\n    </ion-col>\n    <ion-col>     \n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getTitle():\'You can not reload this page\'}}\n      <hr style=\'width:75%\'>      \n    </ion-col>\n  </ion-row>\n\n  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      \n    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">\n      <ion-col style=\'text-align:center\'>         \n        {{summaryTableRow}}\n      </ion-col>                     \n    </ion-row>\n    <hr style=\'width:75%\' text-center>\n  </ng-container>\n\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getFirstLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col style=\'text-align:center\'>         \n      {{successSummary ? successSummary.getSecondLine():\'\'}}\n    </ion-col>               \n  </ion-row>\n  <ion-row>\n    <ion-col *ngFor="let button of successButtons" text-center>\n      <button ion-button (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>\n    </ion-col>\n  </ion-row>\n  <ion-row justify-content-center *ngIf="successSummary == undefined" >\n    <ion-col text-center > \n      <button ion-button (click)="goToEventSelectOnPageReload()">Select Event</button>\n    </ion-col>\n  </ion-row>\n  </ion-grid>\n  \n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/success/success.html"*/,
+            selector: 'page-ticket-purchase',template:/*ion-inline-start:"/Users/agoldma/git/github/TD/front_v2/src/pages/ticket-purchase/ticket-purchase.html"*/'<ion-content>\n  <ion-searchbar *ngIf=\'hideSearchbar!=true\'\n     [(ngModel)]="player_id_for_event"\n     (ionInput)="onInput($event)">\n  </ion-searchbar>\n  <ng-container *ngIf="eventPlayer.first_name!=null ">\n    <ion-item text-center>\n      Player Name : {{eventPlayer.player_full_name}}\n    </ion-item>\n    <ion-item *ngIf="eventPlayer.img_url!=null">\n    <ion-avatar  style=\'zoom:3.0\'>\n      <img [src]="eventPlayer.img_url" style=\'margin-left:auto;margin-right:auto\'>\n    </ion-avatar>\n    </ion-item>\n    <form #myForm="ngForm">\n    \n    <ng-container *ngFor="let ticketPriceList of ticketPriceLists">\n      <ion-item no-lines>\n        Existing Count : {{ticketCounts[ticketPriceList.tournament_id]==null?0:ticketCounts[ticketPriceList.tournament_id].count}}\n      </ion-item>\n      <ion-item>\n        <ion-label>{{ticketPriceList.tournament_name}}</ion-label>\n        <ion-select [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:\'poop\'}" (ionChange)="onSelect($event)">\n          <ion-option *ngFor="let calculatedPrice of ticketPriceList.calculated_price_list" [value]="calculatedPrice">{{calculatedPrice.amount}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ng-container>\n    <ion-item>\n      Total Cost : {{totalCost}}\n    </ion-item>\n    <ion-item no-lines text-center>\n      <button padding [disabled]="!myForm.dirty" ion-button (click)="ticketPurchase()"> Purchase Tickets </button>\n    </ion-item>\n    </form>\n    \n  </ng-container>\n</ion-content>\n'/*ion-inline-end:"/Users/agoldma/git/github/TD/front_v2/src/pages/ticket-purchase/ticket-purchase.html"*/,
         })
-    ], LogoutPage);
-    return LogoutPage;
+    ], TicketPurchasePage);
+    return TicketPurchasePage;
 }(__WEBPACK_IMPORTED_MODULE_1__components_pss_page_pss_page__["a" /* PssPageComponent */]));
 
-//# sourceMappingURL=logout.js.map
+//# sourceMappingURL=ticket-purchase.js.map
 
 /***/ })
 

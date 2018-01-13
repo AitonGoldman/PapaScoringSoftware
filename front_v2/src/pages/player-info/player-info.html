@@ -29,6 +29,11 @@
 
     -->
   <ion-list *ngIf="selectedPlayer!=null">
+    <ion-item no-lines *ngIf="selectedPlayer.img_url!=null">
+      <ion-avatar  style='zoom:3.0'>
+        <img [src]="selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
+      </ion-avatar>
+    </ion-item>
     <ion-item-divider text-center color="light">
       Player Name
     </ion-item-divider>
@@ -48,9 +53,4 @@
       {{ticketCount.tournament_name}} : {{ticketCount.count}}
     </ion-item>
   </ion-list>
-  <!--   {{selectedPlayer!=null?selectedPlayer.player_id_for_event:""}}-- -->
-  <!--   <div *ngFor="let ticketCount of ticketCounts"> -->
-  <!--     {{ticketCount.tournament_name}} : {{ticketCount.count}} -->
-  <!--   </div> -->
-  <!-- </div>   -->
 </ion-content>

@@ -25,26 +25,45 @@ export class PlayerInfoPage extends AutoCompleteComponent {
     playerLoadStatus:string='notStarted';
     @ViewChild('searchbar')  searchbar: any;    
     singleUser:any=null;
+    displayExistingUserNotFound:boolean = false;
     
     
-    // generateGetEventPlayerProcessor(){
-    //     return (result)=>{
-    //         if(result==null){                
-    //             return
-    //         }
-    //         this.selectedPlayer=result.data;
-    //         this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);            
-    //     }
-    // }
-  
-  ionViewWillLoad() {
+    ionViewWillLoad() {
       console.log('ionViewDidLoad PlayerInfoPage');
       //this.autoCompleteProvider.setPlayerSearchType("allPlayers",
       //                                              this.generateLoadingFunction());      
-      this.autoCompleteProvider.initializeAutoComplete(null,
-                                                       null,
-                                                       this.generatePlayerLoadingFunction(),
-                                                       this.eventId);      
+        this.events.subscribe('autocomplete:done', (autocompleteInfo, time) => {
+            // user and time are the same arguments passed in `events.publish(user, time)`
+            this.loading=false;
+            if(autocompleteInfo.state=='DONE' && autocompleteInfo.type=='SEARCH_SINGLE'){
+                console.log(autocompleteInfo);
+                if(autocompleteInfo.data==null){
+                    return;
+                }
+                this['selectedPlayer']=autocompleteInfo.data.data;
+                this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);                
+                
+            }
+            if(autocompleteInfo.state=='DONE' && autocompleteInfo.type=='SEARCH_LIST'){
+                console.log(autocompleteInfo);
+                if(autocompleteInfo.data.data.length==0){
+                    let toast = this.toastCtrl.create({
+                        message:  "No Such Player in Event -- ",
+                        duration: 99000,
+                        position: 'top',
+                        showCloseButton: true,
+                        closeButtonText: " ",
+                        cssClass: "dangerToast"
+                    });
+                    toast.present();                                    
+                }
+                
+            }            
+        });
+        this.autoCompleteProvider.initializeAutoComplete(null,
+                                                         null,
+                                                         this.generatePlayerLoadingFunction(),
+                                                         this.eventId);      
       
       let player_id_for_event = this.navParams.get('player_id_for_event');
       if(player_id_for_event==null){          
@@ -61,66 +80,18 @@ export class PlayerInfoPage extends AutoCompleteComponent {
         this.ticketCounts=null;
         //this.selectedPlayer={player_full_name:null,player_id_for_event:null,first_name:null,last_name:null};
     }
-
-    // onSelected(){
-    //     console.log(this.selectedPlayer);
-    //     this.pssApi.getEventPlayer(this.eventId,this.selectedPlayer.player_id_for_event)
-    //         .subscribe(this.generateAutoCompleteGetEventPlayerProcessor())
-    // }
     
     onInput(event){        
         console.log('in onInput...')
         console.log(event);
-        this.loading=true;        
-        //if(event.length==3){
-            //this.searchbar.select(100);
-        //}
-        
+        this.loading=true;                
     }
 
     onItemsShown(){
-        console.log('in onItemsShown');        
-//        console.log(event);
-//        console.log(this.searchbar);
-//        this.searchbar.select(null);
-        //this.searchbar._showList=false;
-//        console.log("-----------");        
-//        console.log(this.searchbar.getItems());
-//        console.log("-----------");        
+        console.log('in onItemsShown');
     }
-    // generateLoadingFunction(){
-    //     return (input?)=>{
-    //         if(input!=null){
-    //             console.log(input)
-    //             this.selectedPlayer=input.data;
-    //             console.log(this.selectedPlayer);
-    //             this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);
-    //         }            
-    //         setTimeout(()=>{this.loading=false;},500)            
-    //     }
-    // }
-
-    // generateListFromObj(obj){
-    //     if(obj==null){
-    //         return []
-    //     }
-    //     return Object.keys(obj).map(function(key){
-    //         let objValue =obj[key];
-    //         // do something with person
-    //         return objValue
-    //     });
-    // }
-    // onInput(event){        
-    //     this.playerLoadStatus='notStarted';
-    //     if(this.player_id_for_event != null && this.player_id_for_event > 99 && this.player_id_for_event < 1000){
-    //         console.log('in onInput')
-    //         this.pssApi.getEventPlayer(this.eventId,this.player_id_for_event)
-    //             .subscribe(this.generateGetEventPlayerProcessor())                                                  
-
-    //     } else {
-    //         this.clearValues();
-    //     }        
-    // }
+        
+        
     clearValues(){
         this.selectedPlayer={};
         //this.eventPlayer={};

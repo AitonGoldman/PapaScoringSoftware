@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
-
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
 import { ModalController, Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { AlertController } from 'ionic-angular';
-
+import { ToastController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
 import { NotificationsService } from 'angular2-notifications';
+import { Events } from 'ionic-angular';
 
 //import { IonicPage } from 'ionic-angular';
 
@@ -24,8 +24,8 @@ import { NotificationsService } from 'angular2-notifications';
 })
 export class AutoCompleteComponent extends PssPageComponent {
 
-  text: string;
-
+    text: string;
+    
     constructor(public autoCompleteProvider:AutoCompleteProvider,
                 public eventAuth: EventAuthProvider,
                 public navParams: NavParams,
@@ -36,7 +36,9 @@ export class AutoCompleteComponent extends PssPageComponent {
                 public actionSheetCtrl: ActionSheetController,
                 public notificationsService: NotificationsService,
                 public alertCtrl: AlertController,
-                public modalCtrl: ModalController){
+                public modalCtrl: ModalController,
+                public toastCtrl: ToastController,
+                public events: Events){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,

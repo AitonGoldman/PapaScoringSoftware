@@ -22,15 +22,15 @@ import { SearchResults } from '../../classes/search-results';
   templateUrl: 'add-player.html',
 })
 export class AddPlayerPage extends AutoCompleteComponent {
-    selectedPlayer:any={player_full_name:""};
-    loading:boolean=false;
+    //selectedPlayer:any={player_full_name:""};
+    addPlayerAutoComplete:boolean=true;
     ifpaLookup:boolean=false;
-    existingPlayerFound:boolean=true;
-    @ViewChild('searchbar')  searchbar: any;    
-    displayNewPlayerForm:boolean=false;
-    ionViewDidLoad() {
-        console.log('ionViewDidLoad AddPlayerPage');
-    }
+//    existingPlayerFound:boolean=true;
+//    @ViewChild('searchbar')  searchbar: any;    
+//    displayNewPlayerForm:boolean=false;
+//    ionViewDidLoad() {
+//        console.log('ionViewDidLoad AddPlayerPage');
+//    }
 
     generateAddEventPlayersProcessor(){
         return (result) => {
@@ -118,15 +118,15 @@ export class AddPlayerPage extends AutoCompleteComponent {
     }
     
     onFocus(){        
-        this.selectedPlayer={first_name:null,last_name:null,player_full_name:null};
-        this.existingPlayerFound=true;
-        this.displayNewPlayerForm=false;                
+        this.selectedPlayer={player_full_name:null};
+        //this.existingPlayerFound=true;
+        //this.displayNewPlayerForm=false;                
     }
 
     onSelected(){
-        this.existingPlayerFound=false;
+        //this.existingPlayerFound=false;
         this.getIfpaRanking(this.selectedPlayer.first_name+" "+this.selectedPlayer.last_name)
-        this.displayNewPlayerForm=true;                
+        //this.displayNewPlayerForm=true;                
     }
     
     
@@ -155,7 +155,7 @@ export class AddPlayerPage extends AutoCompleteComponent {
         //}
 
         console.log('in onInput...')
-        this.displayNewPlayerForm=false;
+//        this.displayNewPlayerForm=false;
         //this.loading=true;        
     }
     
@@ -172,7 +172,7 @@ export class AddPlayerPage extends AutoCompleteComponent {
                 if(this.searchbar.keyword.length > 2){
                     //this.selectedPlayer={};
 //                    console.log(input);
-                    this.existingPlayerFound=false;
+//                    this.existingPlayerFound=false;
                     console.log(this.searchbar.keyword)
                     let nameElements=this.searchbar.keyword.split(' ');
                     if(nameElements.length>0){
@@ -183,7 +183,7 @@ export class AddPlayerPage extends AutoCompleteComponent {
                     }
                 }
             } else {
-                this.existingPlayerFound=true;            
+//                this.existingPlayerFound=true;            
             }
             setTimeout(()=>{this.loading=false;},500)
             
@@ -198,22 +198,22 @@ export class AddPlayerPage extends AutoCompleteComponent {
                                                         null,
                                                         this.generateLoadingFunction());
 
-        this.events.subscribe('autocomplete:done', (autocompleteInfo, time) => {
-            // user and time are the same arguments passed in `events.publish(user, time)`
-            this.loading=false;
-            if(autocompleteInfo.state=='DONE' && autocompleteInfo.data.data.length==0){
-                console.log(autocompleteInfo);
-                let nameElements=this.searchbar.keyword.split(' ');
-                if(nameElements.length>0){
-                    this.selectedPlayer.first_name=nameElements[0];
-                }
-                if(nameElements.length>1){
-                    this.selectedPlayer.last_name=nameElements[1];
-                }                
-                this.displayNewPlayerForm=true;
+        // this.events.subscribe('autocomplete:done', (autocompleteInfo, time) => {
+        //     // user and time are the same arguments passed in `events.publish(user, time)`
+        //     this.loading=false;
+        //     if(autocompleteInfo.state=='DONE' && autocompleteInfo.data.data.length==0){
+        //         console.log(autocompleteInfo);
+        //         let nameElements=this.searchbar.keyword.split(' ');
+        //         if(nameElements.length>0){
+        //             this.selectedPlayer.first_name=nameElements[0];
+        //         }
+        //         if(nameElements.length>1){
+        //             this.selectedPlayer.last_name=nameElements[1];
+        //         }                
+        //         this.displayNewPlayerForm=true;
                 
-            }
-        });
+        //     }
+        // });
       
       
       //this.autoCompleteProvider.setPlayers(true);

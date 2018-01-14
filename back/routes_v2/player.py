@@ -1,4 +1,4 @@
-from werkzeug.exceptions import BadRequest, Unauthorized
+from werkzeug.exceptions import BadRequest, Unauthorized, NotFound
 from lib_v2 import blueprints,permissions,pss_user_helpers
 from flask import jsonify,current_app,request
 from flask_login import current_user
@@ -90,7 +90,7 @@ def get_event_player_route(app,event_id,event_player_id):
                 'tournament_calculated_lists':to_dict(tournament_calculated_lists),
                 'tournament_counts':tournament_counts}
     else:
-        raise BadRequest('That player number does not exist')
+        raise NotFound('That player number does not exist')
     
 @blueprints.test_blueprint.route('/<int:event_id>/player',methods=['POST'])
 def player_create(event_id):            

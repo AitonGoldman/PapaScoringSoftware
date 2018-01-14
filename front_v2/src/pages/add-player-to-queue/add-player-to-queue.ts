@@ -28,40 +28,7 @@ export class AddPlayerToQueuePage extends AutoCompleteComponent {
         this.events.unsubscribe('autocomplete:done', this.autocompleteEventHandler) 
                                 
     }
-    
-    generateAutocompleteEventHandler(){
-            
-        this.autocompleteEventHandler= (autocompleteInfo, time) => {
-            // user and time are the same arguments passed in `events.publish(user, time)`
-            //this.loading=false;
-            if(autocompleteInfo.state=='DONE' && autocompleteInfo.type=='SEARCH_SINGLE'){
-                console.log(autocompleteInfo);
-                if(autocompleteInfo.data==null){
-                    return;
-                }
-                this['selectedPlayer']=autocompleteInfo.data.data;
-                //this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);                
-                
-            }
-            if(autocompleteInfo.state=='DONE' && autocompleteInfo.type=='SEARCH_LIST'){
-                console.log(autocompleteInfo);
-                if(autocompleteInfo.data.data.length==0){
-                    let toast = this.toastCtrl.create({
-                        message:  "No Such Player in Event -- ",
-                        duration: 99000,
-                        position: 'top',
-                        showCloseButton: true,
-                        closeButtonText: " ",
-                        cssClass: "dangerToast"
-                    });
-                    toast.present();                                    
-                }
-                
-            }            
-        }
-        return this.autocompleteEventHandler
-    }
-    
+        
     ionViewWillLoad() {
         this.tournamentMachine=this.navParams.get('tournamentMachine')
         console.log('ionViewDidLoad AddPlayerToQueuePage');
@@ -70,7 +37,7 @@ export class AddPlayerToQueuePage extends AutoCompleteComponent {
                                                          null,
                                                          this.generatePlayerLoadingFunction(),
                                                          this.eventId);      
-        this.events.subscribe('autocomplete:done', this.generateAutocompleteEventHandler());
+        //this.events.subscribe('autocomplete:done', this.generateAutocompleteEventHandler());
         
     }
     generateGetEventPlayerProcessor(){

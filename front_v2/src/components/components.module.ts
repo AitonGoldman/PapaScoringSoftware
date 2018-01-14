@@ -4,10 +4,7 @@ import { CustomHeaderComponent } from './custom-header/custom-header';
 import { CreateEditEntityComponent } from './create-edit-entity/create-edit-entity';
 import { EventComponent } from './event/event';
 import { TournamentComponent } from './tournament/tournament';
-import { TournamentMachinesComponent } from './tournament-machines/tournament-machines';
 import { ExpandableComponent } from './expandable/expandable';
-import { AddUserComponent } from './add-user/add-user';
-import { EditUserComponent } from './edit-user/edit-user';
 import { TakePicComponent } from './take-pic/take-pic';
 import { AutoCompleteComponent } from './auto-complete/auto-complete';
 @NgModule({
@@ -16,12 +13,9 @@ import { AutoCompleteComponent } from './auto-complete/auto-complete';
             CustomHeaderComponent,
             CreateEditEntityComponent,
             EventComponent,
-            TournamentComponent,
-            TournamentMachinesComponent,
+            TournamentComponent,            
             ExpandableComponent,
-            TakePicComponent,
-    AddUserComponent,
-    EditUserComponent,
+            TakePicComponent,        
     TakePicComponent,
     AutoCompleteComponent],
     imports: [],
@@ -30,11 +24,8 @@ import { AutoCompleteComponent } from './auto-complete/auto-complete';
         CustomHeaderComponent,
         CreateEditEntityComponent,
         EventComponent,
-        TournamentComponent,
-        TournamentMachinesComponent,
-        ExpandableComponent,
-        AddUserComponent,
-        EditUserComponent,
+        TournamentComponent,        
+        ExpandableComponent,                
         TakePicComponent,
     AutoCompleteComponent]
 })

@@ -6,7 +6,8 @@ import { App, IonicPage, NavController, NavParams, Platform } from 'ionic-angula
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { SuccessSummary } from '../../classes/success-summary';
-import { SuccessButton } from '../../classes/SuccessButton';
+import { SuccessButton } from '../../classes/SuccessButton'
+import { ActionSheetController } from 'ionic-angular'
 
 /**
  * Generated class for the EventOwnerConfirmPage page.
@@ -31,11 +32,13 @@ export class EventOwnerConfirmPage extends PssPageComponent{
                 public appCtrl: App,
                 public pssApi: PssApiProvider,
                 public platform: Platform,
-                public notificationsService: NotificationsService) {
+                public notificationsService: NotificationsService,
+               public actionSheetCtrl: ActionSheetController) {
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
-              notificationsService);
+              notificationsService,
+              actionSheetCtrl);
         let encodedString:string = navParams.get('itsdangerousstring');
         this.successSummary = new SuccessSummary('Activating Account....',
                                                  null,

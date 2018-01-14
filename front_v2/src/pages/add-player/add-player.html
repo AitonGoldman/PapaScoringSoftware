@@ -4,7 +4,12 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500 }"></ion-auto-complete>
+  <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
+  <div text-center margin-bottom [style.height]="'25px'">
+    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  </div>
+
+<!--  <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500 }"></ion-auto-complete>-->
   <div class='desktopSlim' padding>
 
     <!-- <ion-grid> -->
@@ -21,7 +26,8 @@
     <!-- </ion-grid> -->
 
     <!--    <form #myForm="ngForm" *ngIf="existingPlayerFound==false && loading==false">-->
-    <form #myForm="ngForm" *ngIf="displayNewPlayerForm==true">    
+    <!--<form #myForm="ngForm" *ngIf="displayNewPlayerForm==true">    -->
+    <form #myForm="ngForm" *ngIf="notFoundMessage!=null||(selectedPlayer!=null && selectedPlayer.player_full_name!=null)">    
       <ion-list>
         <ion-item no-line *ngIf="selectedPlayer.img_url!=null">
           <!-- <ion-grid> -->
@@ -39,7 +45,7 @@
           <!-- </ion-grid> -->
         </ion-item>
         <ion-item>
-        <ion-label floating>First Name</ion-label>
+        <ion-label stacked>First Name</ion-label>
         <ion-input type="text" required
                    [(ngModel)]="selectedPlayer.first_name" name="first_name"></ion-input>
       </ion-item>

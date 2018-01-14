@@ -23,7 +23,7 @@ import { IonicPage } from 'ionic-angular';
 })
 @Component({
   selector: 'page-edit-user',
-  templateUrl: '../../components/edit-user/edit-user.html',
+  templateUrl: 'edit-user.html',
 })
 export class EditUserPage extends PssPageComponent {
     @ViewChild('searchbar')  searchbar: any;    
@@ -45,7 +45,8 @@ export class EditUserPage extends PssPageComponent {
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
-              notificationsService);
+              notificationsService,
+              actionSheetCtrl);
     }
     generateEditEventUserRoleProcessor(removedEventUserFromEvent){
         return (result) => {

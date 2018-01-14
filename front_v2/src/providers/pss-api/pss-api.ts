@@ -59,7 +59,7 @@ export class PssApiProvider {
                                                                    {withCredentials:true,
                                                                     body:postObject}))
                 .pipe(                
-                    catchError(this.handleError(apiName, null))
+                    catchError(this.handleError(apiName,null))
                 );
 
             result_observable.subscribe(()=>{if(hideLoading==null){this.loading_instance.dismiss()}});
@@ -120,27 +120,32 @@ export class PssApiProvider {
 
     purchaseTicket = this.generate_api_call('purchaseTicket',this.basePssUrl+"/:arg/token",'post');
     
-    //    private handleError<T> (operation = 'operation', result?: T) {
-    private handleError<T> (operation = 'operation', result?: T) {            
+    private handleError<T> (operation = 'operation', result?: T) {
+    //private handleError<T> (operation = 'operation') {            
         let debouncer=false;
         
-        return (error: any): Observable<T> => {
-            
+        return (error: any): Observable<T> => {                        
             if (debouncer == false){
                 debouncer=true;
                 console.log('error handling in progress...');
                 console.error(error); // log to console instead                
-                let toast = this.toastCtrl.create({
-                    message:  error.error.message,
-                    duration: 99000,
-                    position: 'top',
-                    showCloseButton: true,
-                    closeButtonText: " ",
-                    cssClass: "dangerToast"
-                });
-                toast.present();                
+                if(error.status!=404){                    
+                    let toast = this.toastCtrl.create({
+                        message:  error.error.message,
+                        duration: 99000,
+                        position: 'top',
+                        showCloseButton: true,
+                        closeButtonText: " ",
+                        cssClass: "dangerToast"
+                    });
+                    toast.present();                    
+                } else {
+                    console.log('found 404...')
+                    result = {data:null} as any
+                }   
             } 
             // Let the app keep running by returning an empty result.
+            //return Observable.empty();
             return of(result as T);            
         };        
     }    

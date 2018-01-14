@@ -39,7 +39,8 @@ export class ChangePlayerPicturePage extends PssPageComponent {
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
-              notificationsService);
+              notificationsService,
+              actionSheetCtrl);
     }
     
     generateGetAllEventPlayersWithNoPicsProcessor(){

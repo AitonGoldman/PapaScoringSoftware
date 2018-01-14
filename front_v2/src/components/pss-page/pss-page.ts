@@ -4,6 +4,7 @@ import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { NotificationsService } from 'angular2-notifications';
 import { SearchResults } from '../../classes/search-results';
+import { ActionSheetController } from 'ionic-angular'
 
 /**
  * Generated class for the TopNavComponent component.
@@ -25,8 +26,9 @@ export class PssPageComponent {
                 public navCtrl: NavController,
                 public appCtrl: App,
                 public pssApi: PssApiProvider,
-                public platform: Platform,
-                public notificationsService: NotificationsService) {
+                public platform: Platform,                
+                public notificationsService: NotificationsService,
+                public actionSheetCtrl: ActionSheetController) {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         console.log('Hello PssPageComponent Component');

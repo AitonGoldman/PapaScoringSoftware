@@ -87,7 +87,7 @@ export class AddUserPage extends AutoCompleteComponent {
     }
     onInput(event){        
         console.log('in oninput...')
-        this.onAutocompleteInput(event);
+        //this.onAutocompleteInput(event);
         if(this.searchbar.suggestions.length==0){                        
             this.newUserName=event;
         } 
@@ -99,10 +99,12 @@ export class AddUserPage extends AutoCompleteComponent {
     onSelect(event){
         console.log('in onselect...');
         
-        if(this.doesEventRolesMatchEvent(this.eventId,this.selectedUser.event_roles)){
+        //        if(this.doesEventRolesMatchEvent(this.eventId,this.selectedUser.event_roles)){
+        if(this.doesEventRolesMatchEvent(this.eventId,this.selectedPlayer.event_roles)){        
             this.displayExistingUserNotFound=false;
             console.log('already there...');
-            let message_string=this.selectedUser.full_user_name+" is already registered for this event."
+            //            let message_string=this.selectedUser.full_user_name+" is already registered for this event."
+            let message_string=this.selectedPlayer.full_user_name+" is already registered for this event."            
                 let toast = this.toastCtrl.create({
                     message:  message_string,
                     duration: 99000,
@@ -117,12 +119,15 @@ export class AddUserPage extends AutoCompleteComponent {
             return;
         }
         //FIXME : need to add new user to list of users searched
-        if(!this.doesEventRolesMatchEvent(this.eventId,this.selectedUser.event_roles)){
+        //        if(!this.doesEventRolesMatchEvent(this.eventId,this.selectedUser.event_roles)){
+        if(!this.doesEventRolesMatchEvent(this.eventId,this.selectedPlayer.event_roles)){        
             this.displayExistingUserNotFound=false;
-            this.pssApi.addEventUsers({event_users:[this.selectedUser],
+            //            this.pssApi.addEventUsers({event_users:[this.selectedUser],
+            this.pssApi.addEventUsers({event_users:[this.selectedPlayer],            
                                        event_role_ids:[this.selectedRole.event_role_id]},
                                       this.eventId)
-                .subscribe(this.generateAddEventUsersProcessor(this.selectedUser.full_user_name,this.selectedRole.event_role_name));            
+            //                .subscribe(this.generateAddEventUsersProcessor(this.selectedUser.full_user_name,this.selectedRole.event_role_name));
+                .subscribe(this.generateAddEventUsersProcessor(this.selectedPlayer.full_user_name,this.selectedRole.event_role_name));                        
             return;
         }             
 
@@ -131,7 +136,8 @@ export class AddUserPage extends AutoCompleteComponent {
         
     }
     onFocus(){
-        this.selectedUser=null;        
+        //this.selectedUser=null;
+        this.selectedPlayer=null;        
         //this.existingUserFound=true;
     }
     onSubmit(name_string){

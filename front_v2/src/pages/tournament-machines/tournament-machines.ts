@@ -17,7 +17,7 @@ import { SuccessButton } from '../../classes/SuccessButton';
 })
 @Component({
     selector: 'page-tournament-machines',
-    templateUrl: '../../components/tournament-machines/tournament-machines.html',
+    templateUrl: 'tournament-machines.html',
 })
 
 export class TournamentMachinesPage extends AutoCompleteComponent {
@@ -28,7 +28,7 @@ export class TournamentMachinesPage extends AutoCompleteComponent {
     selectedMachine:any;
     sliding:boolean = true;
     selectedMachines:any = [];
-    @ViewChild('searchbar')  searchbar: any;
+    //@ViewChild('searchbar')  searchbar: any;
     @ViewChild('myform')  myform: any;    
     
     generateGetAllTournamentMachinesProcessor(){
@@ -60,13 +60,23 @@ export class TournamentMachinesPage extends AutoCompleteComponent {
         return (result) => {            
             if(result == null){
                 return;
-            }
+            }            
+            let toast = this.toastCtrl.create({
+                message:  message_string,
+                duration: 99000,
+                position: 'top',
+                showCloseButton: true,
+                closeButtonText: " ",
+                cssClass: "successToast"
+            });
+            toast.present();                                                    
+
             //toast.present();
-            this.notificationsService.success("Success", message_string,{
-                timeOut:0,
-                position:["top","right"],
-                theClass:'poop'
-            })
+            // this.notificationsService.success("Success", message_string,{
+            //     timeOut:0,
+            //     position:["top","right"],
+            //     theClass:'poop'
+            // })
             
             if(action=="add"){
                 this.selectedMachines[this.selectedMachines.length-1]=result.data;

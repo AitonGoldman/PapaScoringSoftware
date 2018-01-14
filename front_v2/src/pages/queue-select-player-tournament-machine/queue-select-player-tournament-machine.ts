@@ -28,6 +28,7 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
     role:string = null;
     loggedInPlayerId:number = null;
     
+    
     generateGetEventPlayerProcessor(){
         return (result)=>{
             if(result==null){
@@ -65,6 +66,27 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
 
     }
 
+    generateConfirmQueueRemove(playerName,queue,tournamentMachine){
+        return ()=>{
+            let actionSheet = this.actionSheetCtrl.create({title: 'Are you SURE you want to remove '+playerName+' from queue?',
+                                                           buttons: [
+                                                               {
+                                                               text: 'Remove',
+                                                               role: 'destructive',
+                                                               handler: this.generateRemovePlayerFromQueue(queue,tournamentMachine)
+                                                           },
+                                                               {
+                                                               text: 'Cancel',
+                                                               role: 'cancel',
+                                                               handler: () => {
+                                                                   console.log('Cancel clicked');
+                                                               }
+                                                           }
+                                                           ]
+                                                          });            
+            actionSheet.present();        
+        }
+    }
     generateRemovePlayerFromQueueProcessor(){
         return (result) => {            
             if(result == null){
@@ -84,8 +106,8 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
         }
     }
     
-    generateRemovePlayerFromQueue(){
-        return (queue,tournament_machine)=>{
+    generateRemovePlayerFromQueue(queue,tournament_machine){
+        return ()=>{
             console.log(queue)
             this.pssApi.removePlayerFromQueue({player_id:queue.player.player_id,tournament_machine_id:tournament_machine.tournament_machine_id},this.eventId)            
                 .subscribe(this.generateRemovePlayerFromQueueProcessor())
@@ -101,14 +123,14 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             }
             
             this.tournaments=result.data;
-            let role = null;
-            let loggedInPlayerId = null;
-            if(this.eventAuth.isEventUserLoggedIn(this.eventId)){
-                role = this.eventAuth.getRoleName(this.eventId);
-                if(role == 'player'){
-                    loggedInPlayerId = this.eventAuth.getEventPlayerId(this.eventId);
-                }
-            }
+            //let role = null;
+            //let loggedInPlayerId = null;
+            //if(this.eventAuth.isEventUserLoggedIn(this.eventId)){
+            //    role = this.eventAuth.getRoleName(this.eventId);
+            //    if(role == 'player'){
+                    this.loggedInPlayerId = this.eventAuth.getPlayerId(this.eventId);
+            //    }
+            //}
             this.tournaments.map((tournament)=>{
                 tournament.expanded=false;
                 tournament.tournament_machines.map((tournament_machine)=>{
@@ -116,20 +138,29 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
                     
                     tournament_machine.queues.map((queue)=>{
                         queue.icon='person';
-                        if(role==null || role=='scorekeeper'){
+                        let player_name=queue.player!=null?queue.player.player_full_name:null;                        
+                        if(this.role==null || this.role=='scorekeeper'){
                             queue.whatToDo=(x,y)=>{};
                         }
-                        if(role=='player'){
-                            if(queue.player != null && queue.player.player_id==loggedInPlayerId){
+                        if(this.role=='player'){
+                            console.log('in filter - found player..'+this.loggedInPlayerId)
+                            if(queue.player != null && queue.player.player_id==this.loggedInPlayerId){
+                                
                                 queue.icon='remove-circle';
                                 queue.allowedToRemove=true;
-                                queue.whatToDo=this.generateRemovePlayerFromQueue();
+                                //queue.whatToDo=this.generateRemovePlayerFromQueue();
+                                if(player_name!=null){
+                                    queue.whatToDo=this.generateConfirmQueueRemove(player_name,queue,tournament_machine);
+                                }                                
                             }
                         }
-                        if(role=='tournamentdirector' || role=='deskworker'){
+                        if(this.role=='tournamentdirector' || this.role=='deskworker'){
                             queue.icon='remove-circle';
                             queue.allowedToRemove=true;
-                            queue.whatToDo=this.generateRemovePlayerFromQueue();
+                            //queue.whatToDo=this.generateRemovePlayerFromQueue();                            
+                            if(player_name!=null){
+                                queue.whatToDo=this.generateConfirmQueueRemove(player_name,queue,tournament_machine);
+                            }
                         }
                     })
                 })

@@ -13,18 +13,12 @@ import { Events } from 'ionic-angular';
   and Angular DI.
 */
 
-// need a playerSearchResults object
-// players list
-// indiv player
-// type of request
-
-// items : don't care
-// search for player num or players : need to pass back player (or null) to loading func
-
-// fix add-users
-// fix add-machines
-// fix add-players
+// fix add-users - check
+// fix add-machines  - check
+// fix add-players - check
+// queue players - check
 // add to ticket-purchase
+// edit user
 
 @Injectable()
 export class AutoCompleteProvider implements AutoCompleteService{
@@ -49,7 +43,7 @@ export class AutoCompleteProvider implements AutoCompleteService{
         this.eventId=eventId;
         this.labelAttribute=labelAttribute;
         this.loadingCompleteFunc=loadingCompleteFunc
-        console.log(this.autocompleteType)
+        
     }
 
     // getItemLabel(returnedItem){
@@ -93,77 +87,71 @@ export class AutoCompleteProvider implements AutoCompleteService{
     // }
 
     processSearchResults(typeOfSearch){
-        return (result)=>{
-            this.events.publish('autocomplete:done', {type:typeOfSearch, state:'DONE', data: result}, Date.now());
-            if(result==null){
+        return (result)=>{            
+            console.log('in processSearchResults');
+            
+            if(result==null){                
                 return "";
             }
             if(typeOfSearch=="SEARCH_LIST"){
+                if(result.data.length>0){
+                    this.events.publish('autocomplete:done', {type:typeOfSearch, state:'DONE', data: result}, Date.now());
+                } else {
+                    this.events.publish('autocomplete:done', {type:typeOfSearch, state:'NONE', data: result}, Date.now());
+                }
                 return result.data;
             }
             if(typeOfSearch=="SEARCH_SINGLE"){
+                if(result.data!=null){
+                    this.events.publish('autocomplete:done', {type:typeOfSearch, state:'DONE', data: result}, Date.now());
+                } else {
+                    this.events.publish('autocomplete:done', {type:typeOfSearch, state:'NONE', data: result}, Date.now());
+                }                
                 return "";
             }
         }
-        // return (result)=>{
-            
-        //     if(result==null){
-        //         this.loadingCompleteFunc(searchResults)
-        //         return ""
-        //     };
-        //     if(typeOfSearch=="list"){
-        //         //            if(Array.isArray(result.data)){
-        //         searchResults.resultList=result.data;
-        //         this.loadingCompleteFunc(searchResults)
-        //         return result.data
-        //     } else {
-        //         searchResults.individualResult=result;
-        //         this.loadingCompleteFunc(searchResults)
-        //         return ""
-        //     }
-        // }
     }
     
     getResults(name:string){
         //let searchResults = new SearchResults([],null,null);
-        console.log(1);        
+        
         if(this.currentValue!=name){
             this.currentValue=name;            
         }else{
-            this.events.publish('autocomplete:done', {state:'SAME_INPUT'}, Date.now());
+            this.events.publish('autocomplete:skip', {state:'SAME_INPUT'}, Date.now());
             //this.loadingCompleteFunc(searchResults)
             return [];
         }
-        console.log(2);
+        
         if(name.length<3){
-            this.events.publish('autocomplete:done', {state:'NOT_ENOUGH_INPUT'}, Date.now());
+            this.events.publish('autocomplete:skip', {state:'NOT_ENOUGH_INPUT'}, Date.now());
             //this.loadingCompleteFunc(searchResults)
             return [];
         }
-        console.log(3);
+        
         let eventPlayerId:number = parseInt(name);
         if (Number.isNaN(eventPlayerId)==true && this.autocompleteType=="remote"){
             //this.itemFieldToMatch='player_full_name'        
             this.labelAttribute = "player_full_name";        
             //searchResults.typeOfSearch="list";
-            console.log(4);
+            
             if(this.eventId){
-                console.log(5);
-                console.log('going to event player search....')
-                return this.pssApi.searchEventPlayers(this.eventId,name)['map'](this.processSearchResults('SEARCH_LIST'))                            
+                
+                
+                return this.pssApi.searchEventPlayersHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_LIST'))                            
             } else {
-                console.log(6);
-                return this.pssApi.searchPlayers(name)['map'](this.processSearchResults('SEARCH_LIST'))
+                
+                return this.pssApi.searchPlayersHidden(name)['map'](this.processSearchResults('SEARCH_LIST'))
 
             }
             
         } 
         if (Number.isNaN(eventPlayerId)==false && this.autocompleteType=="remote"){
-            console.log(7);
+            
             //this.itemFieldToMatch='player_id_for_event'        
             this.labelAttribute = "player_id_for_event";
             //searchResults.typeOfSearch="single";            
-            return this.pssApi.getEventPlayer(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
+            return this.pssApi.getEventPlayerHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
         } 
 
         if(this.autocompleteType=="remote"){
@@ -172,14 +160,18 @@ export class AutoCompleteProvider implements AutoCompleteService{
         }
         let regex = new RegExp(name.toLowerCase());        
         //this.loadingCompleteFunc(searchResults);
-        console.log('filtering items for ... '+name);
-        this.events.publish('autocomplete:done', {type:'ITEMS_LIST', state:'DONE'}, Date.now());
-        return this.items.filter(
-            (item) => {
-                //let matches = item[this.itemFieldToMatch].toLowerCase().match(regex);
+                
+        let items_to_return = this.items.filter(
+            (item) => {                
                 let matches = item[this.labelAttribute].toLowerCase().match(regex);
                 return (matches!=null && matches.length > 0)
             }
         )
+        if(items_to_return.length>0){
+            this.events.publish('autocomplete:done', {type:'ITEMS_LIST', state:'DONE', data: items_to_return}, Date.now());
+        } else {
+            this.events.publish('autocomplete:done', {type:'ITEMS_LIST', state:'NONE', data: null}, Date.now());
+        }
+        return items_to_return;
     }
 }

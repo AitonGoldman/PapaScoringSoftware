@@ -3,6 +3,7 @@ export class SuccessSummary  {
     //firstLine:string = null;
     //secondLine:string = null;
     summaryTable=[]
+    attentionString:string=null;
     constructor(public title:string,
                 public firstLine:string,
                 public secondLine:string) {        
@@ -10,6 +11,11 @@ export class SuccessSummary  {
     setSummaryTable(table){
         this.summaryTable=table;
     }
+    
+    setAttentionString(attentionString){
+        this.attentionString=attentionString;
+    }
+    
     getSummaryTable(){
         return this.summaryTable;
     }

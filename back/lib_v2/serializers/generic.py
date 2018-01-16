@@ -14,8 +14,10 @@ PLAYER_AND_EVENTS='player_and_events'
 TOURNAMENT_ONLY='tournament_only'
 TOURNAMENT_AND_TOURNAMENT_MACHINES='tournament_and_tournament_machines'
 META_TOURNAMENT_ONLY='meta_tournament_only'
+TOURNAMENT_MACHINE_AND_QUEUES='tournament_machines_and_queues'
 TOURNAMENT_MACHINE_ONLY='tournament_machine_only'
 TOURNAMENT_MACHINE_AND_PLAYER='tournament_machine_and_player'
+TOURNAMENT_MACHINE_AND_PLAYER_AND_EVENTS='tournament_machine_and_player_events'
 
 QUEUE_ONLY='queue_only'
 QUEUE_AND_PLAYER='queue_and_player'
@@ -61,7 +63,7 @@ def serialize_tournament_public(model,type=TOURNAMENT_ONLY):
     if type==TOURNAMENT_ONLY:
         return tournament_dict
     if type==TOURNAMENT_AND_TOURNAMENT_MACHINES:
-        tournament_dict['tournament_machines']=[serialize_tournament_machine_public(tournament_machine,TOURNAMENT_MACHINE_AND_PLAYER) for tournament_machine in model.tournament_machines]
+        tournament_dict['tournament_machines']=[serialize_tournament_machine_public(tournament_machine,TOURNAMENT_MACHINE_AND_PLAYER_AND_EVENTS) for tournament_machine in model.tournament_machines]
         return tournament_dict
         
 def serialize_tournament_private(model,type=TOURNAMENT_ONLY,show_private_fields=True):
@@ -112,6 +114,18 @@ def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
         else:
             tournament_machine_dict['player']=None
         return tournament_machine_dict
+    if type==TOURNAMENT_MACHINE_AND_PLAYER_AND_EVENTS:
+        if model.player:
+            tournament_machine_dict['player']=serialize_player_public(model.player,PLAYER_AND_EVENTS)
+        else:
+            tournament_machine_dict['player']=None
+        return tournament_machine_dict
+    if type==TOURNAMENT_MACHINE_AND_QUEUES:
+        tournament_machine_dict['queues']=[serialize_queue(queue,QUEUE_AND_PLAYER) for queue in model.queues]
+        tournament_machine_dict['queues'].sort(key=lambda x: x['position'])
+
+        return tournament_machine_dict
+    
 def serialize_event_public(model):
     event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model)    
     return event_dict

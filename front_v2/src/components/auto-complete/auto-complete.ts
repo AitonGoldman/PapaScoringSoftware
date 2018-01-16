@@ -28,6 +28,7 @@ export class AutoCompleteComponent extends PssPageComponent {
     autocompleteDoneEventHandler:any=null;
     autocompleteSkipEventHandler:any=null;
     ticketCounts:any=null;
+    ticketCountsDict:any=null;
     notFoundMessage:string=null;
     selectedPlayer:any=null;    
     @ViewChild('searchbar')  searchbar: any;    
@@ -42,7 +43,7 @@ export class AutoCompleteComponent extends PssPageComponent {
                 public pssApi: PssApiProvider,
                 public platform: Platform,                
                 public actionSheetCtrl: ActionSheetController,                
-                public notificationsService: NotificationsService,
+                //public notificationsService: NotificationsService,
                 public alertCtrl: AlertController,
                 public modalCtrl: ModalController,
                 public toastCtrl: ToastController,
@@ -50,7 +51,8 @@ export class AutoCompleteComponent extends PssPageComponent {
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
-              notificationsService,
+              //notificationsService,
+              toastCtrl,
               actionSheetCtrl);
         this.autocompleteDoneEventHandler= (autocompleteInfo, time) => {
             // user and time are the same arguments passed in `events.publish(user, time)`
@@ -59,7 +61,9 @@ export class AutoCompleteComponent extends PssPageComponent {
                 console.log(autocompleteInfo);
                 if(autocompleteInfo.type=='SEARCH_SINGLE'){
                     this.selectedPlayer=autocompleteInfo.data.data;
-                    this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);                
+                    this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);
+                    this.ticketCountsDict=this.selectedPlayer.tournament_counts;
+                    console.log(this.ticketCountsDict);
                 }                
             }
             if(autocompleteInfo.state=='NONE'){

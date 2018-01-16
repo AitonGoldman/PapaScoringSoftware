@@ -14,6 +14,6 @@ def generate_tournament_machines_class(db_handle):
         removed=db_handle.Column(db_handle.Boolean,default=False)
         event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
         #queue = db_handle.relationship('Queues')        
-
+        img_url=db_handle.Column(db_handle.String(100))
     return TournamentMachines
     

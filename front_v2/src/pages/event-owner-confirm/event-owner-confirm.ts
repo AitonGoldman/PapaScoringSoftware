@@ -1,6 +1,6 @@
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { NotificationsService } from 'angular2-notifications';
-
+import { ToastController } from 'ionic-angular';
 import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
@@ -32,12 +32,14 @@ export class EventOwnerConfirmPage extends PssPageComponent{
                 public appCtrl: App,
                 public pssApi: PssApiProvider,
                 public platform: Platform,
-                public notificationsService: NotificationsService,
+                //public notificationsService: NotificationsService,
+                public toastCtrl: ToastController,
                public actionSheetCtrl: ActionSheetController) {
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
-              notificationsService,
+              //notificationsService,
+              toastCtrl,
               actionSheetCtrl);
         let encodedString:string = navParams.get('itsdangerousstring');
         this.successSummary = new SuccessSummary('Activating Account....',

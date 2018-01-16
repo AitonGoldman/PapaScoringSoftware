@@ -75,3 +75,13 @@ def get_tournament_machines_and_machines(event_id,tournament_id):
         
     return jsonify({'data':{'machines_list':machines_list,'tournament_machines_list':tournament_machines_list}})
 
+
+@blueprints.test_blueprint.route('/<int:event_id>/<int:tournament_id>/tournament_machines',methods=['GET'])
+def get_tournament_machines(event_id,tournament_id):                    
+    tournament_machines_list=[]    
+    tournament_machines = current_app.table_proxy.get_tournament_machines(tournament_id)
+    for tournament_machine in tournament_machines:        
+        tournament_machines_list.append(to_dict(tournament_machine))        
+        
+    return jsonify({'data':tournament_machines_list})
+

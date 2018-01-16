@@ -71,6 +71,9 @@ class TableProxy():
             'Events',
             secondary=self.generate_player_event_mapping()
         )
+        self.TournamentMachines.queues = self.db_handle.relationship(
+            'Queues', cascade='all'
+        )        
         
         self.PssUsers.event_roles = self.db_handle.relationship(
             'EventRoleMappings', cascade='all'
@@ -158,10 +161,15 @@ class TableProxy():
     def get_all_active_events(self,event_id):
         return self.Events.query.filter_by(event_id=event_id).first()            
     
-    def get_query_for_available_tokens(self, event_id, player=None, team=None):
+    def get_query_for_available_tokens(self, event_id, player=None, team=None, tournament=None):
         query = self.Tokens.query.filter_by(used=False,voided=False,paid_for=True,deleted=False,event_id=event_id)
         if player:
             query = query.filter_by(player_id=player.player_id)
+        if tournament:
+            if tournament.meta_tournament_id:
+                query=query.filter_by(meta_tournament_id=tournament.meta_tournament_id)
+            else:
+                query=query.filter_by(tournament_id=tournament.tournament_id)
         return query
 
     def get_tournament_machine_player_is_playing(self,player,event_id):
@@ -456,8 +464,9 @@ class TableProxy():
     def get_token_purchase_by_id(self,token_purchase_id):
         return self.TokenPurchases.query.filter_by(token_purchase_id=token_purchase_id).first()
 
-    def get_tokens_by_tournament_id(self,player_id,tournament_id=None,meta_tournament_id=None):
-        return self.Tokens.query.filter_by(tournament_id=tournament_id,meta_tournament_id=meta_tournament_id).all()
+    def get_tokens_by_tournament(self,event_id, player,tournament):
+        #return self.Tokens.query.filter_by(tournament_id=tournament_id,meta_tournament_id=meta_tournament_id).all()
+        return self.get_query_for_available_tokens(event_id,player=player,tournament=tournament).all()
     
     def get_tournament_by_tournament_id(self,tournament_id):
         return self.Tournaments.query.filter_by(tournament_id=tournament_id).first()
@@ -737,14 +746,9 @@ class TableProxy():
     def remove_player_from_machine(self,tournament_machine):
         tournament_machine.player_id=None
 
-    def mark_token_as_used(self,event_id,player,tournament=None,meta_tournament=None,commit=False):
-        tournament_id=None
-        meta_tournament_id=None
-        if tournament.meta_tournament_id:        
-            meta_tournament_id=tournament.tournament_id
-        else:
-            tournament_id=tournament.tournament_id
-        token = self.get_tokens_by_tournament_id(player.player_id,tournament_id=tournament_id,meta_tournament_id=meta_tournament_id)[0]
+    def mark_token_as_used(self,event_id,player,tournament=None,commit=False):
+        token = self.get_tokens_by_tournament(event_id, player,tournament)[0]
+        print "found token id : %s " % token.token_id
         token.used=True                
         if commit:
             self.db_handle.session.commit()
@@ -765,7 +769,8 @@ class TableProxy():
             tournament_id=tournament.tournament_id
         if tokens_available is False:
             return False
-        token = self.get_tokens_by_tournament_id(player.player_id,tournament_id=tournament_id,meta_tournament_id=meta_tournament_id)[0]
+        token = self.get_tokens_by_tournament(event_id, player,tournament)[0]
+        #self.get_tokens_by_tournament_id(player.player_id,tournament_id=tournament_id,meta_tournament_id=meta_tournament_id)[0]
         token.voided=True                
         if commit:
             self.db_handle.session.commit()

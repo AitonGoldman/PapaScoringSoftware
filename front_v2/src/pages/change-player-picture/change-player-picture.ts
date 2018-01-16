@@ -6,7 +6,7 @@ import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complet
 import { ModalController, Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
-
+import { ToastController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
 import { NotificationsService } from 'angular2-notifications';
 import { IonicPage } from 'ionic-angular';
@@ -35,11 +35,13 @@ export class ChangePlayerPicturePage extends PssPageComponent {
                 public platform: Platform,                
                 public actionSheetCtrl: ActionSheetController,
                 public notificationsService: NotificationsService,                
-                public modalCtrl: ModalController){
+                public modalCtrl: ModalController,
+                public toastCtrl: ToastController){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
-              notificationsService,
+              //notificationsService,
+              toastCtrl,
               actionSheetCtrl);
     }
     

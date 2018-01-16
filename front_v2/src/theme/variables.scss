@@ -37,10 +37,12 @@ $colors: (
   primary:    #488aff,
   secondary:  #32db64,
   danger:     #f53d3d,
-  light:      #f4f4f4,
+  light:      #d9d9d9,
+  lighter:    #f4f4f4,
   dark:       #222,
   subHeader:  #DDDDDD
 );
+
 
 
 // App iOS Variables
@@ -48,12 +50,14 @@ $colors: (
 // iOS only Sass variables can go here
 
 $toast-ios-background: rgba(150, 150, 150, .95);
+//$text-input-ios-background-color:  rgba(0,0,0,.95);
 
 
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
+$text-input-md-background-color:  rgba(150, 150, 150, .95);
 
 
 
@@ -61,6 +65,7 @@ $toast-ios-background: rgba(150, 150, 150, .95);
 // App Windows Variables
 // --------------------------------------------------
 // Windows only Sass variables can go here
+$text-input-wp-background-color:  #000000;
 
 
 

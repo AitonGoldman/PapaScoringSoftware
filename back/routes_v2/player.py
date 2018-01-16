@@ -71,7 +71,7 @@ def get_event_player_route(app,event_id,event_player_id):
     event_player = app.table_proxy.get_event_player(event_id,event_player_id)
     tournament_calculated_lists=[]
     if event_player:
-        tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)                
+        tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)
         player_dict=generic.serialize_player_public(event_player,generic.PLAYER_AND_EVENTS)
         for tournament in app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):
             if tournament_counts.get(tournament.tournament_id,None):

@@ -4,9 +4,8 @@ import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complet
 import { Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
-
+import { ToastController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
-import { NotificationsService } from 'angular2-notifications';
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
 import { IonicPage } from 'ionic-angular';
@@ -41,11 +40,14 @@ export class EditUserPage extends PssPageComponent {
                 public pssApi: PssApiProvider,
                 public platform: Platform,                
                 public actionSheetCtrl: ActionSheetController,
-                public notificationsService: NotificationsService){
+                //public notificationsService: NotificationsService
+                public toastCtrl: ToastController
+               ){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
-              notificationsService,
+              //notificationsService,
+              toastCtrl,
               actionSheetCtrl);
     }
     generateEditEventUserRoleProcessor(removedEventUserFromEvent){

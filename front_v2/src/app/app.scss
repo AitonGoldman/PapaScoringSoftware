@@ -25,6 +25,11 @@ ion-auto-complete {
   }
 }
 
+.background-image {
+  background-color:red;
+  background-image: url("https://i.imgur.com/MHZ9i44.jpg");
+}
+
 body {
 -webkit-user-select: text;
 -moz-user-select: text;
@@ -132,3 +137,4 @@ simple-notifications{
     }
   }  
 }
+

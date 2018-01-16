@@ -16,6 +16,8 @@ import { ToastController } from 'ionic-angular';
 @Injectable()
 export class PssApiProvider {
     basePssUrl='http://192.168.1.178:8000'
+    //basePssUrl='http://9.75.197.88:8000'
+
     //basePssUrl='http://0.0.0.0:8000'
     loading_instance = null;   
     constructor(public http: HttpClient,public loadingCtrl: LoadingController,
@@ -70,6 +72,7 @@ export class PssApiProvider {
     addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');
     addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');
     addEventPlayerToQueue = this.generate_api_call('addPlayerToQueue',this.basePssUrl+"/:arg/queue",'post');
+    bumpPlayerDownQueue = this.generate_api_call('bumpPlayerDownQueue',this.basePssUrl+"/:arg/queue",'put')
     completeTicketPurchase = this.generate_api_call('completeTicketPurchase',this.basePssUrl+"/:arg/token/:arg",'put');
 
     createEvent = this.generate_api_call('createEvent',this.basePssUrl+"/event",'post');
@@ -98,6 +101,8 @@ export class PssApiProvider {
     getTournament = this.generate_api_call('getTournament',this.basePssUrl+"/:arg/tournament/:arg",'get');
     
     getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines/machines",'get');
+    getTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines",'get');
+
     getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/machines",'get');
     getAllUsers = this.generate_api_call('getAllUsers',this.basePssUrl+"/pss_users",'get');        
     getAllTournaments = this.generate_api_call('getAllTournaments',this.basePssUrl+"/:arg/tournaments",'get');
@@ -117,6 +122,10 @@ export class PssApiProvider {
     searchPlayersHidden = this.generate_api_call('searchPlayers',this.basePssUrl+"/players/:arg",'get',true);        
 
     searchEventPlayers = this.generate_api_call('searchPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get');           searchEventPlayersHidden = this.generate_api_call('searchPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get',true);        
+
+    startPlayerOnMachine = this.generate_api_call('startPlayerOnMachine',this.basePssUrl+"/:arg/entry",'post');    
+
+    submitScore = this.generate_api_call('submitScore',this.basePssUrl+"/:arg/entry",'put');
 
     purchaseTicket = this.generate_api_call('purchaseTicket',this.basePssUrl+"/:arg/token",'post');
     

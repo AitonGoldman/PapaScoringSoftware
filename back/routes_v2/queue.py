@@ -29,11 +29,9 @@ def bump_player_down_queue_route(request,app,event_id,current_user):
     with app.table_proxy.db_handle.session.no_autoflush:                
         try:                                    
             queues = app.table_proxy.get_sorted_queue_for_tournament_machine(tournament_machine)
-            if len(queues)<2:
-                raise BadRequest('Trying to bump player on queue with only 1 player')            
             if queues[0].player_id!=player_id:
                 raise BadRequest('Trying to bump player who is not at head of the queue')
-            if queues[0].bumped:                
+            if queues[0].bumped or (queues[0].player_id==player.player_id and queues[1].player_id is None):                
                 remove_player_with_notification(player,app,tournament_machine,event_id)
                 audit_log_params['action']='Player Bumped Down Queue And Removed'
                 app.table_proxy.create_audit_log(audit_log_params,event_id)    
@@ -122,7 +120,7 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
         raise BadRequest('Player has no tokens')
     
     queues = app.table_proxy.get_queue_for_tounament_machine(tournament_machine)
-    if tournament_machine.player_id is None:
+    if tournament_machine.player_id is None and queues[0].player_id is None:
         raise BadRequest('Can not add to empty queue.  Please see scorekeeper')
 
     remove_player_with_notification(player,app,tournament_machine, event_id)
@@ -187,5 +185,7 @@ def modify_player_position_in_queue(event_id):
         else:
             raise BadRequest('You do not have permission to bump players')
     current_app.table_proxy.commit_changes()
-    return jsonify({})
+    tournament_machine = current_app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+    tournament_machine_dict=generic.serialize_tournament_machine_public(tournament_machine,generic.TOURNAMENT_MACHINE_AND_QUEUES)            
+    return jsonify({'data':tournament_machine_dict})
     pass

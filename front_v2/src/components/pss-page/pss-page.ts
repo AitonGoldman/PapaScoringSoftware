@@ -43,7 +43,33 @@ export class PssPageComponent {
         }        
         return params;
     }
+
+    getHomePageDisplayString(eventId?){
+        if(eventId==null){
+            eventId=this.eventId;
+        }
+        let role = this.eventAuth.getRoleName(eventId);
+        //console.log('in getHomePageString...')
         
+        if(role=="tournamentdirector"){
+                return 'TD Home'            
+        }
+        if(role=="eventowner"){
+                return 'Event Owner Home'            
+        }
+        if(role=="player"){
+            return 'Player Home'
+        }
+       if(role=="scorekeeper"){
+            return 'Scorekeeper Home'
+       }
+         
+        if (role == null){
+            return 'Home';
+        }
+        
+    }
+    
     getHomePageString(eventId?){
         if(eventId==null){
             eventId=this.eventId;
@@ -118,7 +144,12 @@ export class PssPageComponent {
                 return
             }
             this['selectedPlayer']=result.data;
-            this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);            
+            this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);
+            this['ticketCountsDict']=this['selectedPlayer'].tournament_counts;
+
+            if (this['selectedPlayer'].tournament_calculated_lists!=null){
+                this['ticketPriceLists']=this['selectedPlayer'].tournament_calculated_lists;
+            }
         }
     }
     onAutoCompletePlayerSelected(){        

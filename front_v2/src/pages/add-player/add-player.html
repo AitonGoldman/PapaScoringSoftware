@@ -1,9 +1,13 @@
 <ion-header>
   <ion-navbar>
-    <custom-headers [eventId]="eventId" [homePage]="getHomePageString()"></custom-headers>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>
 </ion-header>
 <ion-content>
+<button ion-button full small color="lighter">
+  Register player for event
+</button>
+
   <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>

@@ -77,10 +77,14 @@ def serialize_meta_tournament_public(model,type=META_TOURNAMENT_ONLY):
     if type==META_TOURNAMENT_ONLY:
         return meta_tournament_dict
     
-def serialize_player_public(model,type_of=PLAYER_ONLY):
+def serialize_player_public(model,type_of=PLAYER_ONLY,event_id=None):
     player_dict=serializer_v2(PLAYER_PRIVATE_FIELDS).serialize_model(model)
     player_dict['player_full_name']=model.__repr__()
-    
+
+    if event_id is not None:
+        events = [event_info for event_info in model.event_info if event_info.event_id==event_id]
+        if len(events)>0:
+            player_dict['player_id_for_event']=events[0].player_id_for_event
     if type_of==PLAYER_ONLY:
         return player_dict
     if type_of==PLAYER_AND_EVENTS:
@@ -90,8 +94,12 @@ def serialize_player_public(model,type_of=PLAYER_ONLY):
             player_dict['player_id_for_event']="%s" % player_dict['events'][0]['player_id_for_event']
         return player_dict
 
-def serialize_player_private(model,type_of=PLAYER_ONLY):
+def serialize_player_private(model,type_of=PLAYER_ONLY, event_id=None):
     player_dict=serializer_v2([]).serialize_model(model)
+    if event_id is not None:
+        events = [event_info for event_info in model.event_info if event_info.event_id==event_id]
+        if len(events)>0:
+            player_dict['player_id_for_event']=events[0].player_id_for_event
     if type_of==PLAYER_AND_EVENTS:            
         if model.event_info:
             player_dict['events']=[serialize_event_players_info_public(event_info_instance) for event_info_instance in model.event_info]

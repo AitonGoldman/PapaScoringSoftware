@@ -11,7 +11,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
   imports: [
       IonicPageModule.forChild(EventOwnerHomePage),
       ExpandableModule,
-      SimpleNotificationsModule.forRoot()    
+      SimpleNotificationsModule.forRoot()      
   ],
 })
 export class EventOwnerHomePageModule {}

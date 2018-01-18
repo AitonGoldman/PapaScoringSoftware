@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { TournamentPage } from './tournament';
 import { ImageUploadModule } from "angular2-image-upload";
+import { CustomComponentsModule } from '../../components/custom-components.module';
 
 @NgModule({
   declarations: [
@@ -9,7 +10,8 @@ import { ImageUploadModule } from "angular2-image-upload";
   ],
   imports: [
       IonicPageModule.forChild(TournamentPage),
-      ImageUploadModule.forRoot()      
+      ImageUploadModule.forRoot(),
+      CustomComponentsModule      
   ],
 })
 export class TournamentPageModule {}

@@ -29,6 +29,7 @@ export class AutoCompleteComponent extends PssPageComponent {
     autocompleteSkipEventHandler:any=null;
     ticketCounts:any=null;
     ticketCountsDict:any=null;
+    ticketPriceLists:any=null;
     notFoundMessage:string=null;
     selectedPlayer:any=null;    
     @ViewChild('searchbar')  searchbar: any;    
@@ -63,6 +64,10 @@ export class AutoCompleteComponent extends PssPageComponent {
                     this.selectedPlayer=autocompleteInfo.data.data;
                     this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);
                     this.ticketCountsDict=this.selectedPlayer.tournament_counts;
+                    if (this.selectedPlayer.tournament_calculated_lists!=null){
+                        this.ticketPriceLists=this.selectedPlayer.tournament_calculated_lists;
+                    }
+
                     console.log(this.ticketCountsDict);
                 }                
             }

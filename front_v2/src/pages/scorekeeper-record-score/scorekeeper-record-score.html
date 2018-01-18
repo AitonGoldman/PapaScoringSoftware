@@ -5,15 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>ScorekeeperRecordScore</ion-title>
-  </ion-navbar>
-
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
 </ion-header>
 
-
-<ion-content padding>
+<ion-content>
+<button style='margin-top:0px;' ion-button full small color="darker">
+  Scorekeeping : Record score
+</button>
+  <div class='desktopSlim'>
   <form #myForm="ngForm" *ngIf="tournamentMachine!=null">
     <ion-item text-center no-lines>
       {{tournamentMachine.tournament_machine_name}}
@@ -33,4 +34,5 @@
       </button>
     </ion-item>
   </form>
+  </div>
 </ion-content>

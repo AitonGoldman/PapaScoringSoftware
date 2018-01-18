@@ -1,22 +1,42 @@
+<ion-header>
+  <ion-navbar>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+
 <ion-content>
-  <ion-searchbar *ngIf='hideSearchbar!=true'
+<button style='margin-top:0px;' ion-button full small color="darker">
+  Purchase Tickets
+</button>
+
+  <div class='desktopSlim'>
+  <ion-auto-complete *ngIf='hideSearchbar!=true' (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="clearValues()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
+  <div text-center margin-bottom [style.height]="'25px'">
+    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  </div>
+  <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
+    <h2>{{notFoundMessage}}</h2>
+  </div>
+
+  <!--  <ion-searchbar *ngIf='hideSearchbar!=true'
      [(ngModel)]="player_id_for_event"
      (ionInput)="onInput($event)">
-  </ion-searchbar>
-  <ng-container *ngIf="eventPlayer.first_name!=null ">
+  </ion-searchbar>-->
+  <!--  <ng-container *ngIf="eventPlayer.first_name!=null "> -->
+  <ng-container *ngIf="notFoundMessage==null && selectedPlayer!=null">   
     <ion-item text-center>
-      Player Name : {{eventPlayer.player_full_name}}
+      Player Name : {{selectedPlayer.player_full_name}}
     </ion-item>
-    <ion-item *ngIf="eventPlayer.img_url!=null">
+    <ion-item *ngIf="selectedPlayer.img_url!=null">
     <ion-avatar  style='zoom:3.0'>
-      <img [src]="eventPlayer.img_url" style='margin-left:auto;margin-right:auto'>
+      <img [src]="selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
     </ion-avatar>
     </ion-item>
     <form #myForm="ngForm">
     
     <ng-container *ngFor="let ticketPriceList of ticketPriceLists">
       <ion-item no-lines>
-        Existing Count : {{ticketCounts[ticketPriceList.tournament_id]==null?0:ticketCounts[ticketPriceList.tournament_id].count}}
+        Existing Count : {{ticketCountsDict[ticketPriceList.tournament_id]==null?0:ticketCountsDict[ticketPriceList.tournament_id].count}}
       </ion-item>
       <ion-item>
         <ion-label>{{ticketPriceList.tournament_name}}</ion-label>
@@ -34,4 +54,5 @@
     </form>
     
   </ng-container>
+  </div>
 </ion-content>

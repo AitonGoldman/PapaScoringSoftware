@@ -1,64 +1,69 @@
 <!-- Generated template for the CreateEditEntityComponent component -->
 <ion-header>
-  <ion-navbar >
-    <ion-title></ion-title>
-    <ion-buttons end hideWhen="mobile">
-      <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
-      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]="buildNavParams({})">Home</button>    
-    </ion-buttons>
-  </ion-navbar>
+  <ion-navbar>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
 </ion-header>
 
 
-<ion-content>  
-  <div class='desktopSlim'>
-  <form #createEditForm="ngForm">
-    <ion-list >
-      <div margin>
-        <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2>
-      </div>
-      <ion-item>
-        <ion-label>Advanced Settings</ion-label>
-        <ion-toggle (ionChange)="onAdvancedChange()" name="myadvanced" [(ngModel)]="advanced"></ion-toggle>
-      </ion-item>
 
-      <ng-container *ngFor="let entityField of entityFieldsArray">
-        <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">
-          <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>
-          <ng-container *ngIf="entityField.fieldType=='text'" >
-            
-            <ion-item>
-              <ion-label>                              <ion-icon name="md-create" item-start></ion-icon></ion-label>
-              <ion-input [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" type="text" placeholder="input here">
-              </ion-input>    
-            </ion-item>
-          </ng-container>
-          <ng-container *ngIf="entityField.fieldType=='boolean'">          
-            <ion-item>
-              <ion-label>{{entityField.description.short}}</ion-label>
-              <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       
-            </ion-item>
-          </ng-container>
-          <ion-item no-lines text-center>
-          </ion-item>
-        </ng-container>        
-      </ng-container>
-      <ng-container *ngIf="entity.img_url!=null">
-        <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>
-        <ion-item>
-          <ion-avatar item-start *ngIf="entity.img_url!=null">
-            <img [src]="entity.img_url">
-          </ion-avatar>                
+<ion-content>  
+<!-- <ion-toolbar style="background-color: rgba(0,0,0,.95)"> -->
+<!-- poop -->
+<!-- </ion-toolbar> -->
+<button ion-button full small color="lighter">
+  {{actionType| titlecase}} {{entityFields.entityType| titlecase}}
+</button>
+
+  <div class='desktopSlim'>
+    <form #createEditForm="ngForm">
+      <ion-list >
+        <!-- <div margin> -->
+        <!--   <h2>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</h2> -->
+        <!-- </div> -->
+        <ion-item class='shadedInputField'>
+          <ion-label>Advanced Settings</ion-label>
+          <ion-toggle (ionChange)="onAdvancedChange()" name="myadvanced" [(ngModel)]="advanced"></ion-toggle>
         </ion-item>
-      </ng-container>
-      
-<!--      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>
-      <ion-item>
-        <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>
-      </ion-item>-->
-    </ion-list>    
-    <button [disabled]='!createEditForm.valid' ion-button default (click)="processEntity()">Apply</button>
-  </form>
+        <ion-item>
+        </ion-item>
+        <ng-container *ngFor="let entityField of entityFieldsArray">
+          <ng-container *ngIf="entityField.dependsOn==null || (entityField.dependsOn && entity[entityField.dependsOn.dependsOn]==entityField.dependsOn.value)">
+            <ion-item-divider color="light" text-wrap>  {{entityField.description.long}} </ion-item-divider>
+            <ng-container *ngIf="entityField.fieldType=='text'||entityField.fieldType=='number'" >
+              
+              <ion-item class='shadedInputField'>
+                <ion-label>                              <ion-icon name="md-create" item-start></ion-icon></ion-label>
+                <ion-input  [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName" [type]="entityField.fieldType" placeholder="input here">
+                </ion-input>    
+              </ion-item>
+            </ng-container>
+            <ng-container *ngIf="entityField.fieldType=='boolean'">          
+              <ion-item class='shadedInputField' >
+                <ion-label>{{entityField.description.short}}</ion-label>
+                <ion-toggle [(ngModel)]="entity[entityField.fieldName]" [name]="entityField.fieldName"></ion-toggle>                       
+              </ion-item>
+            </ng-container>
+            <ion-item no-lines text-center>
+            </ion-item>
+          </ng-container>        
+        </ng-container>
+        <ng-container *ngIf="entity.img_url!=null">
+          <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>
+          <ion-item >
+            <ion-avatar item-start *ngIf="entity.img_url!=null">
+              <img [src]="entity.img_url">
+            </ion-avatar>                
+          </ion-item>
+        </ng-container>
+        
+        <!--      <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider>
+                  <ion-item>
+                    <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>
+                  </ion-item>-->
+      </ion-list>    
+      <button [disabled]='!createEditForm.valid' ion-button default (click)="processEntity()">Apply</button>
+    </form>
   </div>
 </ion-content>
 

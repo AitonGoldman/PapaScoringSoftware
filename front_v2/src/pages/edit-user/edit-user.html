@@ -1,18 +1,25 @@
 <ion-header>
   <ion-navbar>
-    <ion-title></ion-title>
-    <ion-buttons end hideWhen="mobile">
-      <button icon-only ion-button [navPush]="'EventSelectPage'">Switch Events</button>    
-      <button icon-only ion-button [navPush]="destPageAfterSuccess" [navParams]='buildNavParams({})'>Home</button>    
-    </ion-buttons>
-  </ion-navbar>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
 </ion-header>
-<ion-content padding>
+
+<ion-content>
+<button ion-button full small color="lighter">
+  Edit scorekeepeer/deskworker/etc
+</button>
+<ion-item-divider color="light" text-wrap>Person's name</ion-item-divider>
+
+<ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Persons Name', debounce:500}"></ion-auto-complete>
+
+<div class='desktopSlim'>
+
   <form #myForm="ngForm">
-    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider"></ion-auto-complete>
     <ion-item>
     </ion-item>
-    <ion-item>
+    <ion-item-divider color="light" text-wrap>Event Role (Scorekeeper, etc)</ion-item-divider>
+    
+    <ion-item class='shadedInputField' >
     <ion-label>Role</ion-label>
     <ion-select name="myeventrole" #myeventrole="ngModel" [(ngModel)]="selectedRole" required>
       <ion-option *ngFor="let role of roles" [value]="role.event_role_id">{{role.event_role_name}}</ion-option>
@@ -22,6 +29,7 @@
     
     <button [disabled]="!myeventrole.dirty" ion-button (click)="onSubmit(false)"> Modify User Role </button>
     <br>
-    <button ion-button (click)="onSubmit(true)">  Remove User From Event </button>    
-  </form>  
+    <button [disabled]="selectedUser==null" ion-button (click)="onSubmit(true)">  Remove User From Event </button>    
+  </form>
+  </div>
 </ion-content>

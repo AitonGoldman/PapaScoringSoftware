@@ -1,6 +1,6 @@
 <ion-header>
  <ion-navbar>
-  <custom-headers title="TD Homepage" [eventId]="eventId" [homePage]="getHomePageString()"></custom-headers>
+  <custom-headers [homePageDisplayName]="getHomePageDisplayString()" title="TD Homepage" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
  </ion-navbar>
 
   <!-- <ion-toolbar text-center> -->
@@ -22,9 +22,6 @@
     </ion-item>
     <ion-item no-lines [navPush]="'AddPlayerPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Add Player
-    </ion-item>
-    <ion-item no-lines>
-      <ion-icon item-end name="clipboard"></ion-icon> Scorekeeping
     </ion-item>
     <ion-item no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="git-branch"></ion-icon> Queue Player

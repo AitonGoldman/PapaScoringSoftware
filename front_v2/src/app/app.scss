@@ -138,3 +138,10 @@ simple-notifications{
   }  
 }
 
+.shadedInputField {
+  background-color: color($colors,lighter,base);
+}
+
+.subHeader {
+  background-color: color($colors,dark);
+}

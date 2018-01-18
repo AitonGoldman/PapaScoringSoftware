@@ -6,16 +6,16 @@
   -->
 
 <ion-header>
-
   <ion-navbar>
-    <ion-title>PlayerInfo</ion-title>
-  </ion-navbar>
-
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
 </ion-header>
 
-
-
-<ion-content padding>
+<ion-content>
+<button style='margin-top:0px;' ion-button full small color="darker">
+  Player Info
+</button>
+  <div class='desktopSlim'>  
   <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
@@ -59,4 +59,5 @@
       {{ticketCount.tournament_name}} : {{ticketCount.count}}
     </ion-item>
   </ion-list>
+    <div class='desktopSlim'>
 </ion-content>

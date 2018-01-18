@@ -3,6 +3,8 @@ import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
+import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
+
 declare var StripeCheckout: any;
 /**
  * Generated class for the TicketPurchasePage page.
@@ -18,23 +20,28 @@ declare var StripeCheckout: any;
   selector: 'page-ticket-purchase',
   templateUrl: 'ticket-purchase.html',
 })
-export class TicketPurchasePage extends PssPageComponent{
+export class TicketPurchasePage  extends AutoCompleteComponent {
     ticketPriceLists:any=null;
     ticketCounts:any=null;
-    eventPlayer:any={};
-    player_id_for_event:number=null;
+    //selectedPlayer:any={};
+    //player_id_for_event:number=null;
     totalCost:number=0;
     hideSearchbar:boolean=false;
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad TicketPurchasePage');
+        this.autoCompleteProvider.initializeAutoComplete(null,
+                                                         null,
+                                                         this.generatePlayerLoadingFunction(),
+                                                         this.eventId);      
+
         let player_id_for_event = this.navParams.get('player_id_for_event');
         if(player_id_for_event==null){
             return;            
         }
         this.hideSearchbar=true;
-        this.player_id_for_event=player_id_for_event
-        this.pssApi.getEventPlayer(this.eventId,this.player_id_for_event)
+        //this.player_id_for_event=player_id_for_event
+        this.pssApi.getEventPlayer(this.eventId,player_id_for_event)
             .subscribe(this.generateGetEventPlayerProcessor())                                                  
         
     }
@@ -43,11 +50,9 @@ export class TicketPurchasePage extends PssPageComponent{
             if(result==null){
                 return
             }
-            this.eventPlayer=result.data!=null?result.data:{};
+            this.selectedPlayer=result.data!=null?result.data:null;
             this.ticketPriceLists=result.tournament_calculated_lists;
-            this.ticketCounts=result.tournament_counts;
-            
-            
+            this.ticketCountsDict=result.tournament_counts;
         }
     }
     gotoSuccessPage(purchaseSummary){
@@ -91,22 +96,22 @@ export class TicketPurchasePage extends PssPageComponent{
     clearValues(){
         this.ticketPriceLists=null;
         this.ticketCounts=null;
-        this.eventPlayer={};
+        this.selectedPlayer=null;
         //this.player_id_for_event=null;
         this.totalCost=0;
 
     }
 
-    onInput(event){        
-        if(this.player_id_for_event != null && this.player_id_for_event > 99 && this.player_id_for_event < 1000){
-            console.log('in onInput')
-            this.pssApi.getEventPlayer(this.eventId,this.player_id_for_event)
-                .subscribe(this.generateGetEventPlayerProcessor())                                                  
+    // onInput(event){        
+    //     if(this.player_id_for_event != null && this.player_id_for_event > 99 && this.player_id_for_event < 1000){
+    //         console.log('in onInput')
+    //         this.pssApi.getEventPlayer(this.eventId,this.player_id_for_event)
+    //             .subscribe(this.generateGetEventPlayerProcessor())                                                  
 
-        } else {
-            this.clearValues();
-        }        
-    }
+    //     } else {
+    //         this.clearValues();
+    //     }        
+    // }
     onSelect(event){
         this.totalCost=0;
         console.log('in onSelect');
@@ -140,7 +145,7 @@ export class TicketPurchasePage extends PssPageComponent{
     }
     ticketPurchase(){
         let ticketsToBuy={}
-        ticketsToBuy['player_id']=this.eventPlayer.player_id;
+        ticketsToBuy['player_id']=this.selectedPlayer.player_id;
         ticketsToBuy['tournament_token_counts']=[]
         let purchaseSummary = []
         for(let ticketsSelected of this.ticketPriceLists){

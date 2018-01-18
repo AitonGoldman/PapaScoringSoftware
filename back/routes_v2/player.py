@@ -72,7 +72,7 @@ def get_event_player_route(app,event_id,event_player_id):
     tournament_calculated_lists=[]
     if event_player:
         tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)
-        player_dict=generic.serialize_player_public(event_player,generic.PLAYER_AND_EVENTS)
+        player_dict=generic.serialize_player_public(event_player,generic.PLAYER_AND_EVENTS,event_id)
         for tournament in app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):
             if tournament_counts.get(tournament.tournament_id,None):
                 max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed-tournament_counts[tournament.tournament_id]['count']
@@ -146,8 +146,8 @@ def search_for_players(query_string, event_id=None):
     if len(players)>25:
         player_max_index=2
     else:
-        player_max_index=len(players)
-    return [generic.serialize_player_public(player,generic.PLAYER_AND_EVENTS) for player in players[0:player_max_index]]    
+        player_max_index=len(players)    
+    return [generic.serialize_player_public(player,generic.PLAYER_AND_EVENTS,event_id=event_id) for player in players[0:player_max_index]]    
     #current_app.table_proxy.commit_changes()
     
 

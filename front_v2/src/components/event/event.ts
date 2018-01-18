@@ -60,7 +60,7 @@ export class EventComponent  extends PssPageComponent {
         this.wizardMode = this.navParams.get('wizardMode');
         this.entityFields = new EntityFields("event");        
         this.entityFields.setField('name','text',true,false,eventDescriptions['name']);        
-        this.entityFields.setField('number_unused_tickets_allowed','text',true,false,eventDescriptions['number_unused_tickets_allowed']);
+        this.entityFields.setField('number_unused_tickets_allowed','number',true,false,eventDescriptions['number_unused_tickets_allowed']);
         this.entityFields.setField('stripe_api_key','text',false,true,eventDescriptions['stripe_api_key']);
         this.entityFields.setField('stripe_public_key','text',false,true,eventDescriptions['stripe_public_key']);
         this.entityFields.setField('force_ifpa_lookup','boolean',false,true,eventDescriptions['force_ifpa_lookup']);

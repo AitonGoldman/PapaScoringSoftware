@@ -121,7 +121,8 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             if(withPlayer==true){
                 this.eventPlayer=result.player;
             }
-            
+            console.log('in getAllTournaments...')
+            console.log(result)
             this.tournaments=result.data;
             //let role = null;
             //let loggedInPlayerId = null;

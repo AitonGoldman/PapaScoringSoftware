@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ScorekeeperStartPlayerPage } from './scorekeeper-start-player';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
+import { CustomComponentsModule } from '../../components/custom-components.module';
 
 @NgModule({
   declarations: [
@@ -9,7 +10,8 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
   ],
   imports: [
       IonicPageModule.forChild(ScorekeeperStartPlayerPage),
-      AutoCompleteModule      
+      AutoCompleteModule,
+      CustomComponentsModule
   ],
 })
 export class ScorekeeperStartPlayerPageModule {}

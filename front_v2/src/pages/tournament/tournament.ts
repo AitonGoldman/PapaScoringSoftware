@@ -62,8 +62,9 @@ const tournamentDescriptions={
 })
 export class TournamentPage extends PssPageComponent {
 
-    entityFields:EntityFields;    
-    entity:any = {};
+    entityFields:EntityFields;
+    //FIXME : this should not be hardcoded here
+    entity:any = {use_stripe:false};
     wizardEntity:any;
     actionType:string;    
     destPageAfterSuccess:string;
@@ -86,16 +87,16 @@ export class TournamentPage extends PssPageComponent {
 
         this.entityFields.setField('tournament_name','text',true,false, tournamentDescriptions['tournament_name']);
         this.entityFields.setField('multi_division_tournament','boolean',true,false, tournamentDescriptions['multi_division_tournament']);
-        this.entityFields.setField('division_count','text',true,false, tournamentDescriptions['division_count']);
+        this.entityFields.setField('division_count','number',true,false, tournamentDescriptions['division_count']);
         this.entityFields.setDependency('division_count','multi_division_tournament',true)
         this.entityFields.setField('queuing','boolean',true,false, tournamentDescriptions['queuing']);
         this.entityFields.setField('discount','boolean',true,false, tournamentDescriptions['discount']);
-        this.entityFields.setField('number_of_tickets_for_discount','text',true,false, tournamentDescriptions['number_of_tickets_for_discount']);
+        this.entityFields.setField('number_of_tickets_for_discount','number',true,false, tournamentDescriptions['number_of_tickets_for_discount']);
         this.entityFields.setDependency('number_of_tickets_for_discount','discount',true)
 
-        this.entityFields.setField('manually_set_price','text',true,false, tournamentDescriptions['manually_set_price']);
+        this.entityFields.setField('manually_set_price','number',true,false, tournamentDescriptions['manually_set_price']);
         this.entityFields.setDependency('manually_set_price','use_stripe',false)
-        this.entityFields.setField('number_of_qualifiers','text',true,false, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFields.setField('number_of_qualifiers','number',true,false, tournamentDescriptions['number_of_qualifiers']);
 
         this.entityFields.setField('use_stripe','boolean',false,true, tournamentDescriptions['use_stripe']);
         this.entityFields.setField('stripe_sku','text',false,true, tournamentDescriptions['stripe_sku']);

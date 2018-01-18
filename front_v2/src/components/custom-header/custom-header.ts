@@ -11,8 +11,8 @@ import { EventAuthProvider } from '../../providers/event-auth/event-auth';
   selector: 'custom-headers',
   templateUrl: 'custom-header.html'
 })
-export class CustomHeaderComponent {
-    constructor(public eventAuth: EventAuthProvider){
+export class CustomHeaderComponent {    
+    constructor(public eventAuth: EventAuthProvider){        
 
     }
     goGoCustomHeader(){
@@ -20,7 +20,9 @@ export class CustomHeaderComponent {
     }
     
     @Input() homePage;
+    @Input() homePageDisplayName;    
     @Input() eventId;
+    @Input() eventName;
     @Input() title;
         
     // @Input() eventName;

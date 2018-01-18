@@ -90,9 +90,24 @@ export class TournamentMachinesPage extends AutoCompleteComponent {
             if(result == null){
                 return;
             }
-            let successTitle='Fix This Message';
+            let eventName:string = "";
+            if(this.wizardEntity.event!=null){
+                eventName=this.wizardEntity.event.name;
+            }
+            let tournamentName:string = this.wizardEntity.tournament.tournament.tournament_name;
+            
+            let successTitle:string="";
+            if(eventName!=""){
+                successTitle='Event and ';
+            }
+            successTitle=successTitle+"Tournament Created!";
+            let summaryLineOne="Created ";
+            if(eventName!=""){
+                summaryLineOne=successTitle+'event '+eventName+' and ';
+            }
+            summaryLineOne=summaryLineOne+'tournament '+tournamentName;
             let successSummary = new SuccessSummary(successTitle,
-                                                    null,
+                                                    summaryLineOne,
                                                     null);            
             let successButton = new SuccessButton('Go Home',
                                                   this.getHomePageString(),
@@ -165,6 +180,8 @@ export class TournamentMachinesPage extends AutoCompleteComponent {
 
     }
     onSubmit(){
+        console.log('in onSubmit...');
+        console.log(this.wizardEntity);
         this.wizardEntity['tournament_machines']=this.selectedMachines;
         if('event' in this.wizardEntity){
             this.pssApi.createWizardEvent(this.wizardEntity)

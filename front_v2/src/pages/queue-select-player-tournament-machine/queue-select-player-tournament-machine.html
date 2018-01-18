@@ -5,16 +5,18 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>QueueSelectPlayerTournamentMachine</ion-title>
-  </ion-navbar>
-
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
 </ion-header>
 
 
-<ion-content padding>
-  <div>    
+<ion-content>
+  <button ion-button full small color="lighter">
+    Select tournament/machines to view queues 
+  </button>
+
+  <div class='desktopSlim'>    
   <ion-list>
     <ng-container *ngFor="let tournament of tournaments">
       <ion-item-divider (click)="expand(tournament)">

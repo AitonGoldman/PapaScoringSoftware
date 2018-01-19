@@ -26,15 +26,25 @@
       <ion-item-sliding *ngFor="let machine of selectedMachines">
         <ion-item *ngIf="machine.removed!=true">
           <ion-icon [name]="machine.active==true? 'play' : 'pause'" ></ion-icon>
+          <ion-avatar item-start>
+            <img  [src]="machine.img_url!=null?machine.img_url:'/assets/imgs/small_backglass.jpeg'">
+          </ion-avatar>        
+
           <button hideWhen='mobile' (click)="onRemove(machine)" ion-button item-end>Remove</button> {{machine.tournament_machine_name}}
-          <button hideWhen='mobile' (click)="onDisable(machine)" ion-button item-end>{{machine.active==true?"Disable":"Enable"}}</button> 
+          <button hideWhen='mobile' (click)="onDisable(machine)" ion-button item-end>{{machine.active==true?"Disable":"Enable"}}</button>          
+          <button hideWhen='mobile' (click)="takePicture(machine)" ion-button item-end>Take Picture</button>          
+
         </ion-item>
         <ion-item-options *ngIf="machine.removed!=true" side="right">
-          <button round ion-button color="danger">
+          <button round ion-button color="secondary" (click)="takePicture(machine)">
+            <ion-icon name="camera"></ion-icon>
+            Take Pic
+          </button>
+          <button round ion-button color="danger" (click)="onRemove(machine)">
             <ion-icon name="archive"></ion-icon>
             Remove
           </button>
-          <button round ion-button>
+          <button round ion-button (click)="onDisable(machine)">
             <ion-icon name="archive"></ion-icon>
             {{machine.active==true?"Disable":"Enable"}}
           </button>

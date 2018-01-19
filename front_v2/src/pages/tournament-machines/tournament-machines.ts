@@ -4,6 +4,7 @@ import { IonicPage } from 'ionic-angular';
 import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
+import { TakePicComponent } from '../../components/take-pic/take-pic'
 
 /**
  * Generated class for the TournamentMachinesPage page.
@@ -30,6 +31,21 @@ export class TournamentMachinesPage extends AutoCompleteComponent {
     selectedMachines:any = [];
     //@ViewChild('searchbar')  searchbar: any;
     @ViewChild('myform')  myform: any;    
+
+    takePicture(machine){
+        let profileModal = this.modalCtrl.create(TakePicComponent, { userId: 8675309 });
+        profileModal.onDidDismiss(data => {
+            console.log('in modal...');
+            console.log(data);
+            if(data!=null){
+                machine.has_pic=true;
+                machine.img_file=data;                
+                this.pssApi.editTournamentMachine(machine,this.eventId)
+                    .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name+" pic has been updated!","edit"))                            
+            }
+        });
+        profileModal.present();
+    }
     
     generateGetAllTournamentMachinesProcessor(){
         return (result) => {            

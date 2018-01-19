@@ -5,6 +5,16 @@ from flask_login import current_user
 from lib_v2.serializers import generic
 from flask_restless.helpers import to_dict
 import json
+from shutil import copyfile
+
+def handle_img_upload(input_data):
+    print "in handle img upload..."    
+    event_img_folders='/Users/agoldma/git/github/TD/front_v2/www/assets/imgs/'
+    if input_data.get('img_file',None) and input_data.get('has_pic',None):
+        print "in handle img upload...and processing"
+        copyfile(current_app.config['UPLOAD_FOLDER']+"/"+input_data['img_file'],event_img_folders+"/"+input_data['img_file'])
+        input_data['img_url']='/assets/imgs/%s'%(input_data['img_file'])
+
 
 def create_tournament_machine_route(request,tables_proxy,event_id,tournament=None):
     if request.data:        
@@ -33,6 +43,7 @@ def edit_tournament_machine_route(request,app,event_id):
     else:
         raise BadRequest('Submitted information is missing required fields')
     #put tournament edit logic here
+    handle_img_upload(input_data)
     tournament = app.table_proxy.edit_tournament_machine(input_data,False)
     if input_data.get('use_stripe',None):
         api_key = app.event_settings[event_id].stripe_api_key

@@ -1,6 +1,7 @@
 import { ViewChild, Component } from '@angular/core';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
+import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete';
 import { Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
@@ -24,7 +25,7 @@ import { IonicPage } from 'ionic-angular';
   selector: 'page-edit-user',
   templateUrl: 'edit-user.html',
 })
-export class EditUserPage extends PssPageComponent {
+export class EditUserPage extends AutoCompleteComponent {
     @ViewChild('searchbar')  searchbar: any;    
     destPageAfterSuccess:any=null;
     users:any;
@@ -32,24 +33,24 @@ export class EditUserPage extends PssPageComponent {
     selectedRole:any=null;
     selectedUser:any=null;
 
-    constructor(public autoCompleteProvider:AutoCompleteProvider,
-                public eventAuth: EventAuthProvider,
-                public navParams: NavParams,
-                public navCtrl: NavController,
-                public appCtrl: App,
-                public pssApi: PssApiProvider,
-                public platform: Platform,                
-                public actionSheetCtrl: ActionSheetController,
-                //public notificationsService: NotificationsService
-                public toastCtrl: ToastController
-               ){
-        super(eventAuth,navParams,
-              navCtrl,appCtrl,
-              pssApi,platform,
-              //notificationsService,
-              toastCtrl,
-              actionSheetCtrl);
-    }
+    // constructor(public autoCompleteProvider:AutoCompleteProvider,
+    //             public eventAuth: EventAuthProvider,
+    //             public navParams: NavParams,
+    //             public navCtrl: NavController,
+    //             public appCtrl: App,
+    //             public pssApi: PssApiProvider,
+    //             public platform: Platform,                
+    //             public actionSheetCtrl: ActionSheetController,
+    //             //public notificationsService: NotificationsService
+    //             public toastCtrl: ToastController
+    //            ){
+    //     super(eventAuth,navParams,
+    //           navCtrl,appCtrl,
+    //           pssApi,platform,
+    //           //notificationsService,
+    //           toastCtrl,
+    //           actionSheetCtrl);
+    // }
     generateEditEventUserRoleProcessor(removedEventUserFromEvent){
         return (result) => {
             if(result == null){

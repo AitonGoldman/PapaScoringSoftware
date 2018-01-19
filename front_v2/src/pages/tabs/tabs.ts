@@ -33,7 +33,7 @@ export class TabsPage extends PssPageComponent {
         console.log('selected a tab!');
     }
     onTabChange(event){        
-        console.log('changed a tab!');
+        console.log('changed a tab!');        
         if (this.tabRef.getByIndex(event.index).canGoBack()){
             this.tabRef.getByIndex(event.index).popToRoot({animate:false});
         }
@@ -41,5 +41,8 @@ export class TabsPage extends PssPageComponent {
         if (previousTab && previousTab.canGoBack()){
             this.tabRef.previousTab().popToRoot({animate:false});
         }
+    }
+    onHelp(){        
+        console.log(this.tabRef.getSelected());        
     }
 }

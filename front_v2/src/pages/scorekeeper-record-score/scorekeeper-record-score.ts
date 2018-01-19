@@ -25,7 +25,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
     score:any=null;
     player_id_for_event:any=null;
 
-    generateSubmitScoreProcessor(){
+    generateSubmitScoreProcessor(successSummary){
         return (result) => {
             if(result == null){
                 return;
@@ -35,20 +35,6 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
             console.log(result)
             let tournamentMachine=result.data;
             let successButtons=[];            
-            let success_title_string='Score recorded!';
-            let success_line_one_string=this.tournamentMachine.player.player_full_name + " on machine "+this.tournamentMachine.tournament_machine_name;
-            let success_line_two_string='Score of '+this.score+'.';
-            // re-add - send along tournamentMachine, player_id (if they have tickets)
-            // re-queue - send along tournamentMachiine, player_id (if they have tickets)
-            // deal with person in queue - send along player id (if they have tickets)
-            // go home (if no one in queue)
-            
-            let successSummary = new SuccessSummary(success_title_string,success_line_one_string, success_line_two_string);            
-            // let successButtonHome = new SuccessButton('Machine List',
-            //                                           'ScorekeeperMachineSelectPage',
-            //                                           this.buildNavParams({tournamentId:this.tournamentId}));
-            // let successButtonTickets = new SuccessButton('Purchase Tickets',
-            //                                              'TicketPurchasePage',
             
             let recordScoreSuccessButtons=['RE_ADD','RE_QUEUE','DEAL_WITH_PERSON_IN_QUEUE', 'DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER','GO_HOME']
             if(result.tournament_counts==0){
@@ -96,6 +82,31 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
                                                     'tournamentId':this.tournamentId}));
         };
     }
+
+    voidTicket(){
+        let actionSheet = this.actionSheetCtrl.create({
+            title: 'Are you SURE you want to VOID the ticket?',
+            buttons: [
+                {
+                text: 'VOID',
+                role: 'destructive',
+                handler: () => {
+                    //this.onRemoveConfirmed(machine);
+                    this.onVoid();
+                    console.log('Destructive clicked');
+                }
+            },
+                {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => {
+                    console.log('Cancel clicked');
+                }
+            }
+            ]
+        });
+        actionSheet.present();                
+    }
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad ScorekeeperRecordScorePage');
@@ -116,8 +127,24 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
         console.log('hi there');
         this.score = this.score.replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     }
+    onVoid(){
+        let success_title_string='Ticket Voided!';
+        let success_line_one_string='Ticket for '+this.tournamentMachine.player.player_full_name + " has been voided on "+this.tournamentMachine.tournament_machine_name;        
+            
+        let successSummary = new SuccessSummary(success_title_string,success_line_one_string, null);            
+
+        this.pssApi.voidTicket({tournament_id:this.tournamentId,tournament_machine_id:this.tournamentMachineId,player_id:this.tournamentMachine.player_id },this.eventId)            
+            .subscribe(this.generateSubmitScoreProcessor(successSummary))        
+    }
+    
     onSubmit(){
+        let success_title_string='Score recorded!';
+        let success_line_one_string=this.tournamentMachine.player.player_full_name + " on machine "+this.tournamentMachine.tournament_machine_name;
+        let success_line_two_string='Score of '+this.score+'.';
+            
+        let successSummary = new SuccessSummary(success_title_string,success_line_one_string, success_line_two_string);            
+
         this.pssApi.submitScore({tournament_id:this.tournamentId,tournament_machine_id:this.tournamentMachineId,player_id:this.tournamentMachine.player_id, action:'record_score',score:this.score.replace(new RegExp(',', 'g'), "")},this.eventId)            
-            .subscribe(this.generateSubmitScoreProcessor())        
+            .subscribe(this.generateSubmitScoreProcessor(successSummary))        
     }
 }

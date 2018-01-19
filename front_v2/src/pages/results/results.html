@@ -6,9 +6,31 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>testing 1 2 3 </ion-title>
-  </ion-navbar>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>  
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="card-background-page">
+<ion-grid>
+  <ion-row>
+    <ng-container *ngFor="let tournament of tournaments">
+    <ion-col col-12 col-md-4 col-lg-3 col-xl-2 (click)="pushPageWithNoBackButton('ResultsTournamentPage',buildNavParams({tournamentId:tournament.tournament_id}))">
+      <ion-card>
+
+        <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="tournament.img_url!=null?event.img_url:'/assets/imgs/dummy_tournament_small.jpeg'"/>
+        <img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile' [src]="tournament.img_url!=null?event.img_url:'/assets/imgs/dummy_tournament_large.jpeg'"/>
+
+      <div class="card-title">{{tournament.tournament_name}}</div>
+      </ion-card>      
+    </ion-col>
+    <ion-col col-12 col-md-4 col-lg-3 col-xl-2 >
+      <ion-card >        
+        <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="'/assets/imgs/dummy_machines_small.jpg'"/>
+        <img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile' [src]="'/assets/imgs/dummy_machines_large.jpg'"/>        
+      <div class="card-title">{{tournament.tournament_name}} Machines</div>
+      </ion-card>      
+    </ion-col>    
+    </ng-container>
+  </ion-row>
+</ion-grid>
 </ion-content>

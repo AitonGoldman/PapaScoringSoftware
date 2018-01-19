@@ -43,6 +43,7 @@ export class AutoCompleteProvider implements AutoCompleteService{
         this.eventId=eventId;
         this.labelAttribute=labelAttribute;
         this.loadingCompleteFunc=loadingCompleteFunc
+        this.currentValue=null;
         
     }
 

@@ -6,6 +6,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { SearchResults } from '../../classes/search-results';
 import { ActionSheetController } from 'ionic-angular'
 import { ToastController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
 
 /**
  * Generated class for the TopNavComponent component.
@@ -30,7 +31,8 @@ export class PssPageComponent {
                 public platform: Platform,                
                 //public notificationsService: NotificationsService,
                 public toastCtrl: ToastController,
-                public actionSheetCtrl: ActionSheetController) {
+                public actionSheetCtrl: ActionSheetController,
+                public modalCtrl: ModalController) {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         console.log('Hello PssPageComponent Component');

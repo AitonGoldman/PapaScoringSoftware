@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { PssPageComponent } from '../../components/pss-page/pss-page'
 
 /**
  * Generated class for the ScorekeeperHomePage page.
@@ -13,10 +14,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   selector: 'page-scorekeeper-home',
   templateUrl: 'scorekeeper-home.html',
 })
-export class ScorekeeperHomePage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+export class ScorekeeperHomePage extends PssPageComponent{
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ScorekeeperHomePage');

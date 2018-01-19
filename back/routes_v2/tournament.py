@@ -11,7 +11,9 @@ from shutil import copyfile
 import json
 
 def handle_img_upload(input_data):
+    print "in handle img for tourneys..."
     event_img_folders='/Users/agoldma/git/github/TD/front_v2/www/assets/imgs/'
+    print input_data
     if 'img_file' in input_data and input_data['img_file'] and input_data['has_pic']:
         copyfile(current_app.config['UPLOAD_FOLDER']+"/"+input_data['img_file'],event_img_folders+"/"+input_data['img_file'])
         input_data['img_url']='/assets/imgs/%s'%(input_data['img_file'])
@@ -39,8 +41,8 @@ def edit_tournament_route(request,app,event_id):
     else:
         raise BadRequest('Submitted information is missing required fields')
     #put tournament edit logic here
-    tournament = app.table_proxy.edit_tournament(input_data,False)
     handle_img_upload(input_data)
+    tournament = app.table_proxy.edit_tournament(input_data,False)    
     if input_data.get('use_stripe',None):
         api_key = app.event_settings[event_id].stripe_api_key
         app.stripe_proxy.set_tournament_stripe_prices(tournament,api_key,input_data.get('stripe_sku',None),

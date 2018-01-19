@@ -734,6 +734,7 @@ class TableProxy():
         new_score.player_id=player.player_id
         new_score.event_id=event_id        
         new_score.tournament_machine_id=tournament_machine.tournament_machine_id
+        new_score.tournament_id=tournament_machine.tournament_id
         new_entry.scores.append(new_score)
         new_entry.tournament_id=tournament_machine.tournament_id
         new_entry.player_id=tournament_machine.player_id

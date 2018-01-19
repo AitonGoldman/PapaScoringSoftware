@@ -3,6 +3,7 @@ import { EntityFields } from '../../classes/entity-fields'
 import { PssPageComponent } from '../pss-page/pss-page'
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
+import { TakePicComponent } from '../../components/take-pic/take-pic'
 
 /**
  * Generated class for the EventComponent component.
@@ -83,6 +84,18 @@ export class EventComponent  extends PssPageComponent {
             this.entity=result.data;            
         };
         
+    }
+    takePicture(){
+        let profileModal = this.modalCtrl.create(TakePicComponent, { userId: 8675309 });
+        profileModal.onDidDismiss(data => {
+            console.log('in modal...');
+            console.log(data);
+            if(data!=null){                
+                this.entity.img_file=data;
+                this.entity.has_pic=true;                
+            }
+        });
+        profileModal.present();
     }
 
     generateEditEventProcessor(){

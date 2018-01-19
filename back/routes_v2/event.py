@@ -10,8 +10,10 @@ import json
 from shutil import copyfile
 
 def handle_img_upload(input_data):
+    print "in handle img upload..."    
     event_img_folders='/Users/agoldma/git/github/TD/front_v2/www/assets/imgs/'
     if input_data.get('img_file',None) and input_data.get('has_pic',None):
+        print "in handle img upload...and processing"
         copyfile(current_app.config['UPLOAD_FOLDER']+"/"+input_data['img_file'],event_img_folders+"/"+input_data['img_file'])
         input_data['img_url']='/assets/imgs/%s'%(input_data['img_file'])
 

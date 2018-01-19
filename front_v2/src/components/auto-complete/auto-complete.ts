@@ -54,7 +54,8 @@ export class AutoCompleteComponent extends PssPageComponent {
               pssApi,platform,
               //notificationsService,
               toastCtrl,
-              actionSheetCtrl);
+              actionSheetCtrl,
+              modalCtrl);
         this.autocompleteDoneEventHandler= (autocompleteInfo, time) => {
             // user and time are the same arguments passed in `events.publish(user, time)`
             this.loading=false;            
@@ -78,13 +79,16 @@ export class AutoCompleteComponent extends PssPageComponent {
                 if(this.addPlayerAutoComplete==false){
                     return;
                 }
+                if(this.selectedPlayer==null){
+                    this.selectedPlayer={player_full_name:this.searchbar.keyword};
+                }
                 let nameElements=this.searchbar.keyword.split(' ');
                 if(nameElements.length>0){
                     this.selectedPlayer.first_name=nameElements[0];
                 }
                 if(nameElements.length>1){
                     this.selectedPlayer.last_name=nameElements[1];
-                }            
+                }                
                 
                 //this.selectedPlayer = null;
             }                        

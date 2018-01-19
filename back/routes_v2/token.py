@@ -245,11 +245,14 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
 
 @blueprints.test_blueprint.route('/<int:event_id>/token',methods=['POST'])
 def event_user_purchase_tokens(event_id):
+    input_data = json.loads(request.data)
     desk_permission = permissions.DeskTokenPurchasePermission(event_id)
     if desk_permission.can():                
         new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=False,current_user=current_user)            
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)
-    if player_permission.can():        
+    if player_permission.can():
+        if input_data.get('comped',False) is True:
+            raise BadRequest('Naughty Naughty')
         new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=True,logged_in_player=current_user)            
 
     current_app.table_proxy.commit_changes()    

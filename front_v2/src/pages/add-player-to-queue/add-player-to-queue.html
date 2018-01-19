@@ -31,6 +31,12 @@
     <h2>{{notFoundMessage}}</h2>
   </div>
   <div text-center *ngIf='selectedPlayer!=null' padding margin>
+    <ion-item  no-lines>
+    <ion-avatar  style='zoom:3.0'>
+      <img [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'" style='margin-left:auto;margin-right:auto'>
+    </ion-avatar>
+    </ion-item>
+
     Add player {{selectedPlayer.player_full_name}} to queue for {{tournamentMachine.tournament_machine_name}}
     <br>
     <button padding margin ion-button (click)="addEventPlayerToQueue(tournamentMachine.tournament_machine_id)"> Add To Queue </button>

@@ -35,9 +35,9 @@
     <h2>{{notFoundMessage}}</h2>
   </div>
   <ion-list *ngIf="notFoundMessage==null && selectedPlayer!=null">
-    <ion-item no-lines *ngIf="selectedPlayer.img_url!=null">
+    <ion-item no-lines>
       <ion-avatar  style='zoom:3.0'>
-        <img [src]="selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
+        <img [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'" style='margin-left:auto;margin-right:auto'>
       </ion-avatar>
     </ion-item>
     <ion-item-divider text-center color="light">
@@ -59,5 +59,5 @@
       {{ticketCount.tournament_name}} : {{ticketCount.count}}
     </ion-item>
   </ion-list>
-    <div class='desktopSlim'>
+  </div>
 </ion-content>

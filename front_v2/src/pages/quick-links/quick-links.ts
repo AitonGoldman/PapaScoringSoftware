@@ -27,7 +27,7 @@ export class QuickLinksPage extends PssPageComponent {
             'icon':'git-branch'},           
           ];
 
-  ionViewDidLoad() {
+  ionViewWillLoad() {
     console.log('ionViewDidLoad QuickLinksPage');
   }
     reorderItems(indexes) {

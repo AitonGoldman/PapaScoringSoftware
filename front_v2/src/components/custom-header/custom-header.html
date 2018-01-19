@@ -6,5 +6,5 @@
     <button *ngIf='eventId!=null&&eventName!=null' icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="{eventId:eventId,eventName:eventName}" ><ion-icon name="log-out"></ion-icon> {{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>
     <button icon-only ion-button [navPush]="'EventSelectPage'"><ion-icon name="git-compare"></ion-icon> Switch Events </button>
     <button *ngIf='eventId!=null&&eventName!=null' [navPush]="'ResultsPage'" [navParams]="{eventId:eventId,eventName:eventName}" icon-only ion-button> <ion-icon name="clipboard"></ion-icon>Results</button>
-    <button *ngIf='eventId!=null&&eventName!=null' icon-only ion-button> <ion-icon name="git-branch"></ion-icon>Queues</button>
+    <button *ngIf='eventId!=null&&eventName!=null' [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="{eventId:eventId,eventName:eventName}" icon-only ion-button> <ion-icon name="git-branch"></ion-icon>Queues</button>    
   </ion-buttons>

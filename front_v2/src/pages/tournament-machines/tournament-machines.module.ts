@@ -4,6 +4,7 @@ import { TournamentMachinesPage } from './tournament-machines';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { CustomComponentsModule } from '../../components/custom-components.module';
+import { ImageUploadModule } from "angular2-image-upload";
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { CustomComponentsModule } from '../../components/custom-components.modul
       IonicPageModule.forChild(TournamentMachinesPage),
       AutoCompleteModule,
       SimpleNotificationsModule.forRoot(),
-      CustomComponentsModule     
+      CustomComponentsModule,
+      ImageUploadModule.forRoot()
   ],
 })
 export class TournamentMachinesPageModule {}

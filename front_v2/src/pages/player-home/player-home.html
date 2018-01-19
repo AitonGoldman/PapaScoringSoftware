@@ -17,7 +17,7 @@
     <ion-item no-lines [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
       <ion-icon item-start name="ios-cash-outline"></ion-icon> Ticket Purchase
     </ion-item>
-    <ion-item no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
+    <ion-item hideWhen='mobile' no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
       <ion-icon item-start name="git-branch"></ion-icon> Queues
     </ion-item>
 

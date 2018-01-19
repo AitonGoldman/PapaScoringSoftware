@@ -27,11 +27,31 @@
     <h2>{{notFoundMessage}}</h2>
   </div>
   <ion-list *ngIf="notFoundMessage==null && selectedPlayer!=null">
-    <ion-item no-lines *ngIf="selectedPlayer.img_url!=null">
+    <!--<ion-item no-lines *ngIf="selectedPlayer.img_url!=null">
       <ion-avatar  style='zoom:3.0'>
         <img [src]="selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
       </ion-avatar>
-    </ion-item>
+    </ion-item>-->
+    <ion-grid>
+      <ion-row>          
+        <ion-col col-6>
+          <ion-item item-start no-lines>
+          <ion-avatar  style='zoom:3.0'>
+            <img [src]="tournamentMachine.img_url!=null?tournamentMachine.img_url:'/assets/imgs/small_backglass.jpeg'">
+          </ion-avatar>
+          </ion-item>
+        </ion-col>
+        <ion-col col-6>
+          <ion-item no-lines>
+          <ion-avatar  style='zoom:3.0'>
+            <img [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'">
+          </ion-avatar>
+          </ion-item>
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
+    
     <ion-item>
       Player Name : {{selectedPlayer.player_full_name}}
     </ion-item>

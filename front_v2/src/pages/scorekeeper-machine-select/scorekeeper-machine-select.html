@@ -12,18 +12,19 @@
 
 <ion-content>
 <button style='margin-top:0px;' ion-button full small color="darker">
-  Scorekeeping : Select machine
+  Scorekeeping : Select machine 
 </button>
   <div class='desktopSlim'>
   <ion-list>
     <ion-list-header no-lines>Machines For Tournament...
       <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>
+      <i item-end class="material-icons" (click)="undoMode = undoMode==false">do_not_disturb</i>
     </ion-list-header>    
     <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      
-      <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push (click)="pushToMachine(tournamentMachine.tournament_machine_id)">
+      <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push (click)="pushToMachine(tournamentMachine.tournament_machine_id)" [style.background-color]="undoMode==true?'red':null">
         {{tournamentMachine.tournament_machine_name}}
         <ion-avatar item-start>
-          <img  [src]="tournamentMachine.img_url!=null?tournamentMachine.img_url:'/assets/imgs/pinball_small_machine_square.jpg'">
+          <img  [src]="tournamentMachine.img_url!=null?tournamentMachine.img_url:'/assets/imgs/small_backglass.jpeg'">
         </ion-avatar>        
       </button>
     </ion-item-group>

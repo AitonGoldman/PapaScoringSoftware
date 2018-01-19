@@ -33,7 +33,7 @@
     <!--<form #myForm="ngForm" *ngIf="displayNewPlayerForm==true">    -->
     <form #myForm="ngForm" *ngIf="notFoundMessage!=null||(selectedPlayer!=null && selectedPlayer.player_full_name!=null)">    
       <ion-list>
-        <ion-item no-line *ngIf="selectedPlayer.img_url!=null">
+        <ion-item no-line *ngIf="selectedPlayer!=null && selectedPlayer.img_url!=null">
           <!-- <ion-grid> -->
           <!--   <ion-row> -->
           <!--     <ion-col col-5 style='background-color:red'> -->

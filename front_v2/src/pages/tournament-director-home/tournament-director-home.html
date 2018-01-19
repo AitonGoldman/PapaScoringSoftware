@@ -23,7 +23,7 @@
     <ion-item no-lines [navPush]="'AddPlayerPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Add Player
     </ion-item>
-    <ion-item no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({})">
+    <ion-item hideWhen='mobile' no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="git-branch"></ion-icon> Queue Player
     </ion-item>
     <ion-item no-lines [navPush]="'ChangePlayerPicturePage'" [navParams]="buildNavParams({})">

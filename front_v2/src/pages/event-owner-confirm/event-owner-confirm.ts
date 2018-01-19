@@ -26,34 +26,22 @@ import { ActionSheetController } from 'ionic-angular'
 export class EventOwnerConfirmPage extends PssPageComponent{    
     successSummary:any = null;
     successButtons:any = [];    
-    constructor(public navCtrl: NavController,
-                public navParams: NavParams,                
-                public eventAuth: EventAuthProvider,
-                public appCtrl: App,
-                public pssApi: PssApiProvider,
-                public platform: Platform,
-                //public notificationsService: NotificationsService,
-                public toastCtrl: ToastController,
-               public actionSheetCtrl: ActionSheetController) {
-        super(eventAuth,navParams,
-              navCtrl,appCtrl,
-              pssApi,platform,
-              //notificationsService,
-              toastCtrl,
-              actionSheetCtrl);
-        let encodedString:string = navParams.get('itsdangerousstring');
-        this.successSummary = new SuccessSummary('Activating Account....',
-                                                 null,
-                                                 null);
-            
-        if(encodedString){
-            this.pssApi.eventOwnerCreateConfirm({},encodedString)
-                .subscribe(this.generatePssUserConfirm())            
-            
-        }else{
-            
-        }
-    }
+    // constructor(public navCtrl: NavController,
+    //             public navParams: NavParams,                
+    //             public eventAuth: EventAuthProvider,
+    //             public appCtrl: App,
+    //             public pssApi: PssApiProvider,
+    //             public platform: Platform,
+    //             //public notificationsService: NotificationsService,
+    //             public toastCtrl: ToastController,
+    //            public actionSheetCtrl: ActionSheetController) {
+    //     super(eventAuth,navParams,
+    //           navCtrl,appCtrl,
+    //           pssApi,platform,
+    //           //notificationsService,
+    //           toastCtrl,
+    //           actionSheetCtrl);
+    // }
     generatePssUserConfirm(){
         return (result)=>{
             if(result==null){
@@ -70,8 +58,21 @@ export class EventOwnerConfirmPage extends PssPageComponent{
         }
     }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad EventOwnerConfirmPage');
+  ionViewWillLoad() {
+      console.log('ionViewDidLoad EventOwnerConfirmPage');
+      let encodedString:string = this.navParams.get('itsdangerousstring');
+      this.successSummary = new SuccessSummary('Activating Account....',
+                                               null,
+                                               null);
+            
+      if(encodedString){
+          this.pssApi.eventOwnerCreateConfirm({},encodedString)
+              .subscribe(this.generatePssUserConfirm())            
+          
+      }else{
+            
+      }
+      
   }
 
 }

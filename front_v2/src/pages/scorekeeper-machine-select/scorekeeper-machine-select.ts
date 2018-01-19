@@ -21,6 +21,7 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
     tournamentId:any=null;
     tournamentMachines:any=null;
     reorderEnabled:boolean=false;
+    undoMode:boolean=false;
     
     generateGetTournamentMachinesProcessor(){
         return (result) => {            

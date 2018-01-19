@@ -3,6 +3,8 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { TakePicComponent } from '../../components/take-pic/take-pic'
 
 import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
+import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete';
+
 import { ModalController, Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
@@ -23,27 +25,27 @@ import { IonicPage } from 'ionic-angular';
   selector: 'page-change-player-picture',
   templateUrl: 'change-player-picture.html',
 })
-export class ChangePlayerPicturePage extends PssPageComponent {
+export class ChangePlayerPicturePage extends AutoCompleteComponent {
     players:any = [];
     selectedPlayer:any = null;
-    constructor(public autoCompleteProvider:AutoCompleteProvider,
-                public eventAuth: EventAuthProvider,
-                public navParams: NavParams,
-                public navCtrl: NavController,
-                public appCtrl: App,
-                public pssApi: PssApiProvider,
-                public platform: Platform,                
-                public actionSheetCtrl: ActionSheetController,
-                public notificationsService: NotificationsService,                
-                public modalCtrl: ModalController,
-                public toastCtrl: ToastController){
-        super(eventAuth,navParams,
-              navCtrl,appCtrl,
-              pssApi,platform,
-              //notificationsService,
-              toastCtrl,
-              actionSheetCtrl);
-    }
+    // constructor(public autoCompleteProvider:AutoCompleteProvider,
+    //             public eventAuth: EventAuthProvider,
+    //             public navParams: NavParams,
+    //             public navCtrl: NavController,
+    //             public appCtrl: App,
+    //             public pssApi: PssApiProvider,
+    //             public platform: Platform,                
+    //             public actionSheetCtrl: ActionSheetController,
+    //             public notificationsService: NotificationsService,                
+    //             public modalCtrl: ModalController,
+    //             public toastCtrl: ToastController){
+    //     super(eventAuth,navParams,
+    //           navCtrl,appCtrl,
+    //           pssApi,platform,
+    //           //notificationsService,
+    //           toastCtrl,
+    //           actionSheetCtrl);
+    // }
     
     generateGetAllEventPlayersWithNoPicsProcessor(){
         return (result)=>{

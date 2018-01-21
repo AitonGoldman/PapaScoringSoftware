@@ -23,7 +23,7 @@
   <div class='desktopSlim'>
 
   <div *ngIf='eventAuth.getRoleName(null)!="eventowner"'>
-    Please login ( look in quick links for the link )
+    Please <a  [navPush]="'EventOwnerLoginPage'" [navParams]="{eventId:eventId}"> login </a> ( look in quick links for the link )
   </div>
   <div *ngIf='eventAuth.getRoleName(null)=="eventowner"'>
     <h1><b>Event Creation</b></h1>

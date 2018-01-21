@@ -62,8 +62,12 @@ def calculate_list_of_tickets_and_prices_for_player(current_ticket_count, player
         elif tournament.number_of_tickets_for_discount is None:            
             output_list.append({'amount':current_ticket_amount,'price':current_ticket_amount*normal_price})
 
-        if flask_app.table_proxy.get_tournament_machine_player_is_playing(player, event_id):    
-            current_ticket_amount=current_ticket_amount+1
+        # if flask_app.table_proxy.get_tournament_machine_player_is_playing(player, event_id):    
+        #     current_ticket_amount=current_ticket_amount+1
+        pass
+    if flask_app.table_proxy.get_tournament_machine_player_is_playing(player, event_id):    
+        current_ticket_amount=current_ticket_amount+1
+    
     cutoff_index=tournament.number_of_unused_tickets_allowed-current_ticket_count
     return [{'amount':0,'price':0}]+output_list[0:cutoff_index]
 

@@ -7,6 +7,7 @@ import { TournamentComponent } from './tournament/tournament';
 import { ExpandableComponent } from './expandable/expandable';
 import { TakePicComponent } from './take-pic/take-pic';
 import { AutoCompleteComponent } from './auto-complete/auto-complete';
+import { TopThreePopoverComponent } from './top-three-popover/top-three-popover';
 @NgModule({
 	declarations: [
             PssPageComponent,    
@@ -17,7 +18,8 @@ import { AutoCompleteComponent } from './auto-complete/auto-complete';
             ExpandableComponent,
             TakePicComponent,        
     TakePicComponent,
-    AutoCompleteComponent],
+    AutoCompleteComponent,
+    TopThreePopoverComponent],
     imports: [],
     exports: [
         PssPageComponent,
@@ -27,6 +29,7 @@ import { AutoCompleteComponent } from './auto-complete/auto-complete';
         TournamentComponent,        
         ExpandableComponent,                
         TakePicComponent,
-    AutoCompleteComponent]
+    AutoCompleteComponent,
+    TopThreePopoverComponent]
 })
 export class ComponentsModule {}

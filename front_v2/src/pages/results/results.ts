@@ -33,8 +33,15 @@ export class ResultsPage extends PssPageComponent {
             if(withPlayer==true){
                 this.eventPlayer=result.player;
             }
-            this.tournaments=result.data;
+            this.tournaments=result.data.map((tournament)=>{
+                tournament.expand_machines=false;
+                return tournament;
+            });
         }
+    }
+
+    expandMachines(tournament){
+        tournament.expand_machines=tournament.expand_machines==false;
     }
     
     ionViewWillLoad() {        

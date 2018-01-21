@@ -80,12 +80,12 @@ def get_event_player_route(app,event_id,event_player_id):
                 max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed
             calculated_list = calculate_list_of_tickets_and_prices_for_player(0,event_player,app,event_id,tournament)
             if tournament_counts.get(tournament.tournament_id,None):                
-                pruned_calculated_list = [price for price in calculated_list if price['amount'] <= max_amount_allowed_for_player]
+               pruned_calculated_list = [price for price in calculated_list if price['amount'] <= max_amount_allowed_for_player]
             else:
-                pruned_calculated_list = calculated_list            
+               pruned_calculated_list = calculated_list            
             tournament_calculated_lists.append({'tournament_name':tournament.tournament_name,
-                                                'tournament_id':tournament.tournament_id,
-                                                'calculated_price_list':pruned_calculated_list})
+                                               'tournament_id':tournament.tournament_id,
+                                               'calculated_price_list':pruned_calculated_list})
         return {'data':player_dict,
                 'tournament_calculated_lists':to_dict(tournament_calculated_lists),
                 'tournament_counts':tournament_counts}

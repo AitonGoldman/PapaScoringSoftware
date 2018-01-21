@@ -14,21 +14,25 @@
 <ion-grid>
   <ion-row>
     <ng-container *ngFor="let tournament of tournaments">
-    <ion-col col-12 col-md-4 col-lg-3 col-xl-2 (click)="pushPageWithNoBackButton('ResultsTournamentPage',buildNavParams({tournamentId:tournament.tournament_id}))">
+    <ion-col col-12 col-md-4 col-lg-3 col-xl-2 [navPush]='"ResultsTournamentPage"' [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
       <ion-card>
-
-        <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="tournament.img_url!=null?event.img_url:'/assets/imgs/dummy_tournament_small.jpeg'"/>
-        <img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile' [src]="tournament.img_url!=null?event.img_url:'/assets/imgs/dummy_tournament_large.jpeg'"/>
+        <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="tournament.img_url!=null?tournament.img_url:'/assets/imgs/dummy_tournament_small.jpeg'"/>
+        <img [style.height]='"117px"' [style.width]='"225px"' hideWhen='mobile' [src]="tournament.img_url!=null?tournament.img_url:'/assets/imgs/dummy_tournament_large.jpeg'"/>
 
       <div class="card-title">{{tournament.tournament_name}}</div>
       </ion-card>      
     </ion-col>
-    <ion-col col-12 col-md-4 col-lg-3 col-xl-2 >
-      <ion-card >        
+    <ion-col col-12 col-md-4 col-lg-3 col-xl-2>
+      <ion-card (click)="expandMachines(tournament)">        
         <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="'/assets/imgs/dummy_machines_small.jpg'"/>
-        <img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile' [src]="'/assets/imgs/dummy_machines_large.jpg'"/>        
+        <img [style.height]='"117px"' [style.width]='"225px"' hideWhen='mobile' [src]="'/assets/imgs/dummy_machines_large.jpg'"/>        
       <div class="card-title">{{tournament.tournament_name}} Machines</div>
-      </ion-card>      
+      </ion-card>
+      <ion-list showWhen='mobile' *ngIf='tournament != null && tournament.expand_machines==true' no-lines>
+        <ion-item *ngFor="let machine of tournament.tournament_machines" detail-push [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name,tournamentMachineId:machine.tournament_machine_id,tournamentMachineName:machine.tournament_machine_name})">
+          {{machine.tournament_machine_name}}
+        </ion-item>
+      </ion-list>
     </ion-col>    
     </ng-container>
   </ion-row>

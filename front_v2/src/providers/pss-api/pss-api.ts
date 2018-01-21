@@ -103,6 +103,7 @@ export class PssApiProvider {
     getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines/machines",'get');
     getTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines",'get');
     getTournamentResults = this.generate_api_call('getTournamentResults',this.basePssUrl+"/:arg/test_tournament_results/:arg",'get');
+    getTournamentMachineResults = this.generate_api_call('getTournamentMachineResults',this.basePssUrl+"/:arg/test_tournament_machine_results/:arg/:arg",'get');
 
     getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/machines",'get');
     getAllUsers = this.generate_api_call('getAllUsers',this.basePssUrl+"/pss_users",'get');        

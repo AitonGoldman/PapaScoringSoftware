@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { ResultsTournamentPage } from './results-tournament';
+import { ResultsMachinePage } from './results-machine';
 import { CustomComponentsModule } from '../../components/custom-components.module';
 
 @NgModule({
   declarations: [
-    ResultsTournamentPage,
+    ResultsMachinePage,
   ],
   imports: [
       CustomComponentsModule,
-      IonicPageModule.forChild(ResultsTournamentPage),
+      IonicPageModule.forChild(ResultsMachinePage),
   ],
 })
-export class ResultsTournamentPageModule {}
+export class ResultsMachinePageModule {}

@@ -3,36 +3,66 @@
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
--->
+  -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>ResultsTournament</ion-title>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content>
-  <ion-grid>
-    <ion-row nowrap>
-      <ion-col col-1 no-padding text-center>
-        100
+  <div text-center>
+    <h2>{{tournamentName}} Results</h2>
+    <ion-icon (tap)="onReload()" tappable style="zoom:2.0" item-end name="refresh"></ion-icon>
+  </div>
+
+  <ion-grid [style.width]='width' [style.margin]="'auto'">
+    <ion-row>
+      <ion-col col-2 col-md-1 no-padding text-center>
+        Rank
       </ion-col>
-      <ion-col col-2 no-padding text-center>
-        342
-      </ion-col>      
-      <ion-col col-6 no-padding text-center>
-        Elizabeth Cromwell Jr t e
+      <ion-col col-8 col-md-5 no-padding text-center>
+        Name
       </ion-col>
-      <ion-col col-2 no-padding text-center>
-        Top 3
+      <ion-col col-2 col-md-5 no-padding text-center>
+        <span>Top 3 <span hideWhen="mobile">machines</span></span>
       </ion-col>
-      <ion-col col-1 no-padding text-center>
-        <ion-icon item-end name="git-branch"></ion-icon>        
-      </ion-col>      
     </ion-row>
-    <ion-row nowrap>
-    </ion-row>    
+    <ion-row>
+      <ion-col>
+        <hr>
+      </ion-col>
+    </ion-row>
+    <ion-row  nowrap *ngFor="let result of results;even as e;index as i" align-items-center [style.background-color]="e==true?'grey':null">
+      <ng-container *ngIf="result.seperator==true">
+        <ion-col text-center style='background-color:#CCCCCC'>
+          {{result.seperator_message}}
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="result.seperator==false">
+      <ion-col col-2 col-md-1 no-padding text-center align-self-center>
+        {{result.rank}}<span style='font-size:10px'><p style='line-height:1px'>({{result.points}} points)</p></span>
+        <ion-icon *ngIf="result.show_icon==true" item-end name="git-branch"></ion-icon>        
+      </ion-col>
+      <ion-col col-6 col-md-5 no-padding text-center align-self-center>
+        {{result.player_name}}
+      </ion-col>
+      <ion-col col-4 col-md-5 no-padding text-center align-self-center	>
+        <!--<a showWhen="mobile" (click)="showTopThreeMachines($event,result.top_machines)">Top 3</a>-->
+        <span hideWhen="mobile">
+          <span *ngFor="let top_machine of result.top_machines;index as i">
+            <span *ngIf='i>0'>,</span>
+            #{{top_machine.rank}} on {{top_machine.abbreviation}}
+          </span>
+        </span>
+        <span showWhen="mobile" style='font-size:12px' (click)="showTopThreeMachines($event,result.top_machines)">
+          <span *ngFor="let top_machine of result.top_machines;index as i">
+            <span *ngIf='i>0'>/</span>
+            {{top_machine.abbreviation}}
+          </span>
+        </span>
+      </ion-col>
+      </ng-container>
+    </ion-row>
   </ion-grid>
 </ion-content>

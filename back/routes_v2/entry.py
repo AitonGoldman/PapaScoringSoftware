@@ -103,8 +103,7 @@ def change_entry(event_id):
         raise BadRequest('No info in request')        
     scorekeeper_permission = permissions.ScorekeeperPermission(event_id)
     if scorekeeper_permission.can():
-        if input_data['action'] == 'record_score':
-            print "recording score..."
+        if input_data['action'] == 'record_score':            
             record_score_route(input_data,event_id,current_app,current_user)
     else:
         raise Unauthorized('You are not authorized to do this')

@@ -9,6 +9,7 @@ import { ToastController } from 'ionic-angular';
 import { NotificationsService } from 'angular2-notifications';
 import { Events } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
+import { PopoverController } from 'ionic-angular';
 
 //import { IonicPage } from 'ionic-angular';
 
@@ -48,14 +49,17 @@ export class AutoCompleteComponent extends PssPageComponent {
                 public alertCtrl: AlertController,
                 public modalCtrl: ModalController,
                 public toastCtrl: ToastController,
-                public events: Events){
+                public events: Events,
+                public popoverCtrl: PopoverController){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
               //notificationsService,
               toastCtrl,
               actionSheetCtrl,
-              modalCtrl);
+              modalCtrl,
+              alertCtrl,
+              popoverCtrl);
         this.autocompleteDoneEventHandler= (autocompleteInfo, time) => {
             // user and time are the same arguments passed in `events.publish(user, time)`
             this.loading=false;            

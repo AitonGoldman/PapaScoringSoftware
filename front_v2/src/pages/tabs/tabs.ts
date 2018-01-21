@@ -1,6 +1,7 @@
 import { ViewChild, Component } from '@angular/core';
 import { Tabs, IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
+import { TopThreePopoverComponent } from '../../components/top-three-popover/top-three-popover'
 
 /**
  * Generated class for the TabsPage page.
@@ -32,6 +33,13 @@ export class TabsPage extends PssPageComponent {
     onTabSelect(){
         console.log('selected a tab!');
     }
+    showTopThreeMachines(event){
+        let popover = this.popoverCtrl.create(TopThreePopoverComponent);
+        popover.present({
+            ev: event
+        });
+    }
+
     onTabChange(event){        
         console.log('changed a tab!');        
         if (this.tabRef.getByIndex(event.index).canGoBack()){

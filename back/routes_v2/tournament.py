@@ -95,6 +95,16 @@ def wizard_tournament_create():
         request.data=tournament_machine_string
         create_tournament_machine_route(request,current_app.table_proxy,None,tournaments[0])
     current_app.table_proxy.db_handle.session.commit()
+    tournament_machines = json.loads(orig_data)['tournament_machines']
+    tournament_machines_sqlalchemy_objects=[]
+    for tournament_machine in tournament_machines:
+        tournament_machine_string = json.dumps(tournament_machine)
+        request.data=tournament_machine_string
+        tournament_machines_sqlalchemy_objects.append(create_tournament_machine_route(request,current_app.table_proxy,None,tournaments[0]))
+    for tournament_machine in tournament_machines_sqlalchemy_objects:
+        current_app.table_proxy.create_queue_for_tournament_machine(tournament_machine,tournaments[0].queue_size,event.event_id)
+    current_app.table_proxy.commit_changes()
+
     return jsonify({'data':generic.serialize_event_public(event)})
 
 

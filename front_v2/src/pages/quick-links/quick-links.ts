@@ -17,6 +17,8 @@ import { reorderArray } from 'ionic-angular';
 })
 export class QuickLinksPage extends PssPageComponent {  
     reorderEnabled:boolean = false;
+    
+
     items=[{'title':'Results - Classics I',
             'icon':'md-clipboard'},
            {'title':'Results - Main A',

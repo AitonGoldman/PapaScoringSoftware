@@ -6,15 +6,14 @@
  */
 import { Component, Input } from '@angular/core';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
+import { PssPageComponent } from '../../components/pss-page/pss-page'
+import { TopThreePopoverComponent } from '../../components/top-three-popover/top-three-popover'
 
 @Component({
   selector: 'custom-headers',
   templateUrl: 'custom-header.html'
 })
-export class CustomHeaderComponent {    
-    constructor(public eventAuth: EventAuthProvider){        
-
-    }
+export class CustomHeaderComponent extends PssPageComponent {    
     goGoCustomHeader(){
         
     }

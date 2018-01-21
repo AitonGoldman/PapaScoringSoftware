@@ -7,6 +7,8 @@ import { SearchResults } from '../../classes/search-results';
 import { ActionSheetController } from 'ionic-angular'
 import { ToastController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
+import { PopoverController } from 'ionic-angular';
 
 /**
  * Generated class for the TopNavComponent component.
@@ -32,7 +34,9 @@ export class PssPageComponent {
                 //public notificationsService: NotificationsService,
                 public toastCtrl: ToastController,
                 public actionSheetCtrl: ActionSheetController,
-                public modalCtrl: ModalController) {
+                public modalCtrl: ModalController,
+                public alertCtrl: AlertController,
+                public popoverCtrl: PopoverController) {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         console.log('Hello PssPageComponent Component');

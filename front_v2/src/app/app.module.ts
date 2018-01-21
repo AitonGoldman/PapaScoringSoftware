@@ -19,12 +19,15 @@ import { ImageUploadModule } from "angular2-image-upload";
 import { CookieModule } from 'ngx-cookie';
 import { CustomComponentsModule } from '../components/custom-components.module';
 import { TakePicComponent } from '../components/take-pic/take-pic'
+import { TopThreePopoverComponent } from '../components/top-three-popover/top-three-popover'
+
 //import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
 @NgModule({
   declarations: [
       MyApp,
-      TakePicComponent
+      TakePicComponent,
+      TopThreePopoverComponent
   ],
   imports: [
       BrowserModule,
@@ -45,7 +48,8 @@ import { TakePicComponent } from '../components/take-pic/take-pic'
   bootstrap: [IonicApp],
   entryComponents: [
       MyApp,
-      TakePicComponent
+      TakePicComponent,
+      TopThreePopoverComponent
   ],
   providers: [
     StatusBar,

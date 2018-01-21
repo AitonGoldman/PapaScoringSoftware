@@ -749,7 +749,7 @@ class TableProxy():
 
     def mark_token_as_used(self,event_id,player,tournament=None,commit=False):
         token = self.get_tokens_by_tournament(event_id, player,tournament)[0]
-        print "found token id : %s " % token.token_id
+        
         token.used=True                
         if commit:
             self.db_handle.session.commit()

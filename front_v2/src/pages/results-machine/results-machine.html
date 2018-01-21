@@ -13,9 +13,9 @@
 
 <ion-content>
   <div text-center>
-    <h2>{{tournamentMachineName}} Results</h2>
+    <h2>{{tournamentMachineName}} Results     <ion-icon (click)="listOrderStorage.addFavoriteTournamentMachine(eventId,tournamentMachineId,tournamentMachineName)" style="zoom:1.0" item-end name="star"></ion-icon></h2>
     <ion-icon (click)="onReload()" style="zoom:2.0" item-end name="refresh"></ion-icon>
-    <ion-icon (click)="listOrderStorage.addFavoriteTournamentMachine(eventId,tournamentMachineId,tournamentMachineName)" style="zoom:2.0" item-end name="star"></ion-icon>
+
   </div>
   <ion-grid [style.width]='width' [style.margin-left]='"auto"' [style.margin-right]='"auto"'>
     <ion-row>

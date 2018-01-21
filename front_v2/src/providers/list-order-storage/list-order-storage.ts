@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie';
+import { ToastController } from 'ionic-angular';
 
 /*
   Generated class for the ListOrderStorageProvider provider.
@@ -11,7 +12,7 @@ import { CookieService } from 'ngx-cookie';
 @Injectable()
 export class ListOrderStorageProvider {
 
-    constructor(public http: HttpClient, public _cookieService:CookieService) {
+    constructor(public http: HttpClient, public _cookieService:CookieService, private toastCtrl: ToastController) {
         console.log('Hello ListOrderStorageProvider Provider');
     }
     
@@ -49,6 +50,16 @@ export class ListOrderStorageProvider {
         }
         favoriteMachines[eventId][tournamentMachineId]={tournamentMachineId:tournamentMachineId,tournamentMachineName:tournamentMachineName};
         this._cookieService.putObject("favoriteMachines",favoriteMachines);
+        let toast = this.toastCtrl.create({
+            message: 'Machine added to favorites',
+            duration: 99000,
+            position: 'top',
+            showCloseButton: true,
+            closeButtonText: " ",
+            cssClass: "successToast"
+        });
+        toast.present();                    
+        
     }
     getFavoriteTournamentMachines(eventId){        
         let favoriteMachines = this._cookieService.getObject("favoriteMachines");

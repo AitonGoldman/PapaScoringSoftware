@@ -31,7 +31,7 @@
         Tournaments
       </ion-item-divider>
       
-      <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event,'tournamentItems')">      
+      <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderTournamentItems($event,'tournamentItems')">      
         <button *ngFor="let item of tournamentItems"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
       </ion-item-group>
       <ion-item-divider>

@@ -57,6 +57,7 @@ export class QuickLinksPage extends PssPageComponent {
         })
 
         this.tournamentMachines = this.listOrderStorage.getFavoriteTournamentMachines(this.eventId);
+        console.log(this.tournamentMachines);
         if(this.tournamentMachines==null){
             return;
         }
@@ -97,7 +98,7 @@ export class QuickLinksPage extends PssPageComponent {
         
         let tournamentMachinesListToStore = {}
         this.tournamentMachines.forEach((item,index)=>{
-            tournamentMachinesListToStore[item.tournament_machine_id]={index:index+1,tournamentMachineId:item.tournament_machine_id};
+            tournamentMachinesListToStore[item.tournamentMachineId]={index:index+1,tournamentMachineId:item.tournamentMachineId};
         }) 
         this.listOrderStorage.updateList('QuickLinksPage','tournament_machines',tournamentMachinesListToStore)
     }    

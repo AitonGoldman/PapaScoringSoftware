@@ -10,6 +10,8 @@ import { NotificationsService } from 'angular2-notifications';
 import { Events } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
 import { PopoverController } from 'ionic-angular';
+import { TournamentSettingsProvider } from '../../providers/tournament-settings/tournament-settings'
+import { ListOrderStorageProvider } from '../../providers/list-order-storage/list-order-storage'
 
 //import { IonicPage } from 'ionic-angular';
 
@@ -50,7 +52,9 @@ export class AutoCompleteComponent extends PssPageComponent {
                 public modalCtrl: ModalController,
                 public toastCtrl: ToastController,
                 public events: Events,
-                public popoverCtrl: PopoverController){
+                public popoverCtrl: PopoverController,
+                public tournamentSettings: TournamentSettingsProvider,
+                public listOrderStorage: ListOrderStorageProvider){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
@@ -59,7 +63,10 @@ export class AutoCompleteComponent extends PssPageComponent {
               actionSheetCtrl,
               modalCtrl,
               alertCtrl,
-              popoverCtrl);
+              popoverCtrl,
+              tournamentSettings,
+              listOrderStorage,
+              events);
         this.autocompleteDoneEventHandler= (autocompleteInfo, time) => {
             // user and time are the same arguments passed in `events.publish(user, time)`
             this.loading=false;            

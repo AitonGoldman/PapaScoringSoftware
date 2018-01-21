@@ -20,6 +20,9 @@ import { CookieModule } from 'ngx-cookie';
 import { CustomComponentsModule } from '../components/custom-components.module';
 import { TakePicComponent } from '../components/take-pic/take-pic'
 import { TopThreePopoverComponent } from '../components/top-three-popover/top-three-popover'
+import { ListOrderStorageProvider } from '../providers/list-order-storage/list-order-storage';
+import { QuickLinksProvider } from '../providers/quick-links/quick-links';
+import { TournamentSettingsProvider } from '../providers/tournament-settings/tournament-settings';
 
 //import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
@@ -58,7 +61,10 @@ import { TopThreePopoverComponent } from '../components/top-three-popover/top-th
     TitleServiceProvider,
     EventAuthProvider,
     PssApiProvider,
-    AutoCompleteProvider
+    AutoCompleteProvider,
+    ListOrderStorageProvider,
+    QuickLinksProvider,
+    TournamentSettingsProvider
   ]
 })
 export class AppModule {}

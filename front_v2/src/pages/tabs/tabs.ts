@@ -33,6 +33,9 @@ export class TabsPage extends PssPageComponent {
     onTabSelect(){
         console.log('selected a tab!');
     }
+    onQuickLinksSelect(){
+        this.eventsService.publish('quickLinks:reload');
+    }
     showTopThreeMachines(event){
         let popover = this.popoverCtrl.create(TopThreePopoverComponent);
         popover.present({

@@ -9,6 +9,9 @@ import { ToastController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { PopoverController } from 'ionic-angular';
+import { TournamentSettingsProvider } from '../../providers/tournament-settings/tournament-settings'
+import { ListOrderStorageProvider } from '../../providers/list-order-storage/list-order-storage'
+import { Events } from 'ionic-angular';
 
 /**
  * Generated class for the TopNavComponent component.
@@ -36,7 +39,10 @@ export class PssPageComponent {
                 public actionSheetCtrl: ActionSheetController,
                 public modalCtrl: ModalController,
                 public alertCtrl: AlertController,
-                public popoverCtrl: PopoverController) {
+                public popoverCtrl: PopoverController,
+                public tournamentSettings: TournamentSettingsProvider,
+                public listOrderStorage: ListOrderStorageProvider,
+                public eventsService: Events) {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         console.log('Hello PssPageComponent Component');

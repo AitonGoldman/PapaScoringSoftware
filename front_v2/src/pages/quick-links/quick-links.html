@@ -26,10 +26,21 @@
       </button>
       <button ion-item detail-push (click)="pushRootPage('EventSelectPage')">
         <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event
-      </button>      
-    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event)">      
-    <button *ngFor="let item of items"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
-    </ion-item-group>
+      </button>
+      <ion-item-divider>
+        Tournaments
+      </ion-item-divider>
+      
+      <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderItems($event,'tournamentItems')">      
+        <button *ngFor="let item of tournamentItems"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
+      </ion-item-group>
+      <ion-item-divider>
+        Favorited Machines
+      </ion-item-divider>
+      <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderMachineItems($event)">      
+        <button *ngFor="let item of tournamentMachines"  ion-item detail-push>{{item.tournamentMachineName}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
+      </ion-item-group>
+      
   </ion-list>
 
 </ion-content>

@@ -20,6 +20,7 @@ import { NavParams } from 'ionic-angular';
 export class TopThreePopoverComponent {
     machines:any= null;
     linkParams:any = null;
+    tabCtrl:any = null;
     constructor(public viewCtrl: ViewController, public navParams: NavParams) {
         console.log(this.navParams.data);
         this.machines = this.navParams.get('machines');

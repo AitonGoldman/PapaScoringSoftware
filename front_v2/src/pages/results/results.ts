@@ -37,6 +37,7 @@ export class ResultsPage extends PssPageComponent {
                 tournament.expand_machines=false;
                 return tournament;
             });
+            this.tournamentSettings.setTournaments(this.tournaments);
         }
     }
 

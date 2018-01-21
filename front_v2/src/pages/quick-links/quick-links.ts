@@ -30,6 +30,8 @@ export class QuickLinksPage extends PssPageComponent {
     //       ];
     tournamentItems:any=[];
     tournamentsOrderList:any=null;
+    tournamentMachinesOrderList:any=null;
+  
     tournamentMachines:any=[];
     tournamentsMachinesList:any=null;
     

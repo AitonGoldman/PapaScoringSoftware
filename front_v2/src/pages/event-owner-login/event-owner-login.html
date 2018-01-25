@@ -31,7 +31,7 @@
          [(ngModel)]="loginInfo.password" name="password"></ion-input>
 </ion-item>
 <ion-item no-lines>
-  <button [disabled]='!loginForm.valid' ion-button default (click)="loginEventOwner()">Login </button>
+  <button [disabled]='!loginForm.valid' ion-button default (tap)="loginEventOwner()">Login </button>
 </ion-item>
 </form>
 

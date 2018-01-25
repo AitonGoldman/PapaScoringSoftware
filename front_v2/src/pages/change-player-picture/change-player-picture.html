@@ -15,7 +15,7 @@
 
 <ion-content padding>
   <div class='slimDesktop'>
-    <ion-item *ngFor="let player of players" (click)="takePicture(player)">
+    <ion-item *ngFor="let player of players" (tap)="takePicture(player)">
       <ion-icon item-end name="camera"></ion-icon> Take {{player.player_full_name}} Picture      
     </ion-item>
   </div>

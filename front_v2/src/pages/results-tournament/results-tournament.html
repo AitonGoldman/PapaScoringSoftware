@@ -11,12 +11,12 @@
 </ion-header>
 
 <ion-content>
-  <div text-center>
-    <h2>{{tournamentName}} Results</h2>
-    <ion-icon (tap)="onReload()" tappable style="zoom:2.0" item-end name="refresh"></ion-icon>
+  <div text-center tappable>
+    <h2>{{tournamentName}} Results 2</h2>
+    <ion-icon (tap)="onReload()" style="zoom:2.0" item-end name="refresh"></ion-icon>    
   </div>
 
-  <ion-grid [style.width]='width' [style.margin]="'auto'">
+  <ion-grid [style.width]='width' [style.margin]="'auto'" *ngIf="results != null">
     <ion-row>
       <ion-col col-2 col-md-1 no-padding text-center>
         Rank
@@ -41,28 +41,29 @@
       </ng-container>
       <ng-container *ngIf="result.seperator==false">
       <ion-col col-2 col-md-1 no-padding text-center align-self-center>
-        {{result.rank}}<span style='font-size:10px'><p style='line-height:1px'>({{result.points}} points)</p></span>
-        <ion-icon *ngIf="result.show_icon==true" item-end name="git-branch"></ion-icon>        
+        {{result.rank}}<span style='font-size:8px'><p style='line-height:1px'>({{result.points}} points)</p></span>
+        <!--<ion-icon *ngIf="result.show_icon==true" item-end name="git-branch"></ion-icon>-->
       </ion-col>
       <ion-col col-6 col-md-5 no-padding text-center align-self-center>
         {{result.player_name}}
       </ion-col>
-      <ion-col col-4 col-md-5 no-padding text-center align-self-center	>
-        <!--<a showWhen="mobile" (click)="showTopThreeMachines($event,result.top_machines)">Top 3</a>-->
-        <span hideWhen="mobile">
-          <span *ngFor="let top_machine of result.top_machines;index as i">
-            <span *ngIf='i>0'>,</span>
-            #{{top_machine.rank}} on {{top_machine.abbreviation}}
-          </span>
-        </span>
-        <span showWhen="mobile" style='font-size:12px' (click)="showTopThreeMachines($event,result.top_machines)">
-          <span *ngFor="let top_machine of result.top_machines;index as i">
-            <span *ngIf='i>0'>/</span>
-            {{top_machine.abbreviation}}
-          </span>
-        </span>
+      <ion-col col-4 col-md-5 no-padding text-center align-self-center (tap)="showTopThreeMachines($event,result.top_machines)">
+        {{result.topMachineString}}
+        <!--<a showWhen="mobile" (tap)="showTopThreeMachines($event,result.top_machines)">Top 3</a>-->
+          <!-- <span *ngFor="let top_machine of result.top_machines;index as i" (tap)="showTopThreeMachines($event,result.top_machines)"> -->
+          <!--   <\!--<span *ngIf='i>0'>,</span>-\-> -->
+          <!--   #{{top_machine.rank}} on {{top_machine.abbreviation}} -->
+          <!-- </span> -->
+          <!--<button ion-button clear tappable showWhen="mobile"  (tap)="showTopThreeMachines($event,result.top_machines)">-->
       </ion-col>
       </ng-container>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <button ion-button (click)="onBump()">
+          bump
+        </button>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

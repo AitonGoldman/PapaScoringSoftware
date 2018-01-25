@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ViewChild,Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { reorderArray } from 'ionic-angular';
@@ -36,7 +36,8 @@ export class QuickLinksPage extends PssPageComponent {
     tournamentsMachinesList:any=null;
     
     getAndOrderTournaments(){
-        this.tournamentItems=this.tournamentSettings.getTournaments();
+        this.tournamentItems=this.tournamentSettings.getTournaments(this.eventId);
+        //console.log(this.tournamentItems)
         if(this.tournamentItems==null){            
             return;
         }
@@ -48,38 +49,102 @@ export class QuickLinksPage extends PssPageComponent {
             item.uid=item.tournament_id;
         })        
         this.tournamentsOrderList = this.listOrderStorage.getList('QuickLinksPage','tournaments');
-        if(this.tournamentsOrderList==null){
-            return;
+        if(this.tournamentsOrderList!=null){
+             this.tournamentItems=this.tournamentItems.sort((n1,n2)=>{
+                 if(this.tournamentsOrderList[n1.tournament_id]!=null && this.tournamentsOrderList[n2.tournament_id]!=null){
+                     return this.tournamentsOrderList[n1.tournament_id].index - this.tournamentsOrderList[n2.tournament_id].index;
+                 } else {
+                     return 1;
+                 }
+                 
+             })            
         }                        
         
-        this.tournamentItems=this.tournamentItems.sort((n1,n2)=>{
-            return this.tournamentsOrderList[n1.tournament_id].index - this.tournamentsOrderList[n2.tournament_id].index;
-        })
 
-        this.tournamentMachines = this.listOrderStorage.getFavoriteTournamentMachines(this.eventId);
-        console.log(this.tournamentMachines);
-        if(this.tournamentMachines==null){
-            return;
+        this.tournamentMachines = this.listOrderStorage.getFavoriteTournamentMachines(this.eventId);        
+        if(this.tournamentMachines!=null){
+            this.tournamentMachines = this.generateListFromObj(this.tournamentMachines);
+            this.tournamentMachinesOrderList = this.listOrderStorage.getList('QuickLinksPage','tournament_machines');
+            if(this.tournamentMachinesOrderList!=null){
+                this.tournamentMachines=this.tournamentMachines.sort((n1,n2)=>{                    
+                    if(this.tournamentMachinesOrderList[n1.tournamentMachineId]!=null && this.tournamentMachinesOrderList[n2.tournamentMachineId]!=null){                                                
+                        return this.tournamentMachinesOrderList[n1.tournamentMachineId].index - this.tournamentMachinesOrderList[n2.tournamentMachineId].index;
+                    } else {
+                        return -1;
+                    }                   
+                })                
+            }                                    
         }
-        this.tournamentMachines = this.generateListFromObj(this.tournamentMachines);
-        this.tournamentMachinesOrderList = this.listOrderStorage.getList('QuickLinksPage','tournament_machines');
-        if(this.tournamentMachinesOrderList==null){
-            return;
-        }                        
         
-        this.tournamentMachines=this.tournamentMachines.sort((n1,n2)=>{
-            return this.tournamentMachinesOrderList[n1.tournamentMachineId].index - this.tournamentsOrderList[n2.tournamentMachineId].index;
-        })
         
         
     }
-    ionViewWillLoad() {        
+    getCallback(pageName,args){        
+        return ()=>{
+            console.log("**************")                            
+            let toast = this.toastCtrl.create({
+                message:  "Something went wrong.  Please try the quicklink again.",
+                duration: 99000,
+                position: 'top',
+                showCloseButton: true,
+                closeButtonText: " ",
+                cssClass: "dangerToast"
+            });
+            toast.present();                                                                                    
+        }            
+    }
+    publishQuickLinksPlayerPush(pageName,args){
+        //this.tabRef.getByIndex(1).push(pageName,args,{animate:false});
+        let tabs = this.navCtrl.parent;
+        if(tabs.getByIndex(1)._views.length!=0){
+            this.navCtrl.parent.getByIndex(1).push(pageName,args,{animate:false}).then(()=>{
+                tabs.getByIndex(1).last().showBackButton(false);
+                tabs.select(1)
+            })
+            return
+        }
+        let whatever_one = this.navCtrl.parent.getByIndex(1)._views;
+        console.log(this.navCtrl.parent.getByIndex(1)._zone.isStable);
+        tabs.select(1).then(()=>{            
+            setTimeout(this.getCallback(pageName,args),0)
+            
+        })
+        
+        // this.navCtrl.parent.getByIndex(1).push(pageName,args,{animate:false}).then((data)=>{
+        //     setTimeout(()=>{                
+        //         setTimeout(()=>{
+        //             tabs.getByIndex(1).push(pageName,args,{animate:false})
+        //         },1000)
+        //     },3000);
+        // });
+        
+        //this.eventsService.publish('quicklinks:player:results-push',pageName, args);
+    }
+    //ionViewDidLoad(){
+    //  this.tournamentItems=this.tournamentSettings.getTournaments(this.eventId);
+    //}
+    ionViewWillEnter() {        
         console.log('ionViewDidLoad QuickLinksPage');
-        this.eventsService.subscribe('quickLinks:reload', (event)=>{
-            this.getAndOrderTournaments();
-            console.log('got the message');
-        });               
-        this.getAndOrderTournaments()
+        
+        this.getAndOrderTournaments();
+        if(this.tournamentItems==null){
+            this.pssApi.getAllTournamentsAndMachines(this.eventId)            
+                .subscribe((result)=>{                    
+                    this.tournamentItems==result.data;
+                    this.tournamentSettings.setTournaments(result.data);
+                    this.getAndOrderTournaments();
+                })
+        }
+        // this.eventsService.subscribe('quickLinks:reload', (event)=>{
+        //     //this.getAndOrderTournaments();
+        //     console.log('got the message');
+        // });
+
+        // this.eventsService.subscribe('tab:reload', (event)=>{            
+        //     console.log('got the message about the tab');
+        // });               
+        
+        //this.getAndOrderTournaments()
         
     }
     reorderTournamentItems(indexes) {

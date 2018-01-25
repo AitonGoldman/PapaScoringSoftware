@@ -52,13 +52,22 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
             if(result == null){
                 return;
             }            
-            let tournamentMachine=result.data.map((tournament)=>{
-                for(let tournamentMachine of tournament.tournament_machines){
-                    if (tournamentMachine.tournament_machine_id==tournamentMachineId){
-                        return tournamentMachine;
+            // let tournamentMachine=result.data.map((tournament)=>{
+            //     for(let tournamentMachine of tournament.tournament_machines){
+            //         if (tournamentMachine.tournament_machine_id==tournamentMachineId){
+            //             return tournamentMachine;
+            //         }
+            //     }
+            // })[0];
+            let tournamentMachine=null;
+            result.data.forEach((tournament, index) => {
+                tournament.tournament_machines.forEach((tournament_machine,machine_index)=>{
+                    if(tournament_machine.tournament_machine_id==tournamentMachineId){
+                        tournamentMachine=tournament_machine;
                     }
-                }
-            })[0];
+                })
+            });
+            
             let nextPageString:string = "ScorekeeperStartPlayerPage"
             if(tournamentMachine.player_id!=null){
                 nextPageString = "ScorekeeperRecordScorePage"

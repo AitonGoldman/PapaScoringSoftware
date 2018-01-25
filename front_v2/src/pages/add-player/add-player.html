@@ -64,16 +64,16 @@
           <ion-input type="text" required
                      [(ngModel)]="selectedPlayer.ifpa_ranking" name="ifpa_ranking">           
           </ion-input>
-          <ion-icon (click)='getIfpaRanking(selectedPlayer.first_name+" "+selectedPlayer.last_name)' hideWhen="mobile" name='cloud-download' item-end></ion-icon>
+          <ion-icon (tap)='getIfpaRanking(selectedPlayer.first_name+" "+selectedPlayer.last_name)' hideWhen="mobile" name='cloud-download' item-end></ion-icon>
         </ion-item>
         <ion-item-options side="right">
-          <button ion-button (click)='getIfpaRankingMobile(selectedPlayer.first_name+" "+selectedPlayer.last_name,slidingItem)'>
+          <button ion-button (tap)='getIfpaRankingMobile(selectedPlayer.first_name+" "+selectedPlayer.last_name,slidingItem)'>
             Lookup
             <ion-icon name="cloud-download"></ion-icon>            
           </button>
         </ion-item-options>        
       </ion-item-sliding>
-      <ion-item (click)="takePicture()">
+      <ion-item (tap)="takePicture()">
         Take a picture <span>{{selectedPlayer.has_pic==true?"(pic uploaded)":"poop"}}</span>
            <ion-icon name='camera' item-end></ion-icon>
       </ion-item>
@@ -82,7 +82,7 @@
       <!--   <image-upload (uploadFinished)="onUploadFinished($event)" url="http://192.168.1.178:8000/media_upload"></image-upload> -->
       <!-- </ion-item> -->      
       <ion-item text-center>
-        <button ion-button padding (click)="onSubmit()">
+        <button ion-button padding (tap)="onSubmit()">
           register player 
         </button>
       </ion-item>

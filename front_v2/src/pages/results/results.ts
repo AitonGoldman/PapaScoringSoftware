@@ -24,7 +24,8 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 export class ResultsPage extends PssPageComponent {
     playerLoggedIn:boolean = false;
     tournaments:any = null;
-    eventPlayer:any = null;
+    eventPlayer:any = null;    
+    doneLoading:boolean = false;
     generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(withPlayer=false){
         return (result) => {
             if(result == null){
@@ -44,8 +45,12 @@ export class ResultsPage extends PssPageComponent {
     expandMachines(tournament){
         tournament.expand_machines=tournament.expand_machines==false;
     }
-    
-    ionViewWillLoad() {        
+    ionViewDidEnter() {
+        this.doneLoading=true;
+    }        
+   
+    ionViewWillEnter() {        
+        
         if(this.playerLoggedIn==false){                        
             this.pssApi.getAllTournamentsAndMachines(this.eventId)            
                 .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor())

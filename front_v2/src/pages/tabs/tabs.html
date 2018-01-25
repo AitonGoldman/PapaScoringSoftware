@@ -8,6 +8,6 @@
   <ion-tab [rootParams]="buildNavParams({})" [root]="getHomePageString()" tabIcon="md-home" [tabTitle]="this.eventAuth.getRoleName(this.eventId)?this.eventAuth.getRoleName(this.eventId) : 'Home'"></ion-tab>  
   <ion-tab [rootParams]="buildNavParams({})" [root]="'ResultsPage'" tabIcon="md-clipboard" tabTitle="Results"></ion-tab>
   <ion-tab [rootParams]="buildNavParams({})" [root]="'QueueSelectPlayerTournamentMachinePage'" tabIcon="md-git-branch" tabTitle="Queues"></ion-tab>
-  <ion-tab  (ionSelect)="onQuickLinksSelect()"  [rootParams]="buildNavParams({})" [root]="'QuickLinksPage'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>
+  <ion-tab [rootParams]="buildNavParams({})" [root]="'QuickLinksPage'" tabIcon="md-flash" tabTitle="Quick Links"></ion-tab>
 </ion-tabs>
 

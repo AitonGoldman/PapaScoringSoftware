@@ -152,7 +152,8 @@ export class AutoCompleteProvider implements AutoCompleteService{
             //this.itemFieldToMatch='player_id_for_event'        
             this.labelAttribute = "player_id_for_event";
             //searchResults.typeOfSearch="single";            
-            return this.pssApi.getEventPlayerHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
+            //return this.pssApi.getEventPlayerHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
+            return this.pssApi.getEventPlayerResultsHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
         } 
 
         if(this.autocompleteType=="remote"){

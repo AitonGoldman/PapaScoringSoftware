@@ -27,9 +27,9 @@
     </ion-item>
 
     
-    <button [disabled]="!myeventrole.dirty" ion-button (click)="onSubmit(false)"> Modify User Role </button>
+    <button [disabled]="!myeventrole.dirty" ion-button (tap)="onSubmit(false)"> Modify User Role </button>
     <br>
-    <button [disabled]="selectedUser==null" ion-button (click)="onSubmit(true)">  Remove User From Event </button>    
+    <button [disabled]="selectedUser==null" ion-button (tap)="onSubmit(true)">  Remove User From Event </button>    
   </form>
   </div>
 </ion-content>

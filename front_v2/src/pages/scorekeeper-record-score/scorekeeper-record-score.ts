@@ -36,10 +36,10 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
             let tournamentMachine=result.data;
             let successButtons=[];            
             
-            let recordScoreSuccessButtons=['RE_ADD','RE_QUEUE','DEAL_WITH_PERSON_IN_QUEUE', 'DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER','GO_HOME']
+            let recordScoreSuccessButtons=['RE_ADD','RE_QUEUE','DEAL_WITH_PERSON_IN_QUEUE', 'DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER','GO_HOME','ADD_OR_QUEUE']
             if(result.tournament_counts==0){
                 recordScoreSuccessButtons=recordScoreSuccessButtons.filter((buttonLabel)=>{
-                    if(buttonLabel=="RE_ADD" || buttonLabel=="RE_QUEUE" || buttonLabel=="DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER"){
+                    if(buttonLabel=="RE_ADD" || buttonLabel=="RE_QUEUE" || buttonLabel=="DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER" || buttonLabel == "ADD_OR_QUEUE"){
                         return false;
                     } else {
                         return true;
@@ -57,7 +57,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
             }
             if(tournamentMachine.queues[0].player!=null){
                 recordScoreSuccessButtons=recordScoreSuccessButtons.filter((buttonLabel)=>{
-                    if(buttonLabel=="RE_ADD" || buttonLabel=="GO_HOME"){
+                    if(buttonLabel=="RE_ADD" || buttonLabel=="GO_HOME" || buttonLabel=="ADD_OR_QUEUE"){
                         return false;
                     }
                     if(result.tournament_counts==0){                        

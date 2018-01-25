@@ -61,14 +61,14 @@
                   <ion-item>
                     <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>
                   </ion-item>-->
-      <ion-item (click)="takePicture()">
+      <ion-item (tap)="takePicture()">
         Take a picture <span>{{entity!=null && entity.img_file!=null?"(pic uploaded)":"poop"}}</span>
            <ion-icon name='camera' item-end></ion-icon>
       </ion-item>
 
       </ion-list>
       
-      <button [disabled]='!createEditForm.valid' ion-button default (click)="processEntity()">Apply</button>
+      <button [disabled]='!createEditForm.valid' ion-button default (tap)="processEntity()">Apply</button>
     </form>
   </div>
 </ion-content>

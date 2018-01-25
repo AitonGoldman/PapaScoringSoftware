@@ -60,7 +60,8 @@ def getTournamentMachineResultsQuery(tournament_id=None, tournament_machine_id=N
 def build_tournament_result(event_id, result,
                             player_top_machines,
                             players_dict,tournament_machines_dict,
-                            tournament, values):    
+                            tournament, values,
+                            include_seperator=True):    
     value={}
     value['rank']=result[0]+1
     value['points']=result[1][0]
@@ -82,12 +83,13 @@ def build_tournament_result(event_id, result,
         second_qualifying_delemiter=tournament.number_of_qualifiers_for_b_when_finals_style_is_ppo
         seperator_message="QUALIFYING CUTOFF FOR A"
         seperator_message_b="QUALIFYING CUTOFF FOR B"
-    
-    if len(values) > 0 and value['rank'] > first_qualifying_delemiter :
-        if value['rank'] > first_qualifying_delemiter and values[len(values)-1]['rank'] <= first_qualifying_delemiter:
-            values.append({'rank':0,'seperator':True,'seperator_message':seperator_message})
-        if second_qualifying_delemiter and value['rank'] > second_qualifying_delemiter and values[len(values)-1]['rank'] <= second_qualifying_delemiter:
-            values.append({'rank':0, 'seperator':True,'seperator_message':seperator_message_b})                    
+    if include_seperator:
+        if len(values) > 0 and value['rank'] > first_qualifying_delemiter :
+            if value['rank'] > first_qualifying_delemiter and values[len(values)-1]['rank'] <= first_qualifying_delemiter:
+                print "in tournament %s" % tournament.tournament_id
+                values.append({'rank':0,'seperator':True,'seperator_message':seperator_message})
+            if second_qualifying_delemiter and value['rank'] > second_qualifying_delemiter and values[len(values)-1]['rank'] <= second_qualifying_delemiter:
+                values.append({'rank':0, 'seperator':True,'seperator_message':seperator_message_b})                    
 
     value['ifpa_ranking_restricted']=tournament.ifpa_rank_restriction is not None and tournament.ifpa_rank_restriction > event_info.ifpa_ranking
     top_machines=[]
@@ -133,9 +135,10 @@ def test_tournament_results(event_id, tournament_id):
             player_top_machines[tournament_id][i.player_id]=[]
         if len(player_top_machines[tournament_id][i.player_id]) < 3:            
             player_top_machines[tournament_id][i.player_id].append({'tournament_machine_id':i.tournament_machine_id,
-                                                     'tournament_machine_name':tournament_machines_dict[i.tournament_machine_id]['tournament_machine_name'],
-                                                     "abbreviation":tournament_machines_dict[i.tournament_machine_id]['tournament_machine_abbreviation'],
-                                                     "rank":get_rank_from_papa_points(i.machine_rank)})
+                                                                    'tournament_machine_name':tournament_machines_dict[i.tournament_machine_id]['tournament_machine_name'],
+                                                                    "abbreviation":tournament_machines_dict[i.tournament_machine_id]['tournament_machine_abbreviation'],
+                                                                    "rank":get_rank_from_papa_points(i.machine_rank),
+                                                                    "score":i.score})
     for tournament_id,tournament_results in ranked_results_dict.iteritems():                
         for idx, result in enumerate(tournament_results):
         #RANK - SCORE - PLAYER ID - TOURNAMENT ID            
@@ -168,22 +171,16 @@ def test_player_results(event_id, event_player_id):
         players_dict[player.player_id]=player
     player_top_machines = {}        
 
-    for tournament in tournaments:
-        print "%d - checkpoint 1" % (current_milli_time() - start_time)
+    for tournament in tournaments:        
 
         player_top_machines[tournament.tournament_id]={}        
         tournament_machines=current_app.table_proxy.get_tournament_machines(tournament.tournament_id)
         for tournament_machine in tournament_machines:
-           tournament_machines_dict[tournament_machine.tournament_machine_id]=to_dict(tournament_machine)
-        print "%d - checkpoint 1a" % (current_milli_time() - start_time)
-        query = getTournamentResultsQuery(tournament.tournament_id,4)    
-        print "%d - checkpoint 1b" % (current_milli_time() - start_time)
-        machine_query = getTournamentMachineResultsQuery(tournament_id=tournament.tournament_id)    
-        print "%d - checkpoint 1c" % (current_milli_time() - start_time)
-        results = [result for result in current_app.table_proxy.db_handle.engine.execute(query)]                        
-        print "%d - checkpoint 1d" % (current_milli_time() - start_time)
-        machine_results = [result for result in current_app.table_proxy.db_handle.engine.execute(machine_query)]                            
-        print "%d - checkpoint 2" % (current_milli_time() - start_time)
+           tournament_machines_dict[tournament_machine.tournament_machine_id]=to_dict(tournament_machine)        
+        query = getTournamentResultsQuery(tournament.tournament_id,4)            
+        machine_query = getTournamentMachineResultsQuery(tournament_id=tournament.tournament_id)            
+        results = [result for result in current_app.table_proxy.db_handle.engine.execute(query)]                                
+        machine_results = [result for result in current_app.table_proxy.db_handle.engine.execute(machine_query)]                                    
         sorted_results = sorted(results, key= lambda e: e[0],reverse=True)
         ranked_results = list(Ranking(sorted_results,key=lambda pp: pp[0]))
         ranked_results_dict[tournament.tournament_id]=ranked_results    
@@ -199,11 +196,11 @@ def test_player_results(event_id, event_player_id):
                player_top_machines[tournament.tournament_id][i.player_id].append({'tournament_machine_id':i.tournament_machine_id,
                                                                                   'tournament_machine_name':tournament_machines_dict[i.tournament_machine_id]['tournament_machine_name'],
                                                                                   "abbreviation":tournament_machines_dict[i.tournament_machine_id]['tournament_machine_abbreviation'],
-                                                                                  "rank":get_rank_from_papa_points(i.machine_rank)})
-        print "%d - checkpoint 3 " % (current_milli_time()- start_time)
+                                                                                  "rank":get_rank_from_papa_points(i.machine_rank),
+                                                                                  "score":i.score})        
 
-    for tournament_id,tournament_results in ranked_results_dict.iteritems():        
-        print "%d - checkpoint 3a " % (current_milli_time()- start_time)
+    for tournament_id,tournament_results in ranked_results_dict.iteritems():                
+        print "building results for %s" % tournament_id
         tournament = current_app.table_proxy.get_tournament_by_tournament_id(tournament_id)
         for idx, result in enumerate(tournament_results):
         ##RANK - SCORE - PLAYER ID - TOURNAMENT ID                        
@@ -211,11 +208,13 @@ def test_player_results(event_id, event_player_id):
                 build_tournament_result(event_id, result,
                                         player_top_machines,
                                         players_dict,tournament_machines_dict,
-                                        tournament, values)
+                                        tournament, values,
+                                        include_seperator=False)
             #values.append(value)
-            pass
-    print "%d - checkpoint 4 " % (current_milli_time()-start_time)        
-    return jsonify({'data':values})
+            pass    
+    event_player_info['data']['values']=values
+    #return jsonify({'data':values})
+    return jsonify({'data':event_player_info})
 
 
 @blueprints.test_blueprint.route('/<int:event_id>/test_tournament_machine_results/<int:tournament_id>/<int:tournament_machine_id>',methods=['GET'])

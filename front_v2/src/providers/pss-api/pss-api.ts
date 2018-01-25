@@ -16,7 +16,7 @@ import { ToastController } from 'ionic-angular';
 @Injectable()
 export class PssApiProvider {
     basePssUrl='http://192.168.1.178:8000'
-    //basePssUrl='http://9.75.197.88:8000'
+    //basePssUrl='http://9.75.197.88:8000' 
 
     //basePssUrl='http://0.0.0.0:8000'
     loading_instance = null;   
@@ -92,6 +92,8 @@ export class PssApiProvider {
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
     getAllPlayers = this.generate_api_call('getAllPlayers',this.basePssUrl+"/players",'get');    
     getEventPlayer = this.generate_api_call('getEventPlayer',this.basePssUrl+"/:arg/event_player/:arg",'get');
+    getEventPlayerResultsHidden = this.generate_api_call('getEventPlayerResults',this.basePssUrl+"/:arg/test_player_results/:arg",'get',true);
+    
     getEventPlayerHidden = this.generate_api_call('getEventPlayer',this.basePssUrl+"/:arg/event_player/:arg",'get',true);
 
     getEventPlayers = this.generate_api_call('getEventPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get');

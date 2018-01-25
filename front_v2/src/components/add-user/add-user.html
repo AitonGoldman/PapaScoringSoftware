@@ -39,7 +39,7 @@
   <div *ngIf='notFoundMessage!=null && selectedRole!=null' text-center padding>        
     The system does not know about {{this.searchbar.keyword}}.  Click the button below to register them for the event.
     <br>
-    <button [disabled]='!myForm.valid' ion-button margin (click)="onSubmit(this.searchbar.keyword)">Register User</button>
+    <button [disabled]='!myForm.valid' ion-button margin (tap)="onSubmit(this.searchbar.keyword)">Register User</button>
     
   </div>
 </div>  

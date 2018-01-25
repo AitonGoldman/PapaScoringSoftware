@@ -30,27 +30,27 @@
             <img  [src]="machine.img_url!=null?machine.img_url:'/assets/imgs/small_backglass.jpeg'">
           </ion-avatar>        
 
-          <button hideWhen='mobile' (click)="onRemove(machine)" ion-button item-end>Remove</button> {{machine.tournament_machine_name}}
-          <button hideWhen='mobile' (click)="onDisable(machine)" ion-button item-end>{{machine.active==true?"Disable":"Enable"}}</button>          
-          <button hideWhen='mobile' (click)="takePicture(machine)" ion-button item-end>Take Picture</button>          
+          <button hideWhen='mobile' (tap)="onRemove(machine)" ion-button item-end>Remove</button> {{machine.tournament_machine_name}}
+          <button hideWhen='mobile' (tap)="onDisable(machine)" ion-button item-end>{{machine.active==true?"Disable":"Enable"}}</button>          
+          <button hideWhen='mobile' (tap)="takePicture(machine)" ion-button item-end>Take Picture</button>          
 
         </ion-item>
         <ion-item-options *ngIf="machine.removed!=true" side="right">
-          <button round ion-button color="secondary" (click)="takePicture(machine)">
+          <button round ion-button color="secondary" (tap)="takePicture(machine)">
             <ion-icon name="camera"></ion-icon>
             Take Pic
           </button>
-          <button round ion-button color="danger" (click)="onRemove(machine)">
+          <button round ion-button color="danger" (tap)="onRemove(machine)">
             <ion-icon name="archive"></ion-icon>
             Remove
           </button>
-          <button round ion-button (click)="onDisable(machine)">
+          <button round ion-button (tap)="onDisable(machine)">
             <ion-icon name="archive"></ion-icon>
             {{machine.active==true?"Disable":"Enable"}}
           </button>
         </ion-item-options>
       </ion-item-sliding>
   </ion-list>
-  <button ion-button *ngIf="wizardMode!=null" (click)="onSubmit()">Submit</button>
+  <button ion-button *ngIf="wizardMode!=null" (tap)="onSubmit()">Submit</button>
   </div>
 </ion-content>

@@ -169,7 +169,7 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
         };
     }
         
-    ionViewWillLoad() {
+    ionViewWillEnter() {
         //this.queueMode=this.navParams.get('queueMode');
         this.role=this.eventAuth.getRoleName(this.eventId);
         

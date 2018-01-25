@@ -107,10 +107,12 @@ export class PssPageComponent {
         }
         
     }
-    pushRootPage(page,params={}) {
+    pushRootPage(page,params={}) {        
         this.appCtrl.getRootNav().push(page, params);
     }
-    
+    returnToEventSelect(){
+        this.appCtrl.getRootNav().popToRoot({});
+    }
     pushPageWithNoBackButton(pageName,navParams,tabIndex?):void{
         console.log('in push page with no back button...');
         if(tabIndex!=null){            
@@ -155,17 +157,23 @@ export class PssPageComponent {
             if(result==null){                
                 return
             }
-            this['selectedPlayer']=result.data;
+            this['selectedPlayer']=result.data.data;
+            
             this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);
+            //this['ticketCounts']=[]
             this['ticketCountsDict']=this['selectedPlayer'].tournament_counts;
 
             if (this['selectedPlayer'].tournament_calculated_lists!=null){
                 this['ticketPriceLists']=this['selectedPlayer'].tournament_calculated_lists;
             }
+            this['results']=this['selectedPlayer'].values
+            console.log('multi match......');
+            console.log(this['results']);
         }
     }
     onAutoCompletePlayerSelected(){        
-        this.pssApi.getEventPlayer(this.eventId,this['selectedPlayer'].player_id_for_event)
+        //this.pssApi.getEventPlayer(this.eventId,this['selectedPlayer'].player_id_for_event)
+        this.pssApi.getEventPlayerResultsHidden(this.eventId,this['selectedPlayer'].player_id_for_event)
             .subscribe(this.generateAutoCompleteGetEventPlayerProcessor())
     }
     generatePlayerLoadingFunction(){
@@ -204,6 +212,14 @@ export class PssPageComponent {
         }
         
     }
-    
+    nth(d) {
+        if(d>3 && d<21) return 'th'; // thanks kennebec
+        switch (d % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+        }
+    }     
 
 }

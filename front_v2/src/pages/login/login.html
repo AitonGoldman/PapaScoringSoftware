@@ -36,7 +36,7 @@
                    [(ngModel)]="loginInfo.password" name="password"></ion-input>
       </ion-item>
       <ion-item no-lines>
-        <button [disabled]='!loginForm.valid' ion-button default (click)="loginUser()">Login </button>
+        <button [disabled]='!loginForm.valid' ion-button default (tap)="loginUser()">Login </button>
       </ion-item>
     </form>
     <form #playerLoginForm="ngForm" *ngSwitchCase="'player'">
@@ -51,7 +51,7 @@
                    [(ngModel)]="loginInfo.player_pin" name="player_pin"></ion-input>
       </ion-item>
       <ion-item no-lines>
-        <button [disabled]='!playerLoginForm.valid' ion-button default (click)="loginPlayer()">Login </button>
+        <button [disabled]='!playerLoginForm.valid' ion-button default (tap)="loginPlayer()">Login </button>
       </ion-item>
     </form>
     

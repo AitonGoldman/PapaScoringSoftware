@@ -39,6 +39,8 @@ export class AutoCompleteComponent extends PssPageComponent {
     loading:boolean=false;    
     potentialPlayer:any={};
     addPlayerAutoComplete:boolean=false;
+    results:any=null;
+    
     constructor(public autoCompleteProvider:AutoCompleteProvider,
                 public eventAuth: EventAuthProvider,
                 public navParams: NavParams,
@@ -70,17 +72,27 @@ export class AutoCompleteComponent extends PssPageComponent {
         this.autocompleteDoneEventHandler= (autocompleteInfo, time) => {
             // user and time are the same arguments passed in `events.publish(user, time)`
             this.loading=false;            
-            if(autocompleteInfo.state=='DONE'){
-                console.log(autocompleteInfo);
+            if(autocompleteInfo.state=='DONE'){                
                 if(autocompleteInfo.type=='SEARCH_SINGLE'){
-                    this.selectedPlayer=autocompleteInfo.data.data;
-                    this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);
-                    this.ticketCountsDict=this.selectedPlayer.tournament_counts;
-                    if (this.selectedPlayer.tournament_calculated_lists!=null){
-                        this.ticketPriceLists=this.selectedPlayer.tournament_calculated_lists;
-                    }
+                    //this.selectedPlayer=autocompleteInfo.data.data;
+                    this.selectedPlayer=autocompleteInfo.data.data.data;
 
-                    console.log(this.ticketCountsDict);
+                    //this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);
+                    this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);
+                    //this.ticketCountsDict=this.selectedPlayer.tournament_counts;
+                    this.ticketCountsDict=this.selectedPlayer.tournament_counts;
+                    //if (this.selectedPlayer.tournament_calculated_lists!=null){
+                    //    this.ticketPriceLists=this.selectedPlayer.tournament_calculated_lists;
+                    //}
+                    if (this.selectedPlayer.tournament_calculated_lists!=null){
+                       this.ticketPriceLists=this.selectedPlayer.tournament_calculated_lists;
+                    }
+                    
+                    console.log('single match...');
+                    this.results=this.selectedPlayer.values;
+                    console.log(this.selectedPlayer);
+                    
+                    
                 }                
             }
             if(autocompleteInfo.state=='NONE'){

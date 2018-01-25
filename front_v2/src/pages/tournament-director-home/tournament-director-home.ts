@@ -34,11 +34,14 @@ export class TournamentDirectorHomePage extends PssPageComponent {
     }
     
 
-    ionViewDidLoad() {
+    ionViewWillEnter() {
         this.pssApi.getAllTournaments(this.eventId)
             .subscribe(this.generateGetAllTournamentsProcessor())    
 
         console.log('ionViewDidLoad TournamentDirectorHomePage');
+    }
+    ionViewWillUnload() {
+        console.log('ionViewWillUnLoad TournamentDirectorHomePage');
     }
 
 }

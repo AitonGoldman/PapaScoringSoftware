@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Tab, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { TopThreePopoverComponent } from '../../components/top-three-popover/top-three-popover'
 
@@ -24,8 +24,15 @@ export class ResultsTournamentPage extends PssPageComponent {
     tournamentName:string = null;
     results:any = null;
     width:any = '100%';
-    
-    onReload(){        
+    maxResultsToDisplay:number=0;
+
+    onBump(){
+        if(this.maxResultsToDisplay<this.results.length){
+            this.maxResultsToDisplay=this.maxResultsToDisplay+50;
+        }
+    }
+    onReload(){
+        this.maxResultsToDisplay=50;
         this.pssApi.getTournamentResults(this.eventId,this.tournamentId)            
             .subscribe(this.generateGetTournamentResultsProcessor())        
     }
@@ -35,9 +42,26 @@ export class ResultsTournamentPage extends PssPageComponent {
                 return;
             }
             this.results=result.data;
+            this.maxResultsToDisplay=50;
+            this.results.map((result)=>{
+                
+                if(result.top_machines!=null){
+                    result.topMachineStrings=[];
+                    result.top_machines.forEach((top_machine,index)=>{
+                        result.topMachineStrings.push(top_machine.abbreviation)
+                    })
+                    result.topMachineString=result.topMachineStrings.join('/');
+                }
+                
+                return result;
+            })
         }
     }
  
+    ionViewDidLoad() {
+        console.log('done loading and now publishing...')
+        this.eventsService.publish('results-tournaments:done-loading');
+    }
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad ResultsTournamentPage');

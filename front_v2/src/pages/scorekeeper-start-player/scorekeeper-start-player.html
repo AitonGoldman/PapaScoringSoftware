@@ -63,8 +63,8 @@
     </ion-item>
     
     <ion-item no-lines text-center>
-      <button ion-button (click)="onSubmit()">Start Player</button>
-      <button *ngIf="tournamentMachine.queues[0].player!=null" ion-button (click)="onBump()">Bump Player</button>
+      <button ion-button (tap)="onSubmit()">Start Player</button>
+      <button *ngIf="tournamentMachine.queues[0].player!=null" ion-button (tap)="onBump()">Bump Player</button>
     </ion-item>
     <ion-item-divider text-center *ngIf="tournamentMachine.queues[0].player!=null">
       Queue

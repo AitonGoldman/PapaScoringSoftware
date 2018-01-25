@@ -11,8 +11,8 @@ import { NavParams } from 'ionic-angular';
 @Component({
   template: `    
     <ion-list>
-      <ion-list-header>Top 3 machines</ion-list-header>
-      <button (click)="close(machine.tournament_machine_id,machine.tournament_machine_name)" ion-item  *ngFor="let machine of machines">#{{machine.rank}} on {{machine.abbreviation}} </button>
+      <ion-list-header>Top 4 machines</ion-list-header>
+      <button tappable (click)="close(machine.tournament_machine_id,machine.tournament_machine_name)" ion-item  *ngFor="let machine of machines">#{{machine.rank}} on {{machine.abbreviation}} </button>
        <!-- [navPush]="'ResultsMachinePage'" [navParams]="addMachineIdName(machine.tournament_machine_id,'poopMachine',linkParams)" -->
     </ion-list>
   `

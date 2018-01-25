@@ -44,7 +44,7 @@
          [(ngModel)]="userInfo.email" name="email"></ion-input>
   </ion-item>  
 <ion-item no-lines>
-  <button [disabled]='!loginForm.valid' ion-button default (click)="submitRequest()">Submit Request</button>
+  <button [disabled]='!loginForm.valid' ion-button default (tap)="submitRequest()">Submit Request</button>
 </ion-item>
 </form>
   

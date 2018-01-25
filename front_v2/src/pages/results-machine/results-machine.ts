@@ -55,6 +55,7 @@ export class ResultsMachinePage  extends PssPageComponent {
         this.tournamentName=this.navParams.get('tournamentName');
         this.tournamentMachineId=this.navParams.get('tournamentMachineId');
         this.tournamentMachineName=this.navParams.get('tournamentMachineName');
+        console.log(this.tournamentMachineName);
         this.pssApi.getTournamentMachineResults(this.eventId,this.tournamentId,this.tournamentMachineId)            
             .subscribe(this.generateGetTournamentMachineResultsProcessor())        
     }

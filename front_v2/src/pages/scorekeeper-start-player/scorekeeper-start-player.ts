@@ -110,10 +110,13 @@ export class ScorekeeperStartPlayerPage extends AutoCompleteComponent {
             let successButtons:any = [];
             successButtons.push(successButtonHome)
             if(this.playerToBeDealtWith!=null){
+                console.log('-----about to go to ssucceess----');
+                console.log(this.playerToBeDealtWith);
                 successButtons.push(new SuccessButton('Deal with previous player',
-                                                      'DealWithPreviousPlayerPage',
+                                                      'AddOrQueuePlayerAfterScoreRecordPage',
                                                       this.buildNavParams({tournamentId:this.tournamentId,
-                                                                           playerId:this.playerToBeDealtWith.player_id}))
+                                                                           playerId:this.playerToBeDealtWith.player_id,
+                                                                           playerName:this.playerToBeDealtWith.player_full_name}))
                     
                 )
             }

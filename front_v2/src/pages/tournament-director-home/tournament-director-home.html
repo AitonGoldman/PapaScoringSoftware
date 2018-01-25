@@ -56,7 +56,7 @@
   <h1><b>Tournaments</b></h1>
   <ion-list>
     <ng-container *ngFor="let tournament of tournaments">
-      <ion-item-divider (click)="expand(tournament)">
+      <ion-item-divider (tap)="expand(tournament)">
         <ion-avatar item-start *ngIf="tournament.img_url!=null">
           <img [src]="tournament.img_url">
         </ion-avatar>        
@@ -64,11 +64,11 @@
       </ion-item-divider>      
       <ng-container *ngIf="tournament.expanded!=true?false:true">
         <ion-item>
-          <button ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Manage Tournament Machines</button>
+          <button tappable ion-button [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Manage Tournament Machines</button>
           <br>
-            <button [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
+            <button tappable [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})" ion-button >Edit Tournament</button>
           <br>
-          <button ion-button (click)="onTournamentToggle(eventId,tournament)"><ion-icon item-start [name]="tournament.active?'play':'pause'"></ion-icon>Toggle Tournament</button>
+          <button ion-button (tap)="onTournamentToggle(eventId,tournament)"><ion-icon item-start [name]="tournament.active?'play':'pause'"></ion-icon>Toggle Tournament</button>
         </ion-item>
       </ng-container>      
     </ng-container>

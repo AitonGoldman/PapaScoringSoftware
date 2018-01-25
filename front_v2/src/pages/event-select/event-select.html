@@ -15,7 +15,7 @@
 <ion-content padding class="card-background-page">
 <ion-grid>
   <ion-row>
-    <ion-col col-12 col-md-4 col-lg-3 col-xl-2 *ngFor="let event of events" (click)="gotoEvent(event.event_id,event.name)">
+    <ion-col tappable col-12 col-md-4 col-lg-3 col-xl-2 *ngFor="let event of events" (click)="gotoEvent(event.event_id,event.name)">
       <ion-card >        
         <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_small.jpg'"/>
         <img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_med.jpg'"/>        

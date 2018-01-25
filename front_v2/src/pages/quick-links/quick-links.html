@@ -19,12 +19,12 @@
 <ion-content>
   <ion-list>
     <ion-list-header>Jump To...
-      <ion-icon item-end name="cog" (click)="reorderEnabled = reorderEnabled==false"></ion-icon>
+      <ion-icon item-end name="cog" (tap)="reorderEnabled = reorderEnabled==false"></ion-icon>
     </ion-list-header>    
       <button ion-item detail-push [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})">
         <ion-icon name="person" item-end></ion-icon>{{eventAuth.isEventUserLoggedIn(eventId)==true? "Logout" : "Login"}}
       </button>
-      <button ion-item detail-push (click)="pushRootPage('EventSelectPage')">
+      <button ion-item detail-push (tap)="returnToEventSelect()">
         <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event
       </button>
       <ion-item-divider>
@@ -32,13 +32,13 @@
       </ion-item-divider>
       
       <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderTournamentItems($event,'tournamentItems')">      
-        <button *ngFor="let item of tournamentItems"  ion-item detail-push>{{item.title}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
+        <button (tap)="publishQuickLinksPlayerPush('ResultsTournamentPage',buildNavParams({tournamentId:item.tournament_id,tournamentName:item.tournament_name}))" *ngFor="let item of tournamentItems"  ion-item detail-push>{{item.tournament_name}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
       </ion-item-group>
       <ion-item-divider>
         Favorited Machines
       </ion-item-divider>
       <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderMachineItems($event)">      
-        <button *ngFor="let item of tournamentMachines"  ion-item detail-push>{{item.tournamentMachineName}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
+        <button (tap)="publishQuickLinksPlayerPush('ResultsMachinePage',buildNavParams({tournamentMachineId:item.tournamentMachineId,tournamentMachineName:item.tournamentMachineName,tournamentId:item.tournamentId,tournamentName:item.tournamentName}))" *ngFor="let item of tournamentMachines"  ion-item detail-push>{{item.tournamentMachineName}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
       </ion-item-group>
       
   </ion-list>

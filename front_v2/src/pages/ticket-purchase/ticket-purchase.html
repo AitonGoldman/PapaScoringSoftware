@@ -39,9 +39,9 @@
       <ion-item no-lines>
         Existing Count : {{ticketCountsDict[ticketPriceList.tournament_id]==null?0:ticketCountsDict[ticketPriceList.tournament_id].count}}
       </ion-item>
-      <ion-item>
+      <ion-item tappable>
         <ion-label>{{ticketPriceList.tournament_name}}</ion-label>
-        <ion-select [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:'poop'}" (ionChange)="onSelect($event)">
+        <ion-select  [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:'poop'}" (ionChange)="onSelect($event)">
           <ion-option *ngFor="let calculatedPrice of ticketPriceList.calculated_price_list" [value]="calculatedPrice">{{calculatedPrice.amount}}</ion-option>
         </ion-select>
       </ion-item>
@@ -50,7 +50,7 @@
       Total Cost : {{totalCost}}
     </ion-item>
     <ion-item no-lines text-center>
-      <button padding [disabled]="!myForm.dirty" ion-button (click)="ticketPurchase()"> Purchase Tickets </button>
+      <button padding [disabled]="!myForm.dirty" ion-button (tap)="ticketPurchase()"> Purchase Tickets </button>
     </ion-item>
     </form>
     

@@ -7,6 +7,7 @@ from lib_v2.serializers import generic
 from lib_v2.queue_helpers import remove_player_with_notification
 import json
 from lib_v2.serializers import generic
+from routes_v2.queue import add_player_to_tournament_machine_queue_route
 
 def void_ticket_route(input_data,event_id,app,current_user):
     player = app.table_proxy.get_player(event_id,player_id=input_data['player_id'])
@@ -27,7 +28,8 @@ def record_score_route(input_data,event_id,app,current_user):
     app.table_proxy.mark_token_as_used(event_id,player,tournament)
     app.table_proxy.remove_player_from_machine(tournament_machine)
     app.table_proxy.record_score(event_id,player,tournament_machine,score)
-    
+
+
 def start_player_on_machine_route(input_data,event_id, app, current_user):
     player = app.table_proxy.get_player(event_id,player_id=input_data['player_id'])
     tournament_machine = app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
@@ -45,6 +47,15 @@ def start_player_on_machine_route(input_data,event_id, app, current_user):
         'event_id':event_id
     }
     app.table_proxy.create_audit_log(audit_log_params,event_id)    
+
+def start_player_on_machine_or_queue_route(input_data,event_id, app, current_user):
+    tournament_machine = app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+    if tournament_machine.player_id is None:
+        start_player_on_machine_route(input_data,event_id, app, current_user)
+    else:
+        add_player_to_tournament_machine_queue_route(request,app,event_id,current_user)
+        
+    
 
 def start_player_on_machine_from_queue_route(input_data,event_id, app, current_user):
     player = app.table_proxy.get_player(event_id,player_id=input_data['player_id'])
@@ -84,6 +95,9 @@ def start_player_on_machine(event_id):
             start_player_on_machine_route(input_data,event_id,current_app,current_user)
         if input_data['action'] == 'start_from_queue':            
             start_player_on_machine_from_queue_route(input_data,event_id,current_app,current_user)
+            pass
+        if input_data['action'] == 'start_or_queue':
+            start_player_on_machine_or_queue_route(input_data,event_id,current_app,current_user)            
             pass
     else:
         raise Unauthorized('You are not authorized to start a player on a machine')

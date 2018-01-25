@@ -39,7 +39,7 @@ export class ListOrderStorageProvider {
         this._cookieService.putObject("listStorage",listStorage);
     }
     //FIXME : this should be in it's own service
-    addFavoriteTournamentMachine(eventId,tournamentMachineId,tournamentMachineName){
+    addFavoriteTournamentMachine(eventId,tournamentMachineId,tournamentMachineName,tournamentId,tournamentName){
         console.log('recording new favorite...');
         let favoriteMachines = this._cookieService.getObject("favoriteMachines");
         if(favoriteMachines==null){
@@ -48,7 +48,7 @@ export class ListOrderStorageProvider {
         if(favoriteMachines[eventId]==null){
             favoriteMachines[eventId]={};
         }
-        favoriteMachines[eventId][tournamentMachineId]={tournamentMachineId:tournamentMachineId,tournamentMachineName:tournamentMachineName};
+        favoriteMachines[eventId][tournamentMachineId]={tournamentMachineId:tournamentMachineId,tournamentMachineName:tournamentMachineName,tournamentId:tournamentId,tournamentName:tournamentName};
         this._cookieService.putObject("favoriteMachines",favoriteMachines);
         let toast = this.toastCtrl.create({
             message: 'Machine added to favorites',

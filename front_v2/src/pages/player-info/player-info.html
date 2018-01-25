@@ -34,7 +34,7 @@
   <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
     <h2>{{notFoundMessage}}</h2>
   </div>
-  <ion-list *ngIf="notFoundMessage==null && selectedPlayer!=null">
+  <ion-list *ngIf="notFoundMessage==null && selectedPlayer!=null" no-margin>
     <ion-item no-lines>
       <ion-avatar  style='zoom:3.0'>
         <img [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'" style='margin-left:auto;margin-right:auto'>
@@ -55,9 +55,63 @@
     <ion-item-divider text-center color="light">
       Available Tickets
     </ion-item-divider>
-    <ion-item no-lines text-center *ngFor="let ticketCount of ticketCounts">
-      {{ticketCount.tournament_name}} : {{ticketCount.count}}
-    </ion-item>
   </ion-list>
+  <ion-grid *ngIf="notFoundMessage==null && selectedPlayer!=null">
+    <ion-row>
+      <ng-container *ngFor="let ticketCount of ticketCounts;index as i; even as e">
+        <ion-col col-6 text-center *ngIf="i!=ticketCounts.length-1 ||(i==ticketCounts.length-1 && e==false)">
+          {{ticketCount.tournament_name}} : {{ticketCount.count}}    
+        </ion-col>
+        <ion-col col-12 text-center *ngIf="i==ticketCounts.length-1 && e==true">
+          {{ticketCount.tournament_name}} : {{ticketCount.count}}    
+        </ion-col>
+        
+      </ng-container>
+    </ion-row>
+  </ion-grid>
+    <ion-item-divider text-center color="light" *ngIf="notFoundMessage==null && selectedPlayer!=null">
+      Best Scores
+    </ion-item-divider>
+  <ion-grid *ngIf="notFoundMessage==null && selectedPlayer!=null" no-margin no-padding>
+    <ng-container *ngFor='let result of results'>
+      <ion-row margin-top margin-bottom>
+        <ion-col text-center>
+          <ion-chip>
+            <ion-label>{{result.tournament_name}}</ion-label>
+          </ion-chip>
+          <br>
+          <i>{{result.rank}}{{nth(result.rank)}}</i>
+        </ion-col>
+      </ion-row>
+    <ion-row>
+      <ion-col col-12 text-center style="background-color:grey">
+        Machine Scores
+      </ion-col>
+      <ion-col col-5 text-left>
+        <u>Machine</u>
+      </ion-col>
+      <ion-col col-2 text-center>
+        <u>Rank</u>
+      </ion-col>
+      <ion-col col-5 text-right>
+        <u>Score</u>
+      </ion-col>      
+    </ion-row>
+    <ion-row *ngFor='let top_machine of result.top_machines;index as i'>
+      <ion-col col-12 text-center *ngIf="i==3" style="background-color:grey">
+        Not signifigant scores
+      </ion-col>
+      <ion-col col-5 text-left>
+          {{top_machine.tournament_machine_name}} 
+      </ion-col>
+      <ion-col col-2 text-center>
+        {{top_machine.rank}} 
+      </ion-col>      
+      <ion-col col-5 text-right>
+        {{top_machine.score| number}}        
+      </ion-col>      
+    </ion-row>
+    </ng-container>
+  </ion-grid>
   </div>
 </ion-content>

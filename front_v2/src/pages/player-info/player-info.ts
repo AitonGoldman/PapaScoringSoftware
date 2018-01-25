@@ -32,7 +32,7 @@ export class PlayerInfoPage extends AutoCompleteComponent {
     singleUser:any=null;
     displayExistingUserNotFound:boolean = false;
 //    playerNotFoundMessage = null;
-
+    
     // onKeyUp(event){        
     //     this.playerNotFoundMessage=null        
     //     if(this.searchbar.keyword.length>2){
@@ -45,11 +45,10 @@ export class PlayerInfoPage extends AutoCompleteComponent {
     //     }
         
     // }
-    // ionViewWillUnload() {
-        
-    // }
-
-    ionViewWillLoad() {
+     ionViewWillUnload() {
+         console.log('unloading player info...');
+     }
+    ionViewWillEnter() {
 //        super.ionViewWillLoad();
         console.log('ionViewDidLoad PlayerInfoPage');
       //this.autoCompleteProvider.setPlayerSearchType("allPlayers",
@@ -94,9 +93,9 @@ export class PlayerInfoPage extends AutoCompleteComponent {
             return;            
         }      
         this.player_id_for_event=player_id_for_event
+        //this.tournamentSettings.getTournament(result.tournament_id)        
       //this.pssApi.getEventPlayer(this.eventId,this.player_id_for_event)
-      //    .subscribe(this.generateGetEventPlayerProcessor())                                                  
-        
+      //    .subscribe(this.generateGetEventPlayerProcessor())                                                          
   }
     onFocus(){
         console.log('in onFocus..')

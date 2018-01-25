@@ -27,6 +27,7 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
     //player_id_for_event:number=null;
     totalCost:number=0;
     hideSearchbar:boolean=false;
+    comped:boolean=false;
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad TicketPurchasePage');
@@ -156,7 +157,9 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
             }
         }
         purchaseSummary.push("total cost : "+this.totalCost);
-        
+        if(this.comped==true){
+            ticketsToBuy['comped']=true;
+        }
         this.pssApi.purchaseTicket(ticketsToBuy,this.eventId)
             .subscribe(this.generatePurchaseTicketProcessor(purchaseSummary))                                                  
         

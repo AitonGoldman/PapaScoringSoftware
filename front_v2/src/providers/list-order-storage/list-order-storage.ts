@@ -48,17 +48,20 @@ export class ListOrderStorageProvider {
         if(favoriteMachines[eventId]==null){
             favoriteMachines[eventId]={};
         }
-        favoriteMachines[eventId][tournamentMachineId]={tournamentMachineId:tournamentMachineId,tournamentMachineName:tournamentMachineName,tournamentId:tournamentId,tournamentName:tournamentName};
+        if(favoriteMachines[eventId][tournamentMachineId]==null){
+            favoriteMachines[eventId][tournamentMachineId]={tournamentMachineId:tournamentMachineId,tournamentMachineName:tournamentMachineName,tournamentId:tournamentId,tournamentName:tournamentName};
+            let toast = this.toastCtrl.create({
+                message: 'Machine added to favorites',
+                duration: 99000,
+                position: 'top',
+                showCloseButton: true,
+                closeButtonText: " ",
+                cssClass: "successToast"
+            });
+            toast.present();
+        }  
         this._cookieService.putObject("favoriteMachines",favoriteMachines);
-        let toast = this.toastCtrl.create({
-            message: 'Machine added to favorites',
-            duration: 99000,
-            position: 'top',
-            showCloseButton: true,
-            closeButtonText: " ",
-            cssClass: "successToast"
-        });
-        toast.present();                    
+        
         
     }
     getFavoriteTournamentMachines(eventId){        

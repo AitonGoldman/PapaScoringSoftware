@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
-import { PssApiProvider } from '../../providers/pss-api/pss-api';
+
 
 /**
  * Generated class for the EventOwnerRequestPage page.

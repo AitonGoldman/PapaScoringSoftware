@@ -34,8 +34,10 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
             console.log('in genrateSubmitScoreProcessor')
             console.log(result)
             let tournamentMachine=result.data;
-            let successButtons=[];            
-            
+            let successButtons=[];
+            if(result.tournament_counts!=0){
+                successSummary.secondLine="Player has "+result.tournament_counts+" tickets left.";
+            }            
             let recordScoreSuccessButtons=['RE_ADD','RE_QUEUE','DEAL_WITH_PERSON_IN_QUEUE', 'DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER','GO_HOME','ADD_OR_QUEUE']
             if(result.tournament_counts==0){
                 recordScoreSuccessButtons=recordScoreSuccessButtons.filter((buttonLabel)=>{

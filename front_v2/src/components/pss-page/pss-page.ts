@@ -116,11 +116,12 @@ export class PssPageComponent {
     pushPageWithNoBackButton(pageName,navParams,tabIndex?):void{
         console.log('in push page with no back button...');
         if(tabIndex!=null){            
-            
-            
+                       
             this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName,navParams,{animate:false});
-            
-            this.navCtrl.parent.select(tabIndex);
+            let currentTab = this.navCtrl.parent.getSelected();
+            this.navCtrl.parent.select(tabIndex).then(()=>{
+                currentTab.popToRoot({animate:false});
+            });
             
             return;
         }

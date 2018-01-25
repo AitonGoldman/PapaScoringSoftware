@@ -17,6 +17,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
   templateUrl: 'results-machine.html',
 })
 export class ResultsMachinePage  extends PssPageComponent {
+    displayFavoriteMachine:boolean = false;
     tournamentId:number = null;
     tournamentName:string = null;
     tournamentMachineId:number = null;
@@ -45,7 +46,17 @@ export class ResultsMachinePage  extends PssPageComponent {
         this.pssApi.getTournamentMachineResults(this.eventId,this.tournamentId,this.tournamentMachineId)            
             .subscribe(this.generateGetTournamentMachineResultsProcessor())        
     }
-
+    markAsFavorite(){
+        this.listOrderStorage.addFavoriteTournamentMachine(this.eventId,
+                                                           this.tournamentMachineId,
+                                                           this.tournamentMachineName,
+                                                           this.tournamentId,
+                                                           this.tournamentName)
+        this.displayFavoriteMachine=false;
+    }
+    ionViewWillEnter(){
+        this.displayFavoriteMachine=this.listOrderStorage.getFavoriteTournamentMachines(this.eventId)[this.tournamentMachineId]==null
+    }
     ionViewWillLoad() {
       console.log('ionViewDidLoad ResultsMachinePage');
         if(this.platform.is('mobile')==false){

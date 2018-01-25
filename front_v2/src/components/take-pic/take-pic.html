@@ -2,5 +2,7 @@
 <ion-content padding text-center>  
   <h1>Upload pictures</h1>
   <image-upload   (removed)="onRemoved($event)" margin (uploadFinished)="onUploadFinished($event)" url="http://192.168.1.178:8000/media_upload" class="customClass"></image-upload>
-  <button block ion-button (tap)="onClose()">Ok</button>
+  <button margin-bottom block ion-button (tap)="onClose()">Ok</button>
+  <button block ion-button (tap)="onClose()">Cancel</button>
+   
 </ion-content>

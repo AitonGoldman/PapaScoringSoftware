@@ -12,8 +12,17 @@
 
 <ion-content>
   <div text-center>
-    <h2>{{tournamentMachineName}} Results     <ion-icon (click)="listOrderStorage.addFavoriteTournamentMachine(eventId,tournamentMachineId,tournamentMachineName,tournamentId,tournamentName)" style="zoom:1.0" item-end name="star"></ion-icon></h2>
-    <ion-icon (click)="onReload()" style="zoom:2.0" item-end name="refresh"></ion-icon>
+    <h2>{{tournamentMachineName}} Results </h2>
+    <ion-chip tappable (click)="markAsFavorite()" *ngIf="displayFavoriteMachine==true">
+      <ion-label>Favorite</ion-label>
+      <ion-icon name="star" color="dark" item-end></ion-icon>      
+    </ion-chip>
+    <ion-chip tappable (click)="onReload()">
+      <ion-label>Refresh</ion-label>
+      <ion-icon name="refresh" color="dark" item-end></ion-icon>      
+    </ion-chip>
+    
+<!--<ion-icon (click)="onReload()" style="zoom:2.0" item-end name="refresh"></ion-icon>-->
 
   </div>
   <ion-grid [style.width]='width' [style.margin-left]='"auto"' [style.margin-right]='"auto"'>

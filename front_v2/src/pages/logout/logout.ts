@@ -26,8 +26,9 @@ export class LogoutPage extends PssPageComponent {
         let success_title_string='Logged out!';        
         this.successSummary = new SuccessSummary(success_title_string,null,null);            
         this.successButtons = [new SuccessButton('Go Home',
-                                                this.getHomePageString(this.eventId),
-                                                this.buildNavParams({}))];            
+                                                 this.getHomePageString(this.eventId),
+                                                 this.buildNavParams({}),
+                                                 0)];            
         
     }
 

@@ -1,13 +1,9 @@
-import { EventAuthProvider } from '../../providers/event-auth/event-auth';
-import { NotificationsService } from 'angular2-notifications';
-import { ToastController } from 'ionic-angular';
 import { Component } from '@angular/core';
-import { App, IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
-import { PssApiProvider } from '../../providers/pss-api/pss-api';
+import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton'
-import { ActionSheetController } from 'ionic-angular'
+
 
 /**
  * Generated class for the EventOwnerConfirmPage page.

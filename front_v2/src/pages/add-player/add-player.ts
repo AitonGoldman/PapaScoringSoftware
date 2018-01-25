@@ -1,10 +1,10 @@
-import { ViewChild, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
 import { IonicPage } from 'ionic-angular';
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
 import { TakePicComponent } from '../../components/take-pic/take-pic'
-import { SearchResults } from '../../classes/search-results';
+
 
 
 /**
@@ -65,8 +65,7 @@ export class AddPlayerPage extends AutoCompleteComponent {
     takePicture(){
         let profileModal = this.modalCtrl.create(TakePicComponent, { userId: 8675309 });
         profileModal.onDidDismiss(data => {
-            console.log('in modal...');
-            console.log(data);
+            console.log('in modal...');            
             if(data!=null){
                 this.selectedPlayer.has_pic=true;
                 this.selectedPlayer.img_file=data;

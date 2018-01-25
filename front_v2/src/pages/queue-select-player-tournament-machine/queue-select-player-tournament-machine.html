@@ -17,7 +17,13 @@
   </button>
 
   <div class='desktopSlim'>    
-  <ion-list>
+    <div text-center>
+    <ion-chip tappable (click)="onReload()">
+      <ion-label>Refresh</ion-label>
+      <ion-icon name="refresh" color="dark" item-end></ion-icon>      
+    </ion-chip>
+    </div>
+    <ion-list>
     <ng-container *ngFor="let tournament of tournaments">
       <ion-item-divider (tap)="expand(tournament)">
         <ion-avatar item-start *ngIf="tournament.img_url!=null">

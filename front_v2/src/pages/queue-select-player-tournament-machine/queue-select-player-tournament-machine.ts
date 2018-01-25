@@ -168,7 +168,18 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             })
         };
     }
-        
+
+    onReload(){
+        if(this.player_id_for_event==null){                        
+            this.pssApi.getAllTournamentsAndMachines(this.eventId)            
+                .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor())
+        } else {
+            
+            this.pssApi.getAllTournamentsAndMachinesAndEventPlayer(this.eventId,this.player_id_for_event)            
+                .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(true))
+        }
+    }
+    
     ionViewWillEnter() {
         //this.queueMode=this.navParams.get('queueMode');
         this.role=this.eventAuth.getRoleName(this.eventId);

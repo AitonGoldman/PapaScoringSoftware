@@ -1,12 +1,4 @@
 import { ViewChild, Component } from '@angular/core';
-// import { PssPageComponent } from '../../components/pss-page/pss-page'
-// import { AutoCompleteProvider } from '../../providers/auto-complete/auto-complete';
-// import { Platform, App, NavParams, NavController } from 'ionic-angular';
-// import { EventAuthProvider } from '../../providers/event-auth/event-auth';
-// import { PssApiProvider } from '../../providers/pss-api/pss-api';
-
-// import { ActionSheetController } from 'ionic-angular'
-// import { NotificationsService } from 'angular2-notifications';
 import { IonicPage } from 'ionic-angular';
 import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
 

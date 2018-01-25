@@ -28,6 +28,10 @@ export class TakePicComponent {
     onClose(){
         this.viewCtrl.dismiss(this.img_file);
     }
+    onCancel(){
+        this.viewCtrl.dismiss();
+    }
+    
     onRemoved(file) {
         this.img_file=null;
     }    

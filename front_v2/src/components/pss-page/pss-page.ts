@@ -117,10 +117,16 @@ export class PssPageComponent {
         console.log('in push page with no back button...');
         if(tabIndex!=null){            
                        
-            this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName,navParams,{animate:false});
-            let currentTab = this.navCtrl.parent.getSelected();
-            this.navCtrl.parent.select(tabIndex).then(()=>{
-                currentTab.popToRoot({animate:false});
+            // this.navCtrl.parent.getByIndex(tabIndex).setRoot(pageName,navParams,{animate:false});
+            // let currentTab = this.navCtrl.parent.getSelected();
+            // this.navCtrl.parent.select(tabIndex).then(()=>{
+            //     currentTab.popToRoot({animate:false});
+            // });
+            this.navCtrl.parent.getByIndex(tabIndex).popToRoot({}).then(()=>{
+                let currentTab = this.navCtrl.parent.getSelected();
+                this.navCtrl.parent.select(tabIndex).then(()=>{
+                    currentTab.popToRoot({animate:false});
+                });
             });
             
             return;

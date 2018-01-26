@@ -85,7 +85,7 @@ export class AddPlayerToQueuePage extends AutoCompleteComponent {
             
             let successSummary = new SuccessSummary(success_title_string,success_line_one_string,null);            
             let successButtonHome = new SuccessButton('Go Home',
-                                                      this.getHomePageString(this.eventId),
+                                                      'QueueSelectPlayerTournamentMachinePage',
                                                       this.buildNavParams({}));
             
             this.navCtrl.push("SuccessPage",            

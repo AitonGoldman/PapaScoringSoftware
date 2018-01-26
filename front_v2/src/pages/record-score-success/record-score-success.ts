@@ -21,6 +21,7 @@ export class RecordScoreSuccessPage extends SuccessPage {
     tournamentId:any=null;
     reAddSuccess:boolean=false;
     reQueueSuccess:boolean=false;
+    handleCurrentPlayerLater:boolean=true;
     
     player:any=null;
     
@@ -55,6 +56,7 @@ export class RecordScoreSuccessPage extends SuccessPage {
         }
     }
     reAddPlayerToMachine(){
+        this.handleCurrentPlayerLater=false;
         this.pssApi.startPlayerOnMachine({action:"start",
                                           player_id:this.player.player_id,
                                           tournament_machine_id:this.tournamentMachine.tournament_machine_id},
@@ -63,12 +65,13 @@ export class RecordScoreSuccessPage extends SuccessPage {
 
     }
     reQueuePlayerOnMachine(){
+        this.handleCurrentPlayerLater=false;
         this.pssApi.addEventPlayerToQueue({'player_id':this.player.player_id,'tournament_machine_id':this.tournamentMachine.tournament_machine_id},this.eventId)
             .subscribe(this.generatePlacePlayerOnMachineAgainProcessor("Player re-queued on machine"))
     }
     returnToStartPlayer(buttonLabel){
         let params:any = {tournamentMachineId:this.tournamentMachine.tournament_machine_id,tournamentMachine:this.tournamentMachine,tournamentId:this.tournamentId};
-        if(buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER'){
+        if(buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER' && this.handleCurrentPlayerLater==true){
             params.playerToBeDealtWith=this.player;
         }
         this.pushPageWithNoBackButton('ScorekeeperStartPlayerPage',this.buildNavParams(params));        

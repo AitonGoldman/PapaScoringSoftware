@@ -49,7 +49,7 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             
             let successSummary = new SuccessSummary(success_title_string,success_line_one_string,null);            
             let successButtonHome = new SuccessButton('Go Home',
-                                                      this.getHomePageString(this.eventId),
+                                                      'QueueSelectPlayerTournamentMachinePage',
                                                       this.buildNavParams({}));
             
             this.navCtrl.push("SuccessPage",            
@@ -96,7 +96,7 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             
             let successSummary = new SuccessSummary(success_title_string,null,null);            
             let successButtonHome = new SuccessButton('Go Home',
-                                                      this.getHomePageString(this.eventId),
+                                                      'QueueSelectPlayerTournamentMachinePage',
                                                       this.buildNavParams({}));
             
             this.navCtrl.push("SuccessPage",            
@@ -179,9 +179,16 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
                 .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(true))
         }
     }
-    
+    ionViewDidEnter(){
+        console.log('ionViewDidEnter QueueSelectPlayerTournamentMachinePage');
+        console.log(this.navCtrl.parent.getSelected().index)
+    }
     ionViewWillEnter() {
         //this.queueMode=this.navParams.get('queueMode');
+        //console.log('ionViewDidLoad QueueSelectPlayerTournamentMachinePage');
+        console.log('ionViewDidEnter QueueSelectPlayerTournamentMachinePage');
+        console.log(this.navCtrl.parent.getSelected().index);
+        
         this.role=this.eventAuth.getRoleName(this.eventId);
         
         if(this.eventAuth.getRoleName(this.eventId)=='player'){            
@@ -198,7 +205,7 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
                 .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(true))
         }
         
-        console.log('ionViewDidLoad QueueSelectPlayerTournamentMachinePage');
+        
         console.log(this.role);
   }
 

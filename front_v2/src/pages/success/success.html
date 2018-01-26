@@ -70,7 +70,7 @@ Success!
         <button margin [disabled]="reAddSuccess==true" (tap)="reQueuePlayerOnMachine()" *ngIf="buttonLabel=='RE_QUEUE'" ion-button>Re-Queue Player</button>
         <button margin (tap)="returnToStartPlayer(buttonLabel)" *ngIf="buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE'||buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER'" ion-button>Deal with person in queue</button>
         <button margin *ngIf="buttonLabel=='GO_HOME'" (tap)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))" ion-button>Machine List</button>
-        <button margin *ngIf="buttonLabel=='ADD_OR_QUEUE'" (tap)="pushPageWithNoBackButton('AddOrQueuePlayerAfterScoreRecordPage',buildNavParams({tournamentId:tournamentId,playerId:player.player_id,playerName:player.player_full_name}))" ion-button>Add or Queue Player</button>
+        <button margin *ngIf="buttonLabel=='ADD_OR_QUEUE' && handleCurrentPlayerLater==true" (tap)="pushPageWithNoBackButton('AddOrQueuePlayerAfterScoreRecordPage',buildNavParams({tournamentId:tournamentId,playerId:player.player_id,playerName:player.player_full_name}))" ion-button>Add or Queue Player</button>
 
       </ng-container>
     </ion-col>

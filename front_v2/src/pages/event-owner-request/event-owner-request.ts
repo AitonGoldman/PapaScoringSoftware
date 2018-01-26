@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { SuccessSummary } from '../../classes/success-summary';
 import { SuccessButton } from '../../classes/SuccessButton';
+import { PssApiProvider } from '../../providers/pss-api/pss-api';
 
 
 /**
@@ -20,7 +21,8 @@ export class EventOwnerRequestPage {
     userInfo:any={};
   constructor(public pssApi: PssApiProvider,
               public navCtrl: NavController,
-              public navParams: NavParams) {
+              public navParams: NavParams              
+             ) {
       
   }
     ionViewDidLoad() {

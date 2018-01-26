@@ -161,9 +161,8 @@ def test_player_results(event_id, event_player_id):
     start_time = current_milli_time()
     
     event_player_info = get_event_player_route(current_app,event_id,event_player_id)
-    event_player_info['data']['tournament_calculated_lists']=event_player_info['tournament_calculated_lists']
-    event_player_info['data']['tournament_counts']=event_player_info['tournament_counts']
-
+    event_player_info['tournament_calculated_lists']=event_player_info['tournament_calculated_lists']
+    event_player_info['tournament_counts']=event_player_info['tournament_counts']    
     players=current_app.table_proxy.get_all_event_players(event_id)
     
     tournaments = current_app.table_proxy.get_tournaments(event_id)
@@ -214,7 +213,7 @@ def test_player_results(event_id, event_player_id):
             pass    
     event_player_info['data']['values']=values
     #return jsonify({'data':values})
-    return jsonify({'data':event_player_info})
+    return jsonify(event_player_info)
 
 
 @blueprints.test_blueprint.route('/<int:event_id>/test_tournament_machine_results/<int:tournament_id>/<int:tournament_machine_id>',methods=['GET'])

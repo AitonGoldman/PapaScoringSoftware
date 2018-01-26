@@ -168,7 +168,7 @@ export class TournamentMachinesPage extends AutoCompleteComponent {
             .subscribe(this.generateAddEditTournamentMachineProcessor(machine.tournament_machine_name+" has been removed!","edit"))            
 
     }
-    onInput(event){        
+    onInput(event){
     }
     onItemsShown(event){
         

@@ -34,10 +34,28 @@ export class ResultsPage extends PssPageComponent {
             if(withPlayer==true){
                 this.eventPlayer=result.player;
             }
-            this.tournaments=result.data.map((tournament)=>{
+            let tournaments=result.data.map((tournament)=>{
                 tournament.expand_machines=false;
+                tournament.tournament_machines = tournament.tournament_machines.sort((n1,n2)=>{
+                    if(n1.tournament_machine_name < n2.tournament_machine_name){
+                        return -1;
+                    }
+                    if(n1.tournament_machine_name > n2.tournament_machine_name){
+                        return 1;
+                    }
+                    return 0;                                    
+                })
                 return tournament;
             });
+            this.tournaments=tournaments.sort((n1,n2)=>{
+                if(n1.tournament_name < n2.tournament_name){
+                    return -1;
+                }
+                if(n1.tournament_name > n2.tournament_name){
+                    return 1;
+                }
+                return 0;                
+            })
             this.tournamentSettings.setTournaments(this.tournaments);
         }
     }
@@ -45,6 +63,7 @@ export class ResultsPage extends PssPageComponent {
     expandMachines(tournament){
         tournament.expand_machines=tournament.expand_machines==false;
     }
+    
     ionViewDidEnter() {
         this.doneLoading=true;
     }        

@@ -86,7 +86,8 @@ export class PlayerInfoPage extends AutoCompleteComponent {
         this.autoCompleteProvider.initializeAutoComplete(null,
                                                          null,
                                                          this.generatePlayerLoadingFunction(),
-                                                         this.eventId);      
+                                                         this.eventId,
+                                                         true);      
       
         let player_id_for_event = this.navParams.get('player_id_for_event');
         if(player_id_for_event==null){          

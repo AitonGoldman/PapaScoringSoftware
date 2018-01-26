@@ -17,9 +17,12 @@
 </button>
 
   <div class='desktopSlim'>
-    <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedMachine" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Machine To Add', debounce:500}"></ion-auto-complete>
+    <ion-auto-complete (keyup)="onKeyUp($event)" name="myautocomplete" [(ngModel)]="selectedMachine" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Machine To Add', debounce:500}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  </div>
+  <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
+    <h2>Machine Not Found </h2>
   </div>
 
   <ion-list [sliding]="sliding" #list>

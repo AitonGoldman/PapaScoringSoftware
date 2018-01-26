@@ -73,10 +73,12 @@ export class AutoCompleteComponent extends PssPageComponent {
             // user and time are the same arguments passed in `events.publish(user, time)`
             this.loading=false;            
             if(autocompleteInfo.state=='DONE'){                
-                if(autocompleteInfo.type=='SEARCH_SINGLE'){
-                    //this.selectedPlayer=autocompleteInfo.data.data;
-                    this.selectedPlayer=autocompleteInfo.data.data.data;
-
+                if(autocompleteInfo.type=='SEARCH_SINGLE'){                    
+                    
+                    //this.selectedPlayer=autocompleteInfo.data.data.data;
+                    this.selectedPlayer=autocompleteInfo.data.data;
+                    console.log('found single player...');
+                    console.log(this.selectedPlayer);
                     //this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);
                     this.ticketCounts=this.generateListFromObj(this.selectedPlayer.tournament_counts);
                     //this.ticketCountsDict=this.selectedPlayer.tournament_counts;

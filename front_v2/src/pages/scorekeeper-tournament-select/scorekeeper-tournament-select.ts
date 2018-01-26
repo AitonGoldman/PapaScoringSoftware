@@ -24,9 +24,18 @@ export class ScorekeeperTournamentSelectPage extends PssPageComponent{
             if(result == null){
                 return;
             }
-            this.tournaments=result.data;
-            this.tournaments.map((tournament)=>{
+            let tournaments=result.data;
+            tournaments.map((tournament)=>{
                 tournament.expanded=false;
+            })
+            this.tournaments=tournaments.sort((n1,n2)=>{
+                if(n1.tournament_name < n2.tournament_name){
+                    return -1;
+                }
+                if(n1.tournament_name > n2.tournament_name){
+                    return 1;
+                }
+                return 0;                
             })
 
         };

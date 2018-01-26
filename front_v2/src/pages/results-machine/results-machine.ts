@@ -55,16 +55,17 @@ export class ResultsMachinePage  extends PssPageComponent {
         this.displayFavoriteMachine=false;
     }
     ionViewWillEnter(){
-        this.displayFavoriteMachine=this.listOrderStorage.getFavoriteTournamentMachines(this.eventId)[this.tournamentMachineId]==null
+        console.log('results machine on enter...')        
+        this.displayFavoriteMachine=this.listOrderStorage.getFavoriteTournamentMachines(this.eventId)[this.navParams.get('tournamentMachineId')]==null
     }
     ionViewWillLoad() {
       console.log('ionViewDidLoad ResultsMachinePage');
         if(this.platform.is('mobile')==false){
             this.width='75%';
         }
+        this.tournamentMachineId=this.navParams.get('tournamentMachineId');
         this.tournamentId=this.navParams.get('tournamentId');
         this.tournamentName=this.navParams.get('tournamentName');
-        this.tournamentMachineId=this.navParams.get('tournamentMachineId');
         this.tournamentMachineName=this.navParams.get('tournamentMachineName');
         console.log(this.tournamentMachineName);
         this.pssApi.getTournamentMachineResults(this.eventId,this.tournamentId,this.tournamentMachineId)            

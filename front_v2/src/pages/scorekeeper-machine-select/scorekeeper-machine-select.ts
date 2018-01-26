@@ -28,12 +28,40 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
             if(result == null){
                 return;
             }
-            this.tournamentMachines=result.data;
-            this.tournamentMachines.map((tournament)=>{
+            let tournamentMachines=result.data;
+            tournamentMachines.map((tournament)=>{
                 tournament.expanded=false;
+            })            
+            this.tournamentMachines=tournamentMachines.sort((n1,n2)=>{
+                if(n1.tournament_machine_name < n2.tournament_machine_name){
+                    return -1;
+                }
+                if(n1.tournament_machine_name > n2.tournament_machine_name){
+                    return 1;
+                }
+                return 0;                
             })
-
+            this.tournamentsOrderList = this.listOrderStorage.getList('ScorekeeperMachineSelect',this.tournamentId);
+            if(this.tournamentsOrderList!=null){
+                this.tournamentMachines=this.tournamentMachines.sort((n1,n2)=>{
+                    if(this.tournamentsOrderList[n1.tournament_machine_id]!=null && this.tournamentsOrderList[n2.tournament_machine_id]!=null){
+                        return this.tournamentsOrderList[n1.tournament_machine_id].index - this.tournamentsOrderList[n2.tournament_machine_id].index;
+                    } else {
+                        return 1;
+                    }                 
+                })            
+            }                                                
         };
+    }
+    reorderTournamentMachineItems(indexes) {
+        
+        this.tournamentMachines = reorderArray(this.tournamentMachines, indexes);
+        
+        let tournamentMachinesListToStore = {}
+        this.tournamentMachines.forEach((item,index)=>{            
+            tournamentMachinesListToStore[item.tournament_machine_id]={index:index+1,tournament_machine_id:item.tournament_machine_id};
+        }) 
+        this.listOrderStorage.updateList('ScorekeeperMachineSelect',this.tournamentId,tournamentMachinesListToStore)
     }
 
     ionViewWillLoad() {

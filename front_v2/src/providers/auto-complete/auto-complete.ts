@@ -32,19 +32,20 @@ export class AutoCompleteProvider implements AutoCompleteService{
     //loadingObservable:any;
     loadingCompleteFunc:any=null;
     autocompleteType:string=null;
-    currentValue:string=null;    
+    currentValue:string=null;
+    singleWithResults:boolean=false;
     constructor(public http: HttpClient, public pssApi: PssApiProvider,public events: Events) {
         console.log('Hello AutoCompleteProvider Provider');
     }
     
-    initializeAutoComplete(labelAttribute?, items?, loadingCompleteFunc?, eventId?){        
+    initializeAutoComplete(labelAttribute?, items?, loadingCompleteFunc?, eventId?, singleWithResults?){        
         this.autocompleteType=items==null?"remote":"local";        
         this.items=items;
         this.eventId=eventId;
         this.labelAttribute=labelAttribute;
-        this.loadingCompleteFunc=loadingCompleteFunc
-        this.currentValue=null;
-        
+        this.loadingCompleteFunc=loadingCompleteFunc;
+        this.singleWithResults=singleWithResults==true;
+        this.currentValue=null;        
     }
 
     // getItemLabel(returnedItem){
@@ -152,8 +153,13 @@ export class AutoCompleteProvider implements AutoCompleteService{
             //this.itemFieldToMatch='player_id_for_event'        
             this.labelAttribute = "player_id_for_event";
             //searchResults.typeOfSearch="single";            
-            //return this.pssApi.getEventPlayerHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
-            return this.pssApi.getEventPlayerResultsHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
+            if(this.singleWithResults == false){
+                return this.pssApi.getEventPlayerHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
+            } else {
+                return this.pssApi.getEventPlayerResultsHidden(this.eventId,name)['map'](this.processSearchResults('SEARCH_SINGLE'))
+            }
+            
+            
         } 
 
         if(this.autocompleteType=="remote"){

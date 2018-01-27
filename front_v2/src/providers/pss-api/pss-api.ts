@@ -93,6 +93,8 @@ export class PssApiProvider {
     getAllPlayers = this.generate_api_call('getAllPlayers',this.basePssUrl+"/players",'get');    
     getEventPlayer = this.generate_api_call('getEventPlayer',this.basePssUrl+"/:arg/event_player/:arg",'get');
     getEventPlayerResultsHidden = this.generate_api_call('getEventPlayerResults',this.basePssUrl+"/:arg/test_player_results/:arg",'get',true);
+    getEventPlayerResults = this.generate_api_call('getEventPlayerResults',this.basePssUrl+"/:arg/test_player_results/:arg",'get');
+    getEventPlayerResultsByPlayerId = this.generate_api_call('getEventPlayerResults',this.basePssUrl+"/:arg/test_player_results_by_player_id/:arg",'get');
     
     getEventPlayerHidden = this.generate_api_call('getEventPlayer',this.basePssUrl+"/:arg/event_player/:arg",'get',true);
 

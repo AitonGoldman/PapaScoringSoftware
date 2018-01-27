@@ -22,7 +22,7 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
     tournamentMachines:any=null;
     reorderEnabled:boolean=false;
     undoMode:boolean=false;
-    
+    tournamentMachinesOrderList:any=null;;
     generateGetTournamentMachinesProcessor(){
         return (result) => {            
             if(result == null){
@@ -41,11 +41,11 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
                 }
                 return 0;                
             })
-            this.tournamentsOrderList = this.listOrderStorage.getList('ScorekeeperMachineSelect',this.tournamentId);
-            if(this.tournamentsOrderList!=null){
+            this.tournamentMachinesOrderList = this.listOrderStorage.getList('ScorekeeperMachineSelect',this.tournamentId);
+            if(this.tournamentMachinesOrderList!=null){
                 this.tournamentMachines=this.tournamentMachines.sort((n1,n2)=>{
-                    if(this.tournamentsOrderList[n1.tournament_machine_id]!=null && this.tournamentsOrderList[n2.tournament_machine_id]!=null){
-                        return this.tournamentsOrderList[n1.tournament_machine_id].index - this.tournamentsOrderList[n2.tournament_machine_id].index;
+                    if(this.tournamentMachinesOrderList[n1.tournament_machine_id]!=null && this.tournamentMachinesOrderList[n2.tournament_machine_id]!=null){
+                        return this.tournamentMachinesOrderList[n1.tournament_machine_id].index - this.tournamentMachinesOrderList[n2.tournament_machine_id].index;
                     } else {
                         return 1;
                     }                 

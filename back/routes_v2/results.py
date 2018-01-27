@@ -149,6 +149,13 @@ def test_tournament_results(event_id, tournament_id):
             #values.append(value)
     return jsonify({'data':values})
 
+@blueprints.test_blueprint.route('/<int:event_id>/test_player_results_by_player_id/<int:player_id>',methods=['GET'])
+def test_player_results_by_player_id(event_id, player_id):
+    player = current_app.table_proxy.get_player(event_id,player_id=player_id)
+    print player.event_info
+    return test_player_results(event_id,player.event_info[0].player_id_for_event)    
+
+
 @blueprints.test_blueprint.route('/<int:event_id>/test_player_results/<int:event_player_id>',methods=['GET'])
 def test_player_results(event_id, event_player_id):
     players_dict={}

@@ -27,11 +27,13 @@ export class PlayerInfoPage extends AutoCompleteComponent {
 //    ticketCounts:any=null;
 //    selectedPlayer:any=null;    
     player_id_for_event:number=null;
+    playerId:number=null;
+    hideAutoComplete:boolean=false;
     playerLoadStatus:string='notStarted';
 //    @ViewChild('searchbar')  searchbar: any;    
     singleUser:any=null;
-    displayExistingUserNotFound:boolean = false;
-//    playerNotFoundMessage = null;
+    displayExistingUserNotFound:boolean = false;   
+    //    playerNotFoundMessage = null;
     
     // onKeyUp(event){        
     //     this.playerNotFoundMessage=null        
@@ -90,14 +92,39 @@ export class PlayerInfoPage extends AutoCompleteComponent {
                                                          true);      
       
         let player_id_for_event = this.navParams.get('player_id_for_event');
-        if(player_id_for_event==null){          
+        let playerId = this.navParams.get('playerId');
+
+        console.log('got params for player info...')
+        console.log(playerId)
+
+        if(player_id_for_event==null && playerId==null){          
             return;            
-        }      
+        }
+        this.hideAutoComplete=true;
         this.player_id_for_event=player_id_for_event
+        this.playerId=playerId
+        
         //this.tournamentSettings.getTournament(result.tournament_id)        
-      //this.pssApi.getEventPlayer(this.eventId,this.player_id_for_event)
-      //    .subscribe(this.generateGetEventPlayerProcessor())                                                          
-  }
+        if(player_id_for_event!=null){
+            this.pssApi.getEventPlayerResults(this.eventId,this.player_id_for_event)
+                .subscribe(this.generateGetEventPlayerProcessor())                                                          
+        } else {
+            this.pssApi.getEventPlayerResultsByPlayerId(this.eventId,this.playerId)
+                .subscribe(this.generateGetEventPlayerProcessor())                                                                      
+        }
+    }
+    generateGetEventPlayerProcessor(){
+        return (result)=>{
+            if(result==null){
+                return;
+            }
+            console.log(result);
+            this.selectedPlayer=result.data;
+            this.ticketCounts=this.generateListFromObj(result.tournament_counts);            
+            this.results=result.data.values;
+
+        }
+    }
     onFocus(){
         console.log('in onFocus..')
         this.selectedPlayer=null;

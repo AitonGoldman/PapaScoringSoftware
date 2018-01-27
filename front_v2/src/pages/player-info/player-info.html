@@ -16,7 +16,7 @@
   Player Info
 </button>
   <div class='desktopSlim'>  
-  <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
+  <ion-auto-complete *ngIf="hideAutoComplete==false" (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
   </div>

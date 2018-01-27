@@ -17,7 +17,7 @@
       <ion-label>Favorite</ion-label>
       <ion-icon name="star" color="dark" item-end></ion-icon>      
     </ion-chip>
-    <ion-chip tappable (click)="onReload()">
+    <ion-chip tappable (click)="onReload()" >
       <ion-label>Refresh</ion-label>
       <ion-icon name="refresh" color="dark" item-end></ion-icon>      
     </ion-chip>
@@ -46,16 +46,16 @@
       </ion-col>
     </ion-row>
     <ion-row text-nowrap nowrap *ngFor="let result of results" margin-bottom>
-      <ion-col col-2 col-md-1 no-padding text-left>
-        {{result.rank}}<span style='font-size:8px'> ({{result.points}} points)</span>
+      <ion-col col-2 col-md-1 no-padding text-center align-self-center>
+        {{result.rank}}<span style='font-size:8px'><p style='line-height:1px'> ({{result.points}} points)</p></span>
       </ion-col>
       <!-- <ion-col col-2 col-md-1 no-padding text-center> -->
       <!--   {{result.points}} -->
       <!-- </ion-col>    -->
-      <ion-col [attr.col-5]="maxScore>bigMaxScore?true:null" [attr.col-7]="maxScore<smallMaxScore?true:null" [attr.col-6]="maxScore>smallMaxScore && maxScore < bigMaxScore?true:null" col-md-5 no-padding text-center>
+      <ion-col align-self-center [attr.col-5]="maxScore>bigMaxScore?true:null" [attr.col-7]="maxScore<smallMaxScore?true:null" [attr.col-6]="maxScore>smallMaxScore && maxScore < bigMaxScore?true:null" col-md-5 no-padding text-center>
         {{result.player_name}}
       </ion-col>
-      <ion-col [attr.col-5]="maxScore>bigMaxScore?true:null" [attr.col-3]="maxScore<smallMaxScore?true:null" [attr.col-4]="maxScore>smallMaxScore && maxScore < bigMaxScore?true:null" col-md-5 no-padding text-center>
+      <ion-col align-self-center [attr.col-5]="maxScore>bigMaxScore?true:null" [attr.col-3]="maxScore<smallMaxScore?true:null" [attr.col-4]="maxScore>smallMaxScore && maxScore < bigMaxScore?true:null" col-md-5 no-padding text-center>
         {{result.score | number}}
       </ion-col>
     </ion-row>

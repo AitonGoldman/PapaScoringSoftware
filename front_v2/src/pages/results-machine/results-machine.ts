@@ -55,8 +55,10 @@ export class ResultsMachinePage  extends PssPageComponent {
         this.displayFavoriteMachine=false;
     }
     ionViewWillEnter(){
-        console.log('results machine on enter...')        
-        this.displayFavoriteMachine=this.listOrderStorage.getFavoriteTournamentMachines(this.eventId)[this.navParams.get('tournamentMachineId')]==null
+        console.log('results machine on enter...')
+        let tournamentMachineId = this.navParams.get('tournamentMachineId');
+        let favoriteMachines = this.listOrderStorage.getFavoriteTournamentMachines(this.eventId)
+        this.displayFavoriteMachine=favoriteMachines==null || favoriteMachines[tournamentMachineId]==null
     }
     ionViewWillLoad() {
       console.log('ionViewDidLoad ResultsMachinePage');

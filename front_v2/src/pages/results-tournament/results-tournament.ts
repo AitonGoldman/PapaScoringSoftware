@@ -43,14 +43,19 @@ export class ResultsTournamentPage extends PssPageComponent {
             }
             this.results=result.data;
             this.maxResultsToDisplay=50;
-            this.results.map((result)=>{
-                
+            this.results.map((result)=>{                
                 if(result.top_machines!=null){
                     result.topMachineStrings=[];
                     result.top_machines.forEach((top_machine,index)=>{
                         result.topMachineStrings.push(top_machine.abbreviation)
                     })
-                    result.topMachineString=result.topMachineStrings.join('/');
+                    if(this.platform.is("mobile")){
+                        result.topMachineString="top 3";
+                    } else {
+                        result.topMachineString=result.topMachineStrings.join('/');
+                    }
+
+                    
                 }
                 
                 return result;

@@ -164,7 +164,8 @@ export class PssPageComponent {
             if(result==null){                
                 return
             }
-            this['selectedPlayer']=result.data.data;
+            //this['selectedPlayer']=result.data.data;
+            this['selectedPlayer']=result.data;
             
             this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);
             //this['ticketCounts']=[]

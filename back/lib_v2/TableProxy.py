@@ -581,7 +581,9 @@ class TableProxy():
         new_tournament_machine = self.TournamentMachines()                
         new_tournament_machine.machine_id=machine.machine_id
         new_tournament_machine.tournament_machine_name=machine.machine_name
-        new_tournament_machine.abbreviation=machine.abbreviation
+        new_tournament_machine.tournament_machine_abbreviation=machine.abbreviation
+        if new_tournament_machine.tournament_machine_abbreviation is None:
+            new_tournament_machine.tournament_machine_abbreviation = new_tournament_machine.tournament_machine_name[0:4]
         new_tournament_machine.active=True
         #new_tournament_machine.tournament_id=tournament.tournament_id
         tournament.tournament_machines.append(new_tournament_machine)

@@ -46,13 +46,15 @@ export class ResultsTournamentPage extends PssPageComponent {
             this.results.map((result)=>{                
                 if(result.top_machines!=null){
                     result.topMachineStrings=[];
+                    console.log('poop');                    
                     result.top_machines.forEach((top_machine,index)=>{
-                        result.topMachineStrings.push(top_machine.abbreviation)
+                        console.log(top_machine)
+                        result.topMachineStrings.push("#"+top_machine.rank+" on "+top_machine.abbreviation)
                     })
                     if(this.platform.is("mobile")){
                         result.topMachineString="top 3";
                     } else {
-                        result.topMachineString=result.topMachineStrings.join('/');
+                        result.topMachineString=result.topMachineStrings.join(' / ');
                     }
 
                     
@@ -71,7 +73,7 @@ export class ResultsTournamentPage extends PssPageComponent {
     ionViewWillLoad() {
         console.log('ionViewDidLoad ResultsTournamentPage');
         if(this.platform.is('mobile')==false){            
-            this.width='75%';
+            this.width='100%';
         }
         this.tournamentId=this.navParams.get('tournamentId');
         this.tournamentName=this.navParams.get('tournamentName');

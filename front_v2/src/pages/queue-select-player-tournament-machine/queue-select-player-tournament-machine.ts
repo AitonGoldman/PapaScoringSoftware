@@ -181,13 +181,13 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
     }
     ionViewDidEnter(){
         console.log('ionViewDidEnter QueueSelectPlayerTournamentMachinePage');
-        console.log(this.navCtrl.parent.getSelected().index)
+        //console.log(this.navCtrl.parent.getSelected().index)
     }
     ionViewWillEnter() {
         //this.queueMode=this.navParams.get('queueMode');
         //console.log('ionViewDidLoad QueueSelectPlayerTournamentMachinePage');
         console.log('ionViewDidEnter QueueSelectPlayerTournamentMachinePage');
-        console.log(this.navCtrl.parent.getSelected().index);
+        //console.log(this.navCtrl.parent.getSelected().index);
         
         this.role=this.eventAuth.getRoleName(this.eventId);
         

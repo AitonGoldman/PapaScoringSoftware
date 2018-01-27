@@ -47,7 +47,8 @@ current_milli_time = lambda: int(round(time.time() * 1000))
 
 
 def getTournamentResultsQuery(tournament_id,signifigant_scores):
-    query = "select sum(machine_rank), player_id, tournament_id from (select machine_rank,tournament_machine_id,player_id,tournament_id,row_number() over (partition by player_id,tournament_id order by tournament_id,machine_rank desc) as row from (select tournament_id,player_id,score,tournament_machine_id,papa_scoring_func(rank() over (partition by tournament_machine_id order by score desc)) as machine_rank from (select score,player_id,tournament_machine_id,tournament_id from (select score_id,score,player_id,tournament_machine_id,tournament_id,row_number() over (partition by player_id, tournament_machine_id, tournament_id order by score desc) as p from scores where tournament_id=%s) as sub where p=1) as sub_two) as sub_three order by player_id) as sub_four where row <= %s group by player_id,tournament_id" % (tournament_id, signifigant_scores)   
+    #query = "select sum(machine_rank), player_id, tournament_id from (select machine_rank,tournament_machine_id,player_id,tournament_id,row_number() over (partition by player_id,tournament_id order by tournament_id,machine_rank desc) as row from (select tournament_id,player_id,score,tournament_machine_id,papa_scoring_func(rank() over (partition by tournament_machine_id order by score desc)) as machine_rank from (select score,player_id,tournament_machine_id,tournament_id from (select score_id,score,player_id,tournament_machine_id,tournament_id,row_number() over (partition by player_id, tournament_machine_id, tournament_id order by score desc) as p from scores where tournament_id=%s) as sub where p=1) as sub_two) as sub_three order by player_id) as sub_four where row <= %s group by player_id,tournament_id" % (tournament_id, signifigant_scores)
+    query = "select sum(machine_rank), player_id, tournament_id from (select machine_rank,tournament_machine_id,player_id,tournament_id,row_number() over (partition by player_id,tournament_id order by tournament_id,machine_rank desc) as row from (select tournament_id,player_id,score,tournament_machine_id,papa_scoring_func(rank() over (partition by tournament_machine_id order by score desc)) as machine_rank from (select score,player_id,tournament_machine_id,tournament_id from (select scores.score_id,scores.score,scores.player_id,scores.tournament_machine_id,scores.tournament_id,row_number() over (partition by scores.player_id, scores.tournament_machine_id, scores.tournament_id order by score desc) as p from scores,tournament_machines where scores.tournament_id=%s and scores.tournament_machine_id=tournament_machines.tournament_machine_id and tournament_machines.removed=false) as sub where p=1) as sub_two) as sub_three order by player_id) as sub_four where row <= %s group by player_id,tournament_id" % (tournament_id, signifigant_scores)       
     return query
 
 def getTournamentMachineResultsQuery(tournament_id=None, tournament_machine_id=None):
@@ -116,9 +117,9 @@ def test_tournament_results(event_id, tournament_id):
         players_dict[player.player_id]=player
     for tournament_machine in tournament_machines:
         tournament_machines_dict[tournament_machine.tournament_machine_id]=to_dict(tournament_machine)
-    
+        print tournament_machines_dict[tournament_machine.tournament_machine_id]
 
-    query = getTournamentResultsQuery(tournament_id,4)    
+    query = getTournamentResultsQuery(tournament_id,tournament.number_of_signifigant_scores)    
     machine_query = getTournamentMachineResultsQuery(tournament_id=tournament_id)    
     results = [result for result in current_app.table_proxy.db_handle.engine.execute(query)]                        
     machine_results = [result for result in current_app.table_proxy.db_handle.engine.execute(machine_query)]                            

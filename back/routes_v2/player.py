@@ -72,7 +72,12 @@ def get_event_player_route(app,event_id,event_player_id):
     tournament_calculated_lists=[]
     if event_player:
         tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)
-        player_dict=generic.serialize_player_public(event_player,generic.PLAYER_AND_EVENTS,event_id)
+        permission = permissions.CreatePlayerPermission(event_id)    
+        if not permission.can():            
+            player_dict=generic.serialize_player_public(event_player,generic.PLAYER_AND_EVENTS,event_id)
+        else:
+            player_dict=generic.serialize_player_private(event_player,generic.PLAYER_AND_EVENTS,event_id)
+            
         for tournament in app.table_proxy.get_tournaments(event_id,exclude_metatournaments=True):
             if tournament_counts.get(tournament.tournament_id,None):
                 max_amount_allowed_for_player=tournament.number_of_unused_tickets_allowed-tournament_counts[tournament.tournament_id]['count']
@@ -86,6 +91,7 @@ def get_event_player_route(app,event_id,event_player_id):
             tournament_calculated_lists.append({'tournament_name':tournament.tournament_name,
                                                'tournament_id':tournament.tournament_id,
                                                'calculated_price_list':pruned_calculated_list})
+        player_dict['tournament_counts']=tournament_counts
         return {'data':player_dict,
                 'tournament_calculated_lists':to_dict(tournament_calculated_lists),
                 'tournament_counts':tournament_counts}

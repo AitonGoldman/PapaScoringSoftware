@@ -20,18 +20,33 @@
 <!--    <ion-icon (tap)="onReload()" style="zoom:2.0" item-end name="refresh"></ion-icon>    -->
   </div>
 
-  <ion-grid [style.width]='width' [style.margin]="'auto'" *ngIf="results != null">
-    <ion-row style='font-size:12px'>
-      <ion-col col-2 col-md-1 no-padding text-left text-nowrap>
+  <ion-grid  *ngIf="results != null">
+    <ion-row style='font-size:12px' *ngIf="platform.is('mobile')">
+      <ion-col col-2 no-padding text-left text-nowrap>
         Rank/Points
       </ion-col>
-      <ion-col col-8 col-md-5 no-padding text-center>
+      <ion-col col-8 no-padding text-center>
         Name
       </ion-col>
-      <ion-col col-2 col-md-5 no-padding text-right text-nowrap>
-        <span >Machines<span hideWhen="mobile">machines</span></span>
-      </ion-col>
+      <ion-col col-2 no-padding text-right text-nowrap>
+        <span >Machines</span>
+      </ion-col>      
     </ion-row>
+    <ion-row *ngIf="platform.is('mobile')==false">
+      <ion-col col-1 no-padding text-center text-nowrap>
+        Rank
+      </ion-col>
+      <ion-col col-1 no-padding text-center text-nowrap>
+        Points
+      </ion-col>      
+      <ion-col col-6 no-padding text-center>
+        Name
+      </ion-col>
+      <ion-col col-4 no-padding text-center text-nowrap>
+        <span >Machines</span>
+      </ion-col>      
+    </ion-row>
+    
     <ion-row>
       <ion-col>
         <hr>
@@ -43,17 +58,37 @@
           {{result.seperator_message}}
         </ion-col>
       </ng-container>
-      <ng-container *ngIf="result.seperator==false">
-      <ion-col col-2 col-md-1 no-padding text-center align-self-center>
-        {{result.rank}}<span style='font-size:8px'><p style='line-height:1px'>({{result.points}} points)</p></span>        
-      </ion-col>
-      <ion-col col-8 col-md-5 no-padding text-center align-self-center>
-        <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
-      </ion-col>
-      <ion-col col-2 col-md-5 no-padding text-center align-self-center tappable (click)="showTopThreeMachines($event,result.top_machines)">
-        <a> {{result.topMachineString}} </a>
-      </ion-col>
+      <ng-container *ngIf="result.seperator==false && platform.is('mobile')">
+        <ion-col col-2 no-padding text-center align-self-center>
+          {{result.rank}}<span style='font-size:8px'>
+            <p style='line-height:1px'>({{result.points}} points)</p></span>        
+        </ion-col>
+        <ion-col col-8 no-padding text-center align-self-center>
+          <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
+        </ion-col>
+        <ion-col col-2 no-padding text-center align-self-center tappable (click)="showTopThreeMachines($event,result.top_machines)">
+          <a> {{result.topMachineString}} </a>
+        </ion-col>
       </ng-container>
+      <ng-container *ngIf="result.seperator==false && platform.is('mobile')==false">
+        <ion-col col-1 no-padding text-center align-self-center>
+          {{result.rank}}  
+        </ion-col>
+        <ion-col col-1 no-padding text-center align-self-center>
+          {{result.points}}  
+        </ion-col>        
+        <ion-col col-6 no-padding text-center align-self-center>
+          <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
+        </ion-col>
+        <ion-col col-4 no-padding text-center align-self-center tappable>
+          <ng-container *ngFor="let topMachine of result.top_machines;index as i">
+          <a [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentId:tournamentId,tournamentName:tournamentName,tournamentMachineId:topMachine.tournament_machine_id,tournamentMachineName:topMachine.tournament_machine_name})">
+            #{{topMachine.rank}} on {{topMachine.abbreviation}}
+          </a>            
+          <span *ngIf="result.top_machines!=null && result.top_machines.length-1-i > 0"> / </span>
+          </ng-container>
+        </ion-col>
+      </ng-container>      
     </ion-row>
   </ion-grid>
 </ion-content>

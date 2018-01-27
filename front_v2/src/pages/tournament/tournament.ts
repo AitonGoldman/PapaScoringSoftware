@@ -50,6 +50,9 @@ const tournamentDescriptions={
         },'number_of_tickets_for_discount':{
             'short':'Discount Ticket Amount',
             'long':'Number of tickets to offer a discount on.'            
+        },'number_of_signifigant_scores':{
+            'short':'Number of signifigant scores',
+            'long':'Number of top scores that will be used to calculate player rankings in a tournament'            
         }         
 }
 
@@ -104,7 +107,8 @@ export class TournamentPage extends PssPageComponent {
         this.entityFields.setDependency('stripe_sku','use_stripe',true)
         this.entityFields.setField('discount_stripe_sku','text',false,true, tournamentDescriptions['discount_stripe_sku']);
         this.entityFields.setDependency('discount_stripe_sku','use_stripe',true)        
-
+        this.entityFields.setField('number_of_signifigant_scores','number',false,true, tournamentDescriptions['number_of_signifigant_scores']);
+        
         this.entityFieldsArray=this.entityFields.getFieldsArray(this.advanced);
         
         if (this.actionType=="edit"){

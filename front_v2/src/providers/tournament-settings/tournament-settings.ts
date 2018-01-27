@@ -29,7 +29,7 @@ export class TournamentSettingsProvider {
             } else {
                 return false;
             }
-        })
+        })[0]
     }
  
 }

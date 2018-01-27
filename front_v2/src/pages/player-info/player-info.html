@@ -52,10 +52,17 @@
     <ion-item text-center no-lines>
       {{selectedPlayer.player_id_for_event}}
     </ion-item>
+    <ion-item-divider text-center color="light" *ngIf="selectedPlayer.pin!=null">
+      Player Pin
+    </ion-item-divider>
+    <ion-item text-center no-lines *ngIf="selectedPlayer.pin!=null">
+      {{selectedPlayer.pin}}
+    </ion-item>    
     <ion-item-divider text-center color="light">
       Available Tickets
     </ion-item-divider>
   </ion-list>
+  
   <ion-grid *ngIf="notFoundMessage==null && selectedPlayer!=null">
     <ion-row>
       <ng-container *ngFor="let ticketCount of ticketCounts;index as i; even as e">
@@ -68,24 +75,32 @@
         
       </ng-container>
     </ion-row>
+    <ion-row *ngIf="ticketCounts==null || ticketCounts.length==0" margin-top>
+      <ion-col text-center >
+        No tickets available.
+      </ion-col>
+    </ion-row>
   </ion-grid>
-    <ion-item-divider text-center color="light" *ngIf="notFoundMessage==null && selectedPlayer!=null">
-      Best Scores
-    </ion-item-divider>
-  <ion-grid *ngIf="notFoundMessage==null && selectedPlayer!=null" no-margin no-padding>
-    <ng-container *ngFor='let result of results'>
+  <ion-item-divider text-center color="light" *ngIf="notFoundMessage==null && selectedPlayer!=null && infoOnly==false">
+      Scores
+  </ion-item-divider>
+  <ion-grid *ngIf="notFoundMessage==null && selectedPlayer!=null && infoOnly==false" no-padding>
+    <div *ngIf="results==null || results.length==0" text-center margin-top>
+      No games have been played.
+    </div>
+    <ng-container *ngFor='let result of results;index as i;'>
+      <ion-row margin-bottom margin-top *ngIf="i!=0">
+      </ion-row>
       <ion-row margin-top margin-bottom>
         <ion-col text-center>
-          <ion-chip>
-            <ion-label>{{result.tournament_name}}</ion-label>
-          </ion-chip>
-          <br>
+          <a [navPush]="'ResultsTournamentPage'" [navParams]="buildNavParams({tournamentId:result.tournament_id,tournamentName:result.tournament_name})"><b>{{result.tournament_name}}</b></a>
+          <hr style='width:50%;height:2px'/>
           <i>{{result.rank}}{{nth(result.rank)}}</i>
         </ion-col>
       </ion-row>
     <ion-row>
-      <ion-col col-12 text-center style="background-color:grey">
-        Machine Scores
+      <ion-col col-12 text-center style="background-color:#FFFFCC" >
+        Signifigant Machine Scores
       </ion-col>
       <ion-col col-5 text-left>
         <u>Machine</u>
@@ -98,11 +113,11 @@
       </ion-col>      
     </ion-row>
     <ion-row *ngFor='let top_machine of result.top_machines;index as i'>
-      <ion-col col-12 text-center *ngIf="i==3" style="background-color:grey">
-        Not signifigant scores
+      <ion-col col-12 text-center *ngIf="i==tournamentSettings.getTournament(result.tournament_id).number_of_signifigant_scores" style="background-color:#FFFFCC">
+        Non Signifigant Scores
       </ion-col>
       <ion-col col-5 text-left>
-          {{top_machine.tournament_machine_name}} 
+          <a [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentMachineId:top_machine.tournament_machine_id,tournamentMachineName:top_machine.tournament_machine_name,tournamentId:result.tournament_id,tournamentName:result.tournament_name})">{{top_machine.tournament_machine_name}}</a>
       </ion-col>
       <ion-col col-2 text-center>
         {{top_machine.rank}} 

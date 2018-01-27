@@ -33,10 +33,10 @@
      <!-- <ion-col col-2 col-md-1 no-padding text-center style='white-space: nowrap;'> -->
      <!--    Points -->
      <!--  </ion-col> -->
-      <ion-col [attr.col-5]="maxScore>bigMaxScore?true:null" [attr.col-7]="maxScore<smallMaxScore?true:null" [attr.col-6]="maxScore>smallMaxScore && maxScore < bigMaxScore?true:null" col-md-5 no-padding text-center>
+      <ion-col col-5 col-md-5 no-padding text-center>
         Name
       </ion-col>
-      <ion-col [attr.col-5]="maxScore>bigMaxScore?true:null" [attr.col-3]="maxScore<smallMaxScore?true:null" [attr.col-4]="maxScore>smallMaxScore && maxScore < bigMaxScore?true:null" col-md-5 no-padding text-center>
+      <ion-col col-5 no-padding text-right>
         Score
       </ion-col>
     </ion-row>
@@ -45,17 +45,17 @@
         <hr>
       </ion-col>
     </ion-row>
-    <ion-row text-nowrap nowrap *ngFor="let result of results" margin-bottom>
+    <ion-row text-nowrap nowrap *ngFor="let result of results;index as i; even as e;" [style.background-color]="e==true?'#EEEEEE':null">
       <ion-col col-2 col-md-1 no-padding text-center align-self-center>
         {{result.rank}}<span style='font-size:8px'><p style='line-height:1px'> ({{result.points}} points)</p></span>
       </ion-col>
-      <!-- <ion-col col-2 col-md-1 no-padding text-center> -->
-      <!--   {{result.points}} -->
-      <!-- </ion-col>    -->
-      <ion-col align-self-center [attr.col-5]="maxScore>bigMaxScore?true:null" [attr.col-7]="maxScore<smallMaxScore?true:null" [attr.col-6]="maxScore>smallMaxScore && maxScore < bigMaxScore?true:null" col-md-5 no-padding text-center>
-        {{result.player_name}}
+      <ion-col padding-left col-5 align-self-center col-md-5 text-center>
+          <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name}}</a>
       </ion-col>
-      <ion-col align-self-center [attr.col-5]="maxScore>bigMaxScore?true:null" [attr.col-3]="maxScore<smallMaxScore?true:null" [attr.col-4]="maxScore>smallMaxScore && maxScore < bigMaxScore?true:null" col-md-5 no-padding text-center>
+      <ion-col>
+        &nbsp;
+      </ion-col>
+      <ion-col align-self-center col-auto col-md-5 no-padding text-right> 
         {{result.score | number}}
       </ion-col>
     </ion-row>

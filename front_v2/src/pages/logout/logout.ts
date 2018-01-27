@@ -23,12 +23,17 @@ export class LogoutPage extends PssPageComponent {
     
     ionViewWillLoad() {
         this.eventAuth.logout(this.eventId);
-        let success_title_string='Logged out!';        
+        let success_title_string='Logged out!';
+        let targetTabIndex=null;
+        if(this.platform.is('mobile')){
+            console.log('going mobile')
+            targetTabIndex=0;
+        }                    
         this.successSummary = new SuccessSummary(success_title_string,null,null);            
         this.successButtons = [new SuccessButton('Go Home',
                                                  this.getHomePageString(this.eventId),
                                                  this.buildNavParams({}),
-                                                 0)];            
+                                                 targetTabIndex)];            
         
     }
 

@@ -40,7 +40,9 @@
       <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderMachineItems($event)">      
         <button (tap)="publishQuickLinksPlayerPush('ResultsMachinePage',buildNavParams({tournamentMachineId:item.tournamentMachineId,tournamentMachineName:item.tournamentMachineName,tournamentId:item.tournamentId,tournamentName:item.tournamentName}))" *ngFor="let item of tournamentMachines"  ion-item detail-push>{{item.tournamentMachineName}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
       </ion-item-group>
-      
+      <ion-item *ngIf="tournamentMachines==null || tournamentMachines.length==0">
+        No Favorite Machines
+      </ion-item>
   </ion-list>
 
 </ion-content>

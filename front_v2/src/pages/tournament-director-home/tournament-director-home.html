@@ -29,7 +29,7 @@
     <ion-item no-lines [navPush]="'ChangePlayerPicturePage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="camera"></ion-icon> Take Player Picture
     </ion-item>    
-    <ion-item no-lines [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({})">
+    <ion-item no-lines [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({infoOnly:true})">
       <ion-icon item-end name="person"></ion-icon> Player Info
     </ion-item>    
     <ion-item no-lines [navPush]="'ScorekeeperTournamentSelectPage'" [navParams]="buildNavParams({})">

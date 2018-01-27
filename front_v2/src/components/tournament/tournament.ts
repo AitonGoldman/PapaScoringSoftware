@@ -26,6 +26,9 @@ const tournamentDescriptions={
         },'number_of_qualifiers':{
             'short':'Top X players will qualify for finals',
             'long':'Top X players will qualify for finals'
+        },'number_of_signifigant_scores':{
+            'short':'Number of signifigant scores',
+            'long':'Number of top scores that will be used to calculate player rankings in a tournament'            
         }        
 }
 
@@ -64,11 +67,13 @@ export class TournamentComponent extends PssPageComponent{
 
         this.entityFields.setField('tournament_name','text',true,false, tournamentDescriptions['tournament_name']);
         this.entityFields.setField('multi_division_tournament','boolean',true,false, tournamentDescriptions['multi_division_tournament']);
-        this.entityFields.setField('division_count','text',true,false, tournamentDescriptions['division_count']);
+        this.entityFields.setField('division_count','number',true,false, tournamentDescriptions['division_count']);
         this.entityFields.setDependency('division_count','multi_division_tournament',true)
         this.entityFields.setField('queuing','boolean',true,false, tournamentDescriptions['queuing']);
         this.entityFields.setField('manually_set_price','text',true,false, tournamentDescriptions['manually_set_price']);
-        this.entityFields.setField('number_of_qualifiers','text',true,false, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFields.setField('number_of_qualifiers','number',true,false, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFields.setField('number_of_signifigant_scores','number',false,true, tournamentDescriptions['number_of_signifigant_scores']);
+
         this.entityFieldsArray=this.entityFields.getFieldsArray(this.advanced);
         
         if (this.actionType=="edit"){

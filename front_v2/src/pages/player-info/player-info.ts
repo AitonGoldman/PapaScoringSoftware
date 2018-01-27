@@ -30,6 +30,7 @@ export class PlayerInfoPage extends AutoCompleteComponent {
     playerId:number=null;
     hideAutoComplete:boolean=false;
     playerLoadStatus:string='notStarted';
+    infoOnly:boolean=false;
 //    @ViewChild('searchbar')  searchbar: any;    
     singleUser:any=null;
     displayExistingUserNotFound:boolean = false;   
@@ -93,9 +94,12 @@ export class PlayerInfoPage extends AutoCompleteComponent {
       
         let player_id_for_event = this.navParams.get('player_id_for_event');
         let playerId = this.navParams.get('playerId');
-
+        this.infoOnly = this.navParams.get('infoOnly')!=null;
+            
         console.log('got params for player info...')
         console.log(playerId)
+        console.log("got tournament from settings...");
+        console.log(this.tournamentSettings.getTournament(1));
 
         if(player_id_for_event==null && playerId==null){          
             return;            
@@ -103,8 +107,6 @@ export class PlayerInfoPage extends AutoCompleteComponent {
         this.hideAutoComplete=true;
         this.player_id_for_event=player_id_for_event
         this.playerId=playerId
-        
-        //this.tournamentSettings.getTournament(result.tournament_id)        
         if(player_id_for_event!=null){
             this.pssApi.getEventPlayerResults(this.eventId,this.player_id_for_event)
                 .subscribe(this.generateGetEventPlayerProcessor())                                                          

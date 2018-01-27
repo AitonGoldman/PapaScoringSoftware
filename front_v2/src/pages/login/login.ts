@@ -48,10 +48,12 @@ export class LoginPage extends PssPageComponent {
             }            
             if(successButton==null){
                 targetPage=this.getHomePageString();
+                console.log('targetPage is...')
+                console.log(this.buildNavParams({}))
                 successButton = new SuccessButton('Go Home',
-                                                      targetPage,
-                                                      this.buildNavParams({}),
-                                                      targetTabIndex);
+                                                  targetPage,
+                                                  this.buildNavParams({}),
+                                                  targetTabIndex);
                 
             }
             //            this.appCtrl.getRootNav().push("SuccessPage",

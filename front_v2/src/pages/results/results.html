@@ -13,6 +13,15 @@
 <ion-content padding class="card-background-page">
 <ion-grid>
   <ion-row>
+    <ion-col tappable col-12 col-md-4 col-lg-3 col-xl-2 [navPush]='"PlayerInfoPage"' [navParams]="buildNavParams({})">
+      <ion-card >
+        <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="'/assets/imgs/dummy_tournament_small.jpeg'"/>
+        <img [style.height]='"117px"' [style.width]='"225px"' hideWhen='mobile' [src]="'/assets/imgs/dummy_tournament_large.jpeg'"/>
+
+      <div class="card-title">Player Results</div>
+      </ion-card>      
+    </ion-col>
+
     <ng-container *ngFor="let tournament of tournaments">
     <ion-col tappable col-12 col-md-4 col-lg-3 col-xl-2 [navPush]='"ResultsTournamentPage"' [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
       <ion-card >

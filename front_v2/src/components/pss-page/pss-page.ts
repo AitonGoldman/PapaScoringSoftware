@@ -122,12 +122,16 @@ export class PssPageComponent {
             // this.navCtrl.parent.select(tabIndex).then(()=>{
             //     currentTab.popToRoot({animate:false});
             // });
-            this.navCtrl.parent.getByIndex(tabIndex).popToRoot({}).then(()=>{
+
+            //this.navCtrl.parent.getByIndex(tabIndex).popToRoot({}).then(()=>{
                 let currentTab = this.navCtrl.parent.getSelected();
                 this.navCtrl.parent.select(tabIndex).then(()=>{
-                    currentTab.popToRoot({animate:false});
+                    this.navCtrl.parent.getByIndex(tabIndex).push(pageName,this.buildNavParams(navParams)).then((data)=>{
+                        currentTab.popToRoot({animate:false});
+                    })
+                    
                 });
-            });
+            //});
             
             return;
         }
@@ -167,14 +171,18 @@ export class PssPageComponent {
             //this['selectedPlayer']=result.data.data;
             this['selectedPlayer']=result.data;
             
-            this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);
+            //this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);
+            console.log('selectedplayer thing...');
+            console.log(this['selectedPlayer']);
+            this['ticketCounts']=this.generateListFromObj(result.data.tournament_counts);
             //this['ticketCounts']=[]
-            this['ticketCountsDict']=this['selectedPlayer'].tournament_counts;
+            //this['ticketCountsDict']=this['selectedPlayer'].tournament_counts;
+            this['ticketCountsDict']=result.data.tournament_counts;
 
-            if (this['selectedPlayer'].tournament_calculated_lists!=null){
-                this['ticketPriceLists']=this['selectedPlayer'].tournament_calculated_lists;
+            if (result.tournament_calculated_lists!=null){
+                this['ticketPriceLists']=result.tournament_calculated_lists;
             }
-            this['results']=this['selectedPlayer'].values
+            this['results']=result.data.values
             console.log('multi match......');
             console.log(this['results']);
         }

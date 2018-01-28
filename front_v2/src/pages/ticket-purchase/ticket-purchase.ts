@@ -14,7 +14,7 @@ declare var StripeCheckout: any;
  */
 
 @IonicPage({
-    segment:'TicketPurchasePage/:eventId'
+    segment:'TicketPurchasePage/:eventId/:eventName'
 })
 @Component({
   selector: 'page-ticket-purchase',

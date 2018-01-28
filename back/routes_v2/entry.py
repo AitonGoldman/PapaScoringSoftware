@@ -33,6 +33,9 @@ def record_score_route(input_data,event_id,app,current_user):
 def start_player_on_machine_route(input_data,event_id, app, current_user):
     player = app.table_proxy.get_player(event_id,player_id=input_data['player_id'])
     tournament_machine = app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+    tournament = app.table_proxy.get_tournament_by_tournament_id(tournament_machine.tournament_id)
+    if tournament.active is False:
+        raise BadRequest('Can not start a new game because tournament is no longer active')
     if tournament_machine.player_id:
         raise BadRequest('Tried to start game when someone is already playing!')
     if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
@@ -50,6 +53,10 @@ def start_player_on_machine_route(input_data,event_id, app, current_user):
 
 def start_player_on_machine_or_queue_route(input_data,event_id, app, current_user):
     tournament_machine = app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+    tournament = app.table_proxy.get_tournament_by_tournament_id(tournament_machine.tournament_id)
+    if tournament.active is False:
+        raise BadRequest('Can not start a new game because tournament is no longer active')
+
     if tournament_machine.player_id is None and current_app.table_proxy.get_sorted_queue_for_tournament_machine(tournament_machine)[0].player_id is None:        
         print "starting on machine...."
         start_player_on_machine_route(input_data,event_id, app, current_user)

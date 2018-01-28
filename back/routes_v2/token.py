@@ -162,12 +162,17 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
         for tournament_count in input_data.get('tournament_token_counts',[]):            
             if int(tournament_count['tournament_id'])==tournament.tournament_id:
                 if int(tournament_count.get('token_count',0)) > 0:
+                    if tournament.allow_phone_purchases is False:
+                        raise BadRequest('Ticket purchases by players have been disabled.  Sorry.')
                     tournament_count['tournament']=tournament
                     list_of_tournament_tokens.append(tournament_count)    
     for meta_tournament in app.table_proxy.get_meta_tournaments(event_id):        
         for meta_tournament_count in input_data.get('meta_tournament_token_counts',[]):            
             if int(meta_tournament_count['meta_tournament_id'])==meta_tournament.meta_tournament_id:                
                 if int(meta_tournament_count.get('token_count',0)) > 0:
+                    if meta_tournament.allow_phone_purchases is False:
+                        raise BadRequest('Ticket purchases by players have been disabled.  Sorry.')
+
                     meta_tournament_count['meta_tournament']=meta_tournament
                     list_of_meta_tournament_tokens.append(meta_tournament_count)
     if len(list_of_tournament_tokens)==0 and len(list_of_meta_tournament_tokens)==0:

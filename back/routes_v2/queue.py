@@ -108,6 +108,9 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
         raise BadRequest('Player is already playing a game')
     
     tournament=app.table_proxy.get_tournament_by_tournament_id(tournament_machine.tournament_id)
+    if tournament.active is False:
+        raise BadRequest('Can not queue because tournament is no longer active')
+
     #if tournament.meta_tournament_id:
     #    meta_tournament=app.table_proxy.get_meta_tournament_by_id(tournament.meta_tournament_id)
     # tournament_counts,meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,player)

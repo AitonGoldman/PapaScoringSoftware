@@ -53,7 +53,10 @@ const tournamentDescriptions={
         },'number_of_signifigant_scores':{
             'short':'Number of signifigant scores',
             'long':'Number of top scores that will be used to calculate player rankings in a tournament'            
-        }         
+        },'allow_phone_purchases':{
+            'short':'Allow phone purchases',
+            'long':'If disabled, players will be prevented from buying tickets on their phones'            
+        }          
 }
 
 
@@ -103,6 +106,8 @@ export class TournamentPage extends PssPageComponent {
         this.entityFields.setField('number_of_qualifiers','number',true,false, tournamentDescriptions['number_of_qualifiers']);
 
         this.entityFields.setField('use_stripe','boolean',false,true, tournamentDescriptions['use_stripe']);
+        this.entityFields.setField('allow_phone_purchases','boolean',false,true, tournamentDescriptions['allow_phone_purchases']);
+
         this.entityFields.setField('stripe_sku','text',false,true, tournamentDescriptions['stripe_sku']);
         this.entityFields.setDependency('stripe_sku','use_stripe',true)
         this.entityFields.setField('discount_stripe_sku','text',false,true, tournamentDescriptions['discount_stripe_sku']);

@@ -128,6 +128,10 @@ export class PssPageComponent {
                 this.navCtrl.parent.select(tabIndex).then(()=>{
                     this.navCtrl.parent.getByIndex(tabIndex).push(pageName,this.buildNavParams(navParams)).then((data)=>{
                         this.navCtrl.parent.getByIndex(tabIndex).last().showBackButton(false);
+                        let viewsLength = this.navCtrl.parent.getByIndex(tabIndex).getViews().length
+                        if(viewsLength>1){
+                            this.navCtrl.parent.getByIndex(tabIndex).remove(0,viewsLength-1);
+                        }
                         currentTab.popToRoot({animate:false});
                     })                    
                 });

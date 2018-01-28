@@ -19,6 +19,11 @@ def generate_meta_tournaments_class(db_handle):
         ifpa_rank_restriction=db_handle.Column(db_handle.Integer,default=0)
         team_tournament=db_handle.Column(db_handle.Boolean,default=False)
         event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
+        allow_desk_purchases = db_handle.Column(db_handle.Boolean,default=True)
+        allow_phone_purchases = db_handle.Column(db_handle.Boolean,default=True)
+        has_pic=db_handle.Column(db_handle.Boolean,default=False)
+        img_url=db_handle.Column(db_handle.String(100))
+        
     return MetaTournaments
 
 

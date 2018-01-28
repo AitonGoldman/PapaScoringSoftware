@@ -113,6 +113,9 @@ def serialize_event_players_info_public(model,type=None):
     event_info['event_id']=model.event_id
     return event_info
 
+def serialize_score(model,type=None):
+    return serializer_v2([]).serialize_model(model,show_foreign_keys=True)
+    
 def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
     tournament_machine_dict=serializer_v2(TOURNAMENT_MACHINE_PRIVATE_FIELDS).serialize_model(model,show_foreign_keys=True)
     if type==TOURNAMENT_MACHINE_ONLY:

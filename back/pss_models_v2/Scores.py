@@ -5,6 +5,7 @@ def generate_scores_class(db_handle):
         score_id = db_handle.Column(db_handle.Integer, primary_key=True)
         
         score = db_handle.Column(db_handle.BIGINT)            
+        voided = db_handle.Column(db_handle.Boolean,default=False)            
         
         entry_id = db_handle.Column(db_handle.Integer, db_handle.ForeignKey(
             'entries.entry_id'

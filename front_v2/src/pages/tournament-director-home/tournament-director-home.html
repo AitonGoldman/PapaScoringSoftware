@@ -49,7 +49,11 @@
       <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Create Tournament 
 
       <!--<button item-start ion-button [navPush]="'CreateEventPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})" >Create Event</button>-->
-    </ion-item>    
+    </ion-item>
+    <ion-item no-lines [navPush]="'AdminVoidTokensPage'" [navParams]="buildNavParams({})">
+      <ion-icon item-end name="person-add"></ion-icon>  Void Unused Tickets
+    </ion-item>
+    
   </ion-list>  
 
   <!--  <button ion-button [navPush]="'CreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create',targetEventId:1,eventName:'poop'}" >Create Tournament</button> -->

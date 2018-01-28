@@ -68,6 +68,7 @@ export class PssApiProvider {
             return result_observable;            
         }
     }    
+    adminVoidTicket = this.generate_api_call('adminVoidTicket',this.basePssUrl+"/:arg/admin/token/:arg/:arg/:arg",'delete');
     addTournamentMachine = this.generate_api_call('addTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'post');
     addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');
     addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');

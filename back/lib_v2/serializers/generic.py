@@ -18,6 +18,7 @@ TOURNAMENT_MACHINE_AND_QUEUES='tournament_machines_and_queues'
 TOURNAMENT_MACHINE_ONLY='tournament_machine_only'
 TOURNAMENT_MACHINE_AND_PLAYER='tournament_machine_and_player'
 TOURNAMENT_MACHINE_AND_PLAYER_AND_EVENTS='tournament_machine_and_player_events'
+TOURNAMENT_MACHINE_AND_QUEUES_AND_PLAYER='tournament_machine_and_queues_and_player'
 
 QUEUE_ONLY='queue_only'
 QUEUE_AND_PLAYER='queue_and_player'
@@ -131,6 +132,13 @@ def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
     if type==TOURNAMENT_MACHINE_AND_QUEUES:
         tournament_machine_dict['queues']=[serialize_queue(queue,QUEUE_AND_PLAYER) for queue in model.queues]
         tournament_machine_dict['queues'].sort(key=lambda x: x['position'])
+        return tournament_machine_dict
+    
+    if type==TOURNAMENT_MACHINE_AND_QUEUES_AND_PLAYER:
+        tournament_machine_dict['queues']=[serialize_queue(queue,QUEUE_AND_PLAYER) for queue in model.queues]
+        tournament_machine_dict['queues'].sort(key=lambda x: x['position'])
+        if model.player_id:
+            tournament_machine_dict['player']=serialize_player_public(model.player,PLAYER_AND_EVENTS)        
 
         return tournament_machine_dict
     

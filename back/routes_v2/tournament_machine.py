@@ -6,6 +6,7 @@ from lib_v2.serializers import generic
 from flask_restless.helpers import to_dict
 import json
 from shutil import copyfile
+from routes_v2.player import get_event_player_route
 
 def handle_img_upload(input_data):
     print "in handle img upload..."    
@@ -87,6 +88,18 @@ def get_tournament_machines_and_machines(event_id,tournament_id):
     return jsonify({'data':{'machines_list':machines_list,'tournament_machines_list':tournament_machines_list}})
 
 
+@blueprints.test_blueprint.route('/<int:event_id>/<int:tournament_id>/tournament_machine/<int:tournament_machine_id>',methods=['GET'])
+def get_tournament_machine(event_id,tournament_id,tournament_machine_id):
+    queues = current_app.table_proxy.get_all_queues(event_id)    
+    tournament_machine = current_app.table_proxy.get_tournament_machine_by_id(tournament_machine_id)
+    tournament_machine_dict = generic.serialize_tournament_machine_public(tournament_machine,generic.TOURNAMENT_MACHINE_AND_QUEUES_AND_PLAYER)    
+    if tournament_machine_dict.get('player_id',None):
+        player = current_app.table_proxy.get_player(event_id,player_id=tournament_machine_dict['player_id'])
+        event_player_info = get_event_player_route(current_app,event_id,player.event_info[0].player_id_for_event)
+        tournament_machine_dict['tournament_counts']=event_player_info['tournament_counts']        
+    return jsonify({'data':tournament_machine_dict})
+    
+    
 @blueprints.test_blueprint.route('/<int:event_id>/<int:tournament_id>/tournament_machines',methods=['GET'])
 def get_tournament_machines(event_id,tournament_id):                    
     tournament_machines_list=[]    

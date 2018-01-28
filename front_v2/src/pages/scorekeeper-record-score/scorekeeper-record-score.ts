@@ -22,9 +22,10 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
     tournamentId:any=null;
     tournamentMachine:any=null;
     tournamentMachineId:any=null;
+    tournamentCounts:any=null;
     score:any=null;
     player_id_for_event:any=null;
-
+    recordScoreSuccessButtons=['RE_ADD','RE_QUEUE','DEAL_WITH_PERSON_IN_QUEUE', 'DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER','GO_HOME','ADD_OR_QUEUE']
     generateSubmitScoreProcessor(successSummary){
         return (result) => {
             if(result == null){
@@ -38,9 +39,9 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
             if(result.tournament_counts!=0){
                 successSummary.secondLine="Player has "+result.tournament_counts+" tickets left.";
             }            
-            let recordScoreSuccessButtons=['RE_ADD','RE_QUEUE','DEAL_WITH_PERSON_IN_QUEUE', 'DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER','GO_HOME','ADD_OR_QUEUE']
+            
             if(result.tournament_counts==0){
-                recordScoreSuccessButtons=recordScoreSuccessButtons.filter((buttonLabel)=>{
+                this.recordScoreSuccessButtons=this.recordScoreSuccessButtons.filter((buttonLabel)=>{
                     if(buttonLabel=="RE_ADD" || buttonLabel=="RE_QUEUE" || buttonLabel=="DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER" || buttonLabel == "ADD_OR_QUEUE"){
                         return false;
                     } else {
@@ -49,7 +50,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
                 })
             }
             if(tournamentMachine.queues[0].player==null){
-                recordScoreSuccessButtons=recordScoreSuccessButtons.filter((buttonLabel)=>{
+                this.recordScoreSuccessButtons=this.recordScoreSuccessButtons.filter((buttonLabel)=>{
                     if(buttonLabel=="RE_QUEUE" || buttonLabel=="DEAL_WITH_PERSON_IN_QUEUE"|| buttonLabel=="DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER"){
                         return false;
                     } else {
@@ -58,7 +59,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
                 })
             }
             if(tournamentMachine.queues[0].player!=null){
-                recordScoreSuccessButtons=recordScoreSuccessButtons.filter((buttonLabel)=>{
+                this.recordScoreSuccessButtons=this.recordScoreSuccessButtons.filter((buttonLabel)=>{
                     if(buttonLabel=="RE_ADD" || buttonLabel=="GO_HOME" || buttonLabel=="ADD_OR_QUEUE"){
                         return false;
                     }
@@ -78,14 +79,14 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
             this.navCtrl.push("RecordScoreSuccessPage",            
                                this.buildNavParams({'successSummary':successSummary,
                                                     'successButtons':[],
-                                                    'recordScoreSuccessButtons':recordScoreSuccessButtons,
+                                                    'recordScoreSuccessButtons':this.recordScoreSuccessButtons,
                                                     'player':this.tournamentMachine.player,
                                                     'tournamentMachine':tournamentMachine,
                                                     'tournamentId':this.tournamentId}));
         };
     }
 
-    voidTicket(){
+    voidTicket(type){
         let actionSheet = this.actionSheetCtrl.create({
             title: 'Are you SURE you want to VOID the ticket?',
             buttons: [
@@ -94,7 +95,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
                 role: 'destructive',
                 handler: () => {
                     //this.onRemoveConfirmed(machine);
-                    this.onVoid();
+                    this.onVoid(type);
                     console.log('Destructive clicked');
                 }
             },
@@ -115,6 +116,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
         this.tournamentId=this.navParams.get('tournamentId');
         this.tournamentMachineId=this.navParams.get('tournamentMachineId');
         this.tournamentMachine=this.navParams.get('tournamentMachine');
+        this.tournamentCounts=this.navParams.get('tournamentCounts');
         if(this.tournamentMachine.player!=null && this.tournamentMachine.player.events != null){
             console.log('logging eventInfo');
             this.player_id_for_event = this.tournamentMachine.player.events.filter((eventInfo)=>{
@@ -129,14 +131,46 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
         console.log('hi there');
         this.score = this.score.replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     }
-    onVoid(){
-        let success_title_string='Ticket Voided!';
+    onVoid(type){
+        let success_title_string='Ticket Voided';
         let success_line_one_string='Ticket for '+this.tournamentMachine.player.player_full_name + " has been voided on "+this.tournamentMachine.tournament_machine_name;        
-            
-        let successSummary = new SuccessSummary(success_title_string,success_line_one_string, null);            
+        let success_line_two_string='';
 
-        this.pssApi.voidTicket({tournament_id:this.tournamentId,tournament_machine_id:this.tournamentMachineId,player_id:this.tournamentMachine.player_id },this.eventId)            
-            .subscribe(this.generateSubmitScoreProcessor(successSummary))        
+        if(type=="void-requeue"){
+            success_title_string=success_title_string+' And Player ReQueue on machine'
+            success_line_one_string=success_line_one_string+'and requeued.';
+            //let recordScoreSuccessButtons=['RE_ADD','RE_QUEUE','DEAL_WITH_PERSON_IN_QUEUE', 'DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER','GO_HOME','ADD_OR_QUEUE']
+            this.recordScoreSuccessButtons = this.recordScoreSuccessButtons.filter((buttonLabel)=>{
+                if(buttonLabel=="RE_ADD" || buttonLabel=="RE_QUEUE" || buttonLabel=="ADD_OR_QUEUE"){
+                    return false;
+                } else {
+                    return true;
+                }
+            })
+        }
+        if(type=="void-readd"){
+            success_title_string=success_title_string+' And Player ReAdded to machine'            
+            success_line_one_string=success_line_one_string+' and readded.';            
+            this.recordScoreSuccessButtons = this.recordScoreSuccessButtons.filter((buttonLabel)=>{
+                if(buttonLabel=="RE_ADD" || buttonLabel=="RE_QUEUE"  || buttonLabel=="ADD_OR_QUEUE"){
+                    return false;
+                } else {
+                    return true;
+                }
+            })
+            
+        }
+
+        let successSummary = new SuccessSummary(success_title_string,success_line_one_string, success_line_two_string);            
+        if(type=="void"){
+            this.pssApi.voidTicket({tournament_id:this.tournamentId,tournament_machine_id:this.tournamentMachineId,player_id:this.tournamentMachine.player_id },this.eventId)
+                .subscribe(this.generateSubmitScoreProcessor(successSummary))        
+
+        }
+        if(type!="void"){
+            this.pssApi.voidTicketAndReaddOrQueue({tournament_id:this.tournamentId,tournament_machine_id:this.tournamentMachineId,player_id:this.tournamentMachine.player_id },this.eventId)
+                .subscribe(this.generateSubmitScoreProcessor(successSummary))        
+        }
     }
     
     onSubmit(){

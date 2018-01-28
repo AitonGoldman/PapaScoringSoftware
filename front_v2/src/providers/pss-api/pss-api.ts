@@ -106,6 +106,7 @@ export class PssApiProvider {
     
     getAllTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines/machines",'get');
     getTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines",'get');
+    getTournamentMachine = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machine/:arg",'get');
     getTournamentResults = this.generate_api_call('getTournamentResults',this.basePssUrl+"/:arg/test_tournament_results/:arg",'get');
     getTournamentMachineResults = this.generate_api_call('getTournamentMachineResults',this.basePssUrl+"/:arg/test_tournament_machine_results/:arg/:arg",'get');
 
@@ -135,6 +136,8 @@ export class PssApiProvider {
 
     purchaseTicket = this.generate_api_call('purchaseTicket',this.basePssUrl+"/:arg/token",'post');
     voidTicket = this.generate_api_call('purchaseTicket',this.basePssUrl+"/:arg/entry",'delete');
+    voidTicketAndReaddOrQueue = this.generate_api_call('deleteTicketAndReaddOrQueue',this.basePssUrl+"/:arg/entry/player",'delete');
+
     private handleError<T> (operation = 'operation', result?: T) {
     //private handleError<T> (operation = 'operation') {            
         let debouncer=false;

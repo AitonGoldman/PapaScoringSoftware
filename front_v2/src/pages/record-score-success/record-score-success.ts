@@ -34,8 +34,7 @@ export class RecordScoreSuccessPage extends SuccessPage {
         this.tournamentMachine=this.navParams.get('tournamentMachine');
         this.tournamentId=this.navParams.get('tournamentId');        
         this.player=this.navParams.get('player');
-        console.log(this.recordScoreSuccess)
-        console.log(this.recordScoreSuccessButtons)
+        
     }
     generatePlacePlayerOnMachineAgainProcessor(message){
         return (result)=>{

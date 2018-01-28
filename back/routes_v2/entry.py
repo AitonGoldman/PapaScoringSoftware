@@ -50,9 +50,11 @@ def start_player_on_machine_route(input_data,event_id, app, current_user):
 
 def start_player_on_machine_or_queue_route(input_data,event_id, app, current_user):
     tournament_machine = app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
-    if tournament_machine.player_id is None:
+    if tournament_machine.player_id is None and current_app.table_proxy.get_sorted_queue_for_tournament_machine(tournament_machine)[0].player_id is None:        
+        print "starting on machine...."
         start_player_on_machine_route(input_data,event_id, app, current_user)
     else:
+        print "queueing...."
         add_player_to_tournament_machine_queue_route(request,app,event_id,current_user)
         
     
@@ -97,7 +99,7 @@ def start_player_on_machine(event_id):
             start_player_on_machine_from_queue_route(input_data,event_id,current_app,current_user)
             pass
         if input_data['action'] == 'start_or_queue':
-            start_player_on_machine_or_queue_route(input_data,event_id,current_app,current_user)            
+            start_player_on_machine_or_queue_route(input_data,event_id,current_app,current_user)
             pass
     else:
         raise Unauthorized('You are not authorized to start a player on a machine')
@@ -134,6 +136,30 @@ def change_entry(event_id):
     tournament_machine_dict=generic.serialize_tournament_machine_public(tournament_machine,generic.TOURNAMENT_MACHINE_AND_QUEUES)                
     return jsonify({'data':tournament_machine_dict,
                     'tournament_counts':tournament_counts})
+
+
+@blueprints.test_blueprint.route('/<int:event_id>/entry/player',methods=['DELETE'])
+def void_ticket_and_requeue_or_readd(event_id):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('No info in request')        
+    scorekeeper_permission = permissions.ScorekeeperPermission(event_id)
+    if scorekeeper_permission.can():
+        void_ticket_route(input_data,event_id,current_app,current_user)
+    else:
+        raise Unauthorized('You are not authorized to void a ticket')
+    start_player_on_machine_or_queue_route(input_data,event_id,current_app,current_user)
+    current_app.table_proxy.commit_changes()
+    tournament = current_app.table_proxy.get_tournament_by_tournament_id(input_data['tournament_id'])
+    player= current_app.table_proxy.get_player(event_id, player_id=input_data['player_id'])    
+    tournament_counts = current_app.table_proxy.get_available_token_count_for_tournament(event_id,player,tournament)
+    tournament_machine = current_app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+    tournament_machine_dict=generic.serialize_tournament_machine_public(tournament_machine,generic.TOURNAMENT_MACHINE_AND_QUEUES)                
+    return jsonify({'data':tournament_machine_dict,
+                    'tournament_counts':tournament_counts})
+
+    return jsonify({})
 
 
 @blueprints.test_blueprint.route('/<int:event_id>/entry',methods=['DELETE'])

@@ -75,27 +75,20 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
         this.tournamentMachines = reorderArray(this.tournamentMachines, indexes);
     }
 
-    generateGetAllTournamentsAndMachinesAndQueuesProcessor(tournamentMachineId){
+    generateGetTournamentsMachineProcessor(tournamentMachineId){
         return (result) => {            
             if(result == null){
                 return;
-            }            
-            // let tournamentMachine=result.data.map((tournament)=>{
-            //     for(let tournamentMachine of tournament.tournament_machines){
-            //         if (tournamentMachine.tournament_machine_id==tournamentMachineId){
-            //             return tournamentMachine;
+            }                        
+            // let tournamentMachine=null;
+            // result.data.forEach((tournament, index) => {
+            //     tournament.tournament_machines.forEach((tournament_machine,machine_index)=>{
+            //         if(tournament_machine.tournament_machine_id==tournamentMachineId){
+            //             tournamentMachine=tournament_machine;
             //         }
-            //     }
-            // })[0];
-            let tournamentMachine=null;
-            result.data.forEach((tournament, index) => {
-                tournament.tournament_machines.forEach((tournament_machine,machine_index)=>{
-                    if(tournament_machine.tournament_machine_id==tournamentMachineId){
-                        tournamentMachine=tournament_machine;
-                    }
-                })
-            });
-            
+            //     })
+            // });
+            let tournamentMachine=result.data;
             let nextPageString:string = "ScorekeeperStartPlayerPage"
             if(tournamentMachine.player_id!=null){
                 nextPageString = "ScorekeeperRecordScorePage"
@@ -103,14 +96,15 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
             this.navCtrl.push(nextPageString,            
                               this.buildNavParams({tournamentId:this.tournamentId,
                                                    tournamentMachineId:tournamentMachineId,
-                                                   tournamentMachine:tournamentMachine}));                        
+                                                   tournamentMachine:tournamentMachine,
+                                                   tournamentCounts:tournamentMachine.tournament_counts}));                        
         };
     }
     
     pushToMachine(tournamentMachineId){
         console.log('push to machine id is '+tournamentMachineId)
-        this.pssApi.getAllTournamentsAndMachines(this.eventId)            
-          .subscribe(this.generateGetAllTournamentsAndMachinesAndQueuesProcessor(tournamentMachineId))
+        this.pssApi.getTournamentMachine(this.eventId,this.tournamentId,tournamentMachineId)            
+          .subscribe(this.generateGetTournamentsMachineProcessor(tournamentMachineId))
         
     }
 

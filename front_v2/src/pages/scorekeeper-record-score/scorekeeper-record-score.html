@@ -54,9 +54,16 @@
       <button ion-button [disabled]='!myForm.valid' (tap)="onSubmit()" margin padding>
         Record Score
       </button>
-      <button ion-button (tap)="voidTicket()" margin padding>
+      <button ion-button (tap)="voidTicket('void')" margin padding>
         Void Ticket
+      </button>
+      <button (tap)="voidTicket('void-readd')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player!=null">
+        Void Ticket And Requeue
       </button>      
+      <button (tap)="voidTicket('void-readd')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player==null">
+        Void Ticket And ReAdd
+      </button>      
+      
     </ion-item>
   </form>
   </div>

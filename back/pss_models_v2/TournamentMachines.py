@@ -15,5 +15,9 @@ def generate_tournament_machines_class(db_handle):
         event_id=db_handle.Column('event_id', db_handle.Integer, db_handle.ForeignKey('events.event_id'))
         #queue = db_handle.relationship('Queues')        
         img_url=db_handle.Column(db_handle.String(100))
+        total_play_time=db_handle.Column(db_handle.Integer,default=0)
+        total_number_of_players=db_handle.Column(db_handle.Integer,default=0)
+        time_of_game_start = db_handle.Column(db_handle.DateTime)
+
     return TournamentMachines
     

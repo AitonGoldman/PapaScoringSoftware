@@ -744,6 +744,7 @@ class TableProxy():
         if tokens_available is False:
             return False
         tournament_machine.player_id=player.player_id
+        tournament_machine.time_of_game_start = datetime.datetime.now()
         if commit:
             self.db_handle.session.commit()
         return True
@@ -761,6 +762,9 @@ class TableProxy():
         new_entry.player_id=tournament_machine.player_id
         new_entry.event_id=event_id
         self.db_handle.session.add(new_entry)
+        delta = datetime.datetime.now() - tournament_machine.time_of_game_start        
+        tournament_machine.total_play_time=tournament_machine.total_play_time+delta.seconds
+        tournament_machine.total_number_of_players=tournament_machine.total_number_of_players+1        
         if commit:
             self.db_handle.session.commit()
         return new_score
@@ -800,6 +804,9 @@ class TableProxy():
         token = self.get_tokens_by_tournament(event_id, player,tournament)[0]
         #self.get_tokens_by_tournament_id(player.player_id,tournament_id=tournament_id,meta_tournament_id=meta_tournament_id)[0]
         token.voided=True                
+        delta = datetime.datetime.now() - tournament_machine.time_of_game_start        
+        tournament_machine.total_play_time=tournament_machine.total_play_time+delta.seconds
+        tournament_machine.total_number_of_players=tournament_machine.total_number_of_players+1
         if commit:
             self.db_handle.session.commit()
         return True

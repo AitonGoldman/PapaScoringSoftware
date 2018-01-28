@@ -15,8 +15,8 @@ import { ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class PssApiProvider {
-    //basePssUrl='http://192.168.1.178:8000'
-    basePssUrl='http://192.168.0.64:8000'
+    basePssUrl='http://192.168.1.178:8000'
+    //basePssUrl='http://192.168.0.64:8000'
     //basePssUrl='http://9.75.197.88:8000' 
 
     //basePssUrl='http://0.0.0.0:8000'

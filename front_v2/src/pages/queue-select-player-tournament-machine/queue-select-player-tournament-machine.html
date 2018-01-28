@@ -34,7 +34,10 @@
         <ion-list>
           <ng-container *ngFor="let tournament_machine of tournament.tournament_machines">
             <ion-item  (tap)="expand(tournament_machine)">
-              {{tournament_machine.tournament_machine_name}} <span *ngIf='tournament_machine.queue_length > 0'>({{tournament_machine.queue_length}})</span><ion-icon item-end [name]="tournament_machine.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
+              {{tournament_machine.tournament_machine_name}}<ion-badge item-left no-margin *ngIf='tournament_machine.queue_length > 0'>{{tournament_machine.queue_length}}</ion-badge>
+              <span text-center item-end style='font-size:10px' *ngIf="tournament_machine.total_play_time > 0" >Avg Time<br>{{round(tournament_machine.total_play_time/tournament_machine.total_number_of_players)}} minutes</span>
+              <ion-icon item-end [name]="tournament_machine.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
+
             </ion-item>            
             <ion-list *ngIf="tournament_machine.expanded==true && tournament.expanded==true">
               <ion-item>

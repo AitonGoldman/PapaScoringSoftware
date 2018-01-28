@@ -27,7 +27,7 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
     queueMode:string="manage"
     role:string = null;
     loggedInPlayerId:number = null;
-    
+    round:any=Math.round
     
     generateGetEventPlayerProcessor(){
         return (result)=>{

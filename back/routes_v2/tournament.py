@@ -133,6 +133,9 @@ def get_all_tournaments_and_tournament_machines_route(event_id,app):
             tournament_machine['queues'].sort(key=lambda x: x['position'])
             print tournament_machine['queues']
             tournament_machine['queue_length']=len([queue for queue in tournament_machine['queues'] if queue.get('player',None)])
+            if tournament_machine.get('player_id',None):
+                tournament_machine['queue_length']= tournament_machine['queue_length'] + 1           
+            
         tournaments_list.append(tournament_dict)
     return tournaments_list
 

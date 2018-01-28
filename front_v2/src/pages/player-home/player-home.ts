@@ -10,7 +10,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
  */
 
 @IonicPage({
-    segment:'PlayerHomePage/:eventId'
+    segment:'PlayerHomePage/:eventId/:eventName'
 })
 @Component({
   selector: 'page-player-home',

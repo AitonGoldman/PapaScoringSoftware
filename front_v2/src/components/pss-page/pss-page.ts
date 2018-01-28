@@ -99,7 +99,7 @@ export class PssPageComponent {
             return 'PlayerHomePage'
         }
        if(role=="scorekeeper"){
-            return 'ScorekeeperHomePage'
+            return 'ResultsPage'
        }
          
         if (role == null){
@@ -127,10 +127,11 @@ export class PssPageComponent {
                 let currentTab = this.navCtrl.parent.getSelected();
                 this.navCtrl.parent.select(tabIndex).then(()=>{
                     this.navCtrl.parent.getByIndex(tabIndex).push(pageName,this.buildNavParams(navParams)).then((data)=>{
+                        this.navCtrl.parent.getByIndex(tabIndex).last().showBackButton(false);
                         currentTab.popToRoot({animate:false});
-                    })
-                    
+                    })                    
                 });
+            
             //});
             
             return;

@@ -11,15 +11,18 @@
 </ion-header>
 
 
-<ion-content padding>
-  <h1><b>Purchase Tickets</b></h1>
+<ion-content no-padding no-margin>
+ <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+   <b>Player Home Page</b>
+ </ion-toolbar>
   <ion-list>
     <ion-item no-lines [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
       <ion-icon item-start name="ios-cash-outline"></ion-icon> Ticket Purchase
     </ion-item>
-    <ion-item hideWhen='mobile' no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
-      <ion-icon item-start name="git-branch"></ion-icon> Queues
-    </ion-item>
+    
+    <ion-item no-lines tappable (click)="pushPageWithNoBackButton('PlayerInfoPage',buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)}),1)">
+      <ion-icon item-start name="person"></ion-icon>My Results
+    </ion-item>    
 
   </ion-list>
 </ion-content>

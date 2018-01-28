@@ -91,11 +91,12 @@ def remove_player_route(request,app,event_id,current_user,player_initiated=False
 #             app.table_proxy.db_handle.session.commit()            
 #             raise e            
 
-def add_player_to_tournament_machine_queue_route(request,app,event_id,current_user,player_initiated=False):
-    if request.data:        
-        input_data = json.loads(request.data)
-    else:
-        raise BadRequest('Not enough info specified')
+def add_player_to_tournament_machine_queue_route(request,app,event_id,current_user,player_initiated=False,insert=False,input_data=None):
+    if input_data is None:
+        if request.data:        
+            input_data = json.loads(request.data)
+        else:
+            raise BadRequest('Not enough info specified')
     player_id = input_data.get('player_id',None)
     if player_initiated and player_id != current_user.player_id:
         raise BadRequest('Naughty Naughty')
@@ -125,11 +126,13 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
     queues = app.table_proxy.get_queue_for_tounament_machine(tournament_machine)
     if tournament_machine.player_id is None and queues[0].player_id is None:
         raise BadRequest('Can not add to empty queue.  Please see scorekeeper')
-
     remove_player_with_notification(player,app,tournament_machine, event_id)
     with app.table_proxy.db_handle.session.no_autoflush:                
-        try:            
-            updated_queue = app.table_proxy.add_player_to_queue(player,app,tournament_machine)                        
+        try:
+            if insert is False:
+                updated_queue = app.table_proxy.add_player_to_queue(player,app,tournament_machine)
+            else:
+                updated_queue = app.table_proxy.insert_player_into_queue(player,tournament_machine)
             #queue_serializer = serializer.queue.generate_queue_to_dict_serializer(serializer.queue.ALL)
             #return {'result':'player added','added_queue':queue_serializer(updated_queue)}
             
@@ -187,6 +190,15 @@ def modify_player_position_in_queue(event_id):
             bump_player_down_queue_route(request,current_app,event_id,current_user)
         else:
             raise BadRequest('You do not have permission to bump players')
+    if input_data['action']=="insert":
+        # queue_permission = permissions.CreateTournamentPermission(event_id)
+        # if queue_permission.can():
+        player = current_app.table_proxy.get_player(event_id,player_id_for_event=input_data['player_id_for_event'])
+        input_data['player_id']=player.player_id        
+        add_player_to_tournament_machine_queue_route(request,current_app,event_id,current_user,player_initiated=False,insert=True,input_data=input_data)
+        #else:
+        #    raise BadRequest('You do not have permission to bump players')
+        
     current_app.table_proxy.commit_changes()
     tournament_machine = current_app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
     tournament_machine_dict=generic.serialize_tournament_machine_public(tournament_machine,generic.TOURNAMENT_MACHINE_AND_QUEUES)            

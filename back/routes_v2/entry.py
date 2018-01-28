@@ -102,12 +102,17 @@ def start_player_on_machine(event_id):
     if scorekeeper_permission.can():
         if input_data['action'] == 'start':
             start_player_on_machine_route(input_data,event_id,current_app,current_user)
+        if input_data['action'] == 'force_start':
+            player = current_app.table_proxy.get_player(event_id,player_id_for_event=input_data['player_id_for_event'])
+            input_data['player_id']=player.player_id
+            start_player_on_machine_route(input_data,event_id,current_app,current_user)                        
         if input_data['action'] == 'start_from_queue':            
             start_player_on_machine_from_queue_route(input_data,event_id,current_app,current_user)
             pass
         if input_data['action'] == 'start_or_queue':
             start_player_on_machine_or_queue_route(input_data,event_id,current_app,current_user)
             pass
+        
     else:
         raise Unauthorized('You are not authorized to start a player on a machine')
     #total_cost = sum(int(summary[2]['price']) for summary in purchase_summary)
@@ -116,7 +121,9 @@ def start_player_on_machine(event_id):
     #                'purchase_summary':purchase_summary,
     #                'total_cost':new_token_purchase.total_cost})
     current_app.table_proxy.commit_changes()
-    return jsonify({})
+    tournament_machine=current_app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+    return jsonify({'data':generic.serialize_tournament_machine_public(tournament_machine,generic.TOURNAMENT_MACHINE_AND_PLAYER)                
+})
 
 @blueprints.test_blueprint.route('/<int:event_id>/entry',methods=['PUT'])
 def change_entry(event_id):
@@ -128,6 +135,10 @@ def change_entry(event_id):
     if scorekeeper_permission.can():
         if input_data['action'] == 'record_score':            
             record_score_route(input_data,event_id,current_app,current_user)
+        if input_data['action'] == 'force_remove':
+            tournament_machine = current_app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+            current_app.table_proxy.remove_player_from_machine(tournament_machine)
+            
     else:
         raise Unauthorized('You are not authorized to do this')
     #total_cost = sum(int(summary[2]['price']) for summary in purchase_summary)

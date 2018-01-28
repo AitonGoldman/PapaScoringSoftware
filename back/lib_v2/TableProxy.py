@@ -684,6 +684,19 @@ class TableProxy():
                 sorted_remove_queue[index+1].bumped=False
         return True
     
+    def insert_player_into_queue(self,player,tournament_machine):
+        queues_to_lock_for_addition = self.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine.tournament_machine_id).all()
+        sorted_queue = self.get_sorted_queue_for_tournament_machine(tournament_machine,queues_to_lock_for_addition)
+        sorted_queue[len(sorted_queue)-1].player_id=None
+        sorted_queue[len(sorted_queue)-1].bumped=False
+        
+        for index in range(len(sorted_queue)-1,0,-1):
+            print index
+            sorted_queue[index].player_id=sorted_queue[index-1].player_id
+            sorted_queue[index].bumped=sorted_queue[index-1].bumped
+        sorted_queue[0].player_id=player.player_id                
+        return sorted_queue[0]
+        
     def add_player_to_queue(self,player,app,tournament_machine):
         queues_to_lock_for_addition = app.table_proxy.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine.tournament_machine_id).all()
         for index,queue in enumerate(self.get_sorted_queue_for_tournament_machine(tournament_machine,queues_to_lock_for_addition)):            

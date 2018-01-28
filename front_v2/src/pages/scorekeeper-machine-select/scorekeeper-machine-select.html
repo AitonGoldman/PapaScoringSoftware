@@ -22,7 +22,7 @@
       <i item-end class="material-icons" (tap)="undoMode = undoMode==false">do_not_disturb</i>
     </ion-list-header>    
     <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderTournamentMachineItems($event)">      
-      <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push (tap)="pushToMachine(tournamentMachine.tournament_machine_id)" [style.background-color]="undoMode==true?'red':null">
+      <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push (tap)="pushToMachine(tournamentMachine)" [style.background-color]="undoMode==true?'red':null">
         {{tournamentMachine.tournament_machine_name}}
         <ion-avatar item-start>
           <img  [src]="tournamentMachine.img_url!=null?tournamentMachine.img_url:'/assets/imgs/small_backglass.jpeg'">

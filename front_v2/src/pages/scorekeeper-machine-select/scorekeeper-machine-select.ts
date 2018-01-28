@@ -53,6 +53,214 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
             }                                                
         };
     }
+
+    generateForceStartProcessor(tournamentMachine){
+        return (result)=>{
+            if(result==null){
+                return;
+            }
+            this.undoMode=false;
+            tournamentMachine.player_id=result.data.player_id;
+            tournamentMachine.player=result.data.player;
+                        let toast = this.toastCtrl.create({
+                            message:  "Player "+result.data.player.player_full_name+" added to  "+tournamentMachine.tournament_machine_name,
+                            duration: 99000,
+                            position: 'top',
+                            showCloseButton: true,
+                            closeButtonText: " ",
+                            cssClass: "successToast"
+                        });            
+            toast.present();                                                    
+            this.undoMode=false;            
+        }
+    }
+
+    generateInsertIntoQueueProcessor(tournamentMachine){
+        return (result)=>{
+            if(result==null){
+                return;
+            }
+            tournamentMachine.player_id=null;
+            tournamentMachine.player=null;
+            console.log(result);
+            let toast = this.toastCtrl.create({
+                message:  result.data.queues[0].player.player_full_name+" inserted into queue for "+tournamentMachine.tournament_machine_name,
+                duration: 99000,
+                position: 'top',
+                showCloseButton: true,
+                closeButtonText: " ",
+                cssClass: "successToast"
+            });
+            this.undoMode=false;
+            toast.present();                                                                
+        }
+    }
+    
+    generateRemovePlayerProcessor(tournamentMachine){
+        return (result)=>{
+            if(result==null){
+                return;
+            }
+            tournamentMachine.player_id=null;
+            tournamentMachine.player=null;
+            let toast = this.toastCtrl.create({
+                message:  "Player removed from "+tournamentMachine.tournament_machine_name,
+                duration: 99000,
+                position: 'top',
+                showCloseButton: true,
+                closeButtonText: " ",
+                cssClass: "successToast"
+            });
+            this.undoMode=false;
+            toast.present();                                                    
+            
+        }
+    }
+    
+    generateInsertIntoQueue(tournamentMachine){
+        return ()=>{
+        let alert = this.alertCtrl.create({
+            title: 'Force Start Player On Machine',
+            inputs: [
+                {
+                name: 'player_id_for_event',
+                placeholder: 'Player Number'
+            }
+            ],
+            buttons: [
+                {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: data => {
+                    console.log('Cancel clicked');
+                }
+            },
+                {
+                text: 'Insert Player Into Queue',
+                handler: (data) => {
+                    console.log(data);
+                    this.pssApi.bumpPlayerDownQueue({action:"insert",
+                                                     player_id_for_event:data.player_id_for_event,
+                                                     tournament_id:this.tournamentId,
+                                                     tournament_machine_id:tournamentMachine.tournament_machine_id},
+                                                    this.eventId)
+                        .subscribe(this.generateInsertIntoQueueProcessor(tournamentMachine))                                                                          
+                }
+            }
+            ]
+        });
+        alert.present();        
+            
+        }
+    }
+    
+    generateForceAddPlayer(tournamentMachine){
+        return ()=>{
+        let alert = this.alertCtrl.create({
+            title: 'Force Start Player On Machine',
+            inputs: [
+                {
+                name: 'player_id_for_event',
+                placeholder: 'Player Number'
+            }
+            ],
+            buttons: [
+                {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: data => {
+                    console.log('Cancel clicked');
+                }
+            },
+                {
+                text: 'Force Start Player',
+                handler: (data) => {
+                    console.log(data);
+                     this.pssApi.startPlayerOnMachine({action:'force_start',
+                                                       player_id_for_event:data.player_id_for_event,
+                                                       tournament_machine_id:tournamentMachine.tournament_machine_id},
+                                                       this.eventId)
+                        .subscribe(this.generateForceStartProcessor(tournamentMachine))                                                  
+
+                }
+            }
+            ]
+        });
+        alert.present();        
+            
+        }
+    }
+    
+    generateRemovePlayerFromMachine(tournamentMachine){
+        return ()=>{
+            this.pssApi.submitScore({tournament_machine_id:tournamentMachine.tournament_machine_id,
+                                     action:'force_remove',
+                                     tournament_id:this.tournamentId,
+                                     player_id:tournamentMachine.player_id},this.eventId)            
+            .subscribe(this.generateRemovePlayerProcessor(tournamentMachine))        
+        }
+    } 
+       
+
+    onOops(tournamentMachine){
+        let buttons = []
+        console.log(tournamentMachine);
+        if(tournamentMachine.player_id!=null){
+            buttons.push(
+                {
+                text: 'Remove Player From Machine',
+                role: 'destructive',
+                handler: this.generateRemovePlayerFromMachine(tournamentMachine)
+            })
+        } else {
+            buttons.push(
+                {
+                text: 'Force Start Player on Machine',
+                role: 'destructive',
+                handler: this.generateForceAddPlayer(tournamentMachine)
+            })
+        }
+        if(this.eventAuth.getRoleName(this.eventId)=="tournamentdirector"){
+            buttons.push(
+                {
+                text: 'Insert Into Queue',
+                role: 'destructive',
+                handler: this.generateInsertIntoQueue(tournamentMachine)
+            })            
+        }
+        buttons.push({
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+                console.log('Cancel clicked');
+            }
+        })
+        let actionSheetOptions = {title: tournamentMachine.tournament_machine_name.toUpperCase(),
+                                  buttons: buttons// [
+                                  //     {
+                                  //     text: 'Remove Player From Machine',
+                                  //     role: 'destructive',
+                                  //     handler: this.generateRemovePlayerFromMachine(tournamentMachine)
+                                  // },
+                                  //     {
+                                  //     text: 'Force Start Player on Machine',
+                                  //     role: 'destructive',
+                                  //     handler: this.generateForceAddPlayer(tournamentMachine)
+                                  // },
+
+                                  //     {
+                                  //     text: 'Cancel',
+                                  //     role: 'cancel',
+                                  //     handler: () => {
+                                  //         console.log('Cancel clicked');
+                                  //     }
+                                  // }
+                                  // ]
+                                 }        
+        let actionSheet = this.actionSheetCtrl.create(actionSheetOptions);            
+        actionSheet.present();                
+    }
+    
     reorderTournamentMachineItems(indexes) {
         
         this.tournamentMachines = reorderArray(this.tournamentMachines, indexes);
@@ -101,10 +309,15 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
         };
     }
     
-    pushToMachine(tournamentMachineId){
-        console.log('push to machine id is '+tournamentMachineId)
-        this.pssApi.getTournamentMachine(this.eventId,this.tournamentId,tournamentMachineId)            
-          .subscribe(this.generateGetTournamentsMachineProcessor(tournamentMachineId))
+    pushToMachine(tournamentMachine){
+        
+        console.log('push to machine id is '+tournamentMachine.tournament_machine_id)
+        if(this.undoMode==true){
+            this.onOops(tournamentMachine)
+        } else {
+            this.pssApi.getTournamentMachine(this.eventId,this.tournamentId,tournamentMachine.tournament_machine_id)            
+                .subscribe(this.generateGetTournamentsMachineProcessor(tournamentMachine.tournament_machine_id))
+        }
         
     }
 

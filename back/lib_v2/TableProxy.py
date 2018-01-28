@@ -650,7 +650,10 @@ class TableProxy():
 
     def get_scores(self,event_id,player_id):
         return self.Scores.query.filter_by(event_id=event_id,player_id=player_id).all()
-    
+
+    def get_score(self,event_id,player_id,score_id):
+        return self.Scores.query.filter_by(event_id=event_id,player_id=player_id,score_id=score_id).first()
+
     def bump_player_down_queue(self, player,tournament_machine):
         queues_to_lock_for_for_removal = self.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine.tournament_machine_id).all()
         sorted_bump_queue=self.get_sorted_queue_for_tournament_machine(tournament_machine,queues_to_lock_for_for_removal)        
@@ -747,7 +750,8 @@ class TableProxy():
         self.db_handle.session.add(new_entry)
         if commit:
             self.db_handle.session.commit()
-        
+        return new_score
+    
     
     def remove_player_from_machine(self,tournament_machine):
         tournament_machine.player_id=None

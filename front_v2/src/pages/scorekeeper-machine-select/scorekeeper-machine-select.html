@@ -5,18 +5,19 @@
   Ionic pages and navigation.
   -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'> 
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 <ion-content>
-<button style='margin-top:0px;' ion-button full small color="darker">
-  Scorekeeping : Select machine 
-</button>
+ <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+   <b>Scorekeeping : Select Machine</b>
+ </ion-toolbar>
+
   <div class='desktopSlim'>
   <ion-list>
-    <ion-list-header no-lines>Machines For Tournament...
+    <ion-list-header no-lines>
       <ion-icon item-end name="cog" (tap)="reorderEnabled = reorderEnabled==false"></ion-icon>
       <i item-end class="material-icons" (tap)="undoMode = undoMode==false">do_not_disturb</i>
     </ion-list-header>    

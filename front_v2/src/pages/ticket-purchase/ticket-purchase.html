@@ -1,13 +1,13 @@
-<ion-header>
-  <ion-navbar>
+<ion-header >
+  <ion-navbar color="pss-header">
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 <ion-content>
-<button style='margin-top:0px;' ion-button full small color="darker">
-  Purchase Tickets
-</button>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>Purchase Tickets</b>
+ </ion-toolbar>
 
   <div class='desktopSlim'>
   <ion-auto-complete *ngIf='hideSearchbar!=true' (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="clearValues()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
@@ -18,11 +18,6 @@
     <h2>{{notFoundMessage}}</h2>
   </div>
 
-  <!--  <ion-searchbar *ngIf='hideSearchbar!=true'
-     [(ngModel)]="player_id_for_event"
-     (ionInput)="onInput($event)">
-  </ion-searchbar>-->
-  <!--  <ng-container *ngIf="eventPlayer.first_name!=null "> -->
   <ng-container *ngIf="notFoundMessage==null && selectedPlayer!=null">   
     <ion-item no-lines>
     <ion-avatar  style='zoom:3.0'>
@@ -36,8 +31,8 @@
     </ion-item>
     
     <ng-container *ngFor="let ticketPriceList of ticketPriceLists">
-      <ion-item no-lines>
-        Existing Count : {{ticketCountsDict[ticketPriceList.tournament_id]==null?0:ticketCountsDict[ticketPriceList.tournament_id].count}}
+      <ion-item color="darker">
+      {{ticketPriceList.tournament_name}} Existing Count : {{ticketCountsDict[ticketPriceList.tournament_id]==null?0:ticketCountsDict[ticketPriceList.tournament_id].count}}
       </ion-item>
       <ion-item tappable>
         <ion-label>{{ticketPriceList.tournament_name}}</ion-label>

@@ -5,17 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 
 <ion-content>
-  <button ion-button full small color="lighter">
-    Select tournament/machines to view queues 
-  </button>
-
+ <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+   <b> Select tournament/machines to view queues </b>
+ </ion-toolbar>
   <div class='desktopSlim'>    
     <div text-center>
     <ion-chip tappable (click)="onReload()">

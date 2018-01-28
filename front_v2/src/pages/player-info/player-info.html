@@ -6,31 +6,21 @@
   -->
 
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
-<ion-content>
-<button style='margin-top:0px;' ion-button full small color="darker">
-  Player Info
-</button>
+<ion-content no-padding no-margin>
+ <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+   <b>Player {{infoOnly==true?"Info":"Results"}}</b>
+ </ion-toolbar>
+
   <div class='desktopSlim'>  
   <ion-auto-complete *ngIf="hideAutoComplete==false" (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
   </div>
-  <!--
-      Player name
-      player event number
-      player pic
-      
-      Available Tickets
-      - tournament/metatournament name : count
-      
-      Results (when they are available)
-
-    -->
   <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
     <h2>{{notFoundMessage}}</h2>
   </div>

@@ -1,52 +1,25 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>
 </ion-header>
 <ion-content>
-<button ion-button full small color="lighter">
-  Register player for event
-</button>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>Register Player For Event</b>
+ </ion-toolbar>
 
   <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
   </div>
 
-<!--  <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500 }"></ion-auto-complete>-->
   <div class='desktopSlim' padding>
-
-    <!-- <ion-grid> -->
-    <!--   <ion-row> -->
-    <!--     <ion-col col-1> -->
-    <!--     </ion-col> -->
-    <!--     <ion-col col-10>           -->
-    <!--       <ion-auto-complete  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete> -->
-    <!--     </ion-col> -->
-    <!--     <ion-col col-1> -->
-    <!--       <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner> -->
-    <!--     </ion-col> -->
-    <!--   </ion-row> -->
-    <!-- </ion-grid> -->
-
-    <!--    <form #myForm="ngForm" *ngIf="existingPlayerFound==false && loading==false">-->
-    <!--<form #myForm="ngForm" *ngIf="displayNewPlayerForm==true">    -->
     <form #myForm="ngForm" *ngIf="notFoundMessage!=null||(selectedPlayer!=null && selectedPlayer.player_full_name!=null)">    
       <ion-list>
         <ion-item no-line *ngIf="selectedPlayer!=null && selectedPlayer.img_url!=null">
-          <!-- <ion-grid> -->
-          <!--   <ion-row> -->
-          <!--     <ion-col col-5 style='background-color:red'> -->
-          <!--     </ion-col> -->
-          <!--     <ion-col justify-content-center align-items-center> -->
                 <ion-avatar style='zoom:3.0'>
                   <img [src]="selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
                 </ion-avatar>
-          <!--     </ion-col> -->
-          <!--     <ion-col col-5 style='background-color:red'> -->
-          <!--     </ion-col>               -->
-          <!--   </ion-row> -->
-          <!-- </ion-grid> -->
         </ion-item>
         <ion-item>
         <ion-label stacked>First Name</ion-label>
@@ -74,19 +47,16 @@
         </ion-item-options>        
       </ion-item-sliding>
       <ion-item (tap)="takePicture()">
-        Take a picture <span>{{selectedPlayer.has_pic==true?"(pic uploaded)":"poop"}}</span>
+        Take a picture <span>{{selectedPlayer.has_pic==true?"(pic uploaded)":""}}</span>
            <ion-icon name='camera' item-end></ion-icon>
       </ion-item>
-      <!-- <ion-item-divider color="light" text-wrap>Upload an image that will be used as the event icon </ion-item-divider> -->
-      <!-- <ion-item> -->
-      <!--   <image-upload (uploadFinished)="onUploadFinished($event)" url="http://192.168.1.178:8000/media_upload"></image-upload> -->
-      <!-- </ion-item> -->      
-      <ion-item text-center>
+      </ion-list>
+      <ion-item text-center no-lines>
         <button ion-button padding (tap)="onSubmit()">
           register player 
         </button>
       </ion-item>
-      </ion-list>
+      
     </form>
     </div>
 </ion-content>

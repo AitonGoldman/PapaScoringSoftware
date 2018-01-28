@@ -5,15 +5,21 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>ChangePlayerPicture</ion-title>
-  </ion-navbar>
-
+ <ion-navbar color='pss-header'>
+  <custom-headers [homePageDisplayName]="getHomePageDisplayString()" title="TD Homepage" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+ </ion-navbar>  
 </ion-header>
 
-
-<ion-content padding>
+<ion-content no-padding no-margin>
+ <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+   <b>Change Player Picture</b>
+ </ion-toolbar>
+ <div text-center>
+ <ion-chip tappable (click)="onReload()" >
+      <ion-label>Refresh</ion-label>
+      <ion-icon name="refresh" color="dark" item-end></ion-icon>      
+    </ion-chip>
+ </div> 
   <div class='slimDesktop'>
     <ion-item *ngFor="let player of players" (tap)="takePicture(player)">
       <ion-icon item-end name="camera"></ion-icon> Take {{player.player_full_name}} Picture      

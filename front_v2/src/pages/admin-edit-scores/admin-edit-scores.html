@@ -1,0 +1,74 @@
+<!--
+  Generated template for the AdminEditScoresPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+
+<ion-content no-padding no-margin>
+<button style='margin-top:0px;' ion-button full small color="darker">
+  Admin : Void Unused Tickets
+</button>
+  <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
+  <div text-center margin-bottom [style.height]="'25px'">
+    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  </div>
+  <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
+    <h2>{{notFoundMessage}}</h2>
+  </div>
+  <div *ngIf="selectedPlayer!=null" text-center>
+    <b>Player : {{selectedPlayer.player_full_name}}</b>
+    <br>
+    <button margin padding ion-button (click)="onGetScores()">Get Scores</button>
+    <br>
+    <button margin padding ion-button (click)="showNewScoreForm=showNewScoreForm==false">New Score</button>
+    
+  </div>
+  <form #myForm="ngForm" *ngIf="showNewScoreForm">
+    <ion-list>
+      <ion-item class='shadedInputField' margin-bottom>
+        <ion-label>Machine</ion-label>
+        <ion-select name="mytournament" #mytournament="ngModel" [(ngModel)]="newScore.tournament_machine_id" required>
+          <ion-option *ngFor="let tournament_machine of generateListFromObj(tournamentMachines)" [value]="tournament_machine.tournament_machine_id">{{tournament_machine.tournament_machine_name}}</ion-option>
+        </ion-select>
+      </ion-item>
+    <ion-item margin-top class='shadedInputField'>
+      <ion-label stacked>Score</ion-label>
+      <ion-input type="text" required
+                 [(ngModel)]="newScore.score" name="new_score"></ion-input>
+    </ion-item>      
+    <ion-item text-center>
+      <button (click)="onAddScore()" ion-button>Add New Score</button>
+    </ion-item>
+    </ion-list>
+    
+  </form>
+  <ion-list *ngIf="scores.length>0">
+    <ion-item *ngFor="let score of scores" (click)="onVoidScore(score)" [style.background-color]="score.voided==true?'#FFEEEE':null">
+      <i item-start class="material-icons" *ngIf='score.voided==true'>do_not_disturb</i>
+
+
+      <span>{{tournamentMachines[score.tournament_machine_id].tournament_machine_name}}</span>
+      <span style='float:right'>{{score.score}}</span>
+    </ion-item>
+    <!-- <ion-item class='shadedInputField' margin-bottom> -->
+    <!--   <ion-label>Tournament</ion-label> -->
+    <!--   <ion-select name="mytournament" #mytournament="ngModel" [(ngModel)]="selectedTournamentId" required> -->
+    <!--     <ion-option *ngFor="let tournament of tournamentSettings.getTournaments(eventId)" [value]="tournament.tournament_id">{{tournament.tournament_name}}</ion-option> -->
+    <!--   </ion-select> -->
+    <!-- </ion-item> -->
+    <!-- <ion-item margin-top class='shadedInputField'> -->
+    <!--   <ion-label stacked># Of Tokens</ion-label> -->
+    <!--   <ion-input type="text" required -->
+    <!--              [(ngModel)]="tokenCount" name="token_count"></ion-input> -->
+    <!-- </ion-item> -->
+    <!-- <ion-item text-center margin-top> -->
+    <!--   <button (click)="onSubmit()" [disabled]="!myForm.dirty" ion-button>VOID EM</button> -->
+    <!-- </ion-item> -->
+  </ion-list>
+</ion-content>

@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>  
 </ion-header>
@@ -15,8 +15,8 @@
   <ion-row>
     <ion-col tappable col-12 col-md-4 col-lg-3 col-xl-2 [navPush]='"PlayerInfoPage"' [navParams]="buildNavParams({})">
       <ion-card >
-        <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="'/assets/imgs/dummy_tournament_small.jpeg'"/>
-        <img [style.height]='"117px"' [style.width]='"225px"' hideWhen='mobile' [src]="'/assets/imgs/dummy_tournament_large.jpeg'"/>
+        <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="'/assets/imgs/players.jpg'"/>
+        <img [style.height]='"117px"' [style.width]='"225px"' hideWhen='mobile' [src]="'/assets/imgs/players.jpg'"/>
 
       <div class="card-title">Player Results</div>
       </ion-card>      

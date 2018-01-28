@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <ion-title>Add or Queue Player</ion-title>
     <ion-buttons end hideWhen='mobile'>
       <button icon-only ion-button [navPush]="getHomePageString(eventId)" [navParams]="{eventId:eventId,eventName:eventName}" ><ion-icon name="home"></ion-icon> {{getHomePageDisplayString(eventId)}}</button>
@@ -16,9 +16,15 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content no-padding no-margin>
+ <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+   <b>Queue Or Add Player To Machine</b>
+ </ion-toolbar>
+ <div text-center>
+   <img [src]="playerImg!=null?playerImg:'/assets/imgs/pinball_small_machine_square.jpg'">
+ </div>
   <ion-list>
-    <ion-list-header no-lines>Machines For Tournament...
+    <ion-list-header no-lines>Queue/Add {{playerName}}
     </ion-list-header>    
     <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push (tap)="addOrQueuePlayer(tournamentMachine)">
       {{tournamentMachine.tournament_machine_name}}

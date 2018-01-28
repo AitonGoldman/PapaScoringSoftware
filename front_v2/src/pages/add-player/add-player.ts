@@ -25,12 +25,6 @@ export class AddPlayerPage extends AutoCompleteComponent {
     //selectedPlayer:any={player_full_name:""};
     addPlayerAutoComplete:boolean=true;
     ifpaLookup:boolean=false;
-//    existingPlayerFound:boolean=true;
-//    @ViewChild('searchbar')  searchbar: any;    
-//    displayNewPlayerForm:boolean=false;
-//    ionViewDidLoad() {
-//        console.log('ionViewDidLoad AddPlayerPage');
-//    }
 
     generateAddEventPlayersProcessor(){
         return (result) => {
@@ -52,7 +46,8 @@ export class AddPlayerPage extends AutoCompleteComponent {
             
             this.navCtrl.push("PostPlayerAddSuccessPage",            
                               this.buildNavParams({'successSummary':successSummary,
-                                                   'successButtons':[successButtonHome,successButtonTickets]}));
+                                                   'successButtons':[successButtonHome,successButtonTickets],
+                                                   'playerId':result.data[0].player_id}));
         };
     }
     
@@ -118,14 +113,10 @@ export class AddPlayerPage extends AutoCompleteComponent {
     
     onFocus(){        
         this.selectedPlayer={player_full_name:null};
-        //this.existingPlayerFound=true;
-        //this.displayNewPlayerForm=false;                
     }
 
     onSelected(){
-        //this.existingPlayerFound=false;
         this.getIfpaRanking(this.selectedPlayer.first_name+" "+this.selectedPlayer.last_name)
-        //this.displayNewPlayerForm=true;                
     }
     
     
@@ -146,21 +137,12 @@ export class AddPlayerPage extends AutoCompleteComponent {
     }
     
     onInput(event){        
-        //if(this.searchbar.suggestions.length==0 && event.length > 2){            
-        //    this['existingPlayerFound']=false;
-            //this.newUserName=event;
-        //} else {
-        //    this['existingPlayerFound']=true;
-        //}
 
         console.log('in onInput...')
-//        this.displayNewPlayerForm=false;
-        //this.loading=true;        
     }
     
     onItemsShown(event){
         console.log('onItemsShown...')
-        //this.loading=true;
     }
 
     generateLoadingFunction(){
@@ -169,9 +151,6 @@ export class AddPlayerPage extends AutoCompleteComponent {
             
             if (searchResults.typeOfSearch=="list" && searchResults.resultList.length==0){
                 if(this.searchbar.keyword.length > 2){
-                    //this.selectedPlayer={};
-//                    console.log(input);
-//                    this.existingPlayerFound=false;
                     console.log(this.searchbar.keyword)
                     let nameElements=this.searchbar.keyword.split(' ');
                     if(nameElements.length>0){
@@ -182,7 +161,6 @@ export class AddPlayerPage extends AutoCompleteComponent {
                     }
                 }
             } else {
-//                this.existingPlayerFound=true;            
             }
             setTimeout(()=>{this.loading=false;},500)
             
@@ -191,40 +169,12 @@ export class AddPlayerPage extends AutoCompleteComponent {
   ionViewWillLoad() {
       console.log('ionViewDidLoad AddPlayerPage');
       this.eventId = this.navParams.get('eventId')
-      //this.autoCompleteProvider.setPlayerSearchType("allPlayers",
-      //                                             this.generateLoadingFunction());
        this.autoCompleteProvider.initializeAutoComplete("player-full-name",
                                                         null,
                                                         this.generateLoadingFunction());
 
-        // this.events.subscribe('autocomplete:done', (autocompleteInfo, time) => {
-        //     // user and time are the same arguments passed in `events.publish(user, time)`
-        //     this.loading=false;
-        //     if(autocompleteInfo.state=='DONE' && autocompleteInfo.data.data.length==0){
-        //         console.log(autocompleteInfo);
-        //         let nameElements=this.searchbar.keyword.split(' ');
-        //         if(nameElements.length>0){
-        //             this.selectedPlayer.first_name=nameElements[0];
-        //         }
-        //         if(nameElements.length>1){
-        //             this.selectedPlayer.last_name=nameElements[1];
-        //         }                
-        //         this.displayNewPlayerForm=true;
-                
-        //     }
-        // });
-      
-      
-      //this.autoCompleteProvider.setPlayers(true);
-      //this.pssApi.searchPlayers('poop2')
-      //    .subscribe(this.generateSearchPlayerProcessor())            
       
   }
-    // onUploadFinished(event){
-    //     this.selectedPlayer.has_pic=true;        
-    //     console.log(event.serverResponse._body);
-    //     this.selectedPlayer.img_file=JSON.parse(event.serverResponse._body).data;        
-    // }
     onSubmit(){
         if(this.selectedPlayer.ifpa_ranking=='not ranked'){
             this.selectedPlayer.ifpa_ranking=99999;

@@ -15,7 +15,8 @@ import { ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class PssApiProvider {
-    basePssUrl='http://192.168.1.178:8000'
+    //basePssUrl='http://192.168.1.178:8000'
+    basePssUrl='http://192.168.0.64:8000'
     //basePssUrl='http://9.75.197.88:8000' 
 
     //basePssUrl='http://0.0.0.0:8000'
@@ -69,6 +70,9 @@ export class PssApiProvider {
         }
     }    
     adminVoidTicket = this.generate_api_call('adminVoidTicket',this.basePssUrl+"/:arg/admin/token/:arg/:arg/:arg",'delete');
+    adminAddScore = this.generate_api_call('adminAddScore',this.basePssUrl+"/:arg/admin/entry/:arg/:arg/:arg",'put');
+    adminEditScore = this.generate_api_call('editScore',this.basePssUrl+"/:arg/admin/entry/:arg/:arg",'put');
+
     addTournamentMachine = this.generate_api_call('addTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'post');
     addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');
     addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');
@@ -85,6 +89,7 @@ export class PssApiProvider {
     editTournament = this.generate_api_call('editTournament',this.basePssUrl+"/:arg/tournament",'put');
     editEvent = this.generate_api_call('editEvent',this.basePssUrl+"/event",'put');
     editPlayer = this.generate_api_call('editEvent',this.basePssUrl+"/:arg/player",'put');
+    
     editEventUserRole = this.generate_api_call('editEventUser',this.basePssUrl+"/:arg/event_role_mapping",'put');    
     
     eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest',this.basePssUrl+"/pss_user_request",'post');
@@ -112,7 +117,9 @@ export class PssApiProvider {
     getTournamentMachineResults = this.generate_api_call('getTournamentMachineResults',this.basePssUrl+"/:arg/test_tournament_machine_results/:arg/:arg",'get');
 
     getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/machines",'get');
-    getAllUsers = this.generate_api_call('getAllUsers',this.basePssUrl+"/pss_users",'get');        
+    getAllUsers = this.generate_api_call('getAllUsers',this.basePssUrl+"/pss_users",'get');
+    getScores = this.generate_api_call('getScores',this.basePssUrl+"/:arg/scores/:arg",'get');        
+    
     getAllTournaments = this.generate_api_call('getAllTournaments',this.basePssUrl+"/:arg/tournaments",'get');
 
     //fixme : can probably replace earlier calls with this call

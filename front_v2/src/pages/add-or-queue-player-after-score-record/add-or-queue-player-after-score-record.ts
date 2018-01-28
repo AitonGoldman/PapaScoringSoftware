@@ -24,6 +24,7 @@ export class AddOrQueuePlayerAfterScoreRecordPage extends PssPageComponent {
     tournamentId:number=null;
     playerId:any=null;
     playerName:any=null;
+    playerImg:any=null;
     
     generateStartPlayerOnMachineProcessor(typeOfStart,tournamentMachineName, playerName){
         return (result) => {
@@ -138,6 +139,8 @@ export class AddOrQueuePlayerAfterScoreRecordPage extends PssPageComponent {
       this.tournamentId=this.navParams.get('tournamentId');
       this.playerId=this.navParams.get('playerId');
       this.playerName=this.navParams.get('playerName');
+      this.playerImg=this.navParams.get('playerImg');
+      
       this.pssApi.getAllTournamentsAndMachines(this.eventId)            
           .subscribe(this.generateGetAllTournamentsAndMachinesProcessor())      
   }

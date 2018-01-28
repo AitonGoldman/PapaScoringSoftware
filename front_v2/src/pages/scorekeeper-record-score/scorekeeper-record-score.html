@@ -5,15 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="pss-header">
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 <ion-content>
-<button style='margin-top:0px;' ion-button full small color="darker">
-  Scorekeeping : Record score
-</button>
+ <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+   <b>Scorekeeper Record Score</b>
+ </ion-toolbar>
+
   <div class='desktopSlim'>
   <form #myForm="ngForm" *ngIf="tournamentMachine!=null">
     <ion-item text-center no-lines>
@@ -57,10 +58,11 @@
       <button ion-button (tap)="voidTicket('void')" margin padding>
         Void Ticket
       </button>
+      <br>
       <button (tap)="voidTicket('void-readd')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player!=null">
         Void Ticket And Requeue
       </button>      
-      <button (tap)="voidTicket('void-readd')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player==null">
+      <button (tap)="voidTicket('void-requeue')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player==null">
         Void Ticket And ReAdd
       </button>      
       

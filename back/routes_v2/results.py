@@ -87,7 +87,7 @@ def build_tournament_result(event_id, result,
     if include_seperator:
         if len(values) > 0 and value['rank'] > first_qualifying_delemiter :
             if value['rank'] > first_qualifying_delemiter and values[len(values)-1]['rank'] <= first_qualifying_delemiter:
-                print "in tournament %s" % tournament.tournament_id
+                
                 values.append({'rank':0,'seperator':True,'seperator_message':seperator_message})
             if second_qualifying_delemiter and value['rank'] > second_qualifying_delemiter and values[len(values)-1]['rank'] <= second_qualifying_delemiter:
                 values.append({'rank':0, 'seperator':True,'seperator_message':seperator_message_b})                    
@@ -117,7 +117,7 @@ def test_tournament_results(event_id, tournament_id):
         players_dict[player.player_id]=player
     for tournament_machine in tournament_machines:
         tournament_machines_dict[tournament_machine.tournament_machine_id]=to_dict(tournament_machine)
-        print tournament_machines_dict[tournament_machine.tournament_machine_id]
+        
 
     query = getTournamentResultsQuery(tournament_id,tournament.number_of_signifigant_scores)    
     machine_query = getTournamentMachineResultsQuery(tournament_id=tournament_id)    
@@ -153,7 +153,7 @@ def test_tournament_results(event_id, tournament_id):
 @blueprints.test_blueprint.route('/<int:event_id>/test_player_results_by_player_id/<int:player_id>',methods=['GET'])
 def test_player_results_by_player_id(event_id, player_id):
     player = current_app.table_proxy.get_player(event_id,player_id=player_id)
-    print player.event_info
+    
     return test_player_results(event_id,player.event_info[0].player_id_for_event)    
 
 
@@ -207,7 +207,7 @@ def test_player_results(event_id, event_player_id):
                                                                                   "score":i.score})        
 
     for tournament_id,tournament_results in ranked_results_dict.iteritems():                
-        print "building results for %s" % tournament_id
+        
         tournament = current_app.table_proxy.get_tournament_by_tournament_id(tournament_id)
         for idx, result in enumerate(tournament_results):
         ##RANK - SCORE - PLAYER ID - TOURNAMENT ID                        

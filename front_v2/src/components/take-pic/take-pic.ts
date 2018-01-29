@@ -1,5 +1,6 @@
 import { NavParams, ViewController } from 'ionic-angular';
 import { Component } from '@angular/core';
+import { PssApiProvider } from '../../providers/pss-api/pss-api';
 
 /**
  * Generated class for the TakePicComponent component.
@@ -15,7 +16,9 @@ export class TakePicComponent {
     img_file:string=null;
     text: string;
     customStyle:any=null;
-    constructor(public navParam: NavParams, public viewCtrl: ViewController) {
+    constructor(public navParam: NavParams,
+                public viewCtrl: ViewController,
+                public pssApi: PssApiProvider) {
         console.log('Hello TakePicComponent Component');
         this.text = 'Hello World';
     }

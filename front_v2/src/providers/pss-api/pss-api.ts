@@ -15,9 +15,9 @@ import { ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class PssApiProvider {
-    basePssUrl='http://192.168.1.178:8000'
+    //basePssUrl='http://192.168.1.178:8000'
     //basePssUrl='http://192.168.0.64:8000'
-    //basePssUrl='http://9.75.197.88:8000' 
+    basePssUrl='http://9.75.197.88:8000' 
 
     //basePssUrl='http://0.0.0.0:8000'
     loading_instance = null;   
@@ -26,7 +26,9 @@ export class PssApiProvider {
                ){
         console.log('Hello PssApiProvider Provider');
     }
-
+    getBackendHost(){
+        return this.basePssUrl;
+    }
     makeHot(cold) {
         const subject = new Subject();
         cold.subscribe(subject);

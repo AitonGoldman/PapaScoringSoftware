@@ -12,7 +12,7 @@ import json
 
 def handle_img_upload(input_data):
     print "in handle img for tourneys..."
-    event_img_folders='/Users/agoldma/git/github/TD/front_v2/www/assets/imgs/'
+    event_img_folders=current_app.config['IMG_HTTP_SRV_DIR']
     print input_data
     if 'img_file' in input_data and input_data['img_file'] and input_data['has_pic']:
         copyfile(current_app.config['UPLOAD_FOLDER']+"/"+input_data['img_file'],event_img_folders+"/"+input_data['img_file'])

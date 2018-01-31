@@ -20,6 +20,12 @@ from pss_models_v2.Teams import generate_teams_class
 from pss_models_v2.AuditLogs import generate_audit_logs_class
 from pss_models_v2.Entries import generate_entries_class
 from pss_models_v2.Scores  import generate_scores_class
+from pss_models_v2.FinalsPlayers  import generate_finals_players_class
+from pss_models_v2.Tiebreakers  import generate_tiebreakers_class
+from pss_models_v2.TiebreakerPlayers  import generate_tiebreaker_players_class
+from pss_models_v2.Finals  import generate_finals_class
+from pss_models_v2.FinalsMatches  import generate_finals_matches_class
+
 
 from lib_v2 import roles_constants
 from lib_v2.serializers import deserializer
@@ -58,6 +64,12 @@ class TableProxy():
         self.AuditLogs = generate_audit_logs_class(self.db_handle)
         self.Entries = generate_entries_class(self.db_handle)
         self.Scores = generate_scores_class(self.db_handle)
+        self.FinalsPlayers = generate_finals_players_class(self.db_handle)
+        self.Tiebreakers = generate_tiebreakers_class(self.db_handle)
+        self.TiebreakerPlayers = generate_tiebreaker_players_class(self.db_handle)
+        self.Finals = generate_finals_class(self.db_handle)
+        self.FinalsMatches = generate_finals_matches_class(self.db_handle)
+        
         #self.Players.event_roles = self.db_handle.relationship(
         #    'EventPlayerRoleMappings', cascade='all'
         #)
@@ -66,6 +78,19 @@ class TableProxy():
         #self.Players.event_info = self.db_handle.relationship(
         #    'EventPlayersInfo', cascade='all', uselist=True
         #)
+        self.Finals.matches = db_handle.relationship(
+            'FinalsMatches',
+            cascade='all'
+        )
+        
+        self.Tiebreakers.players = db_handle.relationship(
+            'TiebreakerPlayers',
+            cascade='all'
+        )
+        self.FinalsPlayers.tiebreaker_players = db_handle.relationship(
+            'TiebreakerPlayers',
+            cascade='all'
+        )
         
         self.Players.events = db_handle.relationship(
             'Events',
@@ -787,6 +812,102 @@ class TableProxy():
         if commit:
             self.db_handle.session.commit()
             
+    def create_finals_player(self,event_id, player_id,tournament_id,seed_rank,commit=False):        
+        existing_finals_player = self.get_finals_player(player_id,tournament_id)
+        if existing_finals_player:
+            return existing_finals_player
+        player = self.get_player(event_id,player_id=player_id)
+        finals_player = self.FinalsPlayers()
+        finals_player.tournament_id=tournament_id
+        finals_player.player_id=player_id
+        finals_player.player_name=player.__repr__()
+        finals_player.seed_rank=seed_rank
+        self.db_handle.session.add(finals_player)
+        if commit:
+            self.db_handle.session.commit()
+        return finals_player
+
+    def get_final_by_tournament_id(self,tournament_id,finals_name):
+        return self.Finals.query.filter_by(tournament_id=tournament_id,name=finals_name).first()
+
+    def get_final(self,final_id):
+        return self.Finals.query.filter_by(final_id=final_id).first()
+    
+    
+    def get_all_finals_players(self,tournament_id):
+        return self.FinalsPlayers.query.filter_by(tournament_id=tournament_id).all()        
+
+    def get_all_finals_matches(self,final_id):
+        return self.FinalsMatches.query.filter_by(final_id=final_id).order_by(self.FinalsMatches.finals_match_id).all()
+    
+    def get_finals_player(self,player_id,tournament_id):
+        return self.FinalsPlayers.query.filter_by(player_id=player_id,tournament_id=tournament_id).first()        
+    
+    def get_all_tiebreakers(self, tournament_id,round):
+        return self.Tiebreakers.query.filter_by(tournament_id=tournament_id,round=round).all()        
+
+    def get_tiebreaker(self, tiebreaker_id):
+        return self.Tiebreakers.query.filter_by(tiebreaker_id=tiebreaker_id).first()
+
+    def get_tiebreaker_player(self, tiebreaker_player_id):
+        return self.TiebreakerPlayers.query.filter_by(tiebreaker_player_id=tiebreaker_player_id).first()
+    
+    
+    def create_tiebreaker(self,event_id,tied_player_ids,
+                          tournament_id,rank_of_winners,
+                          rank_of_losers, number_of_winners,
+                          round,
+                          ppo_a_b_boundry=False,commit=False):
+        tiebreaker = self.Tiebreakers()
+        self.db_handle.session.add(tiebreaker)
+        tiebreaker.tournament_id=tournament_id
+        tiebreaker.rank_of_winners=rank_of_winners
+        tiebreaker.rank_of_losers=rank_of_losers
+        tiebreaker.number_of_winners=number_of_winners
+        tiebreaker.round=round
+        if ppo_a_b_boundry:
+            tiebreaker.ppo_a_b_boundry=ppo_a_b_boundry
+            
+        for tied_player_id in tied_player_ids:
+            finals_player = self.get_finals_player(tied_player_id,tournament_id)
+            self.db_handle.session.add(finals_player)
+            tiebreaker_player = self.TiebreakerPlayers()
+            self.db_handle.session.add(tiebreaker_player)
+            
+            tiebreaker_player.player_id = tied_player_id
+            finals_player.player_id = tied_player_id
+
+            player = self.get_player(event_id,player_id=tied_player_id)
+            tiebreaker_player.player_name=player.first_name+" "+player.last_name
+            
+            finals_player.player_name=player.first_name+" "+player.last_name
+            finals_player.tiebreaker_players.append(tiebreaker_player)
+            tiebreaker.players.append(tiebreaker_player)
+            
+        if commit:
+            self.db_handle.session.commit()
+        return tiebreaker
+    
+    def create_finals_match(self, tournament_id,final,round,commit=False):
+        finals_match = self.FinalsMatches()
+        finals_match.tournament_id=tournament_id        
+        finals_match.round=round
+        final.matches.append(finals_match)
+        self.db_handle.session.add(finals_match)
+        if commit:
+            self.db_handle.session.commit()
+        return finals_match
+    
+    def create_finals(self, tournament_id,description, commit=False):
+        final = self.Finals()
+        final.tournament_id=tournament_id
+        final.name=description
+        self.db_handle.session.add(final)
+
+        if commit:
+            self.db_handle.session.commit()
+        return final
+    
     def void_ticket(self,event_id,player,tournament_machine=None,tournament=None,commit=False):
         tournament_token_count,meta_tournament_token_count = self.get_available_token_count_for_tournaments(event_id,player)
         tournament_id=None

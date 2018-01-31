@@ -153,3 +153,8 @@ def serialize_event_private(model):
     event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model,True)    
     return event_dict
 
+def serialize_tiebreaker(model):
+    tiebreaker_dict=serializer_v2([]).serialize_model(model,True)    
+    tiebreaker_dict['players']=[to_dict(player) for player in model.players]
+    return tiebreaker_dict
+

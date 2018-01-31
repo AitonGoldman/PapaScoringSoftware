@@ -50,7 +50,6 @@
     <ion-item no-lines [navPush]="'TournamentPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})">
       <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Create Tournament 
     </ion-item>
-    
   </ion-list>  
 
   <!--  <button ion-button [navPush]="'CreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create',targetEventId:1,eventName:'poop'}" >Create Tournament</button> -->
@@ -68,7 +67,11 @@
          <ion-item padding-left margin-left margin-right padding-right detail-push tappable [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Manage Tournament Machines</ion-item>
          <ion-item padding-left margin-left margin-right padding-right detail-push tappable [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})">Edit Tournament</ion-item>
          <ion-item padding-left margin-left margin-right pading-right  (tap)="onTournamentToggle(eventId,tournament)"><ion-icon padding-right item-end [name]="tournament.active?'play':'pause'"></ion-icon>{{tournament.active==true?"DeActivate":"Activate"}} Tournament</ion-item>
-      <!--</ion-item>-->
+         <!--</ion-item>-->
+         <ion-item detail-push padding-left margin-left margin-right pading-right [navPush]="'FinalsBootstrapPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,finalName:tournament.tournament_name+'-A'})">
+           Finals Management
+         </ion-item>
+         
       </ng-container>      
     </ng-container>
   </ion-list>

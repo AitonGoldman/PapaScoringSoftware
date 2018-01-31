@@ -22,29 +22,15 @@ def generate_img_url(type, event_id, tournament_id=None,player_id=None):
 @blueprints.test_blueprint.route('/media_upload',methods=['POST'])
 def upload_event_pic():
     # check if the post request has the file part                    
-    upload_folder = current_app.config['UPLOAD_FOLDER']
-    print "uploading...."    
-    if 'image' not in request.files:                                
-        print "uploading....uh oh 1"
+    upload_folder = current_app.config['UPLOAD_FOLDER']    
+    if 'image' not in request.files:                                        
         return jsonify({})    
     file = request.files['image']            
-    if file.filename == '':
-        print "uploading....uh oh 2"
+    if file.filename == '':        
         return jsonify({})            
-    # if type == "put_edit_event":        
-    #     event = tables.Events.query.filter_by(event_id=event_id).first()
-    #     save_path=os.path.join('%s/img/events/%s'% (upload_folder,event.event_id), "%s.jpg"%event.event_id)
-    #     img_url=generate_img_url(type,event.event_id)
-    # if type == "put_edit_tournament":
-    #     event = tables.Events.query.filter_by(name=current_app.name).first()
-    #     save_path=os.path.join('%s/img/events/%s/tournaments'% (upload_folder,event.event_id), "%s.jpg"%id)                            
-    #     img_url=generate_img_url(type,event.event_id,id)
-    if file:
-        print "uploading....finally"
-        filename = secure_filename(file.filename)
-        print "filename is ..."+filename
-        random_file_name = datetime.datetime.now().strftime("%s")+filename
-        print "random file name is ..."+random_file_name
+    if file:        
+        filename = secure_filename(file.filename)        
+        random_file_name = datetime.datetime.now().strftime("%s")+filename        
         file.save(upload_folder+"/"+random_file_name)
-        print "done saving..."
+        
     return jsonify({'data':"%s"%random_file_name})

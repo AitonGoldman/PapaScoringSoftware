@@ -15,9 +15,9 @@ import { ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class PssApiProvider {
-    //basePssUrl='http://192.168.1.178:8000'
+    basePssUrl='http://192.168.1.178:8000'
     //basePssUrl='http://192.168.0.64:8000'
-    basePssUrl='http://9.75.197.88:8000' 
+    //basePssUrl='http://9.75.197.88:8000' 
 
     //basePssUrl='http://0.0.0.0:8000'
     loading_instance = null;   
@@ -96,6 +96,7 @@ export class PssApiProvider {
     
     eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest',this.basePssUrl+"/pss_user_request",'post');
     eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm',this.basePssUrl+"/pss_user_request_confirm/:arg",'post');
+    generateFinalsBracket = this.generate_api_call('generateFinalsBracket',this.basePssUrl+"/:arg/brackets/:arg",'post');
     
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
     getAllPlayers = this.generate_api_call('getAllPlayers',this.basePssUrl+"/players",'get');    
@@ -108,6 +109,8 @@ export class PssApiProvider {
 
     getEventPlayers = this.generate_api_call('getEventPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get');
     getEvent = this.generate_api_call('getEvent',this.basePssUrl+"/event/:arg",'get');
+    getFinalsTiebreakersRollCall = this.generate_api_call('getFinalsTiebreakersRollCall',this.basePssUrl+"/:arg/tiebreakers/:arg/:arg",'get')
+    saveFinalsBootstrapTiebreakersScore = this.generate_api_call('getFinalsBootstrapTiebreakersScore',this.basePssUrl+"/:arg/tiebreaker/:arg",'put')
     getIfpaRanking = this.generate_api_call('getIfpaRanking',this.basePssUrl+"/ifpa/:arg",'get');
     
     getTournament = this.generate_api_call('getTournament',this.basePssUrl+"/:arg/tournament/:arg",'get');

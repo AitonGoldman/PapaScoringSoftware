@@ -8,7 +8,7 @@ import json
 
 def get_user_roles(pss_user,event_id=None):
     if pss_user.event_creator:        
-        all_roles=[{'event_id':event.event_id,'event_role_name':'tournamentdirector'} for event in pss_user.events_created]
+        all_roles=[{'event_id':event.event_id,'event_role_name':'tournament_director'} for event in pss_user.events_created]
     else:
         all_roles = [{'event_id':event.event_id,'event_role_name':event.event_role_name} for event in pss_user.event_roles]
     if event_id is None:

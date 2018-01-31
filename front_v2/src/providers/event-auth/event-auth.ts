@@ -4,7 +4,8 @@ import { CookieService } from 'ngx-cookie';
 
 const roleToHomePageMap ={
     'eventowner':'EventOwnerHomePage',
-    'tournamentdirector':'TournamentDirectorHomePage',
+    'tournament_director':'TournamentDirectorHomePage',
+    'scorekeeper':'ScorekeeperTournamentSelectPage',
     'player':'PlayerHomePage'
 }
 /*

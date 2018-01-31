@@ -63,7 +63,7 @@ export class PssPageComponent {
         let role = this.eventAuth.getRoleName(eventId);
         //console.log('in getHomePageString...')
         
-        if(role=="tournamentdirector"){
+        if(role=="tournament_director"){
                 return 'TD Home'            
         }
         if(role=="eventowner"){
@@ -89,7 +89,7 @@ export class PssPageComponent {
         let role = this.eventAuth.getRoleName(eventId);
         //console.log('in getHomePageString...')
         
-        if(role=="tournamentdirector"){
+        if(role=="tournament_director"){
                 return 'TournamentDirectorHomePage'            
         }
         if(role=="eventowner"){
@@ -99,7 +99,7 @@ export class PssPageComponent {
             return 'PlayerHomePage'
         }
        if(role=="scorekeeper"){
-            return 'ResultsPage'
+            return 'ScorekeeperTournamentSelectPage'
        }
          
         if (role == null){

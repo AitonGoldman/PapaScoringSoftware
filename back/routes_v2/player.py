@@ -14,7 +14,8 @@ def handle_img_upload(input_data):
     if input_data.get('img_file',None) and input_data.get('has_pic',None):
         copyfile(current_app.config['UPLOAD_FOLDER']+"/"+input_data['img_file'],event_img_folders+"/"+input_data['img_file'])
         input_data['img_url']='/assets/imgs/%s'%(input_data['img_file'])
-
+        input_data['has_pic']=True
+        
 def edit_player_route(request,app,event_id):
     if request.data:        
         input_data = json.loads(request.data)
@@ -22,7 +23,7 @@ def edit_player_route(request,app,event_id):
         raise BadRequest('Submitted information is missing required fields')
     #put tournament edit logic here
     handle_img_upload(input_data)
-    player = app.table_proxy.edit_player(input_data,False)    
+    player = app.table_proxy.edit_player(input_data,False)        
     return player
 
 def create_player_route(request,tables_proxy,event_id):

@@ -41,7 +41,7 @@
         </ion-select>
       </ion-item>
     </ng-container>
-    <ion-item *ngIf="eventAuth.getRoleName(this.eventId)=='tournamentdirector'">
+    <ion-item *ngIf="eventAuth.getRoleName(this.eventId)=='tournament_director'">
       <ion-label>Comped</ion-label>
       <ion-toggle name="myComped" [(ngModel)]="comped"></ion-toggle>
     </ion-item>

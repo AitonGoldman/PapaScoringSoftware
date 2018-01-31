@@ -155,7 +155,7 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
                                 }                                
                             }
                         }
-                        if(this.role=='tournamentdirector' || this.role=='deskworker'){
+                        if(this.role=='tournament_director' || this.role=='deskworker'){
                             queue.icon='remove-circle';
                             queue.allowedToRemove=true;
                             //queue.whatToDo=this.generateRemovePlayerFromQueue();                            

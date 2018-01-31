@@ -220,7 +220,7 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
                 handler: this.generateForceAddPlayer(tournamentMachine)
             })
         }
-        if(this.eventAuth.getRoleName(this.eventId)=="tournamentdirector"){
+        if(this.eventAuth.getRoleName(this.eventId)=="tournament_director"){
             buttons.push(
                 {
                 text: 'Insert Into Queue',

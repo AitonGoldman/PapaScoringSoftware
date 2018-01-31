@@ -48,6 +48,10 @@ def create_player_route(request,tables_proxy,event_id):
             tables_proxy.update_player_roles(event_id, player,
                                              player_to_create.get('ifpa_ranking',None),
                                              player_to_create.get('selected_division_in_multi_division_tournament',None))
+            if player_to_create.get('img_url',None):
+                player.img_url=player_to_create['img_url']
+                player.has_pic=True
+                
             players_added_to_event.append(player)
             continue                        
         existing_players = tables_proxy.get_player(event_id,
@@ -60,6 +64,8 @@ def create_player_route(request,tables_proxy,event_id):
                                                player_to_create['last_name'],
                                                extra_title=player_to_create.get('extra_title',None),
                                                img_url=player_to_create.get('img_url',None))
+        if new_player.img_url:
+            new_player.has_pic=True
         tables_proxy.update_player_roles(event_id, new_player,
                                         player_to_create.get('ifpa_ranking',None),
                                         player_to_create.get('selected_division_in_multi_division_tournament',None))        

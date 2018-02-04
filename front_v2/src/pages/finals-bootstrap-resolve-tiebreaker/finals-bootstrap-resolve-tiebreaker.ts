@@ -47,7 +47,7 @@ export class FinalsBootstrapResolveTiebreakerPage extends PssPageComponent {
 
     
     saveScores(){
-        this.pssApi.saveFinalsBootstrapTiebreakersScore(this.tiebreaker,this.eventId,this.tiebreaker.tiebreaker_id)
+        this.pssApi.saveFinalsBootstrapTiebreakersScore({'tiebreaker':this.tiebreaker},this.eventId,this.tiebreaker.tiebreaker_id)
             .subscribe(this.generateSaveFinalsBootstrapTiebreakersScoreProcessor())                                                          
 
     }

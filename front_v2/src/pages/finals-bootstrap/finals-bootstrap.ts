@@ -10,7 +10,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
  */
 
 @IonicPage({
-    segment: 'FinalsBootstrap/:eventId/:eventName/:tournamentId'
+    segment: 'FinalsBootstrap/:eventId/:eventName/:tournamentId/:finalName'
 })
 @Component({
   selector: 'page-finals-bootstrap',

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { SuccessSummary } from '../../classes/success-summary';
-import { SuccessButton } from '../../classes/SuccessButton';
+
 
 /**
  * Generated class for the ScorekeeperRecordScorePage page.
@@ -34,8 +34,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
             // console.log('in generateAddEventPlayerProcessor')
             console.log('in genrateSubmitScoreProcessor')
             console.log(result)
-            let tournamentMachine=result.data;
-            let successButtons=[];
+            let tournamentMachine=result.data;            
             if(result.tournament_counts!=0){
                 successSummary.secondLine="Player has "+result.tournament_counts+" tickets left.";
             }            

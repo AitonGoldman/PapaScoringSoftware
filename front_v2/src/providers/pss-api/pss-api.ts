@@ -17,6 +17,7 @@ import { ToastController } from 'ionic-angular';
 export class PssApiProvider {
     basePssUrl='http://192.168.1.178:8000'
     //basePssUrl='http://192.168.0.64:8000'
+    //basePssUrl='http://192.168.0.64:8000'
     //basePssUrl='http://9.75.197.88:8000' 
 
     //basePssUrl='http://0.0.0.0:8000'
@@ -81,6 +82,7 @@ export class PssApiProvider {
     addEventPlayerToQueue = this.generate_api_call('addPlayerToQueue',this.basePssUrl+"/:arg/queue",'post');
     bumpPlayerDownQueue = this.generate_api_call('bumpPlayerDownQueue',this.basePssUrl+"/:arg/queue",'put')
     completeTicketPurchase = this.generate_api_call('completeTicketPurchase',this.basePssUrl+"/:arg/token/:arg",'put');
+    completeRound = this.generate_api_call('completeRound',this.basePssUrl+"/:arg/final/:arg/:arg",'put');
 
     createEvent = this.generate_api_call('createEvent',this.basePssUrl+"/event",'post');
     createWizardEvent = this.generate_api_call('createWizardEvent',this.basePssUrl+"/wizard/event/tournament/tournament_machines",'post');
@@ -93,10 +95,12 @@ export class PssApiProvider {
     editPlayer = this.generate_api_call('editEvent',this.basePssUrl+"/:arg/player",'put');
     
     editEventUserRole = this.generate_api_call('editEventUser',this.basePssUrl+"/:arg/event_role_mapping",'put');    
+    editFinalsMatch = this.generate_api_call('editFinalsMatch',this.basePssUrl+"/:arg/finals_match/:arg",'put');    
     
     eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest',this.basePssUrl+"/pss_user_request",'post');
     eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm',this.basePssUrl+"/pss_user_request_confirm/:arg",'post');
     generateFinalsBracket = this.generate_api_call('generateFinalsBracket',this.basePssUrl+"/:arg/brackets/:arg",'post');
+    
     
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
     getAllPlayers = this.generate_api_call('getAllPlayers',this.basePssUrl+"/players",'get');    
@@ -109,8 +113,11 @@ export class PssApiProvider {
 
     getEventPlayers = this.generate_api_call('getEventPlayers',this.basePssUrl+"/:arg/event_players/:arg",'get');
     getEvent = this.generate_api_call('getEvent',this.basePssUrl+"/event/:arg",'get');
+    getFinal = this.generate_api_call('getFinal',this.basePssUrl+"/:arg/final/:arg",'get')
     getFinalsTiebreakersRollCall = this.generate_api_call('getFinalsTiebreakersRollCall',this.basePssUrl+"/:arg/tiebreakers/:arg/:arg",'get')
-    saveFinalsBootstrapTiebreakersScore = this.generate_api_call('getFinalsBootstrapTiebreakersScore',this.basePssUrl+"/:arg/tiebreaker/:arg",'put')
+    saveFinalsBootstrapTiebreakersScore = this.generate_api_call('saveFinalsBootstrapTiebreakersScore',this.basePssUrl+"/:arg/tiebreaker/:arg",'put')
+    saveFinalsMatchTiebreakersScore = this.generate_api_call('saveFinalsMatchTiebreakersScore',this.basePssUrl+"/:arg/tiebreaker/:arg/match/:arg",'put')
+
     getIfpaRanking = this.generate_api_call('getIfpaRanking',this.basePssUrl+"/ifpa/:arg",'get');
     
     getTournament = this.generate_api_call('getTournament',this.basePssUrl+"/:arg/tournament/:arg",'get');

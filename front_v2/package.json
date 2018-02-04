@@ -28,7 +28,7 @@
     "angular-in-memory-web-api": "^0.5.2",
     "angular2-image-upload": "^1.0.0-rc.0",
     "angular2-notifications": "^0.9.7",
-    "cordova-ios": "4.5.4",
+    "cordova-ios": "^4.5.4",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-splashscreen": "^4.0.3",

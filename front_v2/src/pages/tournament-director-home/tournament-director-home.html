@@ -71,7 +71,9 @@
          <ion-item detail-push padding-left margin-left margin-right pading-right [navPush]="'FinalsBootstrapPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,finalName:tournament.tournament_name+'-A'})">
            Finals Management
          </ion-item>
-         
+         <ion-item detail-push padding-left margin-left margin-right pading-right (click)="pushRootPage('ScorekeeperFinalsPage',buildNavParams({finalId:1}))">
+           Finals Scorekeeping
+         </ion-item>
       </ng-container>      
     </ng-container>
   </ion-list>

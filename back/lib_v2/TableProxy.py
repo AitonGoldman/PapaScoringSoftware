@@ -87,6 +87,10 @@ class TableProxy():
             'TiebreakerPlayers',
             cascade='all'
         )
+        self.FinalsMatches.tiebreakers = db_handle.relationship(
+            'Tiebreakers',
+            cascade='all'
+        ) 
         self.FinalsPlayers.tiebreaker_players = db_handle.relationship(
             'TiebreakerPlayers',
             cascade='all'
@@ -813,7 +817,7 @@ class TableProxy():
             self.db_handle.session.commit()
             
     def create_finals_player(self,event_id, player_id,tournament_id,seed_rank,commit=False):        
-        existing_finals_player = self.get_finals_player(player_id,tournament_id)
+        existing_finals_player = self.get_finals_player(tournament_id,player_id=player_id)
         if existing_finals_player:
             return existing_finals_player
         player = self.get_player(event_id,player_id=player_id)
@@ -833,6 +837,11 @@ class TableProxy():
     def get_final(self,final_id):
         return self.Finals.query.filter_by(final_id=final_id).first()
     
+    def get_finals_match(self,finals_match_id):
+        return self.FinalsMatches.query.filter_by(finals_match_id=finals_match_id).first()
+
+    def get_finals_match_by_tiebreaker_id(self,tiebreaker_id):
+        return self.FinalsMatches.query.filter_by(tiebreaker_id=tiebreaker_id).first()
     
     def get_all_finals_players(self,tournament_id):
         return self.FinalsPlayers.query.filter_by(tournament_id=tournament_id).all()        
@@ -840,8 +849,11 @@ class TableProxy():
     def get_all_finals_matches(self,final_id):
         return self.FinalsMatches.query.filter_by(final_id=final_id).order_by(self.FinalsMatches.finals_match_id).all()
     
-    def get_finals_player(self,player_id,tournament_id):
-        return self.FinalsPlayers.query.filter_by(player_id=player_id,tournament_id=tournament_id).first()        
+    def get_finals_player(self,tournament_id,player_id=None,finals_player_id=None):
+        if player_id:
+            return self.FinalsPlayers.query.filter_by(player_id=player_id,tournament_id=tournament_id).first()
+        else:
+            return self.FinalsPlayers.query.filter_by(finals_player_id=finals_player_id,tournament_id=tournament_id).first()
     
     def get_all_tiebreakers(self, tournament_id,round):
         return self.Tiebreakers.query.filter_by(tournament_id=tournament_id,round=round).all()        
@@ -869,18 +881,18 @@ class TableProxy():
             tiebreaker.ppo_a_b_boundry=ppo_a_b_boundry
             
         for tied_player_id in tied_player_ids:
-            finals_player = self.get_finals_player(tied_player_id,tournament_id)
-            self.db_handle.session.add(finals_player)
+            finals_player = self.get_finals_player(tournament_id,finals_player_id=tied_player_id)
+            #self.db_handle.session.add(finals_player)
             tiebreaker_player = self.TiebreakerPlayers()
             self.db_handle.session.add(tiebreaker_player)
             
-            tiebreaker_player.player_id = tied_player_id
-            finals_player.player_id = tied_player_id
+            tiebreaker_player.finals_player_id = tied_player_id
+            #finals_player.player_id = tied_player_id
 
-            player = self.get_player(event_id,player_id=tied_player_id)
+            player = self.get_player(event_id,player_id=finals_player.player_id)
             tiebreaker_player.player_name=player.first_name+" "+player.last_name
             
-            finals_player.player_name=player.first_name+" "+player.last_name
+            #finals_player.player_name=player.first_name+" "+player.last_name
             finals_player.tiebreaker_players.append(tiebreaker_player)
             tiebreaker.players.append(tiebreaker_player)
             
@@ -908,6 +920,11 @@ class TableProxy():
             self.db_handle.session.commit()
         return final
     
+    def edit_finals_match(self,finals_match,input_data,commit=False):                
+        deserializer.deserialize_json(finals_match,input_data)
+        if commit:
+            self.db_handle.session.commit()
+            
     def void_ticket(self,event_id,player,tournament_machine=None,tournament=None,commit=False):
         tournament_token_count,meta_tournament_token_count = self.get_available_token_count_for_tournaments(event_id,player)
         tournament_id=None

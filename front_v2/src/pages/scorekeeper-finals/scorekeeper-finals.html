@@ -1,0 +1,11 @@
+<!--
+  Generated template for the ScorekeeperFinalsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-tabs>
+  <ion-tab [root]="'ScorekeeperFinalsRoundPage'" tabTitle="{{round}}" [rootParams]="buildNavParams({finalId:finalId,round:round})" *ngFor="let round of [1,2,3,4]"></ion-tab>
+</ion-tabs>
+

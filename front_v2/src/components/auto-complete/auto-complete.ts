@@ -6,7 +6,6 @@ import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { AlertController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
-import { NotificationsService } from 'angular2-notifications';
 import { Events } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
 import { PopoverController } from 'ionic-angular';

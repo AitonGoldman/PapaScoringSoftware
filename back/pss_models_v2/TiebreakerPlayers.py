@@ -7,4 +7,5 @@ def generate_tiebreaker_players_class(db_handle):
         player_name=db_handle.Column(db_handle.String(100))        
         # rank after tiebreaker
         score=db_handle.Column(db_handle.Integer)
+        winner=db_handle.Column(db_handle.Boolean)        
     return TiebreakerPlayers

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Platform, App, NavParams, NavController } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
-import { NotificationsService } from 'angular2-notifications';
 import { SearchResults } from '../../classes/search-results';
 import { ActionSheetController } from 'ionic-angular'
 import { ToastController } from 'ionic-angular';

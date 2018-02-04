@@ -1,4 +1,4 @@
-import { ViewChild, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { AutoCompleteComponent } from '../../components/auto-complete/auto-complete'
 import { IonicPage } from 'ionic-angular';
 

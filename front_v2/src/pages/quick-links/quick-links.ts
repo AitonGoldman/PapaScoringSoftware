@@ -1,4 +1,4 @@
-import { ViewChild,Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 import { reorderArray } from 'ionic-angular';
@@ -103,7 +103,7 @@ export class QuickLinksPage extends PssPageComponent {
             })
             return
         }
-        let whatever_one = this.navCtrl.parent.getByIndex(1)._views;
+        //let whatever_one = this.navCtrl.parent.getByIndex(1)._views;
         console.log(this.navCtrl.parent.getByIndex(1)._zone.isStable);
         tabs.select(1).then(()=>{            
             setTimeout(this.getCallback(pageName,args),0)

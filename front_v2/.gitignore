@@ -9,3 +9,4 @@ plugins/
 .\#*
 www/
 .sourcemaps/
+GoogleService-Info.plist

@@ -1,3 +1,4 @@
+from celery import Celery
 from flask_mail import Mail
 from json import loads, dumps
 from flask_principal import Principal, Permission
@@ -15,6 +16,26 @@ from lib_v2.TableProxy import TableProxy
 from werkzeug.wsgi import pop_path_info, peek_path_info
 from StripeProxy import StripeProxy
 
+def make_celery(app):
+
+    celery = Celery('celery_app', backend=app.config['CELERY_RESULT_BACKEND'],
+                    broker=app.config['CELERY_BROKER_URL'])
+    celery.conf.update(app.config)
+    TaskBase = celery.Task
+    class ContextTask(TaskBase):
+        abstract = True
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+    celery.Task = ContextTask
+    return celery
+
+def generate_celery_method(app):
+    @app.celery.task()
+    def add_together(a, b):
+        return a + b
+    return add_together
+
 def configure_base_app(app):    
     app.config['DEBUG']=True
     app.config['UPLOAD_FOLDER']='/tmp'
@@ -26,6 +47,8 @@ def configure_base_app(app):
     #FIXME : need a null check for mail info
     app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
     app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')    
+    app.config['CELERY_BROKER_URL']=os.getenv('CELERY_BROKER_URL')
+    app.config['CELERY_RESULT_BACKEND']=os.getenv('CELERY_RESULT_BACKEND')    
     mail = Mail(app)
     app.mail=mail
     app.json_encoder = CustomJSONEncoder            
@@ -41,7 +64,9 @@ def configure_base_app(app):
     for code in default_exceptions.iterkeys():
         app.error_handler_spec[None][code] = make_json_error
     #FIXME : THIS SHOULD COME FROM THE DB
-    app.secret_key = os.getenv("FLASK_SECRET_KEY")        
+    app.secret_key = os.getenv("FLASK_SECRET_KEY")
+    app.celery = make_celery(app)
+    app.test_celery = generate_celery_method(app)
     return app
 
 def make_json_error(ex):

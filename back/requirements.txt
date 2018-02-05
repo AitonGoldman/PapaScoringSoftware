@@ -34,3 +34,5 @@ sendgrid==3.6.3
 marshmallow-sqlalchemy==0.13.1
 flask-marshmallow==0.8.0
 flask-mail==0.9.1
+pyfcm==1.4.3
+celery==4.1.0

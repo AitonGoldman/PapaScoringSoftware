@@ -8,6 +8,7 @@ def remove_player_with_notification(player,app,tournament_machine, event_id):
                 app.table_proxy.remove_player_from_queue(player,
                                                          tournament_machine_to_remove_from,
                                                          position_in_queue=existing_position)
+                
                 #if app.event_settings[event_id].ionic_api_key:                
                 #    notification_helpers.notify_list_of_players(queues[existing_position:],"test message")
                     

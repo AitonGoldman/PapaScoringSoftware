@@ -75,7 +75,7 @@ export class PssApiProvider {
     adminVoidTicket = this.generate_api_call('adminVoidTicket',this.basePssUrl+"/:arg/admin/token/:arg/:arg/:arg",'delete');
     adminAddScore = this.generate_api_call('adminAddScore',this.basePssUrl+"/:arg/admin/entry/:arg/:arg/:arg",'put');
     adminEditScore = this.generate_api_call('editScore',this.basePssUrl+"/:arg/admin/entry/:arg/:arg",'put');
-
+    
     addTournamentMachine = this.generate_api_call('addTournamentMachine',this.basePssUrl+"/:arg/tournament_machine",'post');
     addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');
     addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');
@@ -144,7 +144,7 @@ export class PssApiProvider {
     loginUser = this.generate_api_call('loginUser',this.basePssUrl+"/auth/pss_event_user/login/:arg",'post');
     loginPlayer = this.generate_api_call('loginPlayer',this.basePssUrl+"/auth/player/login/:arg",'post');
     removePlayerFromQueue = this.generate_api_call('removePlayerFromQueue',this.basePssUrl+"/:arg/queue",'delete');
-    
+    recordTokens = this.generate_api_call('recordTokens',this.basePssUrl+"/fcm_tokens/:arg",'get',true);
     searchPlayers = this.generate_api_call('searchPlayers',this.basePssUrl+"/players/:arg",'get');        
     searchPlayersHidden = this.generate_api_call('searchPlayers',this.basePssUrl+"/players/:arg",'get',true);        
 

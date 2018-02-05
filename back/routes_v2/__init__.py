@@ -16,3 +16,4 @@ import ifpa
 import admin
 import score
 import finals
+import push_notifications

@@ -23,6 +23,7 @@ import { TopThreePopoverComponent } from '../components/top-three-popover/top-th
 import { ListOrderStorageProvider } from '../providers/list-order-storage/list-order-storage';
 import { QuickLinksProvider } from '../providers/quick-links/quick-links';
 import { TournamentSettingsProvider } from '../providers/tournament-settings/tournament-settings';
+import { FCM } from '@ionic-native/fcm';
 
 //import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
@@ -64,7 +65,8 @@ import { TournamentSettingsProvider } from '../providers/tournament-settings/tou
     AutoCompleteProvider,
     ListOrderStorageProvider,
     QuickLinksProvider,
-    TournamentSettingsProvider
+      TournamentSettingsProvider,
+      FCM
   ]
 })
 export class AppModule {}

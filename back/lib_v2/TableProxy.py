@@ -711,7 +711,19 @@ class TableProxy():
                 queue.player_id=sorted_remove_queue[index+1].player_id
                 queue.bumped=sorted_remove_queue[index+1].bumped
                 sorted_remove_queue[index+1].bumped=False
-        return True
+                if queue.player_id:
+                    players_to_notify.append({
+                        'player_name':queue.player.__repr__(),
+                        'player_id':queue.player.player_id,
+                        'token':queue.player.ioniccloud_push_token,
+                        'position':queue.position,
+                        'machine_name':tournament_machine.tournament_machine_name
+                    })
+        # on each loop, build a dict with the following info : player name, player_id, ionic token, new position
+        # return it
+        #
+        #
+        return players_to_notify
     
     def insert_player_into_queue(self,player,tournament_machine):
         queues_to_lock_for_addition = self.Queues.query.with_for_update().filter_by(tournament_machine_id=tournament_machine.tournament_machine_id).all()

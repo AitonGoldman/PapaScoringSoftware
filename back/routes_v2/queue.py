@@ -54,7 +54,7 @@ def remove_player_route(request,app,event_id,current_user,player_initiated=False
     tournament_machine_id=input_data.get('tournament_machine_id',None)
     player = app.table_proxy.get_player(event_id, player_id=player_id)
     tournament_machine = app.table_proxy.get_tournament_machine_by_id(tournament_machine_id)
-    print tournament_machine.tournament_machine_id
+    
     with app.table_proxy.db_handle.session.no_autoflush:                
         try:
             remove_player_with_notification(player,app,tournament_machine,event_id)

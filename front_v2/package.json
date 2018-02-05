@@ -30,6 +30,7 @@
     "angular2-image-upload": "^1.0.0-rc.0",
     "angular2-notifications": "^0.9.7",
     "clean": "4.0.2",
+    "cordova-android": "6.4.0",
     "cordova-ios": "^4.5.4",
     "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-fcm": "^2.1.2",
@@ -66,7 +67,8 @@
       "cordova-plugin-fcm": {}
     },
     "platforms": [
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

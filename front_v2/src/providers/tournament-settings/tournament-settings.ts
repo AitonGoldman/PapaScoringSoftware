@@ -12,12 +12,28 @@ import { PssApiProvider } from '../../providers/pss-api/pss-api';
 export class TournamentSettingsProvider {
     tournaments:any = null;
     tournamentMachines:any = null;
+    events:any=null;
     
     constructor(public http: HttpClient, public pssApi: PssApiProvider) {
         console.log('Hello TournamentSettingsProvider Provider');
     }
     setTournaments(tournaments){
         this.tournaments=tournaments;
+    }
+    setEvents(events){
+        this.events=events;
+    }
+    getEvents(){
+        return this.events;
+    }
+    getEvent(eventId){
+        return this.events.filter((event)=>{
+            if(event.event_id==eventId){
+                return true;
+            } else {
+                return false;
+            }
+        })
     }
     getTournaments(eventId){
         return this.tournaments;        

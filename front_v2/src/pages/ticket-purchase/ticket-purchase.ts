@@ -27,7 +27,7 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
     totalCost:number=0;
     hideSearchbar:boolean=false;
     comped:boolean=false;
-    
+    stripePublicKey:any=null;
     ionViewWillLoad() {
         console.log('ionViewDidLoad TicketPurchasePage');
         this.autoCompleteProvider.initializeAutoComplete(null,
@@ -53,6 +53,7 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
             this.selectedPlayer=result.data!=null?result.data:null;
             this.ticketPriceLists=result.tournament_calculated_lists;
             this.ticketCountsDict=result.tournament_counts;
+            this.stripePublicKey=result.stripe_public_key
         }
     }
     gotoSuccessPage(purchaseSummary){
@@ -122,9 +123,9 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
             
         }       
     }
-    launchStripe(tokenPurchaseId, purchaseSummary){
+    launchStripe(tokenPurchaseId, purchaseSummary){        
         let handler = StripeCheckout.configure({
-            key: 'pk_test_ogpldo01jdDiemTfT8MMTtMU',
+            key: this.stripePublicKey,
             image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
             locale: 'auto',
             //            token: function(token) {
@@ -159,6 +160,7 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
         if(this.comped==true){
             ticketsToBuy['comped']=true;
         }
+        
         this.pssApi.purchaseTicket(ticketsToBuy,this.eventId)
             .subscribe(this.generatePurchaseTicketProcessor(purchaseSummary))                                                  
         

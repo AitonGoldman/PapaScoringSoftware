@@ -23,7 +23,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 })
 export class ResultsPage extends PssPageComponent {
     playerLoggedIn:boolean = false;
-    tournaments:any = null;
+    tournaments:any = [];
     eventPlayer:any = null;    
     doneLoading:boolean = false;
     generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(withPlayer=false){
@@ -34,6 +34,8 @@ export class ResultsPage extends PssPageComponent {
             if(withPlayer==true){
                 this.eventPlayer=result.player;
             }
+            console.log('in processor...')
+            console.log(result)
             let tournaments=result.data.map((tournament)=>{
                 tournament.expand_machines=false;
                 tournament.tournament_machines = tournament.tournament_machines.sort((n1,n2)=>{
@@ -70,11 +72,13 @@ export class ResultsPage extends PssPageComponent {
    
     ionViewWillEnter() {        
         
-        if(this.playerLoggedIn==false){                        
+        if(this.playerLoggedIn==false){
+            console.log('----------eventId is '+this.eventId)
             this.pssApi.getAllTournamentsAndMachines(this.eventId)            
                 .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor())
         } else {
             let playerId=this.eventAuth.getEventPlayerId(this.eventId)
+            console.log('player id is '+playerId+' and eventId is '+this.eventId)
             this.pssApi.getAllTournamentsAndMachinesAndEventPlayer(this.eventId,playerId)            
                 .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(true))
         }

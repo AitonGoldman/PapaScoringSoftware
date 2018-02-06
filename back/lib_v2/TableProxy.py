@@ -732,7 +732,7 @@ class TableProxy():
         sorted_queue[len(sorted_queue)-1].bumped=False
         
         for index in range(len(sorted_queue)-1,0,-1):
-            print index
+            
             sorted_queue[index].player_id=sorted_queue[index-1].player_id
             sorted_queue[index].bumped=sorted_queue[index-1].bumped
         sorted_queue[0].player_id=player.player_id                

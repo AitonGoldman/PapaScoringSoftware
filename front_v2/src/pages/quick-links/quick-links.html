@@ -22,9 +22,14 @@
       <button ion-item detail-push (tap)="returnToEventSelect()">
         <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event
       </button>
-      <button tappable ion-item detail-push (click)="pushPageWithNoBackButton('PlayerInfoPage',buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)}),1)" *ngIf="eventAuth.getRoleName(eventId)=='player'">
+      <!-- <button tappable ion-item detail-push (click)="pushPageWithNoBackButton('PlayerInfoPage',buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)}),1)" *ngIf="eventAuth.getRoleName(eventId)=='player'"> -->
+      <!--   <ion-icon name="person" item-end></ion-icon>My Results -->
+      <!-- </button> -->
+
+      <button tappable ion-item detail-push (tap)="publishQuickLinksPlayerPush('PlayerInfoPage',buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)}))" *ngIf="eventAuth.getRoleName(eventId)=='player'">
         <ion-icon name="person" item-end></ion-icon>My Results
       </button>
+      
       
       <ion-item-divider>
         Tournament Results

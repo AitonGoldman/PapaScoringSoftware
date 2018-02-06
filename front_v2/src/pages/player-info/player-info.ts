@@ -33,7 +33,8 @@ export class PlayerInfoPage extends AutoCompleteComponent {
     infoOnly:boolean=false;
 //    @ViewChild('searchbar')  searchbar: any;    
     singleUser:any=null;
-    displayExistingUserNotFound:boolean = false;   
+    displayExistingUserNotFound:boolean = false;
+    loaded:boolean=false;
     //    playerNotFoundMessage = null;
     
     // onKeyUp(event){        
@@ -52,55 +53,12 @@ export class PlayerInfoPage extends AutoCompleteComponent {
          console.log('unloading player info...');
      }
     ionViewWillEnter() {
-//        super.ionViewWillLoad();
-        console.log('ionViewDidLoad PlayerInfoPage');
-      //this.autoCompleteProvider.setPlayerSearchType("allPlayers",
-      //                                              this.generateLoadingFunction());      
-        // this.events.subscribe('autocomplete:skip', (autocompleteInfo, time) => {            
-        //     this.loading=false;
-        // })
-
-        // this.events.subscribe('autocomplete:done', (autocompleteInfo, time) => {
-        //     // user and time are the same arguments passed in `events.publish(user, time)`
-        //     this.loading=false;            
-        //     if(autocompleteInfo.state=='DONE'){
-        //         console.log(autocompleteInfo);
-        //         if(autocompleteInfo.type=='SEARCH_SINGLE'){
-        //             this['selectedPlayer']=autocompleteInfo.data.data;
-        //             this['ticketCounts']=this.generateListFromObj(this['selectedPlayer'].tournament_counts);                
-        //         }                
-        //     }
-        //     if(autocompleteInfo.state=='NONE'){
-        //         console.log(autocompleteInfo);
-        //         console.log(this.searchbar);
-        //         this.playerNotFoundMessage = "Player not found";
-                
-        //         // let toast = this.toastCtrl.create({
-        //         //     message:  "No Such Player in Event",
-        //         //     duration: 99000,
-        //         //     position: 'top',
-        //         //     showCloseButton: true,
-        //         //     closeButtonText: " ",
-        //         //     cssClass: "dangerToast"
-        //         // });
-        //         // toast.present();                                                    
-        //     }            
-        // });
-        this.autoCompleteProvider.initializeAutoComplete(null,
-                                                         null,
-                                                         this.generatePlayerLoadingFunction(),
-                                                         this.eventId,
-                                                         true);      
-      
+        console.log('entering player info....'+this.loaded)
+        if(this.loaded==false){
         let player_id_for_event = this.navParams.get('player_id_for_event');
         let playerId = this.navParams.get('playerId');
         this.infoOnly = this.navParams.get('infoOnly')!=null;
             
-        console.log('got params for player info...')
-        console.log(playerId)
-        console.log("got tournament from settings...");
-        console.log(this.tournamentSettings.getTournament(1));
-
         if(player_id_for_event==null && playerId==null){          
             return;            
         }
@@ -114,6 +72,37 @@ export class PlayerInfoPage extends AutoCompleteComponent {
             this.pssApi.getEventPlayerResultsByPlayerId(this.eventId,this.playerId)
                 .subscribe(this.generateGetEventPlayerProcessor())                                                                      
         }
+            
+        }
+        this.loaded=true;
+        
+    }
+
+    ionViewWillLoad() {
+        console.log('ionViewDidLoad PlayerInfoPage');
+        this.autoCompleteProvider.initializeAutoComplete(null,
+                                                         null,
+                                                         this.generatePlayerLoadingFunction(),
+                                                         this.eventId,
+                                                         true);      
+      
+        // let player_id_for_event = this.navParams.get('player_id_for_event');
+        // let playerId = this.navParams.get('playerId');
+        // this.infoOnly = this.navParams.get('infoOnly')!=null;
+            
+        // if(player_id_for_event==null && playerId==null){          
+        //     return;            
+        // }
+        // this.hideAutoComplete=true;
+        // this.player_id_for_event=player_id_for_event
+        // this.playerId=playerId
+        // if(player_id_for_event!=null){
+        //     this.pssApi.getEventPlayerResults(this.eventId,this.player_id_for_event)
+        //         .subscribe(this.generateGetEventPlayerProcessor())                                                          
+        // } else {
+        //     this.pssApi.getEventPlayerResultsByPlayerId(this.eventId,this.playerId)
+        //         .subscribe(this.generateGetEventPlayerProcessor())                                                                      
+        // }
     }
     generateGetEventPlayerProcessor(){
         return (result)=>{

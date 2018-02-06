@@ -39,6 +39,8 @@ def pss_login_route(request,tables_proxy,event_creator=False,event_id=None):
         else:
             if len([event for event in pss_user.event_roles if event.event_id==int(event_id)]) == 0:
                 raise Unauthorized('Not allowed to login to this event')
+    if input_data.get('token',None):
+        pss_user.ioniccloud_push_token=input_data['token']
                 
     return pss_user
 
@@ -54,7 +56,9 @@ def player_login_route(request,tables_proxy,event_id):
     if player is None:
         raise Unauthorized('Bad player number')
     if not player.verify_pin(int(input_data['player_pin'])):        
-        raise Unauthorized('Bad pin')        
+        raise Unauthorized('Bad pin')
+    if input_data.get('token',None):
+        player.ioniccloud_push_token=input_data['token']
     return player
 
 

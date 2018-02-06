@@ -24,6 +24,7 @@ export class EventSelectPage extends PssPageComponent {
                 return;
             }
             this.events=result.data;
+            this.tournamentSettings.setEvents(this.events);
         };
     }
 

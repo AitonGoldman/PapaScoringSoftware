@@ -67,6 +67,10 @@ export class LoginPage extends PssPageComponent {
             .subscribe(this.generateLoginUserProcessor())            
     }
     loginPlayer(){
+        if(this.fcmToken.getFcmToken()!=null){
+            this.loginInfo.token=this.fcmToken.getFcmToken();
+        }
+        
         this.pssApi.loginPlayer(this.loginInfo,this.eventId)
             .subscribe(this.generateLoginUserProcessor())            
     }    

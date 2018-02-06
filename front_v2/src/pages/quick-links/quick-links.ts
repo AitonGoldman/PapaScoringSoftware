@@ -97,6 +97,7 @@ export class QuickLinksPage extends PssPageComponent {
         //this.tabRef.getByIndex(1).push(pageName,args,{animate:false});
         let tabs = this.navCtrl.parent;
         if(tabs.getByIndex(1)._views.length!=0){
+            console.log("were okay....")
             this.navCtrl.parent.getByIndex(1).push(pageName,args,{animate:false}).then(()=>{
                 tabs.getByIndex(1).last().showBackButton(false);
                 tabs.select(1)
@@ -104,6 +105,7 @@ export class QuickLinksPage extends PssPageComponent {
             return
         }
         //let whatever_one = this.navCtrl.parent.getByIndex(1)._views;
+        console.log('---------------')
         console.log(this.navCtrl.parent.getByIndex(1)._zone.isStable);
         tabs.select(1).then(()=>{            
             setTimeout(this.getCallback(pageName,args),0)

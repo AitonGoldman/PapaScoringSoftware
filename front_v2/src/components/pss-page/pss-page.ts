@@ -11,6 +11,7 @@ import { PopoverController } from 'ionic-angular';
 import { TournamentSettingsProvider } from '../../providers/tournament-settings/tournament-settings'
 import { ListOrderStorageProvider } from '../../providers/list-order-storage/list-order-storage'
 import { Events } from 'ionic-angular';
+import { FcmTokenProvider } from '../../providers/fcm-token/fcm-token';
 
 /**
  * Generated class for the TopNavComponent component.
@@ -41,7 +42,8 @@ export class PssPageComponent {
                 public popoverCtrl: PopoverController,
                 public tournamentSettings: TournamentSettingsProvider,
                 public listOrderStorage: ListOrderStorageProvider,
-                public eventsService: Events) {
+                public eventsService: Events,
+                public fcmToken: FcmTokenProvider) {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         console.log('Hello PssPageComponent Component');

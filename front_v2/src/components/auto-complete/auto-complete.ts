@@ -11,6 +11,7 @@ import { ActionSheetController } from 'ionic-angular'
 import { PopoverController } from 'ionic-angular';
 import { TournamentSettingsProvider } from '../../providers/tournament-settings/tournament-settings'
 import { ListOrderStorageProvider } from '../../providers/list-order-storage/list-order-storage'
+import { FcmTokenProvider } from '../../providers/fcm-token/fcm-token';
 
 //import { IonicPage } from 'ionic-angular';
 
@@ -55,7 +56,8 @@ export class AutoCompleteComponent extends PssPageComponent {
                 public events: Events,
                 public popoverCtrl: PopoverController,
                 public tournamentSettings: TournamentSettingsProvider,
-                public listOrderStorage: ListOrderStorageProvider){
+                public listOrderStorage: ListOrderStorageProvider,
+                public fcmToken: FcmTokenProvider){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
@@ -67,7 +69,8 @@ export class AutoCompleteComponent extends PssPageComponent {
               popoverCtrl,
               tournamentSettings,
               listOrderStorage,
-              events);
+              events,
+              fcmToken);
         this.autocompleteDoneEventHandler= (autocompleteInfo, time) => {
             // user and time are the same arguments passed in `events.publish(user, time)`
             this.loading=false;            

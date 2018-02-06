@@ -122,7 +122,8 @@ def get_event_player(event_id,event_player_id):
     event_player_info = get_event_player_route(current_app,event_id,event_player_id)
     event_player_info['data']['tournament_calculated_lists']=event_player_info['tournament_calculated_lists']
     event_player_info['data']['tournament_counts']=event_player_info['tournament_counts']
-
+    event = current_app.table_proxy.get_event_by_event_id(event_id)
+    event_player_info['stripe_public_key']=event.stripe_public_key
     return jsonify(event_player_info)
     # event_player = current_app.table_proxy.get_event_player(event_id,event_player_id)
     # tournament_calculated_lists=[]

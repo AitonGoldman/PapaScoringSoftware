@@ -13,7 +13,7 @@ import json
 def handle_img_upload(input_data):
     print "in handle img for tourneys..."
     event_img_folders=current_app.config['IMG_HTTP_SRV_DIR']
-    print input_data
+    
     if 'img_file' in input_data and input_data['img_file'] and input_data['has_pic']:
         copyfile(current_app.config['UPLOAD_FOLDER']+"/"+input_data['img_file'],event_img_folders+"/"+input_data['img_file'])
         input_data['img_url']='/assets/imgs/%s'%(input_data['img_file'])
@@ -78,7 +78,7 @@ def edit_tournament(event_id):
 def wizard_tournament_create():        
     orig_data = request.data
     tournament = json.loads(orig_data)['tournament']
-    print tournament['tournament']
+    
     permission = permissions.CreateTournamentPermission(tournament['tournament']['event_id'])    
     if not permission.can():
         raise Unauthorized('You are not authorized to create an event')
@@ -131,7 +131,7 @@ def get_all_tournaments_and_tournament_machines_route(event_id,app):
         for tournament_machine in tournament_dict['tournament_machines']:                        
             tournament_machine['queues']=[generic.serialize_queue(queue,generic.QUEUE_AND_PLAYER) for queue in queues[tournament_machine['tournament_machine_id']]]
             tournament_machine['queues'].sort(key=lambda x: x['position'])
-            print tournament_machine['queues']
+            
             tournament_machine['queue_length']=len([queue for queue in tournament_machine['queues'] if queue.get('player',None)])
             if tournament_machine.get('player_id',None):
                 tournament_machine['queue_length']= tournament_machine['queue_length'] + 1           

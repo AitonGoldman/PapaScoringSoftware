@@ -24,6 +24,7 @@ import { ListOrderStorageProvider } from '../providers/list-order-storage/list-o
 import { QuickLinksProvider } from '../providers/quick-links/quick-links';
 import { TournamentSettingsProvider } from '../providers/tournament-settings/tournament-settings';
 import { FCM } from '@ionic-native/fcm';
+import { FcmTokenProvider } from '../providers/fcm-token/fcm-token';
 
 //import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
@@ -66,7 +67,8 @@ import { FCM } from '@ionic-native/fcm';
     ListOrderStorageProvider,
     QuickLinksProvider,
       TournamentSettingsProvider,
-      FCM
+      FCM,
+    FcmTokenProvider
   ]
 })
 export class AppModule {}

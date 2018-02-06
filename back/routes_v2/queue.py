@@ -140,11 +140,16 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
             app.table_proxy.db_handle.session.commit()                        
             raise e
             #return {'result':'internal error : %s' % e,'added_queue':{}}
+    audit_log_message='Player %s added to queue %s by %s' % (player,tournament_machine.tournament_machine_name,current_user)
+    action='Player Added To Queue'
+    if insert:
+        audit_log_message='Player %s inserted INTO queue %s by %s' % (player,tournament_machine.tournament_machine_name,current_user)
+        action='Insert into queue'
     audit_log_params={
-        'action':'Player Added To Queue',
+        'action':action,
         'player_id':player.player_id,        
         'player_initiated':player_initiated,        
-        'description':'Player %s added to queue by %s' % (player,current_user),
+        'description': audit_log_message,
         'tournament_machine_id':tournament_machine.tournament_machine_id,
         'event_id':event_id
     }

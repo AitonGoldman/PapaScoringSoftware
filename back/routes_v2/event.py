@@ -8,6 +8,7 @@ from routes_v2.tournament import create_tournament_route
 from routes_v2.tournament_machine import create_tournament_machine_route
 import json
 from shutil import copyfile
+import time
 
 def handle_img_upload(input_data):
     print "in handle img upload..."    
@@ -54,7 +55,11 @@ def get_all_events():
             events_list.append(generic.serialize_event_private(event))
         else:
             events_list.append(generic.serialize_event_public(event))
+    
+    #time.sleep(10)
+    #time.poop()
     return jsonify({'data':events_list})
+    
 
 @blueprints.test_blueprint.route('/event/<int:event_id>',methods=['get'])
 def get_event(event_id):

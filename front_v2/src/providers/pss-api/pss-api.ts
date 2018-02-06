@@ -15,6 +15,7 @@ import { ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class PssApiProvider {
+    timeoutInMs:number=8000;
     basePssUrl='http://192.168.1.178:8000'
     //basePssUrl='http://192.168.0.64:8000'
     //basePssUrl='http://192.168.0.64:8000'
@@ -63,7 +64,7 @@ export class PssApiProvider {
             
             let result_observable = this.makeHot(this.http.request(method,localUrl,            
                                                                    {withCredentials:true,
-                                                                    body:postObject}))
+                                                                    body:postObject}).timeout(this.timeoutInMs))
                 .pipe(                
                     catchError(this.handleError(apiName,null))
                 );
@@ -165,11 +166,23 @@ export class PssApiProvider {
         return (error: any): Observable<T> => {                        
             if (debouncer == false){
                 debouncer=true;
-                console.log('error handling in progress...');
+                
+                if(error.constructor.name=="TimeoutError"){
+                    console.log('TIMEOUT IS HAPPENING...');
+                    //console.log(error)
+                    error.status=-1;
+                    error.error={message:"Operation Timed Out.  Please Try Again. "}
+                }
                 console.error(error); // log to console instead                
                 if(error.status!=404){                    
+                    let error_message = "";
+                    if(error.status==0){
+                        error_message="Internal server error.  Please try again."
+                    } else {
+                        error_message=error.error.message;
+                    }
                     let toast = this.toastCtrl.create({
-                        message:  error.error.message,
+                        message:  error_message,
                         duration: 99000,
                         position: 'top',
                         showCloseButton: true,
@@ -177,14 +190,15 @@ export class PssApiProvider {
                         cssClass: "dangerToast"
                     });
                     toast.present();                    
-                } else {
+                }
+                if (error.status==404){
                     console.log('found 404...')
                     result = {data:null} as any
                 }   
             } 
             // Let the app keep running by returning an empty result.
             //return Observable.empty();
-            return of(result as T);            
+            return of(result as T);
         };        
     }    
 }

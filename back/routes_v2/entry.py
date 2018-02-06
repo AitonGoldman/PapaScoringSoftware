@@ -15,6 +15,15 @@ def void_ticket_route(input_data,event_id,app,current_user):
     if app.table_proxy.void_ticket(event_id,player,tournament_machine) is False:
         raise BadRequest('Failed to void ticket')
     app.table_proxy.remove_player_from_machine(tournament_machine)
+    audit_log_params={
+        'action':'Ticket voided',
+        'player_id':player.player_id,        
+        'player_initiated':False,        
+        'description':'Ticket voided for %s on machine %s by %s' % (player,tournament_machine.tournament_machine_name,current_user),
+        'tournament_machine_id':tournament_machine.tournament_machine_id,
+        'event_id':event_id
+    }
+    app.table_proxy.create_audit_log(audit_log_params,event_id)    
     
 
 def record_score_route(input_data,event_id,app,current_user):
@@ -28,6 +37,15 @@ def record_score_route(input_data,event_id,app,current_user):
     app.table_proxy.mark_token_as_used(event_id,player,tournament)
     app.table_proxy.remove_player_from_machine(tournament_machine)
     app.table_proxy.record_score(event_id,player,tournament_machine,score)
+    audit_log_params={
+        'action':'Score recorded',
+        'player_id':player.player_id,        
+        'player_initiated':False,        
+        'description':'score %s recorded for %s on machine %s by %s' % (score,player,tournament_machine.tournament_machine_name,current_user),
+        'tournament_machine_id':tournament_machine.tournament_machine_id,
+        'event_id':event_id
+    }
+    app.table_proxy.create_audit_log(audit_log_params,event_id)    
 
 
 def start_player_on_machine_route(input_data,event_id, app, current_user):
@@ -137,7 +155,18 @@ def change_entry(event_id):
             record_score_route(input_data,event_id,current_app,current_user)
         if input_data['action'] == 'force_remove':
             tournament_machine = current_app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+            removed_player_id = tournament_machine.player_id
+            removed_player = current_app.table_proxy.get_player(event_id,player_id=removed_player_id)
             current_app.table_proxy.remove_player_from_machine(tournament_machine)
+            audit_log_params={
+                'action':'Player removed from machine',
+                'player_id':removed_player.player_id,        
+                'player_initiated':False,        
+                'description':'Player %s removed from machine %s by %s' % (removed_player,tournament_machine.tournament_machine_name,current_user),
+                'tournament_machine_id':tournament_machine.tournament_machine_id,
+                'event_id':event_id
+            }
+            current_app.table_proxy.create_audit_log(audit_log_params,event_id)    
             
     else:
         raise Unauthorized('You are not authorized to do this')

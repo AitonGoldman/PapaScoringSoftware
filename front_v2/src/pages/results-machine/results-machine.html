@@ -30,15 +30,25 @@
       <ion-col col-2 col-md-1 no-padding text-center>
         Rank
       </ion-col>
+      <ion-col col-md-1 no-padding text-center showWhen="core,tablet">
+        Points
+      </ion-col>      
      <!-- <ion-col col-2 col-md-1 no-padding text-center style='white-space: nowrap;'> -->
      <!--    Points -->
      <!--  </ion-col> -->
-      <ion-col col-5 col-md-5 no-padding text-center>
+      <ion-col hideWhen="tablet,core" col-5 col-md-5 no-padding text-center>
         Name
       </ion-col>
-      <ion-col col-5 no-padding text-right>
+      <ion-col showWhen="tablet,core" no-padding text-center>
+        Name
+      </ion-col>      
+      <ion-col hideWhen="tablet,core" col-5 no-padding text-right>
         Score
       </ion-col>
+      <ion-col showWhen="tablet,core" col-2 no-padding text-center>
+        Score
+      </ion-col>
+      
     </ion-row>
     <ion-row>
       <ion-col>
@@ -47,17 +57,28 @@
     </ion-row>
     <ion-row text-nowrap nowrap *ngFor="let result of results;index as i; even as e;" [style.background-color]="e==true?'#EEEEEE':null">
       <ion-col col-2 col-md-1 no-padding text-center align-self-center>
-        {{result.rank}}<span style='font-size:8px'><p style='line-height:1px'> ({{result.points}} points)</p></span>
+        {{result.rank}}<span hideWhen="core,tablet" style='font-size:8px'><p style='line-height:1px'> ({{result.points}} points)</p></span>
       </ion-col>
-      <ion-col padding-left col-5 align-self-center col-md-5 text-center>
+      <ion-col col-md-1 align-self-center no-padding text-center showWhen="core,tablet">
+        {{result.points}}
+      </ion-col>
+      <ion-col padding-left col-5 align-self-center hideWhen="core,tablet" text-center>
           <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name}}</a>
       </ion-col>
-      <ion-col>
+      <ion-col hideWhen="core,tablet">
         &nbsp;
       </ion-col>
-      <ion-col align-self-center col-auto col-md-5 no-padding text-right> 
+      <ion-col hideWhen="core,tablet" align-self-center xs-auto col-md-5 no-padding text-right> 
         {{result.score | number}}
       </ion-col>
+
+      <ion-col padding-left align-self-center showWhen="core,tablet" text-center>
+          <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name}}</a>
+      </ion-col>
+      <ion-col col-2 showWhen="core,tablet" align-self-center no-padding text-center> 
+        {{result.score | number}}
+      </ion-col>
+      
     </ion-row>
     <ion-row nowrap>
     </ion-row>    

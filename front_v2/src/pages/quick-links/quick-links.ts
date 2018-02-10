@@ -126,6 +126,11 @@ export class QuickLinksPage extends PssPageComponent {
     //  this.tournamentItems=this.tournamentSettings.getTournaments(this.eventId);
     //}
     ionViewWillEnter() {        
+            if(this.eventId==null){
+                this.pushRootPage('EventSelectPage')
+                return;
+            }
+
         console.log('ionViewDidLoad QuickLinksPage');
         
         this.getAndOrderTournaments();

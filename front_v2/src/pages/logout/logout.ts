@@ -22,6 +22,11 @@ export class LogoutPage extends PssPageComponent {
     successButtons:any = null;
     
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         this.eventAuth.logout(this.eventId);
         let success_title_string='Logged out!';
         let targetTabIndex=null;

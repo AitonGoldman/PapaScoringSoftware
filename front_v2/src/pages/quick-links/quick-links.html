@@ -2,7 +2,7 @@
 <ion-header>
 <ion-navbar color='pss-header'>  
     <ion-title showWhen='mobile'>
-      {{title}}
+      {{eventName}}
     </ion-title>    
 </ion-navbar>
 </ion-header>
@@ -13,9 +13,6 @@
    <b>Jump To...</b>
  </ion-toolbar>
   <ion-list>
-    <ion-list-header>Jump To...
-      <ion-icon item-end name="cog" (tap)="reorderEnabled = reorderEnabled==false"></ion-icon>
-    </ion-list-header>    
       <button ion-item detail-push [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})">
         <ion-icon name="person" item-end></ion-icon>{{eventAuth.isEventUserLoggedIn(eventId)==true? "Logout" : "Login"}}
       </button>
@@ -26,20 +23,26 @@
       <!--   <ion-icon name="person" item-end></ion-icon>My Results -->
       <!-- </button> -->
 
-      <button tappable ion-item detail-push (tap)="publishQuickLinksPlayerPush('PlayerInfoPage',buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)}))" *ngIf="eventAuth.getRoleName(eventId)=='player'">
+      <!--      <button tappable ion-item detail-push (click)="publishQuickLinksPlayerPush('PlayerInfoPage',buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)}))" *ngIf="eventAuth.getRoleName(eventId)=='player'"> -->
+            <button tappable ion-item detail-push (click)="publishQuickLinksPlayerPush('PlayerInfoPage',buildNavParams({playerId:eventAuth.getPlayerId(eventId)}))" *ngIf="eventAuth.getRoleName(eventId)=='player'">
         <ion-icon name="person" item-end></ion-icon>My Results
       </button>
-      
-      
-      <ion-item-divider>
+      <button ion-item *ngIf="eventAuth.getRoleName(eventId)=='player'" [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
+        <ion-icon item-end name="ios-cash-outline"></ion-icon> Ticket Purchase
+      </button>
+            
+      <ion-item-divider margin-top color="item-divider">
         Tournament Results
       </ion-item-divider>
       
-      <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderTournamentItems($event,'tournamentItems')">      
+      <!--<ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderTournamentItems($event,'tournamentItems')">-->      
         <button (tap)="publishQuickLinksPlayerPush('ResultsTournamentPage',buildNavParams({tournamentId:item.tournament_id,tournamentName:item.tournament_name}))" *ngFor="let item of tournamentItems"  ion-item detail-push>{{item.tournament_name}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
-      </ion-item-group>
-      <ion-item-divider>
+      <!--</ion-item-group>-->
+      <ion-item-divider margin-top color="item-divider">
         Favorited Machines
+        <ion-icon margin-right item-end name="cog" (tap)="reorderEnabled = reorderEnabled==false">
+        </ion-icon>
+        
       </ion-item-divider>
       <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderMachineItems($event)">      
         <button (tap)="publishQuickLinksPlayerPush('ResultsMachinePage',buildNavParams({tournamentMachineId:item.tournamentMachineId,tournamentMachineName:item.tournamentMachineName,tournamentId:item.tournamentId,tournamentName:item.tournamentName}))" *ngFor="let item of tournamentMachines"  ion-item detail-push>{{item.tournamentMachineName}}<ion-icon [name]="item.icon" item-end></ion-icon></button>

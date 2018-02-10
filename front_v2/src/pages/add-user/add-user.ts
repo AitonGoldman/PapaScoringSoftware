@@ -9,9 +9,7 @@ import { AutoCompleteComponent } from '../../components/auto-complete/auto-compl
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'AddUser/:eventId'
-})
+@IonicPage()
 @Component({
   selector: 'page-add-user',
   templateUrl: '../../components/add-user/add-user.html',
@@ -74,6 +72,10 @@ export class AddUserPage extends AutoCompleteComponent {
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad EventOwnerAddUserPage');        
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
         this.pssApi.getAllUsers()
             .subscribe(this.generateGetAllUsersProcessor())        
     }

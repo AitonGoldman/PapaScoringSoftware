@@ -14,9 +14,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 // -- shows tournaments I have played in first, then others
 // -- allows for expanding the list of machines on this page?
 
-@IonicPage({
-    segment : "Results/:eventId/:eventName"
-})
+@IonicPage()
 @Component({
   selector: 'page-results',
   templateUrl: 'results.html',
@@ -71,12 +69,15 @@ export class ResultsPage extends PssPageComponent {
     }        
    
     ionViewWillEnter() {        
-        
-        if(this.playerLoggedIn==false){
-            console.log('----------eventId is '+this.eventId)
+                    if(this.eventId==null){
+                this.pushRootPage('EventSelectPage')
+                return;
+            }
+
+        if(this.playerLoggedIn==false){            
             this.pssApi.getAllTournamentsAndMachines(this.eventId)            
                 .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor())
-        } else {
+        } else {            
             let playerId=this.eventAuth.getEventPlayerId(this.eventId)
             console.log('player id is '+playerId+' and eventId is '+this.eventId)
             this.pssApi.getAllTournamentsAndMachinesAndEventPlayer(this.eventId,playerId)            

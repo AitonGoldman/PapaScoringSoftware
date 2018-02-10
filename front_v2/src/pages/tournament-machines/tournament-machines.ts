@@ -12,9 +12,7 @@ import { TakePicComponent } from '../../components/take-pic/take-pic'
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'TournamentMachines/:eventId/:tournamentId'
-})
+@IonicPage()
 @Component({
     selector: 'page-tournament-machines',
     templateUrl: 'tournament-machines.html',
@@ -212,6 +210,11 @@ export class TournamentMachinesPage extends AutoCompleteComponent {
         this.selectedMachine=null;
     }
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         //this.targetEventId=this.navParams.get('eventId');
         this.tournamentId=this.navParams.get('tournamentId');
         this.eventId=this.navParams.get('eventId');

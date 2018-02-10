@@ -25,6 +25,7 @@ import { QuickLinksProvider } from '../providers/quick-links/quick-links';
 import { TournamentSettingsProvider } from '../providers/tournament-settings/tournament-settings';
 import { FCM } from '@ionic-native/fcm';
 import { FcmTokenProvider } from '../providers/fcm-token/fcm-token';
+import { PlayerHelpPageProvider } from '../providers/player-help-page/player-help-page';
 
 //import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
@@ -68,7 +69,8 @@ import { FcmTokenProvider } from '../providers/fcm-token/fcm-token';
     QuickLinksProvider,
       TournamentSettingsProvider,
       FCM,
-    FcmTokenProvider
+    FcmTokenProvider,
+    PlayerHelpPageProvider
   ]
 })
 export class AppModule {}

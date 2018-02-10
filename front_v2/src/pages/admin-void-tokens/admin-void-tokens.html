@@ -17,7 +17,9 @@
   <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+    <div padding *ngIf="selectedPlayer!=null">{{selectedPlayer.player_full_name}}</div>
   </div>
+  
   <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
     <h2>{{notFoundMessage}}</h2>
   </div>

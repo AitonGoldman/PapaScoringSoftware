@@ -19,5 +19,13 @@ export class ScorekeeperHomePage extends PssPageComponent{
   ionViewDidLoad() {
     console.log('ionViewDidLoad ScorekeeperHomePage');
   }
+  ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
+      console.log('ionViewDidLoad ScorekeeperHomePage');
+  }
 
 }

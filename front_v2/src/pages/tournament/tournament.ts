@@ -60,9 +60,7 @@ const tournamentDescriptions={
 }
 
 
-@IonicPage({
-    segment:'Tournament/:eventId/:actionType'
-})
+@IonicPage()
 @Component({
   selector: 'page-tournament',
   templateUrl: '../../components/create-edit-entity/create-edit-entity.html',
@@ -81,6 +79,11 @@ export class TournamentPage extends PssPageComponent {
     advanced:boolean=false;
     
     ionViewWillLoad() {        
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         this.actionType=this.navParams.get('actionType');        
         this.entityFields = new EntityFields("tournament");
         this.wizardMode = this.navParams.get('wizardMode');

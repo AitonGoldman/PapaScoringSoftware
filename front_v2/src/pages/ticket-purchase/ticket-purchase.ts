@@ -12,9 +12,7 @@ declare var StripeCheckout: any;
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'TicketPurchasePage/:eventId/:eventName'
-})
+@IonicPage()
 @Component({
   selector: 'page-ticket-purchase',
   templateUrl: 'ticket-purchase.html',
@@ -29,6 +27,11 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
     comped:boolean=false;
     stripePublicKey:any=null;
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         console.log('ionViewDidLoad TicketPurchasePage');
         this.autoCompleteProvider.initializeAutoComplete(null,
                                                          null,

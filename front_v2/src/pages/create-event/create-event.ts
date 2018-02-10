@@ -9,9 +9,7 @@ import { EventComponent } from '../../components/event/event'
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'CreateEventPage/:actionType/:wizardMode'    
-})
+@IonicPage()
 @Component({
   selector: 'page-create-event',
   templateUrl: '../../components/create-edit-entity/create-edit-entity.html',

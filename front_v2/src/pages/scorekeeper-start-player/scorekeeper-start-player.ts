@@ -12,9 +12,7 @@ import { SuccessButton } from '../../classes/SuccessButton';
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'ScorekeeperStartPlayer/:eventId/:tournamentId/:tournamentMachineId'
-})
+@IonicPage()
 @Component({
   selector: 'page-scorekeeper-start-player',
   templateUrl: 'scorekeeper-start-player.html',
@@ -50,6 +48,11 @@ export class ScorekeeperStartPlayerPage extends AutoCompleteComponent {
     }
     
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         console.log('ionViewWillLoad ScorekeeperStartPlayerPage');
         this.autoCompleteProvider.initializeAutoComplete(null,
                                                          null,

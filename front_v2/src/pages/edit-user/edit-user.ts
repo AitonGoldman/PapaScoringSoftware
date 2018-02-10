@@ -11,9 +11,7 @@ import { IonicPage } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'EditUser/:eventId'
-})
+@IonicPage()
 @Component({
   selector: 'page-edit-user',
   templateUrl: 'edit-user.html',
@@ -85,6 +83,11 @@ export class EditUserPage extends AutoCompleteComponent {
     }
     
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         console.log('ionViewDidLoad EditUserPage');
         this.pssApi.getAllUsers()
             .subscribe(this.generateGetAllUsersProcessor())            

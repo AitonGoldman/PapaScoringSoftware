@@ -29,9 +29,15 @@ export class AddPlayerToQueuePage extends AutoCompleteComponent {
     }
         
     ionViewWillLoad() {
+        //this.tournamentMachine=JSON.parse(this.navParams.get('tournamentMachine'))
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         this.tournamentMachine=this.navParams.get('tournamentMachine')
         console.log('ionViewDidLoad AddPlayerToQueuePage');
-        console.log(this.tournamentMachine)
+        console.log(this.tournamentMachine.constructor.name)
         this.autoCompleteProvider.initializeAutoComplete(null,
                                                          null,
                                                          this.generatePlayerLoadingFunction(),
@@ -61,11 +67,38 @@ export class AddPlayerToQueuePage extends AutoCompleteComponent {
     //     }        
     // }
 
+    showQueueAddConfirm(){
+        let msg = 'Confirm Queueing Up On '+this.tournamentMachine.tournament_machine_name;
+        if(this.selectedPlayer.queue_player_is_in==null){
+            this.addEventPlayerToQueue(this.tournamentMachine.tournament_machine_id);
+            return;
+        }
+        msg = 'Warning! Player is already queued on '+this.selectedPlayer.queue_player_is_in.tournament_machine.tournament_machine_name+'.  Still queue on '+this.tournamentMachine.tournament_machine_name+'?'
+        let confirm = this.alertCtrl.create({
+            title: 'Confirm Add To Queue',
+            message: msg,
+            buttons: [
+                {
+                text: 'Cancel'
+            },
+                {
+                text: 'Ok',
+                handler: () => {
+                    this.addEventPlayerToQueue(this.tournamentMachine.tournament_machine_id);
+                }
+            }
+            ]
+        });
+        confirm.present();
+    }
+    
     clearValues(){
         this.selectedPlayer={};        
     }
 
     addEventPlayerToQueue(tournament_machine_id){
+        console.log('hi there')
+        console.log(this.selectedPlayer)
         this.pssApi.addEventPlayerToQueue({'player_id':this.selectedPlayer.player_id,'tournament_machine_id':tournament_machine_id},this.eventId)
             .subscribe(this.generateAddEventPlayerToQueueProcessor())
 

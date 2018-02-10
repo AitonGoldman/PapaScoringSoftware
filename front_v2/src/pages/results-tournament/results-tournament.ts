@@ -10,9 +10,7 @@ import { TopThreePopoverComponent } from '../../components/top-three-popover/top
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment : "Results/:eventId/:eventName/:tournamentId/:tournamentName"
-})
+@IonicPage()
 
 @Component({
   selector: 'page-results-tournament',
@@ -25,6 +23,7 @@ export class ResultsTournamentPage extends PssPageComponent {
     results:any = null;
     width:any = '100%';
     maxResultsToDisplay:number=0;
+    loaded:boolean=false;
 
     onBump(){
         if(this.maxResultsToDisplay<this.results.length){
@@ -70,16 +69,23 @@ export class ResultsTournamentPage extends PssPageComponent {
         this.eventsService.publish('results-tournaments:done-loading');
     }
     
-    ionViewWillLoad() {
+    ionViewWillEnter() {
         console.log('ionViewDidLoad ResultsTournamentPage');
-        if(this.platform.is('mobile')==false){            
-            this.width='100%';
-        }
-        this.tournamentId=this.navParams.get('tournamentId');
-        this.tournamentName=this.navParams.get('tournamentName');
+        if(this.loaded==false){
+            if(this.eventId==null){
+                this.pushRootPage('EventSelectPage')
+                return;
+            }
+            if(this.platform.is('mobile')==false){            
+                this.width='100%';
+            }
+            this.tournamentId=this.navParams.get('tournamentId');
+            this.tournamentName=this.navParams.get('tournamentName');
 
-        this.pssApi.getTournamentResults(this.eventId,this.tournamentId)            
-            .subscribe(this.generateGetTournamentResultsProcessor())        
+            this.pssApi.getTournamentResults(this.eventId,this.tournamentId)            
+                .subscribe(this.generateGetTournamentResultsProcessor())        
+        }
+        this.loaded=true;
     }
     showTopThreeMachines(event,machines){
         let linkParams = this.buildNavParams({tournamentId:this.tournamentId,tournamentName:this.tournamentName})        

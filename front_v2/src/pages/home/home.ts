@@ -10,7 +10,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
  */
 
 @IonicPage({    
-    segment: 'HomePage/:eventId'
+    segment: 'HomePage/:eventId/:eventName'
 })
 @Component({
   selector: 'page-home',
@@ -21,5 +21,16 @@ export class HomePage extends PssPageComponent{
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad HomePage');        
+    }
+    ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+        console.log('ionViewDidLoad HomePage');        
+    }
+    
+    testClick(){
+        alert('hi there');
     }
 }

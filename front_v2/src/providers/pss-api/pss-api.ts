@@ -64,7 +64,7 @@ export class PssApiProvider {
             
             let result_observable = this.makeHot(this.http.request(method,localUrl,            
                                                                    {withCredentials:true,
-                                                                    body:postObject}).timeout(this.timeoutInMs))
+                                                                    body:postObject})['timeout'](this.timeoutInMs))
                 .pipe(                
                     catchError(this.handleError(apiName,null))
                 );

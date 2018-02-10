@@ -33,6 +33,11 @@ export class ChangePlayerPicturePage extends AutoCompleteComponent {
 
     }
     ionViewWillLoad() {
+            if(this.eventId==null){
+                this.pushRootPage('EventSelectPage')
+                return;
+            }
+
         this.pssApi.getEventPlayers(this.eventId,'no_pics')
             .subscribe(this.generateGetAllEventPlayersWithNoPicsProcessor())            
 

@@ -9,9 +9,7 @@ import { EventComponent } from '../../components/event/event'
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'EditEventPage/:actionType/:eventId'    
-})
+@IonicPage()
 @Component({
   selector: 'page-edit-event',
   templateUrl: '../../components/create-edit-entity/create-edit-entity.html',  

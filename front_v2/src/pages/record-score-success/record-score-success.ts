@@ -26,6 +26,11 @@ export class RecordScoreSuccessPage extends SuccessPage {
     player:any=null;
     
     ionViewWillLoad() {
+            if(this.eventId==null){
+                this.pushRootPage('EventSelectPage')
+                return;
+            }
+
         super.ionViewWillLoad();
         this.recordScoreSuccess=true;
 

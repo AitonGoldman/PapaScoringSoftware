@@ -5,20 +5,64 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="pss-header">
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>
   
 </ion-header>
-<ion-content padding>
+<ion-content>
 <!--  {{eventId}} --   {{eventName}}
   Home Page
   <br>
   <a (tap)="goToResults()">Results</a>
   <br>
   <button ion-button [navPush]="'SuccessPage'" [navParams]="buildNavParams({})">GO to success</button>-->
-This is the standard homepage.<br>
-Please login <span showWhen='mobile'>using the <b>Quick Links</b> button</span><br>
-Other stuff goes here.<br>
+<div [style.width]="contentWidth" style='margin-left:auto;margin-right:auto' text-center>
+  <h2>Papa Scoring Software</h2>
+  <div *ngIf="eventAuth.getRoleName(eventId)==null">    
+    <div hideWhen='cordova,core,tablet'>
+      <b>Download the app
+      <a *ngIf="platform.is('ios')" href="http://itunes.apple.com/us/app/yapss/id1207975236"> here </a>
+      <a *ngIf="platform.is('android')" href='https://play.google.com/store/apps/details?id=com.pbchallenge.yapss'> here </a>    
+      !</b><br>
+      &nbsp;<ion-icon margin-right  name="logo-apple" style='zoom:3'></ion-icon>&nbsp;<ion-icon name="logo-android" style='zoom:3'></ion-icon>&nbsp;
 
+      <br>
+      The App will let you...<br>
+      <div text-center>
+        <br>
+        <i>Recieve notifications when queues change!<br>
+        Add yourself to a queue!<br>
+          Purchase tickets!<br>
+          </i>
+      </div>
+      
+    </div>
+    <div showWhen='cordova'>
+      Please login <span showWhen='mobile'>using the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> button</span><span hideWhen='mobile'>using the <b>Login</b> link in the header</span><br>
+    </div>
+    <hr style='width:75%' showWhen='cordova'>
+    <div margin-top showWhen='cordova'>
+      Once logged in, you can purchase tickets <br>and see your list of favorited machines <br> in  <ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b>
+    </div>
+    <hr>
+    <hr style='width:75%'>
+    <div margin-top>
+      To view the results and queues, <br> use the &nbsp;<ion-icon name="md-clipboard"></ion-icon> &nbsp; results and &nbsp;<ion-icon name="md-git-branch"></ion-icon> &nbsp; queues tabs below
+    </div>
+    <hr>
+    <hr style='width:75%'>
+    <div margin-top>
+      Use the &nbsp;<ion-icon name="arrow-back"></ion-icon> &nbsp; back button in the header<br>to navigate to previous pages<br>
+    </div>
+  </div>
+  <div *ngIf="eventAuth.getRoleName(eventId)=='player'">    
+    
+    Use Quick Links to quickly reach ticket purchase, favorited machines, etc <br>
+    Other stuff goes here.<br>    
+  </div>
+  <div *ngIf="eventAuth.getRoleName(eventId)=='player'">
+    
+  </div>
+</div>
 </ion-content>

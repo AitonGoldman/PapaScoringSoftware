@@ -10,15 +10,14 @@ import { reorderArray } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'ScorekeeperMachineSelect/:eventId/:tournamentId'
-})
+@IonicPage()
 @Component({
   selector: 'page-scorekeeper-machine-select',
   templateUrl: 'scorekeeper-machine-select.html',
 })
 export class ScorekeeperMachineSelectPage  extends PssPageComponent {
     tournamentId:any=null;
+    tournamentName:any=null;
     tournamentMachines:any=null;
     reorderEnabled:boolean=false;
     undoMode:boolean=false;
@@ -273,7 +272,14 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
     }
 
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         this.tournamentId=this.navParams.get('tournamentId');
+        this.tournamentName=this.navParams.get('tournamentName');
+
         this.pssApi.getTournamentMachines(this.eventId,this.tournamentId)
             .subscribe(this.generateGetTournamentMachinesProcessor())    
 

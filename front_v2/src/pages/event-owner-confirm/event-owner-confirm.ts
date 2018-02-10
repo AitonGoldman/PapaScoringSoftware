@@ -12,9 +12,7 @@ import { SuccessButton } from '../../classes/SuccessButton'
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'EventOwnerConfirm/:itsdangerousstring'
-})
+@IonicPage()
 @Component({
   selector: 'page-event-owner-confirm',
   templateUrl: '../../pages/success/success.html',
@@ -56,6 +54,11 @@ export class EventOwnerConfirmPage extends PssPageComponent{
 
   ionViewWillLoad() {
       console.log('ionViewDidLoad EventOwnerConfirmPage');
+      if(this.eventId==null){
+          this.pushRootPage('EventSelectPage')
+          return;
+      }
+
       let encodedString:string = this.navParams.get('itsdangerousstring');
       this.successSummary = new SuccessSummary('Activating Account....',
                                                null,

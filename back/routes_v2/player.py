@@ -99,6 +99,13 @@ def get_event_player_route(app,event_id,event_player_id):
                                                'tournament_id':tournament.tournament_id,
                                                'calculated_price_list':pruned_calculated_list})
         player_dict['tournament_counts']=tournament_counts
+        current_queue = current_app.table_proxy.get_queue_player_is_already_in(event_player,event_id) 
+        current_machine = current_app.table_proxy.get_tournament_machine_player_is_playing(event_player,event_id)
+        if current_queue:
+            player_dict['queue_player_is_in'] = generic.serialize_queue(current_queue,generic.QUEUE_AND_MACHINE)
+        if current_machine:
+            player_dict['machine_player_is_on'] = generic.serialize_tournament_machine_public(current_machine)
+
         return {'data':player_dict,
                 'tournament_calculated_lists':to_dict(tournament_calculated_lists),
                 'tournament_counts':tournament_counts}

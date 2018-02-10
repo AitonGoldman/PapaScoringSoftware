@@ -19,6 +19,11 @@ export class FinalsBootstrapResolveTiebreakerPage extends PssPageComponent {
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad FinalsBootstrapPage');
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         this.tiebreaker=this.navParams.get('tiebreaker')
     }
     generateSaveFinalsBootstrapTiebreakersScoreProcessor(){

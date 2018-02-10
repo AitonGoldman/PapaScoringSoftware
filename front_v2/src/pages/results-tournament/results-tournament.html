@@ -78,6 +78,7 @@
           {{result.points}}  
         </ion-col>        
         <ion-col col-6 no-padding text-center align-self-center>
+
           <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
         </ion-col>
         <ion-col col-4 no-padding text-center align-self-center tappable>

@@ -11,9 +11,7 @@ import { SuccessButton } from '../../classes/SuccessButton';
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'AddOrQueue/:eventId/:tournamentId'
-})
+@IonicPage()
 @Component({
   selector: 'page-add-or-queue-player-after-score-record',
   templateUrl: 'add-or-queue-player-after-score-record.html',
@@ -136,6 +134,10 @@ export class AddOrQueuePlayerAfterScoreRecordPage extends PssPageComponent {
         
   ionViewWillLoad() {
       console.log('ionViewDidLoad AddOrQueuePlayerAfterScoreRecordPage');
+      if(this.eventId==null){
+          this.pushRootPage('EventSelectPage')
+          return;
+      }
       this.tournamentId=this.navParams.get('tournamentId');
       this.playerId=this.navParams.get('playerId');
       this.playerName=this.navParams.get('playerName');

@@ -9,9 +9,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'ScorekeeperFinalsRound/:eventId/:finalId/:round'
-})
+@IonicPage()
 @Component({
   selector: 'page-scorekeeper-finals-round',
   templateUrl: 'scorekeeper-finals-round.html',
@@ -62,6 +60,11 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
     }
     
     ionViewWillEnter() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         this.finalId=this.navParams.get('finalId');
         this.round=this.navParams.get('round');
         this.pssApi.getFinal(this.eventId,this.finalId)

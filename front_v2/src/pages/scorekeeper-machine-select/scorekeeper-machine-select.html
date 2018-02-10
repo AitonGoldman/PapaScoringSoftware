@@ -12,14 +12,12 @@
 
 <ion-content>
  <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
-   <b>Scorekeeping : Select Machine</b>
+   <b>Select {{tournamentName}} Machine</b>
  </ion-toolbar>
 
   <div class='desktopSlim'>
   <ion-list>
     <ion-list-header no-lines>
-      <ion-icon item-end name="cog" (tap)="reorderEnabled = reorderEnabled==false"></ion-icon>
-      <i item-end class="material-icons" (tap)="undoMode = undoMode==false">do_not_disturb</i>
     </ion-list-header>    
     <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderTournamentMachineItems($event)">      
       <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push (tap)="pushToMachine(tournamentMachine)" [style.background-color]="undoMode==true?'red':null">
@@ -30,5 +28,9 @@
       </button>
     </ion-item-group>
   </ion-list>
+  <div margin-top padding-top>
+    <button ion-button float-left tappable (click)="reorderEnabled = reorderEnabled==false">Reorder</button>
+    <button float-right  ion-button tappable (click)="undoMode = undoMode==false">&nbsp;Undo&nbsp;</button>
+  </div>
 </div>
 </ion-content>

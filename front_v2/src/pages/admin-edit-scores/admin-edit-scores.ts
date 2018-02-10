@@ -10,9 +10,7 @@ import { IonicPage } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'AdminEditTokens/:eventId/:eventName'
-})
+@IonicPage()
 @Component({
   selector: 'page-admin-edit-scores',
   templateUrl: 'admin-edit-scores.html',
@@ -88,7 +86,11 @@ export class AdminEditScoresPage extends AutoCompleteComponent {
     
 
     ionViewWillLoad() {
-       this.autoCompleteProvider.initializeAutoComplete(null,
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+        this.autoCompleteProvider.initializeAutoComplete(null,
                                                         null,
                                                         null,
                                                         this.eventId);      

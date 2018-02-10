@@ -14,9 +14,7 @@ import { TakePicComponent } from '../../components/take-pic/take-pic'
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'AddPlayer/:eventId'
-})
+@IonicPage()
 @Component({
   selector: 'page-add-player',
   templateUrl: 'add-player.html',
@@ -168,7 +166,11 @@ export class AddPlayerPage extends AutoCompleteComponent {
     }
   ionViewWillLoad() {
       console.log('ionViewDidLoad AddPlayerPage');
-      this.eventId = this.navParams.get('eventId')
+      if(this.eventId==null){
+          this.pushRootPage('EventSelectPage')
+          return;
+      }
+       this.eventId = this.navParams.get('eventId')
        this.autoCompleteProvider.initializeAutoComplete("player-full-name",
                                                         null,
                                                         this.generateLoadingFunction());

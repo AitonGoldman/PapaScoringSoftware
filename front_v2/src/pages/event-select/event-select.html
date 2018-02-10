@@ -13,12 +13,12 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding class="card-background-page">
-<ion-grid>
+<ion-grid [style.width]="contentWidth"> 
   <ion-row>
-    <ion-col tappable col-12 col-md-4 col-lg-3 col-xl-2 *ngFor="let event of events;index as i;even as e;" (click)="gotoEvent(event.event_id,event.name)">
+    <ion-col tappable col-12  *ngFor="let event of events;index as i;even as e;" (click)="gotoEvent(event.event_id,event.name)">
       <ion-card >
-        <img [style.height]='"90px"' [style.width]='"300px"' showWhen='mobile' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_small.jpg'"/>
-        <img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_med.jpg'"/>
+        <img [style.height]='"90px"' [style.width]='"100%"' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_small.jpg'"/>
+        <!--<img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile,tablet' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_med.jpg'"/>-->
       <div class="card-title">{{event.name}}</div>
     </ion-card>
     </ion-col>

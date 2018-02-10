@@ -15,9 +15,7 @@ import { IonicPage } from 'ionic-angular';
 //
 //
 //
-@IonicPage({
-    segment:'PlayerInfo/:eventId'
-})
+@IonicPage()
 @Component({
   selector: 'page-player-info',
   templateUrl: 'player-info.html',
@@ -53,9 +51,15 @@ export class PlayerInfoPage extends AutoCompleteComponent {
          console.log('unloading player info...');
      }
     ionViewWillEnter() {
-        console.log('entering player info....'+this.loaded)
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+        
         if(this.loaded==false){
-        let player_id_for_event = this.navParams.get('player_id_for_event');
+            console.log('entering player info....'+this.loaded)
+            
+            let player_id_for_event = this.navParams.get('player_id_for_event');
         let playerId = this.navParams.get('playerId');
         this.infoOnly = this.navParams.get('infoOnly')!=null;
             
@@ -65,10 +69,13 @@ export class PlayerInfoPage extends AutoCompleteComponent {
         this.hideAutoComplete=true;
         this.player_id_for_event=player_id_for_event
         this.playerId=playerId
-        if(player_id_for_event!=null){
+            if(player_id_for_event!=null){
+                console.log('player id - loading...')
             this.pssApi.getEventPlayerResults(this.eventId,this.player_id_for_event)
                 .subscribe(this.generateGetEventPlayerProcessor())                                                          
         } else {
+                console.log('event player id - loading...'+this.eventId+" "+this.playerId)
+
             this.pssApi.getEventPlayerResultsByPlayerId(this.eventId,this.playerId)
                 .subscribe(this.generateGetEventPlayerProcessor())                                                                      
         }
@@ -110,8 +117,8 @@ export class PlayerInfoPage extends AutoCompleteComponent {
                 return;
             }
             console.log(result);
-            this.selectedPlayer=result.data;
-            this.ticketCounts=this.generateListFromObj(result.tournament_counts);            
+            this.selectedPlayer=result.data;            
+            this.ticketCounts=this.generateListFromObj(result.tournament_counts);                        
             this.results=result.data.values;
 
         }

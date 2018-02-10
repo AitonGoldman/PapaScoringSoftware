@@ -12,7 +12,7 @@ import { SuccessButton } from '../../classes/SuccessButton';
  */
 
 @IonicPage({
-    segment:'login/:eventId'
+    segment:'login/:eventId/:eventName'
 })
 @Component({
     selector: 'page-login',
@@ -44,7 +44,9 @@ export class LoginPage extends PssPageComponent {
             let targetTabIndex=null;
             if(this.platform.is('mobile')){
                 console.log('going mobile')
-                targetTabIndex=0;
+                if(this.loginInfo.player_id_for_event==null && this.loginInfo.player_pin==null && this.loginInfo.username!=null){
+                    targetTabIndex=0;
+                }                
             }            
             if(successButton==null){
                 targetPage=this.getHomePageString();
@@ -93,6 +95,11 @@ export class LoginPage extends PssPageComponent {
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad LoginPage');
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
     }
 }

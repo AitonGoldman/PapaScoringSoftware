@@ -9,9 +9,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:"ScorekeeperTournamentSelect/:eventId"
-})
+@IonicPage()
 @Component({
   selector: 'page-scorekeeper-tournament-select',
   templateUrl: 'scorekeeper-tournament-select.html',
@@ -43,6 +41,11 @@ export class ScorekeeperTournamentSelectPage extends PssPageComponent{
     
 
   ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
       this.pssApi.getAllTournaments(this.eventId)
           .subscribe(this.generateGetAllTournamentsProcessor())    
 

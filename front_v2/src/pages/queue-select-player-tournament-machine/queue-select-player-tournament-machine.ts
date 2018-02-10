@@ -11,9 +11,7 @@ import { SuccessButton } from '../../classes/SuccessButton';
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'QueueSelectPlayerTournamentMachine/:eventId'
-})
+@IonicPage()
 @Component({
   selector: 'page-queue-select-player-tournament-machine',
   templateUrl: 'queue-select-player-tournament-machine.html',
@@ -59,7 +57,30 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
         }
     }
         
-            
+    showQueueAddConfirm(tournamentMachine){
+        let msg = 'Confirm Queueing Up On '+tournamentMachine.tournament_machine_name;
+        let title = 'Confirm Add To Queue'
+        if(this.eventPlayer.queue_player_is_in!=null){
+            msg = 'WARNING! Player is already queued on '+this.eventPlayer.queue_player_is_in.tournament_machine.tournament_machine_name+'.  Still queue on '+tournamentMachine.tournament_machine_name+'?'
+            title = 'WARNING!'
+        }
+        let confirm = this.alertCtrl.create({
+            title: title,
+            message: msg,
+            buttons: [
+                {
+                text: 'Cancel'
+            },
+                {
+                text: 'Ok',
+                handler: () => {
+                    this.addEventPlayerToQueue(tournamentMachine.tournament_machine_id);
+                }
+            }
+            ]
+        });
+        confirm.present();
+    }
     addEventPlayerToQueue(tournament_machine_id){
         this.pssApi.addEventPlayerToQueue({'player_id':this.eventPlayer.player_id,'tournament_machine_id':tournament_machine_id},this.eventId)
             .subscribe(this.generateAddEventPlayerToQueueProcessor())
@@ -184,6 +205,11 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
         //console.log(this.navCtrl.parent.getSelected().index)
     }
     ionViewWillEnter() {
+            if(this.eventId==null){
+                this.pushRootPage('EventSelectPage')
+                return;
+            }
+
         //this.queueMode=this.navParams.get('queueMode');
         //console.log('ionViewDidLoad QueueSelectPlayerTournamentMachinePage');
         console.log('ionViewDidEnter QueueSelectPlayerTournamentMachinePage');

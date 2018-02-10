@@ -17,7 +17,7 @@
 
   <div class='desktopSlim'>
   <ion-list>
-    <ion-item *ngFor="let tournament of tournaments" detail-push [navPush]="'ScorekeeperMachineSelectPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id})">
+    <ion-item *ngFor="let tournament of tournaments" detail-push [navPush]="'ScorekeeperMachineSelectPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
       <ion-avatar item-start>
         <img  [src]="tournament.img_url!=null?tournament.img_url:'/assets/imgs/pinball_small_square.jpg'">
       </ion-avatar>

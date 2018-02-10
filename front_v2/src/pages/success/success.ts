@@ -9,9 +9,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
  * Ionic pages and navigation.
  */
 
-@IonicPage({    
-    segment: 'Success/:eventId'
-})
+@IonicPage()
 @Component({
   selector: 'page-success',
   templateUrl: 'success.html',
@@ -29,6 +27,11 @@ export class SuccessPage extends PssPageComponent{
     //     this.navCtrl.push(pageName,this.buildNavParams(navParams));
     // }
   ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
       this.successSummary = this.navParams.get('successSummary');
       this.successButtons = this.navParams.get('successButtons');
       console.log('ionViewDidLoad SuccessPage');

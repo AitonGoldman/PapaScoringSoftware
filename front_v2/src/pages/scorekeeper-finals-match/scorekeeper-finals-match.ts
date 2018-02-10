@@ -11,9 +11,7 @@ import { trigger, style, transition, animate } from '@angular/animations'
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'ScorekeeperFinalsMatch/:eventId/:finalId/:round/:matchId'
-})
+@IonicPage()
 @Component({
   selector: 'page-scorekeeper-finals-match',
     templateUrl: 'scorekeeper-finals-match.html',
@@ -176,6 +174,11 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
         console.log(thing_to_debug);
     }
     ionViewWillEnter() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         this.finalId=this.navParams.get('finalId');
         this.round=this.navParams.get('round');
         this.matchId=this.navParams.get('matchId')        

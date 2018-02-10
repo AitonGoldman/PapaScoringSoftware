@@ -43,6 +43,11 @@ export class PostPlayerAddSuccessPage extends SuccessPage {
 
     }
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         super.ionViewWillLoad();
         this.playerId = this.navParams.get('playerId');
         console.log('ionViewDidLoad PostPlayerAddSuccessPage');

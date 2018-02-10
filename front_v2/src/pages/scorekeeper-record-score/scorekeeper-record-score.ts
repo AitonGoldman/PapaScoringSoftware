@@ -11,9 +11,7 @@ import { SuccessSummary } from '../../classes/success-summary';
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment: 'ScorekeeperRecordScore/:eventId/:tournamentId/:tournamentMachineId'
-})
+@IonicPage()
 @Component({
   selector: 'page-scorekeeper-record-score',
   templateUrl: 'scorekeeper-record-score.html',
@@ -111,6 +109,11 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
     }
     
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         console.log('ionViewDidLoad ScorekeeperRecordScorePage');
         this.tournamentId=this.navParams.get('tournamentId');
         this.tournamentMachineId=this.navParams.get('tournamentMachineId');

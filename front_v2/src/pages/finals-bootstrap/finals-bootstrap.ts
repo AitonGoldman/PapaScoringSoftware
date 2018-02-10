@@ -120,6 +120,10 @@ export class FinalsBootstrapPage extends PssPageComponent{
     }
     ionViewWillEnter() {
         console.log('ionViewDidLoad FinalsBootstrapPage');
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
         this.tournamentId=this.navParams.get('tournamentId')
         this.finalName=this.navParams.get('finalName')
         this.pssApi.getFinalsTiebreakersRollCall(this.eventId,this.tournamentId,this.finalName)

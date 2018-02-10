@@ -21,6 +21,7 @@ TOURNAMENT_MACHINE_AND_PLAYER_AND_EVENTS='tournament_machine_and_player_events'
 TOURNAMENT_MACHINE_AND_QUEUES_AND_PLAYER='tournament_machine_and_queues_and_player'
 
 QUEUE_ONLY='queue_only'
+QUEUE_AND_MACHINE='queue_and_machine'
 QUEUE_AND_PLAYER='queue_and_player'
 
 class serializer_v2():
@@ -52,6 +53,9 @@ def serialize_queue(model,type=QUEUE_ONLY):
     queue_dict=serializer_v2([]).serialize_model(model)
     if type==QUEUE_ONLY:
         return queue_dict
+    if type==QUEUE_AND_MACHINE:
+        queue_dict['tournament_machine']=to_dict(model.tournament_machine)
+        return queue_dict    
     if type==QUEUE_AND_PLAYER:
         if model.player:
             queue_dict['player']=serialize_player_public(model.player)

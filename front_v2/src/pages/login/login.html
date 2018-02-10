@@ -8,12 +8,16 @@
 <ion-header>
   <ion-navbar color='pss-header'>
     <ion-title>
-      Login
+      {{eventName}}
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-  <div>
+<ion-content no-padding no-margin>
+ <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+   <b>Login</b>
+ </ion-toolbar>
+
+ <div margin>
   <ion-segment [(ngModel)]="loginType">
     <ion-segment-button value="player">
       <ion-icon item-start name="person"></ion-icon> Tournament Player
@@ -47,11 +51,11 @@
       </ion-item>
       <ion-item>
         <ion-label floating>Pin</ion-label>
-        <ion-input type="text" required
+        <ion-input type="number" required
                    [(ngModel)]="loginInfo.player_pin" name="player_pin"></ion-input>
       </ion-item>
       <ion-item no-lines>
-        <button [disabled]='!playerLoginForm.valid' ion-button default (tap)="loginPlayer()">Login </button>
+        <button [disabled]='!playerLoginForm.valid' ion-button default tappable (click)="loginPlayer()">Login </button>
       </ion-item>
     </form>
     

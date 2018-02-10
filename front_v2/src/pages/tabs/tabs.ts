@@ -24,6 +24,11 @@ export class TabsPage extends PssPageComponent {
         //this.tabRef.getByIndex(1).setRoot('ResultsPage',this.buildNavParams({}));
     }
     ionViewWillLoad() {        
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+
         let roleName = this.eventAuth.getRoleName(this.eventId);
         this.roleName = roleName ? roleName : 'Home';
         console.log('ionViewDidLoad TabsPage');

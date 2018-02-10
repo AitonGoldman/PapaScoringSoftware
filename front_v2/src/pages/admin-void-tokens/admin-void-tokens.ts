@@ -9,9 +9,7 @@ import { IonicPage } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
-@IonicPage({
-    segment:'AdminVoidTokens/:eventId/:eventName'
-})
+@IonicPage()
 @Component({
   selector: 'page-admin-void-tokens',
   templateUrl: 'admin-void-tokens.html',
@@ -20,6 +18,11 @@ export class AdminVoidTokensPage extends AutoCompleteComponent {
     tokenCount:number = 0;
     selectedTournamentId:any = null;
     ionViewWillLoad() {
+        if(this.eventId==null){
+            this.pushRootPage('EventSelectPage')
+            return;
+        }
+        
         this.autoCompleteProvider.initializeAutoComplete(null,
                                                          null,
                                                          null,

@@ -28,6 +28,7 @@ export class PssPageComponent {
     eventName:string = null;
     tournamentId:number = null;
     hideBackButton:boolean = false;
+    contentWidth:string='100%'
     constructor(public eventAuth: EventAuthProvider,
                 public navParams: NavParams,
                 public navCtrl: NavController,
@@ -46,6 +47,13 @@ export class PssPageComponent {
                 public fcmToken: FcmTokenProvider) {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
+        if(!platform.is('mobile')){
+            this.contentWidth="50%"
+        }
+        if(platform.is('tablet')){
+            this.contentWidth="75%"
+        }
+        
         console.log('Hello PssPageComponent Component');
 //        console.log(instance.constructor.name)
     }
@@ -83,7 +91,7 @@ export class PssPageComponent {
         
     }
     
-    getHomePageString(eventId?){
+    getHomePageString(eventId?,fromTab?){
         if(eventId==null){
             eventId=this.eventId;
         }
@@ -96,9 +104,17 @@ export class PssPageComponent {
         if(role=="eventowner"){
                 return 'EventOwnerHomePage'            
         }
-        if(role=="player"){
-            return 'PlayerHomePage'
+        if(role=="player" && fromTab==null){
+            if(this.platform.is("mobile")){
+                return 'QuickLinksPage'
+            } else {
+                return 'HomePage'
+            }
+            
         }
+        if(role=="player" && fromTab!=null){
+            return 'HomePage'
+        }        
        if(role=="scorekeeper"){
             return 'ScorekeeperTournamentSelectPage'
        }

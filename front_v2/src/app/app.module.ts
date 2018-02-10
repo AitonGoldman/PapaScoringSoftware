@@ -26,6 +26,7 @@ import { TournamentSettingsProvider } from '../providers/tournament-settings/tou
 import { FCM } from '@ionic-native/fcm';
 import { FcmTokenProvider } from '../providers/fcm-token/fcm-token';
 import { PlayerHelpPageProvider } from '../providers/player-help-page/player-help-page';
+import { IonicImageLoader } from 'ionic-image-loader';
 
 //import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
@@ -49,6 +50,7 @@ import { PlayerHelpPageProvider } from '../providers/player-help-page/player-hel
       ImageUploadModule.forRoot(),
       CookieModule.forRoot(),
       CustomComponentsModule,
+      IonicImageLoader.forRoot()      
   //    ToastModule.forRoot(),
   ],
   bootstrap: [IonicApp],

@@ -29,9 +29,10 @@
     <h2>{{notFoundMessage}}</h2>
   </div>
   <ion-list *ngIf="notFoundMessage==null && selectedPlayer!=null" no-margin>
-    <ion-item no-lines>
+    <ion-item no-lines text-center>
       <ion-avatar  style='zoom:3.0'>
-        <img [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'" style='margin-left:auto;margin-right:auto'>
+        <!--<img [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'" style='margin-left:auto;margin-right:auto'>-->
+        <img-loader [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'" useImg ></img-loader>
       </ion-avatar>
     </ion-item>
     <div text-center margin-top margin-bottom>

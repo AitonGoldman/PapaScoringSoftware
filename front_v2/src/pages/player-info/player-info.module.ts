@@ -3,6 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { PlayerInfoPage } from './player-info';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 import { CustomComponentsModule } from '../../components/custom-components.module';
+import { IonicImageLoader } from 'ionic-image-loader';
 
 //import { SimpleNotificationsModule } from 'angular2-notifications';
 //import { ToastModule } from 'ng2-toastr/ng2-toastr';
@@ -14,7 +15,8 @@ import { CustomComponentsModule } from '../../components/custom-components.modul
   imports: [
       IonicPageModule.forChild(PlayerInfoPage),
       AutoCompleteModule,      
-      CustomComponentsModule             
+      CustomComponentsModule,
+      IonicImageLoader
   //    ToastModule.forRoot(),
   //    SimpleNotificationsModule.forRoot(),
   ],

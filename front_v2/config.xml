@@ -85,4 +85,5 @@
     <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
     <engine name="ios" spec="^4.5.4" />
     <engine name="android" spec="6.4.0" />
+    <plugin name="cordova-plugin-file" spec="^6.0.1" />
 </widget>

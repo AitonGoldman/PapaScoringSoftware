@@ -22,7 +22,7 @@
     </ion-item>
     <ion-grid>
       <ion-row>
-        <ion-col showWhen="tablet,core">
+        <ion-col>
         </ion-col>
         <ion-col col-auto>
           <ion-item no-lines>
@@ -34,11 +34,11 @@
         <ion-col col-auto>
           <ion-item no-lines>
           <ion-avatar  style='zoom:3.0;'>
-            <img [src]="selectedPlayer!=null && selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'">
+            <img [src]="tournamentMachine.player!=null && tournamentMachine.player.img_url!=null?tournamentMachine.player.img_url:'/assets/imgs/pinball_small_machine_square.jpg'">
           </ion-avatar>
           </ion-item>
         </ion-col>
-        <ion-col showWhen="tablet,core">
+        <ion-col >
         </ion-col>
         
       </ion-row>

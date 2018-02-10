@@ -56,11 +56,11 @@ def start_player_on_machine_route(input_data,event_id, app, current_user):
         raise BadRequest('Can not start a new game because tournament is no longer active')
     if tournament_machine.player_id:
         raise BadRequest('Tried to start game when someone is already playing!')
-    if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
-        raise BadRequest('Tried to start game without tokens')
     already_playing_tournament_machine= app.table_proxy.get_tournament_machine_player_is_playing(player,event_id)
     if already_playing_tournament_machine:
-        raise BadRequest('Player is alrady playing %s!' % already_playing_tournament_machine.tournament_machine_name)
+        raise BadRequest('Player is already playing %s!' % already_playing_tournament_machine.tournament_machine_name)    
+    if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
+        raise BadRequest('Tried to start game without tokens')
     if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
         raise BadRequest('Tried to start game without tokens')
     
@@ -102,11 +102,11 @@ def start_player_on_machine_from_queue_route(input_data,event_id, app, current_u
     # remove player from queue
 
     # add player to machine
-    if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
-        raise BadRequest('Tried to start game without tokens')
     already_playing_tournament_machine= app.table_proxy.get_tournament_machine_player_is_playing(player,event_id)
     if already_playing_tournament_machine:
-        raise BadRequest('Player is alrady playing %s!' % already_playing_tournament_machine.tournament_machine_name)
+        raise BadRequest('Player is already playing %s!' % already_playing_tournament_machine.tournament_machine_name)    
+    if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
+        raise BadRequest('Tried to start game without tokens')
     
     audit_log_params={
         'action':'Player started on machine from queue',

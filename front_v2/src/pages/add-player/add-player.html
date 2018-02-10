@@ -9,8 +9,8 @@
  </ion-toolbar>
 
   <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
-  <div text-center margin-bottom [style.height]="'25px'">
-    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  <div text-center *ngIf='loading==true' margin-bottom [style.height]="'25px'">
+    <ion-spinner style='margin-bottom:7px'></ion-spinner>
   </div>
 
   <div class='desktopSlim' padding>

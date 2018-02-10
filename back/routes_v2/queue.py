@@ -98,6 +98,7 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
         else:
             raise BadRequest('Not enough info specified')
     player_id = input_data.get('player_id',None)
+    print "in quueing - player id is %s"%player_id
     if player_initiated and player_id != current_user.player_id:
         raise BadRequest('Naughty Naughty')
     tournament_machine_id=input_data.get('tournament_machine_id',None)
@@ -105,7 +106,9 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
         player = current_user.player_id        
     player = app.table_proxy.get_player(event_id, player_id=player_id)
     tournament_machine = app.table_proxy.get_tournament_machine_by_id(tournament_machine_id)
-    if tournament_machine.player_id == player.player_id or app.table_proxy.get_tournament_machine_player_is_playing(player,event_id):
+    machine_player_is_alrady_playing = app.table_proxy.get_tournament_machine_player_is_playing(player,event_id)
+    print "in queeing - machine already being played is %s"%machine_player_is_alrady_playing
+    if machine_player_is_alrady_playing:
         raise BadRequest('Player is already playing a game')
     
     tournament=app.table_proxy.get_tournament_by_tournament_id(tournament_machine.tournament_id)

@@ -22,23 +22,23 @@
     </ion-item>
     <ion-grid>
       <ion-row>
-        <ion-col>
+        <ion-col showWhen="tablet,core">
         </ion-col>
         <ion-col col-auto>
-          <ion-item text-center no-lines>
-          <ion-avatar  style='zoom:3.0;margin-left:auto;margin-right:auto'>
+          <ion-item no-lines>
+          <ion-avatar  style='zoom:3.0;'>
             <img [src]="tournamentMachine.img_url!=null?tournamentMachine.img_url:'/assets/imgs/small_backglass.jpeg'">
           </ion-avatar>
           </ion-item>
         </ion-col>
         <ion-col col-auto>
-          <ion-item text-center no-lines>
-          <ion-avatar  style='zoom:3.0;margin-left:auto;margin-right:auto'>
+          <ion-item no-lines>
+          <ion-avatar  style='zoom:3.0;'>
             <img [src]="selectedPlayer!=null && selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'">
           </ion-avatar>
           </ion-item>
         </ion-col>
-        <ion-col>
+        <ion-col showWhen="tablet,core">
         </ion-col>
         
       </ion-row>

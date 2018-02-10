@@ -32,5 +32,21 @@ def upload_event_pic():
         filename = secure_filename(file.filename)        
         random_file_name = datetime.datetime.now().strftime("%s")+filename        
         file.save(upload_folder+"/"+random_file_name)
+        new_file_path=upload_folder+"/"+random_file_name
+        #exiftool -j -Orientation -n 1518227110image.jpg
+        #exiftool -Orientation=1 -n "$@"
+        #subprocess.call(["exiftool","-Orientation=1", "-n", upload_folder+"/"+random_file_name])
+        orientation = subprocess.check_output(["identify", "-format", r"'%[orientation]'",new_file_path])[1:-1]        
+        if orientation == "RightTop":            
+            subprocess.call(["convert", new_file_path,"-rotate", "90", "%s_rotate"%new_file_path])
+            subprocess.call(["mv","%s_rotate"%new_file_path,new_file_path])
+            subprocess.call(["convert", new_file_path,"-strip", "%s_strip"%new_file_path])
+            subprocess.call(["mv","%s_strip"%new_file_path,new_file_path])
+        #else:
+        #    print "android..."
+        #subprocess.call(["convert", save_path,"-crop","200x100+0+0!", "%s_crop"%save_path])
+        subprocess.call(["convert", new_file_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%new_file_path])        
+        subprocess.call(["mv","%s_resize"%new_file_path,new_file_path])
+
         
     return jsonify({'data':"%s"%random_file_name})

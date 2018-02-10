@@ -163,6 +163,7 @@ def get_all_event_players_with_no_pics(event_id):
     return jsonify({"data":players_with_no_pics})
 
 def search_for_players(query_string, event_id=None):
+    query_string=query_string.lower()
     players = current_app.table_proxy.search_player(query_string,event_id)
     if len(players)>25:
         player_max_index=2

@@ -202,7 +202,8 @@ class TableProxy():
         return query
 
     def get_tournament_machine_player_is_playing(self,player,event_id):
-        return self.TournamentMachines.query.filter_by(player_id=player.player_id,event_id=event_id).first()
+        tournament_ids = [tournament.tournament_id for tournament in self.get_tournaments(event_id)]        
+        return self.TournamentMachines.query.filter_by(player_id=player.player_id).filter(self.Tournaments.tournament_id.in_(tournament_ids)).first()
 
     def get_available_token_count_for_tournament(self,event_id,player,tournament):
         tournament_results,meta_tournament_results = self.get_available_token_count_for_tournaments(event_id,player)
@@ -394,10 +395,10 @@ class TableProxy():
                       img_url=None,
                       commit=False):        
         player = self.Players()
-        player.first_name=first_name
-        player.last_name=last_name        
+        player.first_name=first_name.lower()
+        player.last_name=last_name.lower()        
         if extra_title:
-            user.extra_title=extra_title
+            user.extra_title=extra_title.lower()
         if pin:
             player.pin=pin
         else:
@@ -597,8 +598,9 @@ class TableProxy():
         return self.TournamentMachines.query.filter_by(tournament_machine_id=tournament_machine_id).first()
     
     def create_tournament_machine(self,
-                                  machine,tournament,
-                                  commit=False):
+                                  machine,tournament,                                  
+                                  commit=False,
+                                  event_id=False):
         existing_tournament_machine = self.TournamentMachines.query.filter_by(machine_id=machine.machine_id,tournament_id=tournament.tournament_id).first()
         if existing_tournament_machine:
             existing_tournament_machine.removed = False
@@ -612,7 +614,7 @@ class TableProxy():
         new_tournament_machine.tournament_machine_name=machine.machine_name
         new_tournament_machine.tournament_machine_abbreviation=machine.abbreviation
         if new_tournament_machine.tournament_machine_abbreviation is None:
-            new_tournament_machine.tournament_machine_abbreviation = new_tournament_machine.tournament_machine_name[0:4]
+            new_tournament_machine.tournament_machine_abbreviation = new_tournament_machine.tournament_machine_name[0:4]            
         new_tournament_machine.active=True
         #new_tournament_machine.tournament_id=tournament.tournament_id
         tournament.tournament_machines.append(new_tournament_machine)

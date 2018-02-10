@@ -84,7 +84,12 @@ export class PlayerInfoPage extends AutoCompleteComponent {
         this.loaded=true;
         
     }
-
+    onReload(){
+        if(this.selectedPlayer!=null)
+            this.pssApi.getEventPlayerResultsByPlayerId(this.eventId,this.selectedPlayer.player_id)
+                .subscribe(this.generateGetEventPlayerProcessor())                                                                                  
+    }
+    
     ionViewWillLoad() {
         console.log('ionViewDidLoad PlayerInfoPage');
         this.autoCompleteProvider.initializeAutoComplete(null,

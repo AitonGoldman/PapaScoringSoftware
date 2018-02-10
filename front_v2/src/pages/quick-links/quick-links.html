@@ -40,8 +40,7 @@
       <!--</ion-item-group>-->
       <ion-item-divider margin-top color="item-divider">
         Favorited Machines
-        <ion-icon margin-right item-end name="cog" (tap)="reorderEnabled = reorderEnabled==false">
-        </ion-icon>
+        <a item-end name="cog" tappable (click)="reorderEnabled = reorderEnabled==false">Reorder</a>
         
       </ion-item-divider>
       <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderMachineItems($event)">      

@@ -19,7 +19,7 @@
   <button ion-button [navPush]="'SuccessPage'" [navParams]="buildNavParams({})">GO to success</button>-->
 <div [style.width]="contentWidth" style='margin-left:auto;margin-right:auto' text-center>
   <h2>Papa Scoring Software</h2>
-  <div *ngIf="eventAuth.getRoleName(eventId)==null">    
+  <div *ngIf="eventAuth.getRoleName(eventId)==null||eventAuth.getRoleName(eventId)=='player'">    
     <div hideWhen='cordova,core,tablet'>
       <b>Download the app
       <a *ngIf="platform.is('ios')" href="http://itunes.apple.com/us/app/yapss/id1207975236"> here </a>
@@ -55,14 +55,6 @@
     <div margin-top>
       Use the &nbsp;<ion-icon name="arrow-back"></ion-icon> &nbsp; back button in the header<br>to navigate to previous pages<br>
     </div>
-  </div>
-  <div *ngIf="eventAuth.getRoleName(eventId)=='player'">    
-    
-    Use Quick Links to quickly reach ticket purchase, favorited machines, etc <br>
-    Other stuff goes here.<br>    
-  </div>
-  <div *ngIf="eventAuth.getRoleName(eventId)=='player'">
-    
   </div>
 </div>
 </ion-content>

@@ -56,7 +56,16 @@ const tournamentDescriptions={
         },'allow_phone_purchases':{
             'short':'Allow phone purchases',
             'long':'If disabled, players will be prevented from buying tickets on their phones'            
-        }          
+        },'finals_style':{
+            'short':'Finals Style',
+            'long':'Finals Style : either PAPA or PPO'            
+        },'number_of_qualifiers_for_a_when_finals_style_is_ppo':{
+            'short':'Top X players will qualify for A finals',
+            'long':'Top X players will qualify for A finals'
+        },'number_of_qualifiers_for_b_when_finals_style_is_ppo':{
+            'short':'Top X players will qualify for B finals',
+            'long':'Top X players will qualify for B finals'
+        }
 }
 
 
@@ -107,15 +116,27 @@ export class TournamentPage extends PssPageComponent {
         this.entityFields.setField('manually_set_price','number',true,false, tournamentDescriptions['manually_set_price']);
         this.entityFields.setDependency('manually_set_price','use_stripe',false)
         this.entityFields.setField('number_of_qualifiers','number',true,false, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFields.setDependency('number_of_qualifiers','finals_style','PAPA')
 
+        this.entityFields.setField('number_of_qualifiers_for_a_when_finals_style_is_ppo','number',true,false, tournamentDescriptions['number_of_qualifiers_for_a_when_finals_style_is_ppo']);
+        this.entityFields.setField('number_of_qualifiers_for_b_when_finals_style_is_ppo','number',true,false, tournamentDescriptions['number_of_qualifiers_for_b_when_finals_style_is_ppo']);
+
+        this.entityFields.setDependency('number_of_qualifiers_for_a_when_finals_style_is_ppo','finals_style','PPO')
+        this.entityFields.setDependency('number_of_qualifiers_for_b_when_finals_style_is_ppo','finals_style','PPO')
+        
+        this.entityFields.setField('number_of_qualifiers','number',true,false, tournamentDescriptions['number_of_qualifiers']);
+        this.entityFields.setDependency('number_of_qualifiers','finals_style','PAPA')
+        
         this.entityFields.setField('use_stripe','boolean',false,true, tournamentDescriptions['use_stripe']);
         this.entityFields.setField('allow_phone_purchases','boolean',false,true, tournamentDescriptions['allow_phone_purchases']);
 
         this.entityFields.setField('stripe_sku','text',false,true, tournamentDescriptions['stripe_sku']);
         this.entityFields.setDependency('stripe_sku','use_stripe',true)
         this.entityFields.setField('discount_stripe_sku','text',false,true, tournamentDescriptions['discount_stripe_sku']);
-        this.entityFields.setDependency('discount_stripe_sku','use_stripe',true)        
+        this.entityFields.setDependency('discount_stripe_sku','use_stripe',true)
         this.entityFields.setField('number_of_signifigant_scores','number',false,true, tournamentDescriptions['number_of_signifigant_scores']);
+        this.entityFields.setField('finals_style','text',false,true, tournamentDescriptions['finals_style']);
+
         
         this.entityFieldsArray=this.entityFields.getFieldsArray(this.advanced);
         

@@ -445,6 +445,7 @@ def get_tiebreaker(ranked_results,boundry_rank,tournament,event_id,round=0,playe
     cutoff_index=len(ranked_results)
     rank_closest_to_cutoff=None
     rank_after_cutoff=None
+    print ranked_results
     if ranked_results[len(ranked_results)-1]['rank']==boundry_rank and boundry_rank==2:
         rank_closest_to_cutoff=2
     for idx, result in enumerate(ranked_results):        

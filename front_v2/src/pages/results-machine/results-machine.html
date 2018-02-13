@@ -7,6 +7,10 @@
 <ion-header>
   <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+    <ion-buttons end showWhen='mobile'>
+      <button tappable no-margin [navPush]="'ResultsPage'" [navParams]="buildNavParams({})" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -63,7 +67,7 @@
         {{result.points}}
       </ion-col>
       <ion-col padding-left col-5 align-self-center hideWhen="core,tablet" text-center>
-          <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name}}</a>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name}}</a>
       </ion-col>
       <ion-col hideWhen="core,tablet">
         &nbsp;
@@ -73,7 +77,7 @@
       </ion-col>
 
       <ion-col padding-left align-self-center showWhen="core,tablet" text-center>
-          <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name}}</a>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name}}</a>
       </ion-col>
       <ion-col col-2 showWhen="core,tablet" align-self-center no-padding text-center> 
         {{result.score | number}}

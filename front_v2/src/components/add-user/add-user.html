@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 <ion-content>
-<button ion-button full small color="lighter">
-  Register scorekeepeer/deskworker/etc
-</button>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>  Register scorekeepeer/deskworker/etc</b>
+ </ion-toolbar>
 
   <div class='desktopSlim'>
   <form #myForm="ngForm">
@@ -39,7 +39,7 @@
   <div *ngIf='notFoundMessage!=null && selectedRole!=null' text-center padding>        
     The system does not know about {{this.searchbar.keyword}}.  Click the button below to register them for the event.
     <br>
-    <button [disabled]='!myForm.valid' ion-button margin (tap)="onSubmit(this.searchbar.keyword)">Register User</button>
+    <button [disabled]='!myForm.valid' ion-button margin tappable (click)="onSubmit(this.searchbar.keyword)">Register User</button>
     
   </div>
 </div>  

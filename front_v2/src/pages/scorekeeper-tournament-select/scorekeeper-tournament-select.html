@@ -17,12 +17,22 @@
 
   <div class='desktopSlim'>
   <ion-list>
-    <ion-item *ngFor="let tournament of tournaments" detail-push [navPush]="'ScorekeeperMachineSelectPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
+    <button ion-item *ngFor="let tournament of tournaments" detail-push tappable [navPush]="'ScorekeeperMachineSelectPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
       <ion-avatar item-start>
         <img  [src]="tournament.img_url!=null?tournament.img_url:'/assets/imgs/pinball_small_square.jpg'">
       </ion-avatar>
       {{tournament.tournament_name}}
-    </ion-item>
+    </button>
+    <ng-container *ngFor="let tournament of tournaments">
+      <ng-container *ngIf="tournament.finals_ids!=null && tournament.finals_ids.length!=0">
+        <button  *ngFor="let finalId of tournament.finals_ids" ion-item tappable (click)="pushRootPage('ScorekeeperFinalsPage',buildNavParams({finalId:finalId}))">
+          <ion-avatar item-start>
+            <img  [src]="tournament.img_url!=null?tournament.img_url:'/assets/imgs/pinball_small_square.jpg'">
+          </ion-avatar>
+          {{tournament.tournament_name}} Finals Scorekeeping
+        </button>
+    </ng-container>
+    </ng-container>
   </ion-list>
   </div>
 

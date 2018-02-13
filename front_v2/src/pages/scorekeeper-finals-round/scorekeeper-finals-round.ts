@@ -21,7 +21,7 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
     round:number=null;
     roundCompleted:boolean=false;
     finalsPlayers:any = null;
-    
+
     generateGetEventPlayerProcessor(){
         return (result)=>{
             if(result==null){

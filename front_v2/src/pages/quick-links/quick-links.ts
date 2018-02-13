@@ -104,13 +104,24 @@ export class QuickLinksPage extends PssPageComponent {
             })
             return
         }
+        if(tabs.getByIndex(1)._views.length==0){
+            console.log("were okay....")
+            tabs.select(1).then(()=>{            
+                this.navCtrl.parent.getByIndex(1).push(pageName,args,{animate:false}).then(()=>{
+                    tabs.getByIndex(1).last().showBackButton(false);                    
+                })                            
+            })
+
+            return
+        }
+        
         //let whatever_one = this.navCtrl.parent.getByIndex(1)._views;
-        console.log('---------------')
-        console.log(this.navCtrl.parent.getByIndex(1)._zone.isStable);
-        tabs.select(1).then(()=>{            
-            setTimeout(this.getCallback(pageName,args),0)
+        //console.log('---------------')
+        //console.log(this.navCtrl.parent.getByIndex(1)._zone.isStable);
+        //tabs.select(1).then(()=>{            
+        //    setTimeout(this.getCallback(pageName,args),0)
             
-        })
+        //})
         
         // this.navCtrl.parent.getByIndex(1).push(pageName,args,{animate:false}).then((data)=>{
         //     setTimeout(()=>{                

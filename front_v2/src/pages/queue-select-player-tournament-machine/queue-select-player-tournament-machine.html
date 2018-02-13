@@ -24,7 +24,7 @@
     </div>
     <ion-list>
     <ng-container *ngFor="let tournament of tournaments">
-      <ion-item-divider tappable (click)="expand(tournament)" padding-top padding-bottom>
+      <ion-item-divider tappable (click)="expand(tournament,tournament.tournament_id)" padding-top padding-bottom id="{{tournament.tournament_id}}">
         <ion-avatar item-start *ngIf="tournament.img_url!=null">
           <img [src]="tournament.img_url">
         </ion-avatar>        
@@ -33,7 +33,7 @@
       <ng-container *ngIf="tournament.expanded!=true?false:true">
         <ion-list>
           <ng-container *ngFor="let tournament_machine of tournament.tournament_machines">
-            <ion-item  tappable (click)="expand(tournament_machine)" >
+            <ion-item  tappable (click)="expand(tournament_machine,'machine_'+tournament_machine.tournament_machine_id)" id="machine_{{tournament_machine.tournament_machine_id}}">
               {{tournament_machine.tournament_machine_name}}<ion-badge item-left no-margin *ngIf='tournament_machine.queue_length > 0'>{{tournament_machine.queue_length}}</ion-badge>
                 <span text-center item-end style='font-size:10px' hideWhen="core,tablet" *ngIf="tournament_machine.total_play_time > 0" >Avg Time<br>{{round(tournament_machine.total_play_time/tournament_machine.total_number_of_players)}} minutes</span>
                 <span text-center item-end showWhen="core,tablet" *ngIf="tournament_machine.total_play_time > 0" >Avg Time<br>{{round(tournament_machine.total_play_time/tournament_machine.total_number_of_players)}} minutes</span>
@@ -54,14 +54,14 @@
               </ng-container>
               
               <ng-container *ngIf="player_id_for_event==null && role != null">
-                <ion-item   *ngIf="tournament_machine.player_id!=null || tournament_machine.queues[0].player!=null ">
-                <ion-icon tappable [navPush]="'AddPlayerToQueuePage'" [navParams]="buildNavParams({tournamentMachine:tournament_machine})" item-start name="add-circle"></ion-icon> Add To Queue
+                <ion-item   *ngIf="tournament_machine.player_id!=null || tournament_machine.queues[0].player!=null " tappable [navPush]="'AddPlayerToQueuePage'" [navParams]="buildNavParams({tournamentMachine:tournament_machine})">
+                <ion-icon  item-start name="add-circle"></ion-icon> Add To Queue
               </ion-item>
               </ng-container>
               <ng-container *ngIf="player_id_for_event!=null && (tournament_machine.player_id!=null || tournament_machine.queues[0].player!=null)">
-                <ion-item >
+                <ion-item tappable (click)="showQueueAddConfirm(tournament_machine)" >
                   <!--<ion-icon tappable (click)="addEventPlayerToQueue(tournament_machine.tournament_machine_id)" item-start name="add-circle"></ion-icon> Add To Queue-->
-                  <ion-icon tappable (click)="showQueueAddConfirm(tournament_machine)" item-start name="add-circle"></ion-icon> Add To Queue
+                  <ion-icon item-start name="add-circle"></ion-icon> Add To Queue
                   
               </ion-item>
               </ng-container>

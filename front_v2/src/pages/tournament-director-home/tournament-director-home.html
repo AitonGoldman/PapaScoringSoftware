@@ -13,67 +13,60 @@
   <div class='desktopSlim' >
   <h1><b>Tournament Operations</b></h1>
   <ion-list>
-    <ion-item no-lines [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({})">
+    <button tappable detail-none ion-item no-lines [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="ios-cash-outline"></ion-icon> Ticket Purchase
-    </ion-item>
-    <ion-item no-lines [navPush]="'AddPlayerPage'" [navParams]="buildNavParams({})">
+    </button>
+    <button tappable detail-none ion-item no-lines [navPush]="'AddPlayerPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Register Player
-    </ion-item>
-    <ion-item hideWhen='mobile' no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({})">
+    </button>
+    <button tappable detail-none hideWhen='mobile' no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="git-branch"></ion-icon> Queue Player
-    </ion-item>
-    <ion-item no-lines [navPush]="'ChangePlayerPicturePage'" [navParams]="buildNavParams({})">
+    </button>
+    <button tappable detail-none ion-item tappable no-lines [navPush]="'ChangePlayerPicturePage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="camera"></ion-icon> Take Player Picture
-    </ion-item>    
-    <ion-item no-lines [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({infoOnly:true})">
+    </button>    
+    <button detail-none tappable ion-item no-lines [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({infoOnly:true})">
       <ion-icon item-end name="person"></ion-icon> Player Info
-    </ion-item>    
-    <ion-item no-lines [navPush]="'ScorekeeperTournamentSelectPage'" [navParams]="buildNavParams({})">
+    </button>    
+    <button detail-none ion-item no-lines [navPush]="'ScorekeeperTournamentSelectPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="clipboard"></ion-icon> Scorekeeping
-    </ion-item>    
+    </button>    
     
   </ion-list>
   <h1><b>TD Operations</b></h1>
     <ion-list>
-    <ion-item no-lines [navPush]="'AddUserPage'" [navParams]="buildNavParams({})">
+    <button detail-none tappable ion-item no-lines [navPush]="'AddUserPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="person-add"></ion-icon>  Add User
-    </ion-item>
-    <ion-item no-lines [navPush]="'EditUserPage'" [navParams]="buildNavParams({})">
+    </button>
+    <button detail-none tappable ion-item no-lines [navPush]="'EditUserPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="create"></ion-icon>  Edit User
-    </ion-item>
-    <ion-item no-lines [navPush]="'AdminVoidTokensPage'" [navParams]="buildNavParams({})">
+    </button>
+    <button detail-none tappable ion-item no-lines [navPush]="'AdminVoidTokensPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="person-add"></ion-icon>  Void Unused Tickets
-    </ion-item>
-    <ion-item no-lines [navPush]="'AdminEditScoresPage'" [navParams]="buildNavParams({})">
+    </button>
+    <button detail-none tappable ion-item no-lines [navPush]="'AdminEditScoresPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="person-add"></ion-icon>  Edit Scores
-    </ion-item>
-    <ion-item no-lines [navPush]="'TournamentPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})">
+    </button>
+    <button detail-none tappable ion-item no-lines [navPush]="'TournamentPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})">
       <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Create Tournament 
-    </ion-item>
+    </button>
   </ion-list>  
 
   <!--  <button ion-button [navPush]="'CreateTournamentPage'" [navParams]="{entityType:'tournament',actionType:'create',targetEventId:1,eventName:'poop'}" >Create Tournament</button> -->
   <h1><b>Tournaments</b></h1>
   <ion-list>
     <ng-container *ngFor="let tournament of tournaments">
-      <ion-item-divider (tap)="expand(tournament)">
+      <ion-item-divider tappable (click)="expand(tournament)">
         <ion-avatar item-start *ngIf="tournament.img_url!=null">
           <img [src]="tournament.img_url">
         </ion-avatar>        
         {{tournament.tournament_name}}<ion-icon item-start [name]="tournament.active?'play':'pause'"></ion-icon><ion-icon item-end [name]="tournament.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
       </ion-item-divider>      
       <ng-container *ngIf="tournament.expanded!=true?false:true">
-<!--        <ion-item margin-left padding-left>-->
-         <ion-item padding-left margin-left margin-right padding-right detail-push tappable [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Manage Tournament Machines</ion-item>
-         <ion-item padding-left margin-left margin-right padding-right detail-push tappable [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})">Edit Tournament</ion-item>
-         <ion-item padding-left margin-left margin-right pading-right  (tap)="onTournamentToggle(eventId,tournament)"><ion-icon padding-right item-end [name]="tournament.active?'play':'pause'"></ion-icon>{{tournament.active==true?"DeActivate":"Activate"}} Tournament</ion-item>
-         <!--</ion-item>-->
-         <ion-item detail-push padding-left margin-left margin-right pading-right [navPush]="'FinalsBootstrapPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,finalName:tournament.tournament_name+'-A'})">
-           Finals Management
-         </ion-item>
-         <ion-item detail-push padding-left margin-left margin-right pading-right (click)="pushRootPage('ScorekeeperFinalsPage',buildNavParams({finalId:1}))">
-           Finals Scorekeeping
-         </ion-item>
+         <button ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Manage Tournament Machines</button>
+         <button ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})">Edit Tournament</button>
+         <button ion-item detail-none tappable  padding-left margin-left margin-right pading-right  (tap)="onTournamentToggle(eventId,tournament)"><ion-icon padding-right item-end [name]="tournament.active?'play':'pause'"></ion-icon>{{tournament.active==true?"DeActivate":"Activate"}} Tournament</button>
+         <button ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'FinalsBootstrapPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,finalName:tournament.tournament_name+'-A'})">Finals Management</button>
       </ng-container>      
     </ng-container>
   </ion-list>

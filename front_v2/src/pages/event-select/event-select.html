@@ -15,8 +15,8 @@
 <ion-content padding class="card-background-page">
 <ion-grid [style.width]="contentWidth"> 
   <ion-row>
-    <ion-col tappable col-12  *ngFor="let event of events;index as i;even as e;" (click)="gotoEvent(event.event_id,event.name)">
-      <ion-card >
+    <ion-col  col-12  *ngFor="let event of events;index as i;even as e;">
+      <ion-card tappable  (click)="gotoEvent(event.event_id,event.name)">
         <img [style.height]='"90px"' [style.width]='"100%"' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_small.jpg'"/>
         <!--<img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile,tablet' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_med.jpg'"/>-->
       <div class="card-title">{{event.name}}</div>

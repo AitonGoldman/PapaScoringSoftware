@@ -18,10 +18,16 @@ import { SuccessButton } from '../../classes/SuccessButton';
     selector: 'page-login',
     templateUrl: 'login.html',
 })
+/*
+"ios":{
+ "num":11.2,
+ "major":11
+}
+*/
 export class LoginPage extends PssPageComponent {    
     loginInfo:any = {'username':null,'password':null,'player_id_for_event':null,'player_pin':null}
     loginType:string = 'player';
-    generateLoginUserProcessor(successButton?){
+    generateLoginUserProcessor(successButton?,eventOwnerLogin?){
         return (result) => {
             if(result == null){
                 return;
@@ -59,16 +65,47 @@ export class LoginPage extends PssPageComponent {
                 
             }
             //            this.appCtrl.getRootNav().push("SuccessPage",
+            let targetPageParams = {'successSummary':successSummary,
+                                    'successButtons':[successButton]}
+            if(eventOwnerLogin!=null){
+                targetPageParams['ignoreEventId']=true;
+            }
             this.navCtrl.push("SuccessPage",            
-                              this.buildNavParams({'successSummary':successSummary,
-                                                   'successButtons':[successButton]}));
+                              this.buildNavParams(targetPageParams));
         };
     }    
     loginUser(){
+        let versions = this.platform.versions();
+        if(versions.ios!=null && versions.ios.major>=11){
+            let toast = this.toastCtrl.create({
+                message: "iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
+                duration: 99000,
+                position: 'top',
+                showCloseButton: true,
+                closeButtonText: " ",
+                cssClass: "dangerToast"
+            });
+            toast.present();
+            //return
+        }
         this.pssApi.loginUser(this.loginInfo,this.eventId)
             .subscribe(this.generateLoginUserProcessor())            
     }
     loginPlayer(){
+        let versions = this.platform.versions();
+        if(versions.ios!=null && versions.ios.major>=11){
+            let toast = this.toastCtrl.create({
+                message: "iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
+                duration: 99000,
+                position: 'top',
+                showCloseButton: true,
+                closeButtonText: " ",
+                cssClass: "dangerToast"
+            });
+            toast.present();
+            return
+        }
+
         if(this.fcmToken.getFcmToken()!=null){
             this.loginInfo.token=this.fcmToken.getFcmToken();
         }
@@ -90,16 +127,11 @@ export class LoginPage extends PssPageComponent {
                                               targetTabIndex);
 
         this.pssApi.loginEventOwner(this.loginInfo)
-            .subscribe(this.generateLoginUserProcessor(successButton))            
+            .subscribe(this.generateLoginUserProcessor(successButton,true))            
     }
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad LoginPage');
-        if(this.eventId==null){
-            this.pushRootPage('EventSelectPage')
-            return;
-        }
-
         //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
     }
 }

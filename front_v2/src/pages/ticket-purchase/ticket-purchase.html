@@ -36,11 +36,14 @@
       <!-- </ion-list> -->
         <ng-container *ngFor="let ticketPriceList of ticketPriceLists">
           <ion-item-divider margin-top color="item-divider">
-            {{ticketPriceList.tournament_name}} Existing Count : {{ticketCountsDict[ticketPriceList.tournament_id]==null?0:ticketCountsDict[ticketPriceList.tournament_id].count}}
+            {{ticketPriceList.tournament_name}}
           </ion-item-divider>
+          <ion-item>
+            Existing Count : {{ticketCountsDict[ticketPriceList.tournament_id]==null?0:ticketCountsDict[ticketPriceList.tournament_id].count}}
+          </ion-item>
           <ion-item tappable>
-            <ion-label>{{ticketPriceList.tournament_name}}</ion-label>
-            <ion-select  tappable [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:'poop'}" (ionChange)="onSelect($event)">
+            <ion-label>Select # Of Tickets To Purchase</ion-label>
+            <ion-select  tappable [name]="ticketPriceList.tournament_name" [(ngModel)]="ticketPriceList.selectedCount" [selectOptions]="{title:'How Many Tickets?'}" (ionChange)="onSelect($event)">
               <ion-option *ngFor="let calculatedPrice of ticketPriceList.calculated_price_list" [value]="calculatedPrice">{{calculatedPrice.amount}}</ion-option>
             </ion-select>
           </ion-item>

@@ -7,10 +7,13 @@
 <ion-header>
 
   <ion-navbar color='pss-header'>
-    <ion-title>Add or Queue Player</ion-title>
-    <ion-buttons end hideWhen='mobile'>
-      <button icon-only ion-button [navPush]="getHomePageString(eventId)" [navParams]="{eventId:eventId,eventName:eventName}" ><ion-icon name="home"></ion-icon> {{getHomePageDisplayString(eventId)}}</button>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+    <ion-buttons end showWhen='mobile'>
+      <!--<button no-margin [navPush]="'ScorekeeperMachineSelectPage'" [navParams]="buildNavParams({tournamentId:tournamentId})" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>-->
+      <button no-margin tappable (click)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>      
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Machine<br>List</p>
     </ion-buttons>
+
   </ion-navbar>
 
 </ion-header>
@@ -26,7 +29,7 @@
   <ion-list>
     <ion-list-header no-lines>Queue/Add {{playerName}}
     </ion-list-header>    
-    <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push (tap)="addOrQueuePlayer(tournamentMachine)">
+    <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push tappable (click)="addOrQueuePlayer(tournamentMachine)">
       {{tournamentMachine.tournament_machine_name}}
       <ion-avatar item-start>
         <img  [src]="tournamentMachine.img_url!=null?tournamentMachine.img_url:'/assets/imgs/small_backglass.jpeg'">

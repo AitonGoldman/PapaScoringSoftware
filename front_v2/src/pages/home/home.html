@@ -11,12 +11,6 @@
   
 </ion-header>
 <ion-content>
-<!--  {{eventId}} --   {{eventName}}
-  Home Page
-  <br>
-  <a (tap)="goToResults()">Results</a>
-  <br>
-  <button ion-button [navPush]="'SuccessPage'" [navParams]="buildNavParams({})">GO to success</button>-->
 <div [style.width]="contentWidth" style='margin-left:auto;margin-right:auto' text-center>
   <h2>Papa Scoring Software</h2>
   <div *ngIf="eventAuth.getRoleName(eventId)==null||eventAuth.getRoleName(eventId)=='player'">    

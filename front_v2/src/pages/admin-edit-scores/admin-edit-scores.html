@@ -5,15 +5,15 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 <ion-content no-padding no-margin>
-<button style='margin-top:0px;' ion-button full small color="darker">
-  Admin : Void Unused Tickets
-</button>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>  Admin : Void Unused Tickets</b>
+ </ion-toolbar>
   <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
@@ -24,9 +24,9 @@
   <div *ngIf="selectedPlayer!=null" text-center>
     <b>Player : {{selectedPlayer.player_full_name}}</b>
     <br>
-    <button margin padding ion-button (click)="onGetScores()">Get Scores</button>
+    <button margin padding ion-button tappable (click)="onGetScores()">Get Scores</button>
     <br>
-    <button margin padding ion-button (click)="showNewScoreForm=showNewScoreForm==false">New Score</button>
+    <button margin padding ion-button tappable (click)="showNewScoreForm=showNewScoreForm==false">New Score</button>
     
   </div>
   <form #myForm="ngForm" *ngIf="showNewScoreForm">

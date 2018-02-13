@@ -5,15 +5,17 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>FinalsBootstrapResolveTiebreaker</ion-title>
+  <ion-navbar color='pss-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>Resolve Tiebreakers</b>
+ </ion-toolbar>
+
   <form #myForm="ngForm">
     <ion-item *ngFor="let player of tiebreaker.players">
       <ion-label stacked>{{player.player_name}}</ion-label>

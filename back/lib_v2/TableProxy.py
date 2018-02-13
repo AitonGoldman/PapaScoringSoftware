@@ -848,6 +848,9 @@ class TableProxy():
     def get_final_by_tournament_id(self,tournament_id,finals_name):
         return self.Finals.query.filter_by(tournament_id=tournament_id,name=finals_name).first()
 
+    def get_finals_by_tournament_id(self,tournament_id):
+        return self.Finals.query.filter_by(tournament_id=tournament_id).all()
+    
     def get_final(self,final_id):
         return self.Finals.query.filter_by(final_id=final_id).first()
     

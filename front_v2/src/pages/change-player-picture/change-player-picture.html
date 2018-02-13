@@ -21,8 +21,8 @@
     </ion-chip>
  </div> 
   <div class='slimDesktop'>
-    <ion-item *ngFor="let player of players" (tap)="takePicture(player)">
+    <button ion-item *ngFor="let player of players" tappable (click)="takePicture(player)">
       <ion-icon item-end name="camera"></ion-icon> Take {{player.player_full_name}} Picture      
-    </ion-item>
+    </button>
   </div>
 </ion-content>

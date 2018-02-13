@@ -1,6 +1,6 @@
 <!-- Generated template for the CreateEditEntityComponent component -->
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
@@ -11,9 +11,9 @@
 <!-- <ion-toolbar style="background-color: rgba(0,0,0,.95)"> -->
 <!-- poop -->
 <!-- </ion-toolbar> -->
-<button ion-button full small color="lighter">
-  {{actionType| titlecase}} {{entityFields.entityType| titlecase}}
-</button>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>{{actionType| titlecase}} {{entityFields.entityType| titlecase}}</b>
+ </ion-toolbar>
 
   <div class='desktopSlim'>
     <form #createEditForm="ngForm">
@@ -61,14 +61,14 @@
                   <ion-item>
                     <image-upload (uploadFinished)="onUploadFinished($event)" url="http://0.0.0.0:8000/media_upload"></image-upload>
                   </ion-item>-->
-      <ion-item (tap)="takePicture()">
+      <ion-item tappable (click)="takePicture()">
         Take a picture <span>{{entity!=null && entity.img_file!=null?"(pic uploaded)":"poop"}}</span>
            <ion-icon name='camera' item-end></ion-icon>
       </ion-item>
 
       </ion-list>
       
-      <button [disabled]='!createEditForm.valid' ion-button default (tap)="processEntity()">Apply</button>
+      <button [disabled]='!createEditForm.valid' ion-button default tappable (click)="processEntity()">Apply</button>
     </form>
   </div>
 </ion-content>

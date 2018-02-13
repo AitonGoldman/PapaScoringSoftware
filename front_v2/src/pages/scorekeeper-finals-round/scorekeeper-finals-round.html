@@ -4,19 +4,22 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
+
 <ion-header>
+  <ion-navbar color='pss-header'>
+    <ion-title>Finals Scorekeeping</ion-title>
 
-  <ion-navbar>
-    <ion-title>ScorekeeperFinalsRound</ion-title>
+    <ion-buttons end showWhen='mobile'>
+      <button tappable no-margin (click)="gotoParentTab()" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Scorekeeper<br>Home</p>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content>  
-    <ion-card *ngFor="let match of final;index as i" [navPush]="'ScorekeeperFinalsMatchPage'" [navParams]="buildNavParams({finalId:finalId,round:round,matchId:match.finals_match_id})">
-      <ion-card-header >
-        <ion-item>
+    <ion-card tappable *ngFor="let match of final;index as i" [navPush]="'ScorekeeperFinalsMatchPage'" [navParams]="buildNavParams({finalId:finalId,round:round,matchId:match.finals_match_id})">
+      <ion-card-header no-padding>
+        <ion-item color="darker">
           <b>Round {{round}}, Match {{i+1}}</b>
           <span *ngIf='match.completed==true' >(Completed)</span>
           <ion-icon item-right name="arrow-forward"></ion-icon>
@@ -24,19 +27,48 @@
       <span *ngIf="match.current_machine"><br>Current Machine : {{match.current_machine}}</span>
       <span *ngIf="match.tiebreaker_in_progress"><br>TieBreaker In Progress</span>      
     </ion-card-header>
-    <ion-card-content>
-      <ion-list>                
-        <ion-item no-lines *ngFor="let player_string of ['player_one','player_two','player_three','player_four']">          
-          <ion-icon item-start *ngIf="match[player_string+'_winner']==true" name="trophy"></ion-icon>
-          <ion-icon style='font-size:20px' center item-start *ngIf="match[player_string+'_winner']!=true">
-          <span *ngIf="finalsPlayers[match[player_string+'_finals_player_id']]!=null && finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank!=null">#{{finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank}}</span>
-          </ion-icon>
-          {{match[player_string+'_name']?match[player_string+'_name']:"TBD"}} ({{match[player_string+'_points']?match[player_string+'_points']:0}} points)
-        </ion-item>
-      </ion-list>
+      <ion-card-content no-padding no-margin>
+        <ion-grid>
+          <ion-row >
+            <ion-col col-2 text-nowrap>
+              Results
+            </ion-col>
+            <ion-col col text-center>
+              Name
+            </ion-col>
+            <ion-col col-2 text-nowrap>
+              Points
+            </ion-col>            
+          </ion-row>
+          <ng-container *ngFor="let player_string of ['player_one','player_two','player_three','player_four']">          
+          <ion-row>
+            <ion-col col-1 text-nowrap text-center>
+              <ion-icon item-start *ngIf="match[player_string+'_winner']==true" name="trophy"></ion-icon>
+              <ion-icon  style='font-size:14px' text-center item-start *ngIf="match[player_string+'_winner']!=true">
+                <span *ngIf="finalsPlayers[match[player_string+'_finals_player_id']]!=null && finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank!=null">#{{finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank}}</span> 
+              </ion-icon>                
+            </ion-col>
+            <ion-col col text-center>
+              {{match[player_string+'_name']?match[player_string+'_name']:"TBD"}}
+            </ion-col>
+            <ion-col col-1 text-right>
+              {{match[player_string+'_points']?match[player_string+'_points']:0}}
+            </ion-col>            
+          </ion-row>
+          </ng-container>
+        </ion-grid>
+      <!--      <ion-list>                -->
+        <!-- <ion-item no-padding no-lines *ngFor="let player_string of ['player_one','player_two','player_three','player_four']">           -->
+        <!--   <ion-icon item-start *ngIf="match[player_string+'_winner']==true" name="trophy"></ion-icon> -->
+        <!--   <ion-icon  style='font-size:14px' text-center item-start *ngIf="match[player_string+'_winner']!=true"> -->
+        <!--   <span *ngIf="finalsPlayers[match[player_string+'_finals_player_id']]!=null && finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank!=null">#{{finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank}}</span> -->
+        <!--   </ion-icon> -->
+        <!--   {{match[player_string+'_name']?match[player_string+'_name']:"TBD"}} ({{match[player_string+'_points']?match[player_string+'_points']:0}} points) -->
+        <!-- </ion-item> -->
+        <!--</ion-list>-->
     </ion-card-content>
     </ion-card>
     <div text-center padding margin >
-      <button (click)="completeRound()" ion-button *ngIf="roundCompleted==true">Start Next Round</button>
+      <button tappable (click)="completeRound()" ion-button *ngIf="roundCompleted==true">Start Next Round</button>
     </div>
 </ion-content>

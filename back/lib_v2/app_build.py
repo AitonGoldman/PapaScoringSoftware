@@ -57,7 +57,7 @@ def configure_base_app(app):
     CORS(
         app,
         headers=['Content-Type', 'Accept'],
-        send_wildcard=False,
+        #send_wildcard=False,        
         supports_credentials=True
     )    
     LoginManager().init_app(app)

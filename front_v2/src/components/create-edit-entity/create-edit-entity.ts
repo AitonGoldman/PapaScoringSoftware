@@ -73,7 +73,7 @@ export class CreateEditEntityComponent extends PssPageComponent {
     
     ionViewWillLoad() {
         
-        //this.entityType=this.navParams.get('entityType');
+        this.entityType=this.navParams.get('entityType');
         this.actionType=this.navParams.get('actionType');
         this.eventId = this.navParams.get('eventId');
         this.entityFields = new EntityFields(this.entityType);

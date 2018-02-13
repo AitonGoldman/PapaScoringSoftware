@@ -60,8 +60,10 @@ export class ResultsPage extends PssPageComponent {
         }
     }
 
-    expandMachines(tournament){
+    expandMachines(tournament,elementId){
+        console.log('in expandmachines');        
         tournament.expand_machines=tournament.expand_machines==false;
+        this.scrollTo(elementId)
     }
     
     ionViewDidEnter() {

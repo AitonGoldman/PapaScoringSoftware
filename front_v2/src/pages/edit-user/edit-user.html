@@ -1,13 +1,14 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 <ion-content>
-<button ion-button full small color="lighter">
-  Edit scorekeepeer/deskworker/etc
-</button>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>Edit scorekeepeer/deskworker/etc</b>
+ </ion-toolbar>
+  
 <ion-item-divider color="light" text-wrap>Person's name</ion-item-divider>
 
 <ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Persons Name', debounce:500}"></ion-auto-complete>

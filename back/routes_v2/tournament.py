@@ -40,13 +40,17 @@ def edit_tournament_route(request,app,event_id):
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Submitted information is missing required fields')
-    #put tournament edit logic here
-    handle_img_upload(input_data)
+    #put tournament edit logic here    
+    handle_img_upload(input_data)    
     tournament = app.table_proxy.edit_tournament(input_data,False)    
+    
     if input_data.get('use_stripe',None):
-        api_key = app.event_settings[event_id].stripe_api_key
-        app.stripe_proxy.set_tournament_stripe_prices(tournament,api_key,input_data.get('stripe_sku',None),
-                                                      input_data.get('discount_stripe_sku',None))
+        stripe_sku = input_data.get('stripe_sku',None)
+        discount_stripe_sku = input_data.get('discout_stripe_sku',None)        
+        if (stripe_sku and tournament.stripe_sku!=stripe_sku) or (discount_stripe_sku and tournament.discount_stripe_sku!=discount_stripe_sku):            
+            api_key = app.event_settings[event_id].stripe_api_key
+            app.stripe_proxy.set_tournament_stripe_prices(tournament,api_key,input_data.get('stripe_sku',None),
+                                                          input_data.get('discount_stripe_sku',None))
     else:    
         app.table_proxy.clear_stripe_prices_from_tournament(tournament)
     return tournament
@@ -118,6 +122,11 @@ def get_all_tournaments(event_id):
             tournament_dict=generic.serialize_tournament_private(tournament)            
         else:
             tournament_dict=generic.serialize_tournament_public(tournament)        
+        finals = current_app.table_proxy.get_finals_by_tournament_id(tournament.tournament_id)
+        if finals:
+            tournament_dict['finals_ids']=[]
+            for final in finals:
+                tournament_dict['finals_ids'].append(final.final_id)
         tournaments_list.append(tournament_dict)
     return jsonify({'data':tournaments_list})
 

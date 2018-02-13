@@ -165,6 +165,7 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
 @blueprints.test_blueprint.route('/<int:event_id>/queue',methods=['POST'])
 def add_player_to_queue(event_id):
     queue_permission = permissions.QueuePermission(event_id)
+    print current_user
     if queue_permission.can():
         updated_queue = add_player_to_tournament_machine_queue_route(request,current_app,event_id,current_user)
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)

@@ -39,10 +39,6 @@ export class EventOwnerHomePage extends PssPageComponent {
     }
 
     ionViewWillEnter() {
-        if(this.eventId==null){
-            this.pushRootPage('EventSelectPage')
-            return;
-        }        
         this.pssApi.getAllEventsAndTournaments()
             .subscribe(this.generateGetAllEventsAndTournamentsProcessor())    
         console.log('ionViewDidLoad EventOwnerHomePage');

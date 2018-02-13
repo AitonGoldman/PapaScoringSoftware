@@ -7,6 +7,10 @@
 <ion-header>
   <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+    <ion-buttons end showWhen='mobile'>
+      <button tappable no-margin [navPush]="'ResultsPage'" [navParams]="buildNavParams({})" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -64,7 +68,7 @@
             <p style='line-height:1px'>({{result.points}} points)</p></span>        
         </ion-col>
         <ion-col col-8 no-padding text-center align-self-center>
-          <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
         </ion-col>
         <ion-col col-2 no-padding text-center align-self-center tappable (click)="showTopThreeMachines($event,result.top_machines)">
           <a> {{result.topMachineString}} </a>
@@ -79,11 +83,11 @@
         </ion-col>        
         <ion-col col-6 no-padding text-center align-self-center>
 
-          <a [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
         </ion-col>
         <ion-col col-4 no-padding text-center align-self-center tappable>
           <ng-container *ngFor="let topMachine of result.top_machines;index as i">
-          <a [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentId:tournamentId,tournamentName:tournamentName,tournamentMachineId:topMachine.tournament_machine_id,tournamentMachineName:topMachine.tournament_machine_name})">
+          <a tappable [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentId:tournamentId,tournamentName:tournamentName,tournamentMachineId:topMachine.tournament_machine_id,tournamentMachineName:topMachine.tournament_machine_name})">
             #{{topMachine.rank}} on {{topMachine.abbreviation}}
           </a>            
           <span *ngIf="result.top_machines!=null && result.top_machines.length-1-i > 0"> / </span>

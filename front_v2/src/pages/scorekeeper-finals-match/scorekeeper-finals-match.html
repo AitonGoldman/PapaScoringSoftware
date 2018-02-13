@@ -5,14 +5,15 @@
   Ionic pages and navigation.
 -->
 <ion-header>
+  <ion-navbar color='pss-header'>
+    <ion-title>Finals Scorekeeping</ion-title>
 
-  <ion-navbar>
-    <ion-title>ScorekeeperFinalsMatch</ion-title>
+    <ion-buttons end showWhen='mobile'>
+      <button tappable no-margin (click)="gotoParentTab()" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Scorekeeper<br>Home</p>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
-
-
 <ion-content>
   <div *ngIf='match!=null' padding margin>
     <ion-grid style='border-width:1px;border-style:solid'>
@@ -42,7 +43,7 @@
     </ion-grid>
   </div>
   <div text-center>
-    <button ion-button default [navPush]="'ScorekeeperFinalsRoundPage'" [navParams]="buildNavParams({finalId:finalId,round:round})" >Go Home</button>
+    <button ion-button default tappable [navPush]="'ScorekeeperFinalsRoundPage'" [navParams]="buildNavParams({finalId:finalId,round:round})" >Go Home</button>
   </div>
   <ng-container *ngFor="let machineNum of [1,2,3]">
     <div margin-top margin-bottom text-center>      
@@ -50,12 +51,12 @@
     </div>
 
   <div *ngIf="match!=null && (machineNum==1 || (machineNum==2 && match.one_completed==true) || (machineNum==3 && match.two_completed==true))" magin-top margin-bottom>
-    <ion-item><h1>Game {{machineNum}}</h1>   <button item-end ion-button (click)="showPlayerOrder(machineNum)">Set Player Order</button></ion-item>
+    <ion-item><h1>Game {{machineNum}}</h1>   <button item-end ion-button tappable (click)="showPlayerOrder(machineNum)">Set Player Order</button></ion-item>
 
   <!--<button ion-button (click)="generateListForOrderPicking(machineNum)">Reset Player Order</button>-->  
 
-  <ion-card [@myvisibility] *ngIf="gameOrderListsDisplay && gameOrderListsDisplay[machineNum]==true">
-    <ion-card-content>
+  <ion-card no-padding [@myvisibility] *ngIf="gameOrderListsDisplay && gameOrderListsDisplay[machineNum]==true">
+    <ion-card-content no-padding no-margin>
     <ion-list>
       <ion-item-sliding *ngFor="let player of gameOrderLists[machineNum]">
         <ion-item>
@@ -63,7 +64,7 @@
           <button ion-button color="danger" *ngIf="player.order!=null" item-end>
             {{player.order}}
           </button>
-          <button item-end *ngFor="let order of [1,2,3,4]" hideWhen="mobile" item-end ion-button color="primary" [disabled]='takenOrderPosition.includes(order)' margin-right padding (click)="setPlayerOrder(order,player,machineNum)">
+          <button item-end *ngFor="let order of [1,2,3,4]" hideWhen="mobile" item-end ion-button color="primary" [disabled]='takenOrderPosition.includes(order)' margin-right padding tappable (click)="setPlayerOrder(order,player,machineNum)">
             {{order}}
           </button>          
 
@@ -72,7 +73,7 @@
         
         <ion-item-options side="right" showWhen="mobile">
           <ng-container *ngFor="let order of [1,2,3,4]">            
-          <button ion-button color="primary" *ngIf="!takenOrderPosition.includes(order)" margin-right padding-right (click)="setPlayerOrder(order,player,machineNum)">
+          <button ion-button color="primary" *ngIf="!takenOrderPosition.includes(order)" margin-right padding-right tappable (click)="setPlayerOrder(order,player,machineNum)">
             {{order}}
           </button>          
           </ng-container>
@@ -84,7 +85,7 @@
     <!-- </span> -->
     <ion-list>
       <ion-item text-center>
-        <button ion-button (click)="showPlayerOrder(machineNum)">Save Order</button>
+        <button ion-button tappable (click)="showPlayerOrder(machineNum)">Save Order</button>
       </ion-item>
     </ion-list>
     </ion-card-content>
@@ -101,7 +102,7 @@
                  [(ngModel)]="match[player.player+'_score_'+machineNum]" name="test{{player.player}}{{machineNum}}"></ion-input>
    </ion-item>
    <ion-item no-lines text-center>
-     <button ion-button (click)="saveScores()">Save Scores</button>
+     <button ion-button tappable (click)="saveScores()">Save Scores</button>
    </ion-item>
   </div>
 
@@ -124,7 +125,7 @@
                    [(ngModel)]="player.score" [name]="player.tiebreaker_player_id"></ion-input>
       </ion-item>
       <ion-item no-lines>
-        <button (click)="saveTiebreakerScores()" [disabled]='!myTiebreakerForm.dirty' ion-button default>Save Scores</button>
+        <button tappable (click)="saveTiebreakerScores()" [disabled]='!myTiebreakerForm.dirty' ion-button default>Save Scores</button>
       </ion-item>
     </form>    
   </div>

@@ -27,7 +27,9 @@ export class SuccessPage extends PssPageComponent{
     //     this.navCtrl.push(pageName,this.buildNavParams(navParams));
     // }
   ionViewWillLoad() {
-        if(this.eventId==null){
+      console.log('hoooohaw')
+      console.log(this.navParams.data);
+      if(this.eventId==null && this.navParams.get('ignoreEventId')!=true){
             this.pushRootPage('EventSelectPage')
             return;
         }

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Platform, App, NavParams, NavController } from 'ionic-angular';
+import { ViewChild, Component } from '@angular/core';
+import { Platform, App, NavParams, NavController, Content } from 'ionic-angular';
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { SearchResults } from '../../classes/search-results';
@@ -13,6 +13,7 @@ import { ListOrderStorageProvider } from '../../providers/list-order-storage/lis
 import { Events } from 'ionic-angular';
 import { FcmTokenProvider } from '../../providers/fcm-token/fcm-token';
 
+
 /**
  * Generated class for the TopNavComponent component.
  *
@@ -24,6 +25,7 @@ import { FcmTokenProvider } from '../../providers/fcm-token/fcm-token';
     templateUrl: 'pss-page.html'
 })
 export class PssPageComponent {
+    @ViewChild(Content) content: Content;
     eventId:number = null;
     eventName:string = null;
     tournamentId:number = null;
@@ -124,6 +126,9 @@ export class PssPageComponent {
         }
         
     }
+    gotoParentTab(){
+        console.log(this.navCtrl.parent.parent.pop())
+    }    
     pushRootPage(page,params={}) {        
         this.appCtrl.getRootNav().push(page, params);
     }
@@ -165,8 +170,18 @@ export class PssPageComponent {
         )        
         this.navCtrl.push(pageName,this.buildNavParams(navParams));
     }
-    expand(item){
+
+    scrollTo(elementId:string) {
+        let yOffset = document.getElementById(elementId).offsetTop;
+        console.log('yoffset is '+yOffset)
+        this.content.scrollTo(0, yOffset, 500)
+    }
+
+    expand(item,elementId?){
         item.expanded=item.expanded==false?true:false;
+        if(elementId!=null){
+            this.scrollTo(elementId);
+        }
     }
     generateEditTournamentProcessor(message_string){
         return (result) => {            

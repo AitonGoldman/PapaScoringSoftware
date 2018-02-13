@@ -56,10 +56,10 @@ export class EventComponent  extends PssPageComponent {
     entityFieldsArray:any=null;
     
     ionViewWillLoad() {        
-        if(this.eventId==null){
-            this.pushRootPage('EventSelectPage')
-            return;
-        }
+        // if(this.eventId==null){
+        //     this.pushRootPage('EventSelectPage')
+        //     return;
+        // }
         this.actionType=this.navParams.get('actionType');                
         this.eventId = this.navParams.get('eventId');
         this.wizardMode = this.navParams.get('wizardMode');

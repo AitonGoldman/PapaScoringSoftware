@@ -53,20 +53,19 @@
       </ion-input>
     </ion-item>
     <ion-item text-center no-lines >
-      <button ion-button [disabled]='!myForm.valid' (tap)="onSubmit()" margin padding>
+      <button ion-button [disabled]='!myForm.valid' tappable (click)="onSubmit()" margin padding>
         Record Score
       </button>
-      <button ion-button (tap)="voidTicket('void')" margin padding>
+      <button ion-button tappable (click)="voidTicket('void')" margin padding>
         Void Ticket
       </button>
       <br>
-      <button (tap)="voidTicket('void-readd')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player!=null">
+      <button tappable (click)="voidTicket('void-readd')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player!=null">
         Void Ticket And Requeue
       </button>      
-      <button (tap)="voidTicket('void-requeue')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player==null">
+      <button tappable (click)="voidTicket('void-requeue')" ion-button margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player==null">
         Void Ticket And ReAdd
-      </button>      
-      
+      </button>            
     </ion-item>
   </form>
   </div>

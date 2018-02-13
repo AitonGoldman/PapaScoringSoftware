@@ -8,6 +8,11 @@
 <ion-header>
   <ion-navbar color='pss-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+    <ion-buttons end showWhen='mobile' *ngIf="infoOnly!=true">
+      <button no-margin [navPush]="'ResultsPage'" [navParams]="buildNavParams({})" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p>
+    </ion-buttons>
+    
   </ion-navbar>    
 </ion-header>
 
@@ -88,7 +93,7 @@
       </ion-row>
       <ion-row margin-top margin-bottom>
         <ion-col text-center>
-          <a [navPush]="'ResultsTournamentPage'" [navParams]="buildNavParams({tournamentId:result.tournament_id,tournamentName:result.tournament_name})"><b>{{result.tournament_name}}</b></a>
+          <a tappable [navPush]="'ResultsTournamentPage'" [navParams]="buildNavParams({tournamentId:result.tournament_id,tournamentName:result.tournament_name})"><b>{{result.tournament_name}}</b></a>
           <hr style='width:50%;height:2px'/>
           <i>{{result.rank}}{{nth(result.rank)}}</i>
         </ion-col>
@@ -112,7 +117,7 @@
         Non Signifigant Scores
       </ion-col>
       <ion-col col-5 text-left>
-          <a [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentMachineId:top_machine.tournament_machine_id,tournamentMachineName:top_machine.tournament_machine_name,tournamentId:result.tournament_id,tournamentName:result.tournament_name})">{{top_machine.tournament_machine_name}}</a>
+          <a tappable [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentMachineId:top_machine.tournament_machine_id,tournamentMachineName:top_machine.tournament_machine_name,tournamentId:result.tournament_id,tournamentName:result.tournament_name})">{{top_machine.tournament_machine_name}}</a>
       </ion-col>
       <ion-col col-2 text-center>
         {{top_machine.rank}} 

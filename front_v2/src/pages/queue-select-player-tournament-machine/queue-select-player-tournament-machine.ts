@@ -187,6 +187,25 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
                     })
                 })
             })
+            this.tournaments.forEach((tournament)=>{
+                tournament.tournament_machines=tournament.tournament_machines.sort((n1,n2)=>{
+                    console.log(n1)
+                    console.log(n2)
+                    console.log('-------------')
+                    if(n1.tournament_machine_name>n2.tournament_machine_name){
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                })
+            })
+            this.tournaments=this.tournaments.sort((n1,n2)=>{
+                if(n1.tournament_name > n2.tournament_name){
+                    return 1
+                } else {
+                    return -1
+                }
+            })
         };
     }
 

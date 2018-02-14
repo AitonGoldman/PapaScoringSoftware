@@ -12,34 +12,32 @@
 </ion-header>
 <ion-content>
 <div [style.width]="contentWidth" style='margin-left:auto;margin-right:auto' text-center>
-  <h2>Papa Scoring Software</h2>
+  <div>
+    <h2>Papa Scoring Software</h2>
+  </div>
   <div *ngIf="eventAuth.getRoleName(eventId)==null||eventAuth.getRoleName(eventId)=='player'">    
-    <!-- <div hideWhen='cordova,core,tablet'> -->
-    <!--   <b>Download the app -->
-    <!--   <a *ngIf="platform.is('ios')" href="http://itunes.apple.com/us/app/yapss/id1207975236"> here </a> -->
-    <!--   <a *ngIf="platform.is('android')" href='https://play.google.com/store/apps/details?id=com.pbchallenge.yapss'> here </a>     -->
-    <!--   !</b><br> -->
-    <!--   &nbsp;<ion-icon margin-right  name="logo-apple" style='zoom:3'></ion-icon>&nbsp;<ion-icon name="logo-android" style='zoom:3'></ion-icon>&nbsp; -->
+    <ion-card hideWhen='cordova,core,tablet' padding-bottom padding-top>
+      <b>Download the app
+        <a *ngIf="platform.is('ios')" href="http://itunes.apple.com/us/app/yapss/id1207975236"> here </a>
+        <a *ngIf="platform.is('android')" href='https://play.google.com/store/apps/details?id=com.pbchallenge.yapss'> here </a>
+        !</b><br>
+      &nbsp;<ion-icon margin-right  name="logo-apple" style='zoom:3'></ion-icon>&nbsp;<ion-icon name="logo-android" style='zoom:3'></ion-icon>&nbsp;
 
-    <!--   <br> -->
-    <!--   The App will let you...<br> -->
-    <!--   <div text-center> -->
-    <!--     <br> -->
-    <!--     <i>Recieve notifications when queues change!<br> -->
-    <!--     Add yourself to a queue!<br> -->
-    <!--       Purchase tickets!<br> -->
-    <!--       </i> -->
-    <!--   </div> -->
-      
-    <!-- </div> -->
-    <div>
-      Please login <span showWhen='mobile'>using the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> button</span><span hideWhen='mobile'>using the <b>Login</b> link in the header</span><br>
+      <br>
+      The App will let you...<br>
+      <div margin-bottom>
+        <br>
+        <i>Recieve notifications when queues change!<br>
+           Add yourself to a queue!<br>
+           Purchase tickets!<br>
+        </i>
+      </div>
+      Download it now!
+    </ion-card>
+    <div margin-top padding-top *ngIf="eventAuth.getRoleName(eventId)==null">     
+      You can login <span showWhen='mobile'>using the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> button</span><span hideWhen='mobile'>using the <b>Login</b> link in the header</span><br>
     </div>
     <hr style='width:75%' showWhen='cordova'>
-    <div margin-top showWhen='cordova'>
-      Once logged in, you can purchase tickets <br>and see your list of favorited machines <br> in  <ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b>
-    </div>
-    <hr>
     <hr style='width:75%'>
     <div margin-top>
       To view the results and queues, <br> use the &nbsp;<ion-icon name="md-clipboard"></ion-icon> &nbsp; results and &nbsp;<ion-icon name="md-git-branch"></ion-icon> &nbsp; queues tabs below

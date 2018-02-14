@@ -24,9 +24,9 @@
     </div>
     <ion-list>
     <ng-container *ngFor="let tournament of tournaments">
-      <ion-item-divider tappable (click)="expand(tournament,tournament.tournament_id)" padding-top padding-bottom id="{{tournament.tournament_id}}">
+      <ion-item-divider color="darker" tappable (click)="expand(tournament,tournament.tournament_id)" padding-top padding-bottom margin-top id="{{tournament.tournament_id}}">
         <ion-avatar item-start *ngIf="tournament.img_url!=null">
-          <img [src]="tournament.img_url">
+          <img [src]="imgBaseUrl+tournament.img_url">
         </ion-avatar>        
         <h1>{{tournament.tournament_name}}</h1><ion-icon item-end [name]="tournament.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
       </ion-item-divider>      

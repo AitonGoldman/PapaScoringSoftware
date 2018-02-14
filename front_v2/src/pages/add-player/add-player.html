@@ -18,7 +18,7 @@
       <ion-list>
         <ion-item no-line *ngIf="selectedPlayer!=null && selectedPlayer.img_url!=null">
                 <ion-avatar style='zoom:3.0'>
-                  <img [src]="selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
+                  <img [src]="imgBaseUrl+selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
                 </ion-avatar>
         </ion-item>
         <ion-item>

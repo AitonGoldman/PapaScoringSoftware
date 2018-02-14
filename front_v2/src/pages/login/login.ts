@@ -76,7 +76,7 @@ export class LoginPage extends PssPageComponent {
     }    
     loginUser(){
         let versions = this.platform.versions();
-        if(versions.ios!=null && versions.ios.major>=11){
+        if(versions.ios!=null && versions.ios.major>=11 && !this.platform.is('cordova')){
             let toast = this.toastCtrl.create({
                 message: "iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
                 duration: 99000,

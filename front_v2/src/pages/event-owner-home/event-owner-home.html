@@ -40,7 +40,7 @@
         <ng-container *ngFor="let event of eventsAndTournaments">
           <button detail-none ion-item ion-item-divider tappable (click)="expand(event)">
             <ion-avatar item-start *ngIf="event.img_url!=null">
-              <img [src]="event.img_url">
+              <img [src]="imgBaseUrl+event.img_url">
             </ion-avatar>
             <h1>{{event.name}}</h1>
             <ion-icon item-end [name]="event.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
@@ -76,7 +76,7 @@
               
               
               <ion-avatar item-start *ngIf="tournament.img_url!=null">
-                <img [src]="tournament.img_url">
+                <img [src]="imgBaseUrl+tournament.img_url">
               </ion-avatar>                  
               {{tournament.tournament_name}}<ion-icon item-end [name]="tournament.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
             </button>

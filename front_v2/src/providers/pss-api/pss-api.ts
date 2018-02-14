@@ -7,6 +7,7 @@ import { of }         from 'rxjs/observable/of';
 import { LoadingController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 
+
 /*
   Generated class for the PssApiProvider provider.
 
@@ -16,12 +17,12 @@ import { ToastController } from 'ionic-angular';
 @Injectable()
 export class PssApiProvider {
     timeoutInMs:number=8000;
-    basePssUrl='http://192.168.1.178:8000'
-    //basePssUrl='http://192.168.0.64:8000'
-    //basePssUrl='http://192.168.0.64:8000'
-    //basePssUrl='http://9.75.197.88:8000' 
-
-    //basePssUrl='http://0.0.0.0:8000'
+    httpPrefix='http'
+    pssUrlPort='8100'
+    pssHost='192.168.1.178'
+    pssHostUrl=this.httpPrefix+'://'+this.pssHost+":"+this.pssUrlPort;
+    basePssUrl=this.httpPrefix+'://'+this.pssHost+':8000';
+    
     loading_instance = null;   
     constructor(public http: HttpClient,public loadingCtrl: LoadingController,
                 private toastCtrl: ToastController,
@@ -31,6 +32,10 @@ export class PssApiProvider {
     getBackendHost(){
         return this.basePssUrl;
     }
+    getBackendHostUrl(){
+        return this.pssHostUrl;
+    }
+    
     makeHot(cold) {
         const subject = new Subject();
         cold.subscribe(subject);

@@ -123,13 +123,21 @@ def get_all_tournaments(event_id):
         else:
             tournament_dict=generic.serialize_tournament_public(tournament)        
         finals = current_app.table_proxy.get_finals_by_tournament_id(tournament.tournament_id)
-        if finals:
-            tournament_dict['finals_ids']=[]
-            for final in finals:
-                tournament_dict['finals_ids'].append(final.final_id)
+        # if finals:
+        #     tournament_dict['finals_ids']=[]
+        #     for final in finals:
+        #         tournament_dict['finals_ids'].append({'final_id':final.final_id,'final_name':final.name})
+        add_finals_to_tournament_dict(tournament_dict,tournament,current_app)
         tournaments_list.append(tournament_dict)
     return jsonify({'data':tournaments_list})
 
+def add_finals_to_tournament_dict(tournament_dict,tournament, app):
+    finals = app.table_proxy.get_finals_by_tournament_id(tournament.tournament_id)
+    if finals:
+        tournament_dict['finals_ids']=[]
+        for final in finals:
+            tournament_dict['finals_ids'].append({'final_id':final.final_id,'final_name':final.name})
+    
 def get_all_tournaments_and_tournament_machines_route(event_id,app):
     tournaments_list=[]    
     tournaments = app.table_proxy.get_tournaments(event_id)
@@ -144,7 +152,7 @@ def get_all_tournaments_and_tournament_machines_route(event_id,app):
             tournament_machine['queue_length']=len([queue for queue in tournament_machine['queues'] if queue.get('player',None)])
             if tournament_machine.get('player_id',None):
                 tournament_machine['queue_length']= tournament_machine['queue_length'] + 1           
-            
+        add_finals_to_tournament_dict(tournament_dict,tournament,app)           
         tournaments_list.append(tournament_dict)
     return tournaments_list
 

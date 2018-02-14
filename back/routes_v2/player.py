@@ -106,6 +106,8 @@ def get_event_player_route(app,event_id,event_player_id):
         if current_machine:
             player_dict['machine_player_is_on'] = generic.serialize_tournament_machine_public(current_machine)
 
+        tournament_calculated_lists = sorted(tournament_calculated_lists, key= lambda e: e['tournament_name'])
+
         return {'data':player_dict,
                 'tournament_calculated_lists':to_dict(tournament_calculated_lists),
                 'tournament_counts':tournament_counts}

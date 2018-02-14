@@ -513,7 +513,7 @@ def get_final(event_id, final_id):
     finals_players = current_app.table_proxy.get_all_finals_players(final.tournament_id)    
     finals_player_dict = {finals_player.finals_player_id:to_dict(finals_player) for finals_player in finals_players}
     
-    return jsonify({'data':final_matches_dict,'finals_players':finals_player_dict})
+    return jsonify({'data':final_matches_dict,'finals_players':finals_player_dict,'final_name':final.name})
     
 @blueprints.test_blueprint.route('/<int:event_id>/tiebreakers/<int:tournament_id>/<finals_name>',methods=['GET'])
 def get_tiebreakers(event_id, tournament_id,finals_name):

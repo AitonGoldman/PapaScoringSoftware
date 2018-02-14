@@ -15,23 +15,31 @@
   <ion-row>
     <ion-col tappable col-12 [navPush]='"PlayerInfoPage"' [navParams]="buildNavParams({})">
       <ion-card >
-        <img [style.height]='"90px"' [style.width]='"100%"' [src]="'/assets/imgs/players.jpg'"/>
+        <img [style.height]='"90px"' [style.width]='"100%"' [src]="imgBaseUrl+'/assets/imgs/players.jpg'"/>
       <div class="card-title">Player Results</div>
       </ion-card>      
     </ion-col>
 
     <ng-container *ngFor="let tournament of tournaments">
+      <ion-col col-12>
+        <ng-container *ngIf="tournament.finals_ids!=null && tournament.finals_ids.length!=0">
+          <ion-card  *ngFor="let final of tournament.finals_ids" tappable (click)="pushRootPage('ResultsFinalsPage',buildNavParams({finalId:final.final_id}))">
+            <img [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/finals.jpg'"/>
+            <div class="card-title">{{final.final_name}} Finals Results</div>
+          </ion-card>
+        </ng-container>    
+    </ion-col>
     <ion-col tappable col-12 [navPush]='"ResultsTournamentPage"' [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
       <ion-card >
-        <img [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?tournament.img_url:'/assets/imgs/dummy_tournament_small.jpeg'"/>
-
-
-      <div class="card-title">{{tournament.tournament_name}} Results</div>
+        <img [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/dummy_tournament_small.jpeg'"/>
+        
+        
+        <div class="card-title">{{tournament.tournament_name}} Results</div>
       </ion-card>      
     </ion-col>
     <ion-col col-12 id="tournament_machines_{{tournament.tournament_id}}">
       <ion-card tappable (click)="expandMachines(tournament,'tournament_machines_'+tournament.tournament_id)">
-        <img [style.height]='"90px"' [style.width]='"100%"' [src]="'/assets/imgs/dummy_machines_small.jpg'" />
+        <img [style.height]='"90px"' [style.width]='"100%"' [src]="imgBaseUrl+'/assets/imgs/dummy_machines_small.jpg'" />
       <div class="card-title">{{tournament.tournament_name}} Machines</div>
       </ion-card>
       <ion-list showWhen='mobile' *ngIf='tournament != null && tournament.expand_machines==true' no-lines>

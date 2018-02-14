@@ -55,6 +55,8 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
             }
             this.selectedPlayer=result.data!=null?result.data:null;
             this.ticketPriceLists=result.tournament_calculated_lists;
+            console.log('ticketsPirceLists is ...')
+            console.log(this.ticketPriceLists);
             this.ticketCountsDict=result.tournament_counts;
             this.stripePublicKey=result.stripe_public_key
         }

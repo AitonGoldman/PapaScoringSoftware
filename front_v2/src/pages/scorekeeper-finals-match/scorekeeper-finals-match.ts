@@ -31,6 +31,7 @@ import { trigger, style, transition, animate } from '@angular/animations'
 export class ScorekeeperFinalsMatchPage extends PssPageComponent {
     match:any=null;
     finalId:any=null;
+    finalName:string=null;
     round:number=null;
     matchId:number=null;
     takenOrderPosition:any=[];
@@ -134,6 +135,7 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
             if(result==null){
                 return
             }
+            this.finalName=result.final_name;
             let final=result.data[this.round];
             this.match = final.filter((match)=>{
                 if(match.finals_match_id==this.matchId){

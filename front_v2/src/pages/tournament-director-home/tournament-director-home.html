@@ -19,9 +19,6 @@
     <button tappable detail-none ion-item no-lines [navPush]="'AddPlayerPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Register Player
     </button>
-    <button tappable detail-none hideWhen='mobile' no-lines [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="buildNavParams({})">
-      <ion-icon item-end name="git-branch"></ion-icon> Queue Player
-    </button>
     <button tappable detail-none ion-item tappable no-lines [navPush]="'ChangePlayerPicturePage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="camera"></ion-icon> Take Player Picture
     </button>    
@@ -58,7 +55,7 @@
     <ng-container *ngFor="let tournament of tournaments">
       <ion-item-divider tappable (click)="expand(tournament)">
         <ion-avatar item-start *ngIf="tournament.img_url!=null">
-          <img [src]="tournament.img_url">
+          <img [src]="imgBaseUrl+tournament.img_url">
         </ion-avatar>        
         {{tournament.tournament_name}}<ion-icon item-start [name]="tournament.active?'play':'pause'"></ion-icon><ion-icon item-end [name]="tournament.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
       </ion-item-divider>      

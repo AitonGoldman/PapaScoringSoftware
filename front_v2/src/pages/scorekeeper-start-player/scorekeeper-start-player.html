@@ -44,14 +44,14 @@
         <ion-col col-auto>
           <ion-item item-start no-lines>
           <ion-avatar  style='zoom:3.0'>
-            <img [src]="tournamentMachine.img_url!=null?tournamentMachine.img_url:'/assets/imgs/small_backglass.jpeg'">
+            <img [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">
           </ion-avatar>
           </ion-item>
         </ion-col>
         <ion-col col-auto>
           <ion-item no-lines>
           <ion-avatar  style='zoom:3.0'>
-            <img [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'">
+            <img [src]="selectedPlayer.img_url!=null?imgBaseUrl+selectedPlayer.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'">
           </ion-avatar>
           </ion-item>
         </ion-col>

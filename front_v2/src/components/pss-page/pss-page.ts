@@ -30,6 +30,7 @@ export class PssPageComponent {
     eventName:string = null;
     tournamentId:number = null;
     hideBackButton:boolean = false;
+    imgBaseUrl:string="";
     contentWidth:string='100%'
     constructor(public eventAuth: EventAuthProvider,
                 public navParams: NavParams,
@@ -55,7 +56,7 @@ export class PssPageComponent {
         if(platform.is('tablet')){
             this.contentWidth="75%"
         }
-        
+        this.imgBaseUrl=pssApi.getBackendHostUrl();
         console.log('Hello PssPageComponent Component');
 //        console.log(instance.constructor.name)
     }

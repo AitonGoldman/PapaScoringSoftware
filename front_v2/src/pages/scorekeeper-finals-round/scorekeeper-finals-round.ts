@@ -17,6 +17,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 export class ScorekeeperFinalsRoundPage extends PssPageComponent{
 
     finalId:number=null;
+    finalName:string=null;
     final:any=null;
     round:number=null;
     roundCompleted:boolean=false;
@@ -27,6 +28,7 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
             if(result==null){
                 return
             }
+            this.finalName=result.final_name;
             this.final=result.data[this.round];
             this.finalsPlayers=result.finals_players;
             

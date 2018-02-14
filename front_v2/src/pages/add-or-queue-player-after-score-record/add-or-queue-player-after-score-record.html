@@ -24,7 +24,7 @@
    <b>Queue Or Add Player To Machine</b>
  </ion-toolbar>
  <div text-center>
-   <img [src]="playerImg!=null?playerImg:'/assets/imgs/pinball_small_machine_square.jpg'">
+   <img [src]="playerImg!=null?imgBaseUrl+playerImg:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'">
  </div>
   <ion-list>
     <ion-list-header no-lines>Queue/Add {{playerName}}
@@ -32,7 +32,7 @@
     <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push tappable (click)="addOrQueuePlayer(tournamentMachine)">
       {{tournamentMachine.tournament_machine_name}}
       <ion-avatar item-start>
-        <img  [src]="tournamentMachine.img_url!=null?tournamentMachine.img_url:'/assets/imgs/small_backglass.jpeg'">
+        <img  [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">
       </ion-avatar>        
     </button>
   </ion-list>

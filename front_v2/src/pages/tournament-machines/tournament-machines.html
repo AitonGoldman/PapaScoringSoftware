@@ -30,7 +30,7 @@
         <ion-item *ngIf="machine.removed!=true">
           <ion-icon [name]="machine.active==true? 'play' : 'pause'" ></ion-icon>
           <ion-avatar item-start>
-            <img  [src]="machine.img_url!=null?machine.img_url:'/assets/imgs/small_backglass.jpeg'">
+            <img  [src]="machine.img_url!=null?imgBaseUrl+machine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">
           </ion-avatar>        
 
           <button hideWhen='mobile' (tap)="onRemove(machine)" ion-button item-end>Remove</button> {{machine.tournament_machine_name}}

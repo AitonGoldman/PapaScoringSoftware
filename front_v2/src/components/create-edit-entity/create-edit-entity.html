@@ -52,7 +52,7 @@
           <ion-item-divider color="light" text-wrap> Current {{entityType}} image </ion-item-divider>
           <ion-item >
             <ion-avatar item-start *ngIf="entity.img_url!=null">
-              <img [src]="entity.img_url">
+              <img [src]="imgBaseUrl+entity.img_url">
             </ion-avatar>                
           </ion-item>
         </ng-container>

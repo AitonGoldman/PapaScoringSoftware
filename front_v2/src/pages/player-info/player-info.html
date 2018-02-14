@@ -22,7 +22,7 @@
  </ion-toolbar>
 
   <div class='desktopSlim'>  
-  <ion-auto-complete *ngIf="hideAutoComplete==false" (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
+  <ion-auto-complete *ngIf="hideAutoComplete==false" (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/Player Number', debounce:500}"></ion-auto-complete>
   <div text-center  margin-bottom [style.height]="'25px'">
     <ion-spinner  *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
     <ion-item no-lines text-center *ngIf='selectedPlayer!=null'>
@@ -37,7 +37,7 @@
     <ion-item no-lines text-center>
       <ion-avatar  style='zoom:3.0'>
         <!--<img [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'" style='margin-left:auto;margin-right:auto'>-->
-        <img-loader [src]="selectedPlayer.img_url!=null?selectedPlayer.img_url:'/assets/imgs/pinball_small_machine_square.jpg'" useImg ></img-loader>
+        <img-loader [src]="selectedPlayer.img_url!=null?imgBaseUrl+selectedPlayer.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'" useImg ></img-loader>
       </ion-avatar>
     </ion-item>
     <div text-center margin-top margin-bottom>

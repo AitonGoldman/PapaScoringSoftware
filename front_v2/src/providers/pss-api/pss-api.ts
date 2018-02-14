@@ -20,19 +20,20 @@ export class PssApiProvider {
     httpPrefix=null;
     pssUrlPort=null;
     pssHost=null;
-    pssHostUrl=null;
-    basePssUrl=null;
+    pssHostUrl='https://results.papa.org';
+    basePssUrl='https://results.papa.org:8000';
+    
     
     loading_instance = null;   
     constructor(public http: HttpClient,public loadingCtrl: LoadingController,
                 private toastCtrl: ToastController,
                ){
         console.log('Hello PssApiProvider Provider');
-        this.httpPrefix='https'
-        this.pssUrlPort='8100'
-        this.pssHost='192.168.1.178'
-        pssHostUrl=this.httpPrefix+'://'+this.pssHost+":"+this.pssUrlPort;
-        basePssUrl=this.httpPrefix+'://'+this.pssHost+':8000';
+        //this.httpPrefix='https'
+        //this.pssUrlPort='8100'
+        //this.pssHost='192.168.1.178'
+        //pssHostUrl=this.httpPrefix+'://'+this.pssHost+":"+this.pssUrlPort;
+        //basePssUrl=this.httpPrefix+'://'+this.pssHost+':8000';
         
     }
     getBackendHost(){

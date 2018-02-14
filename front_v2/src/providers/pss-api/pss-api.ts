@@ -17,17 +17,23 @@ import { ToastController } from 'ionic-angular';
 @Injectable()
 export class PssApiProvider {
     timeoutInMs:number=8000;
-    httpPrefix='http'
-    pssUrlPort='8100'
-    pssHost='192.168.1.178'
-    pssHostUrl=this.httpPrefix+'://'+this.pssHost+":"+this.pssUrlPort;
-    basePssUrl=this.httpPrefix+'://'+this.pssHost+':8000';
+    httpPrefix=null;
+    pssUrlPort=null;
+    pssHost=null;
+    pssHostUrl=null;
+    basePssUrl=null;
     
     loading_instance = null;   
     constructor(public http: HttpClient,public loadingCtrl: LoadingController,
                 private toastCtrl: ToastController,
                ){
         console.log('Hello PssApiProvider Provider');
+        this.httpPrefix='https'
+        this.pssUrlPort='8100'
+        this.pssHost='192.168.1.178'
+        pssHostUrl=this.httpPrefix+'://'+this.pssHost+":"+this.pssUrlPort;
+        basePssUrl=this.httpPrefix+'://'+this.pssHost+':8000';
+        
     }
     getBackendHost(){
         return this.basePssUrl;

@@ -12,6 +12,7 @@ import { TournamentSettingsProvider } from '../../providers/tournament-settings/
 import { ListOrderStorageProvider } from '../../providers/list-order-storage/list-order-storage'
 import { Events } from 'ionic-angular';
 import { FcmTokenProvider } from '../../providers/fcm-token/fcm-token';
+import { PssToastProvider } from '../../providers/pss-toast/pss-toast';
 
 
 /**
@@ -39,7 +40,8 @@ export class PssPageComponent {
                 public pssApi: PssApiProvider,
                 public platform: Platform,                
                 //public notificationsService: NotificationsService,
-                public toastCtrl: ToastController,
+                //public toastCtrl: ToastController,
+                public pssToast: PssToastProvider,
                 public actionSheetCtrl: ActionSheetController,
                 public modalCtrl: ModalController,
                 public alertCtrl: AlertController,

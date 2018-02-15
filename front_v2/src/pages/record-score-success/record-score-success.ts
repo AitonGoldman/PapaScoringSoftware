@@ -47,15 +47,18 @@ export class RecordScoreSuccessPage extends SuccessPage {
                 return;
             }
             this.reAddSuccess=true;
-            let toast = this.toastCtrl.create({
-                message: message,
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "successToast"
-            });
-            toast.present();                    
+            // let toast = this.toastCtrl.create({
+            //     message: message,
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "successToast"
+            // });
+            // toast.present();                    
+            this.pssToast.showToast(message,
+                                    4000,
+                                    "successToast")
             
         }
     }

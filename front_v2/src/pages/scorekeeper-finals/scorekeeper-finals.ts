@@ -16,7 +16,8 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 })
 export class ScorekeeperFinalsPage  extends PssPageComponent{
     finalId:number=null;        
-    
+    rounds:number=null;
+    roundsList:any=[];
     ionViewWillLoad() {
         if(this.eventId==null){
             this.pushRootPage('EventSelectPage')
@@ -24,6 +25,14 @@ export class ScorekeeperFinalsPage  extends PssPageComponent{
         }
 
         this.finalId=this.navParams.get('finalId');
+        this.rounds=this.navParams.get('rounds');
+        let x = 1;        
+        while(x<=this.rounds && this.rounds != null){
+            console.log(x);
+            this.roundsList.push(x);
+            x=x+1;
+        }
+        
         console.log('ionViewDidLoad ScorekeeperFinalsRoundPage');
     }
 

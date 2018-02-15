@@ -20,22 +20,6 @@ import { SuccessButton } from '../../classes/SuccessButton'
 export class EventOwnerConfirmPage extends PssPageComponent{    
     successSummary:any = null;
     successButtons:any = [];    
-    // constructor(public navCtrl: NavController,
-    //             public navParams: NavParams,                
-    //             public eventAuth: EventAuthProvider,
-    //             public appCtrl: App,
-    //             public pssApi: PssApiProvider,
-    //             public platform: Platform,
-    //             //public notificationsService: NotificationsService,
-    //             public toastCtrl: ToastController,
-    //            public actionSheetCtrl: ActionSheetController) {
-    //     super(eventAuth,navParams,
-    //           navCtrl,appCtrl,
-    //           pssApi,platform,
-    //           //notificationsService,
-    //           toastCtrl,
-    //           actionSheetCtrl);
-    // }
     generatePssUserConfirm(){
         return (result)=>{
             if(result==null){

@@ -7,6 +7,7 @@ import { EventAuthProvider } from '../providers/event-auth/event-auth';
 import { FCM } from '@ionic-native/fcm';
 import { PssApiProvider } from '../providers/pss-api/pss-api';
 import { FcmTokenProvider } from '../providers/fcm-token/fcm-token';
+import { ImageLoaderConfig } from 'ionic-image-loader';
 
 @Component({
     templateUrl: 'app.html'
@@ -17,11 +18,15 @@ export class MyApp {
                 splashScreen: SplashScreen, public titleService: TitleServiceProvider,
                 public eventAuth: EventAuthProvider,public fcm: FCM,
                 public pssApi: PssApiProvider,
-                public fcmToken: FcmTokenProvider) {
+                public fcmToken: FcmTokenProvider,
+                private imageLoaderConfig: ImageLoaderConfig
+               ) {
         platform.ready().then(() => {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
-            
+            console.log('------------------')
+            console.log('poop');
+            imageLoaderConfig.enableDebugMode();
             statusBar.overlaysWebView(false);
             statusBar.styleDefault();
             splashScreen.hide();

@@ -63,7 +63,9 @@
          <button ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'TournamentMachinesPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id})">Manage Tournament Machines</button>
          <button ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'TournamentPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id, eventId:tournament.event_id, actionType:'edit'})">Edit Tournament</button>
          <button ion-item detail-none tappable  padding-left margin-left margin-right pading-right  (tap)="onTournamentToggle(eventId,tournament)"><ion-icon padding-right item-end [name]="tournament.active?'play':'pause'"></ion-icon>{{tournament.active==true?"DeActivate":"Activate"}} Tournament</button>
-         <button ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'FinalsBootstrapPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,finalName:tournament.tournament_name+'-A'})">Finals Management</button>
+         <button *ngIf="tournament.finals_style=='PPO'" ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'FinalsBootstrapPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,finalName:tournament.tournament_name+' (A)'})">Finals Management A</button>
+         <button *ngIf="tournament.finals_style=='PPO'" ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'FinalsBootstrapPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,finalName:tournament.tournament_name+' (B)'})">Finals Management B</button>
+         <button *ngIf="tournament.finals_style=='PAPA'" ion-item tappable  padding-left margin-left margin-right padding-right [navPush]="'FinalsBootstrapPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,finalName:tournament.tournament_name})">Finals Management</button>         
       </ng-container>      
     </ng-container>
   </ion-list>

@@ -12,6 +12,7 @@ import { PopoverController } from 'ionic-angular';
 import { TournamentSettingsProvider } from '../../providers/tournament-settings/tournament-settings'
 import { ListOrderStorageProvider } from '../../providers/list-order-storage/list-order-storage'
 import { FcmTokenProvider } from '../../providers/fcm-token/fcm-token';
+import { PssToastProvider } from '../../providers/pss-toast/pss-toast';
 
 //import { IonicPage } from 'ionic-angular';
 
@@ -52,7 +53,8 @@ export class AutoCompleteComponent extends PssPageComponent {
                 //public notificationsService: NotificationsService,
                 public alertCtrl: AlertController,
                 public modalCtrl: ModalController,
-                public toastCtrl: ToastController,
+                //public toastCtrl: ToastController,
+                public pssToast: PssToastProvider,
                 public events: Events,
                 public popoverCtrl: PopoverController,
                 public tournamentSettings: TournamentSettingsProvider,
@@ -62,7 +64,8 @@ export class AutoCompleteComponent extends PssPageComponent {
               navCtrl,appCtrl,
               pssApi,platform,
               //notificationsService,
-              toastCtrl,
+              //toastCtrl,
+              pssToast,
               actionSheetCtrl,
               modalCtrl,
               alertCtrl,

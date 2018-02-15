@@ -5,7 +5,7 @@ import { Observable} from 'rxjs/Observable';
 import { Subject} from 'rxjs/Subject';
 import { of }         from 'rxjs/observable/of';
 import { LoadingController } from 'ionic-angular';
-import { ToastController } from 'ionic-angular';
+import { PssToastProvider } from '../pss-toast/pss-toast';
 
 
 /*
@@ -16,17 +16,20 @@ import { ToastController } from 'ionic-angular';
 */
 @Injectable()
 export class PssApiProvider {
-    timeoutInMs:number=8000;
+    timeoutInMs:number=3000;
     httpPrefix=null;
     pssUrlPort=null;
     pssHost=null;
-    pssHostUrl='https://results.papa.org';
-    basePssUrl='https://results.papa.org:8000';
+    pssHostUrl='http://192.168.1.178:8100';
+    basePssUrl='http://192.168.1.178:8000';
+//   pssHostUrl='http://9.75.197.88:8100';
+//   basePssUrl='http://9.75.197.88:8000';
     
     
     loading_instance = null;   
     constructor(public http: HttpClient,public loadingCtrl: LoadingController,
-                private toastCtrl: ToastController,
+                //private toastCtrl: ToastController,
+                private pssToast:PssToastProvider
                ){
         console.log('Hello PssApiProvider Provider');
         //this.httpPrefix='https'
@@ -112,7 +115,7 @@ export class PssApiProvider {
     
     eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest',this.basePssUrl+"/pss_user_request",'post');
     eventOwnerCreateConfirm = this.generate_api_call('eventOwnerCreateConfirm',this.basePssUrl+"/pss_user_request_confirm/:arg",'post');
-    generateFinalsBracket = this.generate_api_call('generateFinalsBracket',this.basePssUrl+"/:arg/brackets/:arg",'post');
+    generateFinalsBracket = this.generate_api_call('generateFinalsBracket',this.basePssUrl+"/:arg/brackets/:arg/:arg",'post');
     
     
     getAllEvents = this.generate_api_call('getAllEvents',this.basePssUrl+"/events",'get');
@@ -193,15 +196,7 @@ export class PssApiProvider {
                     } else {
                         error_message=error.error.message;
                     }
-                    let toast = this.toastCtrl.create({
-                        message:  error_message,
-                        duration: 99000,
-                        position: 'top',
-                        showCloseButton: true,
-                        closeButtonText: " ",
-                        cssClass: "dangerToast"
-                    });
-                    toast.present();                    
+                    this.pssToast.showToast(error_message,7000,"dangerToast");                    
                 }
                 if (error.status==404){
                     console.log('found 404...')

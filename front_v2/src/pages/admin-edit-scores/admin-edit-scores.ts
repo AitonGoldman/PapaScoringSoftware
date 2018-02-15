@@ -37,15 +37,16 @@ export class AdminEditScoresPage extends AutoCompleteComponent {
             score.voided = score.voided==false            
             this.showNewScoreForm=false;
             this.newScore={};            
-            let toast = this.toastCtrl.create({
-                message:  score.voided==true?"Score voided!":"Score UnVoided!",
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "successToast"
-            });
-            toast.present();                    
+            // let toast = this.toastCtrl.create({
+            //     message:  score.voided==true?"Score voided!":"Score UnVoided!",
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "successToast"
+            // });
+            // toast.present();                    
+            this.pssToast.showToast(score.voided==true?"Score voided!":"Score UnVoided!",4000,"successToast")
             
         })
     }
@@ -57,16 +58,16 @@ export class AdminEditScoresPage extends AutoCompleteComponent {
             }            
             this.showNewScoreForm=false;
             this.newScore={};
-            let toast = this.toastCtrl.create({
-                message: 'New score added!',
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "successToast"
-            });
-            toast.present();                    
-            
+            // let toast = this.toastCtrl.create({
+            //     message: 'New score added!',
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "successToast"
+            // });
+            // toast.present();                    
+            this.pssToast.showToast("New score added!",4000,"successToast")            
         })
     }
     

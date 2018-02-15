@@ -136,7 +136,7 @@ def add_finals_to_tournament_dict(tournament_dict,tournament, app):
     if finals:
         tournament_dict['finals_ids']=[]
         for final in finals:
-            tournament_dict['finals_ids'].append({'final_id':final.final_id,'final_name':final.name})
+            tournament_dict['finals_ids'].append({'final_id':final.final_id,'final_name':final.name,'number_of_rounds':final.number_of_rounds})
     
 def get_all_tournaments_and_tournament_machines_route(event_id,app):
     tournaments_list=[]    

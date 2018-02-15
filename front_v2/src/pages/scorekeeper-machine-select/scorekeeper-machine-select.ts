@@ -61,15 +61,19 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
             this.undoMode=false;
             tournamentMachine.player_id=result.data.player_id;
             tournamentMachine.player=result.data.player;
-                        let toast = this.toastCtrl.create({
-                            message:  "Player "+result.data.player.player_full_name+" added to  "+tournamentMachine.tournament_machine_name,
-                            duration: 99000,
-                            position: 'top',
-                            showCloseButton: true,
-                            closeButtonText: " ",
-                            cssClass: "successToast"
-                        });            
-            toast.present();                                                    
+            //             let toast = this.toastCtrl.create({
+            //                 message:  "Player "+result.data.player.player_full_name+" added to  "+tournamentMachine.tournament_machine_name,
+            //                 duration: 99000,
+            //                 position: 'top',
+            //                 showCloseButton: true,
+            //                 closeButtonText: " ",
+            //                 cssClass: "successToast"
+            //             });            
+            // toast.present();
+            this.pssToast.showToast("Player "+result.data.player.player_full_name+" added to  "+tournamentMachine.tournament_machine_name,
+                                    4000,
+                                    "successToast")
+            
             this.undoMode=false;            
         }
     }
@@ -82,16 +86,20 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
             tournamentMachine.player_id=null;
             tournamentMachine.player=null;
             console.log(result);
-            let toast = this.toastCtrl.create({
-                message:  result.data.queues[0].player.player_full_name+" inserted into queue for "+tournamentMachine.tournament_machine_name,
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "successToast"
-            });
+            // let toast = this.toastCtrl.create({
+            //     message:  result.data.queues[0].player.player_full_name+" inserted into queue for "+tournamentMachine.tournament_machine_name,
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "successToast"
+            // });
             this.undoMode=false;
-            toast.present();                                                                
+            this.pssToast.showToast(result.data.queues[0].player.player_full_name+" inserted into queue for "+tournamentMachine.tournament_machine_name,
+                                    4000,
+                                    "successToast")
+            
+            //toast.present();                                                                
         }
     }
     
@@ -102,16 +110,20 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
             }
             tournamentMachine.player_id=null;
             tournamentMachine.player=null;
-            let toast = this.toastCtrl.create({
-                message:  "Player removed from "+tournamentMachine.tournament_machine_name,
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "successToast"
-            });
+            // let toast = this.toastCtrl.create({
+            //     message:  "Player removed from "+tournamentMachine.tournament_machine_name,
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "successToast"
+            // });
             this.undoMode=false;
-            toast.present();                                                    
+            //toast.present();
+            this.pssToast.showToast("Player removed from "+tournamentMachine.tournament_machine_name,
+                                    4000,
+                                    "successToast")
+
             
         }
     }

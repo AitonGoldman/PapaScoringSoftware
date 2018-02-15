@@ -114,7 +114,7 @@ export class FinalsBootstrapPage extends PssPageComponent{
         }
     }    
     generateBrackets() {
-        this.pssApi.generateFinalsBracket({description:this.finalName,data:this.finalsPlayers},this.eventId,this.tournamentId)
+        this.pssApi.generateFinalsBracket({description:this.finalName,data:this.finalsPlayers},this.eventId,this.tournamentId,this.finalName)
             .subscribe(this.generateGenerateFinalsBracketProcessor())                                                          
         
     }

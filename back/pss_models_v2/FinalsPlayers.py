@@ -5,6 +5,7 @@ def generate_finals_players_class(db_handle):
         tournament_id=db_handle.Column('tournament_id', db_handle.Integer, db_handle.ForeignKey('tournaments.tournament_id'))        
         player_name=db_handle.Column(db_handle.String(100))
         seed_rank=db_handle.Column(db_handle.Integer)
+        ppo_b_seed_rank=db_handle.Column(db_handle.Integer)
         finals_rank=db_handle.Column(db_handle.Integer)
         finishing_rank=db_handle.Column(db_handle.Integer)
         

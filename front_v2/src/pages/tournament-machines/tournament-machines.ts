@@ -74,15 +74,18 @@ export class TournamentMachinesPage extends AutoCompleteComponent {
             if(result == null){
                 return;
             }            
-            let toast = this.toastCtrl.create({
-                message:  message_string,
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "successToast"
-            });
-            toast.present();                                                    
+            // let toast = this.toastCtrl.create({
+            //     message:  message_string,
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "successToast"
+            // });
+            // toast.present();                                                    
+            this.pssToast.showToast(message_string,
+                                    4000,
+                                    "successToast")
 
             //toast.present();
             // this.notificationsService.success("Success", message_string,{

@@ -82,15 +82,15 @@ export class QuickLinksPage extends PssPageComponent {
     getCallback(pageName,args){        
         return ()=>{
             console.log("**************")                            
-            let toast = this.toastCtrl.create({
-                message:  "Something went wrong.  Please try the quicklink again.",
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "dangerToast"
-            });
-            toast.present();                                                                                    
+            // let toast = this.toastCtrl.create({
+            //     message:  "Something went wrong.  Please try the quicklink again.",
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "dangerToast"
+            // });
+            // toast.present();                                                                                    
         }            
     }
     publishQuickLinksPlayerPush(pageName,args){

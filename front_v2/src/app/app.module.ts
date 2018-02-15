@@ -27,6 +27,7 @@ import { FCM } from '@ionic-native/fcm';
 import { FcmTokenProvider } from '../providers/fcm-token/fcm-token';
 import { PlayerHelpPageProvider } from '../providers/player-help-page/player-help-page';
 import { IonicImageLoader } from 'ionic-image-loader';
+import { PssToastProvider } from '../providers/pss-toast/pss-toast';
 
 //import {ToastModule} from 'ng2-toastr/ng2-toastr';
 
@@ -72,7 +73,8 @@ import { IonicImageLoader } from 'ionic-image-loader';
       TournamentSettingsProvider,
       FCM,
     FcmTokenProvider,
-    PlayerHelpPageProvider
+    PlayerHelpPageProvider,
+    PssToastProvider
   ]
 })
 export class AppModule {}

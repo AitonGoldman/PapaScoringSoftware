@@ -55,16 +55,16 @@ export class AddUserPage extends AutoCompleteComponent {
                 this.users.push(result.data[0]);                
             }
             let message_string=user_full_name+" is a "+role_name+" in the event."
-                let toast = this.toastCtrl.create({
-                    message:  message_string,
-                    duration: 99000,
-                    position: 'top',
-                    showCloseButton: true,
-                    closeButtonText: " ",
-                    cssClass: "successToast"
-                });
-                toast.present();                
-
+                // let toast = this.toastCtrl.create({
+                //     message:  message_string,
+                //     duration: 99000,
+                //     position: 'top',
+                //     showCloseButton: true,
+                //     closeButtonText: " ",
+                //     cssClass: "successToast"
+                // });
+                // toast.present();                
+            this.pssToast.showToast(message_string,4000,"successToast")
             
             //toast here
         };
@@ -99,15 +99,16 @@ export class AddUserPage extends AutoCompleteComponent {
             console.log('already there...');
             //            let message_string=this.selectedUser.full_user_name+" is already registered for this event."
             let message_string=this.selectedPlayer.full_user_name+" is already registered for this event."            
-                let toast = this.toastCtrl.create({
-                    message:  message_string,
-                    duration: 99000,
-                    position: 'top',
-                    showCloseButton: true,
-                    closeButtonText: " ",
-                    cssClass: "dangerToast"
-                });
-                toast.present();                
+                // let toast = this.toastCtrl.create({
+                //     message:  message_string,
+                //     duration: 99000,
+                //     position: 'top',
+                //     showCloseButton: true,
+                //     closeButtonText: " ",
+                //     cssClass: "dangerToast"
+                // });
+                // toast.present();                
+            this.pssToast.showToast(message_string,8000,"dangerToast")
 
 
             return;

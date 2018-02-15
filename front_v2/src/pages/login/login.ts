@@ -77,15 +77,19 @@ export class LoginPage extends PssPageComponent {
     loginUser(){
         let versions = this.platform.versions();
         if(versions.ios!=null && versions.ios.major>=11 && !this.platform.is('cordova')){
-            let toast = this.toastCtrl.create({
-                message: "iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "dangerToast"
-            });
-            toast.present();
+            // let toast = this.toastCtrl.create({
+            //     message: "iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "dangerToast"
+            // });
+            // toast.present();
+            this.pssToast.showToast("iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
+                                    99000,
+                                    "dangerToast")
+
             //return
         }
         this.pssApi.loginUser(this.loginInfo,this.eventId)
@@ -93,16 +97,20 @@ export class LoginPage extends PssPageComponent {
     }
     loginPlayer(){
         let versions = this.platform.versions();
-        if(versions.ios!=null && versions.ios.major>=11){
-            let toast = this.toastCtrl.create({
-                message: "iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "dangerToast"
-            });
-            toast.present();
+        if(versions.ios!=null && versions.ios.major>=11 && !this.platform.is('cordova')){
+            // let toast = this.toastCtrl.create({
+            //     message: "iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "dangerToast"
+            // });
+            // toast.present();
+            this.pssToast.showToast("iOS 11 is not supported through the browser.  Please install the app - a link to the app store is on the home page.",
+                                    99000,
+                                    "dangerToast")
+
             return
         }
 

@@ -3,4 +3,5 @@ def generate_finals_class(db_handle):
         final_id=db_handle.Column(db_handle.Integer, primary_key=True)
         tournament_id=db_handle.Column('tournament_id', db_handle.Integer, db_handle.ForeignKey('tournaments.tournament_id'))
         name=db_handle.Column(db_handle.String(1000))
+        number_of_rounds=db_handle.Column(db_handle.Integer)
     return Finals

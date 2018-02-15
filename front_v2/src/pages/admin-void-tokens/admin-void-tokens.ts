@@ -39,15 +39,16 @@ export class AdminVoidTokensPage extends AutoCompleteComponent {
             if(result == null){
                 return
             }
-            let toast = this.toastCtrl.create({
-                message:  this.tokenCount+" unused tokens have been voided",
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "successToast"
-            });
-            toast.present();                    
+            // let toast = this.toastCtrl.create({
+            //     message:  this.tokenCount+" unused tokens have been voided",
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "successToast"
+            // });
+            // toast.present();                    
+            this.pssToast.showToast(this.tokenCount+" unused tokens have been voided",4000,"successToast")
             
         })
     }    

@@ -37,15 +37,16 @@ export class FinalsBootstrapResolveTiebreakerPage extends PssPageComponent {
             if(result.data.completed){
                 msg="Tiebreaker Completed";
             }
-            let toast = this.toastCtrl.create({
-                message:  msg,
-                duration: 99000,
-                position: 'top',
-                showCloseButton: true,
-                closeButtonText: " ",
-                cssClass: "successToast"
-            });            
-            toast.present();                                                    
+            // let toast = this.toastCtrl.create({
+            //     message:  msg,
+            //     duration: 99000,
+            //     position: 'top',
+            //     showCloseButton: true,
+            //     closeButtonText: " ",
+            //     cssClass: "successToast"
+            // });            
+            // toast.present();                                                    
+            this.pssToast.showToast(msg,4000,"successToast")
             
         }
     }

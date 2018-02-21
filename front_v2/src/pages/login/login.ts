@@ -118,7 +118,7 @@ export class LoginPage extends PssPageComponent {
                                     99000,
                                     "dangerToast")
 
-            //return
+            return
         }
         this.pssApi.loginUser(this.loginInfo,this.eventId)
             .subscribe(this.generateLoginUserProcessor())            

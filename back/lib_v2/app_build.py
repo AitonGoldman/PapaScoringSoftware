@@ -57,6 +57,7 @@ def configure_base_app(app):
     CORS(
         app,
         headers=['Content-Type', 'Accept'],
+        vary_header=False,
         #send_wildcard=False,        
         supports_credentials=True
     )    
@@ -105,7 +106,7 @@ def build_app(app):
     pss_config = PssConfig()
     pss_config.get_db_info().check_database_exists()
     app.db_handle = pss_config.get_db_info().create_db_handle(app)
-    app.register_blueprint(blueprints.test_blueprint)
+    app.register_blueprint(blueprints.test_blueprint,url_prefix='/api')
     app.table_proxy=TableProxy()
     app.table_proxy.initialize_tables(app.db_handle)    
     app.before_request(generate_event_settings_hash_setter(app))

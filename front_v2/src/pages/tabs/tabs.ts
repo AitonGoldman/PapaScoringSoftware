@@ -18,17 +18,28 @@ import { TopThreePopoverComponent } from '../../components/top-three-popover/top
 export class TabsPage extends PssPageComponent {
     @ViewChild('myTabs') tabRef: Tabs;
     
-    
+    tabHomeIcon:string='';
+    homeIconTitle:string='';
     roleName:string = "blah";    
     ionViewDidLoad(){
         //this.tabRef.getByIndex(1).setRoot('ResultsPage',this.buildNavParams({}));
+    }
+    setHomeTabIconAndTitle(){
+        if(this.eventAuth.getRoleName(this.eventId)=='player' || this.eventAuth.getRoleName(this.eventId) == null){
+            this.tabHomeIcon='help';
+            this.homeIconTitle='Help'
+        } else {
+            this.tabHomeIcon='home';
+            this.homeIconTitle=this.eventAuth.getRoleName(this.eventId);
+            
+        }        
     }
     ionViewWillLoad() {        
         if(this.eventId==null){
             this.pushRootPage('EventSelectPage')
             return;
         }
-
+        this.setHomeTabIconAndTitle()
         let roleName = this.eventAuth.getRoleName(this.eventId);
         this.roleName = roleName ? roleName : 'Home';
         console.log('ionViewDidLoad TabsPage');
@@ -69,6 +80,8 @@ export class TabsPage extends PssPageComponent {
     }
     onTabChange(event){                
         console.log('changed a tab!');        
+        this.setHomeTabIconAndTitle()
+
         let previousTab = this.tabRef.previousTab(false);
         console.log(previousTab);
         // if(previousTab!=null && previousTab.index!=3){

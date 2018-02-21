@@ -12,7 +12,7 @@
  <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
    <b>Jump To...</b>
  </ion-toolbar>
-  <ion-list>
+ <ion-list>
       <button ion-item detail-push tappable [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})">
         <ion-icon name="person" item-end></ion-icon>{{eventAuth.isEventUserLoggedIn(eventId)==true? "Logout" : "Login"}}
       </button>

@@ -26,7 +26,7 @@ export class MyApp {
             // Here you can do any higher level native things you might need.
             console.log('------------------')
             console.log('poop');
-            imageLoaderConfig.enableDebugMode();
+            this.imageLoaderConfig.enableDebugMode();
             statusBar.overlaysWebView(false);
             statusBar.styleDefault();
             splashScreen.hide();
@@ -40,7 +40,7 @@ export class MyApp {
                         if(token==null){
                             return;
                         }
-                        let sendToken=false;
+                        //let sendToken=false;
                         if((fcmToken.getFcmToken()!=null && fcmToken.getFcmToken()!=token)||fcmToken.getFcmToken()==null){
                             fcmToken.setFcmToken(token);
                             //this.pssApi.recordTokens(token)

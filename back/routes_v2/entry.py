@@ -58,7 +58,8 @@ def start_player_on_machine_route(input_data,event_id, app, current_user):
         raise BadRequest('Tried to start game when someone is already playing!')
     already_playing_tournament_machine= app.table_proxy.get_tournament_machine_player_is_playing(player,event_id)
     if already_playing_tournament_machine:
-        raise BadRequest('Player is already playing %s!' % already_playing_tournament_machine.tournament_machine_name)    
+        raise BadRequest('Player is already playing %s!' % already_playing_tournament_machine.tournament_machine_name)
+    remove_player_with_notification(player,app,tournament_machine, event_id,audit_log_action="player started on %s"%tournament_machine.tournament_machine_name,current_user=current_user)    
     if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
         raise BadRequest('Tried to start game without tokens')
     if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:

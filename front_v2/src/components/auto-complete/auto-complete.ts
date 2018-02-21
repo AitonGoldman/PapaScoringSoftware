@@ -5,7 +5,7 @@ import { ModalController, Platform, App, NavParams, NavController } from 'ionic-
 import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { AlertController } from 'ionic-angular';
-import { ToastController } from 'ionic-angular';
+//import { ToastController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular'
 import { PopoverController } from 'ionic-angular';
@@ -13,6 +13,8 @@ import { TournamentSettingsProvider } from '../../providers/tournament-settings/
 import { ListOrderStorageProvider } from '../../providers/list-order-storage/list-order-storage'
 import { FcmTokenProvider } from '../../providers/fcm-token/fcm-token';
 import { PssToastProvider } from '../../providers/pss-toast/pss-toast';
+import { ImageLoader } from 'ionic-image-loader';
+import { LoadingController } from 'ionic-angular';
 
 //import { IonicPage } from 'ionic-angular';
 
@@ -59,7 +61,9 @@ export class AutoCompleteComponent extends PssPageComponent {
                 public popoverCtrl: PopoverController,
                 public tournamentSettings: TournamentSettingsProvider,
                 public listOrderStorage: ListOrderStorageProvider,
-                public fcmToken: FcmTokenProvider){
+                public fcmToken: FcmTokenProvider,
+                public imageLoader: ImageLoader,
+                public loadingCtrl: LoadingController){
         super(eventAuth,navParams,
               navCtrl,appCtrl,
               pssApi,platform,
@@ -73,7 +77,9 @@ export class AutoCompleteComponent extends PssPageComponent {
               tournamentSettings,
               listOrderStorage,
               events,
-              fcmToken);
+              fcmToken,
+              imageLoader,
+              loadingCtrl);
         this.autocompleteDoneEventHandler= (autocompleteInfo, time) => {
             // user and time are the same arguments passed in `events.publish(user, time)`
             this.loading=false;            

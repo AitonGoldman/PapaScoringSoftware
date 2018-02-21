@@ -91,7 +91,8 @@ def event_user_login_with_event_id(event_id):
     identity_changed.send(current_app._get_current_object(), identity=Identity(pss_user.pss_user_id))
     pss_user_dict = generic.serialize_pss_user_public(pss_user)
     pss_user_dict['roles']=get_user_roles(pss_user,event_id)
-    return jsonify({'data':pss_user_dict})        
+    event_players_list = [generic.serialize_player_public(event_player) for event_player in current_app.table_proxy.get_all_event_players(event_id) if event_player.has_pic is True]
+    return jsonify({'data':pss_user_dict,'event_players':event_players_list})        
 
 @blueprints.test_blueprint.route('/auth/player/login/<int:event_id>',methods=['POST'])
 def event_player_login(event_id):    

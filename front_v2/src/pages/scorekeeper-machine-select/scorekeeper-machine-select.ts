@@ -26,8 +26,12 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
         return (result) => {            
             if(result == null){
                 return;
-            }
+            }            
             let tournamentMachines=result.data;
+            let event_players=result.event_players;
+            if(result.event_players && result.event_players.length >0){
+                this.loadPlayerPicsCache(event_players)
+            }
             tournamentMachines.map((tournament)=>{
                 tournament.expanded=false;
             })            

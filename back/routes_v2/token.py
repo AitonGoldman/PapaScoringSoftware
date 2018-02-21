@@ -162,8 +162,11 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
         for tournament_count in input_data.get('tournament_token_counts',[]):            
             if int(tournament_count['tournament_id'])==tournament.tournament_id:
                 if int(tournament_count.get('token_count',0)) > 0:
-                    if tournament.allow_phone_purchases is False:
-                        raise BadRequest('Ticket purchases by players have been disabled.  Sorry.')
+                    if tournament.allow_phone_purchases is False and player_initiated:
+                        raise BadRequest('Ticket purchases by players have been disabled for this tournament.  Sorry.')
+                    if tournament.active is not True:
+                        raise BadRequest('Ticket purchases have been disabled for this tournament.  Sorry.')
+                    
                     tournament_count['tournament']=tournament
                     list_of_tournament_tokens.append(tournament_count)    
     for meta_tournament in app.table_proxy.get_meta_tournaments(event_id):        

@@ -470,6 +470,7 @@ class TableProxy():
         
     def get_event_player(self,event_id,event_player_id):        
         return self.Players.query.filter(self.Players.event_info.any(self.EventPlayersInfo.event_id==event_id)).filter(self.Players.event_info.any(self.EventPlayersInfo.player_id_for_event==event_player_id)).first()
+    
     #, 
 
     def get_player(self,event_id,player_id=None,

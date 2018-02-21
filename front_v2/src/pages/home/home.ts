@@ -18,7 +18,10 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 })
 export class HomePage extends PssPageComponent{
     @ViewChild('myTabs') tabRef: Tabs;    
-
+    numberCols:number=3;
+    numberMachines:number=16;
+    round:any=Math.round;
+    
     ionViewDidLoad() {
         console.log('ionViewDidLoad HomePage');        
     }

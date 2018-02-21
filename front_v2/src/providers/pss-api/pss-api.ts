@@ -16,12 +16,14 @@ import { PssToastProvider } from '../pss-toast/pss-toast';
 */
 @Injectable()
 export class PssApiProvider {
-    timeoutInMs:number=3000;
+    timeoutInMs:number=8000;
     httpPrefix=null;
     pssUrlPort=null;
     pssHost=null;
-    pssHostUrl='http://192.168.1.178:8100';
-    basePssUrl='http://192.168.1.178:8000';
+    //pssHostUrl='http://192.168.1.178:8100';
+    pssHostUrl='http://admin.inchglue.com:8000';
+    //basePssUrl='http://192.168.1.178:8000';
+    basePssUrl='http://admin.inchglue.com:8000/api';
 //   pssHostUrl='http://9.75.197.88:8100';
 //   basePssUrl='http://9.75.197.88:8000';
     
@@ -78,8 +80,9 @@ export class PssApiProvider {
             
             
             let result_observable = this.makeHot(this.http.request(method,localUrl,            
-                                                                   {withCredentials:true,
-                                                                    body:postObject})['timeout'](this.timeoutInMs))
+                                                                   {withCredentials:true,                                                                    
+                                                                    body:postObject}
+                                                                  )['timeout'](this.timeoutInMs))
                 .pipe(                
                     catchError(this.handleError(apiName,null))
                 );

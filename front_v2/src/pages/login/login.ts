@@ -72,6 +72,34 @@ export class LoginPage extends PssPageComponent {
             }
             this.navCtrl.push("SuccessPage",            
                               this.buildNavParams(targetPageParams));
+            // this.imageLoader.clearCache();
+            // for(let x = 0; x<100;x++){
+            //     this.imageLoader.preload('http://admin.inchglue.com/assets/imgs/'+x+'.jpg').then((data)=>{
+            //         console.log("got "+x);
+            //         console.log(data);
+            //     })
+            // }
+            if(result.event_players && result.event_players.length >0){
+                this.loadPlayerPicsCache(result.event_players,true)
+                // this.showLoading("Loading Player Images....")                
+                // this.imageLoader.clearCache();
+                // result.event_players.forEach((eventPlayer,index)=>{
+                //     this.imageLoader.preload(this.pssApi.getBackendHostUrl()+eventPlayer.img_url).then((data)=>{                        
+                //         this.updateLoadingMessage('Loading Images '+index)
+                //         if(index==result.event_players.length-1){
+                //             setTimeout(()=>{
+                //                 this.hideLoading()
+                //             },1000)
+                //         }
+                //     }).catch((error)=>{
+                //         if(index==result.event_players.length-1){
+                //             setTimeout(()=>{
+                //                 this.hideLoading()
+                //             },1000)
+                //         }
+                //     })
+                // })
+            }
         };
     }    
     loginUser(){

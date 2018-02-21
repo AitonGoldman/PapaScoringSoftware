@@ -143,9 +143,8 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
             }
         });
         handler.open({
-            name: 'Stripe.com',
-            description: '2 widgets',
-            zipCode: true,
+            name: 'Stripe.com',            
+            zipCode: false,
             amount: this.totalCost*100
         });
     }

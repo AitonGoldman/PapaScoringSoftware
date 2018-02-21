@@ -55,7 +55,14 @@ export class PlayerInfoPage extends AutoCompleteComponent {
             this.pushRootPage('EventSelectPage')
             return;
         }
-        
+        // this.imageLoader.clearCache();
+        // for(let x = 0; x<100;x++){
+        //     this.imageLoader.preload('http://admin.inchglue.com/assets/imgs/'+x+'.jpg').then((data)=>{
+        //         console.log("got "+x);
+        //         console.log(data);
+        //     })
+        // }
+        // this.testLoading('poop')();
         if(this.loaded==false){
             console.log('entering player info....'+this.loaded)
             

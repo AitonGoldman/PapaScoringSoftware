@@ -17,8 +17,9 @@
   <ion-row>
     <ion-col  col-12  *ngFor="let event of events;index as i;even as e;">
       <ion-card tappable  (click)="gotoEvent(event.event_id,event.name)">
-        <img [style.height]='"90px"' [style.width]='"100%"' [src]="event.img_url!=null?imgBaseUrl+event.img_url:imgBaseUrl+'/assets/imgs/pinball_small.jpg'"/>
-        <!--<img [style.height]='"117px"' [style.width]='"175px"' hideWhen='mobile,tablet' [src]="event.img_url!=null?event.img_url:'/assets/imgs/pinball_med.jpg'"/>-->
+        <img-loader fallback="assets/imgs/pinball_small.jpg" [style.height]='"90px"' [style.width]='"100%"' [src]="event.img_url!=null?imgBaseUrl+event.img_url:imgBaseUrl+'/assets/imgs/pinball_small.jpg'" useImg ></img-loader>
+        <!--<img [style.height]='"90px"' [style.width]='"100%"' [src]="event.img_url!=null?imgBaseUrl+event.img_url:imgBaseUrl+'/assets/imgs/pinball_small.jpg'"/>-->
+        
       <div class="card-title">{{event.name}}</div>
     </ion-card>
     </ion-col>

@@ -107,6 +107,7 @@ def get_tournament_machines(event_id,tournament_id):
     tournament_machines = current_app.table_proxy.get_tournament_machines(tournament_id)
     for tournament_machine in tournament_machines:        
         tournament_machines_list.append(to_dict(tournament_machine))        
+    event_players_list = [generic.serialize_player_public(event_player) for event_player in current_app.table_proxy.get_all_event_players(event_id) if event_player.has_pic is True]
         
-    return jsonify({'data':tournament_machines_list})
+    return jsonify({'data':tournament_machines_list,'event_players':event_players_list})
 

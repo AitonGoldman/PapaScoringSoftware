@@ -35,8 +35,8 @@
           <ng-container *ngFor="let tournament_machine of tournament.tournament_machines">
             <ion-item  tappable (click)="expand(tournament_machine,'machine_'+tournament_machine.tournament_machine_id)" id="machine_{{tournament_machine.tournament_machine_id}}">
               {{tournament_machine.tournament_machine_name}}<ion-badge item-left no-margin *ngIf='tournament_machine.queue_length > 0'>{{tournament_machine.queue_length}}</ion-badge>
-                <span text-center item-end style='font-size:10px' hideWhen="core,tablet" *ngIf="tournament_machine.total_play_time > 0" >Avg Time<br>{{round(tournament_machine.total_play_time/tournament_machine.total_number_of_players)}} minutes</span>
-                <span text-center item-end showWhen="core,tablet" *ngIf="tournament_machine.total_play_time > 0" >Avg Time<br>{{round(tournament_machine.total_play_time/tournament_machine.total_number_of_players)}} minutes</span>
+                <span text-center item-end style='font-size:10px' hideWhen="core,tablet" *ngIf="tournament_machine.total_play_time > 0" >Avg Time<br>{{round((tournament_machine.total_play_time/tournament_machine.total_number_of_players)/60)}} minutes</span>
+                <span text-center item-end showWhen="core,tablet" *ngIf="tournament_machine.total_play_time > 0" >Avg Time<br>{{round((tournament_machine.total_play_time/tournament_machine.total_number_of_players)/60)}} minutes</span>
 
               <ion-icon item-end [name]="tournament_machine.expanded==false?'ios-arrow-dropdown':'ios-arrow-dropup'"></ion-icon>
 
@@ -45,7 +45,12 @@
               <ion-item>
                 <ion-icon item-start name="play" *ngIf="tournament_machine.player_id!=null"></ion-icon>
                 <ion-icon item-start *ngIf="tournament_machine.player_id==null"></ion-icon>
-                {{tournament_machine.player_id==null?"Not Being Played":tournament_machine.player.player_full_name}}
+                <ng-container *ngIf="tournament_machine.player_id==null&&tournament_machine.queues[0].player==null">
+                  Not Being Played
+                </ng-container>
+                <ng-container *ngIf="tournament_machine.player_id!=null">
+                  {{tournament_machine.player.player_full_name}}
+                </ng-container>
               </ion-item>
               <ng-container *ngFor="let queue of tournament_machine.queues" >
                 <ion-item *ngIf="queue.player!=null" tappable (click)="queue.whatToDo(queue,tournament_machine)">

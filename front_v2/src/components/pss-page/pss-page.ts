@@ -4,7 +4,7 @@ import { EventAuthProvider } from '../../providers/event-auth/event-auth';
 import { PssApiProvider } from '../../providers/pss-api/pss-api';
 import { SearchResults } from '../../classes/search-results';
 import { ActionSheetController } from 'ionic-angular'
-import { ToastController } from 'ionic-angular';
+//import { ToastController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { PopoverController } from 'ionic-angular';
@@ -13,6 +13,9 @@ import { ListOrderStorageProvider } from '../../providers/list-order-storage/lis
 import { Events } from 'ionic-angular';
 import { FcmTokenProvider } from '../../providers/fcm-token/fcm-token';
 import { PssToastProvider } from '../../providers/pss-toast/pss-toast';
+import { ImageLoader } from 'ionic-image-loader';
+
+import { LoadingController } from 'ionic-angular';
 
 
 /**
@@ -33,6 +36,8 @@ export class PssPageComponent {
     hideBackButton:boolean = false;
     imgBaseUrl:string="";
     contentWidth:string='100%'
+    loadingMessage:string='initialMessage'
+    loadingInstance:any=null;
     constructor(public eventAuth: EventAuthProvider,
                 public navParams: NavParams,
                 public navCtrl: NavController,
@@ -49,7 +54,9 @@ export class PssPageComponent {
                 public tournamentSettings: TournamentSettingsProvider,
                 public listOrderStorage: ListOrderStorageProvider,
                 public eventsService: Events,
-                public fcmToken: FcmTokenProvider) {
+                public fcmToken: FcmTokenProvider,
+                public imageLoader: ImageLoader,
+                public loadingCtrl: LoadingController) {
         this.eventId = navParams.get('eventId');
         this.eventName = navParams.get('eventName');
         if(!platform.is('mobile')){
@@ -61,6 +68,55 @@ export class PssPageComponent {
         this.imgBaseUrl=pssApi.getBackendHostUrl();
         console.log('Hello PssPageComponent Component');
 //        console.log(instance.constructor.name)
+    }
+    showLoading(message){
+        // setTimeout(()=>{
+        //     console.log('pooping')
+        //     this.loadingMessage='poop';
+        //     this.testLoader.data.content="poop";
+        // },5000)
+        this.loadingInstance = this.loadingCtrl.create({
+            content: message
+        });
+        this.loadingInstance.present();        
+    }
+    updateLoadingMessage(message){
+        if(this.loadingInstance!=null&&this.loadingInstance.data!=null){
+            this.loadingInstance.data.content=message;
+        }
+        
+    }
+    hideLoading(){        
+        if(this.loadingInstance!=null&&this.loadingInstance.data!=null){
+            this.loadingInstance.dismiss();
+        }            
+    }
+    loadPlayerPicsCache(event_players,loadMessage=false,clearCache=false){
+        if(loadMessage==true){
+            this.showLoading("Loading Player Images....")
+        }
+        
+        if(clearCache==true){
+            this.imageLoader.clearCache();
+        }
+        
+        event_players.forEach((eventPlayer,index)=>{
+            this.imageLoader.preload(this.pssApi.getBackendHostUrl()+eventPlayer.img_url).then((data)=>{                        
+                console.log('loading image '+index)
+                this.updateLoadingMessage('Loading Images '+index)
+                if(index==event_players.length-1){
+                    setTimeout(()=>{
+                        this.hideLoading()
+                    },1000)
+                }
+            }).catch((error)=>{
+                if(index==event_players.length-1){
+                    setTimeout(()=>{
+                        this.hideLoading()
+                    },1000)
+                }
+            });
+        })
     }
     buildNavParams(params){
         if(this.eventId!=null&&this.eventId!=undefined){            

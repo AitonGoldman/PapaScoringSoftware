@@ -37,11 +37,14 @@ def upload_event_pic():
         #exiftool -Orientation=1 -n "$@"
         #subprocess.call(["exiftool","-Orientation=1", "-n", upload_folder+"/"+random_file_name])
         orientation = subprocess.check_output(["identify", "-format", r"'%[orientation]'",new_file_path])[1:-1]        
+        print orientation
         if orientation == "RightTop":            
             subprocess.call(["convert", new_file_path,"-rotate", "90", "%s_rotate"%new_file_path])
-            subprocess.call(["mv","%s_rotate"%new_file_path,new_file_path])
-            subprocess.call(["convert", new_file_path,"-strip", "%s_strip"%new_file_path])
-            subprocess.call(["mv","%s_strip"%new_file_path,new_file_path])
+        if orientation == "LeftBottom":
+            subprocess.call(["convert", new_file_path,"-rotate", "-90", "%s_rotate"%new_file_path])
+        subprocess.call(["mv","%s_rotate"%new_file_path,new_file_path])
+        subprocess.call(["convert", new_file_path,"-strip", "%s_strip"%new_file_path])
+        subprocess.call(["mv","%s_strip"%new_file_path,new_file_path])
         #else:
         #    print "android..."
         #subprocess.call(["convert", save_path,"-crop","200x100+0+0!", "%s_crop"%save_path])

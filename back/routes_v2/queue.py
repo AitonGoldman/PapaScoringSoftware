@@ -34,7 +34,9 @@ def bump_player_down_queue_route(request,app,event_id,current_user):
             if queues[0].bumped or (queues[0].player_id==player.player_id and queues[1].player_id is None):                
                 remove_player_with_notification(player,app,tournament_machine,event_id)
                 audit_log_params['action']='Player Bumped Down Queue And Removed'
-                app.table_proxy.create_audit_log(audit_log_params,event_id)    
+                audit_log_params['description']=audit_log_params['description']+' and removed from queue'
+
+                app.table_proxy.create_audit_log(audit_log_params,event_id)
                 return
             app.table_proxy.bump_player_down_queue(player,
                                                    tournament_machine)            
@@ -129,7 +131,7 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
     queues = app.table_proxy.get_queue_for_tounament_machine(tournament_machine)
     if tournament_machine.player_id is None and queues[0].player_id is None:
         raise BadRequest('Can not add to empty queue.  Please see scorekeeper')
-    remove_player_with_notification(player,app,tournament_machine, event_id)
+    remove_player_with_notification(player,app,tournament_machine, event_id, audit_log_action="player added to queue %s"%tournament_machine.tournament_machine_name,current_user=current_user)
     with app.table_proxy.db_handle.session.no_autoflush:                
         try:
             if insert is False:

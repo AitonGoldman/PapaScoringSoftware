@@ -88,8 +88,9 @@ def generate_brackets(event_id, tournament_id,finals_name):
 
     for finals_player_dict in finals_players:
         finals_player = current_app.table_proxy.get_finals_player(tournament.tournament_id,finals_player_id=finals_player_dict['finals_player_id'])
-        finals_player_dict['seed_rank']=finals_player_dict['ppo_b_seed_rank']                        
-        finals_player.seed_rank=finals_player_dict['ppo_b_seed_rank']
+        if finals_player_dict.get('ppo_b_seed_rank'):
+            finals_player_dict['seed_rank']=finals_player_dict['ppo_b_seed_rank']                        
+            finals_player.seed_rank=finals_player_dict['ppo_b_seed_rank']
         
     first_round_players=finals_players[bracket_template[num_qualifiers]['number_bye_players']:]
     

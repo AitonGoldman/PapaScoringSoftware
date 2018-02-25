@@ -681,7 +681,7 @@ class TableProxy():
         return sorted(queues, key=lambda queue: queue.position)
 
     def get_scores(self,event_id,player_id):
-        return self.Scores.query.filter_by(event_id=event_id,player_id=player_id).all()
+        return self.Scores.query.filter_by(event_id=event_id,player_id=player_id).join(self.TournamentMachines).filter(self.TournamentMachines.removed!=True).all()
 
     def get_score(self,event_id,player_id,score_id):
         return self.Scores.query.filter_by(event_id=event_id,player_id=player_id,score_id=score_id).first()
@@ -806,9 +806,10 @@ class TableProxy():
         new_entry.player_id=tournament_machine.player_id
         new_entry.event_id=event_id
         self.db_handle.session.add(new_entry)
-        delta = datetime.datetime.now() - tournament_machine.time_of_game_start        
-        tournament_machine.total_play_time=tournament_machine.total_play_time+delta.seconds
-        tournament_machine.total_number_of_players=tournament_machine.total_number_of_players+1        
+        if tournament_machine.time_of_game_start:
+            delta = datetime.datetime.now() - tournament_machine.time_of_game_start
+            tournament_machine.total_play_time=tournament_machine.total_play_time+delta.seconds
+            tournament_machine.total_number_of_players=tournament_machine.total_number_of_players+1        
         if commit:
             self.db_handle.session.commit()
         return new_score

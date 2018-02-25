@@ -47,13 +47,17 @@ def pss_event_edit_route(request,tables_proxy):
 
 @blueprints.test_blueprint.route('/events',methods=['get'])
 def get_all_events():
+    print "here we go...s"
     events = current_app.table_proxy.Events.query.filter_by(active=True).all()    
     events_list = []
     for event in events:
         permission = permissions.EventEditPermission(event.event_id)
+        print "getting event "+event.name
         if permission.can():
+            print "getting for admin..."
             events_list.append(generic.serialize_event_private(event))
         else:
+            print "getting for NON admin..."
             events_list.append(generic.serialize_event_public(event))
     
     #time.sleep(10)

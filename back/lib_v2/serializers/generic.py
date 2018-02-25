@@ -68,7 +68,7 @@ def serialize_tournament_public(model,type=TOURNAMENT_ONLY):
     if type==TOURNAMENT_ONLY:
         return tournament_dict
     if type==TOURNAMENT_AND_TOURNAMENT_MACHINES:
-        tournament_dict['tournament_machines']=[serialize_tournament_machine_public(tournament_machine,TOURNAMENT_MACHINE_AND_PLAYER_AND_EVENTS) for tournament_machine in model.tournament_machines]
+        tournament_dict['tournament_machines']=[serialize_tournament_machine_public(tournament_machine,TOURNAMENT_MACHINE_AND_PLAYER_AND_EVENTS) for tournament_machine in model.tournament_machines if tournament_machine.removed is not True]
         return tournament_dict
         
 def serialize_tournament_private(model,type=TOURNAMENT_ONLY,show_private_fields=True):

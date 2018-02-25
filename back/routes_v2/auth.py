@@ -69,6 +69,7 @@ def player_login_route(request,tables_proxy,event_id):
 
 @blueprints.test_blueprint.route('/auth/pss_user/login',methods=['POST'])
 def event_creator_login():
+    logout_user()
     pss_user = pss_login_route(request,current_app.table_proxy,True)
     if login_user(pss_user) is False:
         raise Unauthorized('User is not active')
@@ -77,6 +78,7 @@ def event_creator_login():
 
 @blueprints.test_blueprint.route('/auth/pss_event_user/login',methods=['POST'])
 def event_user_login():
+    logout_user()
     pss_user = pss_login_route(request,current_app.table_proxy,False)
     if login_user(pss_user) is False:
         raise Unauthorized('User is not active')
@@ -85,6 +87,7 @@ def event_user_login():
 
 @blueprints.test_blueprint.route('/auth/pss_event_user/login/<int:event_id>',methods=['POST'])
 def event_user_login_with_event_id(event_id):
+    logout_user()
     pss_user = pss_login_route(request,current_app.table_proxy,event_creator=False,event_id=event_id)
     if login_user(pss_user) is False:
         raise Unauthorized('User is not active')
@@ -97,6 +100,7 @@ def event_user_login_with_event_id(event_id):
 @blueprints.test_blueprint.route('/auth/player/login/<int:event_id>',methods=['POST'])
 def event_player_login(event_id):    
     #current_app.table_proxy.initialize_event_specific_relationship(event_id)
+    logout_user()
     player = player_login_route(request,current_app.table_proxy,event_id)    
     if login_user(player) is False:
         raise Unauthorized('Player is not active')

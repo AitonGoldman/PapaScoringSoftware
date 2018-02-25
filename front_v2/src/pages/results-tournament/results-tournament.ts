@@ -66,7 +66,10 @@ export class ResultsTournamentPage extends PssPageComponent {
     ionViewDidLoad() {
         console.log('done loading and now publishing...')
         this.eventsService.publish('results-tournaments:done-loading');
-        this.contentWidth='90%'
+        if(this.platform.is('core')==true || this.platform.is('tablet')==true){
+            this.contentWidth='90%'
+        }
+        
     }
     
     ionViewWillEnter() {

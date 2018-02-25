@@ -20,7 +20,7 @@ def get_rank_from_papa_points(points):
     if points == 85:
         return 3
     if points < 85:
-        return 84-points+3
+        return 84-points+4
     pass
 def get_papa_points_from_rank(rank):
     if rank == 1:

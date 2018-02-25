@@ -20,7 +20,7 @@ import { SuccessButton } from '../../classes/SuccessButton';
 export class LogoutPage extends PssPageComponent {
     successSummary:any = null;
     successButtons:any = null;
-    
+    cssColors:string = null;
     ionViewWillLoad() {
         if(this.eventId==null){
             this.pushRootPage('EventSelectPage')
@@ -36,7 +36,7 @@ export class LogoutPage extends PssPageComponent {
         }                    
         this.successSummary = new SuccessSummary(success_title_string,null,null);
         this.successSummary.setCssColors('quick-links');
-
+        this.cssColors='quick-links'
         this.successButtons = [new SuccessButton('Go Home',
                                                  this.getHomePageString(this.eventId),
                                                  this.buildNavParams({}),

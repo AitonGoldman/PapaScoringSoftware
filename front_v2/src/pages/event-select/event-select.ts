@@ -23,7 +23,13 @@ export class EventSelectPage extends PssPageComponent {
             if(result == null){
                 return;
             }
-            this.events=result.data;
+            this.events=result.data.filter((event)=>{
+                if(event.active==true){
+                    return true;
+                } else {
+                    return false;
+                }
+            });
             this.tournamentSettings.setEvents(this.events);
         };
     }

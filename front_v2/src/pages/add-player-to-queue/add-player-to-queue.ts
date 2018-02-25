@@ -96,8 +96,7 @@ export class AddPlayerToQueuePage extends AutoCompleteComponent {
         this.selectedPlayer={};        
     }
 
-    addEventPlayerToQueue(tournament_machine_id){
-        console.log('hi there')
+    addEventPlayerToQueue(tournament_machine_id){        
         console.log(this.selectedPlayer)
         this.pssApi.addEventPlayerToQueue({'player_id':this.selectedPlayer.player_id,'tournament_machine_id':tournament_machine_id},this.eventId)
             .subscribe(this.generateAddEventPlayerToQueueProcessor())
@@ -116,8 +115,9 @@ export class AddPlayerToQueuePage extends AutoCompleteComponent {
             let success_title_string=this.selectedPlayer.player_full_name+' has been added to queue.';
             let success_line_one_string='Player position in the queue is '+result.data.position+'.';
             
-            let successSummary = new SuccessSummary(success_title_string,success_line_one_string,null);            
-            let successButtonHome = new SuccessButton('Queue List',
+            let successSummary = new SuccessSummary(success_title_string,success_line_one_string,null);
+            successSummary.setCssColors('queue');
+            let successButtonHome = new SuccessButton('Tournament Queues',
                                                       'QueueSelectPlayerTournamentMachinePage',
                                                       this.buildNavParams({}));
             

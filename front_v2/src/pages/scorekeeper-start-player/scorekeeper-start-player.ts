@@ -106,6 +106,7 @@ export class ScorekeeperStartPlayerPage extends AutoCompleteComponent {
             let success_line_one_string=this.selectedPlayer.player_full_name + " started on machine "+this.tournamentMachine.tournament_machine_name;
             // let success_line_two_string='Player Number is '+result.data[0].events[0].player_id_for_event;
             let successSummary = new SuccessSummary(success_title_string,success_line_one_string, null);            
+            successSummary.setCssColors('home');
 
             let successButtonHome = new SuccessButton('Machine List',
                                                       'ScorekeeperMachineSelectPage',

@@ -17,10 +17,10 @@
 <ion-content>
   <div text-center>
     <h2>{{tournamentMachineName}} Results </h2>
-    <ion-chip tappable (click)="markAsFavorite()" *ngIf="displayFavoriteMachine==true">
-      <ion-label>Favorite</ion-label>
-      <ion-icon name="star" color="dark" item-end></ion-icon>      
-    </ion-chip>
+    <!-- <ion-chip hideWhen='core,tablet' tappable (click)="markAsFavorite()" *ngIf="displayFavoriteMachine==true"> -->
+    <!--   <ion-label>Favorite</ion-label> -->
+    <!--   <ion-icon name="star" color="dark" item-end></ion-icon>       -->
+    <!-- </ion-chip> -->
     <ion-chip tappable (click)="onReload()" >
       <ion-label>Refresh</ion-label>
       <ion-icon name="refresh" color="dark" item-end></ion-icon>      

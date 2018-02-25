@@ -17,6 +17,8 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 export class SuccessPage extends PssPageComponent{
     successSummary:any = null;
     successButtons:any = null;
+    cssColors:string=null;
+    
     postAddPlayerSuccess:boolean = false;
     // pushPageWithNoBackButton(pageName,navParams){        
     //     this.navCtrl.getActive().willLeave.subscribe(
@@ -35,6 +37,7 @@ export class SuccessPage extends PssPageComponent{
         }
 
       this.successSummary = this.navParams.get('successSummary');
+      this.cssColors=this.successSummary.getCssColors();
       this.successButtons = this.navParams.get('successButtons');
       console.log('ionViewDidLoad SuccessPage');
   }

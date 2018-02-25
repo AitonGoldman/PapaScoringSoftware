@@ -23,9 +23,14 @@ export class TournamentSettingsProvider {
         this.tournaments=tournaments;
         let cookieTournaments = []
         tournaments.forEach((tournament)=>{
+            let tournamentMachines = [];
+            tournament.tournament_machines.forEach((machine)=>{
+                tournamentMachines.push({tournament_machine_id:machine.tournament_machine_id,tournament_machine_name:machine.tournament_machine_name,tournament_id:machine.tournament_id})
+            })
             cookieTournaments.push({tournament_id:tournament.tournament_id,
                                     tournament_name:tournament.tournament_name,
-                                    number_of_signifigant_scores:tournament.number_of_signifigant_scores})
+                                    number_of_signifigant_scores:tournament.number_of_signifigant_scores,
+                                    tournament_machines:tournamentMachines})
         })
         this._cookieService.putObject("tournaments",cookieTournaments)
     }

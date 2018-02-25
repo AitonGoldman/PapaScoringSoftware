@@ -26,6 +26,7 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
     hideSearchbar:boolean=false;
     comped:boolean=false;
     stripePublicKey:any=null;
+    cssColors:string=null;
     ionViewWillLoad() {
         if(this.eventId==null){
             this.pushRootPage('EventSelectPage')
@@ -40,8 +41,10 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
 
         let player_id_for_event = this.navParams.get('player_id_for_event');
         if(player_id_for_event==null){
+            this.cssColors="home"
             return;            
         }
+        this.cssColors="quick-links"
         this.hideSearchbar=true;
         //this.player_id_for_event=player_id_for_event
         this.pssApi.getEventPlayer(this.eventId,player_id_for_event)

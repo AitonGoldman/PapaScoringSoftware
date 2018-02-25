@@ -28,6 +28,7 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
                 return;
             }            
             let tournamentMachines=result.data;
+            this.tournamentName = result.tournament_name;
             let event_players=result.event_players;
             if(result.event_players && result.event_players.length >0){
                 this.loadPlayerPicsCache(event_players)
@@ -219,11 +220,12 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
 
     onOops(tournamentMachine){
         let buttons = []
+        console.log('tournament machine about to undo...')
         console.log(tournamentMachine);
         if(tournamentMachine.player_id!=null){
             buttons.push(
                 {
-                text: 'Remove Player From Machine',
+                text: 'Remove Player #'+tournamentMachine.player.player_id_for_event,
                 role: 'destructive',
                 handler: this.generateRemovePlayerFromMachine(tournamentMachine)
             })
@@ -294,7 +296,7 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
         }
 
         this.tournamentId=this.navParams.get('tournamentId');
-        this.tournamentName=this.navParams.get('tournamentName');
+        //this.tournamentName=this.navParams.get('tournamentName');
 
         this.pssApi.getTournamentMachines(this.eventId,this.tournamentId)
             .subscribe(this.generateGetTournamentMachinesProcessor())    
@@ -335,7 +337,11 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
         
         console.log('push to machine id is '+tournamentMachine.tournament_machine_id)
         if(this.undoMode==true){
-            this.onOops(tournamentMachine)
+            this.pssApi.getTournamentMachine(this.eventId,this.tournamentId,tournamentMachine.tournament_machine_id)            
+                .subscribe((result)=>{
+                    let tournamentMachine=result.data;
+                    this.onOops(tournamentMachine)        
+                })            
         } else {
             this.pssApi.getTournamentMachine(this.eventId,this.tournamentId,tournamentMachine.tournament_machine_id)            
                 .subscribe(this.generateGetTournamentsMachineProcessor(tournamentMachine.tournament_machine_id))

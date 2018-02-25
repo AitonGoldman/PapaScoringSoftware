@@ -20,6 +20,7 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
     finalName:string=null;
     final:any=null;
     round:number=null;
+    totalRounds:number=null;
     roundCompleted:boolean=false;
     finalsPlayers:any = null;
 
@@ -29,6 +30,8 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
                 return
             }
             this.finalName=result.final_name;
+            console.log('in finals rounds...');
+            console.log(result.data)
             this.final=result.data[this.round];
             this.finalsPlayers=result.finals_players;
             
@@ -59,6 +62,11 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
             console.log('generateGetEventPlayer')
             console.log(this.final);            
         }
+    }
+
+    reloadResults(){
+        this.pssApi.getFinal(this.eventId,this.finalId)
+            .subscribe(this.generateGetEventPlayerProcessor());        
     }
     
     ionViewWillEnter() {

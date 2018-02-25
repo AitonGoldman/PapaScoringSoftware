@@ -5,12 +5,12 @@
     Ionic pages and navigation.
   -->
 <ion-header>
-  <ion-navbar color="pss-header">
+  <ion-navbar color="pss-home-header">
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>
   
 </ion-header>
-<ion-content>
+<ion-content class="card-background-page">
   <div [style.width]="contentWidth" style='margin-left:auto;margin-right:auto' text-center>
     <div>
       <h2>Papa Scoring Software</h2>
@@ -35,22 +35,39 @@
         </div>
       </ion-card>
       <div margin-top padding-top *ngIf="eventAuth.getRoleName(eventId)==null">     
-        You can login <span showWhen='mobile'>using the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> button</span><span hideWhen='mobile'>using the <b>Login</b> link in the header</span><br>
+        You can login <span showWhen='mobile'>using the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> button</span><span hideWhen='mobile'>using the <b>Login</b> link in the header</span>
+      </div>
+      <hr showWhen="mobile">
+      <hr showWhen="mobile" style='width:75%'>
+      <div margin-top padding-top showWhen="mobile">     
+        Click on the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> to purchase tickets <br> and find shortcuts to all tournament and machine results
       </div>
       <hr>
       <hr style='width:75%'>
+      
       <div margin-top>
-        To view the results and queues, <br> use the &nbsp;<ion-icon name="md-clipboard"></ion-icon> &nbsp; results and &nbsp;<ion-icon name="md-git-branch"></ion-icon> &nbsp; queues tabs below
+        To view the results and queues, <br> use the &nbsp;<ion-icon name="md-clipboard"></ion-icon> &nbsp; <b>Results</b> and &nbsp;<ion-icon name="md-git-branch"></ion-icon> &nbsp; <b>Queues</b> tabs below
       </div>
       <hr>
       <hr style='width:75%'>
-      <div margin-top>
-        Use the &nbsp;<ion-icon name="arrow-back"></ion-icon> &nbsp; back button in the header<br>to navigate to previous pages<br>
+      <div margin-top showWhen="mobile">
+        <!--Use the &nbsp;<ion-icon name="arrow-back"></ion-icon> &nbsp; back button in the header<br>to navigate to previous pages<br>-->
+        What else can the Papa Scoring Software do?<br> Click <a id='homeHelp' (click)="expand(homeHelpExtra,'homeHelp')">here</a> to find out!
       </div>
       <hr>
       <hr style='width:75%'>
+      <div margin-top *ngIf="homeHelpExtra.expanded==true" padding-horizontal>
+        <div margin-top>          
+          In the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> tab<br> you can reorder the list of tournament machines shortcuts by clicking on the reorder button and dragging machines.
+        </div>
+        <hr>
+        <hr style='width:75%'>
+        <div margin-top>          
+          In the &nbsp;<ion-icon name="md-git-branch"></ion-icon><b>Queues</b> tab<br> you can add yourself to a queue if you are logged in.  If no one is playing or queued up on a machine, find a scorekeeper to start on a machine.
+        </div>        
+      </div>
       <div margin-top>
-
+        
       </div>
       
     </div>

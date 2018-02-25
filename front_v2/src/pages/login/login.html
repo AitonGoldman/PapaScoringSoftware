@@ -6,18 +6,18 @@
   -->
 
 <ion-header>
-  <ion-navbar color='pss-header'>
+  <ion-navbar color='pss-quick-links-header'>
     <ion-title>
       {{eventName}}
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content no-padding no-margin>
- <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+<ion-content no-padding no-margin class="card-background-page">
+ <ion-toolbar no-padding no-margin color="pss-quick-links-sub-header" text-center>
    <b>Login</b>
  </ion-toolbar>
 
- <div margin>
+ <div margin [style.width]="contentWidth" style='margin-left:auto;margin-right:auto'>
   <ion-segment [(ngModel)]="loginType">
     <ion-segment-button value="player">
       <ion-icon item-start name="person"></ion-icon> Tournament Player
@@ -28,14 +28,14 @@
   </ion-segment>
   </div>
   <ng-container [ngSwitch]="loginType">
-    <form #loginForm="ngForm" *ngSwitchCase="'official'">
+    <form #loginForm="ngForm" *ngSwitchCase="'official'" [style.width]="contentWidth" style='margin-left:auto;margin-right:auto'>
       <ion-item>
-        <ion-label floating>Username</ion-label>
+        <ion-label stacked>Username</ion-label>
         <ion-input type="text" required
                    [(ngModel)]="loginInfo.username" name="username"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>Password</ion-label>
+        <ion-label stacked>Password</ion-label>
         <ion-input type="text" required
                    [(ngModel)]="loginInfo.password" name="password"></ion-input>
       </ion-item>
@@ -43,14 +43,14 @@
         <button [disabled]='!loginForm.valid' ion-button default (tap)="loginUser()">Login </button>
       </ion-item>
     </form>
-    <form #playerLoginForm="ngForm" *ngSwitchCase="'player'">
+    <form #playerLoginForm="ngForm" *ngSwitchCase="'player'" [style.width]="contentWidth" style='margin-left:auto;margin-right:auto'>
       <ion-item>
-        <ion-label floating>Player Number</ion-label>
+        <ion-label stacked>Player Number</ion-label>
         <ion-input type="number" required
                    [(ngModel)]="loginInfo.player_id_for_event" name="player_id_for_event"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label floating>Pin</ion-label>
+        <ion-label stacked>Pin</ion-label>
         <ion-input type="number" required
                    [(ngModel)]="loginInfo.player_pin" name="player_pin"></ion-input>
       </ion-item>

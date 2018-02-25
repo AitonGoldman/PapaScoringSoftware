@@ -177,10 +177,13 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
     
     onSubmit(){
         let success_title_string='Score recorded!';
-        let success_line_one_string=this.tournamentMachine.player.player_full_name + " on machine "+this.tournamentMachine.tournament_machine_name;
+        let success_line_one_string=null//this.tournamentMachine.player.player_full_name + " on machine "+this.tournamentMachine.tournament_machine_name;
         let success_line_two_string='Score of '+this.score+'.';
             
-        let successSummary = new SuccessSummary(success_title_string,success_line_one_string, success_line_two_string);            
+        let successSummary = new SuccessSummary(success_title_string,success_line_one_string, success_line_two_string);
+        successSummary.setSummaryTable(['Score of '+this.score+'.',
+                                        this.tournamentMachine.player.player_full_name + " on "+this.tournamentMachine.tournament_machine_name])
+        successSummary.setCssColors('home');
 
         this.pssApi.submitScore({tournament_id:this.tournamentId,tournament_machine_id:this.tournamentMachineId,player_id:this.tournamentMachine.player_id, action:'record_score',score:this.score.replace(new RegExp(',', 'g'), "")},this.eventId)            
             .subscribe(this.generateSubmitScoreProcessor(successSummary))        

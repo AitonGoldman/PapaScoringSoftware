@@ -49,7 +49,7 @@ export class AddOrQueuePlayerAfterScoreRecordPage extends PssPageComponent {
             
             // let success_line_two_string='Player Number is '+result.data[0].events[0].player_id_for_event;
             let successSummary = new SuccessSummary(success_title_string,success_line_one_string, null);            
-
+            successSummary.setCssColors('home');
             let successButtonHome = new SuccessButton('Machine List',
                                                       'ScorekeeperMachineSelectPage',
                                                       this.buildNavParams({tournamentId:this.tournamentId}));

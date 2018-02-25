@@ -15,6 +15,15 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <div text-center margin-top margin-bottom>
+    <ion-chip tappable (click)="reloadResults()">
+      <ion-label>Refresh</ion-label>
+      <ion-icon name="refresh" color="dark" item-end></ion-icon>      
+    </ion-chip>
+  </div>
+
+  <div [style.width]='contentWidth' class='desktopSlim'>
+
   <div *ngIf='match!=null' no-padding margin>
     <ion-grid style='border-width:1px;border-style:solid'>
       <ion-row>
@@ -110,5 +119,6 @@
         {{player.player_name}} : {{player.score}}
       </ion-item>
     </form>    
+  </div>
   </div>
 </ion-content>

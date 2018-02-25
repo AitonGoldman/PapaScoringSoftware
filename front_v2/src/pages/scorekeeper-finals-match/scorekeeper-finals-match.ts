@@ -175,6 +175,11 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
     debug(thing_to_debug){
         console.log(thing_to_debug);
     }
+    reloadResults(){
+        this.pssApi.getFinal(this.eventId,this.finalId)
+            .subscribe(this.generateGetFinalProcessor())                                                          
+
+    }
     ionViewWillEnter() {
         if(this.eventId==null){
             this.pushRootPage('EventSelectPage')

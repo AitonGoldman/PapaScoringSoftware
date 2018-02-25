@@ -16,14 +16,16 @@ import { PssToastProvider } from '../pss-toast/pss-toast';
 */
 @Injectable()
 export class PssApiProvider {
-    timeoutInMs:number=8000;
+    timeoutInMs:number=10000;
     httpPrefix=null;
     pssUrlPort=null;
     pssHost=null;
-    //pssHostUrl='http://192.168.1.178:8100';
-    pssHostUrl='https://results.papa.org';
-    //basePssUrl='http://192.168.1.178:8000';
-    basePssUrl='https://results.papa.org:8000/api';
+    pssHostUrl='http://192.168.1.178:8100';
+    //pssHostUrl='https://results.papa.org';
+    basePssUrl='http://192.168.1.178:8000/api';
+    //basePssUrl='https://results.papa.org:8000/api';
+//    basePssUrl='http://0.0.0.0:8000/api';
+//    pssHostUrl='http://0.0.0.0:8100';    
 //   pssHostUrl='http://9.75.197.88:8100';
 //   basePssUrl='http://9.75.197.88:8000';
     

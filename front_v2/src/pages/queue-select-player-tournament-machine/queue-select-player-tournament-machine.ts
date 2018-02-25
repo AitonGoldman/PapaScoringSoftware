@@ -46,7 +46,8 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             let success_line_one_string='Player position in the queue is '+result.data.position+'.';
             
             let successSummary = new SuccessSummary(success_title_string,success_line_one_string,null);            
-            let successButtonHome = new SuccessButton('Go Home',
+            successSummary.setCssColors('queue');
+            let successButtonHome = new SuccessButton('Tournament Queues',
                                                       'QueueSelectPlayerTournamentMachinePage',
                                                       this.buildNavParams({}));
             
@@ -116,7 +117,7 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             let success_title_string=result.data.player_full_name+' has been removed from queue.';            
             
             let successSummary = new SuccessSummary(success_title_string,null,null);            
-            let successButtonHome = new SuccessButton('Go Home',
+            let successButtonHome = new SuccessButton('Tournament Queues',
                                                       'QueueSelectPlayerTournamentMachinePage',
                                                       this.buildNavParams({}));
             

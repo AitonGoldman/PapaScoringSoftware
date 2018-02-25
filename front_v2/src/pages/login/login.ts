@@ -36,16 +36,19 @@ export class LoginPage extends PssPageComponent {
             
             this.eventAuth.setEventUserLoggedIn(this.eventId,result.data);
             let name=null;
+            let cssColor='home';
             if(result.data.full_user_name!=null){
                 name=result.data.full_user_name;
             }
             if(result.data.player_full_name!=null){
                 name=result.data.player_full_name;
+                cssColor='quick-links';
             }
             
             let successSummary = new SuccessSummary(name+' has logged in.',
                                                     null,
                                                     null);
+            successSummary.setCssColors(cssColor);
             let targetPage=null;
             let targetTabIndex=null;
             if(this.platform.is('mobile')){

@@ -2,6 +2,7 @@ export class SuccessSummary  {
     //title:string = null;
     //firstLine:string = null;
     //secondLine:string = null;
+    cssColors:string=null;
     summaryTable=[]
     attentionString:string=null;
     constructor(public title:string,
@@ -11,6 +12,14 @@ export class SuccessSummary  {
     setSummaryTable(table){
         this.summaryTable=table;
     }
+
+    setCssColors(cssColors){
+        this.cssColors=cssColors;
+    }
+    getCssColors(){
+        return this.cssColors;
+    }
+
     
     setAttentionString(attentionString){
         this.attentionString=attentionString;

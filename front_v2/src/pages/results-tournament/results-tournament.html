@@ -15,6 +15,7 @@
 </ion-header>
 
 <ion-content>
+  <div [style.width]='contentWidth' class='desktopSlim'>
   <div text-center tappable>
     <h2>{{tournamentName}} Results</h2>
     <ion-chip tappable (click)="onReload()">
@@ -96,4 +97,5 @@
       </ng-container>      
     </ion-row>
   </ion-grid>
+  </div>
 </ion-content>

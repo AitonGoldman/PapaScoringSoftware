@@ -46,9 +46,10 @@ export class QuickLinksPage extends PssPageComponent {
             item.icon='clipboard';            
             item.title=item.tournament_name;
             item.type='tournament';
-            item.uid=item.tournament_id;
+            item.uid=item.tournament_id;            
         })        
-        this.tournamentsOrderList = this.listOrderStorage.getList('QuickLinksPage','tournaments');
+        this.tournamentsOrderList = this.listOrderStorage.getList('QuickLinksPage','tournaments');        
+
         if(this.tournamentsOrderList!=null){
              this.tournamentItems=this.tournamentItems.sort((n1,n2)=>{
                  if(this.tournamentsOrderList[n1.tournament_id]!=null && this.tournamentsOrderList[n2.tournament_id]!=null){
@@ -60,26 +61,44 @@ export class QuickLinksPage extends PssPageComponent {
              })            
         }                        
         
-
-        this.tournamentMachines = this.listOrderStorage.getFavoriteTournamentMachines(this.eventId);        
+        // on set Tournaments, we also set favorite tournament machines with a alphabetical sorted list of tournament machines - if not already set
+        // remove favoriting options for machine results
+        // 
+        //
+        //this.tournamentMachines = this.listOrderStorage.getFavoriteTournamentMachines(this.eventId);        
+        console.log('almost almost sorting...');
+        this.tournamentMachines = this.listOrderStorage.getList('QuickLinksPage','tournament_machines');
+        console.log(this.tournamentMachines);
         if(this.tournamentMachines!=null){
-            this.tournamentMachines = this.generateListFromObj(this.tournamentMachines);
-            this.tournamentMachinesOrderList = this.listOrderStorage.getList('QuickLinksPage','tournament_machines');
-            if(this.tournamentMachinesOrderList!=null){
-                this.tournamentMachines=this.tournamentMachines.sort((n1,n2)=>{                    
-                    if(this.tournamentMachinesOrderList[n1.tournamentMachineId]!=null && this.tournamentMachinesOrderList[n2.tournamentMachineId]!=null){                                                
-                        return this.tournamentMachinesOrderList[n1.tournamentMachineId].index - this.tournamentMachinesOrderList[n2.tournamentMachineId].index;
-                    } else {
-                        return -1;
-                    }                   
-                })                
-            }                                    
+            
+            //this.tournamentMachinesOrderList = this.listOrderStorage.getList('QuickLinksPage','tournament_machines');            
+            //this.tournamentMachines = this.generateListFromObj(this.tournamentMachines);
+            //console.log('almost sorting...');s            
+            this.tournamentMachines=this.tournamentMachines.sort((n1,n2)=>{                    
+                if(n1.index>n2.index){
+                    return 1
+                } else {
+                    return -1;
+                }                   
+            })                
+
+            // if(this.tournamentMachinesOrderList!=null){
+            //     console.log('sorting...');
+            //     this.tournamentMachines=this.tournamentMachines.sort((n1,n2)=>{                    
+            //         if(this.tournamentMachinesOrderList[n1.tournamentMachineId]!=null && this.tournamentMachinesOrderList[n2.tournamentMachineId]!=null){
+            //             return this.tournamentMachinesOrderList[n1.tournamentMachineId].index - this.tournamentMachinesOrderList[n2.tournamentMachineId].index;
+            //         } else {
+            //             return -1;
+            //         }                   
+            //     })                
+            // }
+            console.log(this.tournamentMachines);
         }
         
         
         
     }
-    getCallback(pageName,args){        
+    getCsallback(pageName,args){        
         return ()=>{
             console.log("**************")                            
             // let toast = this.toastCtrl.create({
@@ -92,6 +111,16 @@ export class QuickLinksPage extends PssPageComponent {
             // });
             // toast.present();                                                                                    
         }            
+    }
+    getTournamentsAndSetLists(){
+        this.pssApi.getAllTournamentsAndMachines(this.eventId)            
+            .subscribe((result)=>{                    
+                //this.tournamentItems==result.data;
+                this.tournamentSettings.setTournaments(result.data);
+                this.getAndOrderTournaments();
+                this.listOrderStorage.storeQuickLinksMachineLists(result.data);
+                this.getAndOrderTournaments();                
+            })
     }
     publishQuickLinksPlayerPush(pageName,args){
         //this.tabRef.getByIndex(1).push(pageName,args,{animate:false});
@@ -141,18 +170,15 @@ export class QuickLinksPage extends PssPageComponent {
                 this.pushRootPage('EventSelectPage')
                 return;
             }
-
+        this.reorderEnabled=false;
         console.log('ionViewDidLoad QuickLinksPage');
         
         this.getAndOrderTournaments();
         if(this.tournamentItems==null){
-            this.pssApi.getAllTournamentsAndMachines(this.eventId)            
-                .subscribe((result)=>{                    
-                    this.tournamentItems==result.data;
-                    this.tournamentSettings.setTournaments(result.data);
-                    this.getAndOrderTournaments();
-                })
+            this.getTournamentsAndSetLists();
         }
+        console.log('tournament itemss3');
+        console.log(this.tournamentItems);
         // this.eventsService.subscribe('quickLinks:reload', (event)=>{
         //     //this.getAndOrderTournaments();
         //     console.log('got the message');
@@ -176,14 +202,19 @@ export class QuickLinksPage extends PssPageComponent {
         this.listOrderStorage.updateList('QuickLinksPage','tournaments',tournamentsListToStore)
     }
     reorderMachineItems(indexes) {
-        
+        console.log(this.tournamentMachines);
+        console.log(indexes)
         this.tournamentMachines = reorderArray(this.tournamentMachines, indexes);
+        this.tournamentMachines.forEach((item,index)=>{
+            item.index=index;
+        }) 
         
         let tournamentMachinesListToStore = {}
-        this.tournamentMachines.forEach((item,index)=>{
-            tournamentMachinesListToStore[item.tournamentMachineId]={index:index+1,tournamentMachineId:item.tournamentMachineId};
-        }) 
-        this.listOrderStorage.updateList('QuickLinksPage','tournament_machines',tournamentMachinesListToStore)
+        // this.tournamentMachines.forEach((item,index)=>{
+        //     tournamentMachinesListToStore[item.tournamentMachineId]={index:index+1,tournamentMachineId:item.tournamentMachineId};
+        // }) 
+        //this.listOrderStorage.updateList('QuickLinksPage','tournament_machines',tournamentMachinesListToStore)
+        this.listOrderStorage.updateList('QuickLinksPage','tournament_machines',this.tournamentMachines)
     }    
     
 }

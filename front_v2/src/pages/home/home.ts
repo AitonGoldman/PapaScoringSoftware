@@ -21,6 +21,7 @@ export class HomePage extends PssPageComponent{
     numberCols:number=3;
     numberMachines:number=16;
     round:any=Math.round;
+    homeHelpExtra:any={expanded:false};
     
     ionViewDidLoad() {
         console.log('ionViewDidLoad HomePage');        

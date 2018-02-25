@@ -1,16 +1,16 @@
 <ion-header >
-  <ion-navbar color="pss-header">
+  <ion-navbar color="pss-{{cssColors}}-header">
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 <ion-content>
- <ion-toolbar color="pss-sub-header" text-center>
+ <ion-toolbar color="pss-{{cssColors}}-sub-header" text-center>
    <b>Purchase Tickets</b>
  </ion-toolbar>
 
   <div [style.width]='contentWidth' class='desktopSlim'>
-  <ion-auto-complete *ngIf='hideSearchbar!=true' (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="clearValues()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
+  <ion-auto-complete *ngIf='hideSearchbar!=true' (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="clearValues()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500,type:'tel'}"></ion-auto-complete>
   <div text-center margin-bottom [style.height]="'25px'" *ngIf="loading">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
   </div>

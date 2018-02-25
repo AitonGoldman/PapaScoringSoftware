@@ -24,7 +24,7 @@ export class TournamentDirectorHomePage extends PssPageComponent {
                 return;
             }
             this.tournaments=result.data;
-            this.tournamentSettings.setTournaments(result.data);
+            //this.tournamentSettings.setTournaments(result.data);
             this.tournaments.map((tournament)=>{
                 tournament.expanded=false;
             })

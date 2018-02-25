@@ -23,8 +23,7 @@ export class ResultsTournamentPage extends PssPageComponent {
     results:any = null;
     width:any = '100%';
     maxResultsToDisplay:number=0;
-    loaded:boolean=false;
-
+    loaded:boolean=false;    
     onBump(){
         if(this.maxResultsToDisplay<this.results.length){
             this.maxResultsToDisplay=this.maxResultsToDisplay+50;
@@ -67,6 +66,7 @@ export class ResultsTournamentPage extends PssPageComponent {
     ionViewDidLoad() {
         console.log('done loading and now publishing...')
         this.eventsService.publish('results-tournaments:done-loading');
+        this.contentWidth='90%'
     }
     
     ionViewWillEnter() {

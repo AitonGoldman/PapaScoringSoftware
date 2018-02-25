@@ -21,8 +21,8 @@
    <b>Player {{infoOnly==true?"Info":"Results"}}</b>
  </ion-toolbar>
 
-  <div class='desktopSlim'>  
-  <ion-auto-complete *ngIf="hideAutoComplete==false" (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/Player Number', debounce:500}"></ion-auto-complete>
+  <div [style.width]='contentWidth' style='margin-left:auto;margin-right:auto'>  
+  <ion-auto-complete   *ngIf="hideAutoComplete==false" (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemsShown)="onItemsShown()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/Player Number', debounce:500}"></ion-auto-complete>
   <div text-center  margin-bottom [style.height]="'25px'">
     <ion-spinner  *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
     <ion-item no-lines text-center *ngIf='selectedPlayer!=null'>
@@ -106,7 +106,7 @@
       </ion-row>
       <ion-row margin-top margin-bottom>
         <ion-col text-center>
-          <a tappable [navPush]="'ResultsTournamentPage'" [navParams]="buildNavParams({tournamentId:result.tournament_id,tournamentName:result.tournament_name})"><b>{{result.tournament_name}}</b></a>
+          <a tappable [navPush]="'ResultsTournamentPage'" [navParams]="buildNavParams({tournamentId:result.tournament_id,tournamentName:result.tournament_name})"><h2>{{result.tournament_name}}</h2></a>
           <hr style='width:50%;height:2px'/>
           <i>{{result.rank}}{{nth(result.rank)}}</i>
         </ion-col>

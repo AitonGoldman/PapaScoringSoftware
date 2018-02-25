@@ -5,19 +5,19 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar hideBackButton="true" color="pss-header">
+  <ion-navbar hideBackButton="true" color="pss-{{cssColors}}-header">
   <ion-title start hideWhen='mobile' style='float:left;margin-top:3px'>Pss</ion-title>
   <ion-title start showWhen='mobile'>{{eventName}}</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
- <ion-toolbar color="pss-sub-header" text-center>
+<ion-content class="card-background-page">
+ <ion-toolbar color="pss-{{cssColors}}-sub-header" text-center>
    <b>Success!</b>
  </ion-toolbar>
 
   
-  <ion-grid>
+  <ion-grid [style.width]="contentWidth" style='margin-left:auto;margin-right:auto'>
   <ion-row>
     <ion-col>      
     </ion-col>
@@ -38,7 +38,7 @@
 
   <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      
     <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">
-      <ion-col style='text-align:center'>         
+      <ion-col style='text-align:center'>                 
         {{summaryTableRow}}
       </ion-col>                     
     </ion-row>
@@ -57,14 +57,14 @@
   </ion-row>
   <ion-row *ngIf="postAddPlayerSuccess==true && picTaken==false">
     <ion-col text-center>
-      <button margin ion-button  tappable (click)="checkPicTaken()">Is Pic Taken??</button>
+      <button margin padding ion-button large tappable (click)="checkPicTaken()">Is Pic Taken??</button>
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col  text-center>
       <ng-container *ngFor="let button of successButtons;inddex as i;even as e">
         <br *ngIf="e==true">
-        <button [disabled]="picTaken==false" margin ion-button  tappable (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>
+        <button [disabled]="picTaken==false" margin padding ion-button large tappable (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>
       </ng-container>        
     </ion-col>
   </ion-row>
@@ -72,19 +72,20 @@
     <ion-col text-center>      
       <ng-container *ngFor="let buttonLabel of recordScoreSuccessButtons; index as i;even as e">
         <br *ngIf="e==true">
-        <button margin [disabled]="reAddSuccess==true"  tappable (click)="reAddPlayerToMachine()" *ngIf="buttonLabel=='RE_ADD'" ion-button>Re-Add Player</button>
-        <button margin [disabled]="reAddSuccess==true"  tappable (click)="reQueuePlayerOnMachine()" *ngIf="buttonLabel=='RE_QUEUE'" ion-button>Re-Queue Player</button>
-        <button margin  tappable (click)="returnToStartPlayer(buttonLabel)" *ngIf="buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE'||buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER'" ion-button>Deal with person in queue</button>
-        <button margin *ngIf="buttonLabel=='GO_HOME'"  tappable (click)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))" ion-button>Machine List</button>
-        <button margin *ngIf="buttonLabel=='ADD_OR_QUEUE' && handleCurrentPlayerLater==true"  tappable (click)="pushPageWithNoBackButton('AddOrQueuePlayerAfterScoreRecordPage',buildNavParams({tournamentId:tournamentId,playerId:player.player_id,playerName:player.player_full_name,playerImg:player.img_url}))" ion-button>Add or Queue Player</button>
-
+        <button margin padding [disabled]="reAddSuccess==true"  tappable (click)="reAddPlayerToMachine()" *ngIf="buttonLabel=='RE_ADD'" ion-button large>Re-Add Player</button>
+        <button margin padding [disabled]="reAddSuccess==true"  tappable (click)="reQueuePlayerOnMachine()" *ngIf="buttonLabel=='RE_QUEUE'" ion-button large>Re-Queue Player</button>
+        <button color="yellow" margin padding  tappable (click)="returnToStartPlayer(buttonLabel)" *ngIf="buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE'||buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER'" ion-button large>Deal with person in queue</button>
+        <button  *ngIf="buttonLabel=='GO_HOME'"  tappable (click)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))" ion-button large margin padding >Machine List</button>
+        <button margin padding *ngIf="buttonLabel=='ADD_OR_QUEUE' && handleCurrentPlayerLater==true"  tappable (click)="pushPageWithNoBackButton('AddOrQueuePlayerAfterScoreRecordPage',buildNavParams({tournamentId:tournamentId,playerId:player.player_id,playerName:player.player_full_name,playerImg:player.img_url}))" ion-button large>
+          Add or Queue Player
+        </button>
       </ng-container>
     </ion-col>
   </ion-row>
   
   <ion-row justify-content-center *ngIf="successSummary == undefined" >
     <ion-col text-center > 
-      <button ion-button  tappable (click)="goToEventSelectOnPageReload()">Select Event</button>
+      <button ion-button  large tappable (click)="goToEventSelectOnPageReload()">Select Event</button>
     </ion-col>
   </ion-row>
   </ion-grid>

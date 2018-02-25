@@ -57,6 +57,10 @@ export class ResultsPage extends PssPageComponent {
                 return 0;                
             })
             this.tournamentSettings.setTournaments(this.tournaments);
+            if (this.listOrderStorage.getList('QuickLinksPage','tournament_machines')==null){
+                this.listOrderStorage.storeQuickLinksMachineLists(this.tournaments);
+            };
+            
         }
     }
 

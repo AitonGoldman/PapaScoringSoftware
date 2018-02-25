@@ -1,6 +1,6 @@
 <!--<bobo>-->
 <ion-header>
-<ion-navbar color='pss-header'>  
+<ion-navbar color='pss-quick-links-header'>  
     <ion-title showWhen='mobile'>
       {{eventName}}
     </ion-title>    
@@ -9,26 +9,27 @@
 <!--</bobo>-->
 
 <ion-content>
- <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+ <ion-toolbar no-padding no-margin color="pss-quick-links-sub-header" text-center>
    <b>Jump To...</b>
  </ion-toolbar>
  <ion-list>
-      <button ion-item detail-push tappable [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})">
-        <ion-icon name="person" item-end></ion-icon>{{eventAuth.isEventUserLoggedIn(eventId)==true? "Logout" : "Login"}}
+      <button ion-item detail-none tappable [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="buildNavParams({})">
+        {{eventAuth.isEventUserLoggedIn(eventId)==true? "Logout" : "Login"}}
+        <ion-icon item-end name="ios-arrow-forward"></ion-icon>
       </button>
-      <button ion-item detail-push tappable (click)="returnToEventSelect()">
-        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event
-      </button>
+      
+
       <!-- <button tappable ion-item detail-push (click)="pushPageWithNoBackButton('PlayerInfoPage',buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)}),1)" *ngIf="eventAuth.getRoleName(eventId)=='player'"> -->
       <!--   <ion-icon name="person" item-end></ion-icon>My Results -->
       <!-- </button> -->
 
       <!--      <button tappable ion-item detail-push (click)="publishQuickLinksPlayerPush('PlayerInfoPage',buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)}))" *ngIf="eventAuth.getRoleName(eventId)=='player'"> -->
-            <button tappable ion-item detail-push (click)="publishQuickLinksPlayerPush('PlayerInfoPage',buildNavParams({playerId:eventAuth.getPlayerId(eventId)}))" *ngIf="eventAuth.getRoleName(eventId)=='player'">
-        <ion-icon name="person" item-end></ion-icon>My Tickets And Results
+            <button tappable ion-item detail-none (click)="publishQuickLinksPlayerPush('PlayerInfoPage',buildNavParams({playerId:eventAuth.getPlayerId(eventId)}))" *ngIf="eventAuth.getRoleName(eventId)=='player'">
+        <ion-icon item-end name="ios-arrow-forward"></ion-icon>My Info (Tickets,Results,Etc)
       </button>
-      <button ion-item *ngIf="eventAuth.getRoleName(eventId)=='player'" tappable [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
-        <ion-icon item-end name="ios-cash-outline"></ion-icon> Ticket Purchase
+      <button ion-item detail-none *ngIf="eventAuth.getRoleName(eventId)=='player'" tappable [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
+        Ticket Purchase
+        <ion-icon item-end name="ios-arrow-forward"></ion-icon>
       </button>
             
       <ion-item-divider margin-top color="item-divider">
@@ -36,19 +37,37 @@
       </ion-item-divider>
       
       <!--<ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderTournamentItems($event,'tournamentItems')">-->      
-        <button tappable (click)="publishQuickLinksPlayerPush('ResultsTournamentPage',buildNavParams({tournamentId:item.tournament_id,tournamentName:item.tournament_name}))" *ngFor="let item of tournamentItems"  ion-item detail-push>{{item.tournament_name}} Results<ion-icon [name]="item.icon" item-end></ion-icon></button>
+      <button tappable (click)="publishQuickLinksPlayerPush('ResultsTournamentPage',buildNavParams({tournamentId:item.tournament_id,tournamentName:item.tournament_name}))" *ngFor="let item of tournamentItems"  ion-item detail-none>{{item.tournament_name}} Results         <ion-icon item-end name="ios-arrow-forward"></ion-icon>
+      </button>
       <!--</ion-item-group>-->
       <ion-item-divider margin-top color="item-divider">
-        Favorited Machines
+        Machines Results
         <a item-end name="cog" tappable (click)="reorderEnabled = reorderEnabled==false">Reorder</a>
         
       </ion-item-divider>
       <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderMachineItems($event)">      
-        <button tappable (click)="publishQuickLinksPlayerPush('ResultsMachinePage',buildNavParams({tournamentMachineId:item.tournamentMachineId,tournamentMachineName:item.tournamentMachineName,tournamentId:item.tournamentId,tournamentName:item.tournamentName}))" *ngFor="let item of tournamentMachines"  ion-item detail-push>{{item.tournamentMachineName}}<ion-icon [name]="item.icon" item-end></ion-icon></button>
+        <button tappable (click)="publishQuickLinksPlayerPush('ResultsMachinePage',buildNavParams({tournamentMachineId:item.tournamentMachineId,tournamentMachineName:item.tournamentMachineName,tournamentId:item.tournamentId,tournamentName:item.tournamentName}))" *ngFor="let item of tournamentMachines"  ion-item detail-none>{{item.tournamentMachineName}}        <ion-icon item-end name="ios-arrow-forward"></ion-icon></button>
       </ion-item-group>
-      <ion-item *ngIf="tournamentMachines==null || tournamentMachines.length==0">
-        No Favorite Machines
+      <ion-item text-center>
+        <button ion-button tappable (click)="getTournamentsAndSetLists()">Reset/Refresh Macine List</button>
       </ion-item>
+      <!-- <ion-item *ngIf="tournamentMachines==null || tournamentMachines.length==0"> -->
+      <!--   No Favorite Machines -->
+      <!-- </ion-item> -->
+      <!-- <ng-container *ngFor="let item of tournamentItems"> -->
+      <!--   <button tappable (click)="publishQuickLinksPlayerPush('ResultsMachinePage',buildNavParams({tournamentMachineId:machine.tournament_machine_id,tournamentMachineName:item.tournament_machine_name,tournamentId:item.tournament_id,tournamentName:item.tournament_name}))" *ngFor="let machine of item.tournament_machines" ion-item detail-push>{{item.tournament_id}} {{machine.tournament_machine_name}}<ion-icon [name]="item.icon" item-end></ion-icon></button> -->
+
+      <!--   <ion-item *ngFor="let machine of item.tournament_machines"> -->
+      <!--     {{machine.tournament_machine_name}} -->
+      <!--   </ion-item> -->
+      <!-- </ng-container> -->
+      <ion-item-divider margin-top color="item-divider">
+        Other Options
+      </ion-item-divider>      
+      <button ion-item detail-push tappable (click)="returnToEventSelect()">
+        <ion-icon name="md-git-compare" item-end></ion-icon>Switch Event
+      </button>
+ 
   </ion-list>
 
 </ion-content>

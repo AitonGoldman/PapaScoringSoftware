@@ -5,29 +5,33 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar color='pss-header'>
+  <ion-navbar color='pss-home-header'>
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 <ion-content>
- <ion-toolbar no-padding no-margin color="pss-sub-header" text-center>
+ <ion-toolbar no-padding no-margin color="pss-home-sub-header" text-center>
    <b>Scorekeeping : Select tournament</b>
  </ion-toolbar>
 
   <div class='desktopSlim'>
   <ion-list>
     <button ion-item *ngFor="let tournament of tournaments" detail-push tappable [navPush]="'ScorekeeperMachineSelectPage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
-      <ion-avatar item-start>
-        <img  [src]="tournament.img_url!=null?tournament.img_url:'/assets/imgs/pinball_small_square.jpg'">
+      <ion-avatar padding-vertical item-start>
+        <img-loader fallback="assets/imgs/pinball_small_square.jpg" [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/pinball_small_square.jpg'" useImg ></img-loader>
+
+        <!--<img  [src]="tournament.img_url!=null?tournament.img_url:'/assets/imgs/pinball_small_square.jpg'">-->
       </ion-avatar>
       {{tournament.tournament_name}}
     </button>
     <ng-container *ngFor="let tournament of tournaments">
       <ng-container *ngIf="tournament.finals_ids!=null && tournament.finals_ids.length!=0">
-        <button  *ngFor="let final of tournament.finals_ids" ion-item tappable (click)="pushRootPage('ScorekeeperFinalsPage',buildNavParams({finalId:final.final_id,rounds:final.number_of_rounds}))">
-          <ion-avatar item-start>
-            <img  [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/pinball_small_square.jpg'">
+        <button *ngFor="let final of tournament.finals_ids" ion-item tappable (click)="pushRootPage('ScorekeeperFinalsPage',buildNavParams({finalId:final.final_id,rounds:final.number_of_rounds}))">
+          <ion-avatar padding-vertical item-start>
+            <img-loader fallback="assets/imgs/pinball_small_square.jpg" [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/pinball_small_square.jpg'" useImg ></img-loader>
+
+            <!--<img  [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/pinball_small_square.jpg'">-->
           </ion-avatar>
           {{final.final_name}} Finals Scorekeeping
         </button>

@@ -61,9 +61,10 @@ class QueuePermission(Permission):
 class ScorekeeperPermission(Permission):
     def __init__(self,event_id):        
         td_need = needs.TournamentDirectorRoleNeed(event_id)        
-        score_need = needs.ScorekeeperRoleNeed(event_id)        
+        score_need = needs.ScorekeeperRoleNeed(event_id)
+        desk_need = needs.DeskworkerRoleNeed(event_id)        
         event_editor_need = needs.EventEditNeed(event_id)                 
-        super(ScorekeeperPermission, self).__init__(td_need,score_need,event_editor_need)
+        super(ScorekeeperPermission, self).__init__(td_need,score_need,event_editor_need,desk_need)
         
 class PlayerQueuePermission(Permission):
     def __init__(self,event_id):        

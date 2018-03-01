@@ -31,6 +31,13 @@ export class HomePage extends PssPageComponent{
             this.pushRootPage('EventSelectPage')
             return;
         }
+        if(this.platform.is('core')){
+            this.cssColors='desktop';
+        } else {
+            this.cssColors='home';
+        }
+            
+        
         console.log('ionViewDidLoad HomePage');        
     }
     

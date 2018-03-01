@@ -38,6 +38,7 @@ export class PssPageComponent {
     contentWidth:string='100%'
     loadingMessage:string='initialMessage'
     loadingInstance:any=null;
+    cssColors:string=null;
     constructor(public eventAuth: EventAuthProvider,
                 public navParams: NavParams,
                 public navCtrl: NavController,
@@ -140,10 +141,13 @@ export class PssPageComponent {
                 return 'Event Owner Home'            
         }
         if(role=="player"){
-            return 'Player Home'
+            return 'Help'
         }
        if(role=="scorekeeper"){
             return 'Scorekeeper Home'
+       }
+       if(role=="scorekeeper"){
+            return 'Deskworker Home'
        }
          
         if (role == null){
@@ -178,6 +182,9 @@ export class PssPageComponent {
         }        
        if(role=="scorekeeper"){
             return 'ScorekeeperTournamentSelectPage'
+       }
+       if(role=="deskworker"){
+            return 'DeskworkerHomePage'
        }
          
         if (role == null){

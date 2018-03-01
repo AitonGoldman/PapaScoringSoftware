@@ -30,6 +30,12 @@ export class AddPlayerToQueuePage extends AutoCompleteComponent {
         
     ionViewWillLoad() {
         //this.tournamentMachine=JSON.parse(this.navParams.get('tournamentMachine'))
+        if(this.platform.is('core')){
+            this.cssColors='desktop';
+        } else {
+            this.cssColors='queue';
+        }
+
         if(this.eventId==null){
             this.pushRootPage('EventSelectPage')
             return;

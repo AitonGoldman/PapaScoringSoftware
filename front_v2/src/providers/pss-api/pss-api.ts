@@ -20,9 +20,9 @@ export class PssApiProvider {
     httpPrefix=null;
     pssUrlPort=null;
     pssHost=null;
-    //pssHostUrl='http://192.168.1.178:8100';
+    //pssHostUrl='http://10.10.23.132:8100';
     pssHostUrl='https://results.papa.org';
-    //basePssUrl='http://192.168.1.178:8000/api';
+    //basePssUrl='http://10.10.23.132:8000/api';
     basePssUrl='https://results.papa.org:8000/api';
 //    basePssUrl='http://0.0.0.0:8000/api';
 //    pssHostUrl='http://0.0.0.0:8100';    
@@ -79,7 +79,6 @@ export class PssApiProvider {
                 let newUrl=localUrl.replace(":arg",restOfArgs.shift())
                 localUrl = newUrl;
             }
-            
             
             let result_observable = this.makeHot(this.http.request(method,localUrl,            
                                                                    {withCredentials:true,                                                                    
@@ -147,7 +146,10 @@ export class PssApiProvider {
     getTournamentMachines = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machines",'get');
     getTournamentMachine = this.generate_api_call('getAllTournamentMachines',this.basePssUrl+"/:arg/:arg/tournament_machine/:arg",'get');
     getTournamentResults = this.generate_api_call('getTournamentResults',this.basePssUrl+"/:arg/test_tournament_results/:arg",'get');
+    getTournamentResultsHidden = this.generate_api_call('getTournamentResults',this.basePssUrl+"/:arg/test_tournament_results/:arg",'get',true);
+
     getTournamentMachineResults = this.generate_api_call('getTournamentMachineResults',this.basePssUrl+"/:arg/test_tournament_machine_results/:arg/:arg",'get');
+    getTournamentMachineResultsHidden = this.generate_api_call('getTournamentMachineResults',this.basePssUrl+"/:arg/test_tournament_machine_results/:arg/:arg",'get',true);
 
     getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/machines",'get');
     getAllUsers = this.generate_api_call('getAllUsers',this.basePssUrl+"/pss_users",'get');
@@ -157,6 +159,8 @@ export class PssApiProvider {
 
     //fixme : can probably replace earlier calls with this call
     getAllTournamentsAndMachines = this.generate_api_call('getAllTournamentsAndMachines',this.basePssUrl+"/:arg/tournaments/tournament_machines",'get');
+    getAllTournamentsAndMachinesHidden = this.generate_api_call('getAllTournamentsAndMachines',this.basePssUrl+"/:arg/tournaments/tournament_machines",'get',true);
+    
     getAllTournamentsAndMachinesAndEventPlayer = this.generate_api_call('getAllTournamentsAndMachines',this.basePssUrl+"/:arg/tournaments/tournament_machines/event_player/:arg",'get');
 
     getAllEventsAndTournaments = this.generate_api_call('getAllEventsAndTournaments',this.basePssUrl+"/events/tournaments",'get');

@@ -35,7 +35,19 @@ export class LogoutPage extends PssPageComponent {
             targetTabIndex=0;
         }                    
         this.successSummary = new SuccessSummary(success_title_string,null,null);
-        this.successSummary.setCssColors('quick-links');
+        if(this.platform.is('core')){
+            this.successSummary.setCssColors('desktop');
+        } else {
+            this.successSummary.setCssColors('quick-links');
+        }
+
+        if(this.platform.is('core')){
+            this.cssColors='desktop';
+        } else {
+            this.cssColors='quick-links';
+            
+        }
+        
         this.cssColors='quick-links'
         this.successButtons = [new SuccessButton('Go Home',
                                                  this.getHomePageString(this.eventId),

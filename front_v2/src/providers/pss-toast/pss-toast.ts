@@ -14,11 +14,6 @@ export class PssToastProvider {
         console.log('Hello PssToastProvider Provider');
     }
     showToast(message,duration, type){
-        if(this.currentToast!=null){
-            this.currentToast.dismiss();
-            // do something
-        }
-        
         let toastOptions = {
             message:  message,
             duration: duration,
@@ -29,6 +24,16 @@ export class PssToastProvider {
             dismissOnPageChange: true	
         }
         this.currentToast = this.toastCtrl.create(toastOptions)
-        this.currentToast.present()
+
+        if(this.currentToast!=null){
+            console.log('taking down signs')
+            this.currentToast.dismiss().then(()=>{
+                console.log('throwing up signs')                
+                this.currentToast.present()
+            });
+            // do something
+        }
+        
+        
     }
 }

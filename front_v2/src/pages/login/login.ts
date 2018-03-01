@@ -44,6 +44,10 @@ export class LoginPage extends PssPageComponent {
                 name=result.data.player_full_name;
                 cssColor='quick-links';
             }
+
+            if(this.platform.is('core')){
+                cssColor='desktop';
+            } 
             
             let successSummary = new SuccessSummary(name+' has logged in.',
                                                     null,
@@ -153,6 +157,12 @@ export class LoginPage extends PssPageComponent {
     
     ionViewWillLoad() {
         console.log('ionViewDidLoad LoginPage');
+        if(this.platform.is('core')){
+            this.cssColors='desktop';
+        } else {
+            this.cssColors='quick-links';
+        }
+
         //this.eventAuth.setEventRole(1,{'roleName':'deskworker'});      
     }
 }

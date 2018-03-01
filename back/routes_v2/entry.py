@@ -62,8 +62,8 @@ def start_player_on_machine_route(input_data,event_id, app, current_user):
     remove_player_with_notification(player,app,tournament_machine, event_id,audit_log_action="player started on %s"%tournament_machine.tournament_machine_name,current_user=current_user)    
     if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
         raise BadRequest('Tried to start game without tokens')
-    if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
-        raise BadRequest('Tried to start game without tokens')
+    #if app.table_proxy.start_player_on_machine(event_id,tournament_machine,player) is False:
+    #    raise BadRequest('Tried to start game without tokens')
     
     audit_log_params={
         'action':'Player started on machine',

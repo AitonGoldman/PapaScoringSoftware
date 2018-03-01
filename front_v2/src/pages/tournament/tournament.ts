@@ -65,6 +65,9 @@ const tournamentDescriptions={
         },'number_of_qualifiers_for_b_when_finals_style_is_ppo':{
             'short':'Top X players will qualify for B finals',
             'long':'Top X players will qualify for B finals'
+        },'ifpa_rank_restriction':{
+            'short':'IFPA Rank Restriction',
+            'long':'Anyone with a BETTER (i.e. lower number) ranking than this will be restricted for this tournament'
         }
 }
 
@@ -136,6 +139,7 @@ export class TournamentPage extends PssPageComponent {
         this.entityFields.setDependency('discount_stripe_sku','use_stripe',true)
         this.entityFields.setField('number_of_signifigant_scores','number',false,true, tournamentDescriptions['number_of_signifigant_scores']);
         this.entityFields.setField('finals_style','text',false,true, tournamentDescriptions['finals_style']);
+        this.entityFields.setField('ifpa_rank_restriction','number',false,true, tournamentDescriptions['ifpa_rank_restriction']);
 
         
         this.entityFieldsArray=this.entityFields.getFieldsArray(this.advanced);

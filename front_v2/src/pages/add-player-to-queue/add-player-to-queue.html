@@ -5,14 +5,14 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar color='pss-queue-header'> 
+  <ion-navbar color='pss-{{cssColors}}-header'> 
     <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
   </ion-navbar>    
 </ion-header>
 
 
 <ion-content>
- <ion-toolbar no-padding no-margin color="pss-queue-sub-header" text-center>
+ <ion-toolbar no-padding no-margin color="pss-{{cssColors}}-sub-header" text-center>
    Add to <b>{{tournamentMachine.tournament_machine_name}}</b> queue
  </ion-toolbar>
 

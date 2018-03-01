@@ -23,7 +23,28 @@ export class ResultsTournamentPage extends PssPageComponent {
     results:any = null;
     width:any = '100%';
     maxResultsToDisplay:number=0;
-    loaded:boolean=false;    
+    loaded:boolean=false;
+    tournamentSettings:any=null;
+    setRowColor(e,result){
+        let rankRestriction=false;
+        console.log(this.tournamentSettings);
+        if(this.tournamentSettings.finals_style=="PAPA"){
+            rankRestriction=this.tournamentSettings.number_of_qualifiers;
+        } else {
+            rankRestriction=this.tournamentSettings.number_of_qualifiers_for_a_when_finals_style_is_ppo;
+        }
+        console.log('rankrestriction is..');
+        console.log(rankRestriction);
+        if(result.ifpa_ranking_restricted==true && result.rank > rankRestriction){
+            return '#FF6347';
+        }                
+        if(e==true){
+            return '#EEEEEE'
+        }
+        if(e!=true){
+            return null
+        };
+    }
     onBump(){
         if(this.maxResultsToDisplay<this.results.length){
             this.maxResultsToDisplay=this.maxResultsToDisplay+50;
@@ -40,6 +61,8 @@ export class ResultsTournamentPage extends PssPageComponent {
                 return;
             }
             this.results=result.data;
+            this.tournamentSettings=result.tournament;
+                
             this.maxResultsToDisplay=50;
             this.results.map((result)=>{                
                 if(result.top_machines!=null){

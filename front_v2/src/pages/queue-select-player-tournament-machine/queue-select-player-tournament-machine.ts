@@ -229,6 +229,11 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
                 this.pushRootPage('EventSelectPage')
                 return;
             }
+        if(this.platform.is('core')){
+            this.cssColors='desktop';
+        } else {
+            this.cssColors='queue';
+        }
 
         //this.queueMode=this.navParams.get('queueMode');
         //console.log('ionViewDidLoad QueueSelectPlayerTournamentMachinePage');

@@ -69,8 +69,9 @@ def build_tournament_result(event_id, result,
     value['points']=result[1][0]
     value['player_id']=result[1].player_id
     player = players_dict[result[1].player_id]
-    event_info = [event_info.player_id_for_event for event_info in player.event_info if event_info.event_id==event_id]
-    value['event_player_id']= event_info[0]    
+    ####event_info = [event_info.player_id_for_event for event_info in player.event_info if event_info.event_id==event_id]
+    
+    value['event_player_id']= player.event_info[0].player_id_for_event
     value['tournament_id']=tournament.tournament_id
     value['tournament_name']=tournament.tournament_name
     value['player_name']=player.__repr__()
@@ -92,8 +93,8 @@ def build_tournament_result(event_id, result,
                 values.append({'rank':0,'seperator':True,'seperator_message':seperator_message})
             if second_qualifying_delemiter and value['rank'] > second_qualifying_delemiter and values[len(values)-1]['rank'] <= second_qualifying_delemiter:
                 values.append({'rank':0, 'seperator':True,'seperator_message':seperator_message_b})                    
-
-    value['ifpa_ranking_restricted']=tournament.ifpa_rank_restriction is not None and tournament.ifpa_rank_restriction > event_info.ifpa_ranking
+    
+    value['ifpa_ranking_restricted']=tournament.ifpa_rank_restriction is not None and tournament.ifpa_rank_restriction > player.event_info[0].ifpa_ranking
     top_machines=[]
     for top_machine in player_top_machines[tournament.tournament_id].get(result[1].player_id):
         top_machines.append(top_machine)
@@ -149,7 +150,7 @@ def test_tournament_results(event_id, tournament_id):
                                     players_dict,tournament_machines_dict,
                                     tournament, values)
             #values.append(value)
-    return jsonify({'data':values})
+    return jsonify({'data':values,'tournament':to_dict(tournament)})
 
 @blueprints.test_blueprint.route('/<int:event_id>/test_player_results_by_player_id/<int:player_id>',methods=['GET'])
 def test_player_results_by_player_id(event_id, player_id):

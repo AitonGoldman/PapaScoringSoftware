@@ -146,7 +146,7 @@ export class TicketPurchasePage  extends AutoCompleteComponent {
             }
         });
         handler.open({
-            name: 'Stripe.com',            
+            name: 'Papa Scoring Software',            
             zipCode: false,
             amount: this.totalCost*100
         });

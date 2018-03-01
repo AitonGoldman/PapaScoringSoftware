@@ -57,7 +57,9 @@
         <hr>
       </ion-col>
     </ion-row>
-    <ion-row  nowrap *ngFor="let result of results;even as e;index as i" align-items-center [style.background-color]="e==true?'#EEEEEE':null">
+    <!--<ion-row  nowrap *ngFor="let result of results;even as e;index as i" align-items-center [style.background-color]="e==true?'#EEEEEE':null">-->
+    <ion-row  nowrap *ngFor="let result of results;even as e;index as i" align-items-center [style.background-color]="setRowColor(e,result)">
+    
       <ng-container *ngIf="result.seperator==true">
         <ion-col text-center style='background-color:#CCCCCC'>
           {{result.seperator_message}}

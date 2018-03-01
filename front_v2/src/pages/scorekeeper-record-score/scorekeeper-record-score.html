@@ -25,16 +25,21 @@
         <ion-col>
         </ion-col>
         <ion-col col-auto>
-          <ion-item no-lines>
+          <div [style.height]='"115px"' [style.width]='"115px"'>
+            <img-loader fallback="assets/imgs/small_backglass.jpeg" [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'" useImg ></img-loader>
+          </div>
+
+          <!--<ion-item no-lines>-->
           <!--<ion-avatar  style='zoom:3.0;'>-->
-            <img style='width:115px;height:115px' [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">
+            <!--<img style='width:115px;height:115px' [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">-->
             <!--</ion-avatar>-->
-          </ion-item>
+            <!--</ion-item>-->
         </ion-col>
         <ion-col col-auto>
           <ion-item no-lines>
           <ion-avatar  style='zoom:3.0;'>
-            <img [src]="tournamentMachine.player!=null && tournamentMachine.player.img_url!=null?imgBaseUrl+tournamentMachine.player.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'">
+            <img-loader fallback="assets/imgs/pinball_small_machine_square.jpg" [src]="tournamentMachine.player!=null && tournamentMachine.player.img_url!=null?imgBaseUrl+tournamentMachine.player.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'" useImg ></img-loader>
+<!--            <img [src]="tournamentMachine.player!=null && tournamentMachine.player.img_url!=null?imgBaseUrl+tournamentMachine.player.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'">-->
           </ion-avatar>
           </ion-item>
         </ion-col>

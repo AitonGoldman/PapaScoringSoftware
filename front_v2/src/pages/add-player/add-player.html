@@ -52,7 +52,7 @@
       </button>
       </ion-list>
       <ion-item text-center no-lines>
-        <button ion-button padding tappable (click)="onSubmit()">
+        <button [disabled]="ifpaLookup!=true" ion-button padding tappable (click)="onSubmit()">
           register player 
         </button>
       </ion-item>

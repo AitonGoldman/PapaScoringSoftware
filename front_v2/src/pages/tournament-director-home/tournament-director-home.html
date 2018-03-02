@@ -44,6 +44,10 @@
     <button detail-none tappable ion-item no-lines [navPush]="'AdminEditScoresPage'" [navParams]="buildNavParams({})">
       <ion-icon item-end name="person-add"></ion-icon>  Edit Scores
     </button>
+    <button detail-none tappable ion-item no-lines [navPush]="'AuditLogPage'" [navParams]="buildNavParams({})">
+      <ion-icon item-end name="person-add"></ion-icon>  Audit Logs
+    </button>
+    
     <button detail-none tappable ion-item no-lines [navPush]="'TournamentPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true})">
       <ion-icon item-end name="ios-add-circle-outline"></ion-icon> Create Tournament 
     </button>

@@ -37,7 +37,7 @@ from lib.PssConfig import PssConfig
 
 #from pss_models_v2.TestMapping import generate_test_class
 
-ACTIONS_TO_ADD_TICKET_SUMMARY_TO = ["Score Recorded","Ticket Purchase","Player Ticket Purchase Complete"]
+ACTIONS_TO_ADD_TICKET_SUMMARY_TO = ["Score recorded","TOKENS VOIDED","Ticket voided", "Ticket Purchase","Player Ticket Purchase Complete"]
 
 class TableProxy():
     def initialize_tables(self,db_handle):
@@ -597,6 +597,10 @@ class TableProxy():
     
     def get_tournament_machine_by_id(self,tournament_machine_id):
         return self.TournamentMachines.query.filter_by(tournament_machine_id=tournament_machine_id).first()
+
+    def get_tournament_machines_by_event(self,event_id):        
+        tournament_ids = [tournament.tournament_id for tournament in get_tournaments(event_id)]        
+        return self.TournamentMachines.query.filter(self.Tournaments.tournament_id.in_(tournament_ids)).all()
     
     def create_tournament_machine(self,
                                   machine,tournament,                                  
@@ -752,6 +756,9 @@ class TableProxy():
             queue.player_id=player.player_id
         return queue    
 
+    def get_audit_logs(self,event_id,player_id):
+        return self.AuditLogs.query.filter_by(event_id=event_id,player_id=player_id).order_by(self.AuditLogs.action_date.desc()).all()
+                
     def create_audit_log(self, audit_log_params, event_id, player=None, commit=False):
         global ACTIONS_TO_ADD_TICKET_SUMMARY_TO        
         audit_log = self.AuditLogs()
@@ -773,6 +780,7 @@ class TableProxy():
         audit_log_ticket_summary.action_date=datetime.datetime.now()
         audit_log_ticket_summary.description=token_count_string    
         audit_log_ticket_summary.summary=True
+        audit_log_ticket_summary.event_id=event_id
         self.db_handle.session.add(audit_log_ticket_summary)
         if commit is True:
             self.db_handle.session.commit()

@@ -20,9 +20,9 @@ export class PssApiProvider {
     httpPrefix=null;
     pssUrlPort=null;
     pssHost=null;
-    //pssHostUrl='http://10.10.23.132:8100';
+    //pssHostUrl='http://192.168.0.176:8100';
     pssHostUrl='https://results.papa.org';
-    //basePssUrl='http://10.10.23.132:8000/api';
+    //basePssUrl='http://192.168.0.176:8000/api';
     basePssUrl='https://results.papa.org:8000/api';
 //    basePssUrl='http://0.0.0.0:8000/api';
 //    pssHostUrl='http://0.0.0.0:8100';    
@@ -152,6 +152,8 @@ export class PssApiProvider {
     getTournamentMachineResultsHidden = this.generate_api_call('getTournamentMachineResults',this.basePssUrl+"/:arg/test_tournament_machine_results/:arg/:arg",'get',true);
 
     getAllMachines = this.generate_api_call('getAllMachines',this.basePssUrl+"/machines",'get');
+    getAuditLogs = this.generate_api_call('getAuditLogs',this.basePssUrl+"/:arg/audit_log/:arg",'get');
+    
     getAllUsers = this.generate_api_call('getAllUsers',this.basePssUrl+"/pss_users",'get');
     getScores = this.generate_api_call('getScores',this.basePssUrl+"/:arg/scores/:arg",'get');        
     

@@ -125,6 +125,7 @@ export class AddPlayerPage extends AutoCompleteComponent {
     }
 
     getIfpaRankingMobile(playerName,slidingItem){
+        this.ifpaLookup=true;
         slidingItem.close();
         this.getIfpaRanking(playerName);
     }

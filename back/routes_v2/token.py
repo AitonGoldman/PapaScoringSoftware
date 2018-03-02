@@ -174,8 +174,8 @@ def verify_tournament_and_meta_tournament_request_counts_are_valid(list_of_tourn
             max_tokens_player_is_allowed_to_buy=max_tokens_player_is_allowed_to_buy-1
         if max_tokens_player_is_allowed_to_buy-int(tournament_token['token_count'])<0:
             raise BadRequest('You are already at the maximum number of tickets for this player.  If you are experiencing network timeouts, please check that your previous transaction went through')
-        if tournament and tournament.ifpa_rank_restriction and player.event_info[0].ifpa_ranking and player.event_info[0].ifpa_ranking < tournament.ifpa_rank_restriction:
-            raise BadRequest('Ifpa restrictions have been violated')    
+        #if tournament and tournament.ifpa_rank_restriction and player.event_info[0].ifpa_ranking and player.event_info[0].ifpa_ranking < tournament.ifpa_rank_restriction:
+        #    raise BadRequest('Ifpa restrictions have been violated')    
                     
 
 def purchase_tickets_route(request, app, event_id, player_initiated=False, logged_in_player=None, current_user=None):

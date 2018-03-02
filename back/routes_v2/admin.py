@@ -30,7 +30,18 @@ def admin_void_ticket(event_id,player_id,tournament_id,number_tokens_to_void):
         raise Unauthorized('You are not authorized to void unused tokens')            
             
     admin_void_ticket_route(event_id,current_app,current_user,player_id,tournament_id,number_tokens_to_void)
+    player = current_app.table_proxy.get_player(event_id,player_id=player_id)
+    audit_log_params={
+        'action':'TOKENS VOIDED',
+        'player_id':player_id,        
+        'player_initiated':False,        
+        'description':'%s Tokens voided for Player %s by %s' % (number_tokens_to_void,player.__repr__(),current_user.__repr__()),        
+        'event_id':event_id
+    }
+    current_app.table_proxy.create_audit_log(audit_log_params,event_id)    
+
     current_app.table_proxy.commit_changes()
+
     return jsonify({})
 
 @blueprints.test_blueprint.route('/<int:event_id>/admin/entry/<int:player_id>/<int:score_id>',methods=['PUT'])

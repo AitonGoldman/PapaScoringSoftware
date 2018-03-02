@@ -25,8 +25,6 @@ export class AuditLogPage extends AutoCompleteComponent {
     onFocus(){
         console.log('in onFocus..')
         this.selectedPlayer=null;
-        this.showNewScoreForm=false;
-        this.newScore={};
     }
     ionViewWillLoad() {
         if(this.eventId==null){

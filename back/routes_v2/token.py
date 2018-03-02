@@ -20,6 +20,14 @@ def get_price(tournament):
         return tournament.manually_set_price
 
 def get_normal_and_discount_amounts(tournament,amount):
+    if tournament.minimum_number_of_tickets_allowed!=1:
+        discount_count = amount/tournament.number_of_tickets_for_discount
+        if discount_count > 0:
+            normal_count=(amount%tournament.number_of_tickets_for_discount)/tournament.minimum_number_of_tickets_allowed
+        else:
+            normal_count=amount/tournament.minimum_number_of_tickets_allowed
+        print "%s - - %s - %s" %(amount,tournament.number_of_tickets_for_discount,discount_count)
+        return(normal_count,discount_count)
     if tournament.number_of_tickets_for_discount:
         if amount < tournament.number_of_tickets_for_discount:
             return (amount,0)
@@ -41,34 +49,59 @@ def calculate_list_of_tickets_and_prices_for_player(current_ticket_count, player
     last_discounted_amount=None
     discount_price=get_discount_price(tournament)
     normal_price=get_price(tournament)
-    output_list=[]    
-    for current_ticket_amount in range(tournament.minimum_number_of_tickets_allowed,
-                                       tournament.number_of_unused_tickets_allowed+1,
-                                       tournament.ticket_increment_for_each_purchase):
-        if tournament.number_of_tickets_for_discount and current_ticket_amount < tournament.number_of_tickets_for_discount:
-            output_list.append({'amount':current_ticket_amount,'price':current_ticket_amount*normal_price})
-        elif tournament.number_of_tickets_for_discount and current_ticket_amount == tournament.number_of_tickets_for_discount:
-            last_discounted_cost=discount_price
-            last_discounted_amount=current_ticket_amount
-            output_list.append({'amount':current_ticket_amount,'price':discount_price})
-        elif tournament.number_of_tickets_for_discount and current_ticket_amount%tournament.number_of_tickets_for_discount==0:
-            last_discounted_cost=discount_price*(current_ticket_amount/tournament.number_of_tickets_for_discount)
-            last_discounted_amount=current_ticket_amount
-            output_list.append({'amount':current_ticket_amount,'price':last_discounted_cost})            
-        elif tournament.number_of_tickets_for_discount:
-            delta_ticket_amount = current_ticket_amount-last_discounted_amount
-            ticket_cost = last_discounted_cost+(delta_ticket_amount*normal_price)
-            output_list.append({'amount':current_ticket_amount,'price':ticket_cost})
-        elif tournament.number_of_tickets_for_discount is None:            
-            output_list.append({'amount':current_ticket_amount,'price':current_ticket_amount*normal_price})
+    output_list=[]
 
-        # if flask_app.table_proxy.get_tournament_machine_player_is_playing(player, event_id):    
-        #     current_ticket_amount=current_ticket_amount+1
-        pass
-    if flask_app.table_proxy.get_tournament_machine_player_is_playing(player, event_id):    
-        current_ticket_amount=current_ticket_amount+1
+    starting_tickets_count = 0
+    starting_ticket_cost = 0
+    tickets_count=0
+    current_tickets_cost=0
+    single_ticket_count=tournament.minimum_number_of_tickets_allowed
+    discount_ticket_count=tournament.number_of_tickets_for_discount    
+    max_ticket_count = tournament.number_of_unused_tickets_allowed
+    reached_max_ticket_count = False
+    while reached_max_ticket_count is not True:
+        if tickets_count+single_ticket_count-starting_tickets_count+1 == discount_ticket_count:
+            tickets_count=starting_tickets_count+discount_ticket_count
+            current_tickets_cost=starting_ticket_cost+discount_price
+            starting_tickets_count=tickets_count
+            starting_ticket_cost = current_tickets_cost            
+        else:
+            tickets_count=tickets_count+single_ticket_count
+            current_tickets_cost=current_tickets_cost+normal_price
+            
+        output_list.append({'amount':tickets_count,'price':current_tickets_cost})
+        reached_max_ticket_count = tickets_count >= max_ticket_count
+    cutoff_amount=tournament.number_of_unused_tickets_allowed-current_ticket_count
+    output_list = [output for output in output_list if output['amount'] <= cutoff_amount]
+    return [{'amount':0,'price':0}]+output_list            
     
-    cutoff_index=tournament.number_of_unused_tickets_allowed-current_ticket_count
+    # for current_ticket_amount in range(tournament.minimum_number_of_tickets_allowed,
+    #                                    tournament.number_of_unused_tickets_allowed+1,
+    #                                    tournament.ticket_increment_for_each_purchase):
+    #     if tournament.number_of_tickets_for_discount and current_ticket_amount < tournament.number_of_tickets_for_discount:
+    #         output_list.append({'amount':current_ticket_amount,'price':current_ticket_amount*normal_price})
+    #     elif tournament.number_of_tickets_for_discount and current_ticket_amount == tournament.number_of_tickets_for_discount:
+    #         last_discounted_cost=discount_price
+    #         last_discounted_amount=current_ticket_amount
+    #         output_list.append({'amount':current_ticket_amount,'price':discount_price})
+    #     elif tournament.number_of_tickets_for_discount and current_ticket_amount%tournament.number_of_tickets_for_discount==0:
+    #         last_discounted_cost=discount_price*(current_ticket_amount/tournament.number_of_tickets_for_discount)
+    #         last_discounted_amount=current_ticket_amount
+    #         output_list.append({'amount':current_ticket_amount,'price':last_discounted_cost})            
+    #     elif tournament.number_of_tickets_for_discount:
+    #         delta_ticket_amount = current_ticket_amount-last_discounted_amount
+    #         ticket_cost = last_discounted_cost+(delta_ticket_amount*normal_price)
+    #         output_list.append({'amount':current_ticket_amount,'price':ticket_cost})
+    #     elif tournament.number_of_tickets_for_discount is None:            
+    #         output_list.append({'amount':current_ticket_amount,'price':current_ticket_amount*normal_price})
+
+    #     # if flask_app.table_proxy.get_tournament_machine_player_is_playing(player, event_id):    
+    #     #     current_ticket_amount=current_ticket_amount+1
+    #     pass
+    # if flask_app.table_proxy.get_tournament_machine_player_is_playing(player, event_id):    
+    #     current_ticket_amount=current_ticket_amount+1
+    
+    # cutoff_index=tournament.number_of_unused_tickets_allowed-current_ticket_count
     return [{'amount':0,'price':0}]+output_list[0:cutoff_index]
 
 

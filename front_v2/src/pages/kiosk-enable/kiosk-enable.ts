@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
 
 /**
- * Generated class for the DeskworkerHomePage page.
+ * Generated class for the KioskEnablePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -11,15 +11,14 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 
 @IonicPage()
 @Component({
-  selector: 'page-deskworker-home',
-  templateUrl: 'deskworker-home.html',
+  selector: 'page-kiosk-enable',
+  templateUrl: 'kiosk-enable.html',
 })
-export class DeskworkerHomePage extends PssPageComponent {
+export class KioskEnablePage  extends PssPageComponent {
 
-  ionViewDidLoad() {
-      if(this.eventId==null){
-          this.pushRootPage('EventSelectPage')
-          return;
-      }      
+  ionViewWillLoad() {
+      this.tournamentSettings.setKioskMode();
+      console.log('ionViewDidLoad KioskEnablePage');
   }
+
 }

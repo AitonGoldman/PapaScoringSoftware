@@ -18,6 +18,17 @@ export class TournamentSettingsProvider {
     constructor(public http: HttpClient, public pssApi: PssApiProvider,public _cookieService:CookieService) {
         console.log('Hello TournamentSettingsProvider Provider');
     }
+    setKioskMode(){
+        this._cookieService.putObject("kioskMode",{'mode':true})
+    }
+    getKioskMode(){
+        if(this._cookieService.getObject("kioskMode")!=null){
+            return this._cookieService.getObject("kioskMode")['mode'];
+        } else {
+            return false
+        }
+    }
+    
     setTournaments(tournaments){
         console.log(tournaments)
         this.tournaments=tournaments;

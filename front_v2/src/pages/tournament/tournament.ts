@@ -68,6 +68,9 @@ const tournamentDescriptions={
         },'ifpa_rank_restriction':{
             'short':'IFPA Rank Restriction',
             'long':'Anyone with a BETTER (i.e. lower number) ranking than this will be restricted for this tournament'
+        },'minimum_number_of_tickets_allowed':{
+            'short':'Minimum Number Tickets For Single Purchase',
+            'long':'This is the minimum number of tickets a player is allowed to purchase in a single purchase.  For example, if this is set to 3 then players can only buy multiples of 3 (assuming discount tickets are not setup)'
         }
 }
 
@@ -140,6 +143,7 @@ export class TournamentPage extends PssPageComponent {
         this.entityFields.setField('number_of_signifigant_scores','number',false,true, tournamentDescriptions['number_of_signifigant_scores']);
         this.entityFields.setField('finals_style','text',false,true, tournamentDescriptions['finals_style']);
         this.entityFields.setField('ifpa_rank_restriction','number',false,true, tournamentDescriptions['ifpa_rank_restriction']);
+        this.entityFields.setField('minimum_number_of_tickets_allowed','number',false,true, tournamentDescriptions['minimum_number_of_tickets_allowed']);
 
         
         this.entityFieldsArray=this.entityFields.getFieldsArray(this.advanced);

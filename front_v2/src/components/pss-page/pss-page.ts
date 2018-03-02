@@ -183,7 +183,7 @@ export class PssPageComponent {
        if(role=="scorekeeper"){
             return 'ScorekeeperTournamentSelectPage'
        }
-       if(role=="deskworker"){
+        if(role=="deskworker"){            
             return 'DeskworkerHomePage'
        }
          

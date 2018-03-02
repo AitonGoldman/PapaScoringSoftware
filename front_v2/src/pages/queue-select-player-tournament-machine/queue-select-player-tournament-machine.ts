@@ -45,7 +45,12 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             let success_title_string=this.eventPlayer.player_full_name+' has been added to queue.';
             let success_line_one_string='Player position in the queue is '+result.data.position+'.';
             
-            let successSummary = new SuccessSummary(success_title_string,success_line_one_string,null);            
+            let success_line_two_string='';
+            if(this.tournamentSettings.getKioskMode()==true){
+                success_line_two_string='NOTE : You have been logged out.'
+                this.eventAuth.logout(this.eventId);
+            }
+            let successSummary = new SuccessSummary(success_title_string,success_line_one_string,success_line_two_string);            
             successSummary.setCssColors('queue');
             let successButtonHome = new SuccessButton('Tournament Queues',
                                                       'QueueSelectPlayerTournamentMachinePage',

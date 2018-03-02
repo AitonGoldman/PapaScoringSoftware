@@ -90,12 +90,12 @@
     <ion-grid>
       <ng-container *ngIf='tournaments.length>0'>
         <ng-container *ngFor="let row of tournaments[tournamentIndexToDisplay].results;even as e">
-          <ion-row [@scrollOut] *ngIf="row.hide!=true && row.seperator==true" [style.background-color]="'#FFFF00'" >
+          <ion-row *ngIf="row.hide!=true && row.seperator==true" [style.background-color]="'#FFFF00'" >
             <ion-col text-center>
               {{row.seperator_message}}
             </ion-col>
           </ion-row>
-          <ion-row [@scrollOut] *ngIf="row.hide!=true && row.seperator!=true" [style.background-color]="e==true?'#CCCCCC':'white'" >
+          <ion-row *ngIf="row.hide!=true && row.seperator!=true" [style.background-color]="e==true?'#CCCCCC':'white'" >
           <ion-col col-2 text-center>
             {{row.rank}}
           </ion-col>
@@ -139,7 +139,7 @@
     <ion-grid>
       <ng-container *ngIf='tournaments.length>0 && tournaments[1].tournament_machine_index!=null'>
         <ng-container *ngFor="let row of tournaments[tournamentIndexToDisplay].tournament_machines[tournaments[tournamentIndexToDisplay].tournament_machine_index].results;even as e">
-          <ion-row [@scrollOut] *ngIf="row.hide!=true" [style.background-color]="e!=true?'#CCCCCC':'white'">
+          <ion-row  *ngIf="row.hide!=true" [style.background-color]="e!=true?'#CCCCCC':'white'">
               <ion-col col-2 text-center>
                 {{row.rank}}
               </ion-col>
@@ -174,6 +174,5 @@
         </ng-container>
       </ion-col>      
     </ion-row>
-  </ion-grid>
-  
+  </ion-grid>  
 </ion-content>

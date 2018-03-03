@@ -66,27 +66,6 @@
   </ion-grid>
 
   <ion-scroll #tournamentScroll1 scrollY="true" style="width: 50%; height: 90%;" float-left >
-  <ion-grid>
-    <ion-row>
-      <ion-col >
-          <div text-center style='height:50%'>
-            <h3>
-              &nbsp;
-            </h3>
-          </div>
-        <div>
-          <ion-grid>
-            <ion-row >
-              <ion-col col-2 text-center>
-                &nbsp;
-              </ion-col>
-            </ion-row>
-          </ion-grid>    
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
     <ion-grid>
       <ng-container *ngIf='tournaments.length>0'>
         <ng-container *ngFor="let row of tournaments[tournamentIndexToDisplay].results;even as e">
@@ -115,26 +94,6 @@
   </ion-scroll>
   
   <ion-scroll #tournamentMachineScroll scrollY="true" style="width: 50%; height: 90%;" float-left >
-  <ion-grid>
-    <ion-row>
-      <ion-col >
-          <div text-center style='height:50%'>
-            <h3>
-              &nbsp;
-            </h3>
-          </div>
-        <div>
-          <ion-grid>
-            <ion-row >
-              <ion-col col-2 text-center>
-                &nbsp;
-              </ion-col>
-            </ion-row>
-          </ion-grid>    
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
 
     <ion-grid>
       <ng-container *ngIf='tournaments.length>0 && tournaments[1].tournament_machine_index!=null'>

@@ -10,13 +10,14 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
  */
 
 @IonicPage({
-    segment:'qd/:eventId/:eventName/:cols/:numPlayersPerQueue/:selectedMachines'
+    segment:'qd/:eventId/:eventName/:cols/:numPlayersPerQueue/:fontSize/:selectedMachines'
 })
 @Component({
   selector: 'page-queue-display',
   templateUrl: 'queue-display.html',
 })
 export class QueueDisplayPage extends PssPageComponent {
+    fontSize:number = 24;
     selectedQueues:any=[];
     selectedMachines:any=[];
     cols:any=4;
@@ -55,9 +56,11 @@ export class QueueDisplayPage extends PssPageComponent {
                             return true;
                         }
                     }).length > 0;
+                    console.log('matchMachine');
                     console.log(matchMachine);
                     if(matchMachine==true){
-                        tournamentMachine.avgPlayTime=Math.round(tournamentMachine.total_play_time/tournamentMachine.total_number_of_players);
+                        console.log(tournamentMachine);
+                        tournamentMachine.avgPlayTime=Math.round((tournamentMachine.total_play_time/tournamentMachine.total_number_of_players)/60);
                         if(tournamentMachine.avgPlayTime>100){
                             tournamentMachine.avgPlayTime=0;
                         }
@@ -84,6 +87,7 @@ export class QueueDisplayPage extends PssPageComponent {
         this.selectedMachines = JSON.parse(this.navParams.get('selectedMachines'));
         this.cols = this.navParams.get('cols');
         this.numPlayersPerQueue = this.navParams.get('numPlayersPerQueue')?this.navParams.get('numPlayersPerQueue'):8;
+        this.fontSize = this.navParams.get('fontSize');        
         console.log(this.selectedMachines);
         this.pssApi.getAllTournamentsAndMachines(this.eventId)            
             .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor())

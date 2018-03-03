@@ -32,16 +32,16 @@
                 <hr>
               </ion-item>
               <ion-item *ngIf="machine.player == null" text-center>
-                <b>Playing : N/A</b>
+                <span [style.font-size]='fontSize+"px"'><b>Playing : N/A</b></span>
                 <hr>
               </ion-item>
               
               <ng-container *ngFor="let queueItem of machine.queues.slice(0,numPlayersPerQueue);index as i">
                 <ion-item *ngIf="queueItem.player!=null">
-                  {{i+1}} : {{queueItem.player.player_full_name}}
+                  <span [style.font-size]='fontSize+"px"'> {{i+1}} : {{queueItem.player.player_full_name}} </span>
                 </ion-item>
                 <ion-item *ngIf="queueItem.player==null" no-lines>
-                  {{i+1}} :
+                  <span [style.font-size]='fontSize+"px"'>{{i+1}} :</span>
                 </ion-item>
                 
               </ng-container>

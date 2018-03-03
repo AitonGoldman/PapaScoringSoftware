@@ -95,7 +95,7 @@
               {{row.seperator_message}}
             </ion-col>
           </ion-row>
-          <ion-row *ngIf="row.hide!=true && row.seperator!=true" [style.background-color]="e==true?'#CCCCCC':'white'" >
+          <ion-row *ngIf="row.hide!=true && row.seperator!=true" [style.background-color]="setRowColor(e,row)">
           <ion-col col-2 text-center>
             {{row.rank}}
           </ion-col>

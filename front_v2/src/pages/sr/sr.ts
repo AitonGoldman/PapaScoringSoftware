@@ -37,17 +37,15 @@ export class SrPage extends PssPageComponent {
     pause:number=5000;
     tournamentIndexToDisplay:number=0;
     listOfIndexes:any=[0,1];
-    setRowColor(e,result){
-        let rankRestriction=false;
-        console.log(this.tournamentSettings);
-        if(this.tournamentSettings.finals_style=="PAPA"){
-            rankRestriction=this.tournamentSettings.number_of_qualifiers;
+    setRowColor(e,result){        
+        let rankRestriction=false;        
+        if(this.tournaments[this.tournamentIndexToDisplay].finals_style=="PAPA"){
+            rankRestriction=this.tournaments[this.tournamentIndexToDisplay].number_of_qualifiers;
         } else {
-            rankRestriction=this.tournamentSettings.number_of_qualifiers_for_a_when_finals_style_is_ppo;
+            rankRestriction=this.tournaments[this.tournamentIndexToDisplay].number_of_qualifiers_for_a_when_finals_style_is_ppo;
         }
-        console.log('rankrestriction is..');
-        console.log(rankRestriction);
-        if(result.ifpa_ranking_restricted==true && result.rank > rankRestriction){
+        console.log(result);
+        if(result && result.ifpa_ranking_restricted==true && result.rank > rankRestriction){
             return '#FF6347';
         }                
         if(e==true){
@@ -70,6 +68,7 @@ export class SrPage extends PssPageComponent {
                 }
                 this.tournamentsLoading[tournament_index_in_tournament_list]=false;
                 this.tournaments[tournament_index_in_tournament_list].results=result.data;
+                
                 this.tournamentSettings=result.tournament;
                 setTimeout(()=>{
                     //tournament_index_in_tournament_list=tournament_index_in_tournament_list+1;

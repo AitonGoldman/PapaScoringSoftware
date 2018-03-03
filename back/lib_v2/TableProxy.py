@@ -850,6 +850,7 @@ class TableProxy():
         finals_player.player_id=player_id
         finals_player.player_name=player.__repr__()
         finals_player.seed_rank=seed_rank
+        finals_player.finals_rank=seed_rank
         self.db_handle.session.add(finals_player)
         if commit:
             self.db_handle.session.commit()

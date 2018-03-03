@@ -5,7 +5,7 @@
     Ionic pages and navigation.
   -->
 <ion-content no-padding no-margin>
-  <ion-grid tournament-header style='width:50%;position:absolute;top:0;left:0' no-padding>
+  <ion-grid tournament-header style='width:50%;' no-padding float-left>
     <ion-row>      
       <ion-col >
         <ng-container *ngIf="tournaments.length > 0">
@@ -33,7 +33,7 @@
   </ion-grid>
 
   
-  <ion-grid machine-header style='width:50%;position:absolute;top:0;' [style.left]="(platform.width()/2)+'px'" no-padding>
+  <ion-grid machine-header style='width:50%;' float-right no-padding>
     <ion-row>
       <ion-col >
         <ng-container *ngIf="tournaments.length > 0">
@@ -162,7 +162,7 @@
     </div>    
   </ion-scroll>
 
-  <ion-grid style='width:50%;position:absolute;top:92%;' [style.left]="(platform.width()/2)+'px'">
+  <ion-grid style='width:50%;' float-right>
     <ion-row>
       <ion-col text-center>
         <ng-container *ngIf="tournaments.length>0 && tournaments[tournamentIndexToDisplay].tournament_machine_index!=null">

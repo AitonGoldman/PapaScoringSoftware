@@ -124,8 +124,8 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
                 }
                 this.match=result;
                 this.gameOrderLists[1]=this.generateListForOrderPicking(1,"rank");            
-                this.gameOrderLists[2]=this.generateListForOrderPicking(2,"score");
-                this.gameOrderLists[3]=this.generateListForOrderPicking(3,"score");
+                this.gameOrderLists[2]=this.generateListForOrderPicking(2,"rank");
+                this.gameOrderLists[3]=this.generateListForOrderPicking(3,"rank");
                 
             })                                                          
     }
@@ -148,8 +148,8 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
             this.gameOrderLists={}                        
             this.gameOrderLists[1]=this.generateListForOrderPicking(1,"rank");
             
-            this.gameOrderLists[2]=this.generateListForOrderPicking(2,"score");
-            this.gameOrderLists[3]=this.generateListForOrderPicking(3,"score");
+            this.gameOrderLists[2]=this.generateListForOrderPicking(2,"rank");
+            this.gameOrderLists[3]=this.generateListForOrderPicking(3,"rank");
             this.gameOrderListsDisplay={};
             this.gameOrderListsDisplay[1]=false;            
             this.gameOrderListsDisplay[2]=false;            

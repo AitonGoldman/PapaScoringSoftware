@@ -6,6 +6,6 @@
 -->
 
 <ion-tabs>
-  <ion-tab [root]="'ScorekeeperFinalsRoundPage'" tabTitle="{{round}}" [rootParams]="buildNavParams({finalId:finalId,round:round})" *ngFor="let round of roundsList"></ion-tab>
+  <ion-tab [root]="'ScorekeeperFinalsRoundPage'" tabTitle="{{round}}" [rootParams]="buildNavParams({finalId:finalId,round:round,totalRounds:roundsList.length})" *ngFor="let round of roundsList"></ion-tab>
 </ion-tabs>
 

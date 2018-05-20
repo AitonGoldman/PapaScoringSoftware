@@ -318,8 +318,11 @@ def edit_finals_match(event_id, finals_match_id):
 
 def get_player_total_points(player_string,match):
     points=0
+    #for each machine number (i.e. 1,2,3) (in the match, but not explicit)
     for index,machine_num in enumerate([1,2,3]):
+        # calculate points for game by looking at "player_x_points_<machine_num>"
         points_for_game = getattr(match,player_string+"_points_"+str(machine_num))
+        # aggregate points
         if points_for_game:
             points=points+points_for_game
     return points
@@ -364,11 +367,14 @@ def edit_tiebreakers_route(event_id,tiebreaker_id,input_data,set_finals_rank=Tru
 def complete_round(event_id, final_id, round):
                 
     final = current_app.table_proxy.get_final(final_id)
-    loosers_finals_player_ids=[]
-    lowest_rank_for_each_round={24:{1:17,2:9,3:5,4:1},16:{1:8,2:4,3:1}}    
+    loosers_finals_player_ids=[]    
+    lowest_rank_for_each_round={24:{1:17,2:9,3:5,4:1},16:{1:8,2:4,3:1}}
+    #lowest_rank_for_each_round={24:{1:24,2:16,3:8,4:4},16:{1:8,2:4,3:1}}    
     tournament = current_app.table_proxy.get_tournament_by_tournament_id(final.tournament_id)
     finals_players = current_app.table_proxy.get_all_finals_players(final.tournament_id)    
+    #create finals_player_dict with key of finals_player_id and content is finals_player object
     finals_player_dict = {finals_player.finals_player_id:finals_player for finals_player in finals_players}
+    #define num qualifiers based on type of tournament
     if tournament.finals_style=="PAPA":
         num_qualifiers = tournament.number_of_qualifiers
     if tournament.finals_style=="PPO":
@@ -377,20 +383,30 @@ def complete_round(event_id, final_id, round):
             num_qualifiers = tournament.number_of_qualifiers_for_a_when_finals_style_is_ppo
         if finals_name=="%s (B)" % tournament.tournament_name:
             num_qualifiers = tournament.number_of_qualifiers_for_b_when_finals_style_is_ppo - tournament.number_of_qualifiers_for_a_when_finals_style_is_ppo
-
+    #get all matches in current round (that was passed in as an argument)
     for match in [match for match in current_app.table_proxy.get_all_finals_matches(final_id) if match.round==round]:
+        #for each player (i.e. "player_one","player_two",etc) in match
         for player_string in ['player_four','player_three','player_two','player_one']:            
+            #figure out if "player_x_winner" is set for match
             winner = getattr(match,player_string+"_winner")
-            if winner is not True:                
+            if winner is not True or int(bracket_template[num_qualifiers]['num_rounds'])==int(round):                
+                #add a hash to loosers_finals_player_ids list.  Hash has two keys - finals_player_id,points.  points come from get_player_total_points()                
                 loosers_finals_player_ids.append({'finals_player_id':getattr(match,player_string+"_finals_player_id"),
                                                   'points':get_player_total_points(player_string,match)})
-    
-    sorted_players = sorted(loosers_finals_player_ids, key= lambda e: e['points'], reverse=True)
+    # sort and rank players based on loosers total points
+    sorted_players = sorted(loosers_finals_player_ids, key= lambda e: e['points'],reverse=True)
     ranked_players = list(Ranking(sorted_players, key=lambda f:f['points']))
+    #sorted_players = sorted(loosers_finals_player_ids, key= lambda e: e['points'])
+    #ranked_players = list(Ranking(sorted_players, key=lambda f:f['points'],reverse=True))
+    
     for ranked_player in ranked_players:
+        #Use hash that defines lowest possible rank for round, add each players rank which we just calculated
         looser_rank = lowest_rank_for_each_round[num_qualifiers][round]+ranked_player[0]
+        #looser_rank = lowest_rank_for_each_round[num_qualifiers][round]-ranked_player[0]
+        #set finishing rank
         finals_player_dict[ranked_player[1]['finals_player_id']].finishing_rank=looser_rank
         print "player %s %s is NOT a winner" % (ranked_player[1]['finals_player_id'],looser_rank)
+    # if we are not in the final round...
     if bracket_template[num_qualifiers]['num_rounds']!=round:
         next_round_matches = [match for match in current_app.table_proxy.get_all_finals_matches(final_id) if match.round==round+1]
         first_match_of_next_round = next_round_matches[0]

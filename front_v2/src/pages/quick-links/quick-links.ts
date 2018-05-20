@@ -125,21 +125,33 @@ export class QuickLinksPage extends PssPageComponent {
     publishQuickLinksPlayerPush(pageName,args){
         //this.tabRef.getByIndex(1).push(pageName,args,{animate:false});
         let tabs = this.navCtrl.parent;
+        console.log('about to jump to warp speed')
         if(tabs.getByIndex(1)._views.length!=0){
             console.log("were okay....")
             this.navCtrl.parent.getByIndex(1).push(pageName,args,{animate:false}).then(()=>{
                 tabs.getByIndex(1).last().showBackButton(false);
                 tabs.select(1)
             })
+            
             return
         }
         if(tabs.getByIndex(1)._views.length==0){
-            console.log("were okay....")
-            tabs.select(1).then(()=>{            
-                this.navCtrl.parent.getByIndex(1).push(pageName,args,{animate:false}).then(()=>{
-                    tabs.getByIndex(1).last().showBackButton(false);                    
-                })                            
-            })
+            // console.log("were moving right along")
+            //  tabs.select(1).then(()=>{            
+            //      this.navCtrl.parent.getByIndex(1).push(pageName,args,{animate:false}).then(()=>{
+            //          tabs.getByIndex(1).last().showBackButton(false);                    
+            //      })                            
+            //  })
+            console.log("were moving right along")                        
+            tabs.select(1).then(()=>{
+                //tabs.getByIndex(1).setPages([{page:"ResultsPage",params:args},{page:pageName,params:args}])
+                this.showLoading("Please Wait");
+                setTimeout(()=>{
+                    tabs.getByIndex(1).setPages([{page:"ResultsPage",params:args},{page:pageName,params:args}]).then(()=>{
+                        this.hideLoading();
+                    })
+                },2000);
+            })            
 
             return
         }

@@ -123,9 +123,9 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
                     return;
                 }
                 this.match=result;
-                this.gameOrderLists[1]=this.generateListForOrderPicking(1,"rank");            
-                this.gameOrderLists[2]=this.generateListForOrderPicking(2,"rank");
-                this.gameOrderLists[3]=this.generateListForOrderPicking(3,"rank");
+                this.gameOrderLists[1]=this.generateListForOrderPicking(1,"score");            
+                this.gameOrderLists[2]=this.generateListForOrderPicking(2,"score");
+                this.gameOrderLists[3]=this.generateListForOrderPicking(3,"score");
                 
             })                                                          
     }
@@ -146,10 +146,10 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
             console.log(this.match);
             console.log(final);
             this.gameOrderLists={}                        
-            this.gameOrderLists[1]=this.generateListForOrderPicking(1,"rank");
+            this.gameOrderLists[1]=this.generateListForOrderPicking(1,"score");
             
-            this.gameOrderLists[2]=this.generateListForOrderPicking(2,"rank");
-            this.gameOrderLists[3]=this.generateListForOrderPicking(3,"rank");
+            this.gameOrderLists[2]=this.generateListForOrderPicking(2,"score");
+            this.gameOrderLists[3]=this.generateListForOrderPicking(3,"score");
             this.gameOrderListsDisplay={};
             this.gameOrderListsDisplay[1]=false;            
             this.gameOrderListsDisplay[2]=false;            

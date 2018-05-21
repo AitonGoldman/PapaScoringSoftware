@@ -56,7 +56,16 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
                 match.player_two_points=match.player_two_points_1+match.player_two_points_2+match.player_two_points_3
                 match.player_three_points=match.player_three_points_1+match.player_three_points_2+match.player_three_points_3
                 match.player_four_points=match.player_four_points_1+match.player_four_points_2+match.player_four_points_3
-
+                
+                if(match.one_completed!=true && match.machine_1){
+                    match.current_machine=match.machine_1;                    
+                }
+                if(match.two_completed!=true && match.machine_2){
+                    match.current_machine=match.machine_2;                    
+                }
+                if(match.three_completed!=true && match.machine_3){
+                    match.current_machine=match.machine_3;
+                }                                
                 return match
             })
             console.log('generateGetEventPlayer')

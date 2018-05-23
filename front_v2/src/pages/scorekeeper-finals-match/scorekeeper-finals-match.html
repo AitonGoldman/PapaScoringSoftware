@@ -55,7 +55,7 @@
 
   <!--<button ion-button (click)="generateListForOrderPicking(machineNum)">Reset Player Order</button>-->  
 
-  <ion-card no-padding [@myvisibility] *ngIf="gameOrderListsDisplay && gameOrderListsDisplay[machineNum]==true">
+  <ion-card no-padding *ngIf="gameOrderListsDisplay && gameOrderListsDisplay[machineNum]==true">
     <ion-card-content no-padding no-margin>
     <ion-list>
       <ion-item-sliding *ngFor="let player of gameOrderLists[machineNum]">
@@ -64,20 +64,22 @@
           <button ion-button color="danger" *ngIf="player.order!=null" item-end>
             {{player.order}}
           </button>
-          <button item-end *ngFor="let order of [1,2,3,4]" hideWhen="mobile" item-end ion-button color="primary" [disabled]='takenOrderPosition.includes(order)' margin-right padding tappable (click)="setPlayerOrder(order,player,machineNum)">
+<!--          <button item-end *ngFor="let order of [1,2,3,4]" hideWhen="mobile" item-end ion-button color="primary" [disabled]='takenOrderPosition.includes(order)' margin-right padding tappable (click)="setPlayerOrder(order,player,machineNum)">
             {{order}}
-          </button>          
+            </button>          -->
+          <button item-end *ngFor="let order of [1,2,3,4]" item-end ion-button color="primary"  [disabled]='takenOrderPosition[order]' margin-right padding tappable (click)="setPlayerOrder(order,player,machineNum)">
+            {{order}}
+            </button>          
 
         </ion-item>
-        
-        
+<!--        
         <ion-item-options side="right" showWhen="mobile">
           <ng-container *ngFor="let order of [1,2,3,4]">            
           <button ion-button color="primary" *ngIf="!takenOrderPosition.includes(order)" margin-right padding-right tappable (click)="setPlayerOrder(order,player,machineNum)">
             {{order}}
           </button>          
           </ng-container>
-        </ion-item-options>
+        </ion-item-options>-->
       </ion-item-sliding>
     </ion-list>
     <!-- <span *ngFor="let player of gameOrderLists[1]"> -->

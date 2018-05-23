@@ -34,7 +34,7 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
     finalName:string=null;
     round:number=null;
     matchId:number=null;
-    takenOrderPosition:any=[];
+    takenOrderPosition:any=[false,false,false,false,false];
     gameOrderLists:any=null;
     gameOrderListsDisplay:any=null;
     gameDisplay:any=null;
@@ -46,11 +46,12 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
     //game_one_player_order_list:any=null;
     toggleVisible() {
         this.visibleState = (this.visibleState == 'visible') ? 'invisible' : 'visible';
-    }    
+    }
     setPlayerOrder(order,player,game){        
         let player_string=player.player;
         player.order=order;
-        this.takenOrderPosition.push(order);
+        this.takenOrderPosition[order]=true;
+        
         this.match[player_string+'_order_'+game]=order;
         this.pssApi.editFinalsMatch(this.match,this.eventId,this.matchId)
             .subscribe((result)=>{

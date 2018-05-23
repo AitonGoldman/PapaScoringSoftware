@@ -17,7 +17,15 @@
 </ion-header>
 
 <ion-content>  
-    <ion-card tappable *ngFor="let match of final;index as i" [navPush]="'ScorekeeperFinalsMatchPage'" [navParams]="buildNavParams({finalId:finalId,round:round,matchId:match.finals_match_id})">
+<ion-list style='margin:auto;background-color:red;width:200px' color='pss-home-header'>
+  <ion-item>
+    <ion-label>Select Round</ion-label>
+    <ion-select #C (ionChange)="onChangeGotoRound(C.value)" >
+      <ion-option *ngFor="let roundNum of rounds" value="{{roundNum}}">{{roundNum}}</ion-option>
+    </ion-select>
+  </ion-item>
+  </ion-list>
+  <ion-card tappable *ngFor="let match of final;index as i" [navPush]="'ScorekeeperFinalsMatchPage'" [navParams]="buildNavParams({finalId:finalId,round:round,matchId:match.finals_match_id})">
       <ion-card-header no-padding>
         <ion-item color="darker">
           <b>Round {{round}}, Match {{i+1}}</b>

@@ -27,7 +27,7 @@
     </button>
     <ng-container *ngFor="let tournament of tournaments">
       <ng-container *ngIf="tournament.finals_ids!=null && tournament.finals_ids.length!=0">
-        <button *ngFor="let final of tournament.finals_ids" ion-item tappable (click)="pushRootPage('ScorekeeperFinalsPage',buildNavParams({finalId:final.final_id,rounds:final.number_of_rounds}))">
+        <button *ngFor="let final of tournament.finals_ids" ion-item tappable [navPush]="'ScorekeeperFinalsRoundPage'" [navParams]="buildNavParams({round:1, finalId:final.final_id,totalRounds:final.number_of_rounds})">
           <ion-avatar padding-vertical item-start>
             <img-loader fallback="assets/imgs/pinball_small_square.jpg" [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/pinball_small_square.jpg'" useImg ></img-loader>
 
@@ -35,6 +35,7 @@
           </ion-avatar>
           {{final.final_name}} Finals Scorekeeping
         </button>
+        
     </ng-container>
     </ng-container>
   </ion-list>

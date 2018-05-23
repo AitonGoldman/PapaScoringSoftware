@@ -23,7 +23,7 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
     totalRounds:number=null;
     roundCompleted:boolean=false;
     finalsPlayers:any = null;
-
+    rounds=[];
     generateGetEventPlayerProcessor(){
         return (result)=>{
             if(result==null){
@@ -86,11 +86,26 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
 
         this.finalId=this.navParams.get('finalId');
         this.round=this.navParams.get('round');
+        this.totalRounds=this.navParams.get('totalRounds');
+        this.rounds = Array(4).fill("").map((x,i)=>i+1).filter((numToFilter)=>{
+            if(numToFilter==this.round){
+                return false;
+            } else {
+                return true;
+            }
+        }); // [0,1,2,3,4]
+        
         this.pssApi.getFinal(this.eventId,this.finalId)
             .subscribe(this.generateGetEventPlayerProcessor())                                                          
       console.log('ionViewDidLoad ScorekeeperFinalsRoundPage');
     }
 
+    onChangeGotoRound(round){
+        //alert(round);
+        
+        this.navCtrl.push('ScorekeeperFinalsRoundPage',this.buildNavParams({"round":round,"finalId":this.finalId,"totalRounds":this.totalRounds}));        
+    }
+    
     generateCompleteRoundProcessor(){
         return (result)=>{
             if(result==null){

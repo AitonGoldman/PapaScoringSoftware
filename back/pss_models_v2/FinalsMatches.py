@@ -9,7 +9,7 @@ def generate_finals_matches_class(db_handle):
         machine_four=db_handle.Column(db_handle.String(100))        
         completed=db_handle.Column(db_handle.Boolean)
         
-        one_completed=db_handle.Column(db_handle.Boolean)
+        one_completed=db_handle.Column(db_handle.Boolean)        
         two_completed=db_handle.Column(db_handle.Boolean)
         three_completed=db_handle.Column(db_handle.Boolean)
         
@@ -89,8 +89,21 @@ def generate_finals_matches_class(db_handle):
         
         player_four_order_1=db_handle.Column(db_handle.Integer)
         player_four_order_2=db_handle.Column(db_handle.Integer)
-        player_four_order_3=db_handle.Column(db_handle.Integer)
+        player_four_order_3=db_handle.Column(db_handle.Integer)        
 
         
-        
+        machine_4=db_handle.Column(db_handle.String(100))
+        player_4_order_4=db_handle.Column(db_handle.Integer)
+        player_3_order_4=db_handle.Column(db_handle.Integer)
+        player_2_order_4=db_handle.Column(db_handle.Integer)
+        player_1_order_4=db_handle.Column(db_handle.Integer)
+        player_four_points_4=db_handle.Column(db_handle.Integer)
+        player_three_points_4=db_handle.Column(db_handle.Integer)
+        player_two_points_4=db_handle.Column(db_handle.Integer)
+        player_one_points_4=db_handle.Column(db_handle.Integer)                                
+        player_one_score_4=db_handle.Column(db_handle.BigInteger)        
+        player_two_score_4=db_handle.Column(db_handle.BigInteger)        
+        player_three_score_4=db_handle.Column(db_handle.BigInteger)        
+        player_four_score_4=db_handle.Column(db_handle.BigInteger)        
+        four_completed=db_handle.Column(db_handle.Boolean)        
     return FinalsMatches

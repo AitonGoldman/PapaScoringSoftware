@@ -126,6 +126,7 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
                 this.gameOrderLists[1]=this.generateListForOrderPicking(1,"score");            
                 this.gameOrderLists[2]=this.generateListForOrderPicking(2,"score");
                 this.gameOrderLists[3]=this.generateListForOrderPicking(3,"score");
+                this.gameOrderLists[4]=this.generateListForOrderPicking(4,"score");
                 
             })                                                          
     }
@@ -146,18 +147,21 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
             console.log(this.match);
             console.log(final);
             this.gameOrderLists={}                        
-            this.gameOrderLists[1]=this.generateListForOrderPicking(1,"score");
-            
+            this.gameOrderLists[1]=this.generateListForOrderPicking(1,"score");            
             this.gameOrderLists[2]=this.generateListForOrderPicking(2,"score");
             this.gameOrderLists[3]=this.generateListForOrderPicking(3,"score");
+            this.gameOrderLists[4]=this.generateListForOrderPicking(4,"score");            
             this.gameOrderListsDisplay={};
             this.gameOrderListsDisplay[1]=false;            
             this.gameOrderListsDisplay[2]=false;            
             this.gameOrderListsDisplay[3]=false;            
+            this.gameOrderListsDisplay[4]=false;            
             this.gameDisplay={};
             this.gameDisplay[1]=false;
             this.gameDisplay[2]=false;
-            this.gameDisplay[3]=false;            
+            this.gameDisplay[3]=false;
+            this.gameDisplay[4]=false;            
+            
             [1,2,3,4].forEach((game)=>{
                 if (this.checkAllPlayerOrderSet(game)){
                     this.gameDisplay[game]=true;
@@ -167,6 +171,7 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
             this.scoreOrderLists[1]=this.generateListForOrderPicking(1,"order")
             this.scoreOrderLists[2]=this.generateListForOrderPicking(2,"order")
             this.scoreOrderLists[3]=this.generateListForOrderPicking(3,"order")
+            this.scoreOrderLists[4]=this.generateListForOrderPicking(4,"order")
             
             console.log('generateGetEventPlayer')
             

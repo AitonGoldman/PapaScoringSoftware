@@ -231,7 +231,7 @@ def edit_finals_match(event_id, finals_match_id):
     else:
         raise BadRequest('No info in request')        
     current_app.table_proxy.edit_finals_match(finals_match,input_data)    
-    if finals_match.player_one_score_1 is not None and finals_match.player_two_score_1 is not None and finals_match.player_three_score_1 is not None and finals_match.player_four_score_1 is not None:        
+    if finals_match.player_one_score_1 is not None and finals_match.player_two_score_1 is not None and finals_match.player_three_score_1 is not None and finals_match.player_four_score_1 is not None :        
         finals_match.one_completed=True
         calculate_points_for_machine(finals_match,1)
     if finals_match.player_one_score_2 is not None and finals_match.player_two_score_2 is not None and finals_match.player_three_score_2 is not None and finals_match.player_four_score_2 is not None:
@@ -241,12 +241,16 @@ def edit_finals_match(event_id, finals_match_id):
         finals_match.three_completed=True
         calculate_points_for_machine(finals_match,3)
 
+    if finals_match.player_one_score_4 is not None and finals_match.player_two_score_4 is not None and finals_match.player_three_score_4 is not None and finals_match.player_four_score_4 is not None:
+        finals_match.four_completed=True
+        calculate_points_for_machine(finals_match,4)
+        
     player_one = {'name':'player_one', 'rank':None, 'points':get_player_total_points('player_one',finals_match),'finals_player_id':finals_match.player_one_finals_player_id}
     player_two = {'name':'player_two', 'rank':None, 'points':get_player_total_points('player_two',finals_match),'finals_player_id':finals_match.player_two_finals_player_id}
     player_three = {'name':'player_three', 'rank':None, 'points':get_player_total_points('player_three',finals_match),'finals_player_id':finals_match.player_three_finals_player_id}
     player_four = {'name':'player_four', 'rank':None, 'points':get_player_total_points('player_four',finals_match),'finals_player_id':finals_match.player_four_finals_player_id}
     
-    if finals_match.one_completed is True and finals_match.two_completed is True and finals_match.three_completed is True:
+    if finals_match.one_completed is True and finals_match.two_completed is True and finals_match.three_completed is True and finals_match.four_completed is True:
         finals_match.player_one_winner=False
         finals_match.player_two_winner=False
         finals_match.player_three_winner=False
@@ -264,7 +268,7 @@ def edit_finals_match(event_id, finals_match_id):
         
         if tiebreaker:            
             finals_match.tiebreakers=tiebreaker
-        if finals_match.one_completed and finals_match.two_completed and finals_match.three_completed:
+        if finals_match.one_completed and finals_match.two_completed and finals_match.three_completed and finals_match.four_completed:
             print "completed 1"
             if tiebreaker:
                 print "found tiebreaker"
@@ -319,7 +323,7 @@ def edit_finals_match(event_id, finals_match_id):
 def get_player_total_points(player_string,match):
     points=0
     #for each machine number (i.e. 1,2,3) (in the match, but not explicit)
-    for index,machine_num in enumerate([1,2,3]):
+    for index,machine_num in enumerate([1,2,3,4]):
         # calculate points for game by looking at "player_x_points_<machine_num>"
         points_for_game = getattr(match,player_string+"_points_"+str(machine_num))
         # aggregate points

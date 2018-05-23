@@ -93,10 +93,10 @@ def generate_finals_matches_class(db_handle):
 
         
         machine_4=db_handle.Column(db_handle.String(100))
-        player_4_order_4=db_handle.Column(db_handle.Integer)
-        player_3_order_4=db_handle.Column(db_handle.Integer)
-        player_2_order_4=db_handle.Column(db_handle.Integer)
-        player_1_order_4=db_handle.Column(db_handle.Integer)
+        player_four_order_4=db_handle.Column(db_handle.Integer)
+        player_three_order_4=db_handle.Column(db_handle.Integer)
+        player_two_order_4=db_handle.Column(db_handle.Integer)
+        player_one_order_4=db_handle.Column(db_handle.Integer)
         player_four_points_4=db_handle.Column(db_handle.Integer)
         player_three_points_4=db_handle.Column(db_handle.Integer)
         player_two_points_4=db_handle.Column(db_handle.Integer)

@@ -49,7 +49,7 @@ import { PssToastProvider } from '../providers/pss-toast/pss-toast';
       BrowserAnimationsModule, 
       SimpleNotificationsModule.forRoot(),
       ImageUploadModule.forRoot(),
-      CookieModule.forRoot(),
+      CookieModule.forRoot(),      
       CustomComponentsModule,
       IonicImageLoader.forRoot()      
   //    ToastModule.forRoot(),

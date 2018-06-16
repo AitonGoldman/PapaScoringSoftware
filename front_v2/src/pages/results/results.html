@@ -20,11 +20,17 @@
     </ion-item>
     <ng-container *ngFor="let tournament of tournaments">
       <ng-container *ngIf="tournament.finals_ids!=null && tournament.finals_ids.length!=0">
-        <ion-item detail-none *ngFor="let final of tournament.finals_ids" tappable (click)="pushRootPage(platform.is('mobile')?'ResultsFinalsPage':'ResultsFinalsRoundsPage',buildNavParams({finalId:final.final_id,round:1}))">
+        <!--<ion-item detail-none *ngFor="let final of tournament.finals_ids" tappable (click)="pushRootPage(platform.is('mobile')?'ResultsFinalsPage':'ResultsFinalsRoundsPage',buildNavParams({finalId:final.final_id,round:1}))">
+          {{final.final_name}} Finals Results
+            <ion-icon item-end name="ios-arrow-forward"></ion-icon>
+
+        </ion-item>-->        
+        <ion-item detail-none *ngFor="let final of tournament.finals_ids" tappable [navPush]='"ResultsFinalsRoundsPage"' [navParams]="buildNavParams({finalId:final.final_id,round:1})">
           {{final.final_name}} Finals Results
             <ion-icon item-end name="ios-arrow-forward"></ion-icon>
 
         </ion-item>
+        
       </ng-container>
       <ion-item detail-none [navPush]='"ResultsTournamentPage"' [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
         {{tournament.tournament_name}} Tournament Results
@@ -64,7 +70,7 @@
     <ng-container *ngFor="let tournament of tournaments">
       <ion-col col-12>
         <ng-container *ngIf="tournament.finals_ids!=null && tournament.finals_ids.length!=0">
-          <ion-card  *ngFor="let final of tournament.finals_ids" tappable (click)="pushRootPage('ResultsFinalsPage',buildNavParams({finalId:final.final_id}))">
+          <ion-card  *ngFor="let final of tournament.finals_ids" tappable [navPush]='"ResultsFinalsRoundsPage"' [navParams]="buildNavParams({finalId:final.final_id,round:1})">
             <!--<img [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/finals.jpg'"/>-->
             <img-loader [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/finals.jpg'" useImg ></img-loader>
             

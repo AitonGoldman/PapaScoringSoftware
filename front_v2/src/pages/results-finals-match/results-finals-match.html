@@ -8,10 +8,10 @@
   <ion-navbar color='pss-header'>
     <ion-title>{{finalName}} Finals Results</ion-title>
 
-    <ion-buttons end showWhen='mobile'>
-      <button tappable no-margin (click)="gotoParentTab()" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
-      <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p>
-    </ion-buttons>
+    <!-- <ion-buttons end showWhen='mobile'> -->
+    <!--   <button tappable no-margin (click)="gotoParentTab()" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br> -->
+    <!--   <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p> -->
+    <!-- </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 <ion-content>
@@ -51,7 +51,7 @@
         <ion-col col-2 text-center>{{match['player_'+player+'_rank']}}</ion-col>
         <ion-col col-6 hideWhen='mobile' text-center>{{match['player_'+player+'_name']}}</ion-col>
         <ion-col col-8 showWhen='mobile' text-center>{{match['player_'+player+'_name']}}</ion-col>                
-        <ion-col text-center col-2>{{match['player_'+player+'_points_1']+match['player_'+player+'_points_2']+match['player_'+player+'_points_3']}}</ion-col>
+        <ion-col text-center col-2>{{match['player_'+player+'_points_1']+match['player_'+player+'_points_2']+match['player_'+player+'_points_3']+match['player_'+player+'_points_4']}}</ion-col>
         <ion-col hideWhen='mobile'></ion-col>
       </ion-row>
     </ion-grid>
@@ -59,12 +59,12 @@
   <div text-center>
     <button ion-button default tappable [navPush]="'ResultsFinalsRoundsPage'" [navParams]="buildNavParams({finalId:finalId,round:round})" >Back to Matches</button>
   </div>
-  <ng-container *ngFor="let machineNum of [1,2,3]">
+  <ng-container *ngFor="let machineNum of [1,2,3,4]">
     <div margin-top margin-bottom text-center>      
       &nbsp;    
     </div>
 
-  <div *ngIf="match!=null && (machineNum==1 || (machineNum==2 && match.one_completed==true) || (machineNum==3 && match.two_completed==true))" magin-top margin-bottom>
+  <div *ngIf="match!=null && (machineNum==1 || (machineNum==2 && match.one_completed==true) || (machineNum==3 && match.two_completed==true)|| (machineNum==4 && match.three_completed==true))" magin-top margin-bottom>
     <ion-item><h1>Game {{machineNum}}</h1>  </ion-item>
 
   <!--<button ion-button (click)="generateListForOrderPicking(machineNum)">Reset Player Order</button>-->  

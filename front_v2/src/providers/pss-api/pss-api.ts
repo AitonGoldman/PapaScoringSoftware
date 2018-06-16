@@ -16,19 +16,19 @@ import { PssToastProvider } from '../pss-toast/pss-toast';
 */
 @Injectable()
 export class PssApiProvider {
-    timeoutInMs:number=10000;
+    timeoutInMs:number=10000;    
     httpPrefix=null;
     pssUrlPort=null;
     pssHost=null;
-    //pssHostUrl='http://192.168.0.176:8100';
-    pssHostUrl='https://results.papa.org';
-    //basePssUrl='http://192.168.0.176:8000/api';
-    basePssUrl='https://results.papa.org:8000/api';
+      pssHostUrl='http://192.168.1.178:8100';
+    //pssHostUrl='https://results.papa.org';
+    basePssUrl='http://192.168.1.178:8000/api';
+    //basePssUrl='https://results.papa.org:8000/api';
 //    basePssUrl='http://0.0.0.0:8000/api';
 //    pssHostUrl='http://0.0.0.0:8100';    
 //   pssHostUrl='http://9.75.197.88:8100';
 //   basePssUrl='http://9.75.197.88:8000';
-    
+    backendVersion=3;
     
     loading_instance = null;   
     constructor(public http: HttpClient,public loadingCtrl: LoadingController,
@@ -68,7 +68,7 @@ export class PssApiProvider {
             if (restOfArgs!=null && localMatches!=null && localMatches.length!=restOfArgs.length){
                 throw new Error("Oops - number of args in url and args given do not match");
             }
-            if(hideLoading==null){
+            if(hideLoading==null||hideLoading==false){
                 this.loading_instance = this.loadingCtrl.create({
                     content: 'Please wait...'                
                 });
@@ -79,7 +79,7 @@ export class PssApiProvider {
                 let newUrl=localUrl.replace(":arg",restOfArgs.shift())
                 localUrl = newUrl;
             }
-            
+            localUrl=localUrl+'?version='+this.backendVersion;
             let result_observable = this.makeHot(this.http.request(method,localUrl,            
                                                                    {withCredentials:true,                                                                    
                                                                     body:postObject}

@@ -6,19 +6,23 @@
 -->
 
 
-<ion-content padding>
-  <ion-grid>
+<ion-content>
+  <a *ngIf="displaySettings==true" style='position:absolute;top:0;left:0' (click)="launchDialog()"><ion-icon name="cog"></ion-icon></a>
+
+  <ion-grid (click)="toggleSettings()" style='background-color:lightgrey' no-padding padding-left>
     <ion-row>
       <ion-col *ngFor="let machine of selectedQueues" [attr.col-4]="cols==3?true:null" [attr.col-3]="cols==4?true:null" [attr.col-6]="cols==2?true:null" text-center>
-        <ion-card>
-          <ion-card-header>
-            <ion-grid>
-              <ion-row align-items-center	>
-                <ion-col col-8 style='background-color:#BBCCDD;' padding>
-                  <h1><b>{{machine.tournament_machine_name}}</b></h1>
+        <ion-card no-margin margin-bottom>
+          <ion-card-header no-margin >
+            <ion-grid no-padding no-margin>
+              <ion-row align-items-center no-margin>
+                <ion-col col-8 style='background-color:#BBCCDD;'>
+                  <div [style.font-size]="machineFontSize+'px'" style='text-overflow:ellipsis;overflow:hidden;'><b>{{machine.tournament_machine_name}}</b></div>
+                  <div style='overflow:hidden;text-overflow:ellipsis' *ngIf="machine.player == null" [style.font-size]="nowPlayerFontSize+'px'">Playing : N/A</div>
+                  <div style='overflow:hidden;text-overflow:ellipsis' *ngIf="machine.player != null" [style.font-size]="nowPlayerFontSize+'px'">Playing : {{machine.player.player_full_name}}</div>
                 </ion-col>
-                <ion-col  col-4>
-                  <span float-right>Avg Time<hr>{{machine.avgPlayTime}} Mins</span>
+                <ion-col  col-4 no-padding no-margin>
+                  <span float-right [style.font-size]="avgTimeFontSize+'px'">Avg Time<hr>{{machine.avgPlayTime}} Mins</span>
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -27,28 +31,28 @@
 
           <ion-card-content>
             <ion-list>
-              <ion-item *ngIf="machine.player != null" text-center>
-                <b>Playing : {{machine.player.player_full_name}} </b>
-                <hr>
-              </ion-item>
-              <ion-item *ngIf="machine.player == null" text-center>
-                <span [style.font-size]='fontSize+"px"'><b>Playing : N/A</b></span>
-                <hr>
-              </ion-item>
+              <!-- <ion-item *ngIf="machine.player != null" text-center [style.font-size]="nowPlayerFontSize+'px'" no-margin> -->
+              <!--   <b>Playing : {{machine.player.player_full_name}} </b> -->
+              <!--   <hr> -->
+              <!-- </ion-item> -->
+              <!-- <div *ngIf="machine.player == null" text-center no-margin no-padding> -->
+              <!--   <span [style.font-size]="nowPlayerFontSize+'px'">Playing : N/A</span> -->
+              <!--   <hr> -->
+              <!-- </div> -->
               
               <ng-container *ngFor="let queueItem of machine.queues.slice(0,numPlayersPerQueue);index as i">
                 <ion-item *ngIf="queueItem.player!=null">
-                  <span [style.font-size]='fontSize+"px"'> {{i+1}} : {{queueItem.player.player_full_name}} </span>
+                  <span [style.font-size]='playerFontSize+"px"'> {{i+1}} : {{queueItem.player.player_full_name}} </span>
                 </ion-item>
                 <ion-item *ngIf="queueItem.player==null" no-lines>
-                  <span [style.font-size]='fontSize+"px"'>{{i+1}} :</span>
+                  <span [style.font-size]='playerFontSize+"px"'>{{i+1}} :</span>
                 </ion-item>
                 
               </ng-container>
-                <ion-item *ngIf="machine.queues[numPlayersPerQueue].player!=null" no-lines>
+                <ion-item [style.font-size]='playerFontSize+"px"' *ngIf="machine.queues[numPlayersPerQueue].player!=null" no-lines>
                   More than {{numPlayersPerQueue}} player on queue...
                 </ion-item>
-                <ion-item *ngIf="machine.queues[numPlayersPerQueue].player==null" no-lines>
+                <ion-item [style.font-size]='playerFontSize+"px"' *ngIf="machine.queues[numPlayersPerQueue].player==null" no-lines>
                   &nbsp;
                 </ion-item>
                 

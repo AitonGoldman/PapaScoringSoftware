@@ -16,14 +16,22 @@
       </button>
       
     </ion-buttons>
-    <ion-buttons end showWhen='mobile'>
-      <button tappable no-margin (click)="gotoParentTab()" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
-      <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p>
-    </ion-buttons>
+    <!-- <ion-buttons end showWhen='mobile'> -->
+    <!--   <button tappable no-margin (click)="gotoParentTab()" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br> -->
+    <!--   <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p> -->
+    <!-- </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 
 <ion-content>
+  <ion-list style='margin:auto;background-color:red;width:200px' color='pss-home-header'>
+  <ion-item>
+    <ion-label>Select Round</ion-label>
+    <ion-select #C (ionChange)="onChangeGotoRound(C.value,true)" >
+      <ion-option *ngFor="let roundNum of rounds" value="{{roundNum}}">{{roundNum}}</ion-option>
+    </ion-select>
+  </ion-item>
+  </ion-list>  
   <div [style.width]='contentWidth' class='desktopSlim'>
     <div text-center margin-top margin-bottom>
       <ion-chip tappable (click)="reloadResults()">

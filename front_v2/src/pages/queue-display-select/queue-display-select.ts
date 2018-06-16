@@ -31,7 +31,7 @@ export class QueueDisplaySelectPage extends PssPageComponent {
                 selectedMachines.push({tournamentMachineId:machine.tournament_machine_id})
             }
         })
-        this.navCtrl.push('QueueDisplayPage',this.buildNavParams({selectedMachines:JSON.stringify(selectedMachines),cols:3,numPlayersPerQueue:8,fontSize:24}))
+        this.navCtrl.push('QueueDisplayPage',this.buildNavParams({selectedMachines:JSON.stringify(selectedMachines),cols:3,numPlayersPerQueue:8,fontSize:38}))
     }
     generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(withPlayer=false){
         return (result) => {            

@@ -25,7 +25,7 @@ export class MyApp {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
             console.log('------------------')
-            console.log('poop');
+            console.log('poop 2');
             this.imageLoaderConfig.enableDebugMode();
             statusBar.overlaysWebView(false);
             statusBar.styleDefault();
@@ -35,24 +35,32 @@ export class MyApp {
             if(platform.is('cordova')){
                 //this.fcm.subscribeToTopic('all');
 
-                this.fcm.onTokenRefresh().subscribe(
+                this.fcm.onTokenRefresh().subscribe(                    
                     token =>{
+                        console.log('inside onTokenRefresh()');
                         if(token==null){
+                            console.log('inside onTokenRefresh() - null token 1');
                             return;
                         }
                         //let sendToken=false;
                         if((fcmToken.getFcmToken()!=null && fcmToken.getFcmToken()!=token)||fcmToken.getFcmToken()==null){
+                            console.log('inside onTokenRefresh() - non null token 1');
+                            console.log(token)
                             fcmToken.setFcmToken(token);
                             //this.pssApi.recordTokens(token)
                         }                                                
                     }
                 );
-                this.fcm.getToken().then(
+                this.fcm.getToken().then(                    
                     token =>{
+                        console.log('inside getToken()');
                         if(token==null){
+                            console.log('inside getToken() null token 2');
                             return;
                         }
                         if((fcmToken.getFcmToken()!=null && fcmToken.getFcmToken()!=token)||fcmToken.getFcmToken()==null){
+                            console.log('inside getToken() non null token 2');
+                            console.log(token)                            
                             fcmToken.setFcmToken(token);
                             //this.pssApi.recordTokens(token)
                         }                                                

@@ -17,14 +17,24 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
   templateUrl: 'queue-display.html',
 })
 export class QueueDisplayPage extends PssPageComponent {
-    fontSize:number = 24;
+    fontSize:number = 38;
+    machineFontSize = 0;
+    nowPlayerFontSize:number = 0;
+    playerFontSize:number = 0;
+    avgTimeFontSize:number = 0;
     selectedQueues:any=[];
     selectedMachines:any=[];
     cols:any=4;
-    numPlayersPerQueue:any=8;
+    numPlayersPerQueue:any=5;
     reload:boolean=true;
     urlString:string="url('/assets/imgs/small_backglass.jpeg')";
     tournaments:any=[];
+    displaySettings:any = false;
+    
+    toggleSettings(){
+        this.displaySettings=this.displaySettings==false;
+    }
+    
     generateGetAllTournamentsAndMachinesAndEventPlayerProcessor(withPlayer=false){
         return (result) => {            
             if(result == null){
@@ -82,12 +92,54 @@ export class QueueDisplayPage extends PssPageComponent {
     ionViewWillLeave() {
         this.reload=false;
     }
+    calcFontSizes(){
+        this.machineFontSize = this.fontSize*.75;
+        this.nowPlayerFontSize = this.fontSize*.4;
+        this.playerFontSize = this.fontSize*.75;
+        this.avgTimeFontSize = this.fontSize*.5
+    }
+    
+    launchDialog(){
+        let fakeThis=this;
+        let alert = this.alertCtrl.create();
+        alert.setTitle('Lightsaber color');
+        
+        alert.addInput({            
+            type: 'text',
+            name: 'fontSize',
+            placeholder: 'fontSize'
+        })
+        alert.addInput({            
+            type: 'text',
+            name: 'cols',
+            placeholder: 'cols'
+        })
+        alert.addInput({            
+            type: 'text',
+            name: 'numPlayersPerQueue',
+            placeholder: 'numPlayersPerQueue'
+        })        
+        alert.addButton('Cancel');
+        alert.addButton({
+            text: 'OK',
+            handler: data => {
+                console.log(data);
+                this.navCtrl.push('QueueDisplayPage',{eventId:this.eventId,eventName:'eventName',cols:data['cols'],numPlayersPerQueue:data['numPlayersPerQueue'],fontSize:data['fontSize'],selectedMachines:this.navParams.get('selectedMachines')})
+                //segment: ':eventId/:baseFontSize/:scrollDelta/test'
+                //this.baseFontSize=data['baseFontSize'];
+                //this.scrollDelta=data['scrollDelta'];                
+                //this.calcFontSizes(this.baseFontSize);
+            }
+        });
+        alert.present();
+    }
     
     ionViewWillEnter() {
         this.selectedMachines = JSON.parse(this.navParams.get('selectedMachines'));
         this.cols = this.navParams.get('cols');
         this.numPlayersPerQueue = this.navParams.get('numPlayersPerQueue')?this.navParams.get('numPlayersPerQueue'):8;
         this.fontSize = this.navParams.get('fontSize');        
+        this.calcFontSizes();
         console.log(this.selectedMachines);
         this.pssApi.getAllTournamentsAndMachines(this.eventId)            
             .subscribe(this.generateGetAllTournamentsAndMachinesAndEventPlayerProcessor())

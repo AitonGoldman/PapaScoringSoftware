@@ -87,7 +87,10 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
         this.finalId=this.navParams.get('finalId');
         this.round=this.navParams.get('round');
         this.totalRounds=this.navParams.get('totalRounds');
-        this.rounds = Array(4).fill("").map((x,i)=>i+1).filter((numToFilter)=>{
+        if(this.totalRounds==null){
+            this.totalRounds=5
+        }
+        this.rounds = Array(this.totalRounds).fill("").map((x,i)=>i+1).filter((numToFilter)=>{
             if(numToFilter==this.round){
                 return false;
             } else {
@@ -100,10 +103,15 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
       console.log('ionViewDidLoad ScorekeeperFinalsRoundPage');
     }
 
-    onChangeGotoRound(round){
+    onChangeGotoRound(round,resultsPage){
         //alert(round);
-        
-        this.navCtrl.push('ScorekeeperFinalsRoundPage',this.buildNavParams({"round":round,"finalId":this.finalId,"totalRounds":this.totalRounds}));        
+        var page = "";
+        if(resultsPage){
+            page = "ResultsFinalsRoundsPage";   
+        } else {
+            page = "ScorekeeperFinalsRoundPage";   
+        }
+        this.navCtrl.push(page,this.buildNavParams({"round":round,"finalId":this.finalId,"totalRounds":this.totalRounds}));        
     }
     
     generateCompleteRoundProcessor(){

@@ -1,0 +1,1 @@
+select count(token_count),token_count from token_purchase_summaries,token_purchases where token_purchase_summaries.token_purchase_id=token_purchases.token_purchase_id and tournament_id=1 and stripe_purchase=false group by token_count ;

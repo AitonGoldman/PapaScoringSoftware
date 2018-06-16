@@ -1,3 +1,4 @@
+
 def generate_event_players_info_class(db_handle):    
     class EventPlayersInfo(db_handle.Model):        
         player_id=db_handle.Column('player_id', db_handle.Integer,
@@ -9,7 +10,7 @@ def generate_event_players_info_class(db_handle):
                                                                         db_handle.Integer,
                                                                         db_handle.ForeignKey('tournaments.tournament_id'))
         team_id = db_handle.Column('team_id', db_handle.Integer, db_handle.ForeignKey('teams.team_id'))
-
+        email_address = db_handle.Column(db_handle.String(80))
     return EventPlayersInfo
     
 

@@ -39,14 +39,15 @@ def remove_player_with_notification(player,app,tournament_machine, event_id,audi
                 if audit_log_action:
                     audit_log_params={
                         'action':'Player removed from queue',
-                        'player_id':player.player_id,
-                        'pss_user_id':current_user.pss_user_id,
+                        'player_id':player.player_id,                        
                         'player_initiated':False,        
                         'description':'Player %s removed from %s queue because %s' % (player,tournament_machine_to_remove_from.tournament_machine_name,audit_log_action),
                         'tournament_machine_id':tournament_machine_to_remove_from.tournament_machine_id,
                         'event_id':event_id
                     }
-                    
+                    if player != current_user:
+                        audit_log_params['pss_user_id']=current_user.pss_user_id
+
                     app.table_proxy.create_audit_log(audit_log_params,event_id)                    
         except Exception as e:            
             app.table_proxy.db_handle.session.commit()            

@@ -5,6 +5,7 @@ from flask import jsonify,current_app,request
 from flask_login import current_user
 from lib_v2.serializers import generic
 import json
+from flask_mail import Message
 
 def get_discount_price(tournament):
     if tournament.use_stripe:
@@ -122,7 +123,10 @@ def insert_tokens_into_db(list_of_tournament_tokens, player,
         meta_tournament = token_count.get('meta_tournament',None)                
         if tournament and tournament.team_tournament and player.event_info[0].team_id is None:
             continue
-        ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,event_id, tournament=tournament,meta_tournament=meta_tournament)          
+        if not comped:
+            ticket_cost = calculate_cost_of_single_ticket_count(int(token_count['token_count']),player,app,event_id, tournament=tournament,meta_tournament=meta_tournament)
+        else:
+            ticket_cost = "comped"
         purchase_summary_dict = {                                 
                                  "token_count":token_count['token_count'],
                                  "ticket_cost":ticket_cost
@@ -229,7 +233,10 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
             token_purchase_summary.meta_tournament_id=purchase_summary['meta_tournament_id']
         token_purchase_summary.token_count=purchase_summary['token_count']            
                 
-    new_token_purchase.total_cost=sum(int(summary['ticket_cost']['price']) for summary in purchase_summaries)
+    if not input_data.get('comped',False):        
+        new_token_purchase.total_cost=sum(int(summary['ticket_cost']['price']) for summary in purchase_summaries)
+    else:
+        new_token_purchase.total_cost=20
     purchase_summary_string = ", ".join([" : ".join([str(summary.get('tournament_name',summary.get('meta_tournament_name'))),
                                                      str(summary['token_count'])]) for summary in purchase_summaries])    
     audit_log_params={'player_id':player.player_id,                      
@@ -248,6 +255,52 @@ def purchase_tickets_route(request, app, event_id, player_initiated=False, logge
     app.table_proxy.create_audit_log(audit_log_params,event_id)    
     return new_token_purchase,purchase_summaries
 
+def complete_prereg_player_token_purchase_route(request,app,event_id,token_purchase_id):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('No info in request')        
+    token_purchase = app.table_proxy.get_token_purchase_by_id(token_purchase_id)
+    if len(token_purchase.tokens)==0:
+        raise BadRequest('0 tickets were specified')
+    player_id = token_purchase.tokens[0].player_id
+    if token_purchase.completed_purchase:
+        raise BadRequest('You are trying to pay for something that is already paid for')
+
+    stripe_items=[]    
+    stripe_items.append({"quantity":1,"type":"sku","parent":'prereg_20'})
+    api_key = app.event_settings[event_id].stripe_api_key    
+    result = app.stripe_proxy.purchase_tickets(stripe_items,api_key,input_data['stripe_token'],input_data['email'],token_purchase)    
+    print "got result from stripe...."
+    print result
+    token_purchase.stripe_transaction_id=result.get('order_id_string',None)    
+    audit_log_params={
+        'action':'Player Ticket Purchase Complete',
+        'player_id':player_id,                      
+        'player_initiated':True,        
+        'description':token_purchase.stripe_transaction_id,
+        'event_id':event_id
+    }
+    app.table_proxy.create_audit_log(audit_log_params,event_id)
+    player = current_app.table_proxy.get_player(event_id,player_id)    
+    email_address=player.event_info[0].email_address
+    player_id_for_event=player.event_info[0].player_id_for_event
+    player_pin = player.pin
+    msg = Message("Registration for Intergalactic charity tournament",
+                  sender="papa.scoring.software@gmail.com",
+                  recipients=[email_address]
+                  )
+    #info = {'username':input_data['username'],
+    #        'first_name':input_data['first_name'],
+    #        'last_name':input_data['last_name'],
+    #        'email':input_data['email'],
+    #        'password':input_data['password']}    
+    msg.body = "Player %s has registered for the Intergalactic charity tournament on ??.  Your player id and pin is : \n Player Id : %s\nPin : %s" %(player.first_name+" "+player.last_name,player_id_for_event,player_pin)
+    current_app.mail.send(msg)
+    
+    return result,token_purchase
+
+    
 def complete_player_token_purchase_route(request,app, event_id, token_purchase_id):
     if request.data:        
         input_data = json.loads(request.data)
@@ -261,6 +314,7 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
         raise BadRequest('You are trying to pay for something that is already paid for')                
     stripe_items=[]
     for token_purchase_summary in token_purchase.token_purchase_summaries:
+        print "token purchase summary happening..."
         token_count=token_purchase_summary.token_count
         if token_purchase_summary.tournament_id:
             tournament=app.table_proxy.get_tournament_by_tournament_id(token_purchase_summary.tournament_id)
@@ -277,6 +331,8 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
             stripe_items.append({"quantity":normal_count,"type":"sku","parent":normal_sku})           
     api_key = app.event_settings[event_id].stripe_api_key    
     result = app.stripe_proxy.purchase_tickets(stripe_items,api_key,input_data['stripe_token'],input_data['email'],token_purchase)    
+    print "got result from stripe...."
+    print result
     token_purchase.stripe_transaction_id=result.get('order_id_string',None)    
     audit_log_params={
         'action':'Player Ticket Purchase Complete',
@@ -305,7 +361,15 @@ def event_user_purchase_tokens(event_id):
     return jsonify({'new_token_purchase':to_dict(new_token_purchase),
                     'purchase_summary':purchase_summary,
                     'total_cost':new_token_purchase.total_cost})
-    
+
+def prereg_event_user_purchase_tokens(event_id,player,request):
+    request.data=json.dumps({'comped':True,'tournament_token_counts':[{'tournament_id':1,'token_count':15}]})
+    new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=True,logged_in_player=player)            
+
+    current_app.table_proxy.commit_changes()    
+    #total_cost = sum(int(summary['ticket_cost']['price']) for summary in purchase_summary)    
+    return new_token_purchase
+
 
 @blueprints.test_blueprint.route('/<int:event_id>/token/<token_purchase_id>',methods=['PUT'])
 def player_complete_purchase_tokens(event_id,token_purchase_id):
@@ -322,4 +386,14 @@ def player_complete_purchase_tokens(event_id,token_purchase_id):
     #                'purchase_summary':purchase_summary,
     #                'total_cost':new_token_purchase.total_cost})
 
+    return jsonify({})
+
+@blueprints.test_blueprint.route('/<int:event_id>/prereg-token/<token_purchase_id>',methods=['PUT'])
+def prereg_player_complete_purchase_tokens(event_id,token_purchase_id):
+        
+    result,token_purchase = complete_prereg_player_token_purchase_route(request,current_app, event_id, token_purchase_id)
+    if result.get('error_text',None):
+        raise BadRequest(result['error_text'])
+    else:            
+        current_app.table_proxy.commit_changes()
     return jsonify({})

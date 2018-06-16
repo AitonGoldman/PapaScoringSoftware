@@ -6,6 +6,7 @@ from flask_login import current_user
 from lib_v2.serializers import generic
 from lib_v2.queue_helpers import remove_player_with_notification
 import json
+from celery_app.celery_app import send_indiv_message
 
 def bump_player_down_queue_route(request,app,event_id,current_user):
     if request.data:        
@@ -215,3 +216,12 @@ def modify_player_position_in_queue(event_id):
     tournament_machine_dict=generic.serialize_tournament_machine_public(tournament_machine,generic.TOURNAMENT_MACHINE_AND_QUEUES)            
     return jsonify({'data':tournament_machine_dict})
     pass
+
+@blueprints.test_blueprint.route('/test_fcm',methods=['GET'])
+def test_fcm():
+    player = current_app.table_proxy.get_player(1,player_id=1)
+    send_indiv_message.delay('test','test message',player.ioniccloud_push_token)
+    response = jsonify({})
+    response.set_cookie('poop','pooping')
+    return response
+#'efbKkf8mQEM:APA91bEtd9uFSdBg949Z_NdZD6iCKo0d1SDD1iVbcob1EMHLsuA9MPfu7G89KmEm4YYNLvf-RCcmhHKio_-MWlpm7mTRsA1ExIkI-ScvRTz2RxdxDyb7ILRv52B_gwVby2tiaThvUOjV'

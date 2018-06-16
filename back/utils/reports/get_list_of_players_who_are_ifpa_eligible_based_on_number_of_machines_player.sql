@@ -1,0 +1,1 @@
+"select players.first_name, players.last_name, counts.player_id,count(*) from (select tournament_machine_id, player_id from scores where tournament_id=2 group by tournament_machine_id,player_id order by tournament_machine_id,player_id) as counts,players where counts.player_id=players.player_id group by counts.player_id,players.first_name,players.last_name order by count(*)"

@@ -7,7 +7,7 @@ import json
 from time import sleep
 from shutil import copyfile
 from flask_restless.helpers import to_dict
-from routes_v2.token import calculate_list_of_tickets_and_prices_for_player
+from routes_v2.token import calculate_list_of_tickets_and_prices_for_player,prereg_event_user_purchase_tokens
 
 def handle_img_upload(input_data):
     event_img_folders=current_app.config['IMG_HTTP_SRV_DIR']
@@ -26,7 +26,7 @@ def edit_player_route(request,app,event_id):
     player = app.table_proxy.edit_player(input_data,False)        
     return player
 
-def create_player_route(request,tables_proxy,event_id):
+def create_player_route(request,tables_proxy,event_id,perform_existing_player_check=True):
     #FIXME : check if user is already added to event
     if request.data:        
         input_data = json.loads(request.data)
@@ -39,16 +39,18 @@ def create_player_route(request,tables_proxy,event_id):
     players_added_to_event=[]        
     for player_to_create in players_to_create:        
         handle_img_upload(player_to_create)
-        if 'player_id' in player_to_create:            
+        if 'player_id' in player_to_create and player_to_create.get('player_id'):            
             player = tables_proxy.get_player(event_id,player_id=player_to_create['player_id'])
             if player is None:
                 raise BadRequest('Tried to submit a player with an invalid player_id')            
-            if len([event_info for event_info in player.event_info if event_info.event_id==int(event_id)])>0:
+            if len([event_info for event_info in player.event_info if event_info.event_id==int(event_id)])>0 and perform_existing_player_check:
                 raise BadRequest('Player already added to event')                
-            
+            email_address=player_to_create['email_address']
+                
             tables_proxy.update_player_roles(event_id, player,
                                              player_to_create.get('ifpa_ranking',None),
-                                             player_to_create.get('selected_division_in_multi_division_tournament',None))
+                                             player_to_create.get('selected_division_in_multi_division_tournament',None),
+                                             email_address=email_address)
             if player_to_create.get('img_url',None):
                 player.img_url=player_to_create['img_url']
                 player.has_pic=True
@@ -59,7 +61,7 @@ def create_player_route(request,tables_proxy,event_id):
                                                    first_name=player_to_create['first_name'],
                                                    last_name=player_to_create['last_name'],
                                                    extra_title=player_to_create.get('extra_title',None))
-        if len(existing_players)>0:            
+        if len(existing_players)>0 and perform_existing_player_check:            
             raise BadRequest('Oops - that player already exists')
         new_player = tables_proxy.create_player(player_to_create['first_name'],
                                                player_to_create['last_name'],
@@ -67,9 +69,11 @@ def create_player_route(request,tables_proxy,event_id):
                                                img_url=player_to_create.get('img_url',None))
         if new_player.img_url:
             new_player.has_pic=True
+        email_address=input_data['players'][0].get('email_address',None)
         tables_proxy.update_player_roles(event_id, new_player,
                                         player_to_create.get('ifpa_ranking',None),
-                                        player_to_create.get('selected_division_in_multi_division_tournament',None))        
+                                         player_to_create.get('selected_division_in_multi_division_tournament',None),
+                                         email_address=email_address)        
         players_added_to_event.append(new_player)    
     return players_added_to_event
 
@@ -119,13 +123,47 @@ def player_create(event_id):
     #current_app.table_proxy.initialize_event_specific_relationship(event_id)
     permission = permissions.CreatePlayerPermission(event_id)    
     if not permission.can():
-        raise Unauthorized('You are not authorized to register players for this event')            
-    new_players=create_player_route(request,current_app.table_proxy,event_id)
+        raise Unauthorized('You are not authorized to register players for this new')            
+    event_players=create_player_route(request,current_app.table_proxy,event_id)
     current_app.table_proxy.commit_changes()            
     new_players_serialized = [generic.serialize_player_private(new_player,generic.PLAYER_AND_EVENTS) for new_player in new_players]    
     return jsonify({'data':new_players_serialized})
     #return jsonify({'data':[{'player_full_name':'poop'}]})
 
+@blueprints.test_blueprint.route('/<int:event_id>/prereg_player',methods=['POST'])
+def prereg_player_create(event_id):    
+    input_data = json.loads(request.data)            
+    player = input_data['players'][0]
+    event = current_app.table_proxy.get_event_by_event_id(event_id)
+    
+    player_name = player['first_name']+" "+player['last_name']
+    if player['extra_title']:
+        player_name = player_name+" "+extra_title
+    players_found_list = search_for_players(player_name,event_id)    
+    if len(players_found_list) == 1:
+        historical_tokens = current_app.table_proxy.get_historical_tokens_for_player(event_id,players_found_list[0]['player_id'])
+        print len(historical_tokens)
+        if historical_tokens and len(historical_tokens)>0:            
+            return jsonify({'data':[],'status':'existing'})
+        else:
+            ## make sure to insert email addess if not already present
+            player = current_app.table_proxy.get_player(event_id,players_found_list[0]['player_id'])
+            token_purchase = prereg_event_user_purchase_tokens(event_id,player,request)
+            new_player_serialized = generic.serialize_player_private(player,generic.PLAYER_AND_EVENTS)
+            new_player_serialized['event_player_id']=new_player_serialized['events'][0]['player_id_for_event']
+            return jsonify({'data':new_player_serialized,'status':'unpaid','token_purchase':to_dict(token_purchase),'stripe_key':event.stripe_public_key,})
+        
+    if len(players_found_list) > 1:
+        return jsonify({'data':[],'status':'multiple'})        
+    event_players=create_player_route(request,current_app.table_proxy,event_id,perform_existing_player_check=False)
+    token_purchase = prereg_event_user_purchase_tokens(event_id,event_players[0],request)
+    current_app.table_proxy.commit_changes()            
+    new_player_serialized = generic.serialize_player_private(event_players[0],generic.PLAYER_AND_EVENTS)    
+    new_player_serialized['event_player_id']=new_player_serialized['events'][0]['player_id_for_event']    
+    
+    return jsonify({'data':new_player_serialized,'token_purchase':to_dict(token_purchase),'stripe_key':event.stripe_public_key,'status':'created'})
+    #return jsonify({'data':[{'player_full_name':'poop'}]})
+    
 @blueprints.test_blueprint.route('/<int:event_id>/event_player/<int:event_player_id>',methods=['GET'])
 def get_event_player(event_id,event_player_id):                
     event_player_info = get_event_player_route(current_app,event_id,event_player_id)
@@ -199,8 +237,10 @@ def search_all_event_players(event_id,query_string):
     #     player_max_index=len(players)
     # players_found_list=[generic.serialize_player_public(player,generic.PLAYER_AND_EVENTS) for player in players[0:player_max_index]]    
     # #current_app.table_proxy.commit_changes()
-    players_found_list = search_for_players(query_string,event_id) 
-    return jsonify({'data':players_found_list})
+    event=current_app.table_proxy.get_event_by_event_id(event_id)    
+
+    players_found_list = search_for_players(query_string,event_id)
+    return jsonify({'data':players_found_list,'event':generic.serialize_event_public(event)})
     #return jsonify(players_found_list)
     
 @blueprints.test_blueprint.route('/players',methods=['GET'])

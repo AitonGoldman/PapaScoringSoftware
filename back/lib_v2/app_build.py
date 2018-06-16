@@ -15,6 +15,8 @@ from lib_v2.PssConfig import PssConfig
 from lib_v2.TableProxy import TableProxy
 from werkzeug.wsgi import pop_path_info, peek_path_info
 from StripeProxy import StripeProxy
+from werkzeug.exceptions import BadRequest
+import json
 
 def make_celery(app):
 
@@ -30,12 +32,13 @@ def make_celery(app):
     celery.Task = ContextTask
     return celery
 
-def generate_celery_method(app):
-    @app.celery.task()
-    def add_together(a, b):
-        return a + b
-    return add_together
+#def generate_celery_method(app):
+#    @app.celery.task()
+#    def add_together(a, b):
+#        return a + b
+#    return add_together
 
+ 
 def configure_base_app(app):    
     app.config['DEBUG']=True
     app.config['UPLOAD_FOLDER']='/tmp'
@@ -66,8 +69,9 @@ def configure_base_app(app):
         app.error_handler_spec[None][code] = make_json_error
     #FIXME : THIS SHOULD COME FROM THE DB
     app.secret_key = os.getenv("FLASK_SECRET_KEY")
-    app.celery = make_celery(app)
-    app.test_celery = generate_celery_method(app)
+    #app.celery = make_celery(app)
+    #app.test_celery = generate_celery_method(app)
+    
     return app
 
 def make_json_error(ex):
@@ -95,13 +99,19 @@ def get_event_name_from_request():
     #print request.environ    
 
 def generate_event_settings_hash_setter(app):
-    def event_settings_hash_setter():
+    def event_settings_hash_setter():        
         app.event_settings={}
         events = app.table_proxy.Events.query.all()
         for event in events:
             app.event_settings[event.event_id]=event
     return event_settings_hash_setter
 
+def generate_check_for_correct_client_version(app):
+    def check_for_correct_client_version():
+        if 'version' in request.args and request.args['version']=='3':
+            return
+        raise BadRequest('The version of the Papa Scoring Software you are using is no longer supported.  You must upgrade to the newest version.')
+    return check_for_correct_client_version            
 def build_app(app):    
     pss_config = PssConfig()
     pss_config.get_db_info().check_database_exists()
@@ -110,6 +120,8 @@ def build_app(app):
     app.table_proxy=TableProxy()
     app.table_proxy.initialize_tables(app.db_handle)    
     app.before_request(generate_event_settings_hash_setter(app))
+    app.before_request(generate_check_for_correct_client_version(app))    
+    
     configure_base_app(app)
     principal_identity_funcs.generate_pss_user_loader(app)
     principal_identity_funcs.generate_pss_user_identity_loaded(app)

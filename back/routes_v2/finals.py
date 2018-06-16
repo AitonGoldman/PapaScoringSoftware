@@ -8,12 +8,12 @@ from flask_restless.helpers import to_dict
 from lib_v2.serializers import generic
 
 bracket_template={}    
-bracket_template[24]={
-    'num_rounds':4,
-    'num_matches_per_round':[4,4,2,1],
-    'bye_rounds':[2],
-    'bye_players_rank_per_match':{ 2 : [[1,8],[2,7],[3,6],[4,5]]},
-    'number_bye_players':8
+bracket_template[40]={
+    'num_rounds':5,
+    'num_matches_per_round':[6,6,4,2,1],
+    'bye_rounds':[2,3],
+    'bye_players_rank_per_match':{ 2 : [[5,16],[6,15],[7,14],[8,13],[9,12],[10,11]], 3: [[1,4],[2,3]]},
+    'number_bye_players':16
 }
 
 bracket_template[16]={
@@ -70,6 +70,7 @@ def get_players_for_match(players_with_ranks):
 
 @blueprints.test_blueprint.route('/<int:event_id>/brackets/<int:tournament_id>/<finals_name>',methods=['POST'])
 def generate_brackets(event_id, tournament_id,finals_name):
+    print "generating brackets..."
     tournament = current_app.table_proxy.get_tournament_by_tournament_id(tournament_id)
     if request.data:        
         input_data = json.loads(request.data)
@@ -109,6 +110,8 @@ def generate_brackets(event_id, tournament_id,finals_name):
                 continue
             if(round_index+1 in bracket_template[num_qualifiers]['bye_rounds']):
                 bye_template = bracket_template[num_qualifiers]['bye_players_rank_per_match'][round_index+1]
+                if len(bye_template)==0:
+                    continue
                 bye_player_ranks = bye_template.pop()
                 bye_player = bye_players[bye_player_ranks[0]-1]
                 finals_match.bye_player_one_finals_player_id=bye_player['finals_player_id']
@@ -570,6 +573,7 @@ def get_final(event_id, final_id):
 def get_tiebreakers(event_id, tournament_id,finals_name):
     tournament = current_app.table_proxy.get_tournament_by_tournament_id(tournament_id)
     important_tiebreaker_boundry_ranks={}
+    important_tiebreaker_boundry_ranks[40]=[4,16,40]    
     important_tiebreaker_boundry_ranks[24]=[8,24]    
     important_tiebreaker_boundry_ranks[16]=[16]    
     

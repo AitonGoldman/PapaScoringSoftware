@@ -1,3 +1,4 @@
+from werkzeug.exceptions import BadRequest, Unauthorized
 import datetime
 import random
 import os 
@@ -364,11 +365,14 @@ class TableProxy():
                             event_id, player,
                             ifpa_ranking=None,
                             selected_division_in_multi_division_tournament=None,
-                            commit=False):                
+                            commit=False,
+                            email_address=None):                
         event = self.get_event_by_event_id(event_id)
         event_player_info = self.EventPlayersInfo()
         event_player_info.event_id=event_id
-        event_player_info.player_id=player.player_id        
+        event_player_info.player_id=player.player_id
+        if email_address:
+            event_player_info.email_address=email_address
         if ifpa_ranking:
             event_player_info.ifpa_ranking=ifpa_ranking
         if selected_division_in_multi_division_tournament:
@@ -491,7 +495,11 @@ class TableProxy():
             if extra_title:
                 query = query.filter_by(extra_title=extra_title)
             return query.all()
-            
+        
+    def get_historical_tokens_for_player(self, event_id, player_id):
+        query = self.Tokens.query.filter_by(event_id=event_id,player_id=player_id,paid_for=True)
+        return query.all()
+    
     def get_token_purchase_by_id(self,token_purchase_id):
         return self.TokenPurchases.query.filter_by(token_purchase_id=token_purchase_id).first()
 

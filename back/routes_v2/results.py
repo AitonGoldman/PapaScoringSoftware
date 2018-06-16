@@ -156,8 +156,8 @@ def test_tournament_results(event_id, tournament_id):
 def test_player_results_by_player_id(event_id, player_id):
     player = current_app.table_proxy.get_player(event_id,player_id=player_id)
     
-    return test_player_results(event_id,player.event_info[0].player_id_for_event)    
-
+    results = test_player_results(event_id,player.event_info[0].player_id_for_event)    
+    return results
 
 @blueprints.test_blueprint.route('/<int:event_id>/test_player_results/<int:event_player_id>',methods=['GET'])
 def test_player_results(event_id, event_player_id):
@@ -186,7 +186,7 @@ def test_player_results(event_id, event_player_id):
         tournament_machines=current_app.table_proxy.get_tournament_machines(tournament.tournament_id)
         for tournament_machine in tournament_machines:
            tournament_machines_dict[tournament_machine.tournament_machine_id]=to_dict(tournament_machine)        
-        query = getTournamentResultsQuery(tournament.tournament_id,4)            
+        query = getTournamentResultsQuery(tournament.tournament_id,tournament.number_of_signifigant_scores)            
         machine_query = getTournamentMachineResultsQuery(tournament_id=tournament.tournament_id)            
         results = [result for result in current_app.table_proxy.db_handle.engine.execute(query)]                                
         machine_results = [result for result in current_app.table_proxy.db_handle.engine.execute(machine_query)]                                    
@@ -206,6 +206,7 @@ def test_player_results(event_id, event_player_id):
                                                                                   'tournament_machine_name':tournament_machines_dict[i.tournament_machine_id]['tournament_machine_name'],
                                                                                   "abbreviation":tournament_machines_dict[i.tournament_machine_id]['tournament_machine_abbreviation'],
                                                                                   "rank":get_rank_from_papa_points(i.machine_rank),
+                                                                                  "papa_points":i.machine_rank,
                                                                                   "score":i.score})        
 
     for tournament_id,tournament_results in ranked_results_dict.iteritems():                
@@ -223,6 +224,10 @@ def test_player_results(event_id, event_player_id):
             pass    
     event_player_info['data']['values']=values
     #return jsonify({'data':values})
+    f= open("/tmp/lax-player-%s.txt"% event_player_id,"w+")
+    f.write(json.dumps(event_player_info))
+    f.close()
+    
     return jsonify(event_player_info)
 
 

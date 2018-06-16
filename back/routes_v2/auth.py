@@ -105,4 +105,5 @@ def event_player_login(event_id):
     if login_user(player) is False:
         raise Unauthorized('Player is not active')
     identity_changed.send(current_app._get_current_object(), identity=Identity("player_%s"%player.player_id))            
+    current_app.table_proxy.commit_changes()
     return jsonify({'data':generic.serialize_player_public(player,generic.PLAYER_AND_EVENTS)})        

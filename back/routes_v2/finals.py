@@ -24,6 +24,13 @@ bracket_template[16]={
     'number_bye_players':0
 }
 
+bracket_template[12]={
+    'num_rounds':3,
+    'num_matches_per_round':[2,2,1],
+    'bye_rounds':[2],
+    'bye_players_rank_per_match':{ 2 : [[1,4],[2,3]]},
+    'number_bye_players':4
+}
 
 def reset_finals_players(tournament_id):
     for finals_player in current_app.table_proxy.get_all_finals_players(tournament_id):
@@ -575,7 +582,8 @@ def get_tiebreakers(event_id, tournament_id,finals_name):
     important_tiebreaker_boundry_ranks={}
     important_tiebreaker_boundry_ranks[40]=[4,16,40]    
     important_tiebreaker_boundry_ranks[24]=[8,24]    
-    important_tiebreaker_boundry_ranks[16]=[16]    
+    important_tiebreaker_boundry_ranks[16]=[16]
+    important_tiebreaker_boundry_ranks[12]=[4,12]    
     
     if tournament.finals_style=="PAPA":
         num_qualifiers = tournament.number_of_qualifiers

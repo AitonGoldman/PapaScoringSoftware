@@ -129,12 +129,13 @@ export class EventComponent  extends PssPageComponent {
                                                   this.destPageAfterSuccess,
                                                   this.buildNavParams({wizardMode:this.wizardMode}));            
             this.navCtrl.push("SuccessPage",            
-                              this.buildNavParams({'successSummary':successSummary,
+                              this.buildNavParams({'ignoreEventId':true,
+                                                   'successSummary':successSummary,
                                                    'successButtons':[successButton]}));
         };
     }
 
-    wizardCreateEventSubmit(){
+    wizardCreateEventSubmit(){        
         let success_title_string='Event '+this.entity['name']+' has been recorded.';
         let success_first_line='Click "Proceed" button to proceed.';
         
@@ -145,14 +146,15 @@ export class EventComponent  extends PssPageComponent {
                                                                    wizardEntity:{'event':this.entity},
                                                                    actionType:'create'}));            
         this.navCtrl.push("SuccessPage",            
-                          this.buildNavParams({'successSummary':successSummary,
+                          this.buildNavParams({'ignoreEventId':true,
+                                               'successSummary':successSummary,
                                                'successButtons':[successButton]}));
         
     }
     
     processEntity(){
         
-        if(this.wizardMode!=null){
+        if(this.wizardMode!=null && this.wizardMode==true){
             this.wizardCreateEventSubmit();
             return
         }

@@ -29,7 +29,7 @@
   <div *ngIf='eventAuth.getRoleName(null)=="eventowner"'>
     <h1><b>Event Creation</b></h1>
     <ion-list>
-      <button detail-none ion-item no-lines [navPush]="'CreateEventPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':true,'entityType':'event'})">
+      <button detail-none ion-item no-lines [navPush]="'CreateEventPage'" [navParams]="buildNavParams({actionType:'create','wizardMode':false,'entityType':'event'})">
         <ion-icon item-start name="ios-add-circle-outline"></ion-icon> Create Event 
       </button>
     </ion-list>

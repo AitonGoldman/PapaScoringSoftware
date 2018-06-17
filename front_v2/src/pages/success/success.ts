@@ -32,8 +32,8 @@ export class SuccessPage extends PssPageComponent{
       console.log('hoooohaw')
       console.log(this.navParams.data);
       if(this.eventId==null && this.navParams.get('ignoreEventId')!=true){
-            this.pushRootPage('EventSelectPage')
-            return;
+          //this.pushRootPage('EventSelectPage')
+          return;
         }
 
       this.successSummary = this.navParams.get('successSummary');
@@ -42,6 +42,6 @@ export class SuccessPage extends PssPageComponent{
       console.log('ionViewDidLoad SuccessPage');
   }
     goToEventSelectOnPageReload(){
-      this.appCtrl.getRootNav().push('EventSelectPage');        
+      //this.appCtrl.getRootNav().push('EventSelectPage');        
     }
 }

@@ -27,10 +27,10 @@
             <button tappable ion-item detail-none (click)="publishQuickLinksPlayerPush('PlayerInfoPage',buildNavParams({playerId:eventAuth.getPlayerId(eventId)}))" *ngIf="eventAuth.getRoleName(eventId)=='player'">
         <ion-icon item-end name="ios-arrow-forward"></ion-icon>My Info (Tickets,Results,Etc)
       </button>
-      <button ion-item detail-none *ngIf="eventAuth.getRoleName(eventId)=='player'" tappable [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
+<!--      <button ion-item detail-none *ngIf="eventAuth.getRoleName(eventId)=='player'" tappable [navPush]="'TicketPurchasePage'" [navParams]="buildNavParams({player_id_for_event:eventAuth.getEventPlayerId(eventId)})">
         Ticket Purchase
         <ion-icon item-end name="ios-arrow-forward"></ion-icon>
-      </button>
+      </button>-->
             
       <ion-item-divider margin-top color="item-divider">
         Tournament Results

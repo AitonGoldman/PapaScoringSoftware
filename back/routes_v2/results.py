@@ -224,9 +224,9 @@ def test_player_results(event_id, event_player_id):
             pass    
     event_player_info['data']['values']=values
     #return jsonify({'data':values})
-    f= open("/tmp/lax-player-%s.txt"% event_player_id,"w+")
-    f.write(json.dumps(event_player_info))
-    f.close()
+    #f= open("/tmp/lax-player-%s.txt"% event_player_id,"w+")
+    #f.write(json.dumps(event_player_info))
+    #f.close()
     
     return jsonify(event_player_info)
 

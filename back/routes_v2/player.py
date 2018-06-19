@@ -45,7 +45,7 @@ def create_player_route(request,tables_proxy,event_id,perform_existing_player_ch
                 raise BadRequest('Tried to submit a player with an invalid player_id')            
             if len([event_info for event_info in player.event_info if event_info.event_id==int(event_id)])>0 and perform_existing_player_check:
                 raise BadRequest('Player already added to event')                
-            email_address=player_to_create['email_address']
+            email_address=player_to_create.get('email_address',None)
                 
             tables_proxy.update_player_roles(event_id, player,
                                              player_to_create.get('ifpa_ranking',None),
@@ -126,7 +126,8 @@ def player_create(event_id):
         raise Unauthorized('You are not authorized to register players for this new')            
     event_players=create_player_route(request,current_app.table_proxy,event_id)
     current_app.table_proxy.commit_changes()            
-    new_players_serialized = [generic.serialize_player_private(new_player,generic.PLAYER_AND_EVENTS) for new_player in new_players]    
+    new_players_serialized = [generic.serialize_player_private(new_player,event_id=event_id) for new_player in event_players]
+    #new_players_serialized = [generic.serialize_player_private(new_player,generic.PLAYER_AND_EVENTS) for new_player in new_players]    
     return jsonify({'data':new_players_serialized})
     #return jsonify({'data':[{'player_full_name':'poop'}]})
 
@@ -148,6 +149,7 @@ def prereg_player_create(event_id):
         else:
             ## make sure to insert email addess if not already present
             player = current_app.table_proxy.get_player(event_id,players_found_list[0]['player_id'])
+            # FIXME : pass in tournament id here
             token_purchase = prereg_event_user_purchase_tokens(event_id,player,request)
             new_player_serialized = generic.serialize_player_private(player,generic.PLAYER_AND_EVENTS)
             new_player_serialized['event_player_id']=new_player_serialized['events'][0]['player_id_for_event']

@@ -105,6 +105,7 @@ def serialize_player_private(model,type_of=PLAYER_ONLY, event_id=None):
         events = [event_info for event_info in model.event_info if event_info.event_id==event_id]
         if len(events)>0:
             player_dict['player_id_for_event']=events[0].player_id_for_event
+            player_dict['events']=[to_dict(events[0])]
     if type_of==PLAYER_AND_EVENTS:            
         if model.event_info:
             player_dict['events']=[serialize_event_players_info_public(event_info_instance) for event_info_instance in model.event_info]

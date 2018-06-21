@@ -127,7 +127,7 @@ export class PlayerInfoPage extends AutoCompleteComponent {
         return (result)=>{
             if(result==null){
                 return;
-            }
+            }            
             console.log(result);
             this.selectedPlayer=result.data;            
             this.ticketCounts=this.generateListFromObj(result.tournament_counts);                        

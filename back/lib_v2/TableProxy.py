@@ -35,6 +35,7 @@ import warnings
 from sqlalchemy import exc as sa_exc,func
 from flask import Flask
 from lib.PssConfig import PssConfig
+from sqlalchemy import and_
 
 #from pss_models_v2.TestMapping import generate_test_class
 
@@ -473,7 +474,7 @@ class TableProxy():
         return self.Players.query.join(self.EventPlayersInfo).filter_by(event_id=event_id).all()
         
     def get_event_player(self,event_id,event_player_id):        
-        return self.Players.query.filter(self.Players.event_info.any(self.EventPlayersInfo.event_id==event_id)).filter(self.Players.event_info.any(self.EventPlayersInfo.player_id_for_event==event_player_id)).first()
+        return self.Players.query.filter(self.Players.event_info.any(and_(self.EventPlayersInfo.player_id_for_event==event_player_id,self.EventPlayersInfo.event_id==event_id))).first()
     
     #, 
 

@@ -7,7 +7,7 @@ import json
 from time import sleep
 from shutil import copyfile
 from flask_restless.helpers import to_dict
-from routes_v2.token import calculate_list_of_tickets_and_prices_for_player,prereg_event_user_purchase_tokens
+from routes_v2.token import calculate_list_of_tickets_and_prices_for_player,prereg_event_user_purchase_tokens,purchase_tickets_route
 
 def handle_img_upload(input_data):
     event_img_folders=current_app.config['IMG_HTTP_SRV_DIR']
@@ -80,7 +80,7 @@ def create_player_route(request,tables_proxy,event_id,perform_existing_player_ch
 
 
 def get_event_player_route(app,event_id,event_player_id):
-    event_player = app.table_proxy.get_event_player(event_id,event_player_id)
+    event_player = app.table_proxy.get_event_player(event_id,event_player_id)    
     tournament_calculated_lists=[]
     if event_player:
         tournament_counts, meta_tournament_counts = app.table_proxy.get_available_token_count_for_tournaments(event_id,event_player)
@@ -136,6 +136,29 @@ def player_create(event_id):
     return jsonify(return_json)
     #return jsonify({'data':[{'player_full_name':'poop'}]})
 
+@blueprints.test_blueprint.route('/<int:event_id>/prereg_player',methods=['POST'])
+def desk_worker_prereg_player_create(event_id):                
+    permission = permissions.CreatePlayerPermission(event_id)    
+    if not permission.can():
+        raise Unauthorized('You are not authorized to register players for this new')            
+    event_players=create_player_route(request,current_app.table_proxy,event_id)
+    event = current_app.table_proxy.get_event_by_event_id(event_id)
+    tournament_id = [tournament for tournament in event.tournaments if tournament.scoring_style.lower()=="HERB_Limited".lower()][0].tournament_id    
+    request.data=json.dumps({'player_id':event_players[0].player_id,'comped':True,'tournament_token_counts':[{'tournament_id':tournament_id,'token_count':10}]})
+    purchase_tickets_route(request,current_app,event_id,player_initiated=False,current_user=current_user)    
+    current_app.table_proxy.commit_changes()            
+    new_players_serialized = [generic.serialize_player_private(new_player,event_id=event_id) for new_player in event_players]
+    #new_players_serialized = [generic.serialize_player_private(new_player,generic.PLAYER_AND_EVENTS) for new_player in new_players]
+    
+    return_json = {'data':new_players_serialized}
+    if event.require_pics:
+        return_json['require_pic']=True
+    return_json['prereg']=True
+    
+    return jsonify(return_json)
+    #return jsonify({'data':[{'player_full_name':'poop'}]})
+    
+    
 @blueprints.test_blueprint.route('/<int:event_id>/<int:tournament_id>/prereg_player',methods=['POST'])
 def prereg_player_create(event_id,tournament_id):    
     input_data = json.loads(request.data)    

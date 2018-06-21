@@ -349,7 +349,7 @@ def event_user_purchase_tokens(event_id):
     input_data = json.loads(request.data)
     desk_permission = permissions.DeskTokenPurchasePermission(event_id)
     if desk_permission.can():                
-        new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=False,current_user=current_user)            
+        new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=False,current_user=current_user)
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)
     if player_permission.can():
         if input_data.get('comped',False) is True:

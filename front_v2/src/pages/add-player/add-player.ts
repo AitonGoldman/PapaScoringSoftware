@@ -38,14 +38,19 @@ export class AddPlayerPage extends AutoCompleteComponent {
             let successButtonHome = new SuccessButton('Go Home',
                                                   this.getHomePageString(this.eventId),
                                                       this.buildNavParams({}));
-            let successButtonTickets = new SuccessButton('Purchase Tickets',
-                                                         'TicketPurchasePage',
-                                                         this.buildNavParams({player_id_for_event:result.data[0].events[0].player_id_for_event}));            
+            let successButtonsList = [successButtonHome]            
+            if(result['prereg']==undefined){
+                let successButtonTickets = new SuccessButton('Purchase Tickets',
+                                                             'TicketPurchasePage',
+                                                             this.buildNavParams({player_id_for_event:result.data[0].events[0].player_id_for_event}));
+                successButtonsList.push(successButtonTickets);
+            }
+            
             
             this.navCtrl.push("PostPlayerAddSuccessPage",            
                               this.buildNavParams({'requirePic':result['require_pic'],
                                                    'successSummary':successSummary,
-                                                   'successButtons':[successButtonHome,successButtonTickets],
+                                                   'successButtons':successButtonsList,
                                                    'playerId':result.data[0].player_id}));
         };
     }
@@ -183,8 +188,9 @@ export class AddPlayerPage extends AutoCompleteComponent {
         if(this.selectedPlayer.ifpa_ranking=='not ranked'){
             this.selectedPlayer.ifpa_ranking=99999;
         }
-        this.pssApi.addEventPlayers({players:[this.selectedPlayer]},this.eventId)
-            .subscribe(this.generateAddEventPlayersProcessor())                                                  
+        this.pssApi.addEventPreRegPlayers({players:[this.selectedPlayer]},this.eventId)
+        .subscribe(this.generateAddEventPlayersProcessor())
+            
 
     }
     

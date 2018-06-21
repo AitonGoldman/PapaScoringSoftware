@@ -362,9 +362,9 @@ def event_user_purchase_tokens(event_id):
                     'purchase_summary':purchase_summary,
                     'total_cost':new_token_purchase.total_cost})
 
-def prereg_event_user_purchase_tokens(event_id,player,request):
+def prereg_event_user_purchase_tokens(event_id,player,request,tournament_id):
     # FIXME : get tournament id passed in here
-    request.data=json.dumps({'comped':True,'tournament_token_counts':[{'tournament_id':1,'token_count':10}]})
+    request.data=json.dumps({'comped':True,'tournament_token_counts':[{'tournament_id':tournament_id,'token_count':10}]})
     new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=True,logged_in_player=player)            
 
     current_app.table_proxy.commit_changes()    

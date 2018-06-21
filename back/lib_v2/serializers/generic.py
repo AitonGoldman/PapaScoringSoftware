@@ -11,6 +11,8 @@ PSS_USER_WITH_ROLES='pss_user_with_roles'
 PLAYER_ONLY='player_only'
 PLAYER_AND_EVENTS='player_and_events'
 
+EVENT_ONLY='event_only'
+EVENT_AND_TOURNAMENTS='event_and_tournaments'
 TOURNAMENT_ONLY='tournament_only'
 TOURNAMENT_AND_TOURNAMENT_MACHINES='tournament_and_tournament_machines'
 META_TOURNAMENT_ONLY='meta_tournament_only'
@@ -150,8 +152,10 @@ def serialize_tournament_machine_public(model,type=TOURNAMENT_MACHINE_ONLY):
 
         return tournament_machine_dict
     
-def serialize_event_public(model):
-    event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model)    
+def serialize_event_public(model,type=EVENT_ONLY):
+    event_dict=serializer_v2(EVENT_PRIVATE_FIELDS).serialize_model(model)
+    if type==EVENT_AND_TOURNAMENTS:
+        event_dict['tournaments'] = [serialize_tournament_machine_public(tournament) for tournament in model.tournaments]
     return event_dict
 
 def serialize_event_private(model):

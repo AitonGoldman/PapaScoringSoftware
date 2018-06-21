@@ -59,7 +59,7 @@ def get_all_events():
         else:
             print "getting for NON admin..."
             events_list.append(generic.serialize_event_public(event))
-    
+            
     #time.sleep(10)
     #time.poop()
     return jsonify({'data':events_list})

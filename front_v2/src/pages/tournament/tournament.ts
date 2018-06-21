@@ -18,6 +18,10 @@ const tournamentDescriptions={
             'short':'Name of the tournament.',
             'long':'Name of the tournament (i.e. Classics I, Main A, etc).'
         },
+        'scoring_style':{
+            'short':'Style of scoring.',
+            'long':'Style of scoring (i.e. HERB, HERB_Limited, etc).'
+        },    
         'multi_division_tournament':{
             'short':'Multiple divisions.',
             'long':'Create a tournament with multiple divisions (i.e. Main A, Main B, Main C, etc).'
@@ -111,6 +115,7 @@ export class TournamentPage extends PssPageComponent {
         }
 
         this.entityFields.setField('tournament_name','text',true,false, tournamentDescriptions['tournament_name']);
+        this.entityFields.setField('scoring_style','text',false,true, tournamentDescriptions['scoring_style']);
         this.entityFields.setField('multi_division_tournament','boolean',true,false, tournamentDescriptions['multi_division_tournament']);
         this.entityFields.setField('division_count','number',true,false, tournamentDescriptions['division_count']);
         this.entityFields.setDependency('division_count','multi_division_tournament',true)

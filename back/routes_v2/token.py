@@ -282,9 +282,9 @@ def complete_prereg_player_token_purchase_route(request,app,event_id,token_purch
         'event_id':event_id
     }
     app.table_proxy.create_audit_log(audit_log_params,event_id)
-    player = current_app.table_proxy.get_player(event_id,player_id)    
-    email_address=player.event_info[0].email_address
-    player_id_for_event=player.event_info[0].player_id_for_event
+    player = current_app.table_proxy.get_player(event_id,player_id)        
+    email_address=[event_info for event_info in player.event_info if event_info.event_id==event_id][0].email_address
+    player_id_for_event=[event_info for event_info in player.event_info if event_info.event_id==event_id][0].player_id_for_event
     player_pin = player.pin
     msg = Message("Registration for Intergalactic charity tournament",
                   sender="papa.scoring.software@gmail.com",

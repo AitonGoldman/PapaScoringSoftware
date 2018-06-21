@@ -17,6 +17,7 @@ export class PostPlayerAddSuccessPage extends SuccessPage {
     postAddPlayerSuccess:boolean=true;
     playerId:number=null;
     picTaken:boolean=false;
+    requirePic:boolean=false;
     generateGetAllEventPlayersWithNoPicsProcessor(){
         return (result)=>{
             if(result==null){
@@ -50,6 +51,7 @@ export class PostPlayerAddSuccessPage extends SuccessPage {
 
         super.ionViewWillLoad();
         this.playerId = this.navParams.get('playerId');
+        this.requirePic = this.navParams.get('requirePic');
         console.log('ionViewDidLoad PostPlayerAddSuccessPage');
     }    
 }

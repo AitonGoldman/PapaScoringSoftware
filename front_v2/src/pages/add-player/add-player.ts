@@ -43,7 +43,8 @@ export class AddPlayerPage extends AutoCompleteComponent {
                                                          this.buildNavParams({player_id_for_event:result.data[0].events[0].player_id_for_event}));            
             
             this.navCtrl.push("PostPlayerAddSuccessPage",            
-                              this.buildNavParams({'successSummary':successSummary,
+                              this.buildNavParams({'requirePic':result['require_pic'],
+                                                   'successSummary':successSummary,
                                                    'successButtons':[successButtonHome,successButtonTickets],
                                                    'playerId':result.data[0].player_id}));
         };

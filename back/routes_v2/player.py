@@ -47,7 +47,7 @@ def create_player_route(request,tables_proxy,event_id,perform_existing_player_ch
             if len([event_info for event_info in player.event_info if event_info.event_id==int(event_id)])>0 and perform_existing_player_check:
                 raise BadRequest('Player already added to event')                
             email_address=player_to_create.get('email_address',None)
-                
+            print "adding player to event %s" %event_id    
             tables_proxy.update_player_roles(event_id, player,
                                              player_to_create.get('ifpa_ranking',None),
                                              player_to_create.get('selected_division_in_multi_division_tournament',None),
@@ -128,43 +128,47 @@ def player_create(event_id):
     event_players=create_player_route(request,current_app.table_proxy,event_id)
     current_app.table_proxy.commit_changes()            
     new_players_serialized = [generic.serialize_player_private(new_player,event_id=event_id) for new_player in event_players]
-    #new_players_serialized = [generic.serialize_player_private(new_player,generic.PLAYER_AND_EVENTS) for new_player in new_players]    
-    return jsonify({'data':new_players_serialized})
+    #new_players_serialized = [generic.serialize_player_private(new_player,generic.PLAYER_AND_EVENTS) for new_player in new_players]
+    event = current_app.table_proxy.get_event_by_event_id(event_id)
+    return_json = {'data':new_players_serialized}
+    if event.require_pics:
+        return_json['require_pic']=True
+    return jsonify(return_json)
     #return jsonify({'data':[{'player_full_name':'poop'}]})
 
 @blueprints.test_blueprint.route('/<int:event_id>/<int:tournament_id>/prereg_player',methods=['POST'])
 def prereg_player_create(event_id,tournament_id):    
-    input_data = json.loads(request.data)            
+    input_data = json.loads(request.data)    
     player = input_data['players'][0]
     event = current_app.table_proxy.get_event_by_event_id(event_id)
-    print "1"    
     player_name = player['first_name']+" "+player['last_name']
     if player['extra_title']:
         player_name = player_name+" "+extra_title
-    players_found_list = search_for_players(player_name,event_id)    
-    print "1a"
+    players_found_list = search_for_players(player_name,event_id)        
     if len(players_found_list) == 1:
-        historical_tokens = current_app.table_proxy.get_historical_tokens_for_player(event_id,players_found_list[0]['player_id'])
-        print len(historical_tokens)
-        if historical_tokens and len(historical_tokens)>0:            
-            print "2a"
+        historical_tokens = current_app.table_proxy.get_historical_tokens_for_player(event_id,players_found_list[0]['player_id'])        
+        if historical_tokens and len(historical_tokens)>0:                        
             return jsonify({'data':[],'status':'existing'})
-        else:
-            print "2b"            
+        else:            
             ## make sure to insert email addess if not already present
-            player = current_app.table_proxy.get_player(event_id,players_found_list[0]['player_id'])
-            # FIXME : pass in tournament id here
+            player = current_app.table_proxy.get_player(event_id,players_found_list[0]['player_id'])            
             token_purchase = prereg_event_user_purchase_tokens(event_id,player,request,tournament_id)
             new_player_serialized = generic.serialize_player_private(player,generic.PLAYER_AND_EVENTS)
             new_player_serialized['event_player_id']=new_player_serialized['events'][0]['player_id_for_event']
             return jsonify({'data':new_player_serialized,'status':'unpaid','token_purchase':to_dict(token_purchase),'stripe_key':event.stripe_public_key,})
         
     if len(players_found_list) > 1:
-        print "3a"        
-        return jsonify({'data':[],'status':'multiple'})        
-    print "3c"
-    event_players=create_player_route(request,current_app.table_proxy,event_id,perform_existing_player_check=False)
-    print "3b"    
+        return jsonify({'data':[],'status':'multiple'})
+    global_players_found_list = search_for_players(player_name)        
+    print global_players_found_list
+    
+    if len(global_players_found_list)==1:
+        old_json = json.loads(request.data)        
+        old_json['players'][0]['player_id']=global_players_found_list[0]['player_id']        
+
+        request.data = json.dumps(old_json)
+        print request.data
+    event_players=create_player_route(request,current_app.table_proxy,event_id,perform_existing_player_check=False)    
     token_purchase = prereg_event_user_purchase_tokens(event_id,event_players[0],request,tournament_id)
     current_app.table_proxy.commit_changes()            
     new_player_serialized = generic.serialize_player_private(event_players[0],generic.PLAYER_AND_EVENTS)    

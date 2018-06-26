@@ -339,6 +339,14 @@ class TableProxy():
             self.db_handle.session.commit()
         return event_role
 
+    def update_event_user_password(self,
+                                   event_id,
+                                   pss_user,
+                                   new_password):
+        pss_user.crypt_password(new_password)
+        self.db_handle.session.commit()
+        
+    
     def update_event_user_roles(self, event_role_ids,
                                 event_id, pss_user,
                                 commit=False):

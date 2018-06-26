@@ -24,8 +24,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-list style='margin:auto;background-color:red;width:200px' color='pss-home-header'>
-  <ion-item>
+  <ion-list style='margin:auto;width:200px'>
+  <ion-item color='light'>
     <ion-label>Select Round</ion-label>
     <ion-select #C (ionChange)="onChangeGotoRound(C.value,true)" >
       <ion-option *ngFor="let roundNum of rounds" value="{{roundNum}}">{{roundNum}}</ion-option>

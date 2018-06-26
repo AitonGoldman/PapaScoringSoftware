@@ -39,6 +39,7 @@ export class PssPageComponent {
     loadingMessage:string='initialMessage'
     loadingInstance:any=null;
     cssColors:string=null;
+    kioskModeEnabled: boolean = false;
     constructor(public eventAuth: EventAuthProvider,
                 public navParams: NavParams,
                 public navCtrl: NavController,
@@ -68,6 +69,8 @@ export class PssPageComponent {
         }
         this.imgBaseUrl=pssApi.getBackendHostUrl();
         console.log('Hello PssPageComponent Component');
+        this.kioskModeEnabled=tournamentSettings.getKioskMode()
+        
 //        console.log(instance.constructor.name)
     }
     showLoading(message){

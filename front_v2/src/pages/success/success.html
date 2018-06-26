@@ -55,6 +55,11 @@
       {{successSummary ? successSummary.getSecondLine():''}}
     </ion-col>               
   </ion-row>
+  <ion-row *ngIf='successSummary!=null && successSummary.attentionString!=null'>
+    <ion-col style='text-align:center'>         
+      {{successSummary.attentionString}}
+    </ion-col>               
+  </ion-row>  
   <ion-row *ngIf="postAddPlayerSuccess==true && picTaken==false && requirePic==true">
     <ion-col text-center>
       <button margin padding ion-button large tappable (click)="checkPicTaken()">Is Pic Taken??</button>

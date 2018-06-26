@@ -52,10 +52,10 @@ export class ScorekeeperFinalsRoundPage extends PssPageComponent{
                 if(match.bye_player_two_name!=null && match.player_two_name==null){
                     match.player_two_name=match.bye_player_two_name;
                 }
-                match.player_one_points=match.player_one_points_1+match.player_one_points_2+match.player_one_points_3
-                match.player_two_points=match.player_two_points_1+match.player_two_points_2+match.player_two_points_3
-                match.player_three_points=match.player_three_points_1+match.player_three_points_2+match.player_three_points_3
-                match.player_four_points=match.player_four_points_1+match.player_four_points_2+match.player_four_points_3
+                match.player_one_points=match.player_one_points_1+match.player_one_points_2+match.player_one_points_3+match.player_one_points_4
+                match.player_two_points=match.player_two_points_1+match.player_two_points_2+match.player_two_points_3+match.player_two_points_4
+                match.player_three_points=match.player_three_points_1+match.player_three_points_2+match.player_three_points_3+match.player_three_points_4
+                match.player_four_points=match.player_four_points_1+match.player_four_points_2+match.player_four_points_3+match.player_four_points_4
                 
                 if(match.one_completed!=true && match.machine_1){
                     match.current_machine=match.machine_1;                    

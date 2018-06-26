@@ -23,7 +23,7 @@ export class EditUserPage extends AutoCompleteComponent {
     roles:any=[];
     selectedRole:any=null;
     selectedUser:any=null;
-
+    newPassword:any=null;
     // constructor(public autoCompleteProvider:AutoCompleteProvider,
     //             public eventAuth: EventAuthProvider,
     //             public navParams: NavParams,
@@ -42,6 +42,24 @@ export class EditUserPage extends AutoCompleteComponent {
     //           toastCtrl,
     //           actionSheetCtrl);
     // }
+
+    generateEditEventUserPasswordProcessor(){
+        return (result) => {
+            if(result == null){
+                return;
+            }
+            let success_title_string='User '+this.selectedUser.full_user_name+' has been changed.';
+            let successSummary = new SuccessSummary(success_title_string,null,null);            
+            let successButton = new SuccessButton('Go Home',
+                                                  this.getHomePageString(),
+                                                  this.buildNavParams({}));            
+            this.navCtrl.push("SuccessPage",            
+                              this.buildNavParams({'successSummary':successSummary,
+                                                   'successButtons':[successButton]}));
+        };
+
+    }
+    
     generateEditEventUserRoleProcessor(removedEventUserFromEvent){
         return (result) => {
             if(result == null){
@@ -104,11 +122,20 @@ export class EditUserPage extends AutoCompleteComponent {
         if(removeEventUserFromEvent!=true){            
             modifiedRoles.push(this.selectedRole)            
         }
-        
+        console.log('SELETED USER WHILE EDITING');
+        console.log(this.selectedUser);
         this.pssApi.editEventUserRole({'event_user':this.selectedUser,'event_role_ids':modifiedRoles},this.eventId)
             .subscribe(this.generateEditEventUserRoleProcessor(removeEventUserFromEvent));
         
     }
+    
+    onSubmitPassword(){
+        this.selectedUser.new_password=this.newPassword;
+        this.pssApi.editEventUserPassword({'event_user':this.selectedUser},this.eventId)
+            .subscribe(this.generateEditEventUserPasswordProcessor());
+        
+    }
+    
     onFocus(){
         this.selectedUser=null;                
     }

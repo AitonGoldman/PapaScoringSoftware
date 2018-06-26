@@ -33,6 +33,21 @@ def update_event_user_roles_route(request,tables_proxy,event_id):
     tables_proxy.update_event_user_roles(event_role_ids,event_id, pss_user)
     return pss_user
 
+def update_event_user_password_route(request,tables_proxy,event_id):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Submitted information is missing required fields')    
+    event = tables_proxy.get_event_by_event_id(event_id)    
+    if event is None:
+        raise BadRequest('No event with that ID')        
+    event_user_to_edit=input_data['event_user']
+    pss_user = tables_proxy.get_user_by_id(event_user_to_edit['pss_user_id'])
+    if pss_user is None:
+        raise BadRequest('Tried to submit a user with an invalid pss_user_id')    
+    tables_proxy.update_event_user_password(event_id, pss_user, event_user_to_edit['new_password'])
+    return pss_user
+
 def create_event_user_route(request,tables_proxy,event_id):
     #FIXME : check if user is already added to event
     if request.data:        
@@ -86,6 +101,15 @@ def event_role_mapping_update(event_id):
     if not permission.can():
         raise Unauthorized('You are not authorized to edit users for this event')        
     update_event_user_roles_route(request,current_app.table_proxy,event_id)
+    current_app.table_proxy.commit_changes()
+    return jsonify({'data':True})
+
+@blueprints.test_blueprint.route('/<int:event_id>/password',methods=['PUT'])
+def event_user_password_update(event_id):            
+    permission = permissions.CreateEventUserPermission(event_id)    
+    if not permission.can():
+        raise Unauthorized('You are not authorized to edit users for this event')        
+    update_event_user_password_route(request,current_app.table_proxy,event_id)
     current_app.table_proxy.commit_changes()
     return jsonify({'data':True})
 

@@ -6,6 +6,7 @@
  */
 import { Component, Input } from '@angular/core';
 import { PssPageComponent } from '../../components/pss-page/pss-page'
+import { TournamentSettingsProvider } from '../../providers/tournament-settings/tournament-settings'
 
 
 @Component({

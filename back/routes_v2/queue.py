@@ -103,6 +103,7 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
     player_id = input_data.get('player_id',None)
     print "in quueing - player id is %s"%player_id
     if player_initiated and player_id != current_user.player_id:
+        print "%s %s"%(player_id,current_user.player_id)
         raise BadRequest('Naughty Naughty')
     tournament_machine_id=input_data.get('tournament_machine_id',None)
     if player_id is None:
@@ -127,7 +128,7 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
     #     token_count=tournament_counts[tournament.tournament_id]['count']
     token_count = app.table_proxy.get_available_token_count_for_tournament(event_id,player,tournament)   
     if token_count<1:        
-        raise BadRequest('Player has no tokens')
+        raise BadRequest('Player has no tickets')
     
     queues = app.table_proxy.get_queue_for_tounament_machine(tournament_machine)
     if tournament_machine.player_id is None and queues[0].player_id is None:
@@ -164,6 +165,32 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
     app.table_proxy.create_audit_log(audit_log_params,event_id)    
     return updated_queue
     
+@blueprints.test_blueprint.route('/<int:event_id>/queue/authless',methods=['POST'])
+def add_unloggedin_player_to_queue(event_id):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Not enough info specified')        
+    
+    player = current_app.table_proxy.get_event_player(event_id, input_data['event_player_id'])
+    if input_data.get('event_player_id',None) is None or input_data.get('pin',None) is None:
+        raise BadRequest('Invalid player number or pin')
+    if player is None:
+        raise BadRequest('Invalid player number or pin')
+    if int(player.pin)!=int(input_data['pin']):
+        raise BadRequest('Player number and pin do not match')
+    tournament_machine = current_app.table_proxy.get_tournament_machine_by_id(input_data['tournament_machine_id'])
+    input_data['player_id']=player.player_id
+    existing_queue = current_app.table_proxy.get_queue_player_is_already_in(player,event_id)                        
+    if existing_queue and int(input_data['tournament_machine_id'])==existing_queue.tournament_machine_id:
+        raise BadRequest('Player is already on queue')
+    updated_queue = add_player_to_tournament_machine_queue_route(request,current_app,event_id,player,player_initiated=True,input_data=input_data)
+    current_app.table_proxy.commit_changes()
+    return_json = {'data':to_dict(updated_queue),'player_name':player.__repr__()}    
+    if existing_queue:
+        return_json['removed_from']="ATTENTION : Player can only be in one queue, so player was removed from %s queue before being added to %s"%(existing_queue.tournament_machine.tournament_machine_name, tournament_machine.tournament_machine_name)        
+    return jsonify(return_json)
+    pass
 
 @blueprints.test_blueprint.route('/<int:event_id>/queue',methods=['POST'])
 def add_player_to_queue(event_id):

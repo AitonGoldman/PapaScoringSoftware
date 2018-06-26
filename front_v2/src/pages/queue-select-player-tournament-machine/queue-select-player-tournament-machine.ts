@@ -62,6 +62,67 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
             
         }
     }
+
+    kioskGenerateAddEventPlayerToQueueProcessor(){
+        return (result) => {            
+            if(result == null){
+                return;
+            }
+            let success_title_string=result['player_name']+' has been added to queue.';
+            let success_line_one_string='Player position in the queue is '+result.data.position+'.';
+            
+            let success_line_two_string='';
+            let successSummary = new SuccessSummary(success_title_string,success_line_one_string,success_line_two_string);            
+            if(this.tournamentSettings.getKioskMode()==true){
+                //success_line_two_string='NOTE : You have been logged out.'
+                console.log(result);
+                successSummary.setAttentionString(result['removed_from'])
+                this.eventAuth.logout(this.eventId);
+            }
+
+            successSummary.setCssColors('queue');
+            let successButtonHome = new SuccessButton('Tournament Queues',
+                                                      'QueueSelectPlayerTournamentMachinePage',
+                                                      this.buildNavParams({}));
+            
+            this.navCtrl.push("SuccessPage",            
+                              this.buildNavParams({'successSummary':successSummary,
+                                                   'successButtons':[successButtonHome]}));
+            
+        }
+    }
+    
+    showKioskQueueAddConfirm(tournamentMachine){
+        let msg = 'Confirm Queueing Up On '+tournamentMachine.tournament_machine_name;
+        let title = 'Confirm Add To Queue'
+        let confirm = this.alertCtrl.create({
+            title: title,
+            message: msg,
+            inputs: [
+                {
+                name: 'player_id_for_event',
+                placeholder: 'Player Number'
+            },{
+                name: 'player_pin_for_event',
+                placeholder: 'Pin'
+                
+            }],
+            buttons: [
+                {
+                text: 'Cancel'
+            },
+                {
+                text: 'Ok',
+                handler: (data) => {
+                    this.kioskAddEventPlayerToQueue({event_player_id:data['player_id_for_event'],
+                                                     pin:data['player_pin_for_event'],
+                                                     tournament_machine_id:tournamentMachine.tournament_machine_id});
+                }
+            }
+            ]
+        });
+        confirm.present();
+    }
         
     showQueueAddConfirm(tournamentMachine){
         let msg = 'Confirm Queueing Up On '+tournamentMachine.tournament_machine_name;
@@ -87,6 +148,13 @@ export class QueueSelectPlayerTournamentMachinePage extends PssPageComponent {
         });
         confirm.present();
     }
+
+    kioskAddEventPlayerToQueue(payload){
+        this.pssApi.kioskAddEventPlayerToQueue(payload,this.eventId)
+            .subscribe(this.kioskGenerateAddEventPlayerToQueueProcessor())
+
+    }
+    
     addEventPlayerToQueue(tournament_machine_id){
         this.pssApi.addEventPlayerToQueue({'player_id':this.eventPlayer.player_id,'tournament_machine_id':tournament_machine_id},this.eventId)
             .subscribe(this.generateAddEventPlayerToQueueProcessor())

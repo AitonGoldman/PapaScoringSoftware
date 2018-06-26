@@ -20,12 +20,12 @@ export class PssApiProvider {
     httpPrefix=null;
     pssUrlPort=null;
     pssHost=null;
-      pssHostUrl='http://192.168.1.178:8100';
+     // pssHostUrl='http://192.168.1.178:8100';
     //pssHostUrl='https://results.papa.org';
-    basePssUrl='http://192.168.1.178:8000/api';
+    //basePssUrl='http://192.168.1.178:8000/api';
     //basePssUrl='https://results.papa.org:8000/api';
-//    basePssUrl='http://0.0.0.0:8000/api';
-//    pssHostUrl='http://0.0.0.0:8100';    
+    basePssUrl='http://0.0.0.0:8000/api';
+    pssHostUrl='http://0.0.0.0:8100';    
 //   pssHostUrl='http://9.75.197.88:8100';
 //   basePssUrl='http://9.75.197.88:8000';
     backendVersion=3;
@@ -100,6 +100,8 @@ export class PssApiProvider {
     addEventUsers = this.generate_api_call('addEventUsers',this.basePssUrl+"/:arg/event_user",'post');
     addEventPlayers = this.generate_api_call('addEventPlayers',this.basePssUrl+"/:arg/player",'post');
     addEventPlayerToQueue = this.generate_api_call('addPlayerToQueue',this.basePssUrl+"/:arg/queue",'post');
+    kioskAddEventPlayerToQueue = this.generate_api_call('kioskAddPlayerToQueue',this.basePssUrl+"/:arg/queue/authless",'post');
+
     bumpPlayerDownQueue = this.generate_api_call('bumpPlayerDownQueue',this.basePssUrl+"/:arg/queue",'put')
     completeTicketPurchase = this.generate_api_call('completeTicketPurchase',this.basePssUrl+"/:arg/token/:arg",'put');
     completeRound = this.generate_api_call('completeRound',this.basePssUrl+"/:arg/final/:arg/:arg",'put');
@@ -115,6 +117,7 @@ export class PssApiProvider {
     editPlayer = this.generate_api_call('editEvent',this.basePssUrl+"/:arg/player",'put');
     
     editEventUserRole = this.generate_api_call('editEventUser',this.basePssUrl+"/:arg/event_role_mapping",'put');    
+    editEventUserPassword = this.generate_api_call('editEventUserPassword',this.basePssUrl+"/:arg/password",'put');    
     editFinalsMatch = this.generate_api_call('editFinalsMatch',this.basePssUrl+"/:arg/finals_match/:arg",'put');    
     
     eventOwnerCreateRequest = this.generate_api_call('eventOwnerCreateRequest',this.basePssUrl+"/pss_user_request",'post');

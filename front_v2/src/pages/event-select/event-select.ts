@@ -23,6 +23,7 @@ export class EventSelectPage extends PssPageComponent {
             if(result == null){
                 return;
             }
+            console.log(result);
             this.events=result.data.filter((event)=>{
                 if(event.active==true){
                     return true;
@@ -38,12 +39,16 @@ export class EventSelectPage extends PssPageComponent {
         this.eventAuth.logoutEventOwner();
         let nextPage = '';
         let tabIndex=null;
+        
         if(this.platform.is('mobile') == true){
             nextPage = 'TabsPage';
             tabIndex = 0;
         } else {
             nextPage = this.getHomePageString(eventId);
         }          
+        if(this.tournamentSettings.getKioskMode()==true){
+            nextPage='KioskHomePage'
+        }
         
         this.pushRootPage(nextPage,{'eventId':eventId,'eventName':eventName});
 
@@ -54,12 +59,14 @@ export class EventSelectPage extends PssPageComponent {
         
         this.pssApi.getAllEvents({})
             .subscribe(this.generateGetAllEventsProcessor())    
-        
+        console.log("DEBUG DEBUG DEBUG");
+        console.log(this.tournamentSettings.getKioskMode());
         if(this.platform.is('mobile') == true){          
             this.nextPage='TabsPage';    
         } else {          
             this.nextPage=this.getHomePageString();         
-        }                                
+        }
+
         console.log('ionViewDidLoad EventSelectPage');
         
     }

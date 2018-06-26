@@ -69,9 +69,13 @@
                   <!--<ion-icon tappable (click)="addEventPlayerToQueue(tournament_machine.tournament_machine_id)" item-start name="add-circle"></ion-icon> Add To Queue-->
                   <ion-icon item-start name="add-circle"></ion-icon> Add To Queue
                   
-              </ion-item>
+                </ion-item>
               </ng-container>
-              
+              <ng-container *ngIf="kioskModeEnabled==true && (tournament_machine.player_id!=null || tournament_machine.queues[0].player!=null)">
+                <ion-item tappable (click)="showKioskQueueAddConfirm(tournament_machine)" >
+                  <ion-icon item-start name="add-circle"></ion-icon> Add To Queue
+                </ion-item>
+              </ng-container>              
             </ion-list>
           </ng-container>
         </ion-list>

@@ -25,7 +25,7 @@
             <ion-icon item-end name="ios-arrow-forward"></ion-icon>
 
         </ion-item>-->        
-        <ion-item detail-none *ngFor="let final of tournament.finals_ids" tappable [navPush]='"ResultsFinalsRoundsPage"' [navParams]="buildNavParams({finalId:final.final_id,round:1})">
+        <ion-item detail-none *ngFor="let final of tournament.finals_ids" tappable [navPush]='"ResultsFinalsRoundsPage"' [navParams]="buildNavParams({finalId:final.final_id,round:1,totalRounds:final.number_of_rounds})">
           {{final.final_name}} Finals Results
             <ion-icon item-end name="ios-arrow-forward"></ion-icon>
 

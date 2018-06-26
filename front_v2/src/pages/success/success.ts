@@ -28,20 +28,24 @@ export class SuccessPage extends PssPageComponent{
     //     )        
     //     this.navCtrl.push(pageName,this.buildNavParams(navParams));
     // }
-  ionViewWillLoad() {
-      console.log('hoooohaw')
-      console.log(this.navParams.data);
-      if(this.eventId==null && this.navParams.get('ignoreEventId')!=true){
-          //this.pushRootPage('EventSelectPage')
-          return;
+    ionViewWillLoad() {
+        if(this.eventId==null && this.navParams.get('ignoreEventId')!=true){
+            this.pushRootPage('EventSelectPage')
+            return;
         }
 
-      this.successSummary = this.navParams.get('successSummary');
-      this.cssColors=this.successSummary.getCssColors();
-      this.successButtons = this.navParams.get('successButtons');
-      console.log('ionViewDidLoad SuccessPage');
-  }
+        console.log('hoooohaw')
+        console.log(this.navParams.data);
+        this.successSummary = this.navParams.get('successSummary');
+        this.cssColors=this.successSummary.getCssColors();
+        this.successButtons = this.navParams.get('successButtons');      
+        console.log('ionViewDidLoad SuccessPage');
+        console.log('poop')
+        
+    }
+    ionViewWillEnter(){
+    }
     goToEventSelectOnPageReload(){
-      //this.appCtrl.getRootNav().push('EventSelectPage');        
+        //this.appCtrl.getRootNav().push('EventSelectPage');        
     }
 }

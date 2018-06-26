@@ -26,10 +26,19 @@
       <ion-option *ngFor="let role of roles" [value]="role.event_role_id">{{role.event_role_name}}</ion-option>
     </ion-select>
     </ion-item>
-
+    <ion-item-divider color="light" text-wrap>New Password</ion-item-divider>        
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input name="myeventpassword" #myeventpassword="ngModel" [(ngModel)]="newPassword" type="text"></ion-input>
+      </ion-item>
+    </ion-list>
     
     <button [disabled]="!myeventrole.dirty" ion-button (tap)="onSubmit(false)"> Modify User Role </button>
     <br>
+    <button [disabled]="!myeventpassword.dirty" ion-button (tap)="onSubmitPassword()"> Modify User Password </button>
+    <br>
+    
     <button [disabled]="selectedUser==null" ion-button (tap)="onSubmit(true)">  Remove User From Event </button>    
   </form>
   </div>

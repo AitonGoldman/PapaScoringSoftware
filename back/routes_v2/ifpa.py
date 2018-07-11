@@ -33,12 +33,12 @@ def route_get_ifpa_ranking(player_name):
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE    
-    #if current_app.event_settings['ifpa_api_key']:
-    #    api_key=current_app.event_config['ifpa_api_key']
-    #    search_result_raw = urllib2.urlopen("https://api.ifpapinball.com/v1/player/search?api_key=%s&q=%s" % (api_key,player_name),context=ctx)
-    #    search_results = json.load(search_result_raw)
-    #else:
-    search_results = get_ifpa_ranking_via_website(player_name)
+    if current_app.event_settings.get('ifpa_api_key',None):
+        api_key=current_app.event_config['ifpa_api_key']
+        search_result_raw = urllib2.urlopen("https://api.ifpapinball.com/v1/player/search?api_key=%s&q=%s" % (api_key,player_name),context=ctx)
+        search_results = json.load(search_result_raw)
+    else:
+        search_results = get_ifpa_ranking_via_website(player_name)
     return jsonify({'ifpa_ranking':search_results})
     
 

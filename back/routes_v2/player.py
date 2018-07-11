@@ -164,9 +164,9 @@ def prereg_player_create(event_id,tournament_id):
     input_data = json.loads(request.data)    
     player = input_data['players'][0]
     event = current_app.table_proxy.get_event_by_event_id(event_id)
-    player_name = player['first_name']+" "+player['last_name']
+    player_name = player['first_name'].lower().strip()+" "+player['last_name'].lower().strip()
     if player['extra_title']:
-        player_name = player_name+" "+extra_title
+        player_name = player_name+" "+player['extra_title'].lower().strip()
     players_found_list = search_for_players(player_name,event_id)        
     if len(players_found_list) == 1:
         historical_tokens = current_app.table_proxy.get_historical_tokens_for_player(event_id,players_found_list[0]['player_id'])        

@@ -18,7 +18,7 @@
   <div class='desktopSlim'>
   <form #myForm="ngForm" *ngIf="tournamentMachine!=null">
     <ion-item text-center no-lines>
-      {{tournamentMachine.player.player_full_name}} (#{{player_id_for_event}})
+      {{tournamentMachine.player.player_full_name|titlecase}} (#{{player_id_for_event}})
     </ion-item>
     <ion-grid>
       <ion-row>
@@ -54,7 +54,7 @@
         Score
       </ion-label>      
       <ion-input placeholder="enter score here" type="tel" required
-                 (keyup)="insertCommas($event)" [(ngModel)]="score" name="score">
+                 class="poop" (keyup)="insertCommas($event)" [(ngModel)]="score" name="score">
       </ion-input>
     </ion-item>
     <div margin>
@@ -69,10 +69,10 @@
         Void Ticket
       </button>
       <br>
-      <button color="danger" tappable (click)="voidTicket('void-readd')" ion-button large margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player!=null" margin>
+      <button color="danger" tappable (click)="voidTicket('void-requeue')" ion-button large margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player!=null" margin>
         Void Ticket And Requeue
       </button>      
-      <button color="danger" tappable (click)="voidTicket('void-requeue')" ion-button large margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player==null" margin>
+      <button color="danger" tappable (click)="voidTicket('void-readd')" ion-button large margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player==null" margin>
         Void Ticket And ReAdd
       </button>            
     </ion-item>

@@ -50,12 +50,12 @@
                   Not Being Played
                 </ng-container>
                 <ng-container *ngIf="tournament_machine.player_id!=null">
-                  {{tournament_machine.player.player_full_name}}
+                  {{tournament_machine.player.player_full_name|titlecase}}
                 </ng-container>
               </ion-item>
               <ng-container *ngFor="let queue of tournament_machine.queues" >
                 <ion-item *ngIf="queue.player!=null" tappable (click)="queue.whatToDo(queue,tournament_machine)">
-                  <ion-icon item-start [name]="queue.icon"></ion-icon> <span>{{queue.player.player_full_name}}</span>
+                  <ion-icon item-start [name]="queue.icon"></ion-icon> <span>{{queue.player.player_full_name|titlecase}}</span>
                 </ion-item>
               </ng-container>
               

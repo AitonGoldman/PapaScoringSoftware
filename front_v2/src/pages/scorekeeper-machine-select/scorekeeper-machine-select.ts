@@ -222,6 +222,10 @@ export class ScorekeeperMachineSelectPage  extends PssPageComponent {
         let buttons = []
         console.log('tournament machine about to undo...')
         console.log(tournamentMachine);
+        if(tournamentMachine.player==null){
+            alert('No one is playing or queued on machine.')
+            return;
+        }
         let player_id_for_event = tournamentMachine.player.player_id_for_event;       
         if(player_id_for_event == undefined || player_id_for_event == null){            
             player_id_for_event = tournamentMachine.player.events.filter((event_info)=>{                            

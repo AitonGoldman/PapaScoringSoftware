@@ -17,6 +17,24 @@
 
 @import "../../node_modules/ionic2-auto-complete/auto-complete";
 
+
+.searchbar-md {
+  .searchbar-input {
+    padding-top:15px;
+    padding-bottom:15px;       
+  }
+  .searchbar-search-icon {
+    top: 20px;                     
+  }
+}
+
+.poop {
+ .text-input-md{
+  padding-top:15px;
+ }
+}
+
+
 ion-auto-complete {
   width: 100%;
   .searchbar-input-container {

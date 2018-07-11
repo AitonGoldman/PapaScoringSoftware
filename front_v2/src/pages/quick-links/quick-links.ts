@@ -113,6 +113,7 @@ export class QuickLinksPage extends PssPageComponent {
         }            
     }
     getTournamentsAndSetLists(){
+        this.listOrderStorage.wipeList('ScorekeeperMachineSelect')        
         this.pssApi.getAllTournamentsAndMachines(this.eventId)            
             .subscribe((result)=>{                    
                 //this.tournamentItems==result.data;

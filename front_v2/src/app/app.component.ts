@@ -70,10 +70,11 @@ export class MyApp {
 
                 this.fcm.onNotification().subscribe(data => {
                     
-                    alert(data.aps.alert.body)
+                    //alert(data.aps.alert.body)
                     if(data.wasTapped) {
                         console.info("Received in background");
                     } else {
+                        alert(data.aps.alert.body)                        
                         console.info("Received in foreground");
                     };
                 });            

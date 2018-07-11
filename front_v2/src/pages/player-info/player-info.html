@@ -26,7 +26,7 @@
   <div text-center  margin-bottom [style.height]="'25px'">
     <ion-spinner  *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
     <ion-item no-lines text-center *ngIf='selectedPlayer!=null'>
-      {{selectedPlayer.player_full_name}}
+      {{selectedPlayer.player_full_name|titlecase}}
     </ion-item>
 
   </div>

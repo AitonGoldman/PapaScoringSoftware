@@ -25,6 +25,8 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
     player_id_for_event:any=null;
     recordScoreSuccessButtons=['RE_ADD','RE_QUEUE','DEAL_WITH_PERSON_IN_QUEUE', 'DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER','GO_HOME','ADD_OR_QUEUE']
     generateSubmitScoreProcessor(successSummary){
+        console.log('got results and success buttons are....');
+        console.log(this.recordScoreSuccessButtons);
         return (result) => {
             if(result == null){
                 return;
@@ -72,14 +74,17 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
                     return true;
                 })
             }
-            
+            let navParams:any = {'successSummary':successSummary,
+                                 'successButtons':[],
+                                 'recordScoreSuccessButtons':this.recordScoreSuccessButtons,                                 
+                                 'tournamentMachine':tournamentMachine,
+                                 'tournamentId':this.tournamentId}
+            if(this.recordScoreSuccessButtons.includes('DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER')&&!this.recordScoreSuccessButtons.includes('THIS_IS_A_READD_OR_REQUEUE')){
+                console.log("INCLUDING PLAYER....");
+                navParams['player']=this.tournamentMachine.player
+            }
             this.navCtrl.push("RecordScoreSuccessPage",            
-                               this.buildNavParams({'successSummary':successSummary,
-                                                    'successButtons':[],
-                                                    'recordScoreSuccessButtons':this.recordScoreSuccessButtons,
-                                                    'player':this.tournamentMachine.player,
-                                                    'tournamentMachine':tournamentMachine,
-                                                    'tournamentId':this.tournamentId}));
+                               this.buildNavParams(navParams));
         };
     }
 
@@ -149,6 +154,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
                     return true;
                 }
             })
+            this.recordScoreSuccessButtons.push('THIS_IS_A_READD_OR_REQUEUE');
         }
         if(type=="void-readd"){
             success_title_string=success_title_string+' And Player ReAdded to machine'            
@@ -160,7 +166,7 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
                     return true;
                 }
             })
-            
+            this.recordScoreSuccessButtons.push('THIS_IS_A_READD_OR_REQUEUE');
         }
 
         let successSummary = new SuccessSummary(success_title_string,success_line_one_string, success_line_two_string);            

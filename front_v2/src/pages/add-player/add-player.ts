@@ -22,7 +22,7 @@ import { TakePicComponent } from '../../components/take-pic/take-pic'
 export class AddPlayerPage extends AutoCompleteComponent {
     //selectedPlayer:any={player_full_name:""};
     addPlayerAutoComplete:boolean=true;
-    ifpaLookup:boolean=false;
+    ifpaLookup:boolean=true;
 
     generateAddEventPlayersProcessor(){
         return (result) => {

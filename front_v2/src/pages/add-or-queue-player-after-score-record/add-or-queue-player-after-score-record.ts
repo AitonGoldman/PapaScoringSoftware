@@ -105,7 +105,7 @@ export class AddOrQueuePlayerAfterScoreRecordPage extends PssPageComponent {
             if(result == null){
                 return;
             }
-            console.log('in getAllTournaments...')            
+            console.log('in getAllTournaments...')                        
             let tournaments=result.data;
             this.tournament=tournaments.filter((tournament)=>{
                 if(tournament.tournament_id==this.tournamentId){
@@ -127,7 +127,17 @@ export class AddOrQueuePlayerAfterScoreRecordPage extends PssPageComponent {
                 })
                 return machine;
             })
-            this.tournamentMachines=this.tournament.tournament_machines;
+            this.tournamentMachines=this.tournament.tournament_machines.sort((n1,n2)=>{
+                if(n1.tournament_machine_name > n2.tournament_machine_name){
+                    return 1
+                }
+                if(n1.tournament_machine_name < n2.tournament_machine_name){
+                    return -1
+                }
+                return 0;
+                
+                
+            });
             console.log(this.tournament);
         }
     }

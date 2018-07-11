@@ -71,7 +71,7 @@
             <p style='line-height:1px'>({{result.points}} points)</p></span>        
         </ion-col>
         <ion-col col-8 no-padding text-center align-self-center>
-          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name|titlecase}}</a>
         </ion-col>
         <ion-col col-2 no-padding text-center align-self-center tappable (click)="showTopThreeMachines($event,result.top_machines)">
           <a> {{result.topMachineString}} </a>
@@ -86,7 +86,7 @@
         </ion-col>        
         <ion-col col-6 no-padding text-center align-self-center>
 
-          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name}}</a>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name|titlecase}}</a>
         </ion-col>
         <ion-col col-4 no-padding text-center align-self-center tappable>
           <ng-container *ngFor="let topMachine of result.top_machines;index as i">

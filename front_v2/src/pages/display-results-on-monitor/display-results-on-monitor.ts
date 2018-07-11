@@ -101,6 +101,7 @@ export class DisplayResultsOnMonitorPage extends PssPageComponent {
                 }
                 this.loading_instance.dismiss();                
                 this.currentResults=results.data;
+                this.currentResults.push({})                
                 console.log(this.currentResults);
                 setTimeout(()=>{
                     this.scrollAnimationTest();
@@ -127,6 +128,7 @@ export class DisplayResultsOnMonitorPage extends PssPageComponent {
                     return 
                 }
                 this.currentResults=results.data;
+                this.currentResults.push({})                
                 this.loading_instance.dismiss();
                 setTimeout(()=>{
                     this.scrollAnimationTest();
@@ -251,6 +253,6 @@ export class DisplayResultsOnMonitorPage extends PssPageComponent {
         this.titleFontSize = this.baseFontSize*2;    
         this.columnTitleFontSize = this.baseFontSize*.75;    
         this.columnContentFontSize = this.baseFontSize;    
-        this.topMachineFontSize = this.baseFontSize/2;        
+        this.topMachineFontSize = this.baseFontSize*.75;        
     }
 }

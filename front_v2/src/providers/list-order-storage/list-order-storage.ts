@@ -27,6 +27,10 @@ export class ListOrderStorageProvider {
         return listStorage[pageName][listName];
     }
 
+    wipeList(pageName){
+        this._cookieService.remove("listStorage_"+pageName);        
+    }
+    
     storeQuickLinksMachineLists(tournaments){
         let tournamentMachines=[];
         tournaments.forEach((tournament)=>{

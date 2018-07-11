@@ -70,7 +70,7 @@
     <ng-container *ngFor="let tournament of tournaments">
       <ion-col col-12>
         <ng-container *ngIf="tournament.finals_ids!=null && tournament.finals_ids.length!=0">
-          <ion-card  *ngFor="let final of tournament.finals_ids" tappable [navPush]='"ResultsFinalsRoundsPage"' [navParams]="buildNavParams({finalId:final.final_id,round:1})">
+          <ion-card  *ngFor="let final of tournament.finals_ids" tappable [navPush]='"ResultsFinalsRoundsPage"' [navParams]="buildNavParams({finalId:final.final_id,round:1,totalRounds:final.number_of_rounds})">
             <!--<img [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/finals.jpg'"/>-->
             <img-loader [style.height]='"90px"' [style.width]='"100%"' [src]="tournament.img_url!=null?imgBaseUrl+tournament.img_url:imgBaseUrl+'/assets/imgs/finals.jpg'" useImg ></img-loader>
             

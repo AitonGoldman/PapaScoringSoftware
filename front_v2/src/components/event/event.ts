@@ -36,7 +36,13 @@ const eventDescriptions={
     {
         'short':'Force IFPA ranking lookup.',
         'long':'When registering player for events, force an IFPA ranking lookup.  This ranking will be used for IFPA ranking restrictions.',        
+    },
+    'active':
+    {
+        'short':'Make event active/inactive',
+        'long':'Make event active/inactive',        
     }
+
 
 }
 
@@ -66,6 +72,7 @@ export class EventComponent  extends PssPageComponent {
         this.entityFields = new EntityFields("event");        
         this.entityFields.setField('name','text',true,false,eventDescriptions['name']);        
         this.entityFields.setField('number_unused_tickets_allowed','number',true,false,eventDescriptions['number_unused_tickets_allowed']);
+        this.entityFields.setField('active','boolean',true,false,eventDescriptions['active']);        
         this.entityFields.setField('stripe_api_key','text',false,true,eventDescriptions['stripe_api_key']);
         this.entityFields.setField('stripe_public_key','text',false,true,eventDescriptions['stripe_public_key']);
         this.entityFields.setField('force_ifpa_lookup','boolean',false,true,eventDescriptions['force_ifpa_lookup']);

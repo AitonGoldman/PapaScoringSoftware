@@ -11,6 +11,12 @@
 </ion-header>
 
 <ion-content>
+ <ion-fab top right edge hideWhen="core" *ngIf="playerToBeDealtWith!=null">
+   <button ion-fab (click)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))">
+      <p no-margin style='font-size:10px;line-height:10px' text-center>Machine<br>List</p>
+   </button>
+ </ion-fab>
+ 
  <ion-toolbar no-padding no-margin color="pss-home-sub-header" text-center>
    <h2>{{tournamentMachine.tournament_machine_name}}</h2>
  </ion-toolbar>
@@ -23,13 +29,16 @@
   <div text-center margin-bottom [style.height]="'25px'">
     <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
     <ion-item no-lines *ngIf='selectedPlayer!=null' text-center>
-      {{selectedPlayer.player_full_name}}
+      {{selectedPlayer.player_full_name|titlecase}}
     </ion-item>
 
   </div>
 
   <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
     <h2>{{notFoundMessage}}</h2>
+  </div>
+  <div *ngIf="notFoundMessage==null && selectedPlayer==null" text-center>
+    <i>Enter the player number to start on {{tournamentMachine.tournament_machine_name}}</i>
   </div>
   <ion-list *ngIf="notFoundMessage==null && selectedPlayer!=null">
     <!--<ion-item no-lines *ngIf="selectedPlayer.img_url!=null">

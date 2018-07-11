@@ -118,6 +118,17 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
        return orderList 
     }
     saveScores(){
+        console.log('saving match...');        
+        for(let playerNum of ['one','two','three','four']){
+            for(let machineNum of [1,2,3,4]){                
+                if(this.match['player_'+playerNum+'_score_'+machineNum]!=null){
+                    this.match['player_'+playerNum+'_score_'+machineNum] = String(this.match['player_'+playerNum+'_score_'+machineNum]).replace(new RegExp(',', 'g'), "")
+                }                
+            }
+        }
+        console.log(this.match);
+        //player_four_score_1
+        
         this.pssApi.editFinalsMatch(this.match,this.eventId,this.matchId)
             .subscribe((result)=>{
                 if(result==null){
@@ -128,7 +139,13 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
                 this.gameOrderLists[2]=this.generateListForOrderPicking(2,"score");
                 this.gameOrderLists[3]=this.generateListForOrderPicking(3,"score");
                 this.gameOrderLists[4]=this.generateListForOrderPicking(4,"score");
-                
+                for(let playerNum of ['one','two','three','four']){
+                    for(let machineNum of [1,2,3,4]){                
+                        if(this.match['player_'+playerNum+'_score_'+machineNum]!=null ){
+                            this.match['player_'+playerNum+'_score_'+machineNum] = String(this.match['player_'+playerNum+'_score_'+machineNum]).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                        }                
+                    }
+                }                
             })                                                          
     }
     
@@ -147,6 +164,14 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
             })[0];
             console.log(this.match);
             console.log(final);
+            for(let playerNum of ['one','two','three','four']){
+                for(let machineNum of [1,2,3,4]){                
+                    if(this.match['player_'+playerNum+'_score_'+machineNum]!=null ){
+                        this.match['player_'+playerNum+'_score_'+machineNum] = String(this.match['player_'+playerNum+'_score_'+machineNum]).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+                    }                
+                }
+            }
+            
             this.gameOrderLists={}                        
             this.gameOrderLists[1]=this.generateListForOrderPicking(1,"score");            
             this.gameOrderLists[2]=this.generateListForOrderPicking(2,"score");
@@ -233,4 +258,12 @@ export class ScorekeeperFinalsMatchPage extends PssPageComponent {
 
         }
     }
+    insertCommas(event,match,playerNum,machineNum){
+        console.log('insertComma');
+        console.log(event);
+        console.log(playerNum);
+        console.log(machineNum);
+        //this.score = this.score.replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        match[playerNum+'_score_'+machineNum]=match[playerNum+'_score_'+machineNum].replace(/\,/g,'').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+    }    
 }

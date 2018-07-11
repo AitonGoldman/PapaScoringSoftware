@@ -54,19 +54,18 @@
             <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.points}}</ion-item>
           </ion-col>
           <ion-col col-4 text-center>
-            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.player_name}}</ion-item>
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.player_name|titlecase}}</ion-item>
           </ion-col>
           <ion-col col-4 text-center>
             <ion-item  no-padding no-margin>
               <span [style.font-size]="columnContentFontSize+'px'">&nbsp;</span>              
-              <ng-container *ngFor="let topMachine of row.top_machines;first as f;last as l">
-              <span [style.font-size]="topMachineFontSize+'px'">
+              <ng-container *ngFor="let topMachine of row.top_machines;first as f;last as l;index as i">
+                <span [style.font-size]="topMachineFontSize+'px'">
                 #{{topMachine.rank}} {{topMachine.abbreviation}} <span *ngIf="l!=true"> &#8226; </span>
               </span>
 
               </ng-container>
-            </ion-item>
-
+              </ion-item>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -123,10 +122,10 @@
             <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.points}}</ion-item>
           </ion-col>
           <ion-col col-5 >
-            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.player_name}}</ion-item>
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.player_name|titlecase}}</ion-item>
           </ion-col>
           <ion-col col-3 >
-            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.score}}</ion-item>
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.score|number}}</ion-item>
           </ion-col>
         </ion-row>
       </ion-grid>    

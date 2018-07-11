@@ -96,12 +96,12 @@
    <ion-item>
       <ion-label stacked>Machine</ion-label>
       <ion-input  type="text" required
-                 [(ngModel)]="match['machine_'+machineNum]" name="test{{match.finals_match_id}}{{machineNum}}"></ion-input>
+                  [(ngModel)]="match['machine_'+machineNum]" name="test{{match.finals_match_id}}{{machineNum}}"></ion-input>
    </ion-item>
     <ion-item *ngFor="let player of scoreOrderLists[machineNum]">
       <ion-label stacked>Player {{player.name}} Score</ion-label>
       <ion-input  type="tel" required
-                 [(ngModel)]="match[player.player+'_score_'+machineNum]" name="test{{player.player}}{{machineNum}}"></ion-input>
+                  (keyup)="insertCommas($event,match,player.player,machineNum)" [(ngModel)]="match[player.player+'_score_'+machineNum]" name="test{{player.player}}{{machineNum}}"></ion-input>
    </ion-item>
    <ion-item no-lines text-center>
      <button ion-button tappable (click)="saveScores()">Save Scores</button>

@@ -96,7 +96,8 @@ def get_tournament_machine(event_id,tournament_id,tournament_machine_id):
     tournament_machine_dict = generic.serialize_tournament_machine_public(tournament_machine,generic.TOURNAMENT_MACHINE_AND_QUEUES_AND_PLAYER)    
     if tournament_machine_dict.get('player_id',None):
         player = current_app.table_proxy.get_player(event_id,player_id=tournament_machine_dict['player_id'])
-        event_player_info = get_event_player_route(current_app,event_id,player.event_info[0].player_id_for_event)
+        player_id_for_event = [event_player for event_player in player.event_info if event_player.event_id == event_id][0].player_id_for_event
+        event_player_info = get_event_player_route(current_app,event_id,player_id_for_event)
         tournament_machine_dict['tournament_counts']=event_player_info['tournament_counts']        
     return jsonify({'data':tournament_machine_dict})
     

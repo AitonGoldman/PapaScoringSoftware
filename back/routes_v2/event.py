@@ -28,8 +28,7 @@ def pss_event_create_route(request,tables_proxy,user,commit=True):
     if tables_proxy.get_event_by_eventname(input_data['name']) is not None:
         raise BadRequest('Event already exists')
     handle_img_upload(input_data)    
-    new_event = tables_proxy.create_event(user,input_data,commit)
-    #tables_proxy.create_event_tables(new_event.event_id)
+    new_event = tables_proxy.create_event(user,input_data,commit)    
     return new_event
 
 def pss_event_edit_route(request,tables_proxy):
@@ -60,8 +59,6 @@ def get_all_events():
             print "getting for NON admin..."
             events_list.append(generic.serialize_event_public(event))
             
-    #time.sleep(10)
-    #time.poop()
     return jsonify({'data':events_list})
     
 
@@ -77,8 +74,8 @@ def get_event(event_id):
     return jsonify({'data':event_dict})
 
 @blueprints.test_blueprint.route('/events/tournaments',methods=['GET'])
-def get_all_events_and_tournaments():    
-    events = current_app.table_proxy.Events.query.filter_by(active=True).all()    
+def get_all_events_and_tournaments():        
+    events = current_app.table_proxy.Events.query.all()    
     events_list = []
     for event in events:
         permission = permissions.EventEditPermission(event.event_id)

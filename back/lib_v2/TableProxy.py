@@ -408,10 +408,10 @@ class TableProxy():
                       img_url=None,
                       commit=False):        
         player = self.Players()
-        player.first_name=first_name.lower()
-        player.last_name=last_name.lower()        
+        player.first_name=first_name.lower().strip()
+        player.last_name=last_name.lower().strip()        
         if extra_title:
-            user.extra_title=extra_title.lower()
+            player.extra_title=extra_title.lower().strip()
         if pin:
             player.pin=pin
         else:
@@ -500,6 +500,10 @@ class TableProxy():
         if player_id_for_event:
             return self.Players.query.join(self.EventPlayersInfo).filter_by(event_id=event_id,player_id_for_event=player_id_for_event).first()
         if first_name:
+            first_name=first_name.lower().strip()
+            last_name=last_name.lower().strip()
+            if extra_title:
+                extra_title=extra_title.strip()
             query = self.Players.query.filter_by(first_name=first_name,last_name=last_name)
             if extra_title:
                 query = query.filter_by(extra_title=extra_title)

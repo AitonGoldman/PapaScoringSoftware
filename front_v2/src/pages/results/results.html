@@ -32,7 +32,7 @@
         </ion-item>
         
       </ng-container>
-      <ion-item detail-none [navPush]='"ResultsTournamentPage"' [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
+      <ion-item *ngIf="tournament.finals_only==false" detail-none [navPush]='"ResultsTournamentPage"' [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name})">
         {{tournament.tournament_name}} Tournament Results
         <ion-icon item-end name="ios-arrow-forward"></ion-icon>
       </ion-item>
@@ -40,18 +40,19 @@
     <ion-item no-lines>
     </ion-item>
     <ng-container *ngFor="let tournament of tournaments">
-    
-    <ion-item id="tournament_machines_{{tournament.tournament_id}}" (click)="expandMachines(tournament,'tournament_machines_'+tournament.tournament_id)">
-      {{tournament.tournament_name}} Machines Results
-        <ion-icon item-end name="{{tournament.expand_machines!=true?'ios-arrow-dropdown':'ios-arrow-dropup'}}"></ion-icon>
+      <ng-container *ngIf="tournament.finals_only==false">
+        <ion-item id="tournament_machines_{{tournament.tournament_id}}" (click)="expandMachines(tournament,'tournament_machines_'+tournament.tournament_id)">
+          {{tournament.tournament_name}} Machines Results
+          <ion-icon item-end name="{{tournament.expand_machines!=true?'ios-arrow-dropdown':'ios-arrow-dropup'}}"></ion-icon>
 
-    </ion-item>
-    <ion-list *ngIf='tournament != null && tournament.expand_machines==true'>
-      <ion-item margin-left  *ngFor="let machine of tournament.tournament_machines" [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name,tournamentMachineId:machine.tournament_machine_id,tournamentMachineName:machine.tournament_machine_name})">
-        {{machine.tournament_machine_name}}
-        <ion-icon margin-right padding-right item-end name="ios-arrow-forward"></ion-icon>
-      </ion-item>
-    </ion-list>    
+        </ion-item>
+        <ion-list *ngIf='tournament != null && tournament.expand_machines==true'>
+          <ion-item margin-left  *ngFor="let machine of tournament.tournament_machines" [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentId:tournament.tournament_id,tournamentName:tournament.tournament_name,tournamentMachineId:machine.tournament_machine_id,tournamentMachineName:machine.tournament_machine_name})">
+            {{machine.tournament_machine_name}}
+            <ion-icon margin-right padding-right item-end name="ios-arrow-forward"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ng-container>
     </ng-container>
   </ion-list>
   

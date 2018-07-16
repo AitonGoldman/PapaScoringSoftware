@@ -75,6 +75,9 @@ const tournamentDescriptions={
         },'minimum_number_of_tickets_allowed':{
             'short':'Minimum Number Tickets For Single Purchase',
             'long':'This is the minimum number of tickets a player is allowed to purchase in a single purchase.  For example, if this is set to 3 then players can only buy multiples of 3 (assuming discount tickets are not setup)'
+        },'finals_only':{
+            'short':'The tournament is finals only',
+            'long':'The software assumes that the qualifying is done by other means'
         }
 }
 
@@ -139,6 +142,7 @@ export class TournamentPage extends PssPageComponent {
         this.entityFields.setDependency('number_of_qualifiers','finals_style','PAPA')
         
         this.entityFields.setField('use_stripe','boolean',false,true, tournamentDescriptions['use_stripe']);
+        this.entityFields.setField('finals_only','boolean',false,true, tournamentDescriptions['finals_only']);
         this.entityFields.setField('allow_phone_purchases','boolean',false,true, tournamentDescriptions['allow_phone_purchases']);
 
         this.entityFields.setField('stripe_sku','text',false,true, tournamentDescriptions['stripe_sku']);

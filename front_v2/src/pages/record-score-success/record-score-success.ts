@@ -63,7 +63,7 @@ export class RecordScoreSuccessPage extends SuccessPage {
         }
     }
     reAddPlayerToMachine(){
-        this.handleCurrentPlayerLater=false;
+        this.handleCurrentPlayerLater=false;        
         this.pssApi.startPlayerOnMachine({action:"start",
                                           player_id:this.player.player_id,
                                           tournament_machine_id:this.tournamentMachine.tournament_machine_id},

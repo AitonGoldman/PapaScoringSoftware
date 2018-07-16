@@ -79,9 +79,14 @@ export class ScorekeeperRecordScorePage extends PssPageComponent {
                                  'recordScoreSuccessButtons':this.recordScoreSuccessButtons,                                 
                                  'tournamentMachine':tournamentMachine,
                                  'tournamentId':this.tournamentId}
-            if(this.recordScoreSuccessButtons.includes('DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER')&&!this.recordScoreSuccessButtons.includes('THIS_IS_A_READD_OR_REQUEUE')){
-                console.log("INCLUDING PLAYER....");
-                navParams['player']=this.tournamentMachine.player
+            if(this.recordScoreSuccessButtons.filter((buttonTitle)=>{
+                if(buttonTitle=='THIS_IS_A_READD_OR_REQUEUE'){
+                    return true;
+                } else {
+                    return false;
+                }
+            }).length==0){
+                navParams['player']=this.tournamentMachine.player    
             }
             this.navCtrl.push("RecordScoreSuccessPage",            
                                this.buildNavParams(navParams));

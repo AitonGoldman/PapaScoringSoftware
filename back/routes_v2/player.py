@@ -165,9 +165,19 @@ def prereg_player_create(event_id,tournament_id):
     player = input_data['players'][0]
     event = current_app.table_proxy.get_event_by_event_id(event_id)
     player_name = player['first_name'].lower().strip()+" "+player['last_name'].lower().strip()
-    if player['extra_title']:
+    players_found_list = search_for_players(player_name,event_id)    
+    if player.get('extra_title',None):
         player_name = player_name+" "+player['extra_title'].lower().strip()
-    players_found_list = search_for_players(player_name,event_id)        
+    # if player list is length > 0, check each player
+    #  if extra title passed in, check against found player
+    #   if doesn't match, remove from players_found_list
+
+    print "full player name"
+    print player_name
+            
+    players_found_list = [found_player for found_player in players_found_list if found_player.get('player_full_name',None)==player_name]    
+    print "printing players_found_list"
+    print players_found_list
     if len(players_found_list) == 1:
         historical_tokens = current_app.table_proxy.get_historical_tokens_for_player(event_id,players_found_list[0]['player_id'])        
         if historical_tokens and len(historical_tokens)>0:                        
@@ -182,9 +192,16 @@ def prereg_player_create(event_id,tournament_id):
         
     if len(players_found_list) > 1:
         return jsonify({'data':[],'status':'multiple'})
-    global_players_found_list = search_for_players(player_name)        
-    print global_players_found_list
+    global_players_found_list = search_for_players(player_name)
+    global_players_found_list = [found_global_player for found_global_player in global_players_found_list if found_global_player.get('player_full_name',None)==player_name]
     
+    # if player list is length > 0, check each player
+    #  if extra title passed in, check against found player
+    #   if doesn't match, remove from players_found_list
+
+    
+    print global_players_found_list    
+    print "global players list 2 "    
     if len(global_players_found_list)==1:
         old_json = json.loads(request.data)        
         old_json['players'][0]['player_id']=global_players_found_list[0]['player_id']        

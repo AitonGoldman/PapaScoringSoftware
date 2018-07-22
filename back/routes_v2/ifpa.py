@@ -17,8 +17,7 @@ def get_ifpa_ranking_via_website(player_name):
     players = re.findall('player.php\?p=(\d+)\"\>([^\<]+).+?(not ranked|\d+th|\d+nd|\d+st|\d+rd)',content.lower())        
     rank = re.findall('(\d+th|\d+nd|\d+st|\d+rd)', content.lower())    
     actual_ranks = []
-    for index,p in enumerate(players):
-        #print players[index]
+    for index,p in enumerate(players):        
         rank_with_suffix=p[2]
         rank_without_suffix = rank_with_suffix.replace("rd","").replace("st","").replace("nd","").replace("th","")
         actual_ranks.append({'wppr_rank':rank_without_suffix,

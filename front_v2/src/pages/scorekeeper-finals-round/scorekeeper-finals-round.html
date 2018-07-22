@@ -53,7 +53,7 @@
             <ion-col col-1 text-nowrap text-center>
               <ion-icon item-start *ngIf="match[player_string+'_winner']==true && round!=totalRounds" name="trophy"></ion-icon>
               <ion-icon  style='font-size:14px' text-center item-start *ngIf="match[player_string+'_winner']!=true || round==totalRounds">
-                <span *ngIf="finalsPlayers[match[player_string+'_finals_player_id']]!=null && finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank!=null">#{{finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank}}</span> 
+                <span *ngIf="finalsPlayers[match[player_string+'_finals_player_id']]!=null && finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank!=null">#{{finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank+1}}</span> 
               </ion-icon>                
             </ion-col>
             <ion-col col text-center>

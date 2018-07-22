@@ -248,9 +248,9 @@ export class PssPageComponent {
 
     expand(item,elementId?){
         item.expanded=item.expanded==false?true:false;
-        if(elementId!=null){
-            this.scrollTo(elementId);
-        }
+        //if(elementId!=null){
+        //    this.scrollTo(elementId);
+        //}
     }
     generateEditTournamentProcessor(message_string){
         return (result) => {            

@@ -10,11 +10,9 @@ import json
 from shutil import copyfile
 import time
 
-def handle_img_upload(input_data):
-    print "in handle img upload..."    
+def handle_img_upload(input_data):    
     event_img_folders=current_app.config['IMG_HTTP_SRV_DIR']
-    if input_data.get('img_file',None) and input_data.get('has_pic',None):
-        print "in handle img upload...and processing"
+    if input_data.get('img_file',None) and input_data.get('has_pic',None):        
         copyfile(current_app.config['UPLOAD_FOLDER']+"/"+input_data['img_file'],event_img_folders+"/"+input_data['img_file'])
         input_data['img_url']='/assets/imgs/%s'%(input_data['img_file'])
 
@@ -46,17 +44,13 @@ def pss_event_edit_route(request,tables_proxy):
 
 @blueprints.test_blueprint.route('/events',methods=['get'])
 def get_all_events():
-    print "here we go...s"
     events = current_app.table_proxy.Events.query.filter_by(active=True).all()    
     events_list = []
     for event in events:
-        permission = permissions.EventEditPermission(event.event_id)
-        print "getting event "+event.name
-        if permission.can():
-            print "getting for admin..."
+        permission = permissions.EventEditPermission(event.event_id)        
+        if permission.can():            
             events_list.append(generic.serialize_event_private(event))
-        else:
-            print "getting for NON admin..."
+        else:            
             events_list.append(generic.serialize_event_public(event))
             
     return jsonify({'data':events_list})

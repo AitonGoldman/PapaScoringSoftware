@@ -36,8 +36,7 @@ def upload_event_pic():
         #exiftool -j -Orientation -n 1518227110image.jpg
         #exiftool -Orientation=1 -n "$@"
         #subprocess.call(["exiftool","-Orientation=1", "-n", upload_folder+"/"+random_file_name])
-        orientation = subprocess.check_output(["identify", "-format", r"'%[orientation]'",new_file_path])[1:-1]        
-        print orientation
+        orientation = subprocess.check_output(["identify", "-format", r"'%[orientation]'",new_file_path])[1:-1]                
         if orientation == "RightTop":            
             subprocess.call(["convert", new_file_path,"-rotate", "90", "%s_rotate"%new_file_path])
         if orientation == "LeftBottom":

@@ -81,11 +81,9 @@ def start_player_on_machine_or_queue_route(input_data,event_id, app, current_use
     if tournament.active is False:
         raise BadRequest('Can not start a new game because tournament is no longer active')
 
-    if tournament_machine.player_id is None and current_app.table_proxy.get_sorted_queue_for_tournament_machine(tournament_machine)[0].player_id is None:        
-        print "starting on machine...."
+    if tournament_machine.player_id is None and current_app.table_proxy.get_sorted_queue_for_tournament_machine(tournament_machine)[0].player_id is None:                
         start_player_on_machine_route(input_data,event_id, app, current_user)
-    else:
-        print "queueing...."
+    else:        
         add_player_to_tournament_machine_queue_route(request,app,event_id,current_user)
         
     

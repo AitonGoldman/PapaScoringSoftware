@@ -57,7 +57,9 @@ export class AdminEditScoresPage extends AutoCompleteComponent {
                 return;
             }            
             this.showNewScoreForm=false;
+            this.scores.unshift({score:this.newScore.score,tournament_machine_id:this.newScore.tournament_machine_id})
             this.newScore={};
+            
             // let toast = this.toastCtrl.create({
             //     message: 'New score added!',
             //     duration: 99000,

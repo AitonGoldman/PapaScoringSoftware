@@ -26,8 +26,7 @@ def get_normal_and_discount_amounts(tournament,amount):
         if discount_count > 0:
             normal_count=(amount%tournament.number_of_tickets_for_discount)/tournament.minimum_number_of_tickets_allowed
         else:
-            normal_count=amount/tournament.minimum_number_of_tickets_allowed
-        print "%s - - %s - %s" %(amount,tournament.number_of_tickets_for_discount,discount_count)
+            normal_count=amount/tournament.minimum_number_of_tickets_allowed        
         return(normal_count,discount_count)
     if tournament.number_of_tickets_for_discount:
         if amount < tournament.number_of_tickets_for_discount:
@@ -271,8 +270,8 @@ def complete_prereg_player_token_purchase_route(request,app,event_id,token_purch
     stripe_items.append({"quantity":1,"type":"sku","parent":'prereg_20'})
     api_key = app.event_settings[event_id].stripe_api_key    
     result = app.stripe_proxy.purchase_tickets(stripe_items,api_key,input_data['stripe_token'],input_data['email'],token_purchase)    
-    print "got result from stripe...."
-    print result
+    if result.get('error_text',None):
+        raise BadRequest(result.get('error_text'))            
     token_purchase.stripe_transaction_id=result.get('order_id_string',None)    
     audit_log_params={
         'action':'Player Ticket Purchase Complete',
@@ -295,7 +294,8 @@ def complete_prereg_player_token_purchase_route(request,app,event_id,token_purch
     #        'last_name':input_data['last_name'],
     #        'email':input_data['email'],
     #        'password':input_data['password']}    
-    msg.body = "Player %s has registered for the Intergalactic charity tournament on ??.  Your player id and pin is : \n Player Id : %s\nPin : %s" %(player.first_name+" "+player.last_name,player_id_for_event,player_pin)
+    msg.body = "Player %s has registered for the Intergalactic charity tournament 2018.  Your player id and pin is : \n\nPlayer Id : %s\nPin : %s\n\nYou can queue yourself and view your results at https://results.papa.org.  Download the app to get push notifications when your position in queue changes  (link to the app is at https://results.papa.org).  " %(player.first_name+" "+player.last_name,player_id_for_event,player_pin)
+    #msg.body = "Player %s has registered for the Intergalactic charity tournament on ??.  Your player id and pin is : \n Player Id : %s\nPin : %s" %(player.first_name+" "+player.last_name,player_id_for_event,player_pin)
     current_app.mail.send(msg)
     
     return result,token_purchase
@@ -313,8 +313,7 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
     if token_purchase.completed_purchase:
         raise BadRequest('You are trying to pay for something that is already paid for')                
     stripe_items=[]
-    for token_purchase_summary in token_purchase.token_purchase_summaries:
-        print "token purchase summary happening..."
+    for token_purchase_summary in token_purchase.token_purchase_summaries:        
         token_count=token_purchase_summary.token_count
         if token_purchase_summary.tournament_id:
             tournament=app.table_proxy.get_tournament_by_tournament_id(token_purchase_summary.tournament_id)
@@ -330,9 +329,7 @@ def complete_player_token_purchase_route(request,app, event_id, token_purchase_i
         if normal_count > 0:
             stripe_items.append({"quantity":normal_count,"type":"sku","parent":normal_sku})           
     api_key = app.event_settings[event_id].stripe_api_key    
-    result = app.stripe_proxy.purchase_tickets(stripe_items,api_key,input_data['stripe_token'],input_data['email'],token_purchase)    
-    print "got result from stripe...."
-    print result
+    result = app.stripe_proxy.purchase_tickets(stripe_items,api_key,input_data['stripe_token'],input_data['email'],token_purchase)
     token_purchase.stripe_transaction_id=result.get('order_id_string',None)    
     audit_log_params={
         'action':'Player Ticket Purchase Complete',
@@ -352,10 +349,10 @@ def event_user_purchase_tokens(event_id):
         new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=False,current_user=current_user)
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)
     if player_permission.can():
-        if input_data.get('comped',False) is True:
-            raise BadRequest('Naughty Naughty')
-        new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=True,logged_in_player=current_user)            
-
+        #if input_data.get('comped',False) is True:
+        #    raise BadRequest('Naughty Naughty')
+        #new_token_purchase,purchase_summary = purchase_tickets_route(request,current_app,event_id,player_initiated=True,logged_in_player=current_user)            
+        raise BadRequest('Player ticket purchase has been disabled for this tournament')
     current_app.table_proxy.commit_changes()    
     #total_cost = sum(int(summary['ticket_cost']['price']) for summary in purchase_summary)    
     return jsonify({'new_token_purchase':to_dict(new_token_purchase),

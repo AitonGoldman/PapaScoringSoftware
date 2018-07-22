@@ -69,9 +69,15 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <ion-item color='primary' *ngIf='row.seperator==true'>
-        {{row.seperator_message}}
-      </ion-item>
+      <ion-grid *ngIf='row.seperator==true'>
+        <ion-row>
+          <ion-col>
+            <ion-item  color="primary" >
+              {{row.seperator_message}}
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>    
   </ng-container>
   </div>
@@ -108,8 +114,7 @@
   <ng-container *ngFor="let row of currentResults;index as i;even as e">
     <div *ngIf="i==currentResults.length-1" 
          (@scrollAnim.done)="animationCallBack($event)"
-         [@scrollAnim]="{value: row.deleted, params : {amountToScroll: scrollDelta}}">
-      {{row}}
+         [@scrollAnim]="{value: row.deleted, params : {amountToScroll: scrollDelta}}">      
     </div>
     <div *ngIf="i!=currentResults.length-1" 
          [@scrollAnim]="{value: row.deleted, params : {amountToScroll: scrollDelta}}">

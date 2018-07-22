@@ -32,8 +32,7 @@ def create_player_route(request,tables_proxy,event_id,perform_existing_player_ch
         input_data = json.loads(request.data)
     else:
         raise BadRequest('Submitted information is missing required fields')    
-    event = tables_proxy.get_event_by_event_id(event_id)    
-    print "%s event id " % event_id
+    event = tables_proxy.get_event_by_event_id(event_id)        
     if event is None:
         raise BadRequest('No event with that ID')
     players_to_create=input_data['players']    
@@ -46,8 +45,7 @@ def create_player_route(request,tables_proxy,event_id,perform_existing_player_ch
                 raise BadRequest('Tried to submit a player with an invalid player_id')            
             if len([event_info for event_info in player.event_info if event_info.event_id==int(event_id)])>0 and perform_existing_player_check:
                 raise BadRequest('Player already added to event')                
-            email_address=player_to_create.get('email_address',None)
-            print "adding player to event %s" %event_id    
+            email_address=player_to_create.get('email_address',None)            
             tables_proxy.update_player_roles(event_id, player,
                                              player_to_create.get('ifpa_ranking',None),
                                              player_to_create.get('selected_division_in_multi_division_tournament',None),
@@ -170,14 +168,10 @@ def prereg_player_create(event_id,tournament_id):
         player_name = player_name+" "+player['extra_title'].lower().strip()
     # if player list is length > 0, check each player
     #  if extra title passed in, check against found player
-    #   if doesn't match, remove from players_found_list
-
-    print "full player name"
-    print player_name
+    #   if doesn't match, remove from players_found_list        
             
-    players_found_list = [found_player for found_player in players_found_list if found_player.get('player_full_name',None)==player_name]    
-    print "printing players_found_list"
-    print players_found_list
+    players_found_list = [found_player for found_player in players_found_list if found_player.get('player_full_name',None)==player_name]
+    
     if len(players_found_list) == 1:
         historical_tokens = current_app.table_proxy.get_historical_tokens_for_player(event_id,players_found_list[0]['player_id'])        
         if historical_tokens and len(historical_tokens)>0:                        
@@ -198,16 +192,12 @@ def prereg_player_create(event_id,tournament_id):
     # if player list is length > 0, check each player
     #  if extra title passed in, check against found player
     #   if doesn't match, remove from players_found_list
-
-    
-    print global_players_found_list    
-    print "global players list 2 "    
+            
     if len(global_players_found_list)==1:
         old_json = json.loads(request.data)        
         old_json['players'][0]['player_id']=global_players_found_list[0]['player_id']        
 
-        request.data = json.dumps(old_json)
-        print request.data
+        request.data = json.dumps(old_json)        
     event_players=create_player_route(request,current_app.table_proxy,event_id,perform_existing_player_check=False)    
     token_purchase = prereg_event_user_purchase_tokens(event_id,event_players[0],request,tournament_id)
     current_app.table_proxy.commit_changes()            

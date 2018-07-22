@@ -10,8 +10,7 @@ from shutil import copyfile
 
 import json
 
-def handle_img_upload(input_data):
-    print "in handle img for tourneys..."
+def handle_img_upload(input_data):    
     event_img_folders=current_app.config['IMG_HTTP_SRV_DIR']
     
     if 'img_file' in input_data and input_data['img_file'] and input_data['has_pic']:

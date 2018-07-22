@@ -63,8 +63,8 @@ class StripeProxy():
         except stripe.error.RateLimitError as e:
             return {'error_text':'The credit card processing service is busy.  Please try again in a few minutes','exception':e}
         except stripe.error.CardError as e:
-            return {'error_text':'The credit card processing service has rejected your card.  Please see the front desk for more details','exception':e}
+            return {'error_text':'The credit card processing service has rejected your card.  Please try another card','exception':e}
         except Exception as e:
             print e
-            return {'error_text':'I have no fucking idea what the fuck just happened','exception':e}
+            return {'error_text':'An unexpected error occured','exception':e}
             

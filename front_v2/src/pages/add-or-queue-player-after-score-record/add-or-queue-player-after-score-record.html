@@ -29,12 +29,12 @@
    </button>
  </ion-fab>
  <div text-center>
-   <img-loader [fallback]="'assets/imgs/default_user_pic.jpg'" [src]="playerImg!=null?imgBaseUrl+playerImg:imgBaseUrl+'/assets/imgs/default_user_pic.jpg'" useImg ></img-loader>
+<!--   <img-loader [fallback]="'assets/imgs/default_user_pic.jpg'" [src]="playerImg!=null?imgBaseUrl+playerImg:imgBaseUrl+'/assets/imgs/default_user_pic.jpg'" useImg ></img-loader> -->
 
    <!--<img [src]="playerImg!=null?imgBaseUrl+playerImg:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'">-->
  </div>
   <ion-list>
-    <ion-list-header no-lines>Queue/Add {{playerName}}
+    <ion-list-header no-lines><b>Queue/Add {{playerName}}</b>
     </ion-list-header>    
     <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push tappable (click)="addOrQueuePlayer(tournamentMachine)">
       <ion-badge item-start>{{tournamentMachine.queue_length}}</ion-badge>

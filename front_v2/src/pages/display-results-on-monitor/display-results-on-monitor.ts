@@ -12,7 +12,7 @@ import { PssPageComponent } from '../../components/pss-page/pss-page'
 
 @IonicPage(
     {
-    segment: ':eventId/:baseFontSize/:scrollDelta/:typeOfResults/test'
+    segment: ':eventId/:typeOfResults/:baseFontSize/:scrollDelta/:numResultsToDisplay/display
 })
 @Component({
   selector: 'page-display-results-on-monitor',
@@ -43,6 +43,7 @@ export class DisplayResultsOnMonitorPage extends PssPageComponent {
     tournament_machines:any=[];
     tournament_machines_for_chip_display:any=[];
     scrollDelta:any = 10;
+    numResultsToDisplay:any = 50;
     killTimer:any = false;
     
     baseFontSize:any = 12
@@ -100,7 +101,7 @@ export class DisplayResultsOnMonitorPage extends PssPageComponent {
                     return 
                 }
                 this.loading_instance.dismiss();                
-                this.currentResults=results.data;
+                this.currentResults=results.data.slice(0,this.numResultsToDisplay);
                 this.currentResults.push({})                
                 console.log(this.currentResults);
                 setTimeout(()=>{
@@ -127,7 +128,7 @@ export class DisplayResultsOnMonitorPage extends PssPageComponent {
                     
                     return 
                 }
-                this.currentResults=results.data;
+                this.currentResults=results.data.slice(0,this.numResultsToDisplay);
                 this.currentResults.push({})                
                 this.loading_instance.dismiss();
                 setTimeout(()=>{
@@ -140,9 +141,11 @@ export class DisplayResultsOnMonitorPage extends PssPageComponent {
     ionViewDidLoad() {
         //this.genResults();        
         this.eventId = this.navParams.get("eventId");
-        this.baseFontSize = this.navParams.get("baseFontSize");
-        this.scrollDelta = this.navParams.get("scrollDelta");
+        this.baseFontSize = this.navParams.get("baseFontSize")?this.navParams.get("baseFontSize"):this.baseFontSize;
+        this.scrollDelta = this.navParams.get("scrollDelta")?this.navParams.get("scrollDelta"):this.scrollDelta;
         this.typeOfResults = this.navParams.get("typeOfResults");        
+        this.numResultsToDisplay = this.navParams.get("numResultsToDisplay")?this.navParams.get("numResultsToDisplay"):this.numResultsToDisplay;
+
         this.calcFontSizes(this.baseFontSize);
         console.log('ionViewDidLoad DisplayResultsOnMonitorPage');
         //this.loading_instance = this.loadingCtrl.create({content: 'Please wait...'});
@@ -221,24 +224,33 @@ export class DisplayResultsOnMonitorPage extends PssPageComponent {
         alert.addInput({            
             type: 'text',
             name: 'baseFontSize',
-            placeholder: 'baseFontSize'
+            placeholder: 'baseFontSize',
+            value:this.baseFontSize
         })
         alert.addInput({            
             type: 'text',
             name: 'scrollDelta',
-            placeholder: 'scrollDelta'
+            placeholder: 'scrollDelta',
+            value:this.scrollDelta
         })
         alert.addInput({            
             type: 'text',
             name: 'typeOfResults',
-            placeholder: 'typeOfResults'
+            placeholder: 'typeOfResults',
+            value:this.typeOfResults
+        })        
+        alert.addInput({            
+            type: 'text',
+            name: 'numResultsToDisplay',
+            placeholder: 'numResultsToDisplay',
+            value:this.numResultsToDisplay
         })        
         alert.addButton('Cancel');
         alert.addButton({
             text: 'OK',
             handler: data => {
                 console.log(data);
-                this.navCtrl.push('DisplayResultsOnMonitorPage',{eventId:this.eventId,baseFontSize:data['baseFontSize'],scrollDelta:data['scrollDelta'],typeOfResults:data['typeOfResults']})
+                this.navCtrl.push('DisplayResultsOnMonitorPage',{eventId:this.eventId,baseFontSize:data['baseFontSize'],scrollDelta:data['scrollDelta'],typeOfResults:data['typeOfResults'],numResultsToDisplay:data['numResultsToDisplay']})
                 //segment: ':eventId/:baseFontSize/:scrollDelta/test'
                 //this.baseFontSize=data['baseFontSize'];
                 //this.scrollDelta=data['scrollDelta'];                

@@ -12,7 +12,7 @@ bracket_template[40]={
     'num_rounds':5,
     'num_matches_per_round':[6,6,4,2,1],
     'bye_rounds':[2,3],
-    'bye_players_rank_per_match':{ 2 : [[5,16],[6,15],[7,14],[8,13],[9,12],[10,11]], 3: [[1,4],[2,3]]},
+    'bye_players_rank_per_match':{ 2 : [[5,16],[6,15],[7,14],[8,13],[9,12],[10,11]], 3: [[1],[2],[3],[4]]},
     'number_bye_players':16
 }
 
@@ -66,8 +66,7 @@ def get_players_for_match(players_with_ranks):
     players_for_match=[]
     last_player_index=len(players_with_ranks)-1
     middle_player_index=last_player_index/2
-    middle_player_two_index=middle_player_index+1
-    
+    middle_player_two_index=middle_player_index+1        
     players_for_match.insert(0,players_with_ranks.pop(last_player_index))    
     players_for_match.insert(0,players_with_ranks.pop(middle_player_two_index))
     players_for_match.insert(0,players_with_ranks.pop(middle_player_index))
@@ -76,8 +75,7 @@ def get_players_for_match(players_with_ranks):
 
 
 @blueprints.test_blueprint.route('/<int:event_id>/brackets/<int:tournament_id>/<finals_name>',methods=['POST'])
-def generate_brackets(event_id, tournament_id,finals_name):
-    print "generating brackets..."
+def generate_brackets(event_id, tournament_id,finals_name):    
     tournament = current_app.table_proxy.get_tournament_by_tournament_id(tournament_id)
     if request.data:        
         input_data = json.loads(request.data)
@@ -124,10 +122,10 @@ def generate_brackets(event_id, tournament_id,finals_name):
                 finals_match.bye_player_one_finals_player_id=bye_player['finals_player_id']
                 finals_match.bye_player_one_name=bye_player['player_name']
                 
-
-                bye_player = bye_players[bye_player_ranks[1]-1]                
-                finals_match.bye_player_two_finals_player_id=bye_player['finals_player_id']
-                finals_match.bye_player_two_name=bye_player['player_name']
+                if len(bye_player_ranks)>1:
+                    bye_player = bye_players[bye_player_ranks[1]-1]                
+                    finals_match.bye_player_two_finals_player_id=bye_player['finals_player_id']
+                    finals_match.bye_player_two_name=bye_player['player_name']
                 continue
             
             match_players=get_players_for_match(first_round_players)
@@ -279,9 +277,7 @@ def edit_finals_match(event_id, finals_match_id):
         if tiebreaker:            
             finals_match.tiebreakers=tiebreaker
         if finals_match.one_completed and finals_match.two_completed and finals_match.three_completed and finals_match.four_completed:
-            print "completed 1"
-            if tiebreaker:
-                print "found tiebreaker"
+            if tiebreaker:                
                 if tiebreaker.completed:
                     finals_match.completed=True                    
                     finals_player_ids_in_tiebreaker = [player.finals_player_id for player in tiebreaker.players]
@@ -317,11 +313,9 @@ def edit_finals_match(event_id, finals_match_id):
 
             else:
                 finals_match.completed=True
-                player_string=ranked_players[0]['name']
-                print "setting %s to true" % player_string                
+                player_string=ranked_players[0]['name']                
                 setattr(finals_match,player_string+"_winner",True)
-                player_string=ranked_players[1]['name']                
-                print "setting %s to true" % player_string
+                player_string=ranked_players[1]['name']                                
                 setattr(finals_match,player_string+"_winner",True)
                 
     current_app.table_proxy.commit_changes()
@@ -382,7 +376,11 @@ def complete_round(event_id, final_id, round):
                 
     final = current_app.table_proxy.get_final(final_id)
     loosers_finals_player_ids=[]    
-    lowest_rank_for_each_round={24:{1:17,2:9,3:5,4:1},16:{1:8,2:4,3:1}}
+    # 24
+    #
+    #
+    #
+    lowest_rank_for_each_round={24:{1:17,2:9,3:5,4:1},16:{1:8,2:4,3:1},40:{1:28,2:16,3:8,4:4,5:0}}    
     #lowest_rank_for_each_round={24:{1:24,2:16,3:8,4:4},16:{1:8,2:4,3:1}}    
     tournament = current_app.table_proxy.get_tournament_by_tournament_id(final.tournament_id)
     finals_players = current_app.table_proxy.get_all_finals_players(final.tournament_id)    
@@ -418,8 +416,7 @@ def complete_round(event_id, final_id, round):
         looser_rank = lowest_rank_for_each_round[num_qualifiers][round]+ranked_player[0]
         #looser_rank = lowest_rank_for_each_round[num_qualifiers][round]-ranked_player[0]
         #set finishing rank
-        finals_player_dict[ranked_player[1]['finals_player_id']].finishing_rank=looser_rank
-        print "player %s %s is NOT a winner" % (ranked_player[1]['finals_player_id'],looser_rank)
+        finals_player_dict[ranked_player[1]['finals_player_id']].finishing_rank=looser_rank        
     # if we are not in the final round...
     if bracket_template[num_qualifiers]['num_rounds']!=round:
         next_round_matches = [match for match in current_app.table_proxy.get_all_finals_matches(final_id) if match.round==round+1]
@@ -502,10 +499,12 @@ def edit_tiebreakers(event_id, tiebreaker_id):
     current_app.table_proxy.commit_changes()
     return jsonify({'data':generic.serialize_tiebreaker(tiebreaker)})    
 
-def get_tiebreaker(ranked_results,boundry_rank,tournament,event_id,round=0,player_ids=False,finals_player_ids=False):
+def get_tiebreaker(ranked_results,boundry_rank,tournament,event_id,round=0,player_ids=False,finals_player_ids=False):    
     cutoff_index=len(ranked_results)
     rank_closest_to_cutoff=None
     rank_after_cutoff=None
+
+    
     
     if ranked_results[len(ranked_results)-1]['rank']==boundry_rank and boundry_rank==2:
         rank_closest_to_cutoff=2
@@ -515,13 +514,13 @@ def get_tiebreaker(ranked_results,boundry_rank,tournament,event_id,round=0,playe
             cutoff_index=idx            
             rank_closest_to_cutoff=ranked_results[idx-1]['rank']
             rank_after_cutoff=ranked_results[idx]['rank']
+    if len([ranked_result for ranked_result in ranked_results if ranked_result['rank']==1])==4:
+        rank_closest_to_cutoff=1        
     count_of_rank_closest_to_cutoff = len([rank for rank in ranked_results if rank['rank']==rank_closest_to_cutoff])            
-    if (rank_closest_to_cutoff == boundry_rank and count_of_rank_closest_to_cutoff < 2) or rank_closest_to_cutoff is None:        
-        print "no tiebreakers found... %s %s "%(rank_closest_to_cutoff, boundry_rank)
+    if (rank_closest_to_cutoff == boundry_rank and count_of_rank_closest_to_cutoff < 2) or rank_closest_to_cutoff is None:                
         return None,None,None
     #count_of_rank_closest_to_cutoff = len([rank for rank in ranked_results if rank['rank']==rank_closest_to_cutoff])
-    if count_of_rank_closest_to_cutoff-1 + rank_closest_to_cutoff <= boundry_rank:
-        print "no tiebreakers found...again %s %s %s "%(count_of_rank_closest_to_cutoff, rank_closest_to_cutoff, boundry_rank)        
+    if count_of_rank_closest_to_cutoff-1 + rank_closest_to_cutoff <= boundry_rank:        
         return None,None,None
     breach_difference = count_of_rank_closest_to_cutoff-1 + rank_closest_to_cutoff - boundry_rank
     num_players_that_advance = count_of_rank_closest_to_cutoff - breach_difference
@@ -542,10 +541,7 @@ def get_tiebreaker(ranked_results,boundry_rank,tournament,event_id,round=0,playe
         if len(tied_players_to_check)==0:
             matched_tiebreaker = tiebreaker
     if matched_tiebreaker:
-        return matched_tiebreaker,cutoff_index, tied_player_ids
-    print "DEBUG : event id - %s" % event_id
-    print "DEBUG : tied_player_ids - %s" % tied_player_ids
-    print "DEBUG : tournament id - %s" % tournament.tournament_id
+        return matched_tiebreaker,cutoff_index, tied_player_ids            
     
     new_tiebreaker = current_app.table_proxy.create_tiebreaker(event_id,
                                                                tied_player_ids,
@@ -627,5 +623,94 @@ def get_tiebreakers(event_id, tournament_id,finals_name):
                     'tournament_qualifiers':num_qualifiers,
                     'final':final_dict})
 
+
+
+@blueprints.test_blueprint.route('/<int:event_id>/final_order_by_winner/<int:final_id>',methods=['GET'])
+def get_final_order_by_winner(event_id, final_id):
+    finals_matches = current_app.table_proxy.get_all_finals_matches(final_id)
+    final_matches_dict={}
+    for final_match in finals_matches:
+        round = final_match.round
+        if final_matches_dict.get(round,None) is None:
+            final_matches_dict[round]=[]
+        final_match_dict = to_dict(final_match)
+        if final_match.tiebreaker_id:
+            final_match_dict['tiebreaker']=generic.serialize_tiebreaker(final_match.tiebreakers)
+        final_matches_dict[round].append(final_match_dict)
+    final_info=[]
+    final = current_app.table_proxy.get_final(final_id)
+    finals_players = current_app.table_proxy.get_all_finals_players(final.tournament_id)
+    #
+    #  player_x_finals_player_id
+    #  player_x_name
+    #  player_x_order_y
+    #  player_x_points_y
+    #  player_x_rank
+    #  player_x_score_y
+    #  player_x_winner
+    #
+    # for each round
+    #  for each match
+    #   create a dict with the values for each player, add to a list
+    #   calculate total points per player
+    #   sort the list based on sum
+    #   place the values back in the appropriate places
+    #
+    #
+    for index in final_matches_dict:
+        round = final_matches_dict[index]
+        for match in round:
+            player_one_dict=create_dict_from_final_match_player(match, "one")
+            player_two_dict=create_dict_from_final_match_player(match, "two")
+            player_three_dict=create_dict_from_final_match_player(match, "three")
+            player_four_dict=create_dict_from_final_match_player(match, "four")
+            players=[player_one_dict,player_two_dict,player_three_dict,player_four_dict]
+            sorted_players = sorted(players, key= lambda e: e['player_total_points'],reverse=True)
+            reassign_match_based_on_sorted_players(match,sorted_players)
+    finals_player_dict = {finals_player.finals_player_id:to_dict(finals_player) for finals_player in finals_players}
+    #return jsonify({'data':final_matches_dict,'finals_players':finals_player_dict,'final_name':final.name})
+    return jsonify({'data':final_matches_dict,'finals_players':finals_player_dict,'final_name':final.name})
+
+def reassign_match_based_on_sorted_players(player_dict,sorted_players):
+    for i,v in enumerate(['one','two','three','four']):
+        player_dict['sorted_player_'+v+'_finals_player_id']=sorted_players[i]['player_finals_player_id']
+        player_dict['sorted_player_'+v+'_name']=sorted_players[i]['player_name']
+        for j in [1,2,3,4]:
+            player_dict['sorted_player_'+v+'_order_'+str(j)]=sorted_players[i]['player_order_'+str(j)]
+        for j in [1,2,3,4]:
+            player_dict['sorted_player_'+v+'_points_'+str(j)]=sorted_players[i]['player_points_'+str(j)]
+        for j in [1,2,3,4]:
+            player_dict['sorted_player_'+v+'_score_'+str(j)]=sorted_players[i]['player_score_'+str(j)]
+        player_dict['sorted_player_'+v+'_winner']=sorted_players[i]['player_winner']
+        player_dict['sorted_player_'+v+'_rank']=sorted_players[i]['player_rank']
+        player_dict['sorted_player_'+v+'_total_points']=sorted_players[i]['player_total_points']
+        player_dict['sorted_player_'+v+'_current_score']=sorted_players[i]['current_score']
+
+    return player_dict
+
+def create_dict_from_final_match_player(match, player_num):
+    player_dict = {}
+    player_dict['player_finals_player_id']=match['player_'+player_num+'_finals_player_id']
+    player_dict['player_name']=match['player_'+player_num+'_name']
+    for j in [1,2,3,4]:
+        player_dict['player_order_'+str(j)]=match['player_'+player_num+'_order_'+str(j)]
+    for j in [1,2,3,4]:
+        player_dict['player_points_'+str(j)]=match['player_'+player_num+'_points_'+str(j)]
+    for j in [1,2,3,4]:
+        player_dict['player_score_'+str(j)]=match['player_'+player_num+'_score_'+str(j)]
+    current_score=None
+    for j in [1,2,3,4]:
+        if match['machine_'+str(j)]:
+            current_score=player_dict['player_score_'+str(j)]
+    match['player_'+player_num+'_current_score']=current_score
+    player_dict['current_score']=current_score
+    player_dict['player_winner']=match['player_'+player_num+'_winner']
+    player_dict['player_rank']=match['player_'+player_num+'_rank']
+    player_total_points = 0
+    for j in [1,2,3,4]:
+        cur_points = player_dict['player_points_'+str(j)] if player_dict['player_points_'+str(j)] else 0
+        player_total_points=player_total_points+cur_points
+    player_dict['player_total_points']=player_total_points
+    return player_dict
 
 

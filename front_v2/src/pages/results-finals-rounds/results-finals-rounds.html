@@ -5,11 +5,12 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar color='pss-header'>
+  <ion-navbar hideBackButton="true" color='pss-header'>
     <ion-title>{{finalName}} Finals</ion-title>
     <ion-buttons end hideWhen='mobile'>
-      <button margin-right ion-button [navPush]="'ResultsFinalsRoundsPage'" [navParams]="buildNavParams({finalId:finalId,round:roundParam})" *ngFor="let roundParam of [1,2,3,4]">
-        Round {{roundParam}}
+      <button margin-right ion-button [navPush]="'ResultsFinalsRoundsPage'" [navParams]="buildNavParams({finalId:finalId,round:roundParam})" *ngFor="let roundParam of [1,2,3,4,5]">
+        <!--Round {{roundParam}}-->
+        {{roundDescriptions[roundParam]}}
       </button>
       <button ion-button [navPush]="'ResultsPage'" [navParams]="buildNavParams({})">
         Back To Results
@@ -25,10 +26,13 @@
 
 <ion-content>
   <ion-list style='margin:auto;width:200px'>
-  <ion-item color='light'>
+  <ion-item color='light' showWhen="mobile">
     <ion-label>Select Round</ion-label>
     <ion-select #C (ionChange)="onChangeGotoRound(C.value,true)" >
-      <ion-option *ngFor="let roundNum of rounds" value="{{roundNum}}">{{roundNum}}</ion-option>
+      <ion-option *ngFor="let roundNum of rounds" value="{{roundNum}}">
+        <!--{{roundNum}}-->
+        {{roundDescriptions[roundNum]}}
+      </ion-option>
     </ion-select>
   </ion-item>
   </ion-list>  
@@ -66,8 +70,8 @@
           <ng-container *ngFor="let player_string of ['player_one','player_two','player_three','player_four']">          
           <ion-row>
             <ion-col col-2 text-nowrap text-center>
-              <ion-icon item-start *ngIf="match[player_string+'_winner']==true" name="trophy"></ion-icon>
-              <ion-icon  style='font-size:14px' text-center item-start *ngIf="match[player_string+'_winner']!=true">
+              <ion-icon item-start *ngIf="match[player_string+'_winner']==true && round!=totalRounds" name="trophy"></ion-icon>
+              <ion-icon  style='font-size:14px' text-center item-start *ngIf="match[player_string+'_winner']!=true || round==totalRounds">
                 <span *ngIf="finalsPlayers[match[player_string+'_finals_player_id']]!=null && finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank!=null">#{{finalsPlayers[match[player_string+'_finals_player_id']].finishing_rank+1}}</span>
                 <span *ngIf="match.completed != true">TBD</span> 
               </ion-icon>                

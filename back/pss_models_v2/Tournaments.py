@@ -51,5 +51,6 @@ def generate_tournaments_class(db_handle):
         wizard_configured=db_handle.Column(db_handle.Boolean,default=False)
         has_pic=db_handle.Column(db_handle.Boolean,default=False)
         img_url=db_handle.Column(db_handle.String(100))
-        
+        finals_only = db_handle.Column(db_handle.Boolean,default=False)
+
     return Tournaments

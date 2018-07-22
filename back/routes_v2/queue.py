@@ -100,18 +100,17 @@ def add_player_to_tournament_machine_queue_route(request,app,event_id,current_us
             input_data = json.loads(request.data)
         else:
             raise BadRequest('Not enough info specified')
-    player_id = input_data.get('player_id',None)
-    print "in quueing - player id is %s"%player_id
-    if player_initiated and player_id != current_user.player_id:
-        print "%s %s"%(player_id,current_user.player_id)
+    player_id = input_data.get('player_id',None)    
+    if player_initiated and player_id != current_user.player_id:        
         raise BadRequest('Naughty Naughty')
     tournament_machine_id=input_data.get('tournament_machine_id',None)
     if player_id is None:
         player = current_user.player_id        
     player = app.table_proxy.get_player(event_id, player_id=player_id)
     tournament_machine = app.table_proxy.get_tournament_machine_by_id(tournament_machine_id)
-    machine_player_is_alrady_playing = app.table_proxy.get_tournament_machine_player_is_playing(player,event_id)
-    print "in queeing - machine already being played is %s"%machine_player_is_alrady_playing
+    if tournament_machine.active is not True:
+        raise BadRequest('This machine is being fixed.  Queueing is disabled for this machine until it is fixed.')
+    machine_player_is_alrady_playing = app.table_proxy.get_tournament_machine_player_is_playing(player,event_id)    
     if machine_player_is_alrady_playing:
         raise BadRequest('Player is already playing a game')
     
@@ -194,8 +193,7 @@ def add_unloggedin_player_to_queue(event_id):
 
 @blueprints.test_blueprint.route('/<int:event_id>/queue',methods=['POST'])
 def add_player_to_queue(event_id):
-    queue_permission = permissions.QueuePermission(event_id)
-    print current_user
+    queue_permission = permissions.QueuePermission(event_id)    
     if queue_permission.can():
         updated_queue = add_player_to_tournament_machine_queue_route(request,current_app,event_id,current_user)
     player_permission = permissions.PlayerTokenPurchasePermission(event_id)
@@ -244,11 +242,3 @@ def modify_player_position_in_queue(event_id):
     return jsonify({'data':tournament_machine_dict})
     pass
 
-@blueprints.test_blueprint.route('/test_fcm',methods=['GET'])
-def test_fcm():
-    player = current_app.table_proxy.get_player(1,player_id=1)
-    send_indiv_message.delay('test','test message',player.ioniccloud_push_token)
-    response = jsonify({})
-    response.set_cookie('poop','pooping')
-    return response
-#'efbKkf8mQEM:APA91bEtd9uFSdBg949Z_NdZD6iCKo0d1SDD1iVbcob1EMHLsuA9MPfu7G89KmEm4YYNLvf-RCcmhHKio_-MWlpm7mTRsA1ExIkI-ScvRTz2RxdxDyb7ILRv52B_gwVby2tiaThvUOjV'

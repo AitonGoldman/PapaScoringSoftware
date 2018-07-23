@@ -1,0 +1,30 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div ng-if="post_success==undefined">
+  <form name="myForm">
+    <div class="card">
+      <pss-text-input-basic field='manually_set_price' basic='true'/>
+    </div>
+    <div class="card">
+      <pss-boolean-input-basic field='discount' basic='true'/>
+    </div>
+    <div class="card" ng-if='item.discount==true'>
+      <pss-text-input-basic field='number_of_tickets_for_discount' basic='true'/>
+    </div>
+    <div class="card" ng-if='item.discount==true'>
+      <pss-text-input-basic field='discount_price' basic='true'/>
+    </div>    
+    
+    <div class='row'>
+      <div class='col'>
+      </div>
+      <button ng-click='edit_event_func(item,["queue_bump_amount","number_unused_tickets_allowed","player_id_seq_start"])' ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
+      <div class='col'>
+      </div>    
+    </div>
+  </form>
+</div>
+

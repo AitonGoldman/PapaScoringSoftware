@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar color='pss-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+<ion-content>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>  Register scorekeepeer/deskworker/etc</b>
+ </ion-toolbar>
+
+  <div class='desktopSlim'>
+  <form #myForm="ngForm">
+    <ion-item-divider color="light" text-wrap>Event Role (Scorekeeper, etc) </ion-item-divider>
+
+    <ion-item class='shadedInputField'>
+    <ion-label>Role</ion-label>
+    <ion-select name="myeventrole" [(ngModel)]="selectedRole" required>
+      <ion-option *ngFor="let role of roles" [value]="role">{{role.event_role_name}}</ion-option>
+    </ion-select>
+    </ion-item>
+    <ion-item>
+    </ion-item>
+    <ion-item-divider color="light" text-wrap>Person's Name</ion-item-divider>
+    <!--<ion-auto-complete [disabled]="selectedRole==null" name="myautocomplete" [(ngModel)]="selectedUser" #searchbar (autoFocus)="onFocus()" (ionAutoInput)="onInput($event)" (itemSelected)="onSelect($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter name', debounce:500}"></ion-auto-complete>-->
+    <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Persons Name', debounce:500}"></ion-auto-complete>
+  <div text-center margin-bottom [style.height]="'25px'">
+    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  </div>
+
+
+  </form>
+  <div *ngIf='selectedRole==null' text-center padding>
+    Please select a role!
+  </div>
+  <div *ngIf='selectedPlayer==null && notFoundMessage==null && selectedRole != null' text-center padding>
+    Please enter a name!
+  </div>
+  
+  <div *ngIf='notFoundMessage!=null && selectedRole!=null' text-center padding>        
+    The system does not know about {{this.searchbar.keyword}}.  Click the button below to register them for the event.
+    <br>
+    <button [disabled]='!myForm.valid' ion-button margin tappable (click)="onSubmit(this.searchbar.keyword)">Register User</button>
+    
+  </div>
+</div>  
+</ion-content>

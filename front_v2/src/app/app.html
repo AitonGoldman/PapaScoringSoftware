@@ -1,0 +1,35 @@
+<ion-menu [content]="content" persistent>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+ 
+  <ion-content>
+    <ion-list>
+      <!--<button ion-item  menuClose (tap)="openPage('EventOwnerHomePage')">
+        Event Owner Home Page
+        </button>-->
+      <button ion-item menuClose>
+        Put Something Here Later
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<!-- main navigation -->
+<!--
+<ion-header hideWhen="mobile">
+  <ion-navbar>
+    <ion-title>Pss</ion-title>
+    <ion-buttons end>
+      <button icon-only ion-button [navPush]="'LoginPage'" [navParams]="getEventIdName()" >Login</button>
+      <button icon-only ion-button>Results</button>
+      <button icon-only ion-button>Queues</button>
+      <button *ngIf="eventAuth.getRoleName(eventId)" icon-only ion-button (click)="menuNav(getRolePage())">{{eventAuth.getRoleName(eventId)}}</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+-->
+
+<ion-nav id="nav" [root]="'EventSelectPage'" [rootParams]="{eventId:eventId,eventName:eventName}" #content swipeBackEnabled="false">
+</ion-nav>

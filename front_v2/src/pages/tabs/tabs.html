@@ -1,0 +1,15 @@
+<!--
+  Generated template for the TabsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-tabs #myTabs (ionChange)="onTabChange($event)">
+  <ion-tab tappable [rootParams]="buildNavParams({})" [root]="getHomePageString(null,true)" [tabIcon]="tabHomeIcon" [tabTitle]="homeIconTitle"></ion-tab>
+  <ion-tab tappable [rootParams]="buildNavParams({})" [root]="'ResultsPage'" tabIcon="clipboard" tabTitle="Results"></ion-tab>
+  <ion-tab tappable [rootParams]="buildNavParams({})" [root]="'QueueSelectPlayerTournamentMachinePage'" tabIcon="git-branch" tabTitle="Queues"></ion-tab>
+  <ion-tab tappable [rootParams]="buildNavParams({})" [root]="'QuickLinksPage'" tabIcon="flash" tabTitle="Quick Links"></ion-tab>
+
+
+</ion-tabs>
+

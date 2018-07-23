@@ -1,0 +1,16 @@
+/node_modules/
+/bower_components/
+/dist/
+/.sass-cache/
+*.swp
+.DS_Store
+npm-debug.log
+*~
+\#*\#
+.\#*
+/platforms/
+/www/css/*
+/www/js/app/config.js
+.io-config.json
+*secret_info.js
+*events.json

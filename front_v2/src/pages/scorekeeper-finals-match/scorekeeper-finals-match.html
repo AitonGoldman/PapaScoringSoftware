@@ -1,0 +1,134 @@
+<!--
+  Generated template for the ScorekeeperFinalsMatchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color='pss-home-header'>
+    <ion-title>Finals Scorekeeping</ion-title>
+
+    <ion-buttons end showWhen='mobile'>
+      <button tappable no-margin (click)="gotoParentTab()" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Scorekeeper<br>Home</p>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <div *ngIf='match!=null' padding margin>
+    <ion-grid style='border-width:1px;border-style:solid'>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-2 text-center>
+          Rank
+        </ion-col>
+        <ion-col col-6 text-center>
+          Name
+        </ion-col>
+        <ion-col col-2 text-center>
+          Points
+        </ion-col>
+        <ion-col>
+        </ion-col>
+        
+      </ion-row>
+      <ion-row *ngFor="let player of ['one','two','three','four']" >
+        <ion-col></ion-col>
+        <ion-col col-2 text-center>{{match['player_'+player+'_rank']}}</ion-col>
+        <ion-col col-6 text-center>{{match['player_'+player+'_name']}}</ion-col>        
+        <ion-col text-center col-2>{{match['player_'+player+'_points_1']+match['player_'+player+'_points_2']+match['player_'+player+'_points_3']++match['player_'+player+'_points_4']}}</ion-col>
+        <ion-col></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div text-center>
+    <button ion-button default tappable [navPush]="'ScorekeeperFinalsRoundPage'" [navParams]="buildNavParams({finalId:finalId,round:round})" >Go Home</button>
+  </div>
+  <ng-container *ngFor="let machineNum of [1,2,3,4]">
+    <div margin-top margin-bottom text-center>      
+      &nbsp;    
+    </div>
+
+  <div *ngIf="match!=null && (machineNum==1 || (machineNum==2 && match.one_completed==true) || (machineNum==3 && match.two_completed==true)|| (machineNum==4 && match.three_completed==true))" magin-top margin-bottom>
+    <ion-item><h1>Game {{machineNum}}</h1>   <button item-end ion-button tappable (click)="showPlayerOrder(machineNum)">Set Player Order</button></ion-item>
+
+  <!--<button ion-button (click)="generateListForOrderPicking(machineNum)">Reset Player Order</button>-->  
+
+  <ion-card no-padding *ngIf="gameOrderListsDisplay && gameOrderListsDisplay[machineNum]==true">
+    <ion-card-content no-padding no-margin>
+    <ion-list>
+      <ion-item-sliding *ngFor="let player of gameOrderLists[machineNum]">
+        <ion-item>
+          {{player.name}}
+          <button ion-button color="danger" *ngIf="player.order!=null" item-end>
+            {{player.order}}
+          </button>
+<!--          <button item-end *ngFor="let order of [1,2,3,4]" hideWhen="mobile" item-end ion-button color="primary" [disabled]='takenOrderPosition.includes(order)' margin-right padding tappable (click)="setPlayerOrder(order,player,machineNum)">
+            {{order}}
+            </button>          -->
+          <button item-end *ngFor="let order of [1,2,3,4]" item-end ion-button color="primary"  [disabled]='takenOrderPosition[order]' margin-right padding tappable (click)="setPlayerOrder(order,player,machineNum)">
+            {{order}}
+            </button>          
+
+        </ion-item>
+<!--        
+        <ion-item-options side="right" showWhen="mobile">
+          <ng-container *ngFor="let order of [1,2,3,4]">            
+          <button ion-button color="primary" *ngIf="!takenOrderPosition.includes(order)" margin-right padding-right tappable (click)="setPlayerOrder(order,player,machineNum)">
+            {{order}}
+          </button>          
+          </ng-container>
+        </ion-item-options>-->
+      </ion-item-sliding>
+    </ion-list>
+    <!-- <span *ngFor="let player of gameOrderLists[1]"> -->
+    <!--   {{player.name}} -->
+    <!-- </span> -->
+    <ion-list>
+      <ion-item text-center>
+        <button ion-button tappable (click)="showPlayerOrder(machineNum)">Save Order</button>
+      </ion-item>
+    </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <div *ngIf="gameDisplay && gameDisplay[machineNum]==true" >
+   <ion-item>
+      <ion-label stacked>Machine</ion-label>
+      <ion-input  type="text" required
+                  [(ngModel)]="match['machine_'+machineNum]" name="test{{match.finals_match_id}}{{machineNum}}"></ion-input>
+   </ion-item>
+    <ion-item *ngFor="let player of scoreOrderLists[machineNum]">
+      <ion-label stacked>Player {{player.name}} Score</ion-label>
+      <ion-input  type="tel" required
+                  (keyup)="insertCommas($event,match,player.player,machineNum)" [(ngModel)]="match[player.player+'_score_'+machineNum]" name="test{{player.player}}{{machineNum}}"></ion-input>
+   </ion-item>
+   <ion-item no-lines text-center>
+     <button ion-button tappable (click)="saveScores()">Save Scores</button>
+   </ion-item>
+  </div>
+
+  <!--<form #myForm="ngForm" *ngIf='final!=null'>
+    <ion-item *ngFor="let player of ['one','two','three']">
+      <ion-label stacked>Username</ion-label>
+      <ion-input  type="text" required
+                 [(ngModel)]="final['player_'+player+'_score_'+player]" name="test"></ion-input>
+    </ion-item>    
+  </form>-->
+  </div>
+  </ng-container>
+
+  <div *ngIf='match != null && match.tiebreaker_id!=null' style='border-width:1px;border-style:solid' padding margin>
+    <b>Tiebreaker</b><span margin-left *ngIf="match.tiebreaker != null && match.tiebreaker.completed==true">(completed)</span>
+    <form #myTiebreakerForm="ngForm">
+      <ion-item *ngFor="let player of match.tiebreaker.players">
+        <ion-label stacked>{{player.player_name}}</ion-label>
+        <ion-input type="number" required
+                   [(ngModel)]="player.score" [name]="player.tiebreaker_player_id"></ion-input>
+      </ion-item>
+      <ion-item no-lines>
+        <button tappable (click)="saveTiebreakerScores()" [disabled]='!myTiebreakerForm.dirty' ion-button default>Save Scores</button>
+      </ion-item>
+    </form>    
+  </div>
+</ion-content>

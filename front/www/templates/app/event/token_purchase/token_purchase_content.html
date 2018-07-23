@@ -1,0 +1,62 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-multiple-buttons buttons-info="[{title:'Purchase More Tickets',ui_sref:'app.event.token_purchase'},{title:'Go Home',ui_sref:'app.event'}]"></post-success-multiple-buttons>
+</div>
+<div ng-if="post_success==undefined">
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Enter Player Number" ng-model='filter_for.filter_for' ng-change='on_change()'>
+    </label>
+    <button class="button button-small" ng-click='get_token_info_for_player_func()'>
+      Select
+    </button>    
+  </div>
+    <div class='row'>
+      <div ng-class="{'col-80':filtered_player.has_pic==true,'col':filtered_player.has_pic!=true}">      
+        <div class="item item-borderless">
+          First Name : {{filtered_player.first_name}} &nbsp;  
+        </div>
+        <div class="item item-borderless">
+          Last Name : {{filtered_player.last_name}} &nbsp; 
+        </div>
+        <div class="item item-borderless">
+          Player Number : {{filtered_player.event_player.event_player_id}} &nbsp; 
+        </div>
+        
+      </div>
+      <div class='col-20' style='margin:auto' ng-if='filtered_player.has_pic==true'>
+        <img src='{{filtered_player.img_url}}' class='padding circular--square' style='opacity:.5;height:130px;width:130px'>
+      </div>
+    </div>
+    
+    <div class="list" ng-if='token_info_gotten!=undefined'>
+      <label class="item item-input item-select" ng-repeat='tournament_ticket_price_list in token_info.tournament_ticket_prices'>
+        <div class="input-label">
+          {{tournament_ticket_price_list.tournament_name}}
+        </div>
+        <select ng-change='on_ticket_change()' ng-model='tournament_ticket_price_list.purchase' ng-options="price.amount for price in tournament_ticket_price_list.prices track by price.amount">
+        </select>
+      </label>
+      <label class="item item-input item-select" ng-repeat='meta_tournament_ticket_price_list in token_info.meta_tournament_ticket_prices'>
+        <div class="input-label">
+          {{meta_tournament_ticket_price_list.meta_tournament_name}}
+        </div>
+        <select ng-change='on_ticket_change()' ng-model='meta_tournament_ticket_price_list.purchase' ng-options="price.amount for price in meta_tournament_ticket_price_list.prices track by price.amount">
+        </select>
+      </label>      
+    </div>
+    <div ng-if='token_info_gotten!=undefined'>
+      <center>
+      Total Cost : {{total_cost}}
+      <br>      <br>
+      <button ng-click="purchase()" class='button'>
+        Purchase
+      </button>
+      </center>
+    </div>
+    
+
+</div>
+

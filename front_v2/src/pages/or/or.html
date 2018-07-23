@@ -1,0 +1,137 @@
+<!--
+    Generated template for the TestPage page.
+
+    See http://ionicframework.com/docs/components/#navigation for more info on
+    Ionic pages and navigation.
+  -->
+<ion-content no-padding no-margin>
+  <ion-grid tournament-header style='width:50%;' no-padding float-left>
+    <ion-row>      
+      <ion-col >
+        <ng-container *ngIf="tournaments.length > 0">
+          <div style='height:50%' text-center>
+            <h3>{{tournaments[tournamentIndexToDisplay].tournament_name}}</h3>
+          </div>
+        </ng-container>        
+        <div style='background-color:#CCCCCC'>
+          <ion-grid no-margin>
+            <ion-row >
+              <ion-col col-2 text-center>
+                rank
+              </ion-col>
+              <ion-col col-2 text-center>
+                points
+              </ion-col>
+              <ion-col col-8 text-center>
+                name
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  
+  <ion-grid machine-header style='width:50%;' float-right no-padding>
+    <ion-row>
+      <ion-col >
+        <ng-container *ngIf="tournaments.length > 0">
+          <div text-center style='height:50%'>
+            <h3 *ngIf="tournaments.length > 0 && tournaments[tournamentIndexToDisplay].tournament_machine_index!=null">
+              {{tournaments[tournamentIndexToDisplay].tournament_machines[tournaments[tournamentIndexToDisplay].tournament_machine_index].tournament_machine_name}}
+            </h3>
+          </div>
+        </ng-container>
+        <div style='background-color:#CCCCCC'>
+          <ion-grid>
+            <ion-row >
+              <ion-col col-2 text-center>
+                rank
+              </ion-col>
+              <ion-col col-2 text-center>
+                points
+              </ion-col>
+              <ion-col col-5 text-center>
+                name
+              </ion-col>
+              <ion-col col-3 text-center>
+                score
+              </ion-col>
+            </ion-row>
+          </ion-grid>    
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-scroll #tournamentScroll1 scrollY="true" style="width: 50%; height: 90%;" float-left >
+    <ion-grid>
+      <ng-container *ngIf='tournaments.length>0'>
+        <ng-container *ngFor="let row of tournaments[tournamentIndexToDisplay].results;even as e">
+          <ion-row *ngIf="row.hide!=true && row.seperator==true" [style.background-color]="'#FFFF00'" >
+            <ion-col text-center>
+              {{row.seperator_message}}
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="row.hide!=true && row.seperator!=true" [style.background-color]="setRowColor(e,row)">
+          <ion-col col-2 text-center>
+            {{row.rank}}
+          </ion-col>
+          <ion-col col-2 text-center>
+            {{row.points}}
+          </ion-col>
+          <ion-col col-8 text-center>
+            {{row.player_name}}
+          </ion-col>
+        </ion-row>
+        </ng-container>
+      </ng-container>
+    </ion-grid>
+    <div text-center *ngIf="tournamentsLoading[0]==true">
+      <ion-spinner></ion-spinner>
+    </div>
+  </ion-scroll>
+  
+  <ion-scroll #tournamentMachineScroll scrollY="true" style="width: 50%; height: 90%;" float-left >
+
+    <ion-grid>
+      <ng-container *ngIf='tournaments.length>0 && tournaments[1].tournament_machine_index!=null'>
+        <ng-container *ngFor="let row of tournaments[tournamentIndexToDisplay].tournament_machines[tournaments[tournamentIndexToDisplay].tournament_machine_index].results;even as e">
+          <ion-row  *ngIf="row.hide!=true" [style.background-color]="e!=true?'#CCCCCC':'white'">
+              <ion-col col-2 text-center>
+                {{row.rank}}
+              </ion-col>
+              <ion-col col-2 text-center>
+                {{row.points}}
+              </ion-col>
+              <ion-col col-5 text-center no-padding no-margin>
+                {{row.player_name}}
+              </ion-col>
+              <ion-col col-3 text-center>
+                {{row.score}}
+              </ion-col>
+
+        </ion-row>
+        </ng-container>
+      </ng-container>
+    </ion-grid>
+    <div text-center *ngIf="tournamentMachinesLoading[1]==true">
+      <ion-spinner></ion-spinner>
+    </div>    
+  </ion-scroll>
+
+  <ion-grid style='width:50%;' float-right>
+    <ion-row>
+      <ion-col text-center>
+        <ng-container *ngIf="tournaments.length>0 && tournaments[tournamentIndexToDisplay].tournament_machine_index!=null">
+          <div text-center>
+          <ion-chip [color]="tournamentMachine.tournament_machine_name==tournaments[tournamentIndexToDisplay].tournament_machines[tournaments[tournamentIndexToDisplay].tournament_machine_index].tournament_machine_name?'primary':null" *ngFor="let tournamentMachine of tournaments[tournamentIndexToDisplay].tournament_machines">
+          <ion-label>{{tournamentMachine.tournament_machine_name | slice:0:10}}{{tournamentMachine.tournament_machine_name.length>10?'...':''}} </ion-label>
+          </ion-chip>
+          </div>          
+        </ng-container>
+      </ion-col>      
+    </ion-row>
+  </ion-grid>  
+</ion-content>

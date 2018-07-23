@@ -1,0 +1,41 @@
+<ion-view view-title="Result Division">
+  <ion-content>      
+    <div ng-if='site!="pinburgh_2017"' 'class="skinny-list list">
+      <a id="home_manage_user_button" ui-sref='.divisions' class="item item-icon-left item-padding">
+        <i class="icon ion-ios-paper-outline"></i>
+        <span>Division Results</span>
+      </a>
+      <a id='home_manage_players_button' ui-sref='.division_machines' class="item item-icon-left  item-padding">
+        <i class="icon ion-cube"></i>
+        <span>Machine Results</span>
+      </a>
+      <a ui-sref='.players' class="item item-icon-left  item-padding">
+        <i class="icon ion-person"></i>
+        <span>Player Results</span>
+      </a>
+      <a ui-sref='app.redirect_finals' class="item item-icon-left  item-padding">
+        <i class="icon ion-person"></i>
+        <span>Finals Results</span>
+      </a>      
+    </div>
+    <div ng-if='site=="pinburgh_2017"' 'class="skinny-list list">
+      <a id="home_manage_user_button" ui-sref='app.redirect' class="item item-icon-left item-padding">
+        <i class="icon ion-ios-paper-outline"></i>
+        <span>Division Results</span>
+      </a>
+      <a id='home_manage_players_button' ui-sref='app.redirect' class="item item-icon-left  item-padding">
+        <i class="icon ion-cube"></i>
+        <span>Machine Results</span>
+      </a>
+      <a ui-sref='app.redirect' class="item item-icon-left  item-padding">
+        <i class="icon ion-person"></i>
+        <span>Player Results</span>
+      </a>
+      <a ui-sref='app.finals_results' class="item item-icon-left  item-padding">
+        <i class="icon ion-person"></i>
+        <span>Finals</span>
+      </a>
+    </div>    
+  </ion-content>
+</ion-view>
+

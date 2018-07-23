@@ -1,0 +1,86 @@
+<!--
+    Generated template for the HomePage page.
+
+    See http://ionicframework.com/docs/components/#navigation for more info on
+    Ionic pages and navigation.
+  -->
+<ion-header>
+  <ion-navbar color="pss-{{cssColors}}-header">
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>
+  
+</ion-header>
+<ion-content class="card-background-page">
+  <div [style.width]="contentWidth" style='margin-left:auto;margin-right:auto' text-center>
+    <div>
+      <h2>Papa Scoring Software</h2>
+    </div>
+    <div *ngIf="eventAuth.getRoleName(eventId)==null||eventAuth.getRoleName(eventId)=='player'">    
+      <ion-card hideWhen='cordova,core,tablet' padding-bottom padding-top>
+        <ion-icon float-left padding-left  name="logo-apple" style='zoom:2'></ion-icon>
+        <b>Download the app
+          <a *ngIf="platform.is('ios')" href="http://itunes.apple.com/us/app/yapss/id1207975236"> here </a>
+          <a *ngIf="platform.is('android')" href='https://play.google.com/store/apps/details?id=com.pbchallenge.yapss'> here </a>
+          !</b>
+        <ion-icon padding-right float-right name="logo-android" style='zoom:2'></ion-icon>
+        <br>
+        <br>
+        The App will ...<br>
+        <div>
+          <br>
+          <i>Recieve notifications when queues change!<br>
+            Load images faster!<br>
+            Bake 20 minute brownies in 10 minutes!
+          </i>
+        </div>
+      </ion-card>
+      <div margin-top padding-top *ngIf="eventAuth.getRoleName(eventId)==null">     
+        You can login <span showWhen='mobile'>using the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> button</span><span hideWhen='mobile'>using the <b>Login</b> link in the header</span>
+      </div>
+      <hr showWhen="mobile">
+      <hr showWhen="mobile" style='width:75%'>
+      <div margin-top padding-top showWhen="mobile">     
+        Click on the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> to purchase tickets <br> and find shortcuts to all tournament and machine results
+      </div>
+      <hr>
+      <hr style='width:75%'>
+      
+      <div margin-top>
+        To view the results and queues, <br> use the &nbsp;<ion-icon name="md-clipboard"></ion-icon> &nbsp; <b>Results</b> and &nbsp;<ion-icon name="md-git-branch"></ion-icon> &nbsp; <b>Queues</b> <span showWhen="mobile">tabs below</span><span hideWhen="mobile">links above</span>
+      </div>
+      <hr>
+      <hr style='width:75%'>
+      <div margin-top showWhen="mobile">
+        <!--Use the &nbsp;<ion-icon name="arrow-back"></ion-icon> &nbsp; back button in the header<br>to navigate to previous pages<br>-->
+        What else can the Papa Scoring Software do?<br> Click <a id='homeHelp' (click)="expand(homeHelpExtra,'homeHelp')">here</a> to find out!
+      <hr>
+      <hr style='width:75%'>        
+      </div>
+      <div margin-top *ngIf="homeHelpExtra.expanded==true" padding-horizontal>
+        <div margin-top>          
+          In the &nbsp;<ion-icon name="md-flash"></ion-icon> &nbsp;<b>Quick Links</b> tab<br> you can reorder the list of tournament machines shortcuts by clicking on the reorder button and dragging machines.
+        </div>
+        <hr>
+        <hr style='width:75%'>
+        <div margin-top>          
+          In the &nbsp;<ion-icon name="md-git-branch"></ion-icon><b>Queues</b> tab<br> you can add yourself to a queue if you are logged in.  If no one is playing or queued up on a machine, find a scorekeeper to start on a machine.
+        </div>        
+      </div>
+      <div margin-top>
+        
+      </div>
+      
+    </div>
+  </div>
+  <!-- <ion-grid> -->
+  <!--   <ion-row> -->
+  <!--     <ion-col -->
+  <!--        [attr.col-6]="numberCols==2?true:null" -->
+  <!--        [attr.col-4]="numberCols==3?true:null" -->
+  <!--        [attr.col-3]="numberCols==4?true:null" -->
+  <!--        *ngFor="let x of [1,2,3,4,5,6]" text-center> -->
+  <!--       {{x}} -->
+  <!--     </ion-col> -->
+  <!--   </ion-row> -->
+  <!-- </ion-grid> -->
+</ion-content>

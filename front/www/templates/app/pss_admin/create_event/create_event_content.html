@@ -1,0 +1,37 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div ng-if="post_success==undefined">
+  <div class="card">
+    <div class="item item-divider">
+      Enter name of event
+    </div>      
+    <label class="item item-input">
+      <input type="text" placeholder="Event Name" ng-model="item.name"/>        
+    </label>
+  </div>
+  <div class="card">
+    <pss-text-input-basic field='queue_bump_amount' basic='true' type='number' />
+  </div>
+  <div class="card">
+    <pss-text-input-basic field='number_unused_tickets_allowed' basic='true'  type='number'/>
+  </div>
+  <div class="card">
+    <pss-text-input-basic field='player_id_seq_start' basic='true'  type='number'/>
+  </div>
+  <div class='row'>
+    <div class='col'>
+    </div>
+    <button ng-click='create_event_func()' type="button" class="padding button-pagraph col-50 button button-block button-positive">
+      Create Event
+    </button>
+    <div class='col'>
+    </div>    
+  </div>
+  
+</div>
+
+
+

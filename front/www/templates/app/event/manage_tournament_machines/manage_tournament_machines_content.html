@@ -1,0 +1,21 @@
+
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model='filter_for'>
+    </label>
+  </div>
+
+  <div class='padding'> </div>  
+  <div ng-repeat="tournament in items">
+    <div class='list'>
+      <div class='item item-borderless'>
+        <h1>{{tournament.tournament_name}}</h1>
+      </div>
+      <div ui-sref='.add_tournament_machine({tournament_id:tournament.tournament_id})' class='item item-icon-left'><i class='icon ion-plus-circled'></i> &nbsp; Add Machine</div>      
+      <pss-generic-binding-list items-to-list='tournament.tournament_machines'  filter-to-apply="filter"> </pss-generic-binding-list>
+    </div>
+  </div>
+    
+
+  

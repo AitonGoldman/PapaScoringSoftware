@@ -1,0 +1,35 @@
+<!--
+  Generated template for the EventSelectPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar hideBackButton="true" color='pss-event-select-header'>
+    <ion-title>Event Select</ion-title>
+    <ion-buttons end>
+      <!--<button ion-button menuToggle><ion-icon name="menu"></ion-icon></button>-->
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding class="card-background-page">
+<ion-grid [style.width]="contentWidth"> 
+  <ion-row>
+    <ng-container *ngFor="let event of events;index as i;even as e;">
+    <ion-col  col-12 *ngIf="event.active==true">
+      <ion-card tappable  (click)="gotoEvent(event.event_id,event.name)">
+        <img-loader fallback="assets/imgs/pinball_small.jpg" [style.height]='"90px"' [style.width]='"100%"' [src]="event.img_url!=null?imgBaseUrl+event.img_url:imgBaseUrl+'/assets/imgs/pinball_small.jpg'" useImg ></img-loader>
+        <!--<img [style.height]='"90px"' [style.width]='"100%"' [src]="event.img_url!=null?imgBaseUrl+event.img_url:imgBaseUrl+'/assets/imgs/pinball_small.jpg'"/>-->
+        
+      <div class="card-title {{platform.is('core')?'card-title-desktop':''}}">{{event.name}}</div>
+    </ion-card>
+    </ion-col>
+    </ng-container>
+  </ion-row>
+</ion-grid>
+  
+  <!--<button block ion-button (click)="pushRootPage('EventOwnerTabsPage')">Login as event owner</button>
+
+  
+  <button block *ngFor="let event of events" ion-button (click)="gotoEvent(event.event_id)">GO to event {{event.name}} </button>-->
+</ion-content>

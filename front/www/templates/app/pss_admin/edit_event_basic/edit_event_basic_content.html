@@ -1,0 +1,53 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div ng-if="post_success==undefined">
+  <form name="myForm">
+    <div class="card">
+      <pss-text-input-basic field='queue_bump_amount' basic='true'  type='number'/>
+    </div>
+    <div class="card">
+      <pss-text-input-basic field='number_unused_tickets_allowed' basic='true'  type='number'/>
+    </div>
+    <div class="card">
+      <pss-text-input-basic field='player_id_seq_start' basic='true'  type='number'/>
+    </div>
+    <div class="card">      
+      <div class="item item-divider">
+        Event Picture
+      </div>      
+      <div>
+        <div class='row'>
+          <div class='col'>
+            <input type="file" nv-file-select uploader="uploader"/><br>
+          </div>
+          <div class='col'>
+            <ul ng-if='pic_selected==true'>
+              <li ng-repeat="img_item in uploader.queue">
+                Name: <span ng-bind="img_item.file.name"></span><br/>
+                <button ng-click="img_item.upload()">upload</button>
+              </li>
+            </ul>
+            <img  ng-if='pic_selected!=true' src='{{item.img_url}}'  class='padding circular--square' style='height:130px;width:130px'>            
+          </div>
+        </div>
+      </div>
+      <div>
+        <center>
+          Upload a picture to represent this event.
+        </center>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col'>
+      </div>      
+      <button ng-click='edit_event_func(item,["queue_bump_amount","number_unused_tickets_allowed","player_id_seq_start"])' ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
+      <div class='col'>
+      </div>    
+    </div>
+    
+  </form>
+</div>
+

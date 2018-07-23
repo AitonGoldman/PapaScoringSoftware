@@ -1,0 +1,34 @@
+##QUEUE_BUMP_AMOUNT is the number of spaces to bump a player down the queue if they are not present.  REQUIRED
+export QUEUE_BUMP_AMOUNT=1
+
+##MAX_TICKETS_ALLOWED_PER_DIVISION is the max number of tickets a player can have per division.  REQUIRED
+export MAX_TICKETS_ALLOWED_PER_DIVISION=25
+
+##FLASK_SECRET_KEY is a string used to encrypt cookies - see Flask documentation for more details.  REQUIRED
+#export FLASK_SECRET_KEY=
+
+##IONIC_* don't worry about these
+#export IONICCLOUD_PROFILE_TAG=
+#export IONICCLOUD_API_KEY=
+
+##EVENT_FILE_PATH is the full path to the events.json file.  See REQUIRED
+#export EVENT_FILE_PATH=
+
+##DB_TYPE is the type of database - can only support postgres right now
+export DB_TYPE=postgres;
+
+##DB_USERNAME and DB_PASSWORD is the postgres username and password
+#export DB_USERNAME=
+#export DB_PASSWORD=
+
+##STRIPE_PUBLIC_KEY and STRIPE_API_KEY are what they say on the tin - see Stripe.com docs for more info
+#export STRIPE_PUBLIC_KEY=
+#export STRIPE_API_KEY=
+
+##UPLOAD_FOLDER is the folder where uploaded player pics and machine backglass pics will be uploaded to.  This should be accessible by your webserver.
+export UPLOAD_FOLDER=/var/www/html/pics
+
+##PLAYER_ID_SEQ_START is the first player id that will be generated
+export PLAYER_ID_SEQ_START=100
+
+export SQUELCH_MISSING_PARAM_WARNINGS=true

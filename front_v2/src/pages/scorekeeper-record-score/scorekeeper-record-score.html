@@ -1,0 +1,81 @@
+<!--
+  Generated template for the ScorekeeperRecordScorePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="pss-home-header">
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+
+<ion-content>
+ <ion-toolbar no-padding no-margin color="pss-home-sub-header" text-center>
+   <h2>{{tournamentMachine.tournament_machine_name}}</h2>
+ </ion-toolbar>
+
+  <div class='desktopSlim'>
+  <form #myForm="ngForm" *ngIf="tournamentMachine!=null">
+    <ion-item text-center no-lines>
+      {{tournamentMachine.player.player_full_name|titlecase}} (#{{player_id_for_event}})
+    </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-auto>
+          <div [style.height]='"115px"' [style.width]='"115px"'>
+            <img-loader fallback="assets/imgs/small_backglass.jpeg" [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'" useImg ></img-loader>
+          </div>
+
+          <!--<ion-item no-lines>-->
+          <!--<ion-avatar  style='zoom:3.0;'>-->
+            <!--<img style='width:115px;height:115px' [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">-->
+            <!--</ion-avatar>-->
+            <!--</ion-item>-->
+        </ion-col>
+        <ion-col col-auto>
+          <ion-item no-lines>
+          <ion-avatar  style='zoom:3.0;'>
+            <img-loader fallback="assets/imgs/pinball_small_machine_square.jpg" [src]="tournamentMachine.player!=null && tournamentMachine.player.img_url!=null?imgBaseUrl+tournamentMachine.player.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'" useImg ></img-loader>
+<!--            <img [src]="tournamentMachine.player!=null && tournamentMachine.player.img_url!=null?imgBaseUrl+tournamentMachine.player.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'">-->
+          </ion-avatar>
+          </ion-item>
+        </ion-col>
+        <ion-col >
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
+    
+    <ion-item margin-bottom text-center [style.width]="'50%'" style='margin-left:auto;margin-right:auto'>
+      <ion-label stacked>
+        Score
+      </ion-label>      
+      <ion-input placeholder="enter score here" type="tel" required
+                 class="poop" (keyup)="insertCommas($event)" [(ngModel)]="score" name="score">
+      </ion-input>
+    </ion-item>
+    <div margin>
+      &nbsp;
+    </div>
+    <ion-item text-center no-lines margin-top>
+      <button ion-button large [disabled]='!myForm.valid' tappable (click)="onSubmit()" margin>
+        Record Score
+      </button>
+      <br>
+      <button color="danger" ion-button large tappable (click)="voidTicket('void')" margin>
+        Void Ticket
+      </button>
+      <br>
+      <button color="danger" tappable (click)="voidTicket('void-requeue')" ion-button large margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player!=null" margin>
+        Void Ticket And Requeue
+      </button>      
+      <button color="danger" tappable (click)="voidTicket('void-readd')" ion-button large margin padding *ngIf="tournamentCounts[tournamentId]!=null && tournamentCounts[tournamentId].count > 1 && tournamentMachine.queues[0].player==null" margin>
+        Void Ticket And ReAdd
+      </button>            
+    </ion-item>
+  </form>
+  </div>
+</ion-content>

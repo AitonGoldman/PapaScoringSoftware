@@ -1,0 +1,10 @@
+<div>
+  <button ng-if="back_button_title!=undefined" ng-click='go_back()' class="mobile-truncate-back-button button button-clear button-dark" style='background-color:white'><i class="icon material-icons">arrow_upward</i>&nbsp;Back&nbsp;</button>
+  <!--<button class="mobile-truncate-back-button button button-small button-clear button-dark" ng-if="back_button_title!=undefined" ng-click='go_back()'>{{back_button_title}}</button>-->
+  
+  <button ng-if='credentials.is_logged_in(event_name)==false' class="desktop-only button button-large button-clear button-dark ion-person"  ui-sref='app.event.login'>&nbsp;Login&nbsp;</button>
+  <button ng-if='credentials.is_logged_in(event_name)==true' class="desktop-only button button-large button-clear button-dark ion-person" ng-click='pss_admin_logout(event_name)'>&nbsp;Logout&nbsp;</button>
+  <button ng-click="openPopover($event)" class="desktop-only button button-large button-clear button-dark ion-ios-photos-outline">&nbsp;Quick Links&nbsp;</button>
+  <button ng-repeat='header_link in header_links' ui-sref='{{header_link.link}}' class="desktop-only button button-large button-clear button-dark {{header_link.icon}}">&nbsp;{{header_link.label}}&nbsp;</button>
+</div>
+

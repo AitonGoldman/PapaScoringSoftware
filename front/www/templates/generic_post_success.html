@@ -1,0 +1,24 @@
+<div>
+  <div class='item item-borderless'>
+    <center>
+      <b>{{post_results.title}}</b> <!--Logged In --> <i class="icon ion-checkmark-circled balanced" style='font-size:26px'></i>
+    </center>
+  </div>
+  
+  <center ng-if='post_results.attention!=undefined'>
+    <div class='card'>
+      <div class="item item-divider item-energized">
+        {{post_results.attention.title}}
+      </div>
+      <div class='item item-text-wrap'>
+        {{post_results.attention.text}}
+      </div>
+    </div>
+  </center>  
+
+  <div class='card' ng-repeat="result in post_results.results" >
+    <div class="item item-divider">{{result[0]}}</div>
+    <div class="item item-text-wrap"><center>{{result[1]}}</center></div>
+  </div>
+  </div>
+</div>

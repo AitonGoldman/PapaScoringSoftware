@@ -13,3 +13,4 @@ scratchpad
 events.json
 ignore
 *env_vars
+*experiment.py

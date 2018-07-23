@@ -1,0 +1,18 @@
+<ion-view view-title="Select tiebreaker">
+  <ion-content>      
+    <div>
+      <center><b>Important tiebreakers marked with <span class='yellow'>yellow</span></b></center>
+    </div>
+    <div ui-sref='.resolve({rank_to_resolve:tiebreaker[0].initial_seed})' ng-repeat='tiebreaker in resources.division_final_tiebreakers.data.tiebreakers' class="card list">
+      <div ng-class='{yellow:utils.check_tiebreaker_is_important(important_bye_ranks,important_qualifying_rank,tiebreaker[0].initial_seed)}' class="item item-divider item-icon-right">
+        <i class="icon ion-chevron-right"></i>
+        Tiebreaker for Rank {{tiebreaker[0].initial_seed+1}}
+      </div>
+      <div class="item" ng-repeat='tiebreaker_player in tiebreaker'>
+        {{tiebreaker_player.player_name}}
+      </div>
+    </div>
+    <!-- ui-sref=".tiebreakers({division_final_id: ,})" -->    
+  </ion-content>
+</ion-view>
+

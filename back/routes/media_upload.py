@@ -1,4 +1,5 @@
-from blueprints import admin_manage_blueprint
+from lib.flask_lib import blueprints
+from lib.route_decorators.db_decorators import load_tables
 from flask import jsonify,current_app,request
 from werkzeug.utils import secure_filename
 import json
@@ -12,33 +13,37 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-@admin_manage_blueprint.route('/media_upload/<pic_type>_pic', methods=['POST'])
-def upload_file(pic_type):    
-    # check if the post request has the file part            
+def generate_img_url(type, event_id, tournament_id=None,player_id=None):
+    timestamp = datetime.datetime.now().strftime("%s")
+    if type=="put_edit_event": 
+            uploaded_image_url='/img/events/%s/%s.jpg?%s' % (event_id,event_id,timestamp)    
+    if type=="put_edit_tournament": 
+            uploaded_image_url='/img/events/%s/tournaments/%s.jpg?%s' % (event_id,tournament_id,timestamp)    
+    return uploaded_image_url
+    
+@blueprints.event_blueprint.route('/media_upload/jpg_pic',methods=['POST'])
+@blueprints.pss_admin_event_blueprint.route('/media_upload/jpg_pic', methods=['POST'])
+@load_tables
+def upload_file_new(tables):    
+    # check if the post request has the file part                    
+    upload_folder = current_app.event_config['upload_folder']
     if 'file' not in request.files:                                
-        return jsonify({})        
+        return jsonify({})    
     file = request.files['file']            
     if file.filename == '':            
-        return jsonify({})        
+        return jsonify({})            
+    type = request.form.get('type')    
+    id = request.form.get('id')        
+    if type == "put_edit_event":        
+        event = tables.Events.query.filter_by(event_id=id).first()
+        save_path=os.path.join('%s/img/events/%s'% (upload_folder,event.event_id), "%s.jpg"%event.event_id)
+        img_url=generate_img_url(type,event.event_id)
+    if type == "put_edit_tournament":
+        event = tables.Events.query.filter_by(name=current_app.name).first()
+        save_path=os.path.join('%s/img/events/%s/tournaments'% (upload_folder,event.event_id), "%s.jpg"%id)                            
+        img_url=generate_img_url(type,event.event_id,id)
     if file:        
         filename = secure_filename(file.filename)
-        random_file_name = datetime.datetime.now().strftime("%s")        
-        save_path=os.path.join(current_app.config['UPLOAD_FOLDER'], "%s.jpg"%random_file_name)
-        file.save(save_path)        
-        orientation = subprocess.check_output(["identify", "-format", r"'%[orientation]'",save_path])[1:-1]        
-        if orientation == "RightTop":            
-            subprocess.call(["convert", save_path,"-rotate", "90", "%s_rotate"%save_path])
-            subprocess.call(["mv","%s_rotate"%save_path,save_path])
-            subprocess.call(["convert", save_path,"-strip", "%s_strip"%save_path])
-            subprocess.call(["mv","%s_strip"%save_path,save_path])
-        #else:
-        #    print "android..."
-        #subprocess.call(["convert", save_path,"-crop","200x100+0+0!", "%s_crop"%save_path])
-        subprocess.call(["convert", save_path,"-resize", "128x128","-define","jpeg:extent=15kb", "%s_resize"%save_path])        
-        subprocess.call(["mv","%s_resize"%save_path,save_path])
-        
-        
-        
-        
-    return jsonify({'data':"%s.jpg"%random_file_name})
-
+        random_file_name = datetime.datetime.now().strftime("%s")
+        file.save(save_path)
+    return jsonify({'data':"%s"%img_url})

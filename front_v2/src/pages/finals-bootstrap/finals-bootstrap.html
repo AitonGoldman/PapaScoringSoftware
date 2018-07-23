@@ -1,0 +1,50 @@
+<!--
+  Generated template for the FinalsBootstrapPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color='pss-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content no-padding no-margin>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>Finals Management</b>
+ </ion-toolbar>
+
+  <ng-container *ngFor='let tiebreaker of tiebreakers'>
+    <button margin ion-button *ngIf="tiebreaker.completed==true" tappable (click)="tiebreaker.completed=tiebreaker.completed==false">Undo Tiebreaker for {{tiebreaker.rank_of_winners}}{{nth(tiebreaker.rank_of_winners)}}</button>
+    <ion-card *ngIf="tiebreaker.completed==false">
+        
+      <ion-card-header style="background-color:#DDDDDD">
+        Tiebreaker for {{tiebreaker.rank_of_winners}}{{nth(tiebreaker.rank_of_winners)}}
+      </ion-card-header>
+      <ion-card-content text-center no-padding no-margin>
+        <ion-item *ngFor="let player of tiebreaker.players;even as e" no-lines>
+          {{player.player_name}}
+        </ion-item>
+        <div text-center margin>           
+          <button [navPush]="'FinalsBootstrapResolveTiebreakerPage'" [navParams]="buildNavParams({tiebreaker:tiebreaker})" ion-button>Resolve Tiebreaker</button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+  <div *ngIf="hasUncompletedTiebreakers==false && final==null">
+    <ng-container *ngFor="let finalsPlayer of finalsPlayers;index as i">
+      <ion-item *ngIf="i==dividerIndex">
+        QUALIFYING CUTOFF <button item-end ion-button margin tappable (click)="generateBrackets()"> Generate Brackets</button>
+      </ion-item>
+      <ion-item>
+        <ion-label># {{finalsPlayer['finals_rank']}} {{finalsPlayer.player_name}}</ion-label>
+        <ion-checkbox (ionChange)="getDividerIndex()" [(ngModel)]="finalsPlayer.present"></ion-checkbox>
+      </ion-item>
+    </ng-container>
+  </div>
+  <div *ngIf="hasUncompletedTiebreakers==false && final!=null">
+    <button ion-button margin> RE-Generate Brackets</button>
+  </div>
+</ion-content>

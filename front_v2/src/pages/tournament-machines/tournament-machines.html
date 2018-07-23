@@ -1,0 +1,59 @@
+<!--
+  Generated template for the TournamentMachinesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+  <ion-navbar>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+
+<ion-content>
+<button ion-button full small color="lighter">
+  Add machines/Manage machines
+</button>
+
+  <div class='desktopSlim'>
+    <ion-auto-complete (keyup)="onKeyUp($event)" name="myautocomplete" [(ngModel)]="selectedMachine" (itemsShown)="onItemsShown($event)" (ionAutoInput)="onInput($event)" (autoFocus)="onFocus()" (itemSelected)="onSelect()" #searchbar [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Machine To Add', debounce:500}"></ion-auto-complete>
+  <div text-center margin-bottom [style.height]="'25px'">
+    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  </div>
+  <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
+    <h2>Machine Not Found </h2>
+  </div>
+
+  <ion-list [sliding]="sliding" #list>
+      <ion-item-sliding *ngFor="let machine of selectedMachines">
+        <ion-item *ngIf="machine.removed!=true">
+          <ion-icon [name]="machine.active==true? 'play' : 'pause'" ></ion-icon>
+          <ion-avatar item-start>
+            <img  [src]="machine.img_url!=null?imgBaseUrl+machine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">
+          </ion-avatar>        
+
+          <button hideWhen='mobile' (tap)="onRemove(machine)" ion-button item-end>Remove</button> {{machine.tournament_machine_name}}
+          <button hideWhen='mobile' (tap)="onDisable(machine)" ion-button item-end>{{machine.active==true?"Disable":"Enable"}}</button>          
+          <button hideWhen='mobile' (tap)="takePicture(machine)" ion-button item-end>Take Picture</button>          
+
+        </ion-item>
+        <ion-item-options *ngIf="machine.removed!=true" side="right">
+          <button round ion-button color="secondary" (tap)="takePicture(machine)">
+            <ion-icon name="camera"></ion-icon>
+            Take Pic
+          </button>
+          <button round ion-button color="danger" (tap)="onRemove(machine)">
+            <ion-icon name="archive"></ion-icon>
+            Remove
+          </button>
+          <button round ion-button (tap)="onDisable(machine)">
+            <ion-icon name="archive"></ion-icon>
+            {{machine.active==true?"Disable":"Enable"}}
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+  </ion-list>
+  <button ion-button *ngIf="wizardMode!=null" (tap)="onSubmit()">Submit</button>
+  </div>
+</ion-content>

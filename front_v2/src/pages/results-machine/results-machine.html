@@ -1,0 +1,90 @@
+<!--
+  Generated template for the ResultsMachinePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color='pss-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+    <ion-buttons end showWhen='mobile'>
+      <button tappable no-margin [navPush]="'ResultsPage'" [navParams]="buildNavParams({})" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div text-center>
+    <h2>{{tournamentMachineName}} Results </h2>
+    <!-- <ion-chip hideWhen='core,tablet' tappable (click)="markAsFavorite()" *ngIf="displayFavoriteMachine==true"> -->
+    <!--   <ion-label>Favorite</ion-label> -->
+    <!--   <ion-icon name="star" color="dark" item-end></ion-icon>       -->
+    <!-- </ion-chip> -->
+    <ion-chip tappable (click)="onReload()" >
+      <ion-label>Refresh</ion-label>
+      <ion-icon name="refresh" color="dark" item-end></ion-icon>      
+    </ion-chip>
+    
+<!--<ion-icon (click)="onReload()" style="zoom:2.0" item-end name="refresh"></ion-icon>-->
+
+  </div>
+  <ion-grid [style.width]='width' [style.margin-left]='"auto"' [style.margin-right]='"auto"'>
+    <ion-row>
+      <ion-col col-2 col-md-1 no-padding text-center>
+        Rank
+      </ion-col>
+      <ion-col col-md-1 no-padding text-center showWhen="core,tablet">
+        Points
+      </ion-col>      
+     <!-- <ion-col col-2 col-md-1 no-padding text-center style='white-space: nowrap;'> -->
+     <!--    Points -->
+     <!--  </ion-col> -->
+      <ion-col hideWhen="tablet,core" col-5 col-md-5 no-padding text-center>
+        Name
+      </ion-col>
+      <ion-col showWhen="tablet,core" no-padding text-center>
+        Name
+      </ion-col>      
+      <ion-col hideWhen="tablet,core" col-5 no-padding text-right>
+        Score
+      </ion-col>
+      <ion-col showWhen="tablet,core" col-2 no-padding text-center>
+        Score
+      </ion-col>
+      
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <hr>
+      </ion-col>
+    </ion-row>
+    <ion-row text-nowrap nowrap *ngFor="let result of results;index as i; even as e;" [style.background-color]="e==true?'#EEEEEE':null">
+      <ion-col col-2 col-md-1 no-padding text-center align-self-center>
+        {{result.rank}}<span hideWhen="core,tablet" style='font-size:8px'><p style='line-height:1px'> ({{result.points}} points)</p></span>
+      </ion-col>
+      <ion-col col-md-1 align-self-center no-padding text-center showWhen="core,tablet">
+        {{result.points}}
+      </ion-col>
+      <ion-col padding-left col-5 align-self-center hideWhen="core,tablet" text-center>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name|titlecase}}</a>
+      </ion-col>
+      <ion-col hideWhen="core,tablet">
+        &nbsp;
+      </ion-col>
+      <ion-col hideWhen="core,tablet" align-self-center xs-auto col-md-5 no-padding text-right> 
+        {{result.score | number}}
+      </ion-col>
+
+      <ion-col padding-left align-self-center showWhen="core,tablet" text-center>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})">{{result.player_name|titlecase}}</a>
+      </ion-col>
+      <ion-col col-2 showWhen="core,tablet" align-self-center no-padding text-center> 
+        {{result.score | number}}
+      </ion-col>
+      
+    </ion-row>
+    <ion-row nowrap>
+    </ion-row>    
+  </ion-grid>
+</ion-content>

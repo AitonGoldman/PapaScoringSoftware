@@ -14,546 +14,145 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
-$testwidth: 971;
-$stable:                          gray !default;
 
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
+
+// // $tabs-height:                     49px !default;
+// // $tabs-text-font-size:             14px !default;
+// // $tabs-text-font-size-side-icon:   10px !default;
+// // $tabs-icon-size:                  32px !default;
+// // $tabs-badge-padding:              1px 6px !default;
+// // $tabs-badge-font-size:            12px !default;
+
+// $tabs-height:                     59px !default;
+// // $tabs-text-font-size:             14px !default;
+// // $tabs-text-font-size-side-icon:   10px !default;
+// // $tabs-icon-size:                  32px !default;
+// // $tabs-badge-padding:              1px 6px !default;
+// // $tabs-badge-font-size:            12px !default;
+
+
+// $bar-height:                      74px !default;
+// $bar-title-font-size:             14px !default;
+// $bar-padding-portrait:            20px !default;
+// // $bar-padding-landscape:           5px !default;
+// // $bar-transparency:                1 !default;
+
+// $font-size-base:                  28px !default;
+// $item-font-size:                  28px !default;
+
+
+// $button-large-font-size:                26px !default;
+// //$button-height:                   42px !default;
+// //$button-padding:                  12px !default;
+// //$button-icon-size:                24px !default;
+
+// //$positive:                        red !default;
+
+// // $input-height-base: 100px;
+// // $input-bg: blue;
+// // $input-color: blue;
+// // $input-border: solid;
+// // $input-border-width: 10px;
+
 // Include all of Ionic
-
-$font-size-base:                  28px !default;
-//$font-size-base:                  14px !default;
-$item-font-size: $font-size-base;
-$bar-height:                      $font-size-base*3;
-$bar-title-font-size:             $font-size-base*1.5;
-$button-font-size:                $font-size-base;
-$button-height:                   $font-size-base*3;
-$button-icon-size:                 $font-size-base*2 !default;
-$button-bar-button-font-size:     $font-size-base*9;
-$button-large-font-size:          $font-size-base !default;
-$button-large-height:             $font-size-base*2 !default;
-$button-large-icon-size:          $font-size-base*2 !default;
-$toggle-off-bg-color:             #33cd5f !default;
-
 @import "www/lib/ionic/scss/ionic";
 
-.avatar-frame{border: 2px solid #c7b89e;}
-.avatar-frame,.avatar-frame img{
-    width: 50px;
-    height: 50px;    
-    -webkit-border-radius: 30px; /* Saf3+, Chrome */
-    border-radius: 30px; /* Opera 10.5, IE 9 */
-    /*-moz-border-radius: 30px;  Disabled for FF1+ */
+
+.input_height_div {
+  height: $input-height-base;
 }
 
-.avatar-frame-small,.avatar-frame img{
-    width: 40px;
-    height: 40px;
-    -webkit-border-radius: 30px; /* Saf3+, Chrome */
-    border-radius: 30px; /* Opera 10.5, IE 9 */
-    /*-moz-border-radius: 30px;  Disabled for FF1+ */
-    margin-top: auto;
-    margin-bottom:auto;
-    margin-right:20px;
-}
-
-.avatar-user-pic-relative {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-        height: $font-size-base*7;
-        width: $font-size-base*7;
-        border-radius:$font-size-base*7;
-            
-        }
-        @media screen and (min-device-height: 751px){
-            height: $font-size-base*6;
-            width: $font-size-base*6;
-            border-radius:$font-size-base*6;
-            
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-        height: $font-size-base*6*1.5;
-        width: $font-size-base*6;
-        border-radius:$font-size-base*6;
-        
-    }
-    @media screen and (min-width: 971px) {
-        height: $font-size-base*6*1.5;
-        width: $font-size-base*6;
-        border-radius:$font-size-base*6;
-        
-    }   
-}
-
-.avatar-user-pic {
-    position:absolute;
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-        height: $font-size-base*7;        
-        width: $font-size-base*7;
-        border-radius:$font-size-base*7;
-            
-        }
-        @media screen and (min-device-height: 751px){
-            height: $font-size-base*6;
-            width: $font-size-base*6;
-            //border-radius:$font-size-base*6;
-            
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-        height: $font-size-base*6*1.5;
-        width: $font-size-base*6;
-        border-radius:$font-size-base*6;
-        
-    }
-    @media screen and (min-width: 971px) {
-        height: $font-size-base*6*1.5;
-        width: $font-size-base*6;
-        border-radius:$font-size-base*6;
-        
-    }   
-}
-
-
-.player-info-avatar {
-    z-index:99;
-    position:absolute;
-    transform-style: preserve-3d;
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-        top:0px;
-        right: $font-size-base*7;
-        perspective:400px;
-
-        }
-        @media screen and (min-device-height: 751px){
-        top:0px;
-        right: $font-size-base*6;
-        perspective:400px;
-
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-        top:0px;
-        right: $font-size-base*6;
-        perspective:400px;
-
-    }
-    @media screen and (min-width: 971px) {
-        top:0px;
-        right: $font-size-base*6;
-        perspective:400px;
+.desktop-only { 
+    @media screen and (max-device-width: 611px){         
+      display:none;
     }
 }
 
-.machine-info-avatar {
-    z-index:4;
-    position:absolute;
-    transform-style: preserve-3d;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity:1;
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            top:0px;
-            right: $font-size-base*9;
-            perspective:400px;
-        }
-        @media screen and (min-device-height: 751px){
-            top:0px;
-            right: $font-size-base*10;
-            perspective:400px;
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-        top:0px;
-        right: $font-size-base*10;
-        perspective:400px;
-    }
-    @media screen and (min-width: 971px) {
-        top:0px;
-        right: $font-size-base*10;
-        perspective:400px;
+.mobile-only { 
+    @media screen and (min-device-width: 610px){         
+      display:none;
     }
 }
 
-.skinny-list {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-        }
-        @media screen and (min-device-height: 751px){
-            margin-left:15px;
-            margin-right:15px;
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-            margin-left:15px;
-            margin-right:15px;
-    }
-    @media screen and (min-width: 971px) {
-            margin-left:15px;
-            margin-right:15px;
-    }
+.desktop-75-width {
+    @media screen and (min-device-width: 611px){         
+      width:75%;
+    }                    
 }
 
-
-.mobile-hide {
-     @media screen and (min-device-width: 601px) and (max-device-width: 900px){
-          @media screen and (max-device-height: 750px){     
-              //display:none;
-              //background-color:red;
-              //rotated tablet
-          }
-          @media screen and (min-device-height: 751px){     
-              display:none;
-              //Background-color:purple;
-              //unrotated tablet
-          }          
-     }
-     @media screen and (max-width: 500px){
-         @media screen and (max-height: 750px){     
-             display:none;
-             //rotated and unrotated phone
-             //background-color:green;
-         }
-     }     
+.desktop-50-width {
+    @media screen and (min-device-width: 611px){         
+      width:50%;
+    }
+    @media screen and (max-device-width: 610px){         
+      width:100%;
+    }                        
 }
-.mobile-show-vertical-only {
-    @media screen and (max-width: 375px){
+
+.mobile-almost-full-width-button {
+    @media screen and (max-device-width: 610px){         
+      width:90%;
+      margin-bottom:5px;
+      margin-top:5px;  
     }
-    @media screen and (min-width: 376px){
-        display:none;
-        //background-color:red;
-    }
+    @media screen and (min-device-width: 611px){              
+      width:100%;
+      margin-bottom:10px;
+      margin-top:10px;  
+
+     }                        
     
 }
-.mobile-show {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-        }
-        @media screen and (min-device-height: 751px){
-            display:none;
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-        display:none;
-    }
-    @media screen and (min-width: 971px) {
-        display:none;
+
+.mobile-truncate-back-button{
+    @media screen and (max-device-width: 610px){         
+        width:100px;
+        white-space: nowrap;
+        overflow:hidden;
+        text-overflow: ellipsis;
     }
 }
 
-
-.red {
-     background-color:red;
+.truncate{
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;    
 }
 
-.green {
-    background-color:green;
-}
-
-.yellow {
-    background-color:yellow;
+.button-pagraph {
+  line-height: 1.5em;
 }
 
 .grey {
-     background-color:grey;
+  color: #AAAAAA;
 }
 
-.lightgrey {
-     background-color:lightgrey;
+.green {
+  color: #00FF00;
 }
 
-
-.item-radio-float {
-    //padding-top: $font-size-base;
-    float:right;
-    width:50px;
-}
-
-.platform-ios {
-    input[type="text"],
-    input[type="password"] {
-    padding-top: 10px;
-  }
-}
-
- .input-label {
-     font-size: $font-size-base;
- }
-
-.platform-ios {
-    .bar {
-      .back-button .icon:before {
-          //margin-top:auto;
-          //margin-bottom:auto;
-          //padding-top:15px;
-          font-size: $font-size-base*2;
-      }
-    }
+.red {
+  color: #FF0000;
 }
 
 
-.bar {
-    .button {
-        &.button-icon {
-            &:before {
-                //padding-top:$font-size-base/1.5;
-                padding-top:0;
-                //font-size:$font-size-base*4.5;
-                font-size:$font-size-base*3.5;
-            }
-        }
-    }
+.mobile_logo {
+   width:42px;
+   height:42px;
 }
 
-.platform-android {
-    .bar {      
-      .back-button .icon:before {
-          //padding-top:10px;
-          font-size: $font-size-base*2.25;
-      }
-    }
+.mobile_logo_small {
+   width:32px;
+   height:32px;
 }
 
-ion-side-menu {
-    ion-header-bar.bar {
-        padding-bottom:$font-size-base*4;
-    }
-    ion-content {
-        .scroll {
-            padding-top:$font-size-base;
-        }
-    }
+.desktop_logo {
+   width:42px;
+   height:42px;
 }
-.platform-ios,.platform-android,.platform-browser{
-.test-select {
-    select {
-        //position:relative;
-        float:right;
-        //margin-right:100px;
-    }
-}
-.test-select::after {
-    float:right;
-    //position:relative;
-    //margin-right:100px;
-}
-}
-.platform-android {
-  .bar {    
-    .title {
-      //CHANGED THIS
-      //font-size: $font-size-base*2.5;
-      font-size: $font-size-base;
-      //font-size: 15px;
-    }
-  }
-}
-
-.action-sheet-title {
-    //padding: $sheet-margin * 2;
-    @media screen and (max-device-height: 750px){
-        font-size: $font-size-base;
-    }
-    @media screen and (min-device-height: 751px){
-        font-size: $font-size-base*.75;
-    }    
-}
-
-.ticket_purchase_summary_font { 
-     font-size:$font-size-base; 
-} 
-
-.button.seperate_button {
-    margin-top: $font-size-base*1.5;
-}
-
-.button.small_seperate_button {
-    margin-top: $font-size-base;
-}
-
-
-.review_confirm_process_screen_text {
-    padding-bottom:$font-size-base*2;
-}
-
-.standard_big_font {
-   font-size:$font-size-base;                    
-}
-
-.standard_large_font {
-   font-size:$font-size-base*2;                    
-}
-
-.standard_med_font {
-   font-size:$font-size-base*.75;                    
-}
-
-.standard_small_font {
-   font-size:$font-size-base*.5;                    
-}
-
-.queue_item_padding {
-    padding-left: $font-size-base*3.5;
-    //font-size: $font-size-base*.75;    
-    //font-size: $font-size-base;
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            font-size: $font-size-base*1.25;
-        }
-        @media screen and (min-device-height: 751px){
-            font-size: $font-size-base*.75;
-            padding-top: 5px;
-            padding-bottom:5px;            
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-        font-size: $font-size-base*.75;
-        padding-top: 5px;
-        padding-bottom:5px;
-    }
-    @media screen and (min-width: 971px) {
-        padding-top: 5px;
-        padding-bottom:5px;
-        font-size: $font-size-base*.75;
-    }
-
-    
-}
-
-.review-icon::before {   
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            font-size:$font-size-base*3;
-        }
-        @media screen and (min-device-height: 751px){
-            font-size: $font-size-base*3;
-        }
-    }
-    @media screen and (min-width:611px) {
-        font-size: $font-size-base*9;            
-    }
-}
-
-
-
-.item-icon-left {
-    .queue_circle {
-        @media screen and (max-width: 610px){
-            @media screen and (max-device-height: 750px){
-                //font-size:$font-size-base*3;
-                font-size:$font-size-base*3;
-                padding-top:0px;
-                padding-bottom:0px;        
-            }
-            @media screen and (min-device-height: 751px){
-                   //font-size: $font-size-base*3;
-                   font-size: $font-size-base*2;
-                   padding-top:0px;
-                   padding-bottom:0px;                           
-            }
-        }
-        @media screen and (min-width:611px) {
-            //font-size: $font-size-base*3;
-            font-size: $font-size-base*2;
-        }
-    }
-}
-
-.item-icon-left {
-    .queue_walking {
-        @media screen and (max-width: 610px){
-            @media screen and (max-device-height: 750px){
-                //font-size:$font-size-base*3;
-                font-size:$font-size-base*2.5;
-                padding-top:0px;
-                padding-bottom:0px;
-                padding-left:0px;
-            }
-            @media screen and (min-device-height: 751px){
-                   //font-size: $font-size-base*3;
-                   font-size: $font-size-base*1.5;
-                   padding-top:0px;
-                   padding-bottom:0px;
-                   padding-left:10px;
-            }
-        }
-        @media screen and (max-width:970px) and (min-width:611px) {
-            //font-size: $font-size-base*2.5;
-            font-size: $font-size-base*1.5;
-            padding-left:10px;
-            //background-color:purple;
-        }
-        @media screen and (min-width:970px){
-            //font-size: $font-size-base*2.5;
-            font-size: $font-size-base*1.5;
-            padding-left:10px;
-        }
-        
-    }
-}
-
-
-.custom_queue_item_small {
-    color:white;
-    position:relative;
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            font-size: $font-size-base*1.25;
-            //left: -1*$font-size-base*1.4;
-            left: -1*$font-size-base*1.4;
-
-        }
-        @media screen and (min-device-height: 751px){
-            font-size: $font-size-base - 2;
-            //left: -1*$font-size-base*.25;
-            left: -1*$font-size-base*.5;
-
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-            font-size: $font-size-base - 2;
-            //left: -1*$font-size-base*.25;
-            left: -1*$font-size-base*.5;
-    }
-    @media screen and (min-width: 971px) {
-        font-size: $font-size-base - 2;
-        //left: -1*$font-size-base*.25;
-        left: -1*$font-size-base*.5;                    
-    }
-    
-}
-
-.custom_queue_item_large {
-    color:white;
-    position:relative;
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            font-size: $font-size-base - 2;
-            left: -1*$font-size-base*1.55;
-            //left: -1*$font-size-base;            
-        }
-        @media screen and (min-device-height: 751px){
-            font-size: $font-size-base - 2;
-            //left: -1*$font-size-base*.45;
-            left: -1*$font-size-base*.85;            
-        }
-    }
-    @media screen and (max-width: 970px) and (min-width:611px) {
-        font-size: $font-size-base - 2;
-        //left: -1*$font-size-base*.45;
-        left: -1*$font-size-base*.85;            
-    }
-    @media screen and (min-width: 971px) {
-        font-size: $font-size-base - 2;
-        //left: -1*$font-size-base*.45;
-        left: -1*$font-size-base*.85;                    
-    }
-}
-
 
 
 .selectable-text {
@@ -563,326 +162,10 @@ ion-side-menu {
 user-select: text;
 }
 
-//
-//
-//
-/* .item-checkbox { */
-/*     padding-top:$font-size-base; */
-/*     padding-bottom:$font-size-base;      */
-/* } */
-/* .item-select { */
-/*     padding-top: $font-size-base; */
-/*     padding-bottom: $font-size-base;     */
-/* } */
-
-/* .item { */
-/*     font-size: $font-size-base; */
-/* } */
-
-.small-text-table {
-    @media screen and (max-width: 610px){
-        @media screen and (min-device-height: 751px){
-            font-size: $font-size-base*.5;
-        }
-    }
-    @media screen and (min-width:611px) {
-        font-size: $font-size-base*.5;
-    }    
+.center-aligned-placeholder{
+  text-align:center;
 }
 
-.finals_round_select{
-        margin-top:$font-size-base*3;
-}
-
-.ion-icon-green:before {
-  color:green;                       
-} 
-.ion-icon-red:before {
-  color:red;                       
-} 
-.ion-icon-yellow:before {
-  color:gold;                       
-}
-button.small-text-button{
-    font-size:$font-size-base*.75;     
-}
-
-
-li.item-toggle {
-    .toggle {
-        
-        padding-top:$font-size-base*.55;
-        .handle {
-            @media screen and (max-width: 610px){
-                @media screen and (max-device-height: 750px){
-                    margin-top:$font-size-base*.20;
-                }
-                @media screen and (min-device-height: 751px){
-                    margin-top:$font-size-base*.35;
-                }
-            }
-            @media screen and (min-width:611px) {
-                margin-top:$font-size-base*.35;
-            }
-        }
-    }
-}
-
-.item-toggle {
-    .toggle {        
-        padding-top:$font-size-base*.55;
-        .handle {
-            @media screen and (max-width: 610px){
-                @media screen and (max-device-height: 750px){
-                    margin-top:$font-size-base*.20;
-                }
-                @media screen and (min-device-height: 751px){
-                    margin-top:$font-size-base*.35;
-                }
-            }
-            @media screen and (min-width:611px) {
-                margin-top:$font-size-base*.35;
-            }
-        }
-    }
-}
-
-
-i.player-purchase-review-icon {
-  font-size:$font-size-base*2;                             
-}
-.padding-for-review-tickets {
-   padding-top:$font-size-base*2;                           
-}
-// submit buttons : calm
-//
-
-a.extra-tall-button,button.extra-tall-button {
-  font-size:$font-size-base*.7;
-  padding-top:$font-size-base/4;
-  line-height:$font-size-base;                  
-}
-.item{
-    .button-medium {
-        padding: 2px $button-small-padding 1px;
-        //min-width: $button-small-height;
-        min-height: $font-size-base;
-        font-size: $font-size-base;
-        line-height: $font-size-base*1.75;
-        @media screen and (max-width: 610px){
-            @media screen and (max-device-height: 750px){
-                width:5%;
-            }
-            @media screen and (min-device-height: 751px){
-                width:35%;
-            }
-        }
-        @media screen and (min-width:611px) {
-            width:35%;
-        }
-        
-
-    }
-    input.embedded-input {
-        height:$font-size-base*1.5;
-        line-height:$font-size-base;
-        @media screen and (max-width: 610px){
-            @media screen and (max-device-height: 750px){
-                width:65%;
-            }
-        }
-    }
-}
-
-.player-info-avatar-ex {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            top:0px;
-            right: $font-size-base*7;
-        }
-        @media screen and (min-device-height: 751px){
-            top:0px;
-            right: $font-size-base*5.5;
-        }
-    }
-}
-
-.player-info-avatar-ex-two {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            top:$font-size-base*8;
-            right: $font-size-base*14;
-        }
-        @media screen and (min-device-height: 751px){
-            top:$font-size-base*6;
-            right: $font-size-base*14;
-        }        
-    }
-    @media screen and (min-width:611px) {
-        top:$font-size-base*6;
-        right: $font-size-base*20;        
-    }
-    
-}
-
-
-.machine-info-avatar-ex {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            top:0;
-            right: $font-size-base*15;
-        }
-        @media screen and (min-device-height: 751px){
-            top:0px;
-            right: $font-size-base*13;
-        }
-    }
-    @media screen and (min-width: 611px){
-            top:0;
-            right: 55%;        
-    }
-    
-}
-
-.avatar-user-pic-ex {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            //height: $font-size-base*7;
-            height: $font-size-base*7*1.5;
-            width: $font-size-base*7;
-            border-radius:$font-size-base*7;            
-        }
-        @media screen and (min-device-height: 751px){
-            height: $font-size-base*5.5*1.5;
-            width: $font-size-base*5.5;
-            border-radius:$font-size-base*5.5;            
-        }
-    }
-}
-
-.machine-pic-ex {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            //height: $font-size-base*7;
-            height: $font-size-base*7;
-            width: $font-size-base*7;
-            border-radius:$font-size-base*7;            
-        }
-        @media screen and (min-device-height: 751px){
-            height: $font-size-base*5.5;
-            width: $font-size-base*5.5;
-            border-radius:$font-size-base*5.5;            
-        }
-    }
-    @media screen and (min-width: 610px){
-            height: $font-size-base*5.5;
-            width: $font-size-base*5.5;
-            border-radius:$font-size-base*5.5;            
-//        height: $font-size-base*8.5;
-//        width: $font-size-base*8.5;
-//        border-radius:$font-size-base*8.5;            
-    }    
-}
-
-
-.machine-select-action-spacer {
-    @media screen and (max-width: 610px){
-        @media screen and (max-device-height: 750px){
-            padding-bottom:$font-size-base*8;
-        }
-        @media screen and (min-device-height: 751px){
-            padding-bottom:$font-size-base*6;
-        }
-    }
-    @media screen and (min-width: 611px){
-            padding-bottom:$font-size-base*6;        
-    }
-    
-}
-
-span.big-spinner {
- .spinner svg {
-        width: 128px;
-        height: 128px;
-        stroke: #444;
-        fill: #444;
-    }
-}
-
-.process_success:before {
-  content: ' ';
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0.1;
-  background-image: url('http://www.pbchallenge.net/pics/ThumbsUp.png');
-  background-repeat: no-repeat;
-  background-position: 50% 0;
-  -ms-background-size: cover;
-  -o-background-size: cover;
-  -moz-background-size: cover;
-  -webkit-background-size: cover;
-  background-size: contain;
-}
-
-.warning_confirm {
-    padding-top:$font-size-base;
-}
-
-.warning_confirm:before {
-    content: ' ';
-    display: block;
-    position: absolute;
-    left: 0;
-    top: -50px;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.1;
-    background-image: url('http://www.pbchallenge.net/pics/attention.jpg');
-    background-repeat: no-repeat;
-    background-position: 50% 0;
-    background-size: contain;
-    -moz-background-size: contain;
-    -webkit-background-size: contain;
-
-}
-
-.platform-android {
-    .warning_confirm_three_row_table:before{
-        @media screen and (max-width: 610px){
-            @media screen and (max-device-height: 750px){            
-                height:40%;
-            }
-            @media screen and (min-device-height: 751px){
-                height:45%;                
-            }
-        }
-
-    }
-    .warning_confirm_two_row_table:before{
-        @media screen and (max-width: 610px){
-            @media screen and (max-device-height: 750px){            
-                height:35%;
-            }
-            @media screen and (min-device-height: 751px){
-                height:40%;                
-            }
-        }
-
-    }    
-    
-}
-
-.normal_ul {
-    list-style: disc;
-    list-style-type: disc;
-}
-
-.team_add_button {
-    margin-top:$font-size-base*3;
+.bottom_spacer {
+  height:75px;             
 }

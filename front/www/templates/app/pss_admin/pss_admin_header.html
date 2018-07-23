@@ -1,0 +1,9 @@
+<div>
+  <button ng-if="back_button_title!=undefined" ng-click="go_back()" class="button button-large ion-arrow-up-a button-clear button-dark">&nbsp;{{back_button_title}}&nbsp;</button>
+  <button ng-if='is_logged_in==false' class="desktop-only button button-large button-clear button-dark ion-person"  ui-sref='app.pss_admin.login'>&nbsp;Login&nbsp;</button>
+  <button ng-if='is_logged_in==true' class="desktop-only button button-large button-clear button-dark ion-person" ng-click='pss_admin_logout("pss_admin")'>&nbsp;Logout&nbsp;</button>
+  <button ng-click="openPopover($event)" class="desktop-only button button-large button-clear button-dark ion-ios-photos-outline">&nbsp;Quick Links&nbsp;</button>  
+  <button ng-repeat='header_link in header_links' ui-sref='{{header_link.link}}' class="desktop-only button button-large button-clear button-dark {{header_link.icon}}">&nbsp;{{header_link.label}}&nbsp;</button>
+
+</div>
+

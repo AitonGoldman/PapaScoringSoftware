@@ -1,0 +1,34 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div ng-if="post_success==undefined">
+  <form name="myForm">
+    <div class='list'>
+      <pss-text-input-advanced field="name"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="queue_bump_amount"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="stripe_api_key"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="stripe_public_key"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="number_unused_tickets_allowed"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="ionic_profile"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="ionic_api_key"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="active"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="sendgrid_api_key"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="player_id_seq_start"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="upload_folder"> </pss-text-input-advanced>
+      <pss-text-input-advanced field="ifpa_api_key"> </pss-text-input-advanced>
+      <pss-boolean-input-advanced field="force_ifpa_lookup"> </pss-boolean-input-advanced>
+      
+    </div>
+    <div class='row'>
+      <div class='col'>
+      </div>
+      <button ng-click='edit_event_func(item)'  ui-sref-opts='{reload:true}' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Save Changes  </button>
+      <div class='col'>
+      </div>    
+    </div>
+    
+  </form>
+</div>
+

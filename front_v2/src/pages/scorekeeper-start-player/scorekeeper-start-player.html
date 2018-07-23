@@ -1,0 +1,98 @@
+<!--
+  Generated template for the ScorekeeperStartPlayerPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color='pss-home-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+
+<ion-content>
+ <ion-fab top right edge hideWhen="core">
+   <button ion-fab (click)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))">
+      <p no-margin style='font-size:10px;line-height:10px' text-center>Machine<br>List</p>
+   </button>
+ </ion-fab>
+ 
+ <ion-toolbar no-padding no-margin color="pss-home-sub-header" text-center>
+   <h2>{{tournamentMachine.tournament_machine_name}}</h2>
+ </ion-toolbar>
+
+  <div [style.width]='contentWidth' class='desktopSlim'>  
+  <ion-auto-complete *ngIf="tournamentMachine.queues[0].player==null" (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()"  [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Number', type:'tel', debounce:500}" ></ion-auto-complete>
+  <div text-center>
+    
+  </div>
+  <div text-center margin-bottom [style.height]="'25px'">
+    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+    <ion-item no-lines *ngIf='selectedPlayer!=null' text-center>
+      {{selectedPlayer.player_full_name|titlecase}}
+    </ion-item>
+
+  </div>
+
+  <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
+    <h2>{{notFoundMessage}}</h2>
+  </div>
+  <div *ngIf="notFoundMessage==null && selectedPlayer==null" text-center>
+    <i>Enter the player number to start on {{tournamentMachine.tournament_machine_name}}</i>
+  </div>
+  <ion-list *ngIf="notFoundMessage==null && selectedPlayer!=null">
+    <!--<ion-item no-lines *ngIf="selectedPlayer.img_url!=null">
+      <ion-avatar  style='zoom:3.0'>
+        <img [src]="selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
+      </ion-avatar>
+    </ion-item>-->
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+        </ion-col>
+        <ion-col col-auto>
+          <!--<ion-item item-start no-lines>-->
+          <!--<ion-avatar  style='zoom:3.0'>-->
+          <div [style.height]='"115px"' [style.width]='"115px"'>
+            <img-loader fallback="assets/imgs/small_backglass.jpeg" [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'" useImg ></img-loader>
+          </div>
+            <!--<img style='width:115px;height:115px' [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">-->
+            <!--</ion-avatar>-->
+            <!--</ion-item>-->
+        </ion-col>
+        <ion-col col-auto>
+          <ion-item no-lines>
+          <ion-avatar  style='zoom:3.0'>
+            <img-loader fallback="assets/imgs/pinball_small_machine_square.jpg" [src]="selectedPlayer.img_url!=null?imgBaseUrl+selectedPlayer.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'" useImg ></img-loader>
+
+            <!--<img [src]="selectedPlayer.img_url!=null?imgBaseUrl+selectedPlayer.img_url:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'">-->
+          </ion-avatar>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <ion-item *ngIf="ticketCountsDict!=null" no-lines text-center>
+      Tickets Available : {{ticketCountsDict[tournamentId]!=null?ticketCountsDict[tournamentId].count:'None'}}
+    </ion-item>
+    <ion-item *ngIf="selectedPlayer.fromQueue==true" text-center>
+      Tickets Available : Yes
+    </ion-item>
+    
+    <div text-center>
+      <button ion-button large margin tappable (click)="onSubmit()">Start Player</button>
+      <button *ngIf="tournamentMachine.queues[0].player!=null" ion-button large margin tappable (click)="onBump()">Bump Player</button>
+    </div>
+    <ion-item-divider text-center *ngIf="tournamentMachine.queues[0].player!=null">
+      Queue
+    </ion-item-divider>
+    <ng-container *ngFor="let queue of tournamentMachine.queues">
+      <ion-item text-center *ngIf="queue.player!=null">
+        <span >{{queue.position}} : {{queue.player.player_full_name}}</span>
+      </ion-item>      
+    </ng-container>
+  </ion-list>
+  </div>
+</ion-content>

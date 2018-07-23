@@ -1,0 +1,38 @@
+<!--
+  Generated template for the ScorekeeperMachineSelectPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+  -->
+<ion-header>
+  <ion-navbar color='pss-home-header'> 
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+
+<ion-content>
+ <ion-toolbar no-padding no-margin color="pss-home-sub-header" text-center>
+   <b>Select {{tournamentName}} Machine</b>
+ </ion-toolbar>
+
+  <div class='desktopSlim'>
+  <ion-list>
+    <ion-list-header no-lines>
+    </ion-list-header>    
+    <ion-item-group [reorder]="reorderEnabled" (ionItemReorder)="reorderTournamentMachineItems($event)">      
+      <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push tappable (click)="pushToMachine(tournamentMachine)" [style.background-color]="undoMode==true?'red':null">
+        {{tournamentMachine.tournament_machine_name}}
+        <ion-avatar item-start padding-vertical>
+          <img-loader fallback="assets/imgs/small_backglass.jpeg" [style.height]='"90px"' [style.width]='"100%"' [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'" useImg ></img-loader>
+
+          <!--<img  [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">-->
+        </ion-avatar>        
+      </button>
+    </ion-item-group>
+  </ion-list>
+  <div margin-top padding-top>
+    <button ion-button large float-left tappable (click)="reorderEnabled = reorderEnabled==false">Reorder</button>
+    <button float-right  large ion-button tappable (click)="undoMode = undoMode==false">&nbsp;Undo&nbsp;</button>
+  </div>
+</div>
+</ion-content>

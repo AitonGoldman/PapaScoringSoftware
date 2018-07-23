@@ -1,0 +1,25 @@
+
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model='filter_for.filter_for'>
+    </label>
+  </div>
+<!--  <ion-item ui-sref='.add_player_to_event' class='item item-icon-left'>      <i class='icon ion-plus-circled'></i>Add New Player To PSS</ion-item>-->
+  <div class='padding'></div>
+  <div class='item item-divider'>
+    <center>
+      # registered users : <a ng-click='showConfirm(type_of_user)'> {{items.length}} </a>
+    </center>
+  </div>
+  <ion-list ng-if='filter_for.filter_for!="" && filter_for.filter_for!=undefined'>
+    <!--<ion-item ng-repeat='item in items|userSearch:filter_for.filter_for|limitTo:45 as count'  ui-sref='.edit_user({pss_user_id:item.pss_user_id})'>{{item.full_user_name}} </ion-item>-->
+    <ion-item ng-repeat='item in items|userSearch:filter_for.filter_for|limitTo:45 as count' ng-click='deal_with_user(item)'><span ng-if='item.already_checked==true'>(registered)</span> {{item.full_user_name}} </ion-item>
+    <!--<ion-item ui-sref='.register_existing_user({namestring:filter_for.filter_for})' class='item-icon-left item-icon-right' ng-if='count.length == 0 && filter_for.filter_for.length > 0'> <i class="icon material-icons">assignment</i> Register {{filter_for.filter_for}} <i class="icon ion-chevron-right"></i></ion-item>-->
+    <ion-item ng-click='deal_with_user(item)' class='item-icon-left item-icon-right' ng-if='count.length == 0 && filter_for.filter_for.length > 0'> <i class="icon material-icons">assignment</i> Register {{filter_for.filter_for}} <i class="icon ion-chevron-right"></i></ion-item>
+
+    <ion-item ng-if='count.length > 44 && filter_for.filter_for.length > 0'> More than 45 people not being shown ...</ion-item>
+  </ion-list>
+    <ion-item ng-if='items.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length-count.length}} users not being shown </ion-item>
+
+<!--  <pss-generic-binding-list items-to-list='items' filter-to-apply="userSearch" not-found-message="Register scorekeeper/deskworker/TD" not-found-sref=".add_user_to_event" filter-for-string="filter_for"> </pss-generic-binding-list>-->

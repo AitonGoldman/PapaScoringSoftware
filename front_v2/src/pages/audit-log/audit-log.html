@@ -1,0 +1,73 @@
+<!--
+  Generated template for the AdminEditScoresPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color='pss-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+
+<ion-content no-padding no-margin>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>  Admin : Audit Logs</b>
+ </ion-toolbar>
+  <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onAutoCompletePlayerSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name/ID', debounce:500}"></ion-auto-complete>
+  <div text-center margin-bottom [style.height]="'25px'">
+    <ion-spinner *ngIf='loading==true' style='margin-bottom:7px'></ion-spinner>
+  </div>
+  <div [style.color]="'red'" *ngIf="notFoundMessage!=null" padding margin text-center>
+    <h2>{{notFoundMessage}}</h2>
+  </div>
+  <div *ngIf="selectedPlayer!=null" text-center>
+    <b>Player : {{selectedPlayer.player_full_name}}</b>
+    <br>
+    <button margin padding ion-button tappable (click)="onGetAuditLogs()">Get Audit Logs</button>
+    <br>
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-2 text-center>
+        Date
+      </ion-col>
+      <ion-col col-3 text-center>
+        Action
+      </ion-col>
+      <ion-col col-7 text-center>
+        Description
+      </ion-col>      
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <hr>
+      </ion-col>
+    </ion-row>
+    <ng-container *ngFor="let auditLog of auditLogs">
+    <ion-row >
+      <ng-container *ngIf='auditLog.summary!=true'>
+      <ion-col text-center col-2>
+        ({{auditLog.action_date}})
+      </ion-col>
+      <ion-col text-center col-3>
+        {{auditLog.action}} 
+      </ion-col>
+      <ion-col text-center col-7>
+        {{auditLog.description}}
+      </ion-col>
+      </ng-container>
+      <ng-container *ngIf='auditLog.summary==true'>
+      <ion-col text-center [style.background-color]='"grey"'>
+        {{auditLog.description}}
+      </ion-col>
+      </ng-container>      
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <hr>
+      </ion-col>
+    </ion-row>
+    </ng-container>
+  </ion-grid>
+</ion-content>

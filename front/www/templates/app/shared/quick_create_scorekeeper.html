@@ -1,0 +1,39 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <div ui-view='post_success_buttons'>
+  </div>  
+</div>
+<div class='chatitemup' ng-if="post_success==undefined">
+  <textarea style='border-width:1px;border-style:solid' rows="20" cols="80" ng-model='new_users.users_text_area'>
+    
+  </textarea>
+  <button ng-click='add_text_area_users_func()' type="button" class="padding button-pagraph button button-block button-positive" > Register Scorekeepers  </button>
+  
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model='filter_for.filter_for'>
+    </label>
+  </div>
+
+  <div class='padding'> </div>
+  <div class='row'>
+    <div class='col'>
+    </div>
+    <button ng-click='add_machine_func()' type="button" class="padding button-pagraph col-50 button button-block button-positive" > Register Scorekeepers  </button>
+    <div class='col'>
+    </div>    
+  </div>
+  
+  <div class='padding'> </div>
+  <button ng-click='filter_single_user(item)' style='margin:5px' class='button button-small' ng-repeat='item in items|filter:{checked:true}'> {{selected_item.username}} </button>
+  <div class='padding'> </div>  
+ 
+  <ion-list>
+    <ion-checkbox ng-repeat='item in items|userSearch:filter_for.filter_for|limitTo:45 as count' ng-model="item.checked">{{item.full_user_name}}</ion-checkbox>
+    <ion-item ng-if='count.length > 44 && filter_for.filter_for.length > 0'> More than 45 machines not being shown ...</ion-item>
+    <ion-item ng-if='count.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length}} machines not being shown </ion-item>
+
+  </ion-list>
+</div>

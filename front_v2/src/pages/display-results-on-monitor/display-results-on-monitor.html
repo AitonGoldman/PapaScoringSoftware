@@ -1,0 +1,140 @@
+<!--
+  Generated template for the DisplayResultsOnMonitorPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!--
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{currentTournamentMachine.tournament_machine_name}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+-->
+
+<ion-content *ngIf="typeOfResults=='tournament'">
+  <div style='background-color:white;z-index:0' text-center>
+    <a float-right (click)="launchDialog()"><ion-icon name="cog"></ion-icon></a>
+    <div padding-top [style.font-size]="titleFontSize+'px'">{{currentTournament.tournament_name}}</div>
+    <br>    
+    <ion-grid margin-top [style.font-size]="columnTitleFontSize+'px'">
+      <ion-row style='background-color:grey'>
+        <ion-col col-2 text-left padding-left>
+          rank
+        </ion-col>
+        <ion-col col-2 text-left padding-left>
+          points
+        </ion-col>
+        <ion-col col-4 text-left padding-left>
+          name
+        </ion-col>
+        <ion-col col-4 text-left padding-left >
+          top 3
+        </ion-col>        
+      </ion-row>
+    </ion-grid>        
+  </div>
+  <div style='position:relative;z-index:-1'>
+  <ng-container *ngFor="let row of currentResults;index as i;even as e">
+    <div *ngIf="i==currentResults.length-1" 
+         (@scrollAnim.done)="animationCallBack($event)"
+         [@scrollAnim]="{value: row.deleted, params : {amountToScroll: scrollDelta}}">
+      <!--{{row}}-->
+    </div>
+    <div *ngIf="i!=currentResults.length-1" 
+         [@scrollAnim]="{value: row.deleted, params : {amountToScroll: scrollDelta}}">
+      <ion-grid *ngIf='row.seperator!=true'>
+        <ion-row >
+          <ion-col col-2 text-center >
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.rank}}</ion-item>
+          </ion-col>
+          <ion-col col-2 text-center>
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.points}}</ion-item>
+          </ion-col>
+          <ion-col col-4 text-center>
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.player_name|titlecase}}</ion-item>
+          </ion-col>
+          <ion-col col-4 text-center>
+            <ion-item  no-padding no-margin>
+              <span [style.font-size]="columnContentFontSize+'px'">&nbsp;</span>              
+              <ng-container *ngFor="let topMachine of row.top_machines;first as f;last as l;index as i">
+                <span [style.font-size]="topMachineFontSize+'px'">
+                #{{topMachine.rank}} {{topMachine.abbreviation}} <span *ngIf="l!=true"> &#8226; </span>
+              </span>
+
+              </ng-container>
+              </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-grid *ngIf='row.seperator==true'>
+        <ion-row>
+          <ion-col>
+            <ion-item  color="primary" >
+              {{row.seperator_message}}
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>    
+  </ng-container>
+  </div>
+</ion-content>
+
+<ion-content *ngIf="typeOfResults!='tournament'">
+  <a float-right (click)="launchDialog()"><ion-icon name="cog"></ion-icon></a>
+  <div style='background-color:white;z-index:0' text-center>
+    <div padding-top [style.font-size]="titleFontSize+'px'">{{currentTournamentMachine.tournament_machine_name}}</div>
+    <br>    
+    <ng-container *ngFor="let tournamentMachine of tournament_machines_for_chip_display;last as l">
+      <ion-chip [color]="tournamentMachine==currentTournamentMachine?'primary':''" [style.font-size]="tournamentMachineChipFontSize+'px'" padding-left padding-right margin-left margin-right margin-top>
+        {{tournamentMachine.tournament_machine_name}}
+      </ion-chip>
+    </ng-container>
+    <ion-grid margin-top [style.font-size]="columnTitleFontSize+'px'">
+      <ion-row style='background-color:grey'>
+        <ion-col col-2 text-left padding-left>
+          rank
+        </ion-col>
+        <ion-col col-2 text-left padding-left>
+          points
+        </ion-col>
+        <ion-col col-5 text-left padding-left>
+          name
+        </ion-col>
+        <ion-col col-3 text-left padding-left>
+          score
+        </ion-col>        
+      </ion-row>
+    </ion-grid>        
+  </div>
+  <div style='position:relative;z-index:-1' [style.font-size]="columnContentFontSize+'px'">
+  <ng-container *ngFor="let row of currentResults;index as i;even as e">
+    <div *ngIf="i==currentResults.length-1" 
+         (@scrollAnim.done)="animationCallBack($event)"
+         [@scrollAnim]="{value: row.deleted, params : {amountToScroll: scrollDelta}}">      
+    </div>
+    <div *ngIf="i!=currentResults.length-1" 
+         [@scrollAnim]="{value: row.deleted, params : {amountToScroll: scrollDelta}}">
+      <ion-grid>
+        <ion-row >
+          <ion-col col-2>
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.rank}}</ion-item>
+          </ion-col>
+          <ion-col col-2 >
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.points}}</ion-item>
+          </ion-col>
+          <ion-col col-5 >
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.player_name|titlecase}}</ion-item>
+          </ion-col>
+          <ion-col col-3 >
+            <ion-item [style.font-size]="columnContentFontSize+'px'">{{row.score|number}}</ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>    
+    </div>    
+  </ng-container>
+  </div>
+</ion-content>

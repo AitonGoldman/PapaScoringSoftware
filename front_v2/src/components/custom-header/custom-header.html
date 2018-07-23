@@ -1,0 +1,10 @@
+  <ion-title start hideWhen='mobile' style='float:left;margin-top:3px'>Pss</ion-title>
+  <ion-title start showWhen='mobile'>{{eventName}}</ion-title>
+  <ion-buttons end hideWhen='mobile'>
+    <button *ngIf="kioskModeEnabled==false" icon-only ion-button [navPush]="homePage" [navParams]="{eventId:eventId,eventName:eventName}" ><ion-icon name="help"></ion-icon> {{homePageDisplayName}}</button>
+    <button *ngIf="kioskModeEnabled==true" icon-only ion-button [navPush]="'KioskHomePage'" [navParams]="{eventId:eventId,eventName:eventName}" ><ion-icon name="help"></ion-icon> Home</button>    
+    <button *ngIf='eventId!=null&&eventName!=null&&kioskModeEnabled==false' icon-only ion-button [navPush]="eventAuth.isEventUserLoggedIn(eventId)? 'LogoutPage' : 'LoginPage'" [navParams]="{eventId:eventId,eventName:eventName}" ><ion-icon name="log-out"></ion-icon> {{eventAuth.isEventUserLoggedIn(eventId)? "Logout" : "Login"}}</button>
+    <button *ngIf="kioskModeEnabled==false" icon-only ion-button [navPush]="'EventSelectPage'"><ion-icon name="git-compare"></ion-icon> Switch Events </button>
+    <button *ngIf='eventId!=null&&eventName!=null&&kioskModeEnabled==false' [navPush]="'ResultsPage'" [navParams]="{eventId:eventId,eventName:eventName}" icon-only ion-button> <ion-icon name="clipboard"></ion-icon>Results</button>
+    <button *ngIf='eventId!=null&&eventName!=null' [navPush]="'QueueSelectPlayerTournamentMachinePage'" [navParams]="{eventId:eventId,eventName:eventName}" icon-only ion-button> <ion-icon name="git-branch"></ion-icon>Queues</button>    
+  </ion-buttons>

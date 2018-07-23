@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-navbar color='pss-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>Register Player For Event</b>
+ </ion-toolbar>
+
+  <ion-auto-complete (keyup)="onKeyUp($event)"  name="myautocomplete" [(ngModel)]="selectedPlayer" #searchbar (autoFocus)="onFocus()" (itemSelected)="onSelected($event)" [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Player Name', debounce:500}"></ion-auto-complete>
+  <div text-center *ngIf='loading==true' margin-bottom [style.height]="'25px'">
+    <ion-spinner style='margin-bottom:7px'></ion-spinner>
+  </div>
+
+  <div class='desktopSlim' padding>
+    <form #myForm="ngForm" *ngIf="notFoundMessage!=null||(selectedPlayer!=null && selectedPlayer.player_full_name!=null)">    
+      <ion-list>
+        <ion-item no-line *ngIf="selectedPlayer!=null && selectedPlayer.img_url!=null">
+                <ion-avatar style='zoom:3.0'>
+                  <img [src]="imgBaseUrl+selectedPlayer.img_url" style='margin-left:auto;margin-right:auto'>
+                </ion-avatar>
+        </ion-item>
+        <ion-item>
+        <ion-label stacked>First Name</ion-label>
+        <ion-input type="text" required
+                   [(ngModel)]="selectedPlayer.first_name" name="first_name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Last Name</ion-label>
+        <ion-input type="text" required
+                   [(ngModel)]="selectedPlayer.last_name" name="last_name"></ion-input>
+      </ion-item>
+      <ion-item-sliding #slidingItem>
+        <ion-item>
+          <ion-label stacked>Ifpa Ranking <span showWhen="mobile">(slide left to re-lookup)</span></ion-label>
+          <ion-input type="text" required
+                     [(ngModel)]="selectedPlayer.ifpa_ranking" name="ifpa_ranking">           
+          </ion-input>
+          <ion-icon tappable (click)='getIfpaRanking(selectedPlayer.first_name+" "+selectedPlayer.last_name)' hideWhen="mobile" name='cloud-download' item-end></ion-icon>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button tappable (click)='getIfpaRankingMobile(selectedPlayer.first_name+" "+selectedPlayer.last_name,slidingItem)'>
+            Lookup
+            <ion-icon name="cloud-download"></ion-icon>            
+          </button>
+        </ion-item-options>        
+      </ion-item-sliding>
+      <button ion-item tappable (click)="takePicture()">
+        Take a picture <span>{{selectedPlayer.has_pic==true?"(pic uploaded)":""}}</span>
+           <ion-icon name='camera' item-end></ion-icon>
+      </button>
+      </ion-list>
+      <ion-item text-center no-lines>
+        <button [disabled]="ifpaLookup!=true" ion-button padding tappable (click)="onSubmit()">
+          register player 
+        </button>
+      </ion-item>
+      
+    </form>
+    </div>
+</ion-content>

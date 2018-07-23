@@ -1,0 +1,29 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div ng-if="post_success==undefined">
+  <form>
+  <div> 
+      <label class="item item-input">
+        <input type="text" placeholder="Username" ng-model="pss_user.username"/>        
+      </label>
+
+      <label class="item item-input">
+        <input type="text" placeholder="Password" ng-model="pss_user.password"/>
+      </label>
+</div>
+<div class='row'>
+  <div class='col'>
+  </div>
+  <input ng-click='login_func("post_pss_admin_login","pss_admin")' type="button" class="padding button-pagraph col-33 button button-block button-positive" value="Login">
+
+  </button>
+  <div class='col'>
+  </div>    
+</div>
+
+</form>
+</div>
+

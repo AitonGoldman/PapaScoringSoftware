@@ -1,0 +1,59 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div class='chatitemup' ng-if="post_success==undefined">
+<div class="card">
+  <div class="item item-divider">
+    Register {{type_of_user}}s
+  </div>
+  <div>
+    <center class='padding'>      
+      Select everyone you want to be a {{type_of_user}},  and click "Register {{type_of_user}}s".<br>
+      If people are not on this list, click <a ui-sref='app.pss_admin.quick_create_users_new({event_id:event_id,event_role_name:event_role_name,target_event_name:target_event_name})'>here</a>
+    </center>
+  <div class="item-input-inset">
+    <label class="item-input-wrapper">
+      <i class="icon ion-ios-search placeholder-icon"></i>
+      <input type="search" placeholder="Search" ng-model='filter_for.filter_for'>
+    </label>
+  </div>
+
+  <div class='padding'> </div>
+  <!-- <div class='row'> -->
+  <!--   <div class='col'> -->
+  <!--   </div> -->
+  <center>
+    <button ng-click='add_existing_users_func()' type="button" class="padding button-pagraph col-90 button button-block button-positive" > Register selected {{type_of_user}}s  </button>
+  </center>
+    <div class='padding'> </div>
+  <!--   <div class='col'> -->
+  <!--   </div>     -->
+  <!-- </div> -->
+  
+  <div class='item item-divider'>
+    <center>
+      # Selected {{type_of_user}}s : <span style="display:inline-block;" ng-class="{'css-class':signal_added_user}"> <a ng-click='showConfirm(type_of_user)'> {{(items|filter:{already_checked:false,checked:true}).length}} </a> </span>
+    </center>
+  </div>
+<!--  <ion-content delegate-handle="tournamentlist" scrollbar-y="false" scrollbar-x="true" direction="x" class='item item-divider pooping'>
+    <button style='margin:5px' class='button button-small button-clear button-dark'>Registered {{type_of_user}}:</button>
+    <button ng-click='filter_single_user(item)' style='margin:5px' class='button button-small' ng-repeat='item in items|filter:{checked:true} as checked_count' ng-if='$index<25'> {{item.username}} </button> <button style='margin:5px' class='button button-small button-dark button-clear' ng-if='checked_count.length > 24 '>{{checked_count.length-24}} {{type_of_user}}s not shown...</button>
+</ion-content>-->
+
+<!--  <button ng-click='scroll_left()'>scroll</button>-->
+
+<!--  <button ng-click='filter_single_user(item)' style='margin:5px' class='button button-small' ng-repeat='item in items|filter:{checked:true} as checked_count' ng-if='$index<25'> {{item.username}} </button> <button style='margin:5px' class='button button-small button-dark button-clear' ng-if='checked_count.length > 24 '>{{checked_count.length-24}} {{type_of_user}}s not shown...</button>-->
+ 
+  <ion-list ng-if='filter_for.filter_for!="" && filter_for.filter_for!=undefined'>
+    <ion-checkbox ng-disabled='item.already_checked==true' ng-repeat='item in items|userSearch:filter_for.filter_for|limitTo:45 as count' ng-model="item.checked">{{item.full_user_name}} <span class='desktop-only' ng-if='item.already_checked==true'>(Registered)</span></ion-checkbox>
+    <ion-item class='item-icon-left item-icon-right' ng-click='add_new_player_to_list(filter_for.filter_for)' ng-if='count.length == 0 && filter_for.filter_for.length > 0'> <i class="icon material-icons">assignment</i> Add {{filter_for.filter_for}} to list to be registered <i class="icon ion-chevron-right"></i></ion-item>
+    <ion-item ng-if='count.length > 44 && filter_for.filter_for.length > 0'> More than 45 people not being shown ...</ion-item>
+    <ion-item ng-if='count.length > 44 && (filter_for.filter_for.length == undefined || filter_for.filter_for.length == 0)'> {{items.length-count.length}} users not being shown </ion-item>
+
+  </ion-list>
+
+  </div>
+</div>
+</div>

@@ -1,0 +1,24 @@
+<div class="chatitem" ng-if='credentials.is_logged_in(event_name)==false'>
+  <center>
+    <h2>Please Log In To {{event_name}}</h2>
+  </center>
+</div>      
+<div class="chatitem list" ng-if='credentials.is_logged_in(event_name)==true'>
+  <ion-item class='item-borderless'> <b>Basic Tournament Management</b> </ion-item>
+  <ion-item ui-sref='.manage_users' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Manage Users</ion-item>
+  <ion-item ui-sref='.manage_tournament_machines' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Manage Tournament Machines</ion-item>
+  <br>
+  <ion-item class='item-borderless'> <b>Additional Tournament Configuration</b> </ion-item>  
+  <ion-item ui-sref='.manage_tournaments' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Manage Tournaments</ion-item>
+  <ion-item ui-sref='.manage_meta_tournaments' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Manage MetaTournaments</ion-item>
+  <br>
+  <ion-item class='item-borderless'> <b>Deskworker Tasks</b> </ion-item>  
+  <ion-item ui-sref='.select_players_to_add_to_event' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Register Players For Event</ion-item>
+  <ion-item ui-sref='.player_info' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Registered Players Info</ion-item>  
+  <ion-item ui-sref='.token_purchase' class='item item-icon-left'><i class='icon ion-plus-circled'></i>Ticket Purchase</ion-item>
+
+</div>      
+
+
+
+

@@ -1,0 +1,32 @@
+<ion-view view-title="Add Player">
+  <ion-content>      
+    <ion-list class="skinny-list">
+      <div class="item-divider item" id='add_user_user_info_title'>
+        Player Info
+      </div>
+      <label  class="item-input item">
+        <span class='input-label'>First Name : </span>
+        <input ng-model='player_info.first_name' type="text" placeholder="First Name">
+      </label>
+
+      <label class="item-input item">
+        <span class='input-label'>Last Name : </span>
+        <input class="myinput" ng-model='player_info.last_name' type="text" placeholder="Last Name" />
+      </label>
+      <label class="item-input item">
+        <span class='input-label'>Email Address : </span>
+        <input class="myinput" ng-model='player_info.email_address' type="text" placeholder="Email Address" />
+      </label>      
+    </ion-list>
+    <button id="add_player_add_button" ui-sref='.process({process_step:{process:true}, player_info:player_info})' class="button button-full item-icon-right button-calm input-list-button seperate_button" style='text-align:left;margin-top:15px' ng-disabled='form_not_ready_for_submit()'>
+        
+        <i class="icon ion-chevron-right"></i>
+        <span >Add Player</span>
+      </button>
+    <div ng-if='player_info.pic_file != undefined' class='player-info-avatar player-info-avatar-ex'>
+      <img class='avatar-frame avatar-user-pic avatar-user-pic-ex' src="http://{{server_ip_address}}/pics/{{player_info.pic_file}}">
+    </div>
+    
+  </ion-content>
+</ion-view>
+

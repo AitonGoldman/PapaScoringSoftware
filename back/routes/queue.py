@@ -1,398 +1,249 @@
-from blueprints import admin_login_blueprint,admin_manage_blueprint
-from flask import jsonify,current_app,request
-import json
-from werkzeug.exceptions import BadRequest,Conflict
-from util import db_util
-from util.permissions import Admin_permission, Desk_permission, Token_permission, Queue_permission, Scorekeeper_permission
-from flask_login import login_required,current_user
-from routes.utils import fetch_entity,check_player_team_can_start_game,set_token_start_time, remove_player_from_queue,get_queue_from_division_machine,send_push_notification,get_player_list_to_notify,check_player_in_queue,get_username_or_player_name
-import os
 from flask_restless.helpers import to_dict
-from orm_creation import create_queue
-from audit_log_utils import create_audit_log,create_audit_log_ex
-import datetime
+from lib.flask_lib import blueprints
+from flask import jsonify,current_app,request
+from werkzeug.exceptions import BadRequest,Unauthorized,Conflict
+from flask_login import login_user, logout_user, current_user
+import json
+from lib import orm_factories,token_helpers
+from lib.serializer.generic import generate_generic_serializer
+from lib import serializer
+from lib.route_decorators.db_decorators import load_tables
+from lib.route_decorators.auth_decorators import check_current_user_is_active
+from sqlalchemy.orm import joinedload
+from lib.flask_lib.permissions import event_user_buy_tickets_permissions
+from lib.flask_lib.permissions import player_add_to_queue_permissions
+from lib.flask_lib.permissions import bump_down_queue_permissions
+from lib.flask_lib.permissions import clear_tournament_queue_permissions
 
-@admin_manage_blueprint.route('/queue/player_id/<player_id>',methods=['GET'])
-def get_queue_for_player(player_id):
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)
-    player = fetch_entity(tables.Player, player_id)
-    queue = tables.Queue.query.filter_by(player_id=player_id).first()
-    if queue:
-        return jsonify({'data':queue.to_dict_simple()})
+from lib import queue_helpers,notification_helpers
+import time
+from sqlalchemy.orm import joinedload
+
+def set_player_id_based_on_type_of_login(user,input_data):
+    if hasattr(user,'pss_user_id'):        
+        is_player=False
+        if 'player_id' in input_data:
+            player_id=input_data['player_id']
+        else:
+            raise BadRequest('No player id specified')
     else:
-        return jsonify({'data':None})
+        is_player=True
+        player_id=current_user.player_id
+    return player_id
 
-@admin_manage_blueprint.route('/queue/division/<division_id>',methods=['GET'])
-def get_queues(division_id):
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)
-    division_machines = tables.DivisionMachine.query.filter_by(division_id=division_id,removed=False)
-    queues = {}
-    machine_players = {}
-    for division_machine in division_machines:
-        queues[division_machine.division_machine_id]={
-            'division_machine_name':"%s"%division_machine.machine.machine_name,
-            'division_machine_id':division_machine.division_machine_id,
-            'removed':division_machine.removed,
-            'division_id':division_machine.division_id,
-            'player_id':division_machine.player_id,
-            'team_id':division_machine.team_id,
-            'avg_play_time':division_machine.avg_play_time,
-            'queues':get_queue_from_division_machine(division_machine,json_output=True)
-        }
-        if division_machine.player is None and division_machine.division.team_tournament is not True:
-            machine_players[division_machine.division_machine_id]=None
-        if division_machine.player is not None and division_machine.division.team_tournament is not True:
-            machine_players[division_machine.division_machine_id]="%s %s" %(division_machine.player.first_name,division_machine.player.last_name)
-        if division_machine.team and division_machine.team and division_machine.division.team_tournament is True:
-            machine_players[division_machine.division_machine_id]=None
-        if division_machine.team and division_machine.team and division_machine.division.team_tournament is True:
-            machine_players[division_machine.division_machine_id]=division_machine.team.team_name
-        
-    return jsonify({'data':queues,'machine_players':machine_players})
+def check_tournament_machine_and_player(app,tournament_machine_id,player_id=None):
+    tournament_machine = app.tables.TournamentMachines.query.filter_by(tournament_machine_id=tournament_machine_id).first()
+    if tournament_machine is None:
+        raise BadRequest('tournament_machine does not exist')
+    if player_id is None:
+        return    
+    player = app.tables.Players.query.filter_by(player_id=player_id).first()            
+    if player is None:
+        raise BadRequest('player does not exist')                
+    return tournament_machine,player
 
-
-@admin_manage_blueprint.route('/queue/insert/<player_id>/<division_machine_id>',methods=['POST'])
-#@login_required
-#@Scorekeeper_permission.require(403)
-def insert_player_into_queue(player_id,division_machine_id):    
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)
-    division_machine = fetch_entity(tables.DivisionMachine, division_machine_id)
-    player = fetch_entity(tables.Player, player_id)
-    with db.session.no_autoflush:
+def clear_tournament_queue_route(app,tournament_id):
+    queue_groups = queue_helpers.get_queue_for_tounament(app,tournament_id)        
+    with app.tables.db_handle.session.no_autoflush:                
         try:
-            queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=division_machine.division_machine_id).all()
-            queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
-            head_of_queue = tables.Queue.query.filter_by(division_machine_id=division_machine_id,parent_id=None).first()
-            if queue:
-                if queue.division_machine_id==division_machine.division_machine_id:
-                    raise BadRequest('Player is already on this queue.')
-                else:
-                    raise BadRequest('Player is currently on another queue.  Remove the player and try again.')
-            if head_of_queue is None:
-                raise BadRequest('Tried to insert into a machine with no one on the queue')                    
-            #head_of_queue = division_machine.queue[0]
-            new_queue = tables.Queue(
-                player=player,
-                division_machine=division_machine                
-            )            
-            db.session.add(new_queue)
-            division_machine.queue.append(new_queue)
-            new_queue.queue_child.append(head_of_queue)
-            
-            db.session.commit()
-            return jsonify({'data':''})
-        except Exception as e:
-            db.session.commit()
-            print "poop %s"%e
-            raise e
-    
-    pass
+            queues_to_lock_for_for_removal = app.tables.Queues.query.with_for_update().join(app.tables.TournamentMachines).filter_by(tournament_id=tournament_id).all()
+            for tournament_machine_id, queue_group in queue_groups:
+                for queue in queue_group:
+                    queue.player_id=None
+                    queue.bumped=False
+            app.tables.db_handle.session.commit()
+            return {'result':'clear!'}
+        except Exception as e:            
+            app.tables.db_handle.session.commit()
+            return {'result':'internal error : %s' % e,'added_queue':{}}
 
+@blueprints.event_blueprint.route('/queue/tournament/<tournament_id>',methods=['DELETE'])
+@clear_tournament_queue_permissions.require(403)
+@check_current_user_is_active
+@load_tables
+def clear_tournament_queue(tables,tournament_id):
+    return jsonify(clear_tournament_queue_route(current_app,tournament_id))
 
-@admin_manage_blueprint.route('/queue',methods=['POST'])
-@login_required
-@Queue_permission.require(403)
-def add_player_to_queue():    
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)
-    queue_data = json.loads(request.data)
-    division_machine = fetch_entity(tables.DivisionMachine, queue_data['division_machine_id'])
-    if division_machine.division.active is False:
-        raise BadRequest('Division is not active')                    
-    if division_machine.removed is True:
-        raise BadRequest('Machine has been removed - you have been very naughty')            
-    if division_machine.player_id is None and len(division_machine.queue) == 0:        
-        raise BadRequest('Oops - player finished playing this game while you were queuing.  See a scorekeeper to start game')
-    player = fetch_entity(tables.Player,queue_data['player_id'])
-    print "okay - starting with  %s"%player.player_id    
-    if player.active is False:
-        raise BadRequest("Player is not active - please see front desk")
-    
-    if player.division_machine:
-        raise BadRequest("Can't queue - player  is already playing a machine")                
-    if len(player.teams) > 0:
-        if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():
-            raise BadRequest("Can't queue - player's team is on another machine")
-    if check_player_team_can_start_game(current_app,division_machine,player) is False:
-        raise BadRequest("Can't queue - player has no tokens")    
-    #queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
-    #if queue and queue.division_machine_id == division_machine.division_machine_id:                
-    #    return jsonify({'data':queue.to_dict_simple()})
-    players_to_alert = []    
-        
-    with db.session.no_autoflush:
-        try:            
-            queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=division_machine.division_machine_id).all()
-            queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
-            if queue and queue.division_machine_id == division_machine.division_machine_id:
-                db.session.commit()
-                return jsonify({'data':queue.to_dict_simple()})
-            if queue:
-                queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=queue.division_machine.division_machine_id).all()
-                players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)
-            else:
-                players_to_alert = []            
-            removed_queue = remove_player_from_queue(current_app,player,commit=False)
-            if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
-                push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
-                send_push_notification(push_notification_message, players=players_to_alert)
-            new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['player_id'])
-            queuer = get_username_or_player_name(current_user.user_id)
-            create_audit_log_ex(current_app,
-                                "Player added to queue",
-                                user_id=current_user.user_id,
-                                player_id=player.player_id,
-                                division_machine_id=division_machine.division_machine_id,
-                                description="Player added to queue for %s by %s" % (division_machine.machine.machine_name,
-                                                                                    queuer),
-                                commit=False)
-            
-            db.session.commit()
-            
-            return jsonify({'data':new_queue.to_dict_simple()})
-            #return jsonify({'data':None})
-        except Exception as e:
-            db.session.commit()
-            print "poop %s"%e
-            raise e
-
-@admin_manage_blueprint.route('/queue/other_player',methods=['POST'])
-def add_other_player_to_queue():
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)
-    queue_data = json.loads(request.data)    
-    division_machine = fetch_entity(tables.DivisionMachine, queue_data['division_machine_id'])
-
-    if division_machine.division.active is False:
-        raise BadRequest('Division is not active')                    
-    if division_machine.removed is True:
-        raise BadRequest('Machine has been removed - you have been very naughty')            
-    if division_machine.player_id is None and len(division_machine.queue) == 0:        
-        raise BadRequest('Oops - player finished playing this game while you were queuing.  See a scorekeeper to start game')        
-    #player = fetch_entity(tables.Player,queue_data['player_id'])
-    player = fetch_entity(tables.Player,queue_data['other_player_id'])    
-    if player.active is False:
-        raise BadRequest("Player is not active - please see front desk")
-    if 'other_player_pin' not in queue_data or player.pin != int(queue_data['other_player_pin']):
-        raise BadRequest('Invalid player id and player pin')    
-    if player.division_machine:
-        raise BadRequest("Can't queue - player  is already playing a machine")                
-    if len(player.teams) > 0:
-        if tables.DivisionMachine.query.filter_by(team_id=player.teams[0].team_id).first():
-            raise BadRequest("Can't queue - player's team is on another machine")
-    if check_player_team_can_start_game(current_app,division_machine,player) is False:
-        raise BadRequest("Can't queue - player has no tokens")    
-    queue = tables.Queue.query.filter_by(player_id=player.player_id).first()
-    if queue and queue.division_machine_id == division_machine.division_machine_id:                
-        return jsonify({'data':queue.to_dict_simple()})
-    players_to_alert = []    
-        
-    with db.session.no_autoflush:
-        try:
-            queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=division_machine.division_machine_id).all()
-            if queue:
-                queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=queue.division_machine.division_machine_id).all()
-                players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)
-            else:
-                players_to_alert = []            
-            removed_queue = remove_player_from_queue(current_app,player,commit=False)
-            if removed_queue is not None and removed_queue is not False and len(players_to_alert) > 0:        
-                push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
-                send_push_notification(push_notification_message, players=players_to_alert)
-            new_queue = create_queue(current_app,queue_data['division_machine_id'],queue_data['other_player_id'])                                    
-            queuer = get_username_or_player_name(current_user.user_id)
-            create_audit_log_ex(current_app,
-                                "Player added other player to queue",
-                                user_id=current_user.user_id,
-                                player_id=player.player_id,
-                                division_machine_id=division_machine.division_machine_id,
-                                description="Player added to queue for %s by %s" % (division_machine.machine.machine_name,
-                                                                                    queuer),
-                                commit=False)
-            db.session.commit()
-            
-            return jsonify({'data':new_queue.to_dict_simple()})
-            #return jsonify({'data':None})
-        except Exception as e:
-            db.session.commit()
-            print "poop %s"%e
-            raise e
-    
-
-@admin_manage_blueprint.route('/queue/division_machine/<division_machine_id>/bump',methods=['PUT'])
-@login_required
-@Queue_permission.require(403)
-def bump_player_down_queue(division_machine_id):
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)    
-    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
-    if len(division_machine.queue) > 0:
-        #queue = division_machine.queue[0]
-        queue = tables.Queue.query.filter_by(division_machine_id=division_machine_id,parent_id=None).first()
+def remove_player_from_queue_route(request,app,tournament_machine_id,user):
+    if request.data:        
+        input_data = json.loads(request.data)
     else:
-        queue = None
-    allow_bump=True        
-    if queue and queue.bumped:
-        allow_bump=False
-    if len(queue.queue_child) == 0:
-        allow_bump=False
-    player_id = queue.player_id
-    player = fetch_entity(tables.Player,player_id)
+        raise BadRequest('Not enough info specified')
 
-    with db.session.no_autoflush:
-        try:
-            queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=division_machine.division_machine_id).all()            
-            if allow_bump:
-                child_queue = queue.queue_child[0]
-                if child_queue and len(child_queue.queue_child) > 0:
-                    grand_child = child_queue.queue_child[0]
-                else:
-                    grand_child = None
-                queue.queue_child.remove(child_queue)
-                if grand_child:
-                    child_queue.queue_child.remove(grand_child)
-                new_queue = tables.Queue(
-                    division_machine_id=division_machine_id,
-                    player_id=player_id,
-                    bumped=True
-                )
-                db.session.add(new_queue)                
-                child_queue.queue_child.append(new_queue)
-                if grand_child:
-                    new_queue.queue_child.append(grand_child)
-                db.session.delete(queue)            
-                create_audit_log_ex(current_app,
-                                    "Player bumped down queue",
-                                    user_id=current_user.user_id,
-                                    player_id=player.player_id,
-                                    division_machine_id=division_machine.division_machine_id,
-                                    description="Player bumped down queue for %s by %s" % (division_machine.machine.machine_name,
-                                                                                           current_user.username),
-                                    commit=False)
-                
-                create_audit_log("Player Bumped",datetime.datetime.now(),
-                                 "",user_id=current_user.user_id,
-                                 player_id=player_id,
-                                 division_machine_id=division_machine.division_machine_id,                     
-                                 commit=False)
+    player_id = set_player_id_based_on_type_of_login(user,input_data)    
+    check_tournament_machine_and_player(app,tournament_machine_id,player_id)       
+
+    with app.tables.db_handle.session.no_autoflush:                
+        try:                                           
+            
+            queues = queue_helpers.get_queue_for_tounament_machine(app,tournament_machine_id)
+            result = queue_helpers.remove_player_from_queue(app,player_id,queues=queues)
+            app.tables.db_handle.session.commit()            
+            if result:
+                result_string='player removed'
             else:
-                if queue:
-                    players_to_alert = get_player_list_to_notify(player.player_id,queue.division_machine)
-                else:
-                    players_to_alert = []                
-                create_audit_log_ex(current_app,
-                                    "Player removed from queue due to bumping",
-                                    user_id=current_user.user_id,
-                                    player_id=player.player_id,
-                                    division_machine_id=division_machine.division_machine_id,
-                                    description="Player removed from queue for %s by %s" % (division_machine.machine.machine_name,
-                                                                                            current_user.username),
-                                    commit=False)
+                result_string='noop'
+            queue_serializer = serializer.queue.generate_queue_to_dict_serializer(serializer.queue.ALL)
+            return {'result':result_string,'updated_queue':[queue_serializer(queue) for queue in queues]}                            
+            
+        except Exception as e:            
+            app.tables.db_handle.session.commit()
+            return {'result':'internal error : %s' % e,'added_queue':{}}
+    
+@blueprints.event_blueprint.route('/queue/tournament_machine/<tournament_machine_id>',methods=['DELETE'])
+@player_add_to_queue_permissions.require(403)
+@check_current_user_is_active
+@load_tables
+def remove_player_from_queue(tables,tournament_machine_id):
+    return jsonify(remove_player_from_queue_route(request,current_app,tournament_machine_id,current_user))
+
+def bump_player_down_queue_route(request,app,tournament_machine_id):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Not enough info specified')
+
+    if 'player_id' in input_data:
+        player_id=input_data['player_id']
+    else:
+        raise BadRequest('no player id specified')
+    
+    check_tournament_machine_and_player(app,tournament_machine_id,player_id)    
+    action=input_data['action']
+    
+    with app.tables.db_handle.session.no_autoflush:                
+        try:                                           
+            if action == 'bump':                                
+                queues = queue_helpers.get_queue_for_tounament_machine(app,tournament_machine_id)
+                if queues[0].player_id != int(player_id):
+                    raise BadRequest('Bump failed (the queue might have changed under you).  Please try again')
+                #FIXME : change logic to allow for more than one bump
+                if queues[0].bumped is False and queues[1].player_id is not None:                    
+                    queue_helpers.bump_player_down_queue(app,tournament_machine_id,queues)
+                    app.tables.db_handle.session.commit()
                     
-                remove_player_from_queue(current_app,player,commit=False)
-                
-                if len(players_to_alert) > 0:        
-                    push_notification_message = "The queue for %s has changed!  Please check the queue to see your new position." % queue.division_machine.machine.machine_name
-                    send_push_notification(push_notification_message, players=players_to_alert)
-            if player.bump_count:
-                player.bump_count = player.bump_count+1
-            else:
-                player.bump_count = 1
-            print "about to commit bump..."            
-            db.session.commit()
-            return_queue = get_queue_from_division_machine(division_machine,True)            
-            #db.session.commit()
-            return jsonify({'data':{division_machine_id:{'queues':return_queue}}})        
-        except Exception as e:
-            db.session.commit()
-            print "poop...%s"%e
-            raise Conflict("Something went wrong while bumping player down queue - please try again.")
-
-
-@admin_manage_blueprint.route('/queue/player/<player_id>',methods=['DELETE'])
-@login_required
-@Queue_permission.require(403)
-def route_remove_player_from_queue(player_id):
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)    
-    player = fetch_entity(tables.Player,player_id)
-    queue = tables.Queue.query.filter_by(player_id=player_id).first()    
-    if queue is None:
-        raise BadRequest('Player is not in any queues')    
-    division_machine=queue.division_machine
-    try:
-        queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=division_machine.division_machine_id).all()                
-        players_to_alert = get_player_list_to_notify(player.player_id,division_machine)    
-        remove_result = remove_player_from_queue(current_app,player,commit=False)
-        new_queue = get_queue_from_division_machine(division_machine,True)
-        if len(players_to_alert) > 0:
-            push_notification_message = """
-            The queue for %s has changed! Check the queue to see your new position.
-            """ % division_machine.machine.machine_name
-            send_push_notification(push_notification_message, players=players_to_alert)
-        queuer = get_username_or_player_name(current_user.user_id)
-        create_audit_log_ex(current_app,
-                            "Player removed from queue",
-                            user_id=current_user.user_id,
-                            player_id=player.player_id,
-                            division_machine_id=division_machine.division_machine_id,
-                            description="Player removed from queue for %s by %s" % (division_machine.machine.machine_name,
-                                                                                    queuer),
-                            commit=False)
-            
-        db.session.commit()
-    except Exception as e:
-        db.session.commit()
-        raise e
-    return jsonify({'data':{division_machine.division_machine_id:{'queues':new_queue}}})
-
-
-@admin_manage_blueprint.route('/queue/division_machine/<division_machine_id>',methods=['PUT'])
-@login_required
-@Queue_permission.require(403)
-def add_player_to_machine_from_queue(division_machine_id):
-    db = db_util.app_db_handle(current_app)
-    tables = db_util.app_db_tables(current_app)    
-    division_machine = fetch_entity(tables.DivisionMachine,division_machine_id)
-    division = fetch_entity(tables.Division,division_machine.division_id)
-    if division.active is False:
-        raise BadRequest('Division is not active')        
-    if len(division_machine.queue) == 0:
-        raise BadRequest('Trying to add player from an empty queue')
-    if division_machine.player_id is not None:
-        raise BadRequest('Trying to add player from a queue to a machine in use')    
-    root_queue = tables.Queue.query.filter_by(division_machine_id=division_machine_id,parent_id=None).first()
-    player = fetch_entity(tables.Player,root_queue.player_id)
-    if check_player_team_can_start_game(current_app,division_machine,player=player) is False:
-        raise BadRequest('Player can not start game - either no tickets or already on another machine')    
-    with db.session.no_autoflush:
-        try:
-            queues_to_lock = tables.Queue.query.with_for_update().filter_by(division_machine_id=division_machine.division_machine_id).all()            
-
-            players_to_alert = get_player_list_to_notify(player.player_id,division_machine)
-            set_token_start_time(current_app,player,division_machine,commit=False)    
-            division_machine.player_id = root_queue.player_id    
-            if len(root_queue.queue_child) > 0:
-                root_queue.queue_child.remove(root_queue.queue_child[0])
-            db.session.delete(root_queue)
-            create_audit_log_ex(current_app,
-                                "Player added to machine from queue",
-                                user_id=current_user.user_id,
-                                player_id=player.player_id,
-                                division_machine_id=division_machine.division_machine_id,
-                                description="Player added to machine %s queue by %s" % (division_machine.machine.machine_name,
-                                                                                        current_user.username),
-                                commit=False)
-            
-            db.session.commit()    
-            return_dict = {'division_machine':division_machine.to_dict_simple()}
-            if len(players_to_alert) > 0:        
-                send_push_notification("The queue for %s has changed!  Please check the queue to see your new position." % division_machine.machine.machine_name,
-                                       players=players_to_alert)
-            return jsonify({'data': division_machine.to_dict_simple()})
-        except Exception as e:
-            db.session.commit()
+                elif queues[1].player_id is None or queues[0].bumped is True:                
+                    queue_helpers.remove_player_from_queue(app,
+                                                           queues[0].player_id,
+                                                           queues=queues,
+                                                           position_in_queue=1)
+                    
+                    app.tables.db_handle.session.commit()
+                queue_serializer = serializer.queue.generate_queue_to_dict_serializer(serializer.queue.ALL)                
+                return {'result':'player bumped','updated_queue':[queue_serializer(queue) for queue in queues if queue.player_id is not None]}                
+        except Exception as e:            
+            app.tables.db_handle.session.commit()            
             raise e
+            #return {'result':'internal error : %s' % e,'added_queue':{}}
+    
+@blueprints.event_blueprint.route('/queue/tournament_machine/<tournament_machine_id>',methods=['PUT'])
+@bump_down_queue_permissions.require(403)
+@check_current_user_is_active
+@load_tables
+def bump_player_down_queue(tables,tournament_machine_id):
+    return jsonify(bump_player_down_queue_route(request,current_app,tournament_machine_id))
+
+#FIXME : raise exception, don't swallow it
+def add_player_to_queue_route_validate(request,app,tournament_machine_id,user):
+    if request.data:        
+        input_data = json.loads(request.data)
+    else:
+        raise BadRequest('Not enough info specified')
+
+    player_id = set_player_id_based_on_type_of_login(user,input_data)    
+    
+    action=input_data['action']
+    tournament_machine,player=check_tournament_machine_and_player(app,tournament_machine_id,player_id)
+    tournament = app.tables.Tournaments.query.filter_by(tournament_id=tournament_machine.tournament_id).first()
+    
+    if tournament.meta_tournament_id:        
+        meta_tournament=app.tables.MetaTournaments.query.filter_by(meta_tournament_id=tournament.meta_tournament_id).first()
+        token_count = token_helpers.get_number_of_unused_tickets_for_player(player,app,meta_tournament=meta_tournament)
+    else:
+        token_count = token_helpers.get_number_of_unused_tickets_for_player(player,app,tournament=tournament)
+    
+    if token_count<1:
+        
+        raise BadRequest('Player has no tokens')
+    
+
+def add_player_to_queue_route_remove_existing(request,app,tournament_machine_id,user):
+    with app.tables.db_handle.session.no_autoflush:                
+        try:
+            input_data = json.loads(request.data)
+            player_id = set_player_id_based_on_type_of_login(user,input_data)    
+            
+            existing_queue = queue_helpers.get_queue_player_is_already_in(player_id,app)            
+            
+            if existing_queue and existing_queue.tournament_machine_id == int(tournament_machine_id):                                                                
+                raise BadRequest('Player can not be added to a queue when they are already on queue')
+
+            queues = queue_helpers.get_queue_for_tounament_machine(app,tournament_machine_id)
+            if queues[0].player_id is None:
+                raise BadRequest('Can not add to empty queue.  Please see scorekeeper')
+            if existing_queue:
+                
+                tournament_machine_id_to_remove_from = existing_queue.tournament_machine_id
+                existing_position = existing_queue.position                                
+                old_queues = queue_helpers.get_queue_for_tounament_machine(app,tournament_machine_id_to_remove_from)
+                
+                queue_helpers.remove_player_from_queue(app,
+                                                       player_id,
+                                                       queues=old_queues,
+                                                       position_in_queue=existing_position)
+                if app.event_config['ionic_api_key']:                    
+                    notification_helpers.notify_list_of_players(queues[existing_position:],"test message")
+                        
+        except Exception as e:            
+            app.tables.db_handle.session.commit()            
+            raise e
+            #return {'result':'internal error : %s' % e,'added_queue':{}}
+
+def add_player_to_queue_route(request,app,tournament_machine_id,user):
+    with app.tables.db_handle.session.no_autoflush:                
+        try:
+            input_data = json.loads(request.data)            
+            player_id = set_player_id_based_on_type_of_login(user,input_data)    
+            queues = queue_helpers.get_queue_for_tounament_machine(app,tournament_machine_id)                        
+            updated_queue = queue_helpers.add_player_to_queue(player_id,queues,app,tournament_machine_id)
+            
+            app.tables.db_handle.session.commit()
+            queue_serializer = serializer.queue.generate_queue_to_dict_serializer(serializer.queue.ALL)
+            return {'result':'player added','added_queue':queue_serializer(updated_queue)}
+            
+        except Exception as e:            
+            app.tables.db_handle.session.commit()                        
+            raise e
+            #return {'result':'internal error : %s' % e,'added_queue':{}}
+            
+@blueprints.event_blueprint.route('/queue/tournament_machine/<tournament_machine_id>',methods=['POST'])
+@player_add_to_queue_permissions.require(403)
+@check_current_user_is_active
+@load_tables
+def add_player_to_queue(tables,tournament_machine_id):
+    add_player_to_queue_route_validate(request,current_app,tournament_machine_id,current_user)
+    add_player_to_queue_route_remove_existing(request,current_app,tournament_machine_id,current_user)
+    return jsonify(add_player_to_queue_route(request,current_app,tournament_machine_id,current_user))
+
+def get_tournament_machine_queue_route(request,app,tournament_machine_id):
+
+    queues = queue_helpers.get_queue_for_tounament_machine(app,tournament_machine_id)
+    queue_serializer = serializer.queue.generate_queue_to_dict_serializer(serializer.queue.ALL)                
+    return {'tournament_machine_queue':[queue_serializer(queue) for queue in queues]}                
+    
+@blueprints.event_blueprint.route('/queue/tournament_machine/<tournament_machine_id>',methods=['GET'])
+@load_tables
+def get_tournament_machine_queue(tables,tournament_machine_id):
+    return jsonify(get_tournament_machine_queue_route(request,current_app,tournament_machine_id))    
+
+def get_tournament_queue_route(app,tournament_id):
+    queue_groups = queue_helpers.get_queue_for_tounament(app,tournament_id)
+    
+    queue_serializer = serializer.queue.generate_queue_to_dict_serializer(serializer.queue.ALL)                
+    return jsonify({'tournament_queues':[{tournament_machine_id:[queue_serializer(queue) for queue in queue_group ]} for tournament_machine_id,queue_group in queue_groups]})
+    
+@blueprints.event_blueprint.route('/queue/tournament/<tournament_id>',methods=['GET'])
+@load_tables
+def get_tournament_queue(tables,tournament_id):
+    return get_tournament_queue_route(current_app,tournament_id)
+    

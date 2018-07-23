@@ -1,0 +1,95 @@
+
+.chatitem {
+
+}
+
+.chatitemup {
+
+}
+
+.chatitem.ng-enter {
+    -webkit-animation: slideInLeft 1s;
+    animation: slideInLeft 1s;
+}
+
+/* .chatitem.ng-leave { */
+/*     -webkit-animation: fadeOut 1s; */
+/*     animation: fadeOut 1s; */
+/* } */
+
+.chatitemup.ng-enter {
+    -webkit-animation: slideInUp 1s;
+    animation: slideInUp 1s;
+}
+
+.chatitemup.ng-exit {
+    -webkit-animation: slideOutDown 1s;
+    animation: slideOutDown 1s;
+}
+
+.backglass:after {
+    background-image: url('http://www.planetarypinball.com/mm5/images/products/pinbotglassL.jpg');
+    background-repeat: no-repeat;
+    content: '';
+    display: block;
+    width:100px;
+    height:100px;
+    position: relative;
+    /* //background-position: 25% 25%; */
+    /* background-size: contain; */
+    /* -moz-background-size: contain; */
+    /* -webkit-background-size: contain; */
+    top:100px;
+    margin-left:auto;
+    z-index:999;
+}
+
+.circular--square {
+  border-top-left-radius: 50% 50%;
+  border-top-right-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
+  border-bottom-left-radius: 50% 50%;
+}
+
+
+.flip-90{
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+@keyframes zoomInNew {
+  from {
+    opacity: 0;
+    transform: scale3d(.3, .3, .3);
+  }
+
+  50% {
+      opacity: 1;
+      transform: scale3d(4.3, 4.3, 4.3);      
+  }
+
+  to {
+      transform: scale3d(1, 1, 1);      
+  }
+}
+
+.zoomInNew {
+  animation-name: zoomInNew;
+}
+
+.css-class-add,.css-class-remove {
+    animation: zoomInNew 2s;
+}
+
+.css-class,
+.css-class-add.css-class-add-active {
+  font-size: 1em;
+}
+
+.css-class-remove.css-class-remove-active {
+  font-size: 1em;
+}
+

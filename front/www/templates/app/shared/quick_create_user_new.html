@@ -1,0 +1,27 @@
+<div class='chatitemup' ng-if="post_success!=undefined">
+  <div ui-view='post_success'>
+  </div>
+  <post-success-single-button></post-success-single-button>
+</div>
+<div class='chatitemup' ng-if="post_success==undefined">
+  <div class="card">
+    <div class="item item-divider">
+      Register scorekeepers
+    </div>
+    <div>
+      <center>
+        <div class='padding'>
+
+        </div>
+        <div>
+          Please enter the names of the scorekeepers you want to register.<br>
+          Please enter one name per line, then click the "Register Scorekeepers" button.
+        </div>
+        <div class='padding'>
+
+        </div>
+        
+        <textarea style='border-width:1px;border-style:solid' rows="20" cols="80" ng-model='new_users.users_text_area'></textarea>
+      </center>
+      <button ng-click='add_text_area_users_func()' type="button" class="padding button-pagraph button button-block button-positive" > Register Scorekeepers  </button>  
+</div>

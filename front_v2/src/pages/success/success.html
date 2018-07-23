@@ -1,0 +1,98 @@
+<!--
+  Generated template for the SuccessPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar hideBackButton="true" color="pss-{{cssColors}}-header">
+  <ion-title start hideWhen='mobile' style='float:left;margin-top:3px'>Pss</ion-title>
+  <ion-title start showWhen='mobile'>{{eventName}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="card-background-page">
+ <ion-toolbar color="pss-{{cssColors}}-sub-header" text-center>
+   <b>Success!</b>
+ </ion-toolbar>
+
+  
+  <ion-grid [style.width]="contentWidth" style='margin-left:auto;margin-right:auto'>
+  <ion-row>
+    <ion-col>      
+    </ion-col>
+    <ion-col style='text-align:center'> 
+      <ion-icon *ngIf="successSummary" style="zoom:4.0;" name="thumbs-up"></ion-icon>
+      <ion-icon *ngIf="successSummary == undefined" style="zoom:4.0;" name="thumbs-down"></ion-icon>
+
+    </ion-col>
+    <ion-col>     
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col style='text-align:center'>         
+      {{successSummary ? successSummary.getTitle():'You can not reload this page'}}
+      <hr style='width:75%'>      
+    </ion-col>
+  </ion-row>
+
+  <ng-container *ngIf="successSummary!=null && successSummary.summaryTable.length>0">      
+    <ion-row *ngFor="let summaryTableRow of successSummary.summaryTable">
+      <ion-col style='text-align:center'>                 
+        {{summaryTableRow}}
+      </ion-col>                     
+    </ion-row>
+    <hr style='width:75%' text-center>
+  </ng-container>
+
+  <ion-row>
+    <ion-col style='text-align:center'>         
+      {{successSummary ? successSummary.getFirstLine():''}}
+    </ion-col>               
+  </ion-row>
+  <ion-row>
+    <ion-col style='text-align:center'>         
+      {{successSummary ? successSummary.getSecondLine():''}}
+    </ion-col>               
+  </ion-row>
+  <ion-row *ngIf='successSummary!=null && successSummary.attentionString!=null'>
+    <ion-col style='text-align:center'>         
+      {{successSummary.attentionString}}
+    </ion-col>               
+  </ion-row>  
+  <ion-row *ngIf="postAddPlayerSuccess==true && picTaken==false && requirePic==true">
+    <ion-col text-center>
+      <button margin padding ion-button large tappable (click)="checkPicTaken()">Is Pic Taken??</button>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col  text-center>
+      <ng-container *ngFor="let button of successButtons;inddex as i;even as e">
+        <br *ngIf="e==true">
+        <button [disabled]="picTaken==false&&requirePic==true" margin padding ion-button large tappable (click)="pushPageWithNoBackButton(button.getTargetPage(),button.getParams(),button.getTargetTabIndex())">{{button.getTitle()}}</button>
+      </ng-container>        
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="recordScoreSuccess==true">
+    <ion-col text-center>      
+      <ng-container *ngFor="let buttonLabel of recordScoreSuccessButtons; index as i;even as e">
+        <br *ngIf="e==true">
+        <button margin padding [disabled]="reAddSuccess==true"  tappable (click)="reAddPlayerToMachine()" *ngIf="buttonLabel=='RE_ADD'" ion-button large>Re-Add Player</button>
+        <button margin padding [disabled]="reAddSuccess==true"  tappable (click)="reQueuePlayerOnMachine()" *ngIf="buttonLabel=='RE_QUEUE'" ion-button large>Re-Queue Player</button>
+        <button color="yellow" margin padding  tappable (click)="returnToStartPlayer(buttonLabel)" *ngIf="buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE'||buttonLabel=='DEAL_WITH_PERSON_IN_QUEUE_AND_HANDLE_CURRENT_PLAYER'" ion-button large>Deal with person in queue</button>
+        <button  *ngIf="buttonLabel=='GO_HOME'"  tappable (click)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))" ion-button large margin padding >Machine List</button>
+        <button margin padding *ngIf="buttonLabel=='ADD_OR_QUEUE' && handleCurrentPlayerLater==true"  tappable (click)="pushPageWithNoBackButton('AddOrQueuePlayerAfterScoreRecordPage',buildNavParams({tournamentId:tournamentId,playerId:player.player_id,playerName:player.player_full_name,playerImg:player.img_url}))" ion-button large>
+          Add or Queue Player
+        </button>
+      </ng-container>
+    </ion-col>
+  </ion-row>
+  
+  <ion-row justify-content-center *ngIf="successSummary == undefined" >
+    <ion-col text-center > 
+      <button ion-button  large tappable (click)="goToEventSelectOnPageReload()">Select Event</button>
+    </ion-col>
+  </ion-row>
+  </ion-grid>
+  
+</ion-content>

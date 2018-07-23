@@ -1,0 +1,49 @@
+<!--
+  Generated template for the AddOrQueuePlayerAfterScoreRecordPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color='pss-home-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+    <ion-buttons end showWhen='mobile'>
+      <!--<button no-margin [navPush]="'ScorekeeperMachineSelectPage'" [navParams]="buildNavParams({tournamentId:tournamentId})" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>-->
+      <!--<button no-margin tappable (click)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>      
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Machine<br>List</p>-->
+    </ion-buttons>
+
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content no-padding no-margin>
+ <ion-toolbar no-padding no-margin color="pss-home-sub-header" text-center>
+   <b>Queue Or Add Player To Machine</b>
+ </ion-toolbar>
+ <ion-fab top right edge hideWhen="core">
+   <button ion-fab (click)="pushPageWithNoBackButton('ScorekeeperMachineSelectPage',buildNavParams({tournamentId:tournamentId}))">
+      <p no-margin style='font-size:10px;line-height:10px' text-center>Machine<br>List</p>
+   </button>
+ </ion-fab>
+ <div text-center>
+<!--   <img-loader [fallback]="'assets/imgs/default_user_pic.jpg'" [src]="playerImg!=null?imgBaseUrl+playerImg:imgBaseUrl+'/assets/imgs/default_user_pic.jpg'" useImg ></img-loader> -->
+
+   <!--<img [src]="playerImg!=null?imgBaseUrl+playerImg:imgBaseUrl+'/assets/imgs/pinball_small_machine_square.jpg'">-->
+ </div>
+  <ion-list>
+    <ion-list-header no-lines><b>Queue/Add {{playerName}}</b>
+    </ion-list-header>    
+    <button *ngFor="let tournamentMachine of tournamentMachines"  ion-item detail-push tappable (click)="addOrQueuePlayer(tournamentMachine)">
+      <ion-badge item-start>{{tournamentMachine.queue_length}}</ion-badge>
+      <span item-end>{{tournamentMachine.tournament_machine_name}}</span>
+      <ion-avatar item-end padding-vertical>
+          <img-loader fallback="assets/imgs/small_backglass.jpeg" [style.height]='"90px"' [style.width]='"100%"' [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'" useImg ></img-loader>
+          <!--<img  [src]="tournamentMachine.img_url!=null?imgBaseUrl+tournamentMachine.img_url:imgBaseUrl+'/assets/imgs/small_backglass.jpeg'">-->
+      </ion-avatar>
+
+    </button>
+  </ion-list>
+</ion-content>

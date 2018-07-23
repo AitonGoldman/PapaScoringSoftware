@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-navbar color='pss-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [title]="eventName" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+  </ion-navbar>    
+</ion-header>
+
+<ion-content>
+ <ion-toolbar color="pss-sub-header" text-center>
+   <b>Edit scorekeepeer/deskworker/etc</b>
+ </ion-toolbar>
+  
+<ion-item-divider color="light" text-wrap>Person's name</ion-item-divider>
+
+<ion-auto-complete name="myautocomplete" [(ngModel)]="selectedUser" (autoFocus)="onFocus()" (itemSelected)="onSelect($event)" #searchbar [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Enter Persons Name', debounce:500}"></ion-auto-complete>
+
+<div class='desktopSlim'>
+
+  <form #myForm="ngForm">
+    <ion-item>
+    </ion-item>
+    <ion-item-divider color="light" text-wrap>Event Role (Scorekeeper, etc)</ion-item-divider>
+    
+    <ion-item class='shadedInputField' >
+    <ion-label>Role</ion-label>
+    <ion-select name="myeventrole" #myeventrole="ngModel" [(ngModel)]="selectedRole" required>
+      <ion-option *ngFor="let role of roles" [value]="role.event_role_id">{{role.event_role_name}}</ion-option>
+    </ion-select>
+    </ion-item>
+    <ion-item-divider color="light" text-wrap>New Password</ion-item-divider>        
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input name="myeventpassword" #myeventpassword="ngModel" [(ngModel)]="newPassword" type="text"></ion-input>
+      </ion-item>
+    </ion-list>
+    
+    <button [disabled]="!myeventrole.dirty" ion-button (tap)="onSubmit(false)"> Modify User Role </button>
+    <br>
+    <button [disabled]="!myeventpassword.dirty" ion-button (tap)="onSubmitPassword()"> Modify User Password </button>
+    <br>
+    
+    <button [disabled]="selectedUser==null" ion-button (tap)="onSubmit(true)">  Remove User From Event </button>    
+  </form>
+  </div>
+</ion-content>

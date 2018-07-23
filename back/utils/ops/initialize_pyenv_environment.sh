@@ -5,4 +5,4 @@ eval "$(~/.pyenv/bin/pyenv virtualenv-init -)"
 pyenv install 2.7.11
 pyenv virtualenv 2.7.11 pss_venv
 pyenv activate pss_venv
-pip install gunicorn
+#pip install gunicorn

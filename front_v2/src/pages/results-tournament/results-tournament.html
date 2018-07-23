@@ -1,0 +1,103 @@
+<!--
+  Generated template for the ResultsTournamentPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+  -->
+<ion-header>
+  <ion-navbar color='pss-header'>
+    <custom-headers [homePageDisplayName]="getHomePageDisplayString()" [eventId]="eventId" [eventName]="eventName" [homePage]="getHomePageString()"></custom-headers>
+    <ion-buttons end showWhen='mobile'>
+      <button tappable no-margin [navPush]="'ResultsPage'" [navParams]="buildNavParams({})" icon-only ion-button> <ion-icon name="clipboard"></ion-icon></button><br>
+      <p no-margin style='font-size:8px;line-height:8px' text-center>Results<br>Home</p>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-padding>
+  <div [style.width]='contentWidth' class='desktopSlim'>
+  <div text-center tappable>
+    <h2>{{tournamentName}} Results</h2>
+    <ion-chip tappable (click)="onReload()">
+      <ion-label>Refresh</ion-label>
+      <ion-icon name="refresh" color="dark" item-end></ion-icon>      
+    </ion-chip>
+<!--    <ion-icon (tap)="onReload()" style="zoom:2.0" item-end name="refresh"></ion-icon>    -->
+  </div>
+
+  <ion-grid  *ngIf="results != null">
+    <ion-row style='font-size:12px' *ngIf="platform.is('mobile')">
+      <ion-col col-2 no-padding text-left text-nowrap>
+        Rank/Points
+      </ion-col>
+      <ion-col col-8 no-padding text-center>
+        Name
+      </ion-col>
+      <ion-col col-2 no-padding text-right text-nowrap>
+        <span >Machines</span>
+      </ion-col>      
+    </ion-row>
+    <ion-row *ngIf="platform.is('mobile')==false">
+      <ion-col col-1 no-padding text-center text-nowrap>
+        Rank
+      </ion-col>
+      <ion-col col-1 no-padding text-center text-nowrap>
+        Points
+      </ion-col>      
+      <ion-col col-6 no-padding text-center>
+        Name
+      </ion-col>
+      <ion-col col-4 no-padding text-center text-nowrap>
+        <span >Machines</span>
+      </ion-col>      
+    </ion-row>
+    
+    <ion-row>
+      <ion-col>
+        <hr>
+      </ion-col>
+    </ion-row>
+    <!--<ion-row  nowrap *ngFor="let result of results;even as e;index as i" align-items-center [style.background-color]="e==true?'#EEEEEE':null">-->
+    <ion-row  nowrap *ngFor="let result of results;even as e;index as i" align-items-center [style.background-color]="setRowColor(e,result)">
+    
+      <ng-container *ngIf="result.seperator==true">
+        <ion-col text-center style='background-color:#CCCCCC'>
+          {{result.seperator_message}}
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="result.seperator==false && platform.is('mobile')">
+        <ion-col col-2 no-padding text-center align-self-center>
+          {{result.rank}}<span style='font-size:8px'>
+            <p style='line-height:1px'>({{result.points}} points)</p></span>        
+        </ion-col>
+        <ion-col col-8 no-padding text-center align-self-center>
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name|titlecase}}</a>
+        </ion-col>
+        <ion-col col-2 no-padding text-center align-self-center tappable (click)="showTopThreeMachines($event,result.top_machines)">
+          <a> {{result.topMachineString}} </a>
+        </ion-col>
+      </ng-container>
+      <ng-container *ngIf="result.seperator==false && platform.is('mobile')==false">
+        <ion-col col-1 no-padding text-center align-self-center>
+          {{result.rank}}  
+        </ion-col>
+        <ion-col col-1 no-padding text-center align-self-center>
+          {{result.points}}  
+        </ion-col>        
+        <ion-col col-6 no-padding text-center align-self-center>
+
+          <a tappable [navPush]="'PlayerInfoPage'" [navParams]="buildNavParams({playerId:result.player_id})"> {{result.player_name|titlecase}}</a>
+        </ion-col>
+        <ion-col col-4 no-padding text-center align-self-center tappable>
+          <ng-container *ngFor="let topMachine of result.top_machines;index as i">
+          <a tappable [navPush]="'ResultsMachinePage'" [navParams]="buildNavParams({tournamentId:tournamentId,tournamentName:tournamentName,tournamentMachineId:topMachine.tournament_machine_id,tournamentMachineName:topMachine.tournament_machine_name})">
+            #{{topMachine.rank}} on {{topMachine.abbreviation}}
+          </a>            
+          <span *ngIf="result.top_machines!=null && result.top_machines.length-1-i > 0"> / </span>
+          </ng-container>
+        </ion-col>
+      </ng-container>      
+    </ion-row>
+  </ion-grid>
+  </div>
+</ion-content>
